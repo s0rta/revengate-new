@@ -2,7 +2,7 @@ Revengate
 =========
 
 This is Revengate, a role playing game set in a steampunk world where magic and
-heavy machines are common.
+heavy machines coexist.
 
 
 ## Copying

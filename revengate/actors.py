@@ -20,16 +20,17 @@ monsters, characters, etc.
 """
 
 import random
-from .weapons import Hit, Hits, Weapon, DmgType
+from .weapons import Hit, Events, HealthEvent, Condition, Weapon, DmgType
 
 SIGMA = 0.125 # std. dev. for a normal distribution more or less contained in 0..1
 MU = 0.5 # average of the above distribution
-INATE_DMG = 5 # FIXME: this is ugly, templates should solve that
+
 
 class Actor(object):
     """ Base class of all actors. """
     # everyone defaults to 35% more damage with a critical hit
     critical_mult = 0.35 
+    
     def __init__(self, health, armor, strength, agility):
         super(Actor, self).__init__()
         self.health = health
@@ -39,14 +40,56 @@ class Actor(object):
         self.strength = strength
         self.agility = agility
 
-        self.resistances = {}
+        self.resistances = set()
         self.weapon = None
 
-        #taxon and identifiers
+        # taxon and identifiers
         self.species = None
         self.role = None
         self.rank = None
         self.name = None
+
+        # turns logic
+        self.initiative = random.random()
+        self.engine = None
+        self._last_update = None # last time we computed conditions and regen
+        self.conditions = [] # mostly stuff that does damage over time
+
+    def set_engine(self, engine):
+        """ Finalize the registration with a game engine. """
+        self.engine = engine
+        self._last_update = engine.current_turn
+
+    def update(self):
+        """ 
+        Do the update for all the turns since the last update.
+
+        Return the summary of health changes.
+        """
+        # Actors are only update on the current level.  Upon revisiting a level, 
+        # the updates for all missed turns are computed.
+        if self.engine is None:
+            raise RuntimeError("Actors must be registered with an engine before"
+                               " performing turn updates.")
+        events = Events()
+        for t in range(self._last_update or 0, self.engine.current_turn + 1):
+            events.add(self._update_one(t))
+        return events
+    
+    def _update_one(self, turn):
+        """
+        Compute the effect of all over-time conditions for one turn.
+        
+        Return the summary of health changes.
+        """
+        events = Events()
+        for cond in self.conditions:
+            if cond.start <= turn <= cond.stop:
+                self.health += cond.h_delta
+                events.add(HealthEvent(self, cond.h_delta))
+        self.conditions = [c for c in self.conditions if c.stop > turn]
+        self._last_update = turn
+        return events or None
 
     def __str__(self):
         if self.name:
@@ -68,7 +111,7 @@ class Actor(object):
     def attack(self, foe):
         """ Do all the stikes allowed in one turn against foe. """
         if self.weapon:
-            return Hits(self.strike(foe, self.weapon))
+            return Events(self.strike(foe, self.weapon))
         else:
             return None
 
@@ -89,8 +132,7 @@ class Actor(object):
             dmg *= (1+self.critical_mult)
 
         dmg = foe.take_damage(weapon, dmg)
-        return Hit(self, foe, weapon, dmg, crit)
-
+        return Hit(foe, self, weapon, dmg, crit)
 
     def take_damage(self, injurious, dmg):
         """ 
@@ -102,20 +144,31 @@ class Actor(object):
             dmg *= 0.5 # 50% less damage if you have a resistance
         dmg = round(max(0, dmg - self.armor))
         self.health -= dmg
+        
+        # damage over time effects
+        for effect in injurious.effects:
+            h_delta = -effect.damage
+            if effect.dmg_type in self.resistances:
+                h_delta *= 0.5
+            start = self.engine.current_turn + 1
+            if isinstance(effect.duration, int):
+                stop = start + effect.duration
+            else:
+                stop = start + random.randint(*effect.duration)
+            cond = Condition(effect, start, stop, h_delta)
+            self.conditions.append(cond)
         return dmg
-
 
     def get_evasion(self):
         # TODO: check for incapacitation
         return self.agility
 
-
     def get_damage(self, weapon):
+        """ Return how much damage the actor can do with a given weapon taking 
+        into account procificency and incapacitation. """
+
         # TODO: check for proficiency
-        if weapon:
-            dmg = weapon.damage
-        else:
-            dmg = INATE_DMG
+        dmg = weapon.damage
         return (1 + self.strength - MU) * dmg * random.random()
 
 
@@ -151,9 +204,9 @@ class Humanoid(Character):
             
     def attack(self, foe):
         if self.weapon:
-            return Hits(self.strike(foe, self.weapon))
+            return Events(self.strike(foe, self.weapon))
         else:
-            hits = Hits()
+            hits = Events()
             if self.fist_r:
                 hits.add(self.strike(foe, self.fist_r))
             if self.fist_l:
