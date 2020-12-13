@@ -18,6 +18,7 @@
 """ Run simulations on various parts of the rule engine to test the balance. """
 
 from collections import Counter
+from .tags import t
 from .actors import Humanoid, Monster
 from . import weapons
 from .weapons import Events
@@ -47,11 +48,11 @@ def man_vs_wolf(engine):
     start = engine.current_turn
     me = Humanoid(60, 0, .50, .50, .50, 4, 4)
     me.name = "you"
-    fire_sword = weapons.Weapon("fire sword", 6, weapons.DmgType.HEAT)
-    fire_sword.effects.append(weapons.Effect("flames", 3, 2, weapons.DmgType.HEAT))
+    fire_sword = weapons.Weapon("fire sword", 6, t("heat"))
+    fire_sword.effects.append(weapons.Effect("flames", 3, 2, weapons.DmgTypes.HEAT))
     me.weapon = fire_sword
     wolf = Monster(30, 0, .35, .55)
-    wolf.weapon = weapons.Injurious("bite", 5, weapons.DmgType.PIERCE)
+    wolf.weapon = weapons.Injurious("bite", 5, weapons.DmgTypes.PIERCE)
 
     engine.register(me)
     engine.register(wolf)

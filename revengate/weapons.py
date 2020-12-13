@@ -18,14 +18,18 @@
 """ Weapons logic and common weapon types. """
 
 import enum
+from .tags import Tag
 
-class DmgType(enum.Enum):
-    """ Types of damages that weapons can inflict. """
-    IMPACT = enum.auto()
-    SLICE  = enum.auto()
-    PIERCE = enum.auto()
-    ARCANE = enum.auto()
-    HEAT   = enum.auto()
+class DmgType(Tag):
+    pass
+
+class DmgTypes:
+    IMPACT = DmgType("impact")
+    SLICE  = DmgType("slice")
+    PIERCE = DmgType("pierce")
+    ARCANE = DmgType("arcane")
+    HEAT   = DmgType("heat")
+
 
 class StatusEvent(object):
     """ Something that changes the status of an actor. 

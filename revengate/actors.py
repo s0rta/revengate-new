@@ -20,7 +20,8 @@ monsters, characters, etc.
 """
 
 import random
-from .weapons import Hit, Events, HealthEvent, Condition, Weapon, DmgType
+from .tags import TagBag
+from .weapons import Hit, Events, HealthEvent, Condition, Weapon, DmgTypes
 
 SIGMA = 0.125 # std. dev. for a normal distribution more or less contained in 0..1
 MU = 0.5 # average of the above distribution
@@ -40,7 +41,7 @@ class Actor(object):
         self.strength = strength
         self.agility = agility
 
-        self.resistances = set()
+        self.resistances = TagBag('DmgType')
         self.weapon = None
 
         # taxon and identifiers
@@ -193,12 +194,12 @@ class Humanoid(Character):
     def __init__(self, health, armor, strength, agility, intelligence, fist_r=4, fist_l=None):
         super(Humanoid, self).__init__(health, armor, strength, agility, intelligence)
         if fist_r:
-            self.fist_r = Weapon("fist", fist_r, DmgType.IMPACT)
+            self.fist_r = Weapon("fist", fist_r, DmgTypes.IMPACT)
         else:
             self.fist_r = None
 
         if fist_l:
-            self.fist_l = Weapon("fist", fist_l, DmgType.IMPACT)
+            self.fist_l = Weapon("fist", fist_l, DmgTypes.IMPACT)
         else:
             self.fist_l = None
             
