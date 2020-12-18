@@ -2,3 +2,4 @@
 .kateproject
 .venv
 __pycache__
+*.kate-swp
