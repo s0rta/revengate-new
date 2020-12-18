@@ -1,0 +1,19 @@
+
+[{"&class": "Weapon", 
+  "name": "dagger", 
+  "damage": 5, 
+  "dmg_type": "#slice", 
+  "verb": "cut"}, 
+ {"&template": "blade", 
+  "&class": "Weapon", 
+  "dmg_type": "slice", 
+  "verb": "cut"}, 
+ {"&template": "dagger",
+  "&parent": "blade",
+  "name": "dagger",
+  "damage": 5}, 
+ {"&template": "big-dagger",
+  "&parent": "dagger",
+  "+damage": 1}
+  ]
+ 
