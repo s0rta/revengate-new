@@ -88,7 +88,7 @@ class Loader:
         # apply fields references
         for k, v in list(fields.items()):
             if isinstance(v, str):
-                fields[k] = self._expand_one(t)
+                fields[k] = self._expand_one(v)
             if isinstance(v, list):
                 fields[k] = [self._expand_one(s) for s in v]
         # find which fields are contructor friendly
@@ -131,6 +131,37 @@ class Loader:
         else:
             return map(self._decode_one, recs)
 
+    def _add_to_field(self, parent_val, val):
+        """ Add val to parent_val.
+        
+        List operations (append) are supported. 
+        """
+        if isinstance(parent_val, int):
+            return parent_val + val
+        if isinstance(parent_val, list):
+            if isinstance(val, list):
+                return parent_val + val
+            else:
+                return parent_val.append(val)
+        raise ValueError(f"Adding ${val} to base value ${parent_val} is"
+                         " unsupported.")
+
+    def _sub_from_field(self, parent_val, val):
+        """ Subtract val from parent_val.
+        
+        List operations (filter out) are supported. 
+        """
+        if isinstance(parent_val, int):
+            return parent_val - val
+        if isinstance(parent_val, list):
+            if isinstance(val, list):
+                return [e for e in parent_val if e not in val]
+            else:
+                return [e for e in parent_val if e != val]
+        raise ValueError(f"Subtracting ${val} from base value ${parent_val} is"
+                         " unsupported.")
+
+
     def invoke(self, template):
         """ Instanciate an object based on a template.  
         
@@ -142,9 +173,6 @@ class Loader:
         # resolution is two steps: 
         # 1) find all the parents
         # 2) populate all the fields starting at the oldest ancestor
-        # TODO: The only exception to the above is the class, we start with the most 
-        # specific one we can find
-        # FIXME: what if class changes along the way?
         oname = template.name
         seen = set() # to prevent infinite loops
         stack = []
@@ -165,23 +193,19 @@ class Loader:
         for t in reversed(stack):
             tfields = dict(t.fields) # we don't want to modify the original
             # manually apply the fields with special overrides: +, -
-            adds = [k for k in tfields if k.startswith("+")]
-            for k in adds:
-                v = tfields.pop(k)
-                k = k[1:]
-                if k in fields:
-                    fields[k] += v
-                else: 
-                    fields[k] = v
-            subs = [k for k in tfields if k.startswith("-")]
-            # FIXME: deal with lists better
-            for k in subs:
-                v = tfields.pop(k)
-                k = k[1:]
-                if k in fields:
-                    fields[k] -= v
-                else: 
-                    fields[k] = v
+            for prefix, action in [("+", self._add_to_field), 
+                                   ("-", self._sub_from_field)]:
+                keys = [k for k in tfields if k.startswith(prefix)]
+                for k in keys:
+                    v = tfields.pop(k)
+                    k = k[1:]
+                    if k in fields:
+                        fields[k] = action(fields[k], v)
+                    else: 
+                        raise ValueError(f"Field ${k} in template ${oname} has"
+                                         f" no parent value. " 
+                                         f"Can't apply '${prefix}' transform.")
+            # batch apply the other fields
             fields.update(tfields)
         return self._instanciate(fields.pop("&class"), fields)
 
@@ -194,7 +218,7 @@ def main():
     pprint(obj)
     obj = loader.invoke("big-dagger")
     print(obj.damage)
-    obj = loader.invoke("big-dagger")
+    obj = loader.invoke("rusty-dagger")
     print(obj.damage)
 
 if __name__ == "__main__":

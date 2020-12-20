@@ -14,6 +14,9 @@
   "damage": 5}, 
  {"&template": "big-dagger",
   "&parent": "dagger",
-  "+damage": 1}
+  "+damage": 1},
+ {"&template": "rusty-dagger",
+  "&parent": "dagger",
+  "-damage": 1}
   ]
  
