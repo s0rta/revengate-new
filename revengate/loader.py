@@ -22,11 +22,13 @@
 import sys
 import json
 import inspect
+from random import randrange
 from pprint import pprint
 
 from . import tags
 from .tags import Tag
 from .weapons import Injurious
+from .actors import Actor
 
 # Special fields:
 # &class: the class to instanciate
@@ -39,6 +41,7 @@ from .weapons import Injurious
 # field names can be prefixed by the following for special action:
 # '+': add value to the value of the parent template (works with lists)
 # '-': subtrack value to the value of the parent (not implemented for lists)
+# '!': random value, pass the max int or a [min, max] list
 
 # values can be prefixed by the following for special actions:
 # '*': invoke a sub-template by name
@@ -63,6 +66,7 @@ class Loader:
         self._templates = {} # for by-name invokation
         self._map_class_tree(Tag)
         self._map_class_tree(Injurious)
+        self._map_class_tree(Actor)
         
     def _map_class_tree(self, cls):
         """ Add all the subclasses of cls to the class map. """
@@ -71,11 +75,15 @@ class Loader:
             self._map_class_tree(sub)
   
     def _expand_one(self, field):
-        """ Expand tag and template invokations in field.
+        """ Expand invokations (tags and templates), and generators in field.
         
         Return the field unmodified if there are no references. """
+        if callable(field):
+            return field()
         if isinstance(field, str) and field.startswith("#"): # tag
             return tags.t(field[1:])
+        if isinstance(field, str) and field.startswith("*"): # sub-template
+            return self.invoke(field[1:])
         return field
   
     def _instanciate(self, cls_name, fields):
@@ -87,7 +95,7 @@ class Loader:
         cls = self._class_map[cls_name]
         # apply fields references
         for k, v in list(fields.items()):
-            if isinstance(v, str):
+            if isinstance(v, str) or callable(v):
                 fields[k] = self._expand_one(v)
             if isinstance(v, list):
                 fields[k] = [self._expand_one(s) for s in v]
@@ -99,7 +107,7 @@ class Loader:
         obj = cls(**init_args)
         # set the other fields after creation
         for attr in fields:
-            obj.setattr(attr, fields[attr])
+            setattr(obj, attr, fields[attr])
         return obj
   
     def _decode_one(self, rec):
@@ -130,6 +138,21 @@ class Loader:
             return self._decode_one(recs)
         else:
             return map(self._decode_one, recs)
+
+    def _random_field(self, val):
+        """ Convert val into a random generator.
+        
+        val: either max or a [min, max] list.
+        The generator is called at invokation time.
+        """
+        if isinstance(val, int):
+            return lambda: randrange(val+1)
+        elif isinstance(val, list):
+            min, max = val
+            return lambda: randrange(min, max+1)
+        else:
+            raise ValueError(f"Don't know how to turn {val} into a random"
+                             " generator.")
 
     def _add_to_field(self, parent_val, val):
         """ Add val to parent_val.
@@ -192,9 +215,15 @@ class Loader:
         fields = {}
         for t in reversed(stack):
             tfields = dict(t.fields) # we don't want to modify the original
-            # manually apply the fields with special overrides: +, -
+            # manually apply the fields with special overrides: +, -, ...
+            for prefix, action in [("!", self._random_field)]: # single actions
+                keys = [k for k in tfields if k.startswith(prefix)]
+                for k in keys:
+                    v = tfields.pop(k)
+                    k = k[1:]
+                    fields[k] = action(v)
             for prefix, action in [("+", self._add_to_field), 
-                                   ("-", self._sub_from_field)]:
+                                   ("-", self._sub_from_field)]: # transforms
                 keys = [k for k in tfields if k.startswith(prefix)]
                 for k in keys:
                     v = tfields.pop(k)
@@ -214,12 +243,8 @@ def main():
     loader = Loader()
     objs = loader.load(open(sys.argv[1], "r"))
     pprint(list(objs))
-    obj = loader.invoke("dagger")
-    pprint(obj)
-    obj = loader.invoke("big-dagger")
-    print(obj.damage)
-    obj = loader.invoke("rusty-dagger")
-    print(obj.damage)
+    obj = loader.invoke("hero")
+    print(obj.weapon.damage)
 
 if __name__ == "__main__":
     main()

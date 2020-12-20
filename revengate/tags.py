@@ -83,6 +83,15 @@ class TagRegistry(set):
         super(TagRegistry, self).__init__()        
 
 
+def _find_ns_class(ns, parent=Tag):
+    if ns == parent.__name__:
+        return parent
+    for sub in parent.__subclasses__():
+        cls = _find_ns_class(ns, sub)
+        if cls:
+            return cls
+
+
 class TagBag(set):
     """ 
     A group of tags.
@@ -95,7 +104,7 @@ class TagBag(set):
     def __init__(self, namespace=Tag, *members):
         super(TagBag, self).__init__()
         if isinstance(namespace, str):
-            cls = self._find_ns_class(namespace)
+            cls = _find_ns_class(namespace)
             if cls is None:       
                 msg = f"{namespace} does not appear to be a subclass of Tag"
                 raise ValueError(msg)
@@ -111,11 +120,36 @@ class TagBag(set):
             raise ValueError(msg)
         super(TagBag, self).add(tag)
 
-    def _find_ns_class(self, ns, parent=Tag):
-        if ns == parent.__name__:
-            return parent
-        for sub in parent.__subclasses__():
-            cls = self._find_ns_class(ns, sub)
-            if cls:
-                return cls
-    
+
+class TagSlot:
+    """ 
+    A placeholder for a tag that enforces its namespace.
+
+    namespace: see the doc for TagBag.
+
+    This is using the descriptor protocol and should be set as a class 
+    attribute.
+    """
+    def __init__(self, namespace=Tag):
+        super(TagSlot, self).__init__()
+        if isinstance(namespace, str):
+            cls = _find_ns_class(namespace)
+            if cls is None:       
+                msg = f"{namespace} does not appear to be a subclass of Tag"
+                raise ValueError(msg)
+            else:
+                namespace = cls
+        self.namespace = namespace
+
+    def __set_name__(self, owner, name):
+        self.slot = '_' + name
+
+    def __get__(self, obj, objtype=None):
+        return getattr(obj, self.slot)
+
+    def __set__(self, obj, tag):
+        if not self.namespace.is_registered(tag):
+            msg = f"{tag} is not a registered instance of {self.namespace}"
+            raise ValueError(msg)
+        setattr(obj, self.slot, tag)
+

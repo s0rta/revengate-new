@@ -18,7 +18,7 @@
 """ Weapons logic and common weapon types. """
 
 import enum
-from .tags import Tag
+from .tags import Tag, TagSlot
 
 class DmgType(Tag):
     pass
@@ -105,6 +105,7 @@ class Events(list):
 
 class Effect(object):
     """ A long term effect. """
+    dmg_type = TagSlot(DmgType)
     def __init__(self, name, duration, damage, dmg_type, verb=None):
         super(Effect, self).__init__()
         self.name = name
@@ -127,6 +128,7 @@ class Condition(object):
 class Injurious(object):
     """ Something that can hurt someone or something.  This could be a tool,
     a body part, a spell, or a toxin. """
+    dmg_type = TagSlot(DmgType)
     def __init__(self, name, damage, dmg_type, verb=None):
         super(Injurious, self).__init__()
         self.name = name

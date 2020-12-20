@@ -1,0 +1,20 @@
+
+[{"&template": "blade", 
+  "&class": "Weapon", 
+  "dmg_type": "#slice", 
+  "verb": "cut"}, 
+ {"&template": "dagger",
+  "&parent": "blade",
+  "name": "dagger",
+  "!damage": [3, 7]}, 
+ {"&template": "hero",
+  "&class": "Humanoid", 
+  "name": "you", 
+  "health": 60,
+  "armor": 0,
+  "strength": 0.5,
+  "agility": 0.5,
+  "intelligence": 0.5, 
+  "weapon": "*dagger"}
+  ]
+ 
