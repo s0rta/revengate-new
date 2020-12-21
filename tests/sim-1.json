@@ -26,9 +26,9 @@
   "name": "you", 
   "health": 60,
   "armor": 0,
-  "strength": 0.5,
-  "agility": 0.5,
-  "intelligence": 0.5, 
+  "strength": 50,
+  "agility": 50,
+  "intelligence": 50, 
   "weapon": "*fire-sword"}, 
 
  {"&template": "bite", 
@@ -41,8 +41,8 @@
   "name": "wolf", 
   "health": 30,
   "armor": 0,
-  "strength": 0.35,
-  "agility": 0.55,
+  "strength": 35,
+  "agility": 55,
   "weapon": "*bite"}
 
   ]

@@ -23,8 +23,8 @@ import random
 from .tags import TagBag
 from .weapons import Hit, Events, HealthEvent, Condition, Weapon, DmgTypes
 
-SIGMA = 0.125 # std. dev. for a normal distribution more or less contained in 0..1
-MU = 0.5 # average of the above distribution
+SIGMA = 12.5 # std. dev. for a normal distribution more or less contained in 0..100
+MU = 50 # average of the above distribution
 
 
 class Actor(object):
