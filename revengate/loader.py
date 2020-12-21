@@ -27,7 +27,7 @@ from pprint import pprint
 
 from . import tags
 from .tags import Tag
-from .weapons import Injurious
+from .weapons import Injurious, Effect
 from .actors import Actor
 
 # Special fields:
@@ -64,9 +64,8 @@ class Loader:
         super(Loader, self).__init__()
         self._class_map = {} # name -> class object mapping
         self._templates = {} # for by-name invokation
-        self._map_class_tree(Tag)
-        self._map_class_tree(Injurious)
-        self._map_class_tree(Actor)
+        for cls in [Tag, Injurious, Effect, Actor]:
+            self._map_class_tree(cls)
         
     def _map_class_tree(self, cls):
         """ Add all the subclasses of cls to the class map. """
@@ -137,7 +136,7 @@ class Loader:
         if isinstance(recs, dict):
             return self._decode_one(recs)
         else:
-            return map(self._decode_one, recs)
+            return [self._decode_one(r) for r in recs]
 
     def _random_field(self, val):
         """ Convert val into a random generator.
@@ -239,7 +238,6 @@ class Loader:
         return self._instanciate(fields.pop("&class"), fields)
 
 def main():
-    from pprint import pprint
     loader = Loader()
     objs = loader.load(open(sys.argv[1], "r"))
     pprint(list(objs))

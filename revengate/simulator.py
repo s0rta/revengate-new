@@ -17,18 +17,23 @@
 
 """ Run simulations on various parts of the rule engine to test the balance. """
 
+import sys
 from collections import Counter
+from pprint import pprint
+
 from .tags import t
 from .actors import Humanoid, Monster
 from . import weapons
 from .weapons import Events
+from .loader import Loader
 
 class Engine(object):
     """ Keep track of all the actors and implement the turns logic. """
-    def __init__(self):
+    def __init__(self, loader):
         super(Engine, self).__init__()
         self.actors = [] # TODO: move to a priority queue when implementing initiative
         self.current_turn = 0
+        self.loader = loader
 
     def register(self, actor):
         """ Register an actor with this engine. """
@@ -46,16 +51,12 @@ class Engine(object):
 
 def man_vs_wolf(engine):
     start = engine.current_turn
-    me = Humanoid(60, 0, .50, .50, .50, 4, 4)
-    me.name = "you"
-    fire_sword = weapons.Weapon("fire sword", 6, t("heat"))
-    fire_sword.effects.append(weapons.Effect("flames", 3, 2, weapons.DmgTypes.HEAT))
-    me.weapon = fire_sword
-    wolf = Monster(30, 0, .35, .55)
-    wolf.weapon = weapons.Injurious("bite", 5, weapons.DmgTypes.PIERCE)
+    me = engine.loader.invoke("hero")
+    wolf = engine.loader.invoke("wolf")
 
     engine.register(me)
     engine.register(wolf)
+    # FIXME: deregister after the combat
 
     while (me.health > 0 and wolf.health > 0):
         print(engine.advance_turn() or "no turn updates")
@@ -86,7 +87,10 @@ def run_many(engine, combat_func, nbtimes=100):
 
 def main():
     print("Running a simulation for basic attacks.")
-    eng = Engine()
+
+    loader = Loader()
+    loader.load(open(sys.argv[1], "r"))
+    eng = Engine(loader)
 
     #man_vs_wolf(eng)
     run_many(eng, man_vs_wolf)
