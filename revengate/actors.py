@@ -21,11 +21,11 @@ monsters, characters, etc.
 
 import random
 from .tags import TagBag
-from .weapons import Hit, Events, HealthEvent, Condition, Weapon, DmgTypes
+from .weapons import Hit, Events, HealthEvent, Condition, Weapon, Families
 
 SIGMA = 12.5 # std. dev. for a normal distribution more or less contained in 0..100
 MU = 50 # average of the above distribution
-
+RES_FACTOR = 0.5 # 50% less damage if you have a resistance
 
 class Actor(object):
     """ Base class of all actors. """
@@ -41,7 +41,7 @@ class Actor(object):
         self.strength = strength
         self.agility = agility
 
-        self.resistances = TagBag('DmgType')
+        self.resistances = TagBag('Family')
         self.weapon = None
 
         # taxon and identifiers
@@ -135,22 +135,22 @@ class Actor(object):
         dmg = foe.take_damage(weapon, dmg)
         return Hit(foe, self, weapon, dmg, crit)
 
-    def take_damage(self, injurious, dmg):
+    def take_damage(self, vector, dmg):
         """ 
         Receive `dmg` damage point from something injurious.  Compute armor 
-        protection, resistances, and weaknesses; update health; return how many effective 
-        damage were applied. 
+        protection, resistances, and weaknesses; update health; return how many 
+        effective damages were applied. 
         """
-        if injurious.dmg_type in self.resistances:
-            dmg *= 0.5 # 50% less damage if you have a resistance
+        if vector.family in self.resistances:
+            dmg *= RES_FACTOR
         dmg = round(max(0, dmg - self.armor))
         self.health -= dmg
         
         # damage over time effects
-        for effect in injurious.effects:
+        for effect in vector.effects:
             h_delta = -effect.damage
-            if effect.dmg_type in self.resistances:
-                h_delta *= 0.5
+            if effect.family in self.resistances:
+                h_delta *= RES_FACTOR
             start = self.engine.current_turn + 1
             if isinstance(effect.duration, int):
                 stop = start + effect.duration
@@ -186,7 +186,19 @@ class Character(Actor):
     def __init__(self, health, armor, strength, agility, intelligence):
         super(Character, self).__init__(health, armor, strength, agility)
         self.intelligence = intelligence
+        self.mana = round(intelligence / 3)
+        self.spells = []
         
+    def cast(self, spell, target=None):
+        """ Cast a spell, optionally directing it at target. """
+
+        # FIXME: compute damage and effects
+        dmg = self.get_damage(weapon)
+        # TODO: mana accounting
+
+        dmg = foe.take_damage(weapon, dmg)
+        return Hit(foe, self, weapon, dmg, crit)
+
 
 class Humanoid(Character):
     """ Your average human shapped creature. 
@@ -194,12 +206,12 @@ class Humanoid(Character):
     def __init__(self, health, armor, strength, agility, intelligence, fist_r=4, fist_l=None):
         super(Humanoid, self).__init__(health, armor, strength, agility, intelligence)
         if fist_r:
-            self.fist_r = Weapon("fist", fist_r, DmgTypes.IMPACT)
+            self.fist_r = Weapon("fist", fist_r, Families.IMPACT)
         else:
             self.fist_r = None
 
         if fist_l:
-            self.fist_l = Weapon("fist", fist_l, DmgTypes.IMPACT)
+            self.fist_l = Weapon("fist", fist_l, Families.IMPACT)
         else:
             self.fist_l = None
             
