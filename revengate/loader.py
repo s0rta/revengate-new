@@ -85,7 +85,7 @@ class Loader:
             return self.invoke(field[1:])
         return field
   
-    def _instanciate(self, cls_name, fields):
+    def _instanciate(self, cls_name, fields, template_name=None):
         """ Create an instance of cls_name with all the fields specified.
         
         As many fields as possible are passed to the constructor, the other 
@@ -100,9 +100,16 @@ class Loader:
                 fields[k] = [self._expand_one(s) for s in v]
         # find which fields are contructor friendly
         init_args = {}
-        for arg in inspect.signature(cls).parameters:
+        params = inspect.signature(cls).parameters
+        for arg in params:
             if arg in fields:
                 init_args[arg] = fields.pop(arg)
+                
+        # 'name' is a special case: it's often the same at the Template name
+        if "name" in params and "name" not in init_args:
+            if template_name:
+                init_args["name"] = template_name
+        
         obj = cls(**init_args)
         # set the other fields after creation
         for attr in fields:
@@ -196,7 +203,7 @@ class Loader:
         # resolution is two steps: 
         # 1) find all the parents
         # 2) populate all the fields starting at the oldest ancestor
-        oname = template.name
+        oname = template.name # the original name before we resolve inheritance
         seen = set() # to prevent infinite loops
         stack = []
         while template is not None:
@@ -236,7 +243,7 @@ class Loader:
                                          f"Can't apply {prefix!r} transform.")
             # batch apply the other fields
             fields.update(tfields)
-        return self._instanciate(fields.pop("&class"), fields)
+        return self._instanciate(fields.pop("&class"), fields, oname)
 
 def main():
     loader = Loader()
