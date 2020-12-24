@@ -107,13 +107,20 @@ class Events(list):
 class Effect(object):
     """ A long term effect. """
     family = TagSlot(Family)
-    def __init__(self, name, duration, damage, family, verb=None):
+    def __init__(self, name, duration, h_delta, family, verb=None):
         super(Effect, self).__init__()
         self.name = name
         self.duration = duration # either an int or a (min, max) tuple 
-        self.damage = damage
+        self.h_delta = h_delta
         self.family = family
         self.verb = verb
+
+    def _get_damage(self):
+        """ For weapons, it's easier to think in terms of damage. """
+        return -self.h_delta
+    def _set_damage(self, dmg):
+        self.h_delta = -dmg
+    damage = property(_get_damage, _set_damage)
 
 
 class Condition(object):
@@ -163,3 +170,11 @@ class Weapon(Injurious):
     weilded. """
     def __init__(self, name, damage, family, verb=None):
         super(Weapon, self).__init__(name, damage, family, verb=None)
+
+
+class Spell(HealthVector):
+    """ A magical invocation """
+    def __init__(self, name, h_delta, family, cost, verb=None):
+        super(Spell, self).__init__(name, h_delta, family, verb)
+        self.cost = cost
+        

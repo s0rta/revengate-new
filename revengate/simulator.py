@@ -71,6 +71,33 @@ def man_vs_wolf(engine):
           f" {duration} turns)")
     return winner, duration
 
+
+def mage_vs_wolf(engine):
+    start = engine.current_turn
+    me = engine.loader.invoke("mage")
+    wolf = engine.loader.invoke("wolf")
+
+    engine.register(me)
+    engine.register(wolf)
+    # FIXME: deregister after the combat
+
+    while (me.health > 0 and wolf.health > 0):
+        print(engine.advance_turn() or "no turn updates")
+        if me.mana > 5:
+            hits = me.cast(me.spells[0], wolf)
+        else:
+            hits = me.attack(wolf)
+        print(hits or f"{me} miss!")
+        hits = wolf.attack(me)
+        print(hits or f"{wolf} miss!")
+    duration = engine.current_turn - start
+    victim = me.health <= 0 and me or wolf
+    winner = victim is me and wolf or me
+    print(f"{victim} died!  ({me.health} vs {wolf.health} HP;"
+          f" {duration} turns)")
+    return winner, duration
+
+
 def run_many(engine, combat_func, nbtimes=100):
     """ Run a simulation nbtimes and print a statistical summary. """
     winners = Counter()
@@ -93,7 +120,7 @@ def main():
     eng = Engine(loader)
 
     #man_vs_wolf(eng)
-    run_many(eng, man_vs_wolf)
+    run_many(eng, mage_vs_wolf)
 
 if __name__ == '__main__':
     main()

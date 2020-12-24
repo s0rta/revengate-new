@@ -27,7 +27,7 @@ from pprint import pprint
 
 from . import tags
 from .tags import Tag
-from .weapons import Injurious, Effect
+from .weapons import HealthVector, Effect
 from .actors import Actor
 
 # Special fields:
@@ -64,7 +64,7 @@ class Loader:
         super(Loader, self).__init__()
         self._class_map = {} # name -> class object mapping
         self._templates = {} # for by-name invokation
-        for cls in [Tag, Injurious, Effect, Actor]:
+        for cls in [Tag, HealthVector, Effect, Actor]:
             self._map_class_tree(cls)
         
     def _map_class_tree(self, cls):
@@ -164,7 +164,8 @@ class Loader:
             if isinstance(val, list):
                 return parent_val + val
             else:
-                return parent_val.append(val)
+                parent_val.append(val)
+                return parent_val
         raise ValueError(f"Adding ${val} to base value ${parent_val} is"
                          " unsupported.")
 
@@ -230,9 +231,9 @@ class Loader:
                     if k in fields:
                         fields[k] = action(fields[k], v)
                     else: 
-                        raise ValueError(f"Field ${k} in template ${oname} has"
-                                         f" no parent value. " 
-                                         f"Can't apply '${prefix}' transform.")
+                        raise ValueError(f"Field {k!r} in template {oname!r}"
+                                         f" has no parent value. " 
+                                         f"Can't apply {prefix!r} transform.")
             # batch apply the other fields
             fields.update(tfields)
         return self._instanciate(fields.pop("&class"), fields)

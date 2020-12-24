@@ -20,8 +20,11 @@ monsters, characters, etc.
 """
 
 import random
+from pysnooper import snoop
+
 from .tags import TagBag
-from .weapons import Hit, Events, HealthEvent, Condition, Weapon, Families
+from .weapons import (Hit, Events, HealthEvent, Condition, Weapon, Spell, 
+                      Families)
 
 SIGMA = 12.5 # std. dev. for a normal distribution more or less contained in 0..100
 MU = 50 # average of the above distribution
@@ -125,52 +128,69 @@ class Actor(object):
         roll = random.normalvariate(MU, SIGMA)
         if roll < foe.get_evasion():
             return None  # miss!
-        dmg = self.get_damage(weapon)
 
         if roll > MU+2*SIGMA:
             # critical hit!
             crit = True
-            dmg *= (1+self.critical_mult)
+        h_delta = self.make_delta(weapon, crit)
 
-        dmg = foe.take_damage(weapon, dmg)
-        return Hit(foe, self, weapon, dmg, crit)
+        h_delta = foe.apply_delta(weapon, h_delta)
+        return Hit(foe, self, weapon, -h_delta, crit)
 
-    def take_damage(self, vector, dmg):
+    def apply_delta(self, vector, h_delta):
         """ 
-        Receive `dmg` damage point from something injurious.  Compute armor 
+        Receive damage or healing from a HealthVector.  Compute armor 
         protection, resistances, and weaknesses; update health; return how many 
-        effective damages were applied. 
+        effective health points changed. 
         """
-        if vector.family in self.resistances:
-            dmg *= RES_FACTOR
-        dmg = round(max(0, dmg - self.armor))
-        self.health -= dmg
-        
+        # We don't resist healings
+        if h_delta < 0:
+            if vector.family in self.resistances:
+                h_delta *= RES_FACTOR
+            # spells bypass armor
+            if not isinstance(vector, Spell):
+                h_delta = min(0, h_delta + self.armor)
+        h_delta = round(h_delta)
+        self.health += h_delta
+
         # damage over time effects
         for effect in vector.effects:
-            h_delta = -effect.damage
+            cond_delta = effect.h_delta
             if effect.family in self.resistances:
-                h_delta *= RES_FACTOR
+                cond_delta *= RES_FACTOR
             start = self.engine.current_turn + 1
             if isinstance(effect.duration, int):
                 stop = start + effect.duration
             else:
                 stop = start + random.randint(*effect.duration)
-            cond = Condition(effect, start, stop, h_delta)
+            cond = Condition(effect, start, stop, cond_delta)
             self.conditions.append(cond)
-        return dmg
+        return h_delta
 
     def get_evasion(self):
         # TODO: check for incapacitation
         return self.agility
 
-    def get_damage(self, weapon):
-        """ Return how much damage the actor can do with a given weapon taking 
-        into account procificency and incapacitation. """
+    def make_delta(self, vector, critical=False):
+        """ Return how much damage or healing the actor can do with a given 
+        HealthVector taking into account procificency, incapacitation, and 
+        critical hits. """
 
-        # TODO: check for proficiency
-        dmg = weapon.damage
-        return (1 + self.strength - MU) * dmg * random.random()
+        # The relevant stat moves the 50% average.  Ex. if you are 60 strength, 
+        # you hit 10% harder with weapons.
+        if isinstance(vector, Weapon):
+            stat = self.strength
+        elif isinstance(vector, Spell):
+            stat = self.intelligence
+        else:
+            stat = MU # everyone is perfectly average with improvised vectors
+
+        if critical:
+            h_delta = vector.h_delta * self.critical_mult
+        else:
+            h_delta = vector.h_delta
+
+        return (1 + (stat - MU)/100.0) * h_delta * random.random()
 
 
 class Monster(Actor):
@@ -182,7 +202,7 @@ class Monster(Actor):
 
 class Character(Actor):
     """ Characters are everyone smart enough to become angry at something.  
-    Most characters can use equipment. """
+    Most characters can use equipment.  Can be PC or NPC."""
     def __init__(self, health, armor, strength, agility, intelligence):
         super(Character, self).__init__(health, armor, strength, agility)
         self.intelligence = intelligence
@@ -192,12 +212,13 @@ class Character(Actor):
     def cast(self, spell, target=None):
         """ Cast a spell, optionally directing it at target. """
 
-        # FIXME: compute damage and effects
-        dmg = self.get_damage(weapon)
-        # TODO: mana accounting
+        if self.mana < spell.cost:
+            raise RuntimeError(f"Not enough mana to cast {spell.name}!")
 
-        dmg = foe.take_damage(weapon, dmg)
-        return Hit(foe, self, weapon, dmg, crit)
+        h_delta = self.make_delta(spell)
+        h_delta = target.apply_delta(spell, h_delta)
+        self.mana -= spell.cost
+        return Hit(target, self, spell, -h_delta)
 
 
 class Humanoid(Character):
