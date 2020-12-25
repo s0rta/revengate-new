@@ -20,9 +20,8 @@ monsters, characters, etc.
 """
 
 import random
-from pysnooper import snoop
 
-from .tags import TagBag
+from .tags import TagBag, TagSlot, Faction
 from .weapons import (Hit, Events, HealthEvent, Condition, Weapon, Spell, 
                       Families)
 
@@ -34,7 +33,8 @@ class Actor(object):
     """ Base class of all actors. """
     # everyone defaults to 35% more damage with a critical hit
     critical_mult = 0.35 
-    
+    faction = TagSlot(Faction)
+
     def __init__(self, health, armor, strength, agility):
         super(Actor, self).__init__()
         self.health = health

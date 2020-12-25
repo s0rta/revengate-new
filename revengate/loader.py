@@ -72,7 +72,7 @@ class Loader:
         self._class_map[cls.__name__] = cls
         for sub in cls.__subclasses__():
             self._map_class_tree(sub)
-  
+
     def _expand_one(self, field):
         """ Expand invokations (tags and templates), and generators in field.
         

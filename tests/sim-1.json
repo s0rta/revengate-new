@@ -1,5 +1,9 @@
 
-[{"&template": "blade", 
+[{"&class": "Faction", 
+  "name": "lumiere"},
+ {"&class": "Faction", 
+  "name": "beasts"},
+ {"&template": "blade", 
   "&class": "Weapon", 
   "family": "#slice", 
   "verb": "cut"}, 
@@ -38,7 +42,8 @@
   "spells": []}, 
  {"&template": "mage", 
   "&parent": "hero", 
-  "+spells": "*fire-arc"},
+  "+spells": "*fire-arc", 
+  "faction": "#lumiere"},
   
  {"&template": "bite", 
   "&class": "Injurious", 
@@ -52,6 +57,7 @@
   "armor": 0,
   "strength": 35,
   "agility": 55,
-  "weapon": "*bite"}
+  "weapon": "*bite", 
+  "faction": "#beasts"}
 
   ]

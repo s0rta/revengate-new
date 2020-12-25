@@ -17,7 +17,7 @@
 
 """ Textual tagging. """
 
-class Tag(str):
+class Tag:
     """ An individual tag. """
     _registry = None
     def __init__(self, name, desc=None):
@@ -36,9 +36,11 @@ class Tag(str):
     def __eq__(self, tag):
         if isinstance(tag, Tag):
             return self.name == tag.name
+        elif isinstance(tag, str):
+            return self.name == tag
         else:
             return super(Tag, self).__eq__(tag)
-
+        
     def __repr__(self):
         if self.desc:
             return f"<{self.__class__.__name__}({self.name!r}, {self.desc!r})>"
@@ -56,6 +58,10 @@ class Tag(str):
         if cls._registry is None:
             return False
         return tag in cls._registry
+
+
+class Faction(Tag):
+    pass
 
 
 def _find_tag(name, cls=Tag):
