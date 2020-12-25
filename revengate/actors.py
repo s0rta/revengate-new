@@ -209,8 +209,16 @@ class Character(Actor):
         self.mana = round(intelligence / 3)
         self.spells = []
         
+    def _find_spell(self, name):
+        for spell in self.spells:
+            if spell.name == name:
+                return spell
+        raise ValueError(f"No known spell called {name} for {self}")
+
     def cast(self, spell, target=None):
         """ Cast a spell, optionally directing it at target. """
+        if isinstance(spell, str):
+            spell = self._find_spell(spell)
 
         if self.mana < spell.cost:
             raise RuntimeError(f"Not enough mana to cast {spell.name}!")

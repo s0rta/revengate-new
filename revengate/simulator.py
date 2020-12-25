@@ -84,7 +84,7 @@ def mage_vs_wolf(engine):
     while (me.health > 0 and wolf.health > 0):
         print(engine.advance_turn() or "no turn updates")
         if me.mana > 5:
-            hits = me.cast(me.spells[0], wolf)
+            hits = me.cast("fire-arc", wolf)
         else:
             hits = me.attack(wolf)
         print(hits or f"{me} miss!")
