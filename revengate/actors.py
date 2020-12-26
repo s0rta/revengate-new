@@ -22,6 +22,7 @@ monsters, characters, etc.
 import random
 
 from .tags import TagBag, TagSlot, Faction
+from .strategies import StrategySlot
 from .weapons import (Hit, Events, HealthEvent, Condition, Weapon, Spell, 
                       Families)
 
@@ -34,6 +35,7 @@ class Actor(object):
     # everyone defaults to 35% more damage with a critical hit
     critical_mult = 0.35 
     faction = TagSlot(Faction)
+    strategy = StrategySlot()
 
     def __init__(self, health, armor, strength, agility):
         super(Actor, self).__init__()

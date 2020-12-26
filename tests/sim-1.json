@@ -3,6 +3,10 @@
   "name": "lumiere"},
  {"&class": "Faction", 
   "name": "beasts"},
+  
+ {"&template": "tribal", 
+  "&class": "Tribal"},
+  
  {"&template": "blade", 
   "&class": "Weapon", 
   "family": "#slice", 
@@ -43,7 +47,8 @@
  {"&template": "mage", 
   "&parent": "hero", 
   "+spells": "*fire-arc", 
-  "faction": "#lumiere"},
+  "faction": "#lumiere", 
+  "strategy": "*tribal"},
   
  {"&template": "bite", 
   "&class": "Injurious", 
@@ -58,6 +63,7 @@
   "strength": 35,
   "agility": 55,
   "weapon": "*bite", 
-  "faction": "#beasts"}
+  "faction": "#beasts", 
+  "strategy": "*tribal"}
 
   ]

@@ -18,8 +18,9 @@
 """ Run simulations on various parts of the rule engine to test the balance. """
 
 import sys
-from collections import Counter
+from collections import Counter, defaultdict
 from pprint import pprint
+from argparse import ArgumentParser
 
 from .tags import t
 from .actors import Humanoid, Monster
@@ -39,6 +40,9 @@ class Engine(object):
         """ Register an actor with this engine. """
         actor.set_engine(self)
         self.actors.append(actor)
+
+    def deregister(self, actor):
+        self.actor = [a for a in self.actors if a != actor]
 
     def advance_turn(self):
         """ Update everything that needs to be updated at the start of a new 
@@ -98,6 +102,53 @@ def mage_vs_wolf(engine):
     return winner, duration
 
 
+def last_faction_standing(engine, actor_names):
+    start = engine.current_turn
+    actors = set()
+    factions = defaultdict(lambda: set()) # name->actors map
+    
+    def filter_empties():
+        nonlocal actors
+        for f in factions:
+            factions[f] = {a for a in factions[f] if a.health > 0}
+        actors = {a for a in actors if a.health > 0}
+
+    for name in actor_names:
+        actor = engine.loader.invoke(name)
+        factions[actor.faction].add(actor)
+        actors.add(actor)
+        engine.register(actor)
+    orig_cast = list(actors)
+    
+    while len([f for f in factions if len(factions[f]) > 0]) > 1:
+        print(engine.advance_turn() or "no turn updates")
+        filter_empties()
+        for a in actors:
+            if a.health <= 0:
+                continue
+            target = a.strategy.select_target(actors - {a})
+            if target:
+                hit = a.attack(target)
+                print(hit)
+                if target.health <= 0:
+                    print(f"{target} died!")
+        filter_empties()
+    
+    for actor in orig_cast:
+        engine.deregister(actor)
+    duration = engine.current_turn - start
+    winner = [f for f in factions if len(factions[f]) > 0][0]
+    print("Battle is over!")
+    print(f"{winner.name} won in {duration} turns!")
+    print("Survivors: " +
+          ", ".join([f"{a.name} ({a.health}HP)" for a in factions[winner]]))
+    return winner, duration
+
+
+def wolf_pack_skirmish(engine):
+    return last_faction_standing(engine, ["mage", "wolf", "wolf", "wolf"])
+
+
 def run_many(engine, combat_func, nbtimes=100):
     """ Run a simulation nbtimes and print a statistical summary. """
     winners = Counter()
@@ -113,14 +164,24 @@ def run_many(engine, combat_func, nbtimes=100):
           f"Fights lasted {avg} turns on average.")
 
 def main():
-    print("Running a simulation for basic attacks.")
+    parser = ArgumentParser()
+    parser.add_argument("-l", "--load", metavar="FILE", type=open, nargs="+", 
+                        help="Template files to load.")
+    parser.add_argument("-a", "--actors", metavar="ACTOR", type=str, nargs="+", 
+                        help=("Actors to include in the simulation; names can " 
+                              "be repeated to create a group of the same kind " 
+                              "of actor."))
+    
+    args = parser.parse_args()
 
     loader = Loader()
-    loader.load(open(sys.argv[1], "r"))
+    for f in args.load:
+        loader.load(f)
     eng = Engine(loader)
 
-    #man_vs_wolf(eng)
-    run_many(eng, mage_vs_wolf)
+    def sim(engine):
+        return last_faction_standing(engine, args.actors)
+    run_many(eng, sim)
 
 if __name__ == '__main__':
     main()

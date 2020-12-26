@@ -27,6 +27,7 @@ from pprint import pprint
 
 from . import tags
 from .tags import Tag
+from .strategies import Strategy
 from .weapons import HealthVector, Effect
 from .actors import Actor
 
@@ -64,7 +65,7 @@ class Loader:
         super(Loader, self).__init__()
         self._class_map = {} # name -> class object mapping
         self._templates = {} # for by-name invokation
-        for cls in [Tag, HealthVector, Effect, Actor]:
+        for cls in [Tag, HealthVector, Effect, Strategy, Actor]:
             self._map_class_tree(cls)
         
     def _map_class_tree(self, cls):

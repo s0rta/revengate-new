@@ -146,6 +146,7 @@ class TagSlot:
             else:
                 namespace = cls
         self.namespace = namespace
+        self.slot = None
 
     def __set_name__(self, owner, name):
         self.slot = '_' + name
