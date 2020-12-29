@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 # Copyright © 2020 Yannick Gingras <ygingras@ygingras.net>
 
 # This file is part of Revengate.
@@ -163,6 +165,30 @@ def run_many(engine, combat_func, nbtimes=100):
     print(f"{champ} won {victories} times. "
           f"Fights lasted {avg} turns on average.")
 
+
+def map_demo(eng, actor_names):
+    from .maps import Map, Builder
+    from random import randrange
+    map = Map()
+    builder = Builder(map)
+    builder.init(40, 20)
+    builder.room(5, 5, 20, 15, True)
+    actors = []
+    for name in actor_names:
+        a = eng.loader.invoke(name)
+        actors.append(a)
+        x, y = randrange(6, 20), randrange(6, 15)
+        map.place(a, x, y)
+    print(map.to_text())
+    for i in range(15):
+        for a in actors:
+            x, y = map._a_to_pos[a]
+            if x < 20:
+                map.move(a, x+1, y)
+        print(map.to_text())
+
+
+
 def main():
     parser = ArgumentParser()
     parser.add_argument("-l", "--load", metavar="FILE", type=open, nargs="+", 
@@ -171,6 +197,8 @@ def main():
                         help=("Actors to include in the simulation; names can " 
                               "be repeated to create a group of the same kind " 
                               "of actor."))
+    parser.add_argument("-m", "--map", action="store_true", 
+                        help="Run the map simulation instead of the combat one.")
     
     args = parser.parse_args()
 
@@ -179,9 +207,12 @@ def main():
         loader.load(f)
     eng = Engine(loader)
 
-    def sim(engine):
-        return last_faction_standing(engine, args.actors)
-    run_many(eng, sim)
+    if args.map:
+        map_demo(eng, args.actors)
+    else:
+        def sim(engine):
+            return last_faction_standing(engine, args.actors)
+        run_many(eng, sim)
 
 if __name__ == '__main__':
     main()

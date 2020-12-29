@@ -64,6 +64,7 @@
   "agility": 55,
   "weapon": "*bite", 
   "faction": "#beasts", 
-  "strategy": "*tribal"}
+  "strategy": "*tribal", 
+  "char": "d"}
 
   ]

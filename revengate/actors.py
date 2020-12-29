@@ -36,6 +36,7 @@ class Actor(object):
     critical_mult = 0.35 
     faction = TagSlot(Faction)
     strategy = StrategySlot()
+    char = "X" # How to render this actor on the text map
 
     def __init__(self, health, armor, strength, agility):
         super(Actor, self).__init__()
@@ -198,6 +199,7 @@ class Actor(object):
 class Monster(Actor):
     """ Monsters follow their instinct; they do not posses soffisticated 
     aspirations nor ethics. """
+    char = "x"
     def __init__(self, health, armor, strength, agility):
         super(Monster, self).__init__(health, armor, strength, agility)
         
@@ -234,6 +236,7 @@ class Character(Actor):
 class Humanoid(Character):
     """ Your average human shapped creature. 
     Most creatures of that shape know how to throw a punch. """
+    char = "@"
     def __init__(self, health, armor, strength, agility, intelligence, fist_r=4, fist_l=None):
         super(Humanoid, self).__init__(health, armor, strength, agility, intelligence)
         if fist_r:
