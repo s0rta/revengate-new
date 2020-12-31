@@ -167,12 +167,14 @@ def run_many(engine, combat_func, nbtimes=100):
 
 
 def map_demo(eng, actor_names):
-    from .maps import Map, Builder
-    from random import randrange
+    from .maps import Map, Builder, MapOverlay
+    from random import randrange, sample
     map = Map()
     builder = Builder(map)
     builder.init(40, 20)
     builder.room(5, 5, 20, 15, True)
+    builder.room(12, 7, 14, 12, True)
+
     actors = []
     for name in actor_names:
         a = eng.loader.invoke(name)
@@ -180,13 +182,25 @@ def map_demo(eng, actor_names):
         x, y = randrange(6, 20), randrange(6, 15)
         map.place(a, x, y)
     print(map.to_text())
-    for i in range(15):
+    for i in range(3):
         for a in actors:
-            x, y = map._a_to_pos[a]
-            if x < 20:
+            x, y = map.find(a)
+            if map.is_free(x+1, y):
                 map.move(a, x+1, y)
         print(map.to_text())
-
+    a1, a2 = sample(actors, 2)
+    a1_pos = map.find(a1)
+    print(f"adjacent to {a1} at {a1_pos}")
+    overlay = MapOverlay()
+    map.add_overlay(overlay)
+    
+    start, stop = map.find(a1), map.find(a2)
+    print(f"path from {start} to {stop}")
+    path = list(map.path(*start, *stop))
+    for x, y in path[1:-1]:
+        overlay.place('x', x, y)
+    print(map.to_text())
+    print(list(path))
 
 
 def main():
