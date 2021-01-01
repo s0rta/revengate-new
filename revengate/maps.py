@@ -18,6 +18,7 @@
 """ Maps and movement. """
 
 import heapq
+import random
 from copy import deepcopy
 from enum import IntEnum, auto
 from collections import defaultdict
@@ -93,6 +94,10 @@ class Map:
     
     def clear_overlays(self):
         self.overlays = []
+        
+    def all_actors(self):
+        """ Return a list of all actors known to be on the map. """
+        return self._a_to_pos.keys()
             
     def distance(self, x1, y1, x2, y2):
         """ Return the grid distance between two points.  
@@ -102,26 +107,68 @@ class Map:
         # This is not the Manhattan disance since we allow diagonal movement.
         return max(abs(x1 - x2), abs(y1 - y2))
     
-    def adjacents(self, x, y, free=False):
+    def _ring(self, center, radius=1, free=False, shuffle=False):
+        """ Return a list of coords defining a ring with the given centre.  
+        
+        The shape is a square for square tiles and a hex for hex tiles."""
+        x, y = center
+        w, h = self.size()
+
+        tiles = []
+        for i in range(max(0, x-radius), min(x+radius+1, w)):
+            if y >= radius:
+                tiles.append((i, y-radius))
+            if y+radius < h:
+                tiles.append((i, y+radius))
+
+        for j in range(max(0, y-radius+1), min(y+radius, h)):
+            if x >= radius:
+                tiles.append((x-radius, j))
+            if x+radius < w:
+                tiles.append((x+radius, j))
+
+        if shuffle:
+            random.shuffle(tiles)
+
+        if free:
+            tiles = [t for t in tiles if self.is_free(*t)]
+        
+        return tiles        
+    
+    def adjacents(self, x, y, free=False, shuffle=False):
         """ Return a list of coordinates for tiles adjacent to (x, y).
         
         Map boundaries are checked. 
         If free=True, only tiles availble for moving are returned. 
         """
-        tiles = []
-        for i in range(-1, 2):
-            tiles.append((x+i, y+1))
-            tiles.append((x+i, y-1))
-        tiles.append((x-1, y))
-        tiles.append((x+1, y))
+        return self._ring((x, y), 1, free, shuffle)
+
+    def random_tile(self, free):
+        """ Return a random tile (x, y) coordinate. 
+        
+        If free=True, the tile can allow an actor to step on.
+        Raise a RuntimeError if no suitable tile can be found. """
+        # Fully random attempts a few times, then we systematically explore all
+        # the tile if we still haven't found one
         w, h = self.size()
-        tiles = [(x, y) for x, y in tiles if 0<=x<w and 0<=y<h]
-        if free:
-            tiles = [t for t in tiles if self.is_free(*t)]
-        return tiles
+        for i in range(5):
+            x, y = random.randrange(w), random.randrange(h)
+            if free:
+                if self.is_free(x, y):
+                    return (x, y)
+            else: 
+                return (x, y)
+        # Still no luck, so we spiral around the last attempt until we have 
+        # tried everything on the map.
+        for rad in range(1, max(w, h)):
+            tiles = self._ring((x, y), rad, free=free, shuffle=True)
+            if tiles:
+                return next(iter(tiles))
+        raise RuntimeError("Can't find a free tile on the map.  It appears to"
+                           " be completely full!")
 
     def is_free(self, x, y):
-        """ Is the tile at (x, y) free for at actor to step on?"""
+        """ Is the tile at (x, y) free for a nactor to step on?"""
         coord = (x, y)
         if self.tiles[x][y] in WALKABLE and coord not in self._pos_to_a:
             return True
@@ -180,9 +227,11 @@ class Map:
             return self._a_to_pos[thing]
         return None
 
-    def place(self, thing, x, y):
-        """ Put thing on the map at (x, y). """
-        pos = (x, y)
+    def place(self, thing, pos=None):
+        """ Put thing on the map at pos=(x, y). 
+        If pos is not not supplied, a random position is selected. """
+        if pos is None:
+            pos = self.random_tile(free=True)
         if isinstance(thing, Actor):
             if pos in self._pos_to_a:
                 raise ValueError(f"There is already an actor at {pos}!")
@@ -243,7 +292,8 @@ class MapOverlay:
                 return self.tiles[x][y]
         return None
     
-    def place(self, thing, x, y):
+    def place(self, thing, pos):
+        x, y = pos
         self.tiles[x][y] = thing
         
     def items(self):
@@ -296,6 +346,17 @@ def main():
     builder.init(40, 20)
     builder.room(20, 5, 5, 15, True)
     print(map.to_text())
+    for i in range(10):
+        x, y = random.randrange(40), random.randrange(20)
+        r1 = list(map.adjacents(x, y, free=True))
+        r2 = list(map._ring((x, y), free=True))
+        print(f"center: {x, y}")
+        if sorted(r1) != sorted(r2):
+            print(f"r1: {r1}")
+            print(f"r2: {r2}")
+        else:
+            print("Equal!")
+        
 
 
 if __name__ == "__main__":

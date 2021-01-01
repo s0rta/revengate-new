@@ -24,7 +24,21 @@ class Strategy:
         self.name = name
         self.actor = actor
         
-    def select_target(self, targets):
+    def act(self, map):
+        actors = map.all_actors() # TODO: ignore the out of sight ones
+        target = self.select_target(map, actors)
+        if target:
+            # TODO: check distance
+            here = map.find(self.actor)
+            there = map.find(target)
+            if map.distance(*here, *there) == 1:
+                return self.actor.attack(target)
+            else:
+                path = map.path(*here, *there)
+                if path:
+                    return self.actor.move(map, *list(path)[1])
+        
+    def select_target(self, map, targets):
         raise NotImplementedError()
 
 
@@ -55,9 +69,14 @@ class StrategySlot:
         
 class Tribal(Strategy):
     """ Attack anyone not in the same faction. """
-    def select_target(self, targets):
-        for t in targets:
-            if t.faction != self.actor.faction:
-                return t
-        return None # no one to attack
+    def select_target(self, map, targets):
+        pos = map.find(self.actor)
+        # FIXME: this does not garatee that there is a path to target
+        options = [(map.distance(*pos, *map.find(t)), t) for t in targets 
+                   if t.faction != self.actor.faction]
+        if options:
+            options.sort(key=lambda x:x[0])
+            return options[0][1]
+        else:
+            return None # no one to attack
 

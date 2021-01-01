@@ -23,12 +23,14 @@ import sys
 from collections import Counter, defaultdict
 from pprint import pprint
 from argparse import ArgumentParser
+from random import randrange, sample
 
 from .tags import t
 from .actors import Humanoid, Monster
 from . import weapons
 from .weapons import Events
 from .loader import Loader
+from .maps import Map, Builder, MapOverlay
 
 class Engine(object):
     """ Keep track of all the actors and implement the turns logic. """
@@ -103,11 +105,16 @@ def mage_vs_wolf(engine):
           f" {duration} turns)")
     return winner, duration
 
+def _split_factions(actors):
+    factions = defaultdict(lambda: set()) # name->actors map
+    for a in actors:
+        factions[a.faction].add(a)
+    return factions
 
 def last_faction_standing(engine, actor_names):
     start = engine.current_turn
     actors = set()
-    factions = defaultdict(lambda: set()) # name->actors map
+    #factions = defaultdict(lambda: set()) # name->actors map
     
     def filter_empties():
         nonlocal actors
@@ -117,10 +124,12 @@ def last_faction_standing(engine, actor_names):
 
     for name in actor_names:
         actor = engine.loader.invoke(name)
-        factions[actor.faction].add(actor)
+        #factions[actor.faction].add(actor)
         actors.add(actor)
         engine.register(actor)
     orig_cast = list(actors)
+    factions = _split_factions(actors)
+
     
     while len([f for f in factions if len(factions[f]) > 0]) > 1:
         print(engine.advance_turn() or "no turn updates")
@@ -167,40 +176,50 @@ def run_many(engine, combat_func, nbtimes=100):
 
 
 def map_demo(eng, actor_names):
-    from .maps import Map, Builder, MapOverlay
-    from random import randrange, sample
     map = Map()
     builder = Builder(map)
     builder.init(40, 20)
     builder.room(5, 5, 20, 15, True)
-    builder.room(12, 7, 14, 12, True)
+    builder.room(12, 7, 13, 12, True)
 
-    actors = []
+    actors = set()
     for name in actor_names:
         a = eng.loader.invoke(name)
-        actors.append(a)
-        x, y = randrange(6, 20), randrange(6, 15)
-        map.place(a, x, y)
-    print(map.to_text())
-    for i in range(3):
-        for a in actors:
-            x, y = map.find(a)
-            if map.is_free(x+1, y):
-                map.move(a, x+1, y)
-        print(map.to_text())
-    a1, a2 = sample(actors, 2)
-    a1_pos = map.find(a1)
-    print(f"adjacent to {a1} at {a1_pos}")
-    overlay = MapOverlay()
-    map.add_overlay(overlay)
+        actors.add(a)
+        eng.register(a)
+        map.place(a)
+    factions = _split_factions(actors)
+    orig_cast = list(actors)
     
-    start, stop = map.find(a1), map.find(a2)
-    print(f"path from {start} to {stop}")
-    path = list(map.path(*start, *stop))
-    for x, y in path[1:-1]:
-        overlay.place('x', x, y)
-    print(map.to_text())
-    print(list(path))
+    def filter_empties():
+        # TODO: find a more graceful way to handle death
+        nonlocal actors
+        for f in factions:
+            factions[f] = {a for a in factions[f] if a.health > 0}
+        actors = {a for a in actors if a.health > 0}
+    
+    start = eng.current_turn
+    while len([f for f in factions if len(factions[f]) > 0]) > 1:
+        print(eng.advance_turn() or "no turn updates")
+        filter_empties()
+        for a in actors:
+            if a.health <= 0:
+                continue
+            event = a.act(map)
+            if event:
+                print(event)
+        filter_empties()
+        print(map.to_text())
+    
+    for actor in orig_cast:
+        eng.deregister(actor)
+    duration = eng.current_turn - start
+    winner = [f for f in factions if len(factions[f]) > 0][0]
+    print("Battle is over!")
+    print(f"{winner.name} won in {duration} turns!")
+    print("Survivors: " +
+          ", ".join([f"{a.name} ({a.health}HP)" for a in factions[winner]]))
+    return winner, duration
 
 
 def main():

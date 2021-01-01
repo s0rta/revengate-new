@@ -23,8 +23,8 @@ import random
 
 from .tags import TagBag, TagSlot, Faction
 from .strategies import StrategySlot
-from .weapons import (Hit, Events, HealthEvent, Condition, Weapon, Spell, 
-                      Families)
+from .weapons import Condition, Weapon, Spell, Families
+from .events import Hit, Events, HealthEvent, Move
 
 SIGMA = 12.5 # std. dev. for a normal distribution more or less contained in 0..100
 MU = 50 # average of the above distribution
@@ -114,6 +114,28 @@ class Actor(object):
             return f"the {self.role}"
         order = self.__class__.__name__.lower()
         return f"the {order}"
+
+    def act(self, map):
+        """ Perform a action for this turn, return the Event summarizing 
+        the action. 
+        
+        Return None if no action is performed.
+        
+        In most cases, the choice of the action is delegated to the strategy 
+        while the selected action is performed by this class. """
+        if not self.strategy:
+            raise RuntimeError("Trying to perform an action before assigning " 
+                               "a strategy.")
+        return self.strategy.act(map)
+    
+    def move(self, map, x, y):
+        """ Move to (x, y) on the map, if we can get there, raise otherwise.
+        """
+        if map.is_free(x, y):
+            old_pos = map.find(self)
+            if map.distance(*old_pos, x, y) == 1:
+                map.move(self, x, y)
+                return Move(self, old_pos, (x, y))
 
     def attack(self, foe):
         """ Do all the stikes allowed in one turn against foe. """
