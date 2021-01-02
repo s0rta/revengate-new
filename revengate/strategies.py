@@ -17,26 +17,54 @@
 
 """ Various ways to decide who to attack and how to attack them. """
 
+class SelectionCache:
+    """ A placeholder for various properties about a target so we don't keep 
+    recomputing it. """
+    def __init__(self, map, actor, target):
+        self.map = map
+        self.actor = actor
+        self.target = target
+        self._pos_a = map.find(actor)
+        self._pos_t = map.find(target)
+        self._dist = None
+        self._los = None
+        self._path = None
+        
+    @property
+    def dist(self):
+        if self._dist == None:
+            self._dist = self.map.distance(self._pos_a, self._pos_t)
+        return self._dist
+
+    @property
+    def los(self):
+        if self._los == None:
+            self._los = self.map.line_of_sight(self._pos_a, self._pos_t)
+        return self._los
+
+    @property
+    def path(self):
+        if self._path == None:
+            self._path = list(self.map.path(self._pos_a, self._pos_t))
+        return self._path
+
 class Strategy:
     """ A play strategy to automate an actor's actions. """
     def __init__(self, name, actor=None):
         super(Strategy, self).__init__()
         self.name = name
         self.actor = actor
-        
+
     def act(self, map):
         actors = map.all_actors() # TODO: ignore the out of sight ones
-        target = self.select_target(map, actors)
-        if target:
-            # TODO: check distance
-            here = map.find(self.actor)
-            there = map.find(target)
-            if map.distance(*here, *there) == 1:
-                return self.actor.attack(target)
+        tc = self.select_target(map, actors)
+        if tc:
+            if tc.dist == 1:
+                return self.actor.attack(tc.target)
             else:
-                path = map.path(*here, *there)
+                path = tc.path
                 if path:
-                    return self.actor.move(map, *list(path)[1])
+                    return self.actor.move(map, path[1])
         
     def select_target(self, map, targets):
         raise NotImplementedError()
@@ -71,12 +99,26 @@ class Tribal(Strategy):
     """ Attack anyone not in the same faction. """
     def select_target(self, map, targets):
         pos = map.find(self.actor)
-        # FIXME: this does not garatee that there is a path to target
-        options = [(map.distance(*pos, *map.find(t)), t) for t in targets 
+        # TODO: tune-down the awareness and only start chasing a target if you 
+        #       can reasonably suspect where it is
+        options = [SelectionCache(map, self.actor, t) 
+                   for t in targets
                    if t.faction != self.actor.faction]
-        if options:
-            options.sort(key=lambda x:x[0])
-            return options[0][1]
+        # path finding is very expensive, so we start by looking at 
+        # map.distance() to find a smaller set, then we sort by actually path
+        # finding.
+        options.sort(key=lambda x:x.dist)
+        short_list = []
+        for opt in options:
+            if opt.dist == 1:
+                return opt
+            elif opt.path:
+                short_list.append(opt)
+                if len(short_list) == 5:
+                    break
+        if short_list:
+            short_list.sort(key=lambda x:len(x.path))
+            return short_list[0]
         else:
             return None # no one to attack
 

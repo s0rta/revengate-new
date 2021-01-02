@@ -128,14 +128,14 @@ class Actor(object):
                                "a strategy.")
         return self.strategy.act(map)
     
-    def move(self, map, x, y):
-        """ Move to (x, y) on the map, if we can get there, raise otherwise.
+    def move(self, map, new_pos):
+        """ Move to new_pos on the map, if we can get there, raise otherwise.
         """
-        if map.is_free(x, y):
+        if map.is_free(new_pos):
             old_pos = map.find(self)
-            if map.distance(*old_pos, x, y) == 1:
-                map.move(self, x, y)
-                return Move(self, old_pos, (x, y))
+            if map.distance(old_pos, new_pos) == 1:
+                map.move(self, new_pos)
+                return Move(self, old_pos, new_pos)
 
     def attack(self, foe):
         """ Do all the stikes allowed in one turn against foe. """

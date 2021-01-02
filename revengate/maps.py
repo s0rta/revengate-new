@@ -99,12 +99,14 @@ class Map:
         """ Return a list of all actors known to be on the map. """
         return self._a_to_pos.keys()
             
-    def distance(self, x1, y1, x2, y2):
+    def distance(self, pos1, pos2):
         """ Return the grid distance between two points.  
         
         This is not the path length taking obstables into account. """
         # Chebyshev distance (Hex maps will need a different distance metric)
         # This is not the Manhattan distance since we allow diagonal movement.
+        x1, y1 = pos1
+        x2, y2 = pos2
         return max(abs(x1 - x2), abs(y1 - y2))
     
     def _ring(self, center, radius=1, free=False, shuffle=False):
@@ -131,17 +133,17 @@ class Map:
             random.shuffle(tiles)
 
         if free:
-            tiles = [t for t in tiles if self.is_free(*t)]
+            tiles = [t for t in tiles if self.is_free(t)]
         
         return tiles        
     
-    def adjacents(self, x, y, free=False, shuffle=False):
-        """ Return a list of coordinates for tiles adjacent to (x, y).
+    def adjacents(self, pos, free=False, shuffle=False):
+        """ Return a list of coordinates for tiles adjacent to pos=(x, y).
         
         Map boundaries are checked. 
         If free=True, only tiles availble for moving are returned. 
         """
-        return self._ring((x, y), 1, free, shuffle)
+        return self._ring(pos, 1, free, shuffle)
 
     def _nearby_tiles(self, pos, free=False, shuffle=False):
         """ Generate a stream of tiles near pos, progressively further until 
@@ -151,7 +153,7 @@ class Map:
         """
         w, h = self.size()
         for rad in range(1, max(w, h)):
-            tiles = self._ring((x, y), rad, free=free, shuffle=shuffle)
+            tiles = self._ring(pos, rad, free=free, shuffle=shuffle)
             for t in tiles:
                 yield t
 
@@ -166,7 +168,7 @@ class Map:
         for i in range(5):
             x, y = random.randrange(w), random.randrange(h)
             if free:
-                if self.is_free(x, y):
+                if self.is_free((x, y)):
                     return (x, y)
             else: 
                 return (x, y)
@@ -179,10 +181,10 @@ class Map:
             raise RuntimeError("Can't find a free tile on the map.  It appears"
                                " to be completely full!")
 
-    def is_free(self, x, y):
-        """ Is the tile at (x, y) free for a nactor to step on?"""
-        coord = (x, y)
-        if self.tiles[x][y] in WALKABLE and coord not in self._pos_to_a:
+    def is_free(self, pos):
+        """ Is the tile at pos=(x, y) free for a nactor to step on?"""
+        x, y = pos
+        if self.tiles[x][y] in WALKABLE and pos not in self._pos_to_a:
             return True
         else:
             return False
@@ -195,21 +197,19 @@ class Map:
             path.append(current)
         return reversed(path)
 
-    def path(self, x1, y1, x2, y2):
+    def path(self, start, goal):
         """ Find an optimal path going from (x1, y1) to (x2, y2) taking 
         obstacles into account. 
         
         Return the path as a list of (x, y) tuples. """
         # Using the A* algorithm
-        start = (x1, y1)
-        goal = (x2, y2)
         came_from = {} # a back track map from one point to it's predecessor
         open_q = Queue()
         open_set = {start}
         prev = None
         
         g_scores = {start: 0}
-        f_scores = {start: self.distance(*start, *goal)}
+        f_scores = {start: self.distance(start, goal)}
         open_q.push((f_scores[start], start))
 
         current = None
@@ -221,29 +221,29 @@ class Map:
             
             if current == goal:
                 return self._rebuild_path(start, goal, came_from)
-            for tile in self.adjacents(*current):
-                if not self.is_free(*tile) and tile != goal:
+            for tile in self.adjacents(current):
+                if not self.is_free(tile) and tile != goal:
                     continue
-                g_score = g_scores[current] + self.distance(*current, *tile)
+                g_score = g_scores[current] + self.distance(current, tile)
                 if tile not in g_scores or g_score < g_scores[tile]:
                     came_from[tile] = current
                     g_scores[tile] = g_score
-                    f_scores[tile] = g_score + self.distance(*tile, *goal)
+                    f_scores[tile] = g_score + self.distance(tile, goal)
                     open_q.push((f_scores[tile], tile))
                     open_set.add(tile)
         return None
     
     def line_of_sight(self, pos1, pos2):
         """ Return a list of tile in the line of sight between pos1 and pos2 
-        or None if the direct path is obstructed. """
+        or None if the direct path is visibly obstructed. """
         steps = []
-        nb_steps = self.distance(*pos1, *pos2) + 1
+        nb_steps = self.distance(pos1, pos2) + 1
         mult = max(1, nb_steps - 1)
         # move to continuous coords from the center of the tiles
         x1, y1, x2, y2 = (c+0.5 for c in pos1 + pos2) 
         for i in range(nb_steps):
-            x, y = (int(((mult-i)*x1 + i*x2) / mult), 
-                    int(((mult-i)*y1 + i*y2) / mult))
+            x = int(((mult-i)*x1 + i*x2) / mult)
+            y = int(((mult-i)*y1 + i*y2) / mult)
             if self.tiles[x][y] in SEE_THROUGH:
                 steps.append((x, y))
             else:
@@ -281,14 +281,14 @@ class Map:
         else:
             raise ValueError(f"Unsupported type for placing {thing} on the map.")
         
-    def move(self, thing, x, y):
+    def move(self, thing, there):
         """ Move something already on the map somewhere else.
         
         Speed and obstables are not taken into account. """
         if thing in self._a_to_pos:
             del self._pos_to_a[self._a_to_pos[thing]]
-            self._pos_to_a[(x, y)] = thing
-            self._a_to_pos[thing] = (x, y)
+            self._pos_to_a[there] = thing
+            self._a_to_pos[thing] = there
         else:
             raise ValueError(f"{thing} is not on the current map.")
     
