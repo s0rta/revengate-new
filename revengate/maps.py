@@ -49,7 +49,7 @@ TEXT_TILE = {TileType.SOLID_ROCK:'▓',
              TileType.DOORWAY: '◠'}
 
 WALKABLE = [TileType.FLOOR]
-
+SEE_THROUGH = [TileType.FLOOR, TileType.DOORWAY]
 
 class Queue:
     """ A priority queue. """
@@ -104,7 +104,7 @@ class Map:
         
         This is not the path length taking obstables into account. """
         # Chebyshev distance (Hex maps will need a different distance metric)
-        # This is not the Manhattan disance since we allow diagonal movement.
+        # This is not the Manhattan distance since we allow diagonal movement.
         return max(abs(x1 - x2), abs(y1 - y2))
     
     def _ring(self, center, radius=1, free=False, shuffle=False):
@@ -143,6 +143,18 @@ class Map:
         """
         return self._ring((x, y), 1, free, shuffle)
 
+    def _nearby_tiles(self, pos, free=False, shuffle=False):
+        """ Generate a stream of tiles near pos, progressively further until 
+        the whole map has been returned. 
+        
+        If free=True, the tile can allow an actor to step on.
+        """
+        w, h = self.size()
+        for rad in range(1, max(w, h)):
+            tiles = self._ring((x, y), rad, free=free, shuffle=shuffle)
+            for t in tiles:
+                yield t
+
     def random_tile(self, free):
         """ Return a random tile (x, y) coordinate. 
         
@@ -160,12 +172,12 @@ class Map:
                 return (x, y)
         # Still no luck, so we spiral around the last attempt until we have 
         # tried everything on the map.
-        for rad in range(1, max(w, h)):
-            tiles = self._ring((x, y), rad, free=free, shuffle=True)
-            if tiles:
-                return next(iter(tiles))
-        raise RuntimeError("Can't find a free tile on the map.  It appears to"
-                           " be completely full!")
+        tiles = self._nearby_tiles((x, y), free=free, shuffle=True)
+        if tiles:
+            return next(iter(tiles))
+        else:
+            raise RuntimeError("Can't find a free tile on the map.  It appears"
+                               " to be completely full!")
 
     def is_free(self, x, y):
         """ Is the tile at (x, y) free for a nactor to step on?"""
@@ -220,6 +232,23 @@ class Map:
                     open_q.push((f_scores[tile], tile))
                     open_set.add(tile)
         return None
+    
+    def line_of_sight(self, pos1, pos2):
+        """ Return a list of tile in the line of sight between pos1 and pos2 
+        or None if the direct path is obstructed. """
+        steps = []
+        nb_steps = self.distance(*pos1, *pos2) + 1
+        mult = max(1, nb_steps - 1)
+        # move to continuous coords from the center of the tiles
+        x1, y1, x2, y2 = (c+0.5 for c in pos1 + pos2) 
+        for i in range(nb_steps):
+            x, y = (int(((mult-i)*x1 + i*x2) / mult), 
+                    int(((mult-i)*y1 + i*y2) / mult))
+            if self.tiles[x][y] in SEE_THROUGH:
+                steps.append((x, y))
+            else:
+                return None
+        return steps
 
     def find(self, thing):
         """ Return the position of thing if its on the map, None otherwise. """
@@ -227,14 +256,23 @@ class Map:
             return self._a_to_pos[thing]
         return None
 
-    def place(self, thing, pos=None):
+    def place(self, thing, pos=None, fallback=False):
         """ Put thing on the map at pos=(x, y). 
-        If pos is not not supplied, a random position is selected. """
+        If pos is not not supplied, a random position is selected. 
+        If fallback=True, a nearby space is selected when pos is not available.
+        """
         if pos is None:
             pos = self.random_tile(free=True)
         if isinstance(thing, Actor):
             if pos in self._pos_to_a:
-                raise ValueError(f"There is already an actor at {pos}!")
+                if fallback:
+                    tiles = self._nearby_tiles(pos, free=True, shuffle=True)
+                    if tiles:
+                        pos = next(iter(tiles))
+                    else:
+                        raise RuntimeError("The map appears to be full!")
+                else:
+                    raise ValueError(f"There is already an actor at {pos}!")
             if thing in self._a_to_pos:
                 raise ValueError(f"{thing} is already on the map, use"
                                   " Map.move() to change it's position.")
@@ -344,20 +382,23 @@ def main():
     map = Map()
     builder = Builder(map)
     builder.init(40, 20)
-    builder.room(20, 5, 5, 15, True)
+    builder.room(5, 5, 35, 15, True)
     print(map.to_text())
     for i in range(10):
-        x, y = random.randrange(40), random.randrange(20)
-        r1 = list(map.adjacents(x, y, free=True))
-        r2 = list(map._ring((x, y), free=True))
-        print(f"center: {x, y}")
-        if sorted(r1) != sorted(r2):
-            print(f"r1: {r1}")
-            print(f"r2: {r2}")
-        else:
-            print("Equal!")
+        x1, y1 = random.randrange(5, 35), random.randrange(5, 15)
+        x2, y2 = random.randrange(5, 35), random.randrange(5, 15)
+        los = map.line_of_sight((x1, y1), (x2, y2))
+        if los:
+            overlay = MapOverlay()
+            for c in los[1:-1]:
+                overlay.place('x', c)
+            overlay.place('@', (x1, y1))
+            overlay.place('d', (x2, y2))
+            map.add_overlay(overlay)
+            print(map.to_text())
+            map.clear_overlays()
+        print(f"LOS from {(x1, y1)} to {(x2, y2)}: {los}")
         
-
 
 if __name__ == "__main__":
     main()
