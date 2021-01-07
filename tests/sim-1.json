@@ -4,6 +4,15 @@
  {"&class": "Faction", 
   "name": "beasts"},
   
+ {"&template": "bag", 
+  "&class": "Item", 
+  "char": "👜",
+  "weight": 1},
+ {"&template": "corpse", 
+  "&class": "Item", 
+  "char": "%",
+  "weight": 5},
+  
  {"&template": "tribal", 
   "&class": "Tribal"},
   
@@ -14,6 +23,7 @@
  {"&template": "dagger",
   "&parent": "blade",
   "name": "dagger",
+  "weight": 5,
   "!damage": [4, 6]}, 
  {"&template": "burn_eff", 
   "&class": "Effect", 
@@ -31,7 +41,9 @@
   "&class": "Weapon", 
   "family": "#slice", 
   "verb": "cut", 
+  "char": "🗡️",
   "damage": 6, 
+  "weight": 7,
   "family": "#heat", 
   "effects": ["*burn_eff"]},
  {"&template": "hero",
@@ -48,7 +60,8 @@
   "&parent": "hero", 
   "+spells": "*fire-arc", 
   "faction": "#lumiere", 
-  "strategy": "*tribal"},
+  "strategy": "*tribal", 
+  "inventory": ["*bag"]},
   
  {"&template": "bite", 
   "&class": "Injurious", 

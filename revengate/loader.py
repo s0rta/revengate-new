@@ -28,6 +28,7 @@ from pprint import pprint
 from . import tags
 from .tags import Tag
 from .strategies import Strategy
+from .items import Item
 from .weapons import HealthVector, Effect
 from .actors import Actor
 
@@ -61,11 +62,12 @@ class Template:
 
 class Loader:
     """ Factory class for creating instances from json data. """
-    def __init__(self):
+    def __init__(self, engine=None):
         super(Loader, self).__init__()
+        self.engine = engine
         self._class_map = {} # name -> class object mapping
         self._templates = {} # for by-name invokation
-        for cls in [Tag, HealthVector, Effect, Strategy, Actor]:
+        for cls in [Tag, Item, HealthVector, Effect, Strategy, Actor]:
             self._map_class_tree(cls)
         
     def _map_class_tree(self, cls):
@@ -85,7 +87,7 @@ class Loader:
         if isinstance(field, str) and field.startswith("*"): # sub-template
             return self.invoke(field[1:])
         return field
-  
+
     def _instanciate(self, cls_name, fields, template_name=None):
         """ Create an instance of cls_name with all the fields specified.
         
@@ -115,6 +117,8 @@ class Loader:
         # set the other fields after creation
         for attr in fields:
             setattr(obj, attr, fields[attr])
+        if hasattr(obj, "engine") and self.engine:
+            obj.engine = self.engine
         return obj
   
     def _decode_one(self, rec):

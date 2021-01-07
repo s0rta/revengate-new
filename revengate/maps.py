@@ -24,6 +24,7 @@ from enum import IntEnum, auto
 from collections import defaultdict
 
 from .actors import Actor
+from .items import Item, ItemCollection
 
 # Only Square tiles are implemented, but being able to switch between Square 
 # and Hex would be great.  Hex math is well explained here:
@@ -76,7 +77,10 @@ class Map:
         self.overlays = []
         self._a_to_pos = {} # actor to position mapping
         self._pos_to_a = {} # position to actor mapping
-        
+        self._i_to_pos = {} # item to position
+        # position to items
+        self._pos_to_i = defaultdict(lambda:ItemCollection()) 
+
     def size(self):
         """ Return a (width, height) tuple. """
         w = len(self.tiles)
@@ -254,6 +258,8 @@ class Map:
         """ Return the position of thing if its on the map, None otherwise. """
         if thing in self._a_to_pos:
             return self._a_to_pos[thing]
+        elif thing in self._i_to_pos:
+            return self._i_to_pos[thing]
         return None
 
     def place(self, thing, pos=None, fallback=False):
@@ -261,6 +267,9 @@ class Map:
         If pos is not not supplied, a random position is selected. 
         If fallback=True, a nearby space is selected when pos is not available.
         """
+        if thing in self._a_to_pos or thing in self._i_to_pos:
+            raise ValueError(f"{thing} is already on the map, use Map.move()" 
+                             " to change it's position.")
         if pos is None:
             pos = self.random_tile(free=True)
         if isinstance(thing, Actor):
@@ -273,13 +282,26 @@ class Map:
                         raise RuntimeError("The map appears to be full!")
                 else:
                     raise ValueError(f"There is already an actor at {pos}!")
-            if thing in self._a_to_pos:
-                raise ValueError(f"{thing} is already on the map, use"
-                                  " Map.move() to change it's position.")
             self._a_to_pos[thing] = pos
             self._pos_to_a[pos] = thing
+        elif isinstance(thing, Item):
+            self._i_to_pos[thing] = pos
+            self._pos_to_i[pos].append(thing)
         else:
             raise ValueError(f"Unsupported type for placing {thing} on the map.")
+
+    def remove(self, thing):
+        """ Remove something from the map."""
+        if thing in self._a_to_pos:
+            pos = self._a_to_pos[thing]
+            del self._pos_to_a[pos]
+            del self._a_to_pos[thing]
+        elif thing in self._i_to_pos:
+            pos = self._a_to_pos[thing]
+            self._pos_to_i.remove(pos)
+            del self._i_to_pos[thing]
+        else:
+            raise ValueError(f"{thing} is not on the current map.")
         
     def move(self, thing, there):
         """ Move something already on the map somewhere else.
@@ -289,6 +311,10 @@ class Map:
             del self._pos_to_a[self._a_to_pos[thing]]
             self._pos_to_a[there] = thing
             self._a_to_pos[thing] = there
+        elif thing in self._i_to_pos:
+            self._pos_to_i.remove(self._a_to_pos[thing])
+            self._pos_to_i[there].append(thing)
+            self._i_to_pos[thing] = there
         else:
             raise ValueError(f"{thing} is not on the current map.")
     
@@ -302,6 +328,9 @@ class Map:
             cols.append([TEXT_TILE[t] for t in col])
             
         # overlay actors and objects
+        for (x, y), stack in self._pos_to_i.items():
+            if stack:
+                cols[x][y] = stack.char
         for a, (x, y) in self._a_to_pos.items():
             cols[x][y] = a.char
             

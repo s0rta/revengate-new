@@ -20,6 +20,7 @@
 """ Run simulations on various parts of the rule engine to test the balance. """
 
 import sys
+import itertools
 from collections import Counter, defaultdict
 from pprint import pprint
 from argparse import ArgumentParser
@@ -36,9 +37,12 @@ class Engine(object):
     """ Keep track of all the actors and implement the turns logic. """
     def __init__(self, loader):
         super(Engine, self).__init__()
-        self.actors = [] # TODO: move to a priority queue when implementing initiative
+        self.actors = [] # actors who are not on the map but we still track
         self.current_turn = 0
         self.loader = loader
+        if self.loader:
+            self.loader.engine = self
+        self.map = None
 
     def register(self, actor):
         """ Register an actor with this engine. """
@@ -46,16 +50,38 @@ class Engine(object):
         self.actors.append(actor)
 
     def deregister(self, actor):
-        self.actor = [a for a in self.actors if a != actor]
+        actor.engine = None
+        self.actors = [a for a in self.actors if a != actor]
 
     def advance_turn(self):
         """ Update everything that needs to be updated at the start of a new 
         turn. """
         self.current_turn += 1
         events = Events()
-        for actor in self.actors:
+        if self.map:
+            actors = itertools.chain(self.actors, self.map.all_actors())
+        else:
+            actors = self.actors
+        for actor in list(actors):
             events += actor.update()
         return events
+
+    def change_map(self, map):
+        # TODO: save the status of the old map so we can go back to it
+        if map:
+            for a in map.all_actors():
+                a.engine = self
+        self.map = map
+
+    def to_charon(self, actor):
+        # TODO: take payment for the toll across the Styx
+        if self.map:
+            pos = self.map.find(actor)
+            self.map.remove(actor)
+            corpse = self.loader.invoke("corpse")
+            self.map.place(corpse, pos)
+        self.deregister(actor)
+
 
 def man_vs_wolf(engine):
     start = engine.current_turn
@@ -181,16 +207,19 @@ def map_demo(eng, actor_names):
     builder.init(40, 20)
     builder.room(5, 5, 20, 15, True)
     builder.room(12, 7, 13, 12, True)
+    eng.change_map(map)
 
+    bag = eng.loader.invoke("bag")
+    map.place(bag)
+    
     actors = set()
     for name in actor_names:
         a = eng.loader.invoke(name)
         actors.add(a)
-        eng.register(a)
         map.place(a)
     factions = _split_factions(actors)
     orig_cast = list(actors)
-    
+
     def filter_empties():
         # TODO: find a more graceful way to handle death
         nonlocal actors
@@ -211,8 +240,7 @@ def map_demo(eng, actor_names):
         filter_empties()
         print(map.to_text())
     
-    for actor in orig_cast:
-        eng.deregister(actor)
+    eng.change_map(None)
     duration = eng.current_turn - start
     winner = [f for f in factions if len(factions[f]) > 0][0]
     print("Battle is over!")

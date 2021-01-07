@@ -19,7 +19,7 @@
 
 import enum
 from .tags import Tag, TagSlot
-
+from .items import Item
 
 class Family(Tag):
     pass 
@@ -32,7 +32,7 @@ class Families:
     HEAT   = Family("heat")
 
 
-class StatusEvent(object):
+class StatusEvent:
     """ Something that changes the status of an actor. 
     
     This is mostly to keep track of what happened so we can show it to the 
@@ -165,11 +165,12 @@ class Injurious(HealthVector):
         super(Injurious, self).__init__(name, -damage, family, verb)
 
 
-class Weapon(Injurious):
+class Weapon(Item, Injurious):
     """ An actual weapon.  Something that takes inventory space and must be 
     weilded. """
-    def __init__(self, name, damage, family, verb=None):
-        super(Weapon, self).__init__(name, damage, family, verb=None)
+    def __init__(self, name, damage, family, weight, verb=None):
+        Item.__init__(self, name, weight)
+        Injurious.__init__(self, name, damage, family, verb)
 
 
 class Spell(HealthVector):

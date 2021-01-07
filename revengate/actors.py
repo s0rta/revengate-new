@@ -23,8 +23,9 @@ import random
 
 from .tags import TagBag, TagSlot, Faction
 from .strategies import StrategySlot
-from .weapons import Condition, Weapon, Spell, Families
-from .events import Hit, Events, HealthEvent, Move
+from .weapons import Condition, Injurious, Weapon, Spell, Families
+from .events import Hit, Events, HealthEvent, Move, Death
+from .items import ItemsSlot
 
 SIGMA = 12.5 # std. dev. for a normal distribution more or less contained in 0..100
 MU = 50 # average of the above distribution
@@ -36,12 +37,14 @@ class Actor(object):
     critical_mult = 0.35 
     faction = TagSlot(Faction)
     strategy = StrategySlot()
+    inventory = ItemsSlot()
     char = "X" # How to render this actor on the text map
 
     def __init__(self, health, armor, strength, agility):
         super(Actor, self).__init__()
         self.health = health
         self.armor = armor
+        self.inventory = []
 
         # main attributes
         self.strength = strength
@@ -58,14 +61,19 @@ class Actor(object):
 
         # turns logic
         self.initiative = random.random()
-        self.engine = None
+        self._engine = None
         self._last_update = None # last time we computed conditions and regen
         self.conditions = [] # mostly stuff that does damage over time
 
+    def get_engine(self):
+        return self._engine
+
     def set_engine(self, engine):
         """ Finalize the registration with a game engine. """
-        self.engine = engine
-        self._last_update = engine.current_turn
+        self._engine = engine
+        if self._last_update is None:
+            self._last_update = engine.current_turn
+    engine=property(get_engine, set_engine)
 
     def update(self):
         """ 
@@ -81,11 +89,13 @@ class Actor(object):
         events = Events()
         for t in range(self._last_update or 0, self.engine.current_turn + 1):
             events.add(self._update_one(t))
+        if self.health <= 0:
+            events.add(self.die())
         return events
     
     def _update_one(self, turn):
         """
-        Compute the effect of all over-time conditions for one turn.
+        Compute the effect of one over-time conditions for one turn.
         
         Return the summary of health changes.
         """
@@ -123,6 +133,8 @@ class Actor(object):
         
         In most cases, the choice of the action is delegated to the strategy 
         while the selected action is performed by this class. """
+        if self.health < 0:
+            raise RuntimeError(f"{self} can't attack because of being dead!")
         if not self.strategy:
             raise RuntimeError("Trying to perform an action before assigning " 
                                "a strategy.")
@@ -159,16 +171,22 @@ class Actor(object):
             crit = True
         h_delta = self.make_delta(weapon, crit)
 
-        h_delta = foe.apply_delta(weapon, h_delta)
-        return Hit(foe, self, weapon, -h_delta, crit)
+        h_delta, events = foe.apply_delta(weapon, h_delta)
+        return Events(Hit(foe, self, weapon, -h_delta, crit), events)
 
     def apply_delta(self, vector, h_delta):
         """ 
         Receive damage or healing from a HealthVector.  Compute armor 
-        protection, resistances, and weaknesses; update health; return how many 
-        effective health points changed. 
+        protection, resistances, and weaknesses; update health. 
+        
+        Return a (delta, events) tuple.
+        
+        Delta is how many effective health points changed.
+        Events is a instance or Events, which may include Death, or None if
+        nothing notable happened.
         """
         # We don't resist healings
+        events = Events()
         if h_delta < 0:
             if vector.family in self.resistances:
                 h_delta *= RES_FACTOR
@@ -190,7 +208,11 @@ class Actor(object):
                 stop = start + random.randint(*effect.duration)
             cond = Condition(effect, start, stop, cond_delta)
             self.conditions.append(cond)
-        return h_delta
+        
+        if self.health <= 0:
+            events.add(self.die())
+
+        return h_delta, events
 
     def get_evasion(self):
         # TODO: check for incapacitation
@@ -216,6 +238,27 @@ class Actor(object):
             h_delta = vector.h_delta
 
         return (1 + (stat - MU)/100.0) * h_delta * random.random()
+
+    def die(self):
+        """ 
+        Perpare the actor for the passage into the underworld, then expire.
+        """
+        if not self.engine:
+            raise RuntimeError("Passing into the underworld requires being part"
+                               " of a world to begin with.")
+        
+        # drop inventory
+        if self.engine.map:
+            pos = self.engine.map.find(self)
+            for i in self.inventory:
+                self.engine.map.place(i, pos)
+        self.inventory = []
+        # TODO: keep 1g when money is implemented.  The passage into the 
+        # underworld must be paid.
+        
+        # pass the control to the engine
+        self.engine.to_charon(self)
+        return Death(self)
 
 
 class Monster(Actor):
@@ -250,9 +293,9 @@ class Character(Actor):
             raise RuntimeError(f"Not enough mana to cast {spell.name}!")
 
         h_delta = self.make_delta(spell)
-        h_delta = target.apply_delta(spell, h_delta)
+        h_delta, events = target.apply_delta(spell, h_delta)
         self.mana -= spell.cost
-        return Hit(target, self, spell, -h_delta)
+        return Events(Hit(target, self, spell, -h_delta), events)
 
 
 class Humanoid(Character):
@@ -262,12 +305,12 @@ class Humanoid(Character):
     def __init__(self, health, armor, strength, agility, intelligence, fist_r=4, fist_l=None):
         super(Humanoid, self).__init__(health, armor, strength, agility, intelligence)
         if fist_r:
-            self.fist_r = Weapon("fist", fist_r, Families.IMPACT)
+            self.fist_r = Injurious("fist", fist_r, Families.IMPACT)
         else:
             self.fist_r = None
 
         if fist_l:
-            self.fist_l = Weapon("fist", fist_l, Families.IMPACT)
+            self.fist_l = Injurious("fist", fist_l, Families.IMPACT)
         else:
             self.fist_l = None
             

@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-""" Events keep track of everything that change.  This allows the game to 
+""" Events keep track of everything that change.  This allows the game to  if Events 
 display or animate the changes. """
 
 class StatusEvent:
@@ -32,25 +32,35 @@ class StatusEvent:
         self.target = target
 
 
-class Events(list):
+class Events:
     """ A group of StatusEvents.  None-events are implicitely ignored. """
     def __init__(self, *events):
-        if events:
-            events = filter(bool, events)
-            super(Events, self).__init__(events)
-        else:
-            super(Events, self).__init__()
+        super(Events, self).__init__()
+        self._events = []
+        for e in events:
+            if e:
+                if isinstance(e, Event):
+                    self._events.append(e)
+                else:
+                    self._events += e
         
     def __str__(self):
         return " ".join(map(str, self))
        
     def __iadd__(self, other):
         other = filter(bool, other)
-        return super(Events, self).__iadd__(other)
+        self._events += other
+        return self
+    
+    def __bool__(self):
+        return len(self._events) > 0
+    
+    def __iter__(self):
+        return iter(self._events)
     
     def add(self, event):
         if event:
-            self.append(event)
+            self._events.append(event)
 
 
 class Move(StatusEvent):
@@ -62,6 +72,15 @@ class Move(StatusEvent):
         
     def __str__(self):
         return f"{self.target} moved from {self.old_pos} to {self.new_pos}."
+
+
+class Death(StatusEvent):
+    """ The actor died. """
+    def __init__(self, target):
+        super(Death, self).__init__(target)
+        
+    def __str__(self):
+        return f"{self.target} died!"
 
 
 class HealthEvent(StatusEvent):

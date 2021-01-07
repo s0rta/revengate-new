@@ -79,7 +79,6 @@ class StrategySlot:
     """
     def __init__(self, strategy=None):
         super(StrategySlot, self).__init__()
-        self.strategy = strategy
         self.slot = None
 
     def __set_name__(self, owner, name):
@@ -89,6 +88,8 @@ class StrategySlot:
         return getattr(obj, self.slot)
 
     def __set__(self, obj, strategy):
+        if not isinstance(strategy, Strategy):
+            raise ValueError(f"Unsupported type for strategy: {type(strategy)}")
         if strategy.actor is not None:
             raise ValueError(f"{strategy} already has a registered actor.")
         strategy.actor = obj
