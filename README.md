@@ -18,3 +18,11 @@ version.
 Please note that this project is released with a Contributor Code of Conduct. By 
 participating in this project you agree to abide by its terms.  See 
 CODE_OF_CONDUCT.md for the details.
+
+
+## Credits
+All coding: Yannick Gingras
+
+2D tiles: CC0, released by the Craw Stone Soup team
+https://opengameart.org/content/dungeon-crawl-32x32-tiles
+https://github.com/crawl/tiles/tree/master/releases

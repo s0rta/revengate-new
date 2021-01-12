@@ -168,8 +168,8 @@ class Injurious(HealthVector):
 class Weapon(Item, Injurious):
     """ An actual weapon.  Something that takes inventory space and must be 
     weilded. """
-    def __init__(self, name, damage, family, weight, verb=None):
-        Item.__init__(self, name, weight)
+    def __init__(self, name, damage, family, weight, char='⚔️', verb=None):
+        Item.__init__(self, name, weight, char)
         Injurious.__init__(self, name, damage, family, verb)
 
 
