@@ -11,13 +11,14 @@ I have take some handwritten notes, to be typed or converted into code at a late
 * 2020-09-08: Monsters: plasus rats, Sulant tigers, torachs
 * 2020-09-07: nochorts, éguis
 * 2020-09-04: automatons
-* 2020-10-17: Pridout Faucheve the smuggler
+* 2020-10-17: Pridout Faucheve the smuggler and the mysterious lenses
 * 2020-10-27: La Compagnie des Lumières
 * 2020-10-28,29: world politics and economy
 * 2020-11-16: combat rolls
 * 2020-11-20: poisons and toxins
 * 2020-11-21: coupon codes
 * 2020-11-29: Foujoi Porans
+* 2021-04-04: Nagège Cyrat
 
 ## External tools
 Pathfinder background generator (OGL):
@@ -32,6 +33,12 @@ Good Public Domain tiles:
 
 Azgaar's Fantasy Map Generator
 * https://azgaar.github.io/Fantasy-Map-Generator
+
+Kassoon NPC Generator
+* https://www.kassoon.com/dnd/npc-generator/
+
+Royalty Free Music:
+* https://www.serpentsoundstudios.com/royalty-free-music/
 
 ## Steampunk RPGs
 Iron Kingdoms
