@@ -26,3 +26,7 @@ All coding: Yannick Gingras
 2D tiles: CC0, released by the Craw Stone Soup team
 https://opengameart.org/content/dungeon-crawl-32x32-tiles
 https://github.com/crawl/tiles/tree/master/releases
+
+Bestiary images:
+
+- Le Grand Salapou, Éguis, Large Automata: CC-BY-SA by Jonathan Timmons, 2021
