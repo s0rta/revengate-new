@@ -90,6 +90,29 @@ class Map:
             h = 0
         return w, h
 
+    def iter_tiles(self):
+        """ Return an iterator for ((x, y), TileType) pairs. """
+        w, h = self.size()
+        for x in range(w):
+            for y in range(h):
+                yield ((x, y), self.tiles[x][y])
+
+    def iter_actors(self):
+        """ Return an iterator for ((x, y), actor) pairs. """
+        for a, (x, y) in self._a_to_pos.items():
+            yield ((x, y), a)
+
+    def iter_items(self):
+        """ Return an iterator for ((x, y), stack) pairs. 
+        
+        Only tripplets for non-empty item stacks are returned. """
+        for (x, y), stack in self._pos_to_i.items():
+            if stack:
+                yield ((x, y), stack)
+
+    def iter_overlays(self):
+        ...
+
     def add_overlay(self, overlay):
         self.overlays.append(overlay)
     
@@ -323,15 +346,16 @@ class Map:
         terminal."""
         
         # Convert to text
+        #  not using iter_tiles() in order to take advantage of or using the 
+        #  same nested list format
         cols = []
         for col in self.tiles:
             cols.append([TEXT_TILE[t] for t in col])
             
         # overlay actors and objects
-        for (x, y), stack in self._pos_to_i.items():
-            if stack:
-                cols[x][y] = stack.char
-        for a, (x, y) in self._a_to_pos.items():
+        for (x, y), stack in self.iter_items():
+            cols[x][y] = stack.char
+        for (x, y), a in self.iter_actors():
             cols[x][y] = a.char
             
         # overlay extra layers:
