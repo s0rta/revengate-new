@@ -19,6 +19,7 @@
 
 import heapq
 import random
+import itertools
 from copy import deepcopy
 from enum import IntEnum, auto
 from collections import defaultdict
@@ -111,7 +112,14 @@ class Map:
                 yield ((x, y), stack)
 
     def iter_overlays(self):
-        ...
+        """ Return an iterator for ((x, y), object) pairs.  
+        Positions can be seen more than once. 
+        The stacking order of overlays is preserved. """
+        return itertools.chain(*[o.items() for o in self.overlays])
+
+    def iter_overlays_text(self):
+        """ Like Map.iter_overlays() but for text representation of things. """
+        return itertools.chain(*[o.text_items() for o in self.overlays])
 
     def add_overlay(self, overlay):
         self.overlays.append(overlay)
@@ -359,9 +367,8 @@ class Map:
             cols[x][y] = a.char
             
         # overlay extra layers:
-        for o in self.overlays:
-            for (x, y), thing in o.items():
-                cols[x][y] = str(thing) # FIXME: use the text overlay instead
+        for (x, y), char in self.iter_overlays_text():
+            cols[x][y] = char
 
         # transpose and stringify
         lines = []
@@ -376,11 +383,21 @@ class MapOverlay:
         super(MapOverlay, self).__init__()
         self.tiles = defaultdict(lambda: {}) # keep the same addressing at Map
 
-    def char_at(self, x, y):
+    def _as_char(self, obj):
+        # We do not take a single char prefix since some Emojis have multi-char 
+        # composition sequences (ex: bald man is "👨‍🦲"), which we want to support.
+        if obj in TEXT_TILE:
+            return TEXT_TILE[obj]
+        elif isinstance(obj, str):
+            return obj
+        else:
+            return str(obj)
+        
+    def char_at(self, pos):
+        x, y = pos
         if x in self.tiles:
             if y in self.tiles[x]:
-                # TODO: convert to char if TileType
-                return self.tiles[x][y]
+                return self._as_char(self.tiles[x][y])
         return None
     
     def place(self, thing, pos):
@@ -397,7 +414,9 @@ class MapOverlay:
     def text_items(self):
         """ Like MapOverlay.items() but everything is converted to text before 
         being returned. """
-        raise NotImplementedError()
+        for x in self.tiles:
+            for y in self.tiles[x]:
+                yield ((x, y), self._as_char(self.tiles[x][y]))
 
 class Builder:
     """ Builder for map features. """
