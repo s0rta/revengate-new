@@ -27,6 +27,7 @@ All coding: Yannick Gingras
 https://opengameart.org/content/dungeon-crawl-32x32-tiles
 https://github.com/crawl/tiles/tree/master/releases
 
-Bestiary images:
+Bestiary and NPC images:
 
 - Le Grand Salapou, Éguis, Large Automata: CC-BY-SA by Jonathan Timmons, 2021
+- Pridout Fauchève: Clara ???, 2021
