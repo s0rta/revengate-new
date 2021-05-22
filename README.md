@@ -30,4 +30,4 @@ https://github.com/crawl/tiles/tree/master/releases
 Bestiary and NPC images:
 
 - Le Grand Salapou, Éguis, Large Automata: CC-BY-SA by Jonathan Timmons, 2021
-- Pridout Fauchève, Sulat Tiger: Clara ???, 2021
+- Pridout Fauchève, Sulat Tiger: Clara Baltoré Pooter, 2021
