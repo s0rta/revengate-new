@@ -37,7 +37,7 @@ class Engine(object):
     """ Keep track of all the actors and implement the turns logic. """
     def __init__(self, loader):
         super(Engine, self).__init__()
-        self.actors = [] # actors who are not on the map but we still track
+        self.actors = []  # actors who are not on the map but we still track
         self.current_turn = 0
         self.loader = loader
         if self.loader:
@@ -54,7 +54,7 @@ class Engine(object):
         self.actors = [a for a in self.actors if a != actor]
 
     def advance_turn(self):
-        """ Update everything that needs to be updated at the start of a new 
+        """ Update everything that needs to be updated at the start of a new
         turn. """
         self.current_turn += 1
         events = Events()
@@ -140,8 +140,7 @@ def _split_factions(actors):
 def last_faction_standing(engine, actor_names):
     start = engine.current_turn
     actors = set()
-    #factions = defaultdict(lambda: set()) # name->actors map
-    
+
     def filter_empties():
         nonlocal actors
         for f in factions:
@@ -150,13 +149,11 @@ def last_faction_standing(engine, actor_names):
 
     for name in actor_names:
         actor = engine.loader.invoke(name)
-        #factions[actor.faction].add(actor)
         actors.add(actor)
         engine.register(actor)
     orig_cast = list(actors)
     factions = _split_factions(actors)
 
-    
     while len([f for f in factions if len(factions[f]) > 0]) > 1:
         print(engine.advance_turn() or "no turn updates")
         filter_empties()
@@ -170,7 +167,7 @@ def last_faction_standing(engine, actor_names):
                 if target.health <= 0:
                     print(f"{target} died!")
         filter_empties()
-    
+
     for actor in orig_cast:
         engine.deregister(actor)
     duration = engine.current_turn - start
@@ -205,8 +202,8 @@ def map_demo(eng, actor_names):
     map = Map()
     builder = Builder(map)
     builder.init(40, 20)
-    builder.room(5, 5, 20, 15, True)
-    builder.room(12, 7, 13, 12, True)
+    builder.room((5, 5), (20, 15), True)
+    builder.room((12, 7), (13, 12), True)
     eng.change_map(map)
 
     bag = eng.loader.invoke("bag")
@@ -274,6 +271,7 @@ def main():
         def sim(engine):
             return last_faction_standing(engine, args.actors)
         run_many(eng, sim)
+
 
 if __name__ == '__main__':
     main()
