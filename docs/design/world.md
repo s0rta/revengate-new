@@ -18,11 +18,18 @@ Movies with the adequate feel include:
 
 The action taking place in Franconia rather than London, everything is a little more decorated and a little less industrial. Some early hints of Art Nouveau can be seen here and there. Men almost all sport a beard or a mustache and have some kind of headwear: newsboy caps, bowler hats, top hats. Corsets and crinolines are very common elements of ladies fashion. 
 
+Other fashion inspiration: https://historyten.com/victorian-era/victorian-era-fashion-trends/
+
 Cafés and absinthe lounges are very popular in Franconia.
 
 ## Currency
 The Franc has the same purchasing power as $5 USD of our era, roughly one basic meal. Franconia has wide reaching trade routes and one can trade in Francs in most ports around the world, but they will have to trade in local currency or in gold if they venture further inland outside of Franconia.
 
+## Places
+
+- Franconia: roughly modern day France
+- Saxonia: roughly modern day England
+- Prussia: roughly modern day Germany
 
 ## Organizations 
 

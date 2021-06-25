@@ -35,3 +35,33 @@ Fauchève has a tribal view of the world: members of his clan before anything el
 
 He sports low key heavily worn sailor outfits. His face is animated by nervous ticks making his dark full beard dance like it's hosting a small family of squirrels. 
 
+
+## Nadège Cyrat
+Nadège Cyrat is the first contact the hero has with the Compagnie des Lumières. She is a field agent and a recruiter there.
+
+She is the youngest of three siblings, daughter of a clock maker in Paris. She has been with the Compagnie since she was 19, she is now 27. She is deeply motivated to see the advancement of science and technology and for the dominance of Franconia in those fields.
+
+Her mother died of illness when she was 14. She left to Lyon for studying when she was 18. To make ends meet, she accepted a few odd jobs with the underground, which is how she got recruited by the Compagnie.
+
+She is very agile and skilled in many fighting styles. She is not a magic user.
+
+She has light blue-grey eyes and light brown hair that she keeps short. She wears crinoline dresses and decorated hats in public, but she prefers more masculine attires when she is at the Compagnie's workshops. This usually means docker overalls when doing work at a bench or lighter more athletic pants when training. 
+
+Her favourite drink is Champagne with a splash of cassis syrup, but with readily settle for an Absinthe. She drinks several cups of coffee every day, always with cream and one sugar cube. Sitting by herself in a cafe, she is usually seen reading a book, typically about philosophy. 
+
+
+## Henry Bessemer
+Henry Bessemer is an inventor living in Saxonia. Now 34 years old, he is very well of financially thanks to the commercial success of earlier inventions in his late twenties and early thirties. This gives him the freedom to pursue capital intensive discoveries around heavy industries.
+
+Bessemer currently has close ties with the Saxonian military and there are reasons to suspect that he is on the verge of dramatically changing how easy it is to produce steel, with the goal of arming Saxonia with heavy war machines.
+
+He primarily speaks English, but he knows some French thanks to his father who lived in Franconia for a while.
+
+He has blue-gray eyes, a fast receding hairline, and bushy sideburns. Taking advantage of his wealth, he likes to appear in fancy attires in public, such as a three-piece suit with a top hat and an ornate cane. In private, he is a workaholic and will most likely be seen with a thick leather apron if he is working on prototype furnaces or with a lab coat while working in his metallurgy lab. A decorated fountain pen and a stained leather-bound notebook follow him wherever he goes.
+
+Bessemer is an industrialist at heart. He has little interests for pure science and focuses solely on inventions with large commercial potential. Potential for his inventions have changed his allegiances in the past.
+
+Historical Bessemer: 
+- https://media.sciencephoto.com/image/h4020114/800wm/H4020114-Portrait_of_metallurgist,_Sir_Henry_Bessemer.jpg
+- https://media.gettyimages.com/photos/threequarter-length-portrait-of-sir-henry-bessemer-inventor-of-a-picture-id526917692
+

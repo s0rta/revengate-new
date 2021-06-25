@@ -18,10 +18,11 @@ I have take some handwritten notes, to be typed or converted into code at a late
 * 2020-11-20: poisons and toxins
 * 2020-11-21: coupon codes
 * 2020-11-29: Foujoi Porans
-* 2021-04-04: Nagège Cyrat
+* 2021-04-04: Nadège Cyrat
 * 2021-05-28,31: ambush plants
 * 2021-06-01: labra
 * 2021-06-03: sentry scarabs
+* 2021-06-06: Henry Bessemer
 
 ## External tools
 Pathfinder background generator (OGL):
