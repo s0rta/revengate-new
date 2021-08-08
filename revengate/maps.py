@@ -57,7 +57,7 @@ TEXT_TILE = {TileType.SOLID_ROCK: '▓',
 
 WALKABLE = [TileType.FLOOR]
 SEE_THROUGH = [TileType.FLOOR, TileType.DOORWAY]
-
+WALLS = [TileType.WALL, TileType.WALL_H, TileType.WALL_V]
 
 class Queue:
     """ A priority queue. """
@@ -598,14 +598,6 @@ class Builder:
         
         self.mazes = [MazePlan(self.map, [room]) for room in self._rooms]
 
-        def add_to_maze(maze, pos):
-            maze.add(pos)
-            x, y = pos
-            if self.map.tiles[x][y] in (TileType.WALL, TileType.WALL_H, TileType.WALL_V):
-                self.map.tiles[x][y] = TileType.DOORWAY
-            else:
-                self.map.tiles[x][y] = TileType.FLOOR
-
         def next_step(pos, prev=None, cur_maze=None, other_mazes=None):
             """ Return the next step to take. """
             steps = [self.mk_step(p, pos, prev, cur_maze) 
@@ -650,7 +642,7 @@ class Builder:
             while step:
                 prev = (x, y)
                 x, y = step.pos
-                add_to_maze(cur_maze, step.pos)
+                cur_maze.add(step.pos)
                 if len(step.mazes) > 0:  # just made a connection
                     cur_maze = self.merge_mazes(step.mazes + [cur_maze])
 
@@ -830,7 +822,14 @@ class MazePlan:
         return len(self._corridors) + sum(r.area for r in self._rooms)
     
     def add(self, pos):
-        self._corridors.add(pos)
+        x, y = pos
+        if self.map.tiles[x][y] in WALLS:
+            self.map.tiles[x][y] = TileType.DOORWAY
+        else:
+            self.map.tiles[x][y] = TileType.FLOOR
+
+        if not pos in self._rooms:
+            self._corridors.add(pos)
 
     def _freeze_room_corners(self):
         """ Mark all the room corners as frozen. """
