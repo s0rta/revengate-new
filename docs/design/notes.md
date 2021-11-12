@@ -23,6 +23,16 @@ I have take some handwritten notes, to be typed or converted into code at a late
 * 2021-06-01: labra
 * 2021-06-03: sentry scarabs
 * 2021-06-06: Henry Bessemer
+* 2021-06-25: Ambroise Hamillois
+* 2021-08-14 – 22: Pacherrs 
+* 2021-08-30: bears
+* 2021-08-31: raccoons
+* 2021-09-02: secret usage of items
+* 2021-09-23: Charles Baudelaire
+* 2021-09-24: Lyon's traboules
+* 2021-09-30: Philippe Blumôt
+* 2021-10-19 – 29: A Tangle of Roses
+* 2021-10-31 – 11-09: A Dye to Die For
 
 ## External tools
 Pathfinder background generator (OGL):
