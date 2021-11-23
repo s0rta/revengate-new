@@ -65,3 +65,11 @@ Historical Bessemer:
 - https://media.sciencephoto.com/image/h4020114/800wm/H4020114-Portrait_of_metallurgist,_Sir_Henry_Bessemer.jpg
 - https://media.gettyimages.com/photos/threequarter-length-portrait-of-sir-henry-bessemer-inventor-of-a-picture-id526917692
 
+## Ambrose Hamillois
+Ambrose Hamillois is a potion maker with a workshop in Lyon. The very first impression of him might be of a very dishevelled Victorian Santa Claus. He is in his mid-60s with a large grey beard and long hairs that run in all directions. He is typically seen in a three piece suit of dark colours that is of great need for a pressing. A small bow tie and a propped up collar at his neck and a well worn top hat complete his signature look.
+
+The store front where he does business looks line a small cramped and overfilled bookstore. The back of the store is where the actual business takes place. A long work bench takes most of one wall. Then bench has scales, mortars of various sizes, and some laboratory glassware. On the wall opposed to the bench is an array of glass jars of all shapes and sizes all containing some coloured liquid.
+
+Hamillois harvests some of the herbs and spices that go into the potions himself, mostly from the countryside near Lyon. Most of his supplies however come from a solid network of trusted merchants and smugglers. 
+
+Hamillois is not completely anti-science, but he is distrusting of physics and engineering. He is however completely up to date on all the recent development and discoveries in the field of botany. He is slightly partial to royalists.
