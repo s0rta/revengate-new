@@ -91,3 +91,16 @@ They are rather slow, moving roughly at the pace of a brisk walking average huma
 Lire regular scarabs, they tend to display elaborate patterns and flashy colours on their body, including metallic and iridescent light effects.
 
 Sentry scarabs have a high mental capacity for insects due to their large head size. They can be trained and a few individuals can collaborate in the resolution of simple tasks. 
+
+## Pacherrs
+Pacherrs are human-sized bipedal wholly mammoths. They are essentially the closest one gets to Tolkienan dwarves: stubby with elaborate braiding on their long facial wool. Celtic knots are often carved in the ivory of their tusks, less commonly, jewels are also set in their tusks.
+
+They rarely go taller than 1.5m, but because they are greatly muscular, 100kg is pretty much as light as an adult can be. Thanks to their massive head, they are also much smarter than the typical human can be.  Their clothing has a lot in common with Cossack attires, including robe-like gowns and long coats for males as well as fluffy hats. 
+
+Pacherrs come from nomadic tribes in Eastern Russian. They form strong bonds within their clan and will readily help any individual within the clan. Clans have a matriarchal structure with an elder female having the final word on internal affairs.
+
+Among themselves, Pacherrs love music and dancing with both genders taking interchangeable roles in their traditional dances. Their music often includes the tambourine and the balalaika. 
+
+They are adept at fencing with the shashka sabre. The typically lack the finesse of human duellists, which they compensate for with the fantastic power of their swings. They are also generally proficient with pole arms. They sometimes have trunk attachements that serve as weapon, the trunk-morning-star being a common one.
+
+They are all strictly vegetarian, but otherwise, they do not advocate for the nature conservancy. They ascribe to a view of a world in change where nature's role evolve depending on the era. They tend to be more strongly opinionated with the relative place of various human and Pacherr factions, but who they would like to see at the top largely depends on which clan they are from.
