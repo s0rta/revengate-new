@@ -33,6 +33,8 @@ I have take some handwritten notes, to be typed or converted into code at a late
 * 2021-09-30: Philippe Blumôt
 * 2021-10-19 – 29: A Tangle of Roses
 * 2021-10-31 – 11-09: A Dye to Die For
+* 2021-11-27 – ...: Vitriolic Connections
+* 2021-12-01: phantruch
 
 ## External tools
 Pathfinder background generator (OGL):

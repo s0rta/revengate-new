@@ -12,8 +12,8 @@ Sulant tigers have the general shape and size of a Bengal tiger, but they are al
 Sulant tigers use their tails as monkeys do to grab objects or the limbs of unsuspecting adventurers who venture too close. Some say that their spines can cause poisoning. They can perceive electrical currents in their vicinity, some are also sensitive to magnetic fields.
 
 
-## loquilases (was torachs)
-Loquilases are basically large badgers with rigid scales on their head and back. Their scales often feature colourful intricate line patterns. More often then not, the line patterns are too flashy to serve as effective camouflage.
+## Sahwakoons (was torachs and loquilases)
+Sahwakoons are basically large badgers with rigid scales on their head and back. Their scales often feature colourful intricate line patterns. More often then not, the line patterns are too flashy to serve as effective camouflage.
 
 They are very aggressive, jumping on anything that they perceive as either food or as a threat. They can stun a target who is within their grasp with an electrical shock. They can jump up to two meters high and they are perfectly immune from induced fear from intimidation, toxins, or magic.
 
@@ -101,6 +101,57 @@ Pacherrs come from nomadic tribes in Eastern Russian. They form strong bonds wit
 
 Among themselves, Pacherrs love music and dancing with both genders taking interchangeable roles in their traditional dances. Their music often includes the tambourine and the balalaika. 
 
-They are adept at fencing with the shashka sabre. The typically lack the finesse of human duellists, which they compensate for with the fantastic power of their swings. They are also generally proficient with pole arms. They sometimes have trunk attachements that serve as weapon, the trunk-morning-star being a common one.
+They are adept at fencing with the shashka sabre. The typically lack the finesse of human duellists, which they compensate for with the fantastic power of their swings. They are also generally proficient with pole arms. They sometimes have trunk attachments that serve as weapon, the trunk-morning-star being a common one.
 
 They are all strictly vegetarian, but otherwise, they do not advocate for the nature conservancy. They ascribe to a view of a world in change where nature's role evolve depending on the era. They tend to be more strongly opinionated with the relative place of various human and Pacherr factions, but who they would like to see at the top largely depends on which clan they are from.
+
+
+## Bears
+The world of Revengate is filled with various kinds of bears. There are the common ones who also inhabit our world, like the black bear, the grisly bear, and the panda; and there are some that are unique to Revengate, like the moon bear and the short faced bear.
+
+All bears share similar characteristics and attach styles. The species of a bear dictates how strong of a foe it's going to be and to some extent, it's level of aggression. Unsurprisingly, pandas are the least aggressive and rarely attack unless provoked while polar bears are the most aggressive and will almost always attack on sight.
+
+Bears all have a very powerful sense of smell. With it, they can detect heroes who hide around corners. They can all climb and sprint for short distances, which is the basis for their charge attack. Given their considerable mass, a bear charge can deal a lot of damage and even knock a hero off their feet. 
+
+Bear are not social and are rarely seen in groups except for a mother with young cubs. A mother with cubs will always be more aggressive than other individuals from the same species. 
+
+Bears attack with their sharp front claws, which do slashing damage, and with their bites, which does piercing damage. Their attack range is short, but their thick fur offers a lot of protection so their can easily get into close-range combat.
+
+Bears can often be distracted by food, especially smelly and sweet ripe fruits.
+
+
+## Raccoons (including sahwakoon)
+Raccoons and sahwakoons share common behaviours. Both are very smart, but raccoons are smarter and have more dexterous front paws, which allows them to solve a wider range of problems. 
+
+Raccoons are the most social of the two. They can form groups of up to five. Their communication being limited, they do not coordinate attacks, but they have been seen helping one another for simple tasks, such as climbing over a tall structure.
+
+Raccoons can easily grab objects, but they have not been seen using them as tools or weapons. They will readily steal objects from adventurers, including their weapons, but they will rarely run away with the object they just stole.
+
+Rabid raccoons are the ones who have been infected by rabies. They are more aggressive than healthy individuals and can pass on the virus to humans. Unless vaccinated, humans almost never survive rabies. 
+
+Raccoon claws inflict slashing damage, but they are not particularly sharp. Their teeth are sharper and they inflict piercing damage. Their thick fur offers a surprisingly high amount of protection for an animal of this size. 
+
+It is rumoured that raccoons can be trained and that pet raccoons can steal items from enemies. If this turns out to be true, that would make these avid climbers very valuable companions on many dungeon adventures. 
+
+## Phantruch
+A phantruch is a magical creation. At first glace, it is a creature floating inside a wisp of blue flames.
+
+A major phantruch has an insect-like oval shaped torso that features a head and four limbs. Two of the arms are spider like, hairy, long and stiff, one with a crab-like pincer and one with a dagger shaped claw. The two other arms are soft tentacles tipped with suckers, a bit like those of squids. There are no legs, the thing simply floats.
+
+The part of the creature that is inside the blue flame is ethereal and semi-transparent. When a body part ventures outside of the flames, like for an attack, it instantly become solid and tangible. 
+
+The head is roughly triangular and features four eyes. The are many horns and spikes around the head, but no visible mouth.
+
+And the center of the creature floats the "vital assemblage", a frame of wood and brass housing an intricate mechanism that keeps the creature animated. The frame is adorned with writing in the ancient Aramaic script. Inside the frame there are four crystals arranged in the shape of a tetrahedron pyramid and a complex clockwork set of gears and springs constantly moving with a soft ticking sound. The vital assemblage has a very solid look to it despite being at the very center of the flames. 
+
+When a phantruch dies, the creature and the flames completely evaporate, but the vital assemblage remains. Any damage to the vital assemblage is likely to cause the creature to vanish.
+
+The lesser phantruch is help in animation by only two crystals. The weaker magical pulled produced by those simpler vital assemblages cannot reach as far in between the planes of reality and the creature nesting inside the blue flame is therefore much different.
+
+The creature of the lesser phantruch resembles a cross between a moray eel and a Chinese dragon. The serpent like beast remains coiled around the vital assemblage until the time of the attack. It attacks by springing forward with the swiftness of the cobra. As it floats in the air, the creature really seems to be swimming. Just like for the greater phantruch, the creature is ethereal and semi-transparent while it remains inside the blue flames.
+
+The lesser phantruch creature has diminutive arms like a Chinese dragon. Behind the head are protruding external gills somewhat similar to those of an axolotl. There are no eyes and no nostrils. How it senses it's enemy is a mystery. 
+
+The simpler vital assemblage of the lesser phantruch is still very intricate. The assemblage simply floats in mid-air without any visible attachment points. Sometimes the outline of a portal is visible as a two dimensional triangle. The equilateral triangle has one point facing down to the ground and emits a faint glow. It is about half as big as the creature. 
+
+If the creature manages to snatch an item and to drop it inside the blue flame, the item will soon vanish into oblivion, never to be found again.
