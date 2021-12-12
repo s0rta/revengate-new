@@ -5,3 +5,5 @@ __pycache__
 *.kate-swp
 core
 .randstate.json
+.envrc
+Pipfile.lock

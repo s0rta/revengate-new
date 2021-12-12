@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+Kivy = ">=2.0.0"
+
+[dev-packages]
+PySnooper = "*"
+buildozer = "*"
+ipdb = "*"
+
+[requires]
+python_version = "3.9"
