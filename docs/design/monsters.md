@@ -133,6 +133,7 @@ Raccoon claws inflict slashing damage, but they are not particularly sharp. Thei
 
 It is rumoured that raccoons can be trained and that pet raccoons can steal items from enemies. If this turns out to be true, that would make these avid climbers very valuable companions on many dungeon adventures. 
 
+
 ## Phantruch
 A phantruch is a magical creation. At first glace, it is a creature floating inside a wisp of blue flames.
 
@@ -155,3 +156,24 @@ The lesser phantruch creature has diminutive arms like a Chinese dragon. Behind 
 The simpler vital assemblage of the lesser phantruch is still very intricate. The assemblage simply floats in mid-air without any visible attachment points. Sometimes the outline of a portal is visible as a two dimensional triangle. The equilateral triangle has one point facing down to the ground and emits a faint glow. It is about half as big as the creature. 
 
 If the creature manages to snatch an item and to drop it inside the blue flame, the item will soon vanish into oblivion, never to be found again.
+
+
+## Gleugt
+
+A gleugt is an horror recognized in many Bavarian folk tales. The creature has the head of a goat, very long skinny arms that end in sharp claws, bird-like legs, and horrible looking wings.
+
+The head is roughly the shape of a goat's head with short horns protruding. The rest is hard to tell because gleugts almost always wear a plain looking mask. Long wavy hairs flow from the side of the mask down to the shoulders of the beast. 
+
+The long skinny arms are shaped a bit like those of gibbons or spider monkeys, but less hairy and much skinnier, making the bone structure show through the thin skin. The claws resemble those of mauls. The arms go down below the knees, almost touching the ground. 
+
+The legs of a gleugt are very similar to those of an ostrich, with the exception that they are equipped with sharp claws – a mix of those of an eagle and those or a road runner. 
+
+Deployed, the wings are about 2m across, which is probably not large enough to make the creature fly very far. The wings have mostly the shape of bat or dragon wings, but the bone structure is very irregular, almost like it was made by tree branches. Over the bone structure is a thin semi-transparent slimy membrane. The membrane is pinkish with many veins showing. The membrane is somewhat reminiscent of the amniotic sack or the placenta of a new born. 
+
+Gleugts are about as tall as a short human: between 1.25m and 1.5m. Because they are very skinny, they can move very fast despite their frail musculature. 
+
+In addition to the mask, gleugts typically wear as sleeveless vest and a skirt that looks more like a Victorian take on the Roman battle attire than like a kilt. It's also common to them to have a pocket watch on a chain and a ceremonial dagger on their belt. 
+
+Gleugts are adept at magic and can cast a wide range of spells, especially the older individuals who can be identified by their longer horns and their more leathery tattered wings. Their mastery of spells come from a natural affinity with magic rather than from long studying. Their intelligence is in fact lower than that of the human and they respond in impulsive manner rather than in a calculated way most of the time. They are smart enough to execute coordinated attacks between multiple individuals and to command other thinking beasts. 
+
+Gleugts prefer to dedicate their life to communion with nature through meditation and various rituals, but they will venture inside human civilisations to gather various ingredients for their rituals and for other items that they can't craft themselves. 
