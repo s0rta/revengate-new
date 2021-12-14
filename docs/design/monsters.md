@@ -164,7 +164,7 @@ A gleugt is an horror recognized in many Bavarian folk tales. The creature has t
 
 The head is roughly the shape of a goat's head with short horns protruding. The rest is hard to tell because gleugts almost always wear a plain looking mask. Long wavy hairs flow from the side of the mask down to the shoulders of the beast. 
 
-The long skinny arms are shaped a bit like those of gibbons or spider monkeys, but less hairy and much skinnier, making the bone structure show through the thin skin. The claws resemble those of mauls. The arms go down below the knees, almost touching the ground. 
+The long skinny arms are shaped a bit like those of gibbons or spider monkeys, but less hairy and much skinnier, making the bone structure show through the thin skin. The claws resemble those of moles. The arms go down below the knees, almost touching the ground. 
 
 The legs of a gleugt are very similar to those of an ostrich, with the exception that they are equipped with sharp claws – a mix of those of an eagle and those or a road runner. 
 
