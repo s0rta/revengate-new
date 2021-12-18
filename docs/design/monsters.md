@@ -159,7 +159,6 @@ If the creature manages to snatch an item and to drop it inside the blue flame, 
 
 
 ## Gleugt
-
 A gleugt is an horror recognized in many Bavarian folk tales. The creature has the head of a goat, very long skinny arms that end in sharp claws, bird-like legs, and horrible looking wings.
 
 The head is roughly the shape of a goat's head with short horns protruding. The rest is hard to tell because gleugts almost always wear a plain looking mask. Long wavy hairs flow from the side of the mask down to the shoulders of the beast. 
@@ -177,3 +176,47 @@ In addition to the mask, gleugts typically wear as sleeveless vest and a skirt t
 Gleugts are adept at magic and can cast a wide range of spells, especially the older individuals who can be identified by their longer horns and their more leathery tattered wings. Their mastery of spells come from a natural affinity with magic rather than from long studying. Their intelligence is in fact lower than that of the human and they respond in impulsive manner rather than in a calculated way most of the time. They are smart enough to execute coordinated attacks between multiple individuals and to command other thinking beasts. 
 
 Gleugts prefer to dedicate their life to communion with nature through meditation and various rituals, but they will venture inside human civilisations to gather various ingredients for their rituals and for other items that they can't craft themselves. 
+
+
+## Siren
+Sirens are semi-aquatic creatures. They have the torso of a human and the lower body of a sea serpent. Both genders exist, but females outnumber males 3 to 1.
+
+The torso of a siren is about the same size as that of the average human, but with their long tail included, they can reach between 4m and 7m from head to the tip of the tail. Because of the long muscular tail, they can weigh 200kg or more.
+
+In the wild, especially as sea, sirens rarely bother with clothing, which they say interferes with their swimming, but in a civilized setting, they usually wear beautifully crafted attires. They also wear armour when fighting is expected, but very rarely anything made of metal because they like to keep option of a water retreat.  Sirens like long clothing over their torso, such as riding jackets, Greek-style togas, sarongs, and a variety of gowns. They wear jewellery on their tail, but rarely more. They do enjoy elaborate body paintings on their tails.
+
+Sirens can easily crawl on land. When they do, they go about half as fast as a walking human. In water, they can swim about four times as fast as a human and maintain that speed for up to an hour. In sea water, they also regenerate cuts and wounds in just a few hours. They can get oxygen from sea water, but not from fresh water. 
+
+The two genders can mate together and female sirens can have offsprings with male humans; it is unknown if the same is true with the genders reversed. 
+
+Sirens have some innate magical abilities, such as charming sentient beings with their voice. They can also lean other spells from studying. They are about as smart as the average human, but they live twice as long, which gives them plenty of time to perfect their learning.
+
+Sirens can slow down their metabolism, which allows them to survive for a long time with very little food or water. They can drink both sea and fresh water. They also enjoy fermented beverages.
+
+Sirens are typically skilled with poles arms and blades. Their tail is prehensile and they can constrict a victim to death.
+
+They tend to liven in small groups of 5 to 30 individuals. They rarely have individual dwellings. Instead, they build longhouses where they store the group's belongings. Since sirens are very good divers, they are also very skilled at treasure hunting. A group of sirens therefore typically enjoys considerable wealth, which they will readily trade for rare delicacies, jewels, and books. They take little interests in human politics, except that they disapprove of imperialistic ambitions and often act to counter them.
+
+
+## Tripolitan Desert Centipede (aka Centrach)
+The Tripolitan Desert Centipede is not the kind of bug that you can hope to crush under your boot. These distant cousins of the more common house centipede measure 1m on average and feature a very thick armored exoskeleton. 
+
+The head has six eyes, two short antennas, and tow long and sharp mandibles. The body is segmented with each segment interlocking with the next one like on the tails of lobsters or scorpions. The segments have all sorts of spike and protrusions. The tails ends with two large spikes, one on each side, which can deliver great damage when the creature swings around. The last 25% to 35% of the segments towards the tail do not have any legs. Each leg ends with a small claw that allows the creature to climb on most textured surfaces.
+
+The mandible attack can deliver venom, which paralyses the victim for a short time and produces an excruciating amount of lasting pain.
+
+The creature often hides by burrowing under loose sand, which also protects it from the scorching heat of the desert sun. Desert centipedes are very good as sensing vibrations and they know when a prey is approaching even when burrowed. On most surfaces, it can run twice as fast as the average human. It can't swim, but it can walk under water for a short period of time. Prolonged exposure to water will however inevitably drown the bug. Nests will typically feature an adult mother and about a dozen eggs or juveniles. The young centipedes leave the nest when they reach about 30 cm in length.
+
+### References
+General look:
+http://whatsthatbug.com/wp-content/uploads/2011/11/centipded_namibia_roger.jpg
+https://watchdogpestcontrol.com/wp-content/uploads/2020/05/giant-desert-centipede-on-log-52920.jpg
+https://cdn.branchcms.com/9QKOAx7da2-1163/images/blog/centipede-crawling-in-a-garage.v2.jpg
+
+Mandibules:
+https://live.staticflickr.com/3600/3372321416_5a05dc6aee_b.jpg
+https://imgix.ranker.com/user_node_img/3387/67726892/original/stag-beetle-photo-u1?w=650&q=50&fm=pjpg&fit=crop&crop=faces
+https://butterfly-designs.com/wp-content/uploads/2020/06/prosopocoilus-serricornis-8-1250x938.jpg
+
+Claws (like on the back legs):
+https://www.annehepfer.com/blog/wp-content/uploads/2014/02/Be-Collection.jpg
