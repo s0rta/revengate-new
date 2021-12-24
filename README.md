@@ -32,4 +32,4 @@ Bestiary and NPC images:
 - Le Grand Salapou, Éguis, Large Automata: CC-BY-SA by Jonathan Timmons, 2021
 - Pridout Fauchève, Sulat Tiger, Sahwakoon: CC-BY by Clara Baltoré Pooter, 2021
 - Henry Bessemer, Nochorts, Sentry Scarabs: CC-BY by Tuyên Đặng, 2021
-- Labras, Pacherr, Phantruch, Gleugt: Creative Commons Attribution 4.0 International License by Jason Teves, 2021
+- Labras, Pacherr, Phantruch (lesser and greater), Gleugt, Desert Centipede: Creative Commons Attribution 4.0 International License by Jason Teves, 2021
