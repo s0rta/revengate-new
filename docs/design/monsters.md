@@ -349,7 +349,7 @@ Angola rabbit: https://cdn.fotofits.com/petzlover/gallery/img/l/angora-rabbit-47
 
 
 ## Algerian giant locust
-Illustration: to do
+Illustration: Jason Teves
 
 The Algerian giant locust is a large insect that looks like a cross between a wood wasp and a grasshopper. A single one of them poses little threat on its own, but they tend to come in very large numbers. 
 

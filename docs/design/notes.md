@@ -3,7 +3,7 @@ Miscelaneous Notes
 ==================
 
 ## Cross reference to Yannick's journal
-I have take some handwritten notes, to be typed or converted into code at a later dates.  Here are the references by date.
+I have taken some handwritten notes, to be typed or converted into code at a later dates.  Here are the references by date.
 
 * 2020-09-20: Le Grand Salapou
 * 2020-09-12: Shadow spells
