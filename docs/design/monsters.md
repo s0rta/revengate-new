@@ -278,7 +278,7 @@ http://aarondinin.com/wp-content/uploads/2017/07/saber-toothed-tiger.jpeg
 
 
 ## Yarohu
-Illustration: to do
+Illustration by Jason Teves
 
 The yarohu is a giant one meter tall red frog. They climb on trees and drop on unsuspecting victims. The center of their hands have lamprey like mouths that they sure to suck the blood from their victims. They can also inject a paralytic neuro-toxin to hold the victim still. After incapacitating a victim, they can swallow the victim whole and digest it slowly. 
 
@@ -307,7 +307,7 @@ They are very good swimmers and can stay underwater for up to 10 minutes. They h
 
 
 ## Cherubs
-Illustration: to do
+Illustration by Jason Teves
 
 Cherubs are minor angelic beings. Unlike their typical depiction as Cupid-like flying babies, they look more like a sphinx with four wings.
 
