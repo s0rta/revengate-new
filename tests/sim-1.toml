@@ -1,0 +1,102 @@
+
+[RevengateFile]
+format = 0
+content = "templatized-objects"
+description = "Doesn't matter, this field is ignored"
+
+[instances]
+[instances.lumiere]
+_class = "Faction"
+name = "lumiere"
+
+[instances.beasts]
+_class = "Faction"
+name = "beasts"
+
+[templates]
+[templates.bag]
+_class = "Item"
+char = "👜"
+weight = 1
+ 
+[templates.corpse] 
+_class = "Item"
+char = "%"
+weight = 5
+
+# Strategies
+[templates.tribal]
+_class = "Tribal"
+  
+# Weapons
+[templates.blade]
+_class = "Weapon"
+family = "#slice"
+verb = "cut"
+
+[templates.dagger]
+_parent = "blade"
+name = "dagger"
+weight = 5
+"!damage" = [4, 6]
+
+[templates.burn_eff] 
+_class = "Effect"
+name = "flames"
+duration = 3
+h_delta = -2
+family = "#heat"
+
+[templates.fire-arc]
+_class = "Spell"
+h_delta = -4 
+family = "#heat"
+cost = 5
+effects = ["*burn_eff"]
+
+[templates.fire-sword] 
+_class = "Weapon"
+verb = "cut"
+char = "🗡️"
+damage = 6
+weight = 7
+family = "#heat"
+effects = ["*burn_eff"]
+
+# Humans
+[templates.hero]
+_class = "Humanoid"
+name = "you"
+health = 60
+armor = 0
+strength = 50
+agility = 50
+intelligence = 50
+weapon = "*fire-sword"
+spells = []
+
+[templates.mage] 
+_parent = "hero"
+"+spells" = "*fire-arc"
+faction = "#lumiere"
+strategy = "*tribal"
+inventory = ["*bag"]
+
+# Beasts
+[templates.bite]
+_class = "Injurious"
+name = "bite"
+damage = 5
+family = "#pierce"
+
+[templates.wolf]
+_class = "Monster"
+name = "wolf"
+health = 30
+armor = 0
+strength = 35
+agility = 55
+weapon = "*bite"
+faction = "#beasts"
+strategy = "*tribal"
+char = "d"

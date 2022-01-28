@@ -1,83 +1,102 @@
-
-[{"&class": "Faction", 
-  "name": "lumiere"},
- {"&class": "Faction", 
-  "name": "beasts"},
-  
- {"&template": "bag", 
-  "&class": "Item", 
-  "char": "👜",
-  "weight": 1},
- {"&template": "corpse", 
-  "&class": "Item", 
-  "char": "%",
-  "weight": 5},
-  
- {"&template": "tribal", 
-  "&class": "Tribal"},
-  
- {"&template": "blade", 
-  "&class": "Weapon", 
-  "family": "#slice", 
-  "verb": "cut"}, 
- {"&template": "dagger",
-  "&parent": "blade",
-  "name": "dagger",
-  "weight": 5,
-  "!damage": [4, 6]}, 
- {"&template": "burn_eff", 
-  "&class": "Effect", 
-  "name": "flames", 
-  "duration": 3,
-  "h_delta": -2,
-  "family": "#heat"},
- {"&template": "fire-arc", 
-  "&class": "Spell", 
-  "h_delta": -4, 
-  "family": "#heat", 
-  "cost": 5,
-  "effects": ["*burn_eff"]},
- {"&template": "fire-sword", 
-  "&class": "Weapon", 
-  "family": "#slice", 
-  "verb": "cut", 
-  "char": "🗡️",
-  "damage": 6, 
-  "weight": 7,
-  "family": "#heat", 
-  "effects": ["*burn_eff"]},
- {"&template": "hero",
-  "&class": "Humanoid", 
-  "name": "you", 
-  "health": 60,
-  "armor": 0,
-  "strength": 50,
-  "agility": 50,
-  "intelligence": 50, 
-  "weapon": "*fire-sword",
-  "spells": []}, 
- {"&template": "mage", 
-  "&parent": "hero", 
-  "+spells": "*fire-arc", 
-  "faction": "#lumiere", 
-  "strategy": "*tribal", 
-  "inventory": ["*bag"]},
-  
- {"&template": "bite", 
-  "&class": "Injurious", 
-  "name": "bite",
-  "damage": 5,
-  "family": "#pierce"}, 
- {"&template": "wolf", 
-  "&class": "Monster", 
-  "name": "wolf", 
-  "health": 30,
-  "armor": 0,
-  "strength": 35,
-  "agility": 55,
-  "weapon": "*bite", 
-  "faction": "#beasts", 
-  "strategy": "*tribal", 
-  "char": "d"}
-
-  ]
+{
+   "RevengateFile" : {
+      "content" : "templatized-objects",
+      "description" : "Doesn't matter, this field is ignored",
+      "format" : 0
+   },
+   "instances" : {
+      "beasts" : {
+         "_class" : "Faction",
+         "name" : "beasts"
+      },
+      "lumiere" : {
+         "_class" : "Faction",
+         "name" : "lumiere"
+      }
+   },
+   "templates" : {
+      "bag" : {
+         "_class" : "Item",
+         "char" : "👜",
+         "weight" : 1
+      },
+      "bite" : {
+         "_class" : "Injurious",
+         "damage" : 5,
+         "family" : "#pierce",
+         "name" : "bite"
+      },
+      "blade" : {
+         "_class" : "Weapon",
+         "family" : "#slice",
+         "verb" : "cut"
+      },
+      "burn_eff" : {
+         "_class" : "Effect",
+         "duration" : 3,
+         "family" : "#heat",
+         "h_delta" : -2,
+         "name" : "flames"
+      },
+      "corpse" : {
+         "_class" : "Item",
+         "char" : "%",
+         "weight" : 5
+      },
+      "dagger" : {
+         "!damage" : [4, 6],
+         "_parent" : "blade",
+         "name" : "dagger",
+         "weight" : 5
+      },
+      "fire-arc" : {
+         "_class" : "Spell",
+         "cost" : 5,
+         "effects" : ["*burn_eff"],
+         "family" : "#heat",
+         "h_delta" : -4
+      },
+      "fire-sword" : {
+         "_class" : "Weapon",
+         "char" : "🗡️",
+         "damage" : 6,
+         "effects" : ["*burn_eff"],
+         "family" : "#heat",
+         "verb" : "cut",
+         "weight" : 7
+      },
+      "hero" : {
+         "_class" : "Humanoid",
+         "agility" : 50,
+         "armor" : 0,
+         "health" : 60,
+         "intelligence" : 50,
+         "name" : "you",
+         "spells" : [],
+         "strength" : 50,
+         "weapon" : "*fire-sword"
+      },
+      "mage" : {
+         "_parent" : "hero",
+         "+spells" : "*fire-arc",
+         "faction" : "#lumiere",
+         "inventory" : ["*bag"],
+         "strategy" : "*tribal"
+      },
+      "tribal" : {
+         "_class" : "Tribal"
+      },
+      "wolf" : {
+         "_class" : "Monster",
+         "agility" : 55,
+         "armor" : 0,
+         "char" : "d",
+         "faction" : "#beasts",
+         "health" : 30,
+         "name" : "wolf",
+         "strategy" : "*tribal",
+         "strength" : 35,
+         "weapon" : "*bite"
+      }
+   }
+}

@@ -25,6 +25,9 @@ import inspect
 from random import randrange
 from pprint import pprint
 
+import tomlkit
+
+# classes loaders can instantiate; this could be factored out
 from . import tags
 from .tags import Tag
 from .strategies import Strategy
@@ -32,10 +35,14 @@ from .items import Item
 from .weapons import HealthVector, Effect
 from .actors import Actor
 
+TOP_SECTION = "RevengateFile"
+FORMAT = 0
+
+# TODO: document the two sections: 'instances' and 'templates'
+
 # Special fields:
-# &class: the class to instanciate
-# &template: a template name that can be invoked later
-# &parent: another template that can this template derives from
+# _class: the class to instanciate
+# _parent: another template that this template inherits from
 
 # If no template name is specified, this is an instance, which we create on 
 # the spot. 
@@ -49,24 +56,97 @@ from .actors import Actor
 # '*': invoke a sub-template by name
 # '#': invoke a tag by name, similar to tags.t()
 
+
 class Template:
     """ Template are recipes for creating entities.  
     
-    Resulting entities can be fully initialized or only partialy so. 
+    Resulting entities can be fully initialized or only partialy so. Invoking 
+    a template to produce an instance must be done by a factory, typically a 
+    SubLoader.
     """
+
     def __init__(self, name, parent=None, fields=None):
         super(Template, self).__init__()
-        self.name = name
+        # Templates must know their name,  it simplifies the inheritance 
+        # resolution
+        self.name = name  
         self.parent = parent
         self.fields = fields or {}
 
-class Loader:
-    """ Factory class for creating instances from json data. """
+
+class TopLevelLoader:
+    """ Initial file loader: do some file validation, then invoke the 
+    appropriate sub-loader(s) based on content type. """
+
     def __init__(self, engine=None):
-        super(Loader, self).__init__()
+        # We keep the sub-loader used for each file. Template invocation and 
+        # instance lookup is defered to them.
+        self.sub_loaders = []
+        
+        # TODO: see the comment on TemplatizedObjectsLoader
         self.engine = engine
+
+    def load(self, fp):
+        serializer = None
+        if fp.name:
+            if fp.name.endswith(".toml"):
+                serializer = tomlkit
+            elif fp.name.endswith(".json"):
+                serializer = json
+        return self.loads(fp.read(), serializer)
+        
+    def loads(self, data, serializer=None):
+        if serializer is None:
+            # assume json if it does not look like TOML 
+            if data.lstrip().startswith(f"[{TOP_SECTION}]"):
+                serializer = tomlkit
+            else:
+                serializer = json
+                
+        root_record = serializer.loads(data)
+        file_info = root_record[TOP_SECTION]
+        file_format = file_info["format"]
+        if file_format != FORMAT:
+            raise ValueError(f"Unsupported file format: {file_format}. "
+                             f"This loader expects {FORMAT}")
+
+        content_type = file_info["content"]
+        for cls in SubLoader.__subclasses__():
+            if cls.content_key == content_type:
+                loader = cls(self.engine)
+                self.sub_loaders.append(loader)
+                return loader.decode(root_record)
+        raise ValueError(f"Could not find a SubLoader for {content_type}")
+
+
+class SubLoader:
+    """ Base class for inner content loaders. 
+    
+    Content discovery is based on the `content_key` class attribute. """
+    
+    content_key = None
+    # TODO: interface should be based on Python objects, not strings
+
+    def decode(self, record):
+        raise NotImplementedError()
+
+class TemplatizedObjectsLoader(SubLoader):
+    """ Factory class for creating instances from json data. """
+    
+    content_key = "templatized-objects"
+
+    def __init__(self, engine=None):
+        super(TemplatizedObjectsLoader, self).__init__()
+        # TODO: 'engine' could be easily factored our as a more generic dict
+        # of instance values to set by the loader. "defaults" would be a good 
+        # name for it
+        self.engine = engine  
+        
         self._class_map = {} # name -> class object mapping
-        self._templates = {} # for by-name invokation
+        
+        # for by-name invokations
+        self._instances = {} 
+        self._templates = {}
         for cls in [Tag, Item, HealthVector, Effect, Strategy, Actor]:
             self._map_class_tree(cls)
         
@@ -121,35 +201,36 @@ class Loader:
             obj.engine = self.engine
         return obj
   
-    def _decode_one(self, rec):
-        """ Convert a single record to either a template or an instance. """
-        if "&template" in rec:
-            name = rec.pop("&template")
-            parent = rec.pop("&parent", None)
-            obj = Template(name, parent, rec)
-            self._templates[name] = obj
-            return obj
-        if "&parent" in rec:
-            raise ValueError(f"Parent specified without a template name: {rec}")
+    def _decode_template(self, name, rec):
+        """ Convert a single record to template that can later be invoked 
+        by `name`. """
+        parent = rec.pop("_parent", None)
+        obj = Template(name, parent, rec)
+        self._templates[name] = obj
+        return obj
+  
+    def _decode_instance(self, name, rec):
+        """ Convert a single record to an instance. """
+        if "_parent" in rec:
+            msg = f"Parent specified in an instance record name: {rec}"
+            raise ValueError(msg)
     
-        obj = self._instanciate(rec.pop("&class"), rec)
-
+        obj = self._instanciate(rec.pop("_class"), rec)
+        self._instances[name] = obj
         return obj
 
     def _stack_str(self, stack):
         """ Return a printable summary of a template stack. """
         return "->".join([t.name for t in stack])
   
-    def load(self, fp):
-        return self.loads(fp.read())
         
-    def loads(self, data):
-        recs = json.loads(data)
-        if isinstance(recs, dict):
-            return self._decode_one(recs)
-        else:
-            return [self._decode_one(r) for r in recs]
-
+    def decode(self, rec):
+        for name, subrec in rec["instances"].items():
+            self._decode_instance(name, subrec)
+        for name, subrec in rec["templates"].items():
+            self._decode_template(name, subrec)
+        return dict(instances=self._instances, templates=self._templates)
+        
     def _random_field(self, val):
         """ Convert val into a random generator.
         
@@ -248,14 +329,14 @@ class Loader:
                                          f"Can't apply {prefix!r} transform.")
             # batch apply the other fields
             fields.update(tfields)
-        return self._instanciate(fields.pop("&class"), fields, oname)
+        return self._instanciate(fields.pop("_class"), fields, oname)
 
 def main():
-    loader = Loader()
-    objs = loader.load(open(sys.argv[1], "r"))
-    pprint(list(objs))
-    obj = loader.invoke("hero")
-    print(obj.weapon.damage)
+    loader = TopLevelLoader()
+    objs = loader.load(open(sys.argv[1], "rt"))
+    pprint(objs)
+    # obj = loader.invoke("hero")
+    # print(obj.weapon.damage)
 
 if __name__ == "__main__":
     main()
