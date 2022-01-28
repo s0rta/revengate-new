@@ -1,0 +1,18 @@
+[RevengateFile]
+format = 0
+content = "templatized-objects"
+description = "Doesn't matter, this field is ignored"
+
+[instances]
+
+[templates.bob]
+_class = "Humanoid"
+name = "bob"
+health = 80
+armor = 0
+strength = 50
+agility = 50
+intelligence = 50
+weapon = "*dagger"
+spells = []
+

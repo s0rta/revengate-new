@@ -1,0 +1,6 @@
+
+[RevengateFile]
+format = 0
+content = "file-map"
+description = "Doesn't matter, this field is ignored"
+files = ["sim-1.toml", "sim-2.toml"]

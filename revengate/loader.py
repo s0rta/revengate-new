@@ -19,6 +19,7 @@
 
 """ Object creation from json data. """
 
+import os
 import sys
 import json
 import inspect
@@ -81,7 +82,8 @@ class TopLevelLoader:
     def __init__(self, engine=None):
         # We keep the sub-loader used for each file. Template invocation and 
         # instance lookup is defered to them.
-        self.sub_loaders = []
+        self.master_file = None
+        self.sub_loaders = {}  # content_key -> instance
         
         # TODO: see the comment on TemplatizedObjectsLoader
         self.engine = engine
@@ -89,6 +91,8 @@ class TopLevelLoader:
     def load(self, fp):
         serializer = None
         if fp.name:
+            if self.master_file is None:
+                self.master_file = fp.name
             if fp.name.endswith(".toml"):
                 serializer = tomlkit
             elif fp.name.endswith(".json"):
@@ -111,12 +115,32 @@ class TopLevelLoader:
                              f"This loader expects {FORMAT}")
 
         content_type = file_info["content"]
-        for cls in SubLoader.__subclasses__():
-            if cls.content_key == content_type:
-                loader = cls(self.engine)
-                self.sub_loaders.append(loader)
-                return loader.decode(root_record)
-        raise ValueError(f"Could not find a SubLoader for {content_type}")
+        if content_type not in self.sub_loaders:
+            for cls in SubLoader.__subclasses__():
+                if cls.content_key == content_type:
+                    self.sub_loaders[content_type] = cls(self, self.engine)
+                    break
+            else:
+                # we got to the end of the loop without finding a sub-loader
+                raise ValueError("Could not find a SubLoader for " 
+                                 f"{content_type}")
+        loader = self.sub_loaders[content_type]
+        return loader.decode(root_record)
+
+    def invoke(self, template):
+        for loader in self.sub_loaders.values():
+            obj = loader.invoke(template)
+            if obj:
+                return obj
+        raise ValueError(f"Could not find a sub-loader to handle {template}.")
+        
+    def get_instance(self, name):
+        for loader in self.sub_loaders.values():
+            obj = loader.get_instance(name)
+            if obj:
+                return obj
+        raise ValueError("Could not find a sub-loader with an instance "
+                         f"registered as {name}.")
 
 
 class SubLoader:
@@ -125,22 +149,72 @@ class SubLoader:
     Content discovery is based on the `content_key` class attribute. """
     
     content_key = None
-    # TODO: interface should be based on Python objects, not strings
+
+    def __init__(self, top_loader, engine=None):
+        self.top_loader = top_loader
+        # TODO: 'engine' could be easily factored our as a more generic dict
+        # of instance values to set by the loader. "defaults" would be a good 
+        # name for it
+        self.engine = engine  
 
     def decode(self, record):
         raise NotImplementedError()
+
+    def invoke(self, template):
+        raise NotImplementedError()
+        
+    def get_instance(self, name):
+        raise NotImplementedError()
+
+
+class FileMapLoader(SubLoader):
+    """ Load content that is spread across multiple files. 
+    
+    The 'RevengateFile' section must have a 'files' attribute: a list of 
+    filenames.
+    
+    Files must be in the same directory as the master file or fully qualified 
+    paths must be supplied. Files can contain anything for which there is a 
+    valid loader, including another file-map. """
+    
+    content_key = "file-map"
+
+    def __init__(self, top_loader, engine=None):
+        super(FileMapLoader, self).__init__(top_loader, engine)
+
+    def locate(self, filename):
+        """ Return a qualified location for filename. """
+        if os.path.isfile(filename):
+            return filename
+        if self.top_loader.master_file:
+            master_dir = os.path.dirname(self.top_loader.master_file)
+            qual_name = os.path.join(master_dir, filename)
+            if os.path.isfile(qual_name):
+                return qual_name
+        return ValueError(f"Can't find {filename!r}. Try supplying an "
+                          "absolute path.")
+        
+    def decode(self, record):
+        objs = []
+        for fname in record[TOP_SECTION]["files"]:
+            with open(self.locate(fname), "rt") as fp:
+                objs.append(self.top_loader.load(fp))
+        return objs
+
+    def invoke(self, template):
+        return None
+        
+    def get_instance(self, name):
+        return None
+
 
 class TemplatizedObjectsLoader(SubLoader):
     """ Factory class for creating instances from json data. """
     
     content_key = "templatized-objects"
 
-    def __init__(self, engine=None):
-        super(TemplatizedObjectsLoader, self).__init__()
-        # TODO: 'engine' could be easily factored our as a more generic dict
-        # of instance values to set by the loader. "defaults" would be a good 
-        # name for it
-        self.engine = engine  
+    def __init__(self, top_loader, engine=None):
+        super(TemplatizedObjectsLoader, self).__init__(top_loader, engine)
         
         self._class_map = {} # name -> class object mapping
         
@@ -222,14 +296,18 @@ class TemplatizedObjectsLoader(SubLoader):
     def _stack_str(self, stack):
         """ Return a printable summary of a template stack. """
         return "->".join([t.name for t in stack])
-  
-        
+    
     def decode(self, rec):
+        # only instances and templates for the current file are returned
+        instances = {}
         for name, subrec in rec["instances"].items():
-            self._decode_instance(name, subrec)
+            obj = self._decode_instance(name, subrec)
+            instances[name] = obj
+        templates = {}
         for name, subrec in rec["templates"].items():
-            self._decode_template(name, subrec)
-        return dict(instances=self._instances, templates=self._templates)
+            obj = self._decode_template(name, subrec)
+            templates[name] = obj
+        return dict(instances=instances, templates=templates)
         
     def _random_field(self, val):
         """ Convert val into a random generator.
@@ -331,10 +409,17 @@ class TemplatizedObjectsLoader(SubLoader):
             fields.update(tfields)
         return self._instanciate(fields.pop("_class"), fields, oname)
 
+    def get_instance(self, name):
+        return self._instances.get(name)
+
+
 def main():
     loader = TopLevelLoader()
     objs = loader.load(open(sys.argv[1], "rt"))
     pprint(objs)
+    print(loader.get_instance("beasts"))
+    print(loader.invoke("hero"))
+    print(loader.invoke("bob").weapon.damage)
     # obj = loader.invoke("hero")
     # print(obj.weapon.damage)
 
