@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-# Copyright © 2020 Yannick Gingras <ygingras@ygingras.net>
+# Copyright © 2020–2022 Yannick Gingras <ygingras@ygingras.net>
 
 # This file is part of Revengate.
 
@@ -24,7 +24,6 @@ import itertools
 from collections import Counter, defaultdict
 from pprint import pprint
 from argparse import ArgumentParser
-from random import randrange, sample
 
 from .tags import t
 from .actors import Humanoid, Monster

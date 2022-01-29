@@ -1,4 +1,4 @@
-# Copyright © 2020 Yannick Gingras <ygingras@ygingras.net>
+# Copyright © 2020–2022 Yannick Gingras <ygingras@ygingras.net>
 
 # This file is part of Revengate.
 
@@ -19,8 +19,7 @@
 monsters, characters, etc. 
 """
 
-import random
-
+from .randutils import rng
 from .tags import TagBag, TagSlot, Faction
 from .strategies import StrategySlot
 from .weapons import Condition, Injurious, Weapon, Spell, Families
@@ -60,7 +59,7 @@ class Actor(object):
         self.name = None
 
         # turns logic
-        self.initiative = random.random()
+        self.initiative = rng.random()
         self._engine = None
         self._last_update = None # last time we computed conditions and regen
         self.conditions = [] # mostly stuff that does damage over time
@@ -162,7 +161,7 @@ class Actor(object):
         crit = False
 
         # to-hit roll
-        roll = random.normalvariate(MU, SIGMA)
+        roll = rng.normalvariate(MU, SIGMA)
         if roll < foe.get_evasion():
             return None  # miss!
 
@@ -205,7 +204,7 @@ class Actor(object):
             if isinstance(effect.duration, int):
                 stop = start + effect.duration
             else:
-                stop = start + random.randint(*effect.duration)
+                stop = start + rng.randint(*effect.duration)
             cond = Condition(effect, start, stop, cond_delta)
             self.conditions.append(cond)
         
@@ -237,7 +236,7 @@ class Actor(object):
         else:
             h_delta = vector.h_delta
 
-        return (1 + (stat - MU)/100.0) * h_delta * random.random()
+        return (1 + (stat - MU)/100.0) * h_delta * rng.random()
 
     def die(self):
         """ 

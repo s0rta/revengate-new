@@ -49,6 +49,14 @@ def iter_tiles(rect):
         for y in range(y1, y2+1):
             yield (x, y)
 
+def is_diag(pos1, pos2):
+    """ Return True if pos1 is in a 45 degree diagonal from pos2. """
+    x1, y1 = pos1
+    x2, y2 = pos2
+    if x1 == x2 or y1 == y2:
+        return False
+    return abs(x1 - x2) == abs(y1 - y2)
+
 def y_sorted(seq):
     """ Return a sequence of (x, y) coords sorted by its y component. """
     return sorted(seq, key=operator.itemgetter(1))

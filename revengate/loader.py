@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-# Copyright © 2020, 2021 Yannick Gingras <ygingras@ygingras.net>
+# Copyright © 2020–2022 Yannick Gingras <ygingras@ygingras.net>
 
 # This file is part of Revengate.
 
@@ -34,7 +34,6 @@ import os
 import sys
 import json
 import inspect
-from random import randrange
 from pprint import pprint
 
 import tomlkit
@@ -42,6 +41,7 @@ import tomlkit
 # classes loaders can instantiate; this could be factored out
 from . import tags
 from .tags import Tag
+from .randutils import rng
 from .strategies import Strategy
 from .items import Item
 from .weapons import HealthVector, Effect
@@ -366,10 +366,10 @@ file. Templates must be invoked by calling invoke() to create a new instance.
         The generator is called at invokation time.
         """
         if isinstance(val, int):
-            return lambda: randrange(val+1)
+            return lambda: rng.randrange(val+1)
         elif isinstance(val, list):
             min, max = val
-            return lambda: randrange(min, max+1)
+            return lambda: rng.randrange(min, max+1)
         else:
             raise ValueError(f"Don't know how to turn {val} into a random"
                              " generator.")

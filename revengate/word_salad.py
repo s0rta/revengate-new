@@ -1,4 +1,4 @@
-# Copyright © 2021 Yannick Gingras <ygingras@ygingras.net>
+# Copyright © 2021–2022 Yannick Gingras <ygingras@ygingras.net>
 
 # This file is part of Revengate.
 
@@ -21,8 +21,7 @@ Word salad generators: like Lorem Ipsum, but sounds like modern languages.
 
 from os import path
 import re
-import random
-from revengate import randutils
+from .randutils import rng
 
 DATA_DIR = path.join(path.dirname(__file__), "data/")
 FILE_PAT = "nonsense-{lang}.txt"
@@ -41,8 +40,8 @@ class WordSaladGenerator:
         """ Return a nonsense sentence. """
 
         if nb_words is None:
-            nb_words = randutils.rint(self.sentence_len)
-        words = random.choices(self.words, k=nb_words)
+            nb_words = rng.rint(self.sentence_len)
+        words = rng.choices(self.words, k=nb_words)
         words[0] = words[0].title()
         words[-1] = words[-1] + punct
         return " ".join(words)
