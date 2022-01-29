@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-# Copyright © 2020 Yannick Gingras <ygingras@ygingras.net>
+# Copyright © 2020, 2021 Yannick Gingras <ygingras@ygingras.net>
 
 # This file is part of Revengate.
 
@@ -17,7 +17,18 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-""" Object creation from json data. """
+""" Object creation from json or toml data. 
+
+The files must deserialize to a dictonary with at least a "RevengateFile" 
+section with the following fields:
+- format: an integer describing the format version 
+- content: a key describing the sub-loader to invoke to decode the data into 
+Python instances.
+
+See the documentation of various sub-classes of SubLoader for the various data 
+representations that are supported. 
+
+"""
 
 import os
 import sys
@@ -38,24 +49,6 @@ from .actors import Actor
 
 TOP_SECTION = "RevengateFile"
 FORMAT = 0
-
-# TODO: document the two sections: 'instances' and 'templates'
-
-# Special fields:
-# _class: the class to instanciate
-# _parent: another template that this template inherits from
-
-# If no template name is specified, this is an instance, which we create on 
-# the spot. 
-
-# field names can be prefixed by the following for special action:
-# '+': add value to the value of the parent template (works with lists)
-# '-': subtrack value to the value of the parent (not implemented for lists)
-# '!': random value, pass the max int or a [min, max] list
-
-# values can be prefixed by the following for special actions:
-# '*': invoke a sub-template by name
-# '#': invoke a tag by name, similar to tags.t()
 
 
 class Template:
@@ -175,7 +168,14 @@ class FileMapLoader(SubLoader):
     
     Files must be in the same directory as the master file or fully qualified 
     paths must be supplied. Files can contain anything for which there is a 
-    valid loader, including another file-map. """
+    valid loader, including another file-map. 
+    
+    Example:
+    [RevengateFile]
+    format = 0
+    content = "file-map"
+    files = ["sim-1.toml", "sim-2.toml"]
+    """
     
     content_key = "file-map"
 
@@ -209,7 +209,54 @@ class FileMapLoader(SubLoader):
 
 
 class TemplatizedObjectsLoader(SubLoader):
-    """ Factory class for creating instances from json data. """
+    """ Factory class for creating templatized object instances.
+    
+    Object templates specify some or all the fields of an object with the values 
+that they should be initialized to. Templates can inherit some of their values 
+from parent templates and they can apply basic transforms to the parent values. 
+Values can also be initialized with random numbers inside the specified range. 
+
+    Two sections must be present: 'instances' and 'templates'. Both are 
+name->definition mappings. Instances are initialized when calling decode() on a 
+file. Templates must be invoked by calling invoke() to create a new instance.
+    
+    Special fields:
+    _class: the class to instanciate
+    _parent: another template that this template inherits from
+
+    field names can be prefixed by the following for special action:
+    '+': add value to the value of the parent template (appends with lists)
+    '-': subtrack value to the value of the parent (not implemented for lists)
+    '!': random value, pass the max int or a [min, max] list for a range
+
+    values can be prefixed by the following for special actions:
+    '*': invoke a sub-template by name
+    '#': invoke a tag by name, similar to tags.t()
+
+    Fields that are named in the constructor of an object's Python class are 
+    set at creation time. All the other fields are set after the object has 
+    been created. 
+    
+    Example:
+    [RevengateFile]
+    format = 0
+    content = "templatized-objects"
+
+    # no instances but we still should declare the section
+    [instances]
+
+    # create this very average person by calling loader.invoke("bob")
+    [templates.bob]
+    _class = "Humanoid"
+    name = "bob"
+    health = 80
+    armor = 0
+    strength = 50
+    agility = 50
+    intelligence = 50
+    spells = []
+
+    """
     
     content_key = "templatized-objects"
 
@@ -221,6 +268,9 @@ class TemplatizedObjectsLoader(SubLoader):
         # for by-name invokations
         self._instances = {} 
         self._templates = {}
+        
+        # Templates and instances can only be for those and their sub-classes. 
+        # It would make sens to factor this out at some point. 
         for cls in [Tag, Item, HealthVector, Effect, Strategy, Actor]:
             self._map_class_tree(cls)
         
@@ -236,9 +286,9 @@ class TemplatizedObjectsLoader(SubLoader):
         Return the field unmodified if there are no references. """
         if callable(field):
             return field()
-        if isinstance(field, str) and field.startswith("#"): # tag
+        if isinstance(field, str) and field.startswith("#"):  # tag
             return tags.t(field[1:])
-        if isinstance(field, str) and field.startswith("*"): # sub-template
+        if isinstance(field, str) and field.startswith("*"):  # sub-template
             return self.invoke(field[1:])
         return field
 
