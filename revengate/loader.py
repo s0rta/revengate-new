@@ -22,8 +22,8 @@
 The files must deserialize to a dictonary with at least a "RevengateFile" 
 section with the following fields:
 - format: an integer describing the format version 
-- content: a key describing the sub-loader to invoke to decode the data into 
-Python instances.
+- content: a key describing the sub-loader to invoke to decode the data into Python 
+  instances.
 
 See the documentation of various sub-classes of SubLoader for the various data 
 representations that are supported. 
@@ -40,12 +40,14 @@ import tomlkit
 
 # classes loaders can instantiate; this could be factored out
 from . import tags
-from .tags import Tag
+from .tags import Tag, t
 from .randutils import rng
 from .strategies import Strategy
 from .items import Item
 from .weapons import HealthVector, Effect
 from .actors import Actor
+from .dialogue import Dialogue, Line, Action, SpeakerTag, ActionTag
+
 
 TOP_SECTION = "RevengateFile"
 FORMAT = 0
@@ -145,9 +147,8 @@ class SubLoader:
 
     def __init__(self, top_loader, engine=None):
         self.top_loader = top_loader
-        # TODO: 'engine' could be easily factored our as a more generic dict
-        # of instance values to set by the loader. "defaults" would be a good 
-        # name for it
+        # TODO: 'engine' could be easily factored our as a more generic dict of instance 
+        # values to set by the loader. "defaults" would be a good name for it
         self.engine = engine  
 
     def decode(self, record):
@@ -208,17 +209,164 @@ class FileMapLoader(SubLoader):
         return None
 
 
+class DialogueLoader(SubLoader):
+    """ Load dialogues. 
+    
+    The 'RevengateFile' section must have 'speakers' and 'actions' attributes: lists of 
+    strings.
+    
+    The file is composed of multiple dialogues, each as subsections of [dialogues], each 
+    with a unique name. A dialogue must define a 'script' attribute: a multiline 
+    string in the following format:
+    - comments start with '# ' and continue until the end of the line;
+    - tags start with '#' and are immediately followed by alphanumerics, "_" or "-";
+    - top level tags are followed by ':', everything until the next top level tag and 
+      the end of the documents is an argument to the top level tag;
+    - arguments can be separated by pipes or new lines ("|" or "\n");
+    - for speaker tags, each non-tag argument becomes a speech line for that speaker;
+    - for action tags, each non-tag is passed verbatim to the target function;
+    - only action tags are allowed as arguments, they are called *after* the preceeding 
+      element is displayed or selected, depending if the preceeding element is part of a 
+      sequence of speech or part of a choice;
+    - if an action tag is the first argument of a top level action, it will be called 
+      with the return value of the top level action.
+      
+    Syntactic legaleese aside, it's quite simple: start with a speaker tag, type all the 
+    lines for that speaker (either as separate lines or separated by |). Move to the 
+    next speaker with a new speaker tag on a new line. If actions need to happen because 
+    a line of speech has consequences on the game world, add an action tag after that 
+    line of speech.
+
+    
+    TODO include a few examples
+    
+    """
+    
+    content_key = "dialogues"
+    COMMENTS = ["# ", "#\t", "#\n"]
+
+    def __init__(self, top_loader, engine=None):
+        super(DialogueLoader, self).__init__(top_loader, engine)
+        self.dialogues = {}
+        self._speakers = {}
+        self._actions = {}
+
+    def _strip_comments(self, line):
+        for style in self.COMMENTS:
+            cmt_pos = line.find(style)
+            if cmt_pos >= 0:
+                line = line[:cmt_pos]
+        # typically the '\n' has already been stripped, so we also check this
+        if line == "#":
+            line = ""
+        return line
+
+    def _decode_one(self, name, record):
+        dia = Dialogue(name)
+        lines = record["script"].split("\n")
+        lines = [self._strip_comments(l) for l in lines]
+        
+        cur_elem = None
+        cur_args = []
+
+        def finalize_elem():
+            # This looks a bit like a mess because one speaker tag generates many speech 
+            # lines while one action tag is only one action. Keeping that in mind, what 
+            # follows is reasonably straight forward.
+            nonlocal cur_elem, cur_args
+            
+            if cur_elem is None and len(cur_args) == 0:
+                return
+            elif cur_elem is None:
+                raise ValueError("Malformed file: arguments without a top level tag.")
+            
+            if isinstance(cur_elem, SpeakerTag):
+                # all non-tag arguments after a speaker tag are lines of dialogue for 
+                # that speaker
+                for arg in cur_args:
+                    if arg.startswith("#"):
+                        tag = self._decode_tag(arg)
+                        if dia.elems:
+                            dia.elems.after_ftag = tag
+                        else:
+                            dia.elems.append(Action(tag))
+                    else:
+                        dia.elems.append(Line(text=arg, speaker=cur_elem))
+            else:
+                # non-tag arguments after an action tag are passed verbatim to the 
+                # target function
+                args = []
+                for arg in cur_args:
+                    arg = arg.strip()
+                    if arg.startswith("#"):
+                        arg = self._decode_tag(arg)
+                        if args:
+                            args[-1].after_ftag = arg
+                        else:
+                            args.append(arg)
+                    else:
+                        args.append(Line(arg))
+                    
+                action = Action(name=cur_elem, args=args)
+                dia.elems.append(action)
+            
+            # reset for next parsing
+            cur_elem = None
+            cur_args = []
+
+        for line in lines:
+            if len(line) == 0 or line.isspace():
+                continue
+            if line.startswith("#") and line[1].isalpha():
+                # we have a tag!
+                tag, line = line.split(':', 1)
+                tag = self._decode_tag(tag)
+                finalize_elem()
+                cur_elem = tag
+            cur_args += line.split("|")
+        finalize_elem()
+        return dia
+    
+    def _decode_tag(self, tag):
+        tag = tag.strip("#:")
+        if tag in self._speakers or tag in self._actions:
+            return t(tag)  # the tag registry remembers what namespace it belongs to
+        else:
+            raise ValueError(f"Not a registered action or speakers: {tag!r}")
+
+    def decode(self, record):
+        for tag in record[TOP_SECTION]["speakers"]:
+            self._speakers[tag] = SpeakerTag(tag)
+        for tag in record[TOP_SECTION]["actions"]:
+            self._actions[tag] = ActionTag(tag)
+
+        dias = {}
+        for name, subrec in record["dialogues"].items():
+            dias[name] = self._decode_one(name, subrec)
+        self.dialogues.update(dias)
+        return dias
+        
+    def invoke(self, template):
+        return None
+        
+    def get_instance(self, name):
+        if name in self.dialogues:
+            return self.dialogues[name]
+        return None
+
+
+
 class TemplatizedObjectsLoader(SubLoader):
     """ Factory class for creating templatized object instances.
     
-    Object templates specify some or all the fields of an object with the values 
-that they should be initialized to. Templates can inherit some of their values 
-from parent templates and they can apply basic transforms to the parent values. 
-Values can also be initialized with random numbers inside the specified range. 
+    Object templates specify some or all the fields of an object with the values that 
+    they should be initialized to. Templates can inherit some of their values from 
+    parent templates and they can apply basic transforms to the parent values. Values 
+    can also be initialized with random numbers inside the specified range.
 
-    Two sections must be present: 'instances' and 'templates'. Both are 
-name->definition mappings. Instances are initialized when calling decode() on a 
-file. Templates must be invoked by calling invoke() to create a new instance.
+    Two sections must be present: 'instances' and 'templates'. Both are name->definition 
+    mappings. Instances are initialized when calling decode() on a file. Templates must 
+    be invoked by calling invoke() to create a new instance.
     
     Special fields:
     _class: the class to instanciate
@@ -233,9 +381,8 @@ file. Templates must be invoked by calling invoke() to create a new instance.
     '*': invoke a sub-template by name
     '#': invoke a tag by name, similar to tags.t()
 
-    Fields that are named in the constructor of an object's Python class are 
-    set at creation time. All the other fields are set after the object has 
-    been created. 
+    Fields that are named in the constructor of an object's Python class are set at 
+    creation time. All the other fields are set after the object has been created.
     
     Example:
     [RevengateFile]
@@ -263,7 +410,7 @@ file. Templates must be invoked by calling invoke() to create a new instance.
     def __init__(self, top_loader, engine=None):
         super(TemplatizedObjectsLoader, self).__init__(top_loader, engine)
         
-        self._class_map = {} # name -> class object mapping
+        self._class_map = {}  # name -> class object mapping
         
         # for by-name invokations
         self._instances = {} 
@@ -467,9 +614,14 @@ def main():
     loader = TopLevelLoader()
     objs = loader.load(open(sys.argv[1], "rt"))
     pprint(objs)
-    print(loader.get_instance("beasts"))
-    print(loader.invoke("hero"))
-    print(loader.invoke("bob").weapon.damage)
+    
+    from .dialogue import TextUI
+    ui = TextUI()
+    ui.show_dia(objs["question"])
+    
+    #print(loader.get_instance("beasts"))
+    #print(loader.invoke("hero"))
+    #print(loader.invoke("bob").weapon.damage)
     # obj = loader.invoke("hero")
     # print(obj.weapon.damage)
 

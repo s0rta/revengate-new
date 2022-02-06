@@ -182,13 +182,13 @@ def wolf_pack_skirmish(engine):
     return last_faction_standing(engine, ["mage", "wolf", "wolf", "wolf"])
 
 
-def run_many(engine, combat_func, nbtimes=100):
+def run_many(engine, combat_funct, nbtimes=100):
     """ Run a simulation nbtimes and print a statistical summary. """
     winners = Counter()
     durations = []
     
     for i in range(nbtimes):
-        winner, duration = combat_func(engine)
+        winner, duration = combat_funct(engine)
         durations.append(duration)
         winners[winner.name] += 1
     champ, victories = winners.most_common(1)[0]

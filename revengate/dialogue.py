@@ -17,45 +17,11 @@
 
 """ Conversations between actors. """
 
+
 from .tags import Tag, t
 
 import functools
 import inspect
-
-
-DIA_1 = [
-    ["#salapou", ["What a great pleasure to see you here {hero}", 
-                    "Please accept this token of hispotality",
-                    "#add-potion-to-inventory"]]
-]
-
-# #salapou: – What a great pleasure to see you here {hero}
-#    - Please accept this token of hospitality
-#    #add-potion-to-inventory
-
-DIA_2 = [
-    ["#salapou", "You have no power over me!"],
-    ["#bob", "That is true, but I have power over this circus business of yours."],
-    ["#salapou", "We shall see about that!"]
-]
-
-DIA_3 = [
-    ["#salapou", "This is my final offer. What do you say?"], 
-    ["#prompt", [["Accept", "#agree-with-salapou"], 
-                 ["Decline", "#fight-salapou"]]]
-]
-
-DIA_4 = [
-    ["#salapou", "This is my final offer. What do you say?"], 
-    ["#yes-no-prompt", ["#agree-with-salapou", "#fight-salapou"]]
-]
-
-DIA_5 = [
-    ["#salapou", "This is my final offer. What do you say?"], 
-    ["#speach-choice", 
-     [["You are right, let's be allies.", "#agree-with-salapou"], 
-      ["Die, you megalomaniac!", "#fight-salapou"]]]
-]
 
 
 class UI:
@@ -72,7 +38,7 @@ class UI:
 
 class TextUI(UI):
     def show_dia(self, dia):
-        for part in dia.seq:
+        for part in dia.elems:
             if isinstance(part, Action):
                 result = self.action_map.call(part.name, *part.args)
                 if part.after_ftag:
@@ -104,7 +70,7 @@ class TextUI(UI):
         return choice
 
 
-class Speaker(Tag):
+class SpeakerTag(Tag):
     pass
 
 
@@ -112,7 +78,11 @@ class ActionTag(Tag):
     pass
 
 
-class Line:
+class DialogueElement:
+    pass
+
+
+class Line(DialogueElement):
     """ A line of dialogue. 
     
     If `after_ftag` is provided, it is called without arguments (except the global ones 
@@ -121,6 +91,7 @@ class Line:
     """
     
     def __init__(self, text, speaker=None, after_ftag=None):
+        super(Line, self).__init__()
         self.text = text
         self.speaker = speaker
         self.after_ftag = after_ftag
@@ -132,7 +103,7 @@ class Line:
             return self.text
 
 
-class Action:
+class Action(DialogueElement):
     """ An event taking place sometime during the course of a dialogue. 
     
     If `after_ftag` is provided, it is called with the result of the current action 
@@ -141,6 +112,7 @@ class Action:
     """
 
     def __init__(self, name, args, after_ftag=None):
+        super(Action, self).__init__()
         self.name = name
         self.args = args
         self.after_ftag = after_ftag
@@ -149,7 +121,12 @@ class Action:
 class Dialogue:
     def __init__(self, key):
         self.key = key
-        self.seq = []
+        self.elems = []
+
+    @property
+    def sequence(self):
+        # Writers out there might find this terminology easier to remember
+        return self.elems
 
 
 class ActionMap:
@@ -195,6 +172,8 @@ class ActionMap:
         return funct
 
     def call(self, action, *args):
+        if isinstance(action, Tag):
+            action = action.name
         if action in self._actions:
             funct = self._actions[action]
         elif hasattr(self, action):
@@ -215,7 +194,7 @@ class ActionMap:
 
 def main():
     # TODO: speaker lookup
-    speakers = [Speaker("bob"), Speaker("salapou"), Speaker("hero")]
+    speakers = [SpeakerTag("bob"), SpeakerTag("salapou"), SpeakerTag("hero")]
     
     ui = TextUI()
     ui.action_map.register(lambda: print("done with the rambling"), 
@@ -226,12 +205,12 @@ def main():
     dia = Dialogue("one")
     speaker, texts = DIA_1[0]
     for text in texts:
-        dia.seq.append(Line(text, speaker))
-    dia.seq[-1].after_ftag = "log-end-of-speach"
+        dia.elems.append(Line(text, speaker))
+    dia.elems[-1].after_ftag = "log-end-of-speach"
     options = [Line("OK!"), 
                Line("Maybe...", after_ftag="log-end-of-speach"), 
                Line("No way!")]
-    dia.seq.append(Action("prompt", options))
+    dia.elems.append(Action("prompt", options))
 
     ui.show_dia(dia)
 
