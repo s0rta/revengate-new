@@ -190,6 +190,9 @@ class ActionMap:
     
     def yes_no_prompt(self):
         return self.promp("Yes", "No")
+    
+    def log(self, *args):
+        print(f"Dialogue action call with args: {args}")
         
 
 def main():
@@ -203,6 +206,7 @@ def main():
                            "log-selection")
     
     dia = Dialogue("one")
+    # FIXME: restore DIA_1
     speaker, texts = DIA_1[0]
     for text in texts:
         dia.elems.append(Line(text, speaker))

@@ -296,6 +296,7 @@ class DialogueLoader(SubLoader):
                 # non-tag arguments after an action tag are passed verbatim to the 
                 # target function
                 args = []
+                action = Action(name=cur_elem, args=args)
                 for arg in cur_args:
                     arg = arg.strip()
                     if arg.startswith("#"):
@@ -303,11 +304,10 @@ class DialogueLoader(SubLoader):
                         if args:
                             args[-1].after_ftag = arg
                         else:
-                            args.append(arg)
+                            action.after_ftag = arg
                     else:
                         args.append(Line(arg))
                     
-                action = Action(name=cur_elem, args=args)
                 dia.elems.append(action)
             
             # reset for next parsing
@@ -315,6 +315,7 @@ class DialogueLoader(SubLoader):
             cur_args = []
 
         for line in lines:
+            line = line.strip()
             if len(line) == 0 or line.isspace():
                 continue
             if line.startswith("#") and line[1].isalpha():
@@ -323,7 +324,7 @@ class DialogueLoader(SubLoader):
                 tag = self._decode_tag(tag)
                 finalize_elem()
                 cur_elem = tag
-            cur_args += line.split("|")
+            cur_args += [part.strip() for part in line.split("|")]
         finalize_elem()
         return dia
     
@@ -617,7 +618,7 @@ def main():
     
     from .dialogue import TextUI
     ui = TextUI()
-    ui.show_dia(objs["question"])
+    ui.show_dia(objs["intro"])
     
     #print(loader.get_instance("beasts"))
     #print(loader.invoke("hero"))

@@ -2,7 +2,7 @@
 format = 0
 content = "dialogues"
 speakers = ["salapou", "bob"]
-actions = ["prompt"]
+actions = ["prompt", "log"]
 
 [dialogues.intro]
 script="""
@@ -10,14 +10,14 @@ script="""
 #salapou: You have no power over me!
 #bob: That is true. You are right about that.
       But I have power over this circus business of yours!
-#salapou: How dare you... | You have outlasted my hospitaly. Go!
+#salapou: How dare you... | You have outlasted my hospitaly. Leave!
 """
 
 [dialogues.question]
 script="""
 #salapou: I think this a good deal. What do you say?
 # This is another comment
-#prompt: 
+#prompt: #log
   I'll do this for you.
   No way!
 """
