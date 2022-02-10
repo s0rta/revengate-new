@@ -6,3 +6,4 @@ Coding style and conventions
 * funct, not func: a Python callable
 * action and ftag: a string referencing a registered Python function; must be resolved before it can be called
 * params, not parms
+* when in doubt, name things after steam engine parts or concepts at the core of the industrial revolution
