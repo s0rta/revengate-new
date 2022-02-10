@@ -1,0 +1,12 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "revengate"
+dynamic = ["description", "version"]
+license = "GPL-3.0-or-later"
+classifiers = ["Private :: Do Not Upload"]
+
+[project.scripts]
+revcli = "revengate.apparatus:main"

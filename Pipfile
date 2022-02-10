@@ -11,6 +11,7 @@ tomlkit = "*"
 PySnooper = "*"
 buildozer = "*"
 ipdb = "*"
+flit = "*"
 
 [requires]
 python_version = "3.9"
