@@ -29,7 +29,7 @@ from .tags import t
 from .actors import Humanoid, Monster
 from . import weapons
 from .weapons import Events
-from .loader import Loader
+from .loader import TopLevelLoader
 from .maps import Map, Builder, MapOverlay
 
 class Engine(object):
@@ -213,6 +213,7 @@ def map_demo(eng, actor_names):
         a = eng.loader.invoke(name)
         actors.add(a)
         map.place(a)
+        eng.register(a)
     factions = _split_factions(actors)
     orig_cast = list(actors)
 
@@ -259,7 +260,7 @@ def main():
     
     args = parser.parse_args()
 
-    loader = Loader()
+    loader = TopLevelLoader()
     for f in args.load:
         loader.load(f)
     eng = Engine(loader)

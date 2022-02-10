@@ -40,6 +40,12 @@ name = "dagger"
 weight = 5
 "!damage" = [4, 6]
 
+[templates.sword]
+_parent = "blade"
+name = "shinny sword"
+weight = 7
+"!damage" = [5, 8]
+
 [templates.burn_eff] 
 _class = "Effect"
 name = "flames"
@@ -72,14 +78,15 @@ armor = 0
 strength = 50
 agility = 50
 intelligence = 50
-weapon = "*fire-sword"
+# weapon = "*fire-sword"
+weapon = "*sword"
+strategy = "*tribal"
+faction = "#lumiere"
 spells = []
 
 [templates.mage] 
 _parent = "hero"
 "+spells" = "*fire-arc"
-faction = "#lumiere"
-strategy = "*tribal"
 inventory = ["*bag"]
 
 # Beasts
