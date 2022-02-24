@@ -1,0 +1,63 @@
+[RevengateFile]
+format = 0
+content = "templatized-objects"
+description = "Core actors, including monsters"
+
+[instances]
+[instances.lumiere]
+_class = "Faction"
+name = "lumiere"
+
+[instances.beasts]
+_class = "Faction"
+name = "beasts"
+
+[templates]
+
+# Strategies, these are templates rather than instances because everyone need their own 
+# instance.
+[templates.tribal]
+_class = "Tribal"
+
+# Beasts
+[templates.bite]
+_class = "Injurious"
+name = "bite"
+damage = 5
+family = "#pierce"
+
+[templates.rat]
+_class = "Monster"
+name = "rat"
+health = 5
+armor = 0
+strength = 15
+agility = 50
+weapon = "*bite"
+faction = "#beasts"
+strategy = "*tribal"
+char = "r"
+
+[templates.wolf]
+_class = "Monster"
+name = "wolf"
+health = 30
+armor = 0
+strength = 35
+agility = 55
+weapon = "*bite"
+faction = "#beasts"
+strategy = "*tribal"
+char = "d"
+
+
+# humans
+[templates.novice]
+_class = "Humanoid"
+health = 60
+armor = 0
+strength = 50
+agility = 50
+intelligence = 50
+weapon = "*sword"
+faction = "#lumiere"

@@ -1,0 +1,5 @@
+[RevengateFile]
+format = 0
+content = "file-map"
+description = "Master file for all the core elements"
+files = ["core-items.toml", "core-actors.toml", "core-dialogues.toml"]

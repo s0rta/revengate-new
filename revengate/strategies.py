@@ -1,4 +1,4 @@
-# Copyright © 2020 Yannick Gingras <ygingras@ygingras.net>
+# Copyright © 2020 – 2022 Yannick Gingras <ygingras@ygingras.net>
 
 # This file is part of Revengate.
 
@@ -17,56 +17,62 @@
 
 """ Various ways to decide who to attack and how to attack them. """
 
+from . import tender
+
+
 class SelectionCache:
     """ A placeholder for various properties about a target so we don't keep 
     recomputing it. """
-    def __init__(self, map, actor, target):
-        self.map = map
+    def __init__(self, actor, target):
+        self.map = tender.engine.map
         self.actor = actor
         self.target = target
-        self._pos_a = map.find(actor)
-        self._pos_t = map.find(target)
+        self._pos_a = self.map.find(actor)
+        self._pos_t = self.map.find(target)
         self._dist = None
         self._los = None
         self._path = None
         
     @property
     def dist(self):
-        if self._dist == None:
+        if self._dist is None:
             self._dist = self.map.distance(self._pos_a, self._pos_t)
         return self._dist
 
     @property
     def los(self):
-        if self._los == None:
+        if self._los is None:
             self._los = self.map.line_of_sight(self._pos_a, self._pos_t)
         return self._los
 
     @property
     def path(self):
-        if self._path == None:
+        if self._path is None:
             self._path = list(self.map.path(self._pos_a, self._pos_t))
         return self._path
 
+
 class Strategy:
     """ A play strategy to automate an actor's actions. """
+    
     def __init__(self, name, actor=None):
         super(Strategy, self).__init__()
         self.name = name
         self.actor = actor
 
-    def act(self, map):
-        actors = map.all_actors() # TODO: ignore the out of sight ones
-        tc = self.select_target(map, actors)
+    def act(self):
+        map = tender.engine.map
+        actors = map.all_actors()  # TODO: ignore the out of sight ones
+        tc = self.select_target(actors)
         if tc:
             if tc.dist == 1:
                 return self.actor.attack(tc.target)
             else:
                 path = tc.path
                 if path:
-                    return self.actor.move(map, path[1])
+                    return self.actor.move(path[1])
         
-    def select_target(self, map, targets):
+    def select_target(self, targets):
         raise NotImplementedError()
 
 
@@ -98,11 +104,12 @@ class StrategySlot:
         
 class Tribal(Strategy):
     """ Attack anyone not in the same faction. """
-    def select_target(self, map, targets):
+    def select_target(self, targets):
+        map = tender.engine.map
         pos = map.find(self.actor)
         # TODO: tune-down the awareness and only start chasing a target if you 
         #       can reasonably suspect where it is
-        options = [SelectionCache(map, self.actor, t) 
+        options = [SelectionCache(self.actor, t) 
                    for t in targets
                    if t.faction != self.actor.faction]
         # path finding is very expensive, so we start by looking at 

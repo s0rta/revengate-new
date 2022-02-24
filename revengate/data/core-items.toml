@@ -1,0 +1,46 @@
+[RevengateFile]
+format = 0
+content = "templatized-objects"
+description = "Core items, including weapons"
+
+[instances]
+
+[templates]
+[templates.corpse] 
+_class = "Item"
+char = "%"
+weight = 5
+
+# Weapons
+[templates.blade]
+_class = "Weapon"
+family = "#slice"
+verb = "cut"
+
+[templates.dagger]
+_parent = "blade"
+name = "dagger"
+weight = 5
+"!damage" = [4, 6]
+
+[templates.sword]
+_parent = "blade"
+name = "sword"
+char = "🗡️"
+weight = 7
+"!damage" = [5, 8]
+
+[templates.burn_eff] 
+_class = "Effect"
+name = "flames"
+duration = 3
+h_delta = -2
+family = "#heat"
+
+[templates.fire-sword] 
+_parent = "sword"
+verb = "cut"
+damage = 6
+weight = 7
+family = "#heat"
+effects = ["*burn_eff"]

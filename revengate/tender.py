@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # Copyright © 2022 Yannick Gingras <ygingras@ygingras.net>
 
 # This file is part of Revengate.
@@ -17,25 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
+""" Global that must be kept accessible from many parts of the game. 
 
-import sys
-from argparse import ArgumentParser
+There are no guarantees on initialization. Whatever governor or simulation is setting 
+things in motion must also make sure that this the required globals are initialized.
+"""
 
-from . import __version__, __doc__
-from .governor import Governor
-
-def main():
-    parser = ArgumentParser(sys.argv[0], description=__doc__)
-    parser.add_argument("--version", action="store_true", 
-                        help="Print version and exit.")
-    args = parser.parse_args()
-    
-    if args.version:
-        print(f"Revengate version {__version__}")
-        sys.exit(0)
-
-    gov = Governor()
-    gov.start()
-
-if __name__ == "__main__":
-    main()
+engine = None
+ui = None
+action_map = None
+hero = None

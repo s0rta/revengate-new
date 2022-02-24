@@ -66,7 +66,7 @@ class Events:
 class Move(StatusEvent):
     """ The actor moved. """
     def __init__(self, target, old_pos, new_pos):
-        super(Move, self).__init__(target)
+        super().__init__(target)
         self.old_pos = old_pos
         self.new_pos = new_pos
         
@@ -77,7 +77,7 @@ class Move(StatusEvent):
 class Death(StatusEvent):
     """ The actor died. """
     def __init__(self, target):
-        super(Death, self).__init__(target)
+        super().__init__(target)
         
     def __str__(self):
         return f"{self.target} died!"
@@ -86,7 +86,7 @@ class Death(StatusEvent):
 class HealthEvent(StatusEvent):
     """ The actor's health just got better or worse. """
     def __init__(self, target, h_delta):
-        super(HealthEvent, self).__init__(target)
+        super().__init__(target)
         self.h_delta = h_delta
         
     def __str__(self):
@@ -99,7 +99,7 @@ class HealthEvent(StatusEvent):
 class Injury(HealthEvent):
     """ Something that hurts """
     def __init__(self, target, damage):
-        super(Injury, self).__init__(target, -damage)
+        super().__init__(target, -damage)
 
     @property
     def damage(self):
@@ -109,7 +109,7 @@ class Injury(HealthEvent):
 class Hit(Injury):
     """ A successful hit with a weapon. """
     def __init__(self, target, attacker, weapon, damage, critical=False):
-        super(Hit, self).__init__(target, damage)
+        super().__init__(target, damage)
         self.attacker = attacker
         self.weapon = weapon
         self.critical = critical
@@ -120,6 +120,17 @@ class Hit(Injury):
         if self.critical:
             s += " Critical hit!"
         return s
+
+
+class Miss(StatusEvent):
+    """ Tried to attack, but didn't make contact with the target. """
+    def __init__(self, target, attacker, weapon):
+        super().__init__(target)
+        self.attacker = attacker
+        self.weapon = weapon
+        
+    def __str__(self):
+        return f"{self.attacker} misses {self.target}."
 
 
 class Events(list):

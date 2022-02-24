@@ -53,6 +53,17 @@ TOP_SECTION = "RevengateFile"
 FORMAT = 0
 
 
+DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
+
+
+def data_path(fname):
+    """ 
+    Return a fully qualified path for fname withtout checking if fname is actually in 
+    the data directory. 
+    """
+    return os.path.join(DATA_DIR, fname)
+
+
 class Template:
     """ Template are recipes for creating entities.  
     

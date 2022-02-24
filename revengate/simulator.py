@@ -25,61 +25,12 @@ from collections import Counter, defaultdict
 from pprint import pprint
 from argparse import ArgumentParser
 
+from .engine import Engine
 from .tags import t
 from .actors import Humanoid, Monster
 from . import weapons
-from .weapons import Events
 from .loader import TopLevelLoader
 from .maps import Map, Builder, MapOverlay
-
-class Engine(object):
-    """ Keep track of all the actors and implement the turns logic. """
-    def __init__(self, loader):
-        super(Engine, self).__init__()
-        self.actors = []  # actors who are not on the map but we still track
-        self.current_turn = 0
-        self.loader = loader
-        if self.loader:
-            self.loader.engine = self
-        self.map = None
-
-    def register(self, actor):
-        """ Register an actor with this engine. """
-        actor.set_engine(self)
-        self.actors.append(actor)
-
-    def deregister(self, actor):
-        actor.engine = None
-        self.actors = [a for a in self.actors if a != actor]
-
-    def advance_turn(self):
-        """ Update everything that needs to be updated at the start of a new
-        turn. """
-        self.current_turn += 1
-        events = Events()
-        if self.map:
-            actors = itertools.chain(self.actors, self.map.all_actors())
-        else:
-            actors = self.actors
-        for actor in list(actors):
-            events += actor.update()
-        return events
-
-    def change_map(self, map):
-        # TODO: save the status of the old map so we can go back to it
-        if map:
-            for a in map.all_actors():
-                a.engine = self
-        self.map = map
-
-    def to_charon(self, actor):
-        # TODO: take payment for the toll across the Styx
-        if self.map:
-            pos = self.map.find(actor)
-            self.map.remove(actor)
-            corpse = self.loader.invoke("corpse")
-            self.map.place(corpse, pos)
-        self.deregister(actor)
 
 
 def man_vs_wolf(engine):

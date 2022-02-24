@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 Kivy = ">=2.0.0"
 tomlkit = "*"
+click = "*"
 
 [dev-packages]
 PySnooper = "*"

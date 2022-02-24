@@ -23,12 +23,15 @@ from .randutils import rng
 from .tags import TagBag, TagSlot, Faction
 from .strategies import StrategySlot
 from .weapons import Condition, Injurious, Weapon, Spell, Families
-from .events import Hit, Events, HealthEvent, Move, Death
+from .events import Hit, Miss, Events, HealthEvent, Move, Death
 from .items import ItemsSlot
+from . import tender
 
-SIGMA = 12.5 # std. dev. for a normal distribution more or less contained in 0..100
-MU = 50 # average of the above distribution
-RES_FACTOR = 0.5 # 50% less damage if you have a resistance
+
+SIGMA = 12.5  # std. dev. for a normal distribution more or less contained in 0..100
+MU = 50  # average of the above distribution
+RES_FACTOR = 0.5  # 50% less damage if you have a resistance
+
 
 class Actor(object):
     """ Base class of all actors. """
@@ -60,19 +63,26 @@ class Actor(object):
 
         # turns logic
         self.initiative = rng.random()
-        self._engine = None
-        self._last_update = None # last time we computed conditions and regen
-        self.conditions = [] # mostly stuff that does damage over time
+        self._last_action = None  # last turn when self made an action
+        self._last_update = None  # last time we computed conditions and regen
+        self.conditions = []  # mostly stuff that does damage over time
 
-    def get_engine(self):
-        return self._engine
+    @property
+    def is_alive(self):
+        return self.health > 0
 
-    def set_engine(self, engine):
-        """ Finalize the registration with a game engine. """
-        self._engine = engine
-        if self._last_update is None:
-            self._last_update = engine.current_turn
-    engine=property(get_engine, set_engine)
+    @property
+    def is_dead(self):
+        return self.health <= 0
+
+    @property
+    def has_played(self):
+        if self._last_action is None:
+            return False
+        return self._last_action >= tender.engine.current_turn
+        
+    def set_played(self):
+        self._last_action = tender.engine.current_turn
 
     def update(self):
         """ 
@@ -80,13 +90,13 @@ class Actor(object):
 
         Return the summary of health changes.
         """
-        # Actors are only update on the current level.  Upon revisiting a level, 
+        # Actors are only updated on the current level.  Upon revisiting a level, 
         # the updates for all missed turns are computed.
-        if self.engine is None:
-            raise RuntimeError("Actors must be registered with an engine before"
-                               " performing turn updates.")
+        if tender.engine is None:
+            raise RuntimeError("A global engine must be initialized before "
+                               "performing turn updates.")
         events = Events()
-        for t in range(self._last_update or 0, self.engine.current_turn + 1):
+        for t in range(self._last_update or 0, tender.engine.current_turn + 1):
             events.add(self._update_one(t))
         if self.health <= 0:
             events.add(self.die())
@@ -124,7 +134,7 @@ class Actor(object):
         order = self.__class__.__name__.lower()
         return f"the {order}"
 
-    def act(self, map):
+    def act(self):
         """ Perform a action for this turn, return the Event summarizing 
         the action. 
         
@@ -137,11 +147,14 @@ class Actor(object):
         if not self.strategy:
             raise RuntimeError("Trying to perform an action before assigning " 
                                "a strategy.")
-        return self.strategy.act(map)
+        result = self.strategy.act()
+        self._last_action = tender.engine.current_turn
+        return result
     
-    def move(self, map, new_pos):
+    def move(self, new_pos):
         """ Move to new_pos on the map, if we can get there, raise otherwise.
         """
+        map = tender.engine.map
         if map.is_free(new_pos):
             old_pos = map.find(self)
             if map.distance(old_pos, new_pos) == 1:
@@ -163,7 +176,7 @@ class Actor(object):
         # to-hit roll
         roll = rng.normalvariate(MU, SIGMA)
         if roll < foe.get_evasion():
-            return None  # miss!
+            return Miss(foe, self, weapon)
 
         if roll > MU+2*SIGMA:
             # critical hit!
@@ -200,7 +213,7 @@ class Actor(object):
             cond_delta = effect.h_delta
             if effect.family in self.resistances:
                 cond_delta *= RES_FACTOR
-            start = self.engine.current_turn + 1
+            start = tender.engine.current_turn + 1
             if isinstance(effect.duration, int):
                 stop = start + effect.duration
             else:
@@ -242,21 +255,21 @@ class Actor(object):
         """ 
         Perpare the actor for the passage into the underworld, then expire.
         """
-        if not self.engine:
+        if not tender.engine:
             raise RuntimeError("Passing into the underworld requires being part"
                                " of a world to begin with.")
         
         # drop inventory
-        if self.engine.map:
-            pos = self.engine.map.find(self)
+        if tender.engine.map:
+            pos = tender.engine.map.find(self)
             for i in self.inventory:
-                self.engine.map.place(i, pos)
+                tender.engine.map.place(i, pos)
         self.inventory = []
         # TODO: keep 1g when money is implemented.  The passage into the 
         # underworld must be paid.
         
         # pass the control to the engine
-        self.engine.to_charon(self)
+        tender.engine.to_charon(self)
         return Death(self)
 
 
