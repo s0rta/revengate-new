@@ -1,0 +1,42 @@
+
+digraph {
+    compound = true
+
+    apparatus -> governor
+    governor -> engine
+    governor -> loader
+    governor -> ui
+    engine -> map
+    loader
+    ui -> kivy
+    ui -> engine
+    
+    subgraph cluster_globals {
+        label = "globals"
+        engine
+        ui
+        map
+        action_map
+        loader
+    }
+    
+    subgraph cluster_combat {
+        label = "combat"
+        actors
+        items
+        combat [style=invis, fixedsize=true, width=0, height=0];
+        weapons
+        events
+    }
+
+    map -> combat [lhead="cluster_combat"]
+    engine -> combat [lhead="cluster_combat"]
+    loader -> combat [lhead="cluster_combat"]
+
+    subgraph cluster_utils {
+        label = "utils"
+        utils [style=invis, fixedsize=true, width=0, height=0]
+        geometry
+        random
+    }
+}
