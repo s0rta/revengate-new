@@ -47,7 +47,7 @@ She is very agile and skilled in many fighting styles. She is not a magic user.
 
 She has light blue-grey eyes and light brown hair that she keeps short. She wears crinoline dresses and decorated hats in public, but she prefers more masculine attires when she is at the Compagnie's workshops. This usually means docker overalls when doing work at a bench or lighter more athletic pants when training. 
 
-Her favourite drink is Champagne with a splash of cassis syrup, but with readily settle for an Absinthe. She drinks several cups of coffee every day, always with cream and one sugar cube. Sitting by herself in a cafe, she is usually seen reading a book, typically about philosophy. 
+Her favourite drink is Champagne with a splash of cassis syrup, but she will readily settle for an Absinthe. She drinks several cups of coffee every day, always with cream and one sugar cube. Sitting by herself in a cafe, she is usually seen reading a book, typically about philosophy. 
 
 
 ## Henry Bessemer
