@@ -32,6 +32,10 @@ c: show credits
 ?: show help"""
 
 
+class Quitting(Exception):
+    pass
+
+
 class UI:
     """ 
     Mock class for the general UI that should be designed in order to run the game on 
@@ -52,7 +56,7 @@ class TextUI(UI):
     
     def quit(self):
         # FIXME: there has to be a better way!
-        raise Exception("Giving up!")
+        raise Quitting("Giving up!")
     
     def show_help(self):
         print(TEXT_HELP)

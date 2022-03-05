@@ -1,4 +1,4 @@
-# Copyright © 2020 Yannick Gingras <ygingras@ygingras.net>
+# Copyright © 2020–2022 Yannick Gingras <ygingras@ygingras.net>
 
 # This file is part of Revengate.
 
@@ -19,14 +19,14 @@
 
 import time
 import heapq
-import random
 import itertools
 from copy import deepcopy
 from enum import IntEnum, auto
 from collections import defaultdict
 
 from . import geometry as geom
-from .randutils import *
+from . import tender
+from .randutils import rng
 from .actors import Actor
 from .items import Item, ItemCollection
 
@@ -80,7 +80,7 @@ class Map:
     """
     
     def __init__(self, name=None):
-        super(Map, self).__init__()
+        super().__init__()
         self.name = name
         self.tiles = []
         self.overlays = []
@@ -88,7 +88,35 @@ class Map:
         self._pos_to_a = {}  # position to actor mapping
         self._i_to_pos = {}  # item to position
         # position to items
-        self._pos_to_i = defaultdict(lambda:ItemCollection()) 
+        self._pos_to_i = defaultdict(ItemCollection) 
+
+    def __getstate__(self):
+        """ Return a representation of the internal state that is suitable for the 
+        pickling protocol. """
+        state = self.__dict__.copy()
+        if tender.hero in self._a_to_pos:
+            # the hero must be serialized by whoever is in charge or saving the tender
+            pos = state["_a_to_pos"].pop(tender.hero)
+            del state["_pos_to_a"][pos]
+            state["__hero_pos"] = pos
+        return state
+
+    def __setstate__(self, state):
+        """ Restore an instance from a pickled state.
+        
+        tender.hero must be restored before any map on which the hero is present. """
+        if "__hero_pos" in state:
+            if tender.hero is None:
+                raise RuntimeError("tender.hero must be restored before any map that "
+                                   "contains the hero.")
+            hero_pos = state.pop("__hero_pos")
+        else:
+            hero_pos = None
+
+        self.__dict__.update(state)
+        
+        if hero_pos:
+            self.place(tender.hero, hero_pos)
 
     def size(self):
         """ Return a (width, height) tuple. """
@@ -144,6 +172,9 @@ class Map:
     def clear_overlays(self):
         self.overlays = []
         
+    def actor_at(self, pos):
+        return self._pos_to_a.get(pos)
+        
     def all_actors(self):
         """ Return a list of all actors known to be on the map. """
         return self._a_to_pos.keys()
@@ -158,47 +189,60 @@ class Map:
         x2, y2 = pos2
         return max(abs(x1 - x2), abs(y1 - y2))
     
-    def _ring(self, center, radius=1, free=False, shuffle=False, filter_pred=None):
+    def _ring(self, center, radius=1, free=False, shuffle=False, 
+              filter_pred=None, in_map=True, sparse=True):
         """ Return a list of coords defining a ring with the given centre.  
         
-        The shape is a square for square tiles and a hex for hex tiles, only 
-        tiles inside the map are returned. If filter_pred is supplied, only 
-        tiles for which filter_pred(t) is True are returned.
+        The shape is a square. 
+        If in_map=True, only tiles inside the map are returned. 
+        If filter_pred is supplied, only tiles for which filter_pred(t) is True 
+        are returned.
+        If sparse=True: invalid tiles are not returns, returned as None otherwise.
+        Tiles are returned counter-clockwise starting at the bottom-left corner 
+        of the ring unless shuffle=True.
         """
+        def sift(pred, tiles):
+            if sparse:
+                tiles = filter(pred, tiles)
+            else:
+                tiles = [pred(t) and t or None for t in tiles]
+            return list(tiles)
+
         x, y = center
         w, h = self.size()
-
+        
         tiles = []
-        for i in range(max(0, x-radius), min(x+radius+1, w)):
-            if y >= radius:
-                tiles.append((i, y-radius))
-            if y+radius < h:
-                tiles.append((i, y+radius))
-
-        for j in range(max(0, y-radius+1), min(y+radius, h)):
-            if x >= radius:
-                tiles.append((x-radius, j))
-            if x+radius < w:
-                tiles.append((x+radius, j))
-
+        r = radius
+        for i in range(-r, r+1):
+            tiles.append((x+i, y-r))
+        for j in range(-r+1, r+1):
+            tiles.append((x+r, y+j))
+        for i in range(r-1, -r-1, -1):
+            tiles.append((x+i, y+r))
+        for j in range(r-1, -r, -1):
+            tiles.append((x-r, y+j))
+    
+        if in_map:
+            tiles = sift(self.is_in_map, tiles)
         if shuffle:
-            random.shuffle(tiles)
+            rng.shuffle(tiles)
 
         if filter_pred:
-            tiles = filter(filter_pred, tiles)
+            tiles = sift(filter_pred, tiles)
 
         if free:
-            tiles = [t for t in tiles if self.is_free(t)]
+            tiles = sift(self.is_free, tiles)
+
+        return list(tiles)
         
-        return tiles        
-    
-    def adjacents(self, pos, free=False, shuffle=False, filter_pred=None):
+    def adjacents(self, pos, free=False, shuffle=False, filter_pred=None, 
+                  in_map=True, sparse=True):
         """ Return a list of coordinates for tiles adjacent to pos=(x, y).
         
         Map boundaries are checked. 
         If free=True, only tiles availble for moving are returned. 
         """
-        return self._ring(pos, 1, free, shuffle, filter_pred)
+        return self._ring(pos, 1, free, shuffle, filter_pred, in_map, sparse)
     
     def opposite(self, from_pos, pivot_pos):
         """ Return a coordinate that is opposite to from_pos relative to 
@@ -212,12 +256,16 @@ class Map:
         else:
             return None
         
+    def cross(self, pos):
+        """ Return the 4 straight line coords touching pos. """
+        x, y = pos
+        return [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
+        
     def front_cross(self, from_pos, pivot_pos):
         """ Return the three coords that would move in straight line from 
         pivot_pos without going back to from_pos. Diagonals are not returned.
         """
-        x, y = pivot_pos
-        return [p for p in [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
+        return [p for p in self.cross(pivot_pos)
                 if p != from_pos]
 
     def front_diags(self, from_pos, pivot_pos):
@@ -234,6 +282,59 @@ class Map:
         else:
             raise ValueError(f"{from_pos} and {pivot_pos} do not seem "
                              "to be in line.")
+
+    def back_diags(self, from_pos, pivot_pos):
+        x1, y1 = from_pos
+        x2, y2 = pivot_pos
+        if x1 == x2:
+            delta = y2 - y1
+            return [(x2-1, y2-delta), (x2+1, y2-delta)]
+        elif y1 == y2:
+            delta = x2 - x1
+            return [(x2-delta, y2-1), (x2-delta, y2+1)]
+        else:
+            raise ValueError(f"{from_pos} and {pivot_pos} do not seem "
+                             "to be in line.")
+
+    def connectedness(self, pos):
+        """ Return the maximum connection number for a position. 
+        
+        The maximum connection number is how many sides and diagonals in a row 
+        a already connected. """
+
+        def is_unconn(pos):
+            x, y = pos
+            # FIXME: more than one tile type is unconn
+            return self.tiles[x][y] in (TileType.SOLID_ROCK, )
+            
+        adjs = self.adjacents(pos, free=False, in_map=True, sparse=False)
+
+        # The current implementation only works if we start on a diagonal. The 
+        # number would be the same, but our assumptions on what is considered 
+        # too high would not hold. See 2021-11-13 notes.
+        for adj in adjs[::2]:
+            if adj is None:
+                continue
+            if geom.is_diag(pos, adj):  # all is good!
+                break
+            else:
+                msg = f"Adjacents for {pos} do not start on a diagonal."
+                raise ValueError(msg)
+
+        max_conn = 0
+        cur_conn = 0
+        size = len(adjs)
+        for i in range(size * 2 - 1):
+            tile = adjs[i % size]
+            if tile is None or is_unconn(tile):
+                if cur_conn > max_conn:
+                    max_conn = cur_conn
+                cur_conn = 0
+                if i >= (size-1):
+                    break
+            else:
+                cur_conn += 1
+        return max_conn
 
     def _nearby_tiles(self, pos, free=False, shuffle=False):
         """ Generate a stream of tiles near pos, progressively further until 
@@ -256,7 +357,7 @@ class Map:
         # the tile if we still haven't found one
         w, h = self.size()
         for i in range(5):
-            x, y = random.randrange(w), random.randrange(h)
+            x, y = rng.randrange(w), rng.randrange(h)
             if free:
                 if self.is_free((x, y)):
                     return (x, y)
@@ -348,12 +449,15 @@ class Map:
             return self._i_to_pos[thing]
         return None
 
+    def __contains__(self, thing):
+        return thing in self._a_to_pos or thing in self._i_to_pos
+
     def place(self, thing, pos=None, fallback=False):
         """ Put thing on the map at pos=(x, y). 
         If pos is not not supplied, a random position is selected. 
         If fallback=True, a nearby space is selected when pos is not available.
         """
-        if thing in self._a_to_pos or thing in self._i_to_pos:
+        if thing in self:
             raise ValueError(f"{thing} is already on the map, use Map.move()" 
                              " to change it's position.")
         if pos is None:
@@ -455,7 +559,7 @@ class Map:
         lines = []
         for l in zip(*cols):
             lines.append("".join(l))
-        return "\n".join(lines)
+        return "\n".join(reversed(lines))
 
 
 class MapOverlay:
@@ -503,7 +607,8 @@ class MapOverlay:
 class Builder:
     """ Builder for map features. """
     straight_line_bias = 3.0
-    branching_factor = .10
+    branching_factor = .5
+    doors_range = (1, 5)
     
     def __init__(self, map):
         super(Builder, self).__init__()
@@ -529,17 +634,17 @@ class Builder:
             return False
 
         if isinstance(width, (tuple, list)):
-            width = rint(width)
+            width = rng.rint(width)
         if isinstance(height, (tuple, list)):
-            height= rint(height)
+            height= rng.rint(height)
         mw, mh = self.map.size()
         
         for i in range(nb_retry+1):
-            x1 = random.randrange(0, mw - width)
-            y1 = random.randrange(0, mh - height)
+            x1 = rng.randrange(0, mw - width)
+            y1 = rng.randrange(0, mh - height)
             rect = (x1, y1), (x1+width, y1+height)
             if not any_intersect(rect):
-                self.room(*rect, True)
+                self.room(*rect, walls=True)
                 return rect
         return False
                 
@@ -552,10 +657,12 @@ class Builder:
                 return True
         return False
         
-    def room(self, corner1, corner2, walls=False):
-        room = RoomPlan(corner1, corner2, walls)
+    def room(self, corner1, corner2, doors_target=None, walls=False):
+        if doors_target == None:
+            doors_target = rng.rint(self.doors_range)
+        room = RoomPlan(self.map, corner1, corner2, doors_target, walls)
         self._rooms.append(room)
-        room.set_tiles(self.map)
+        room.set_tiles()
 
     def touching_mazes(self, pos, ignore):
         """ Return the list of mazes touched by a position. 
@@ -569,14 +676,25 @@ class Builder:
         """ Return a list of mazes that include pos in a room or a corridor."""
         return [m for m in self.mazes if pos in m]
 
+    def free_front_cross(self, from_pos, pivot_pos):
+        """ Return true of the front cross of a position is free. """
+        for pos in self.map.front_cross(from_pos, pivot_pos):
+            x, y = pos
+            if not (not self.in_mazes(pos) or self.map.tiles[x][y] in WALLS):
+                return False
+        return True                
+
     def mk_step(self, pos, cur_pos, prev_pos, cur_maze, force_connect=False):
         """ Return a MazeStep for pos or None if the step would be illegal 
         with the current state of maze generation. """
         if pos == prev_pos or not self.map.is_in_map(pos) or self.is_frozen(pos):
             return None
 
+        ignore = [cur_pos, prev_pos]
+        if len(self.mazes) == 1:
+            ignore += self.map.back_diags(cur_pos, pos)
         step = MazeStep(pos)
-        step.mazes = self.touching_mazes(pos, [cur_pos, prev_pos])
+        step.mazes = self.touching_mazes(pos, ignore)
 
         # Don't connect back to self until we are fully connected (no 
         # other mazes), then connect back to self according to the 
@@ -587,9 +705,18 @@ class Builder:
             if cur_maze in step.mazes:
                 return None
         elif cur_maze in step.mazes:
-            if rftest(1 - self.branching_factor):
+            if rng.rftest(1 - self.branching_factor):
                 return None
         return step
+        
+    def valid_run_start(self, pos, cur_maze):
+        """ Return True if pos is a good place to start growing the maze. """
+        cross = self.map.cross(pos)
+        for pos in cross:
+            x, y = pos
+            if self.map.is_in_map(pos) and self.map.tiles[x][y] == TileType.DOORWAY:
+                return False
+        return True
         
     def maze_connect(self, ratio=0.5):
         """ Connect all the rooms with a maze of corridors until `ratio` 
@@ -609,9 +736,9 @@ class Builder:
                     prefered_step = self.map.opposite(prev, pos)
                 else:
                     prefered_step = None
-                return biased_choice(steps, 
-                                     self.straight_line_bias, 
-                                     prefered_step)
+                return rng.biased_choice(steps, 
+                                         self.straight_line_bias, 
+                                         prefered_step)
             else:
                 return None
 
@@ -631,32 +758,43 @@ class Builder:
             # TODO: force exit after max-iter (probably 100)
             # TODO: connect new branches when we restart
             if self.mazes:                    
-                cur_maze, other_mazes = rpop(self.mazes)
-                x, y = cur_maze.rand_wall()
+                cur_maze, other_mazes = rng.rpop(self.mazes)
+                x, y = cur_maze.rand_cor_start()
             else:
                 break
                 # FIXME: start in a hallway instead
             run_start = (x, y)
-            self.map.tiles[x][y] = TileType.DOORWAY
-            step = next_step((x, y), cur_maze=cur_maze, other_mazes=other_mazes)
+            run_lenght = 0
+            if self.valid_run_start(run_start, cur_maze):
+                cur_maze.add(run_start)
+                debug_overlay.place('x', run_start)
+                step = next_step((x, y), cur_maze=cur_maze, other_mazes=other_mazes)
+            else:
+                step = None  # abandon the run
             while step:
+                run_lenght += 1
                 prev = (x, y)
                 x, y = step.pos
-                cur_maze.add(step.pos)
+
                 if len(step.mazes) > 0:  # just made a connection
                     cur_maze = self.merge_mazes(step.mazes + [cur_maze])
+                cur_maze.add(step.pos)
 
-                    print(f"now conneted at {step.pos}")
-                    # debug_overlay.place("X", step.pos)
+                debug_overlay.place(str(run_lenght % 10), step.pos)
 
+                if len(step.mazes) > 0:  # finalize the connection
+                    conn = self.map.connectedness(step.pos)
+                    print(f"now conneted at {step.pos}, ({len(self.mazes)} mazes) "
+                          f"connectedness: {conn}")
+                        
                     diags = self.map.front_diags(prev, step.pos)
-                    cross = self.map.front_cross(prev, step.pos)
                     if (any(map(self.in_mazes, diags)) 
-                         and not any(map(self.in_mazes, cross))):
+                         and self.free_front_cross(prev, step.pos)):
                         opp = self.map.opposite(prev, step.pos)
                         step = self.mk_step(opp, step.pos, prev, cur_maze, True)
                     else:
-                        step = None  # got back to sub-maze selection
+                        # FIXME: this is only good if the make is not fully connected
+                        step = None  # go back to sub-maze selection
                 else:
                     step = next_step((x, y), prev, cur_maze, other_mazes)
             maze_ratio = sum(m.area for m in self.mazes) / tot_area
@@ -696,9 +834,11 @@ def partition(seq, predicate):
 
 class RoomPlan:
     """ A builder helper to manage a soon-to-be room on a map. """
-    def __init__(self, corner1, corner2, walls=False):
+    def __init__(self, map, corner1, corner2, doors_target, walls=False):
+        self.map = map
         self.bl, self.tr = geom.cannon_corners(corner1, corner2)
         self.has_walls = walls
+        self.doors_target = doors_target
         self.doors = []
 
     def __contains__(self, point):
@@ -725,12 +865,21 @@ class RoomPlan:
         (x1, y1), (x2, y2) = self.to_rect()
         return (x2 - x1) * (y2 - y1)
 
+    def select_weight(self):
+        """ Return how important it should be to select this room. """
+        return self.doors_target - len(self.doors)
+
+    def add_door(self, pos):
+        self.doors.append(pos)
+        x, y = pos
+        self.map.tiles[x][y] = TileType.DOORWAY
+
     def rand_wall(self):
         """ Return a random non-corner wall in of a room. """
         (x1, y1), (x2, y2) = self.to_rect()
         width = x2-x1-2
         height = y2-y1-2
-        offset = random.randrange(width*2 + height*2)
+        offset = rng.randrange(width*2 + height*2)
         if offset < width:
             return (x1+offset+1, y1)
         elif offset < width*2:
@@ -740,22 +889,22 @@ class RoomPlan:
         else:
             return (x2, y1+offset-width*2-height+1)
 
-    def set_tiles(self, map):
+    def set_tiles(self):
         """ Set the tiles on the map representing the room. """
         # TODO: handle doors
         (x1, y1), (x2, y2) = self.to_rect()
         if self.has_walls:
             for x in range(x1, x2+1):
-                map.tiles[x][y1] = TileType.WALL
-                map.tiles[x][y2] = TileType.WALL
+                self.map.tiles[x][y1] = TileType.WALL
+                self.map.tiles[x][y2] = TileType.WALL
             for y in range(y1+1, y2):
-                map.tiles[x1][y] = TileType.WALL
-                map.tiles[x2][y] = TileType.WALL
+                self.map.tiles[x1][y] = TileType.WALL
+                self.map.tiles[x2][y] = TileType.WALL
             x1, y1, x2, y2 = x1+1, y1+1, x2-1, y2-1
 
         for x in range(x1, x2+1):
             for y in range(y1, y2+1):
-                map.tiles[x][y] = TileType.FLOOR
+                self.map.tiles[x][y] = TileType.FLOOR
 
     def intersect(self, room):
         """ Return True if room overlaps with self. """
@@ -784,7 +933,8 @@ class MazeStep:
     def __init__(self, pos, mazes=None):
         self.pos = pos
         self.mazes = mazes or []
-        # TODO: is_connector?
+        self.is_self_connect = False
+        self.is_cross_connect = False
         
     def __eq__(self, other):
         if isinstance(other, MazeStep):
@@ -805,7 +955,8 @@ class MazePlan:
 
     def __init__(self, map, rooms=None, corridors=None):
         self.map = map
-        self._frozen_tiles = set()
+        # frozen tiles are final and can't become hallways
+        self._frozen_tiles = set()  
         self._corridors = corridors and set(corridors) or set()
         
         walls, no_walls = partition(rooms or [], lambda x:x.has_walls)
@@ -822,13 +973,19 @@ class MazePlan:
         return len(self._corridors) + sum(r.area for r in self._rooms)
     
     def add(self, pos):
+        room = None
+        for r in self._walled_rooms:
+            if pos in r:
+                room = r
+                break
         x, y = pos
-        if self.map.tiles[x][y] in WALLS:
-            self.map.tiles[x][y] = TileType.DOORWAY
+        if room:
+            if self.map.tiles[x][y] in WALLS:
+                room.add_door(pos)
+        elif pos in self._no_wall_rooms:
+            pass # nothing to do
         else:
             self.map.tiles[x][y] = TileType.FLOOR
-
-        if not pos in self._rooms:
             self._corridors.add(pos)
 
     def _freeze_room_corners(self):
@@ -890,15 +1047,39 @@ class MazePlan:
             raise ValueError("Union is only supported with another MazePlan.")
         
     def rand_wall(self):
-        # TODO: target the rooms with fewer doors
-        room = random.choice(self._rooms)
+        rooms = self._rooms
+        weights = [r.select_weight() for r in rooms]
+        if sum(weights) > 1:
+            room = rng.choices(rooms, weights=weights)[0]
+        else:
+            room = rng.choice(rooms)
         return room.rand_wall()
+
+    def rand_cor_start(self):
+        """ Random starting point for a corridor. """
+        # see if all the rooms have all their WALLS
+        # pick a rand wall if that's not the case
+        # pick a random corridor otherwise
+        rooms = self._rooms
+        weights = [r.select_weight() for r in rooms]
+        if sum(weights) > 1:
+            room = rng.choices(rooms, weights=weights)[0]
+            return room.rand_wall()
+        elif self._corridors:
+            return rng.choice(list(self._corridors))
+        else:
+            room = rng.choice(rooms)
+            return room.rand_wall()
+        
+    def select_weight(self):
+        """ Return how important it should be to select this MazePlan. """
+        return sum([r.select_weight() for r in self._rooms])
 
 
 def main():
     RSTATE = ".randstate.json"
-    # rstate_save(RSTATE)
-    # rstate_restore(RSTATE)
+    # rng.state_save(RSTATE)
+    rng.state_restore(RSTATE)
 
     map = Map()
     builder = Builder(map)
@@ -908,6 +1089,7 @@ def main():
         builder.random_room((5, 20), (5, 10))
     builder.maze_connect()
     print(map.to_text(True))
+    
     #intersect = builder._interstect(*builder._rooms)
     #print(f"Intersect: {intersect}")
     

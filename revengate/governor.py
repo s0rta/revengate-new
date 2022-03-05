@@ -20,34 +20,74 @@
 
 import os
 import shutil
+import pickle
 
 from . import tender
 from .randutils import rng
 from .loader import DATA_DIR, TopLevelLoader, data_path
 from .engine import Engine
-from .ui import TextUI
+from .ui import TextUI, Quitting
 from .action_map import ActionMap
 from .maps import Map, Builder
 from .events import StatusEvent, Events
 
 CONFIG_DIR = "~/.config/revengate"
-HERO_FILE = "hero.toml"
 CORE_FILE = "core.toml"
 
-# TODO: where does the UI come from?
+class Condenser:
+    """ Save and reload game objects """
+
+    def __init__(self):
+        self.config_dir = os.path.expanduser(CONFIG_DIR)
+
+    def file_path(self, key):
+        fname = f"{key}.pickle"
+        return os.path.join(self.config_dir, "save", fname)
+        
+    def ensure_dir(self, path):
+        if path.endswith("/"):
+            dirname = path
+        else:
+            dirname = os.path.dirname(path)
+        if not os.path.isdir(dirname):
+            os.makedirs(dirname)
+
+    def load(self, key):
+        fpath = self.file_path(key)
+        if not os.path.isfile(fpath):
+            return None
+        return pickle.load(open(fpath, "rb"))
+    
+    def save(self, key, obj):
+        fpath = self.file_path(key)
+        self.ensure_dir(fpath)
+        pickle.dump(obj, open(fpath, "wb"))
+    
+    def delete(self, key):
+        fpath = self.file_path(key)
+        if os.path.isfile(fpath):
+            os.unlink(fpath)
+
 
 class Governor:
     def __init__(self):
-        # find where all the files are, which changes a lot depending on the OS
-        self.config_dir = os.path.expanduser(CONFIG_DIR)
+        self.condenser = Condenser()
         self.loader = TopLevelLoader()
-        tender.engine = Engine(self.loader)
+        tender.engine = self.condenser.load("engine")
+        if tender.engine is None:
+            tender.engine = Engine(self.loader)
+        else:
+            tender.engine.loader = self.loader
         # TODO: get rid of this circular dep by letting everyone reference the engine 
         # lazily from the tender module.
-        self.loader.engine = tender.engine 
+        self.loader.engine = tender.engine
+        
         
         tender.ui = TextUI()
         tender.action_map = ActionMap()
+
+    def save_path(self, fname):
+        return os.path.join(self.config_dir, "save", fname)
 
     def init_map(self):
         map = Map()
@@ -55,7 +95,6 @@ class Governor:
         builder.init(60, 20)
         builder.room((5, 5), (20, 15), True)
         builder.room((12, 7), (13, 12), True)
-        tender.engine.change_map(map)
 
         sword = self.loader.invoke("sword")
         map.place(sword)
@@ -63,21 +102,34 @@ class Governor:
         for name in rng.choices(["rat", "wolf"], k=3):
             a = self.loader.invoke(name)
             map.place(a)
+        return map
+    
     
     def start(self):
         """ Start a game. """
         self.loader.load(open(data_path(CORE_FILE), "rt"))
-        # see if there is a hero file, create a new character otherwise
-        self.create_hero()
+        tender.hero = self.condenser.load("hero")
+        if tender.hero is None:
+            self.create_hero()
         
         # pre-game naration
         dia = self.loader.get_instance("intro")
         tender.ui.show_dia(dia)
-        # play!
-        self.init_map()
-        tender.engine.map.place(tender.hero)
-        self.play()
-    
+
+        map = self.condenser.load("map")
+        if map is None:
+            map = self.init_map()
+            map.place(tender.hero)
+        tender.engine.change_map(map)
+
+        try:
+            self.play()
+        except Quitting:
+            self.condenser.save("engine", tender.engine)
+            self.condenser.save("hero", tender.hero)
+            self.condenser.save("map", tender.engine.map)
+            print(f"See you later, brave {tender.hero.name}...")
+            
     def play(self):
         """ Main game loop. 
         
@@ -104,24 +156,13 @@ class Governor:
                     if event:
                         print(event)
                 if tender.hero.is_dead:
+                    self.condenser.delete("hero")
+                    self.condenser.delete("map")
                     return False
 
             if tender.hero.has_played:
                 events = tender.engine.advance_turn()
                 print(events or "no turn updates")
-            # done = True
-
-        #while len([f for f in factions if len(factions[f]) > 0]) > 1:
-            #print(eng.advance_turn() or "no turn updates")
-            #filter_empties()
-            #for a in actors:
-                #if a.health <= 0:
-                    #continue
-                #event = a.act(map)
-                #if event:
-                    #print(event)
-            #filter_empties()
-            #print(map.to_text())
         return True
     
     def create_hero(self):
@@ -132,6 +173,7 @@ class Governor:
         name = input("Name: ")
         tender.hero = self.loader.invoke("novice")
         tender.hero.name = name
+        self.condenser.save("hero", tender.hero)
     
     def shutdown(self):
         """ Gracefully shutdown after saving everything. """

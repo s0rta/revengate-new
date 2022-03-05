@@ -36,6 +36,23 @@ class Engine(object):
             self.loader.engine = self
         self.map = None
 
+    def __getstate__(self):
+        """ Return a representation of the internal state that is suitable for the 
+        pickling protocol. """
+        state = self.__dict__.copy()
+        # Remove the unpicklable entries.
+        for key in ["loader", "map"]:
+            del state[key]
+        return state
+
+    def __setstate__(self, state):
+        """ Restore an instance from a pickled state.
+        
+        `loader` and `map` are not restored. The governor or simulator is in charge or 
+        restoring those attributes. """
+
+        self.__dict__.update(state)
+
     def all_actors(self):
         if self.map:
             actors = itertools.chain(self._actors, self.map.all_actors())
