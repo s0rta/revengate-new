@@ -27,13 +27,10 @@ from . import tender
 class Engine(object):
     """ Keep track of all the actors and implement the turns logic. """
     
-    def __init__(self, loader):
+    def __init__(self):
         super(Engine, self).__init__()
         self._actors = []  # actors who are not on the map but we still track
         self.current_turn = 0
-        self.loader = loader
-        if self.loader:
-            self.loader.engine = self
         self.map = None
 
     def __getstate__(self):
@@ -41,15 +38,15 @@ class Engine(object):
         pickling protocol. """
         state = self.__dict__.copy()
         # Remove the unpicklable entries.
-        for key in ["loader", "map"]:
+        for key in ["map"]:
             del state[key]
         return state
 
     def __setstate__(self, state):
         """ Restore an instance from a pickled state.
         
-        `loader` and `map` are not restored. The governor or simulator is in charge or 
-        restoring those attributes. """
+        `map` is not restored. The governor or simulator is in charge or 
+        restoring this attributes. """
 
         self.__dict__.update(state)
 
@@ -88,7 +85,7 @@ class Engine(object):
         if self.map:
             pos = self.map.find(actor)
             self.map.remove(actor)
-            corpse = self.loader.invoke("corpse")
+            corpse = tender.loader.invoke("corpse")
             self.map.place(corpse, pos)
         self.deregister(actor)
 

@@ -20,8 +20,22 @@
 There are no guarantees on initialization. Whatever governor or simulation is setting 
 things in motion must also make sure that this the required globals are initialized.
 """
+from .engine import Engine
+from .ui import UI
+from .action_map import ActionMap
+from .actors import Actor
+from .loader import TopLevelLoader
 
-engine = None
-ui = None
-action_map = None
-hero = None
+loader: TopLevelLoader = None
+engine: Engine = None
+ui: UI = None
+action_map: ActionMap = None
+hero: Actor = None
+
+
+def is_init():
+    """ Return whether all parts of the tender have been initialized. """
+    for part in [loader, engine, ui, action_map, hero]:
+        if part is None:
+            return False
+    return True

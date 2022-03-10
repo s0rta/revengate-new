@@ -39,7 +39,7 @@ from pprint import pprint
 import tomlkit
 
 # classes loaders can instantiate; this could be factored out
-from . import tags
+from . import tags, tender
 from .tags import Tag, t
 from .randutils import rng
 from .strategies import Strategy
@@ -85,15 +85,12 @@ class TopLevelLoader:
     """ Initial file loader: do some file validation, then invoke the 
     appropriate sub-loader(s) based on content type. """
 
-    def __init__(self, engine=None):
+    def __init__(self):
         # We keep the sub-loader used for each file. Template invocation and 
         # instance lookup is defered to them.
         self.master_file = None
         self.sub_loaders = {}  # content_key -> instance
         
-        # TODO: see the comment on TemplatizedObjectsLoader
-        self.engine = engine
-
     def load(self, fp):
         serializer = None
         if fp.name:
@@ -124,7 +121,7 @@ class TopLevelLoader:
         if content_type not in self.sub_loaders:
             for cls in SubLoader.__subclasses__():
                 if cls.content_key == content_type:
-                    self.sub_loaders[content_type] = cls(self, self.engine)
+                    self.sub_loaders[content_type] = cls(self)
                     break
             else:
                 # we got to the end of the loop without finding a sub-loader
@@ -156,11 +153,8 @@ class SubLoader:
     
     content_key = None
 
-    def __init__(self, top_loader, engine=None):
+    def __init__(self, top_loader):
         self.top_loader = top_loader
-        # TODO: 'engine' could be easily factored our as a more generic dict of instance 
-        # values to set by the loader. "defaults" would be a good name for it
-        self.engine = engine  
 
     def decode(self, record):
         raise NotImplementedError()
@@ -191,8 +185,8 @@ class FileMapLoader(SubLoader):
     
     content_key = "file-map"
 
-    def __init__(self, top_loader, engine=None):
-        super(FileMapLoader, self).__init__(top_loader, engine)
+    def __init__(self, top_loader):
+        super().__init__(top_loader)
 
     def locate(self, filename):
         """ Return a qualified location for filename. """
@@ -256,8 +250,8 @@ class DialogueLoader(SubLoader):
     content_key = "dialogues"
     COMMENTS = ["# ", "#\t", "#\n"]
 
-    def __init__(self, top_loader, engine=None):
-        super(DialogueLoader, self).__init__(top_loader, engine)
+    def __init__(self, top_loader):
+        super().__init__(top_loader)
         self.dialogues = {}
         self._speakers = {}
         self._actions = {}
@@ -419,8 +413,8 @@ class TemplatizedObjectsLoader(SubLoader):
     
     content_key = "templatized-objects"
 
-    def __init__(self, top_loader, engine=None):
-        super(TemplatizedObjectsLoader, self).__init__(top_loader, engine)
+    def __init__(self, top_loader):
+        super().__init__(top_loader)
         
         self._class_map = {}  # name -> class object mapping
         
@@ -480,8 +474,8 @@ class TemplatizedObjectsLoader(SubLoader):
         # set the other fields after creation
         for attr in fields:
             setattr(obj, attr, fields[attr])
-        if hasattr(obj, "engine") and self.engine:
-            obj.engine = self.engine
+        if hasattr(obj, "engine") and tender.engine:
+            obj.engine = tender.engine
         return obj
   
     def _decode_template(self, name, rec):

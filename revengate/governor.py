@@ -72,16 +72,10 @@ class Condenser:
 class Governor:
     def __init__(self):
         self.condenser = Condenser()
-        self.loader = TopLevelLoader()
+        tender.loader = TopLevelLoader()
         tender.engine = self.condenser.load("engine")
         if tender.engine is None:
-            tender.engine = Engine(self.loader)
-        else:
-            tender.engine.loader = self.loader
-        # TODO: get rid of this circular dep by letting everyone reference the engine 
-        # lazily from the tender module.
-        self.loader.engine = tender.engine
-        
+            tender.engine = Engine()
         
         tender.ui = TextUI()
         tender.action_map = ActionMap()
@@ -96,24 +90,24 @@ class Governor:
         builder.room((5, 5), (20, 15), True)
         builder.room((12, 7), (13, 12), True)
 
-        sword = self.loader.invoke("sword")
+        sword = tender.loader.invoke("sword")
         map.place(sword)
         
         for name in rng.choices(["rat", "wolf"], k=3):
-            a = self.loader.invoke(name)
+            a = tender.loader.invoke(name)
             map.place(a)
         return map
     
     
     def start(self):
         """ Start a game. """
-        self.loader.load(open(data_path(CORE_FILE), "rt"))
+        tender.loader.load(open(data_path(CORE_FILE), "rt"))
         tender.hero = self.condenser.load("hero")
         if tender.hero is None:
             self.create_hero()
         
         # pre-game naration
-        dia = self.loader.get_instance("intro")
+        dia = tender.loader.get_instance("intro")
         tender.ui.show_dia(dia)
 
         map = self.condenser.load("map")
@@ -171,7 +165,7 @@ class Governor:
               "either random or abitrary. However, you get to chose the "
               "name of your character.")
         name = input("Name: ")
-        tender.hero = self.loader.invoke("novice")
+        tender.hero = tender.loader.invoke("novice")
         tender.hero.name = name
         self.condenser.save("hero", tender.hero)
     

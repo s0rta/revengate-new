@@ -28,15 +28,15 @@ from argparse import ArgumentParser
 from .engine import Engine
 from .tags import t
 from .actors import Humanoid, Monster
-from . import weapons
+from . import weapons, tender
 from .loader import TopLevelLoader
 from .maps import Map, Builder, MapOverlay
 
 
 def man_vs_wolf(engine):
     start = engine.current_turn
-    me = engine.loader.invoke("hero")
-    wolf = engine.loader.invoke("wolf")
+    me = tender.loader.invoke("hero")
+    wolf = tender.loader.invoke("wolf")
 
     engine.register(me)
     engine.register(wolf)
@@ -58,8 +58,8 @@ def man_vs_wolf(engine):
 
 def mage_vs_wolf(engine):
     start = engine.current_turn
-    me = engine.loader.invoke("mage")
-    wolf = engine.loader.invoke("wolf")
+    me = tender.loader.invoke("mage")
+    wolf = tender.loader.invoke("wolf")
 
     engine.register(me)
     engine.register(wolf)
@@ -98,7 +98,7 @@ def last_faction_standing(engine, actor_names):
         actors = {a for a in actors if a.health > 0}
 
     for name in actor_names:
-        actor = engine.loader.invoke(name)
+        actor = tender.loader.invoke(name)
         actors.add(actor)
         engine.register(actor)
     orig_cast = list(actors)
@@ -211,10 +211,10 @@ def main():
     
     args = parser.parse_args()
 
-    loader = TopLevelLoader()
+    tender.loader = TopLevelLoader()
     for f in args.load:
-        loader.load(f)
-    eng = Engine(loader)
+        tender.loader.load(f)
+    eng = Engine()
 
     if args.map:
         map_demo(eng, args.actors)
