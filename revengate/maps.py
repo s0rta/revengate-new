@@ -20,6 +20,7 @@
 import time
 import heapq
 import itertools
+from uuid import uuid4
 from copy import deepcopy
 from enum import IntEnum, auto
 from collections import defaultdict
@@ -81,6 +82,7 @@ class Map:
     
     def __init__(self, name=None):
         super().__init__()
+        self.id = str(uuid4())
         self.name = name
         self.tiles = []
         self.overlays = []

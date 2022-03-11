@@ -29,6 +29,7 @@ from .engine import Engine
 from .ui import TextUI, Quitting
 from .action_map import ActionMap
 from .maps import Map, Builder
+from .area import Area
 from .events import StatusEvent, Events
 
 CONFIG_DIR = "~/.config/revengate"
@@ -73,15 +74,33 @@ class Governor:
     def __init__(self):
         self.condenser = Condenser()
         tender.loader = TopLevelLoader()
-        tender.engine = self.condenser.load("engine")
+        tender.loader.load(open(data_path(CORE_FILE), "rt"))
+        self.restore_game()
+        if self.dungeon is None:
+            self.dungeon = Area()
         if tender.engine is None:
             tender.engine = Engine()
         
         tender.ui = TextUI()
         tender.action_map = ActionMap()
 
-    def save_path(self, fname):
-        return os.path.join(self.config_dir, "save", fname)
+    def del_game(self):
+        for key in ["hero", "engine", "mapid", "dungeon"]:
+            self.condenser.delete(key)
+
+    def save_game(self):
+        self.condenser.save("engine", tender.engine)
+        self.condenser.save("hero", tender.hero)
+        self.condenser.save("mapid", tender.engine.map.id)
+        self.condenser.save("dungeon", self.dungeon)
+        
+    def restore_game(self):
+        tender.hero = self.condenser.load("hero")
+        tender.engine = self.condenser.load("engine")
+        self.dungeon = self.condenser.load("dungeon")
+        mapid = self.condenser.load("mapid")
+        if mapid is not None and tender.engine is not None:
+            tender.engine.change_map(self.dungeon[mapid])
 
     def init_map(self):
         map = Map()
@@ -101,8 +120,6 @@ class Governor:
     
     def start(self):
         """ Start a game. """
-        tender.loader.load(open(data_path(CORE_FILE), "rt"))
-        tender.hero = self.condenser.load("hero")
         if tender.hero is None:
             self.create_hero()
         
@@ -110,18 +127,16 @@ class Governor:
         dia = tender.loader.get_instance("intro")
         tender.ui.show_dia(dia)
 
-        map = self.condenser.load("map")
-        if map is None:
+        if tender.engine.map is None:
             map = self.init_map()
+            self.dungeon.add_map(map)
+            tender.engine.change_map(map)
             map.place(tender.hero)
-        tender.engine.change_map(map)
 
         try:
             self.play()
         except Quitting:
-            self.condenser.save("engine", tender.engine)
-            self.condenser.save("hero", tender.hero)
-            self.condenser.save("map", tender.engine.map)
+            self.save_game()
             print(f"See you later, brave {tender.hero.name}...")
             
     def play(self):
@@ -150,8 +165,7 @@ class Governor:
                     if event:
                         print(event)
                 if tender.hero.is_dead:
-                    self.condenser.delete("hero")
-                    self.condenser.delete("map")
+                    self.del_game()
                     return False
 
             if tender.hero.has_played:
