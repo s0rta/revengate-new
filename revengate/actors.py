@@ -43,7 +43,7 @@ class Actor(object):
     char = "X" # How to render this actor on the text map
 
     def __init__(self, health, armor, strength, agility):
-        super(Actor, self).__init__()
+        super().__init__()
         self.health = health
         self.armor = armor
         self.inventory = []

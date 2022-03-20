@@ -28,7 +28,7 @@ from .loader import DATA_DIR, TopLevelLoader, data_path
 from .engine import Engine
 from .ui import TextUI, Quitting
 from .action_map import ActionMap
-from .maps import Map, Builder
+from .maps import Map, Builder, Connector
 from .area import Area
 from .events import StatusEvent, Events
 
@@ -83,6 +83,7 @@ class Governor:
         
         tender.ui = TextUI()
         tender.action_map = ActionMap()
+        tender.action_map.register(self.follow_stairs, "follow-stairs")
 
     def del_game(self):
         for key in ["hero", "engine", "mapid", "dungeon"]:
@@ -102,22 +103,29 @@ class Governor:
         if mapid is not None and tender.engine is not None:
             tender.engine.change_map(self.dungeon[mapid])
 
-    def init_map(self):
-        map = Map()
+    def make_map(self, nb_monsters, item, from_pos=None, parent_map=None):
+        lvl = len(self.dungeon.maps) + 1
+        map = Map(f"level {lvl}")
         builder = Builder(map)
         builder.init(60, 20)
         builder.room((5, 5), (20, 15), True)
+        # FIXME: the inner room does not show up
         builder.room((12, 7), (13, 12), True)
 
-        sword = tender.loader.invoke("sword")
-        map.place(sword)
-        
-        for name in rng.choices(["rat", "wolf"], k=3):
+        # stairs
+        if lvl < 5:
+            # we after 5 levels, we can't go down anymore
+            builder.staircase()
+        if parent_map:
+            builder.staircase(None, "<", from_pos, parent_map)
+
+        for name in rng.choices(["rat", "wolf"], k=nb_monsters):
             a = tender.loader.invoke(name)
             map.place(a)
+        map.place(item)
+        self.dungeon.add_map(map, parent_map)
         return map
-    
-    
+
     def start(self):
         """ Start a game. """
         if tender.hero is None:
@@ -128,8 +136,8 @@ class Governor:
         tender.ui.show_dia(dia)
 
         if tender.engine.map is None:
-            map = self.init_map()
-            self.dungeon.add_map(map)
+            pen = tender.loader.invoke("pen")
+            map = self.make_map(2, pen)
             tender.engine.change_map(map)
             map.place(tender.hero)
 
@@ -160,7 +168,7 @@ class Governor:
                             if move:
                                 print(move)
                                 actor.set_played()
-                else:
+                elif actor in tender.engine.map:
                     event = actor.act()
                     if event:
                         print(event)
@@ -182,7 +190,34 @@ class Governor:
         tender.hero = tender.loader.invoke("novice")
         tender.hero.name = name
         self.condenser.save("hero", tender.hero)
-    
+
+    def follow_stairs(self):
+        from_pos = tender.engine.map.find(tender.hero)
+        tile = tender.engine.map[from_pos]
+        if isinstance(tile, Connector):
+            print(f"following stairs at {from_pos}")
+            mapid = tile.dest_map
+            if mapid is None:
+                sword = tender.loader.invoke("sword")
+                map = self.make_map(3, sword, from_pos, tender.engine.map)
+                
+            else:
+                map = self.dungeon[mapid]
+            # switch the map
+            next_pos = map.arrival_pos(tender.engine.map.id)
+            tender.engine.map.remove(tender.hero)
+            tender.engine.change_map(map)
+            map.place(tender.hero, next_pos)
+
+            # TODO: return a Move event instead
+            tender.hero.set_played()
+            return True
+
+        else:
+            print(f"there are no stairs at {pos}")
+            return None
+        
+        
     def shutdown(self):
         """ Gracefully shutdown after saving everything. """
         ...

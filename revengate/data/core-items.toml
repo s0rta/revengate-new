@@ -11,6 +11,11 @@ _class = "Item"
 char = "%"
 weight = 5
 
+[templates.pen] 
+_class = "Item"
+char = "🖊️"
+weight = 1
+
 # Weapons
 [templates.blade]
 _class = "Weapon"

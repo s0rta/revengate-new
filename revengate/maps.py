@@ -60,6 +60,19 @@ WALKABLE = [TileType.FLOOR]
 SEE_THROUGH = [TileType.FLOOR, TileType.DOORWAY]
 WALLS = [TileType.WALL, TileType.WALL_H, TileType.WALL_V]
 
+
+def array(width, height, fill=None):
+    return [[fill] * height for i in range(width)]
+
+
+class Connector:
+    """ A tile that connects to another map or another area. """
+
+    def __init__(self, char=">", dest_map=None):
+        self.char = char
+        self.dest_map = dest_map
+
+
 class Queue:
     """ A priority queue. """
     
@@ -89,8 +102,28 @@ class Map:
         self._a_to_pos = {}  # actor to position mapping
         self._pos_to_a = {}  # position to actor mapping
         self._i_to_pos = {}  # item to position
-        # position to items
-        self._pos_to_i = defaultdict(ItemCollection) 
+        self._pos_to_i = defaultdict(ItemCollection)  # position to items
+        
+        # connections to neighbouring maps ({mapid:pos}), our side of the connection
+        self._map_to_conn = {}  
+
+    def connect(self, pos1, there, pos2):
+        """ Connect pos1 on this map to pos2 on there (another map). """
+        if not isinstance(there, Map):
+            raise TypeError(f"Only maps are supported, not {type(there)}")
+        for tile in [self[pos1], there[pos2]]:
+            if not isinstance(tile, Connector):
+                raise TypeError("Connecting maps must be done at Connector tiles.")
+        self._map_to_conn[there.id] = pos1
+        self[pos1].dest_map = there.id
+
+        # return path
+        there._map_to_conn[self.id] = pos2
+        there[pos2].dest_map = self.id
+
+    def arrival_pos(self, mapid):
+        """ Return where to place the hero if they just arrived from mapid """
+        return self._map_to_conn[mapid]
 
     def __getstate__(self):
         """ Return a representation of the internal state that is suitable for the 
@@ -120,6 +153,14 @@ class Map:
         if hero_pos:
             self.place(tender.hero, hero_pos)
 
+    def __getitem__(self, pos):
+        x, y = pos
+        return self.tiles[x][y]
+
+    def __setitem__(self, pos, tile):
+        x, y = pos
+        self.tiles[x][y] = tile
+
     def size(self):
         """ Return a (width, height) tuple. """
         w = len(self.tiles)
@@ -134,6 +175,16 @@ class Map:
         w, h = self.size()
         x, y = pos
         return 0<=x<w and 0<=y<h
+
+    def iter_coords(self):
+        """ Return an iterator for all the (x, y) coordinates in the map.
+        
+        No order guaratees. 
+        """
+        w, h = self.size()
+        for x in range(w):
+            for y in range(h):
+                yield (x, y)
 
     def iter_tiles(self):
         """ Return an iterator for ((x, y), TileType) pairs. """
@@ -173,7 +224,19 @@ class Map:
     
     def clear_overlays(self):
         self.overlays = []
+    
+    def char_at(self, pos):
+        """ Return the character representation of what is at pos. """
+        if pos in self._pos_to_a:
+            return self._pos_to_a[pos].char
+        if pos in self._pos_to_i:
+            return self._pos_to_i[pos].char
         
+        tile = self[pos]
+        if isinstance(tile, Connector):
+            return tile.char
+        return TEXT_TILE[tile]
+    
     def actor_at(self, pos):
         return self._pos_to_a.get(pos)
         
@@ -374,10 +437,13 @@ class Map:
             raise RuntimeError("Can't find a free tile on the map.  It appears"
                                " to be completely full!")
 
+    def is_walkable(self, pos):
+        tile = self[pos]
+        return isinstance(tile, Connector) or tile in WALKABLE
+
     def is_free(self, pos):
         """ Is the tile at pos=(x, y) free for a nactor to step on?"""
-        x, y = pos
-        if self.tiles[x][y] in WALKABLE and pos not in self._pos_to_a:
+        if self.is_walkable(pos) and pos not in self._pos_to_a:
             return True
         else:
             return False
@@ -514,29 +580,23 @@ class Map:
         """ Return a Unicode render of the map suitable for display in a 
         terminal.
         
-        axes: added graduated axes around the render
+        axes: add graduated axes on the margins of the render
         """
         
         # Convert to text
-        #  not using iter_tiles() in order to take advantage of or using the 
-        #  same nested list format
-        cols = []
-        for col in self.tiles:
-            cols.append([TEXT_TILE[t] for t in col])
+        #  not using iter_tiles() because we let actors and items take precedence
+        w, h = self.size()
+        cols = array(w, h, None)
+        for x, y in self.iter_coords():
+            cols[x][y] = self.char_at((x, y))
             
-        # overlay actors and objects
-        for (x, y), stack in self.iter_items():
-            cols[x][y] = stack.char
-        for (x, y), a in self.iter_actors():
-            cols[x][y] = a.char
-            
-        # overlay extra layers:
+        # overlay extra layers
         for (x, y), char in self.iter_overlays_text():
             cols[x][y] = char
 
         if axes:
-            w, h = self.size()
-            mat = [[" " for j in range(h+2)] for i in range(w+2)]
+            mat = array(w+2, h+2, " ")
+
             for i in range(w):
                 for j in range(h):
                     mat[i+1][j+1] = cols[i][j]
@@ -581,6 +641,7 @@ class MapOverlay:
             return str(obj)
         
     def char_at(self, pos):
+        # FIXME: handle object, actors, and portals
         x, y = pos
         if x in self.tiles:
             if y in self.tiles[x]:
@@ -651,7 +712,7 @@ class Builder:
         return False
                 
     def init(self, width, height, fill=TileType.SOLID_ROCK):
-        self.map.tiles = [[fill]*height for i in range(width)]
+        self.map.tiles = array(width, height, fill)
         
     def is_frozen(self, pos):
         for m in self.mazes:
@@ -665,6 +726,25 @@ class Builder:
         room = RoomPlan(self.map, corner1, corner2, doors_target, walls)
         self._rooms.append(room)
         room.set_tiles()
+
+    def staircase(self, pos=None, char=">", dest_pos=None, dest_map=None):
+        """ Add a staircase. 
+        
+        If pos=None, a random location is selected. 
+        If dest_map=None, it's left pending to be determined later.
+        
+        Return where the staircase was placed. 
+        """
+        if pos is None:
+            if not self._rooms:
+                raise RuntimeError("Staircases can only be placed after rooms "
+                                   "have been created.")
+            room = rng.choice(self._rooms)
+            pos = rng.pos_in_rect(room.to_rect())
+        self.map[pos] = Connector(char)
+        if dest_map is not None:
+            self.map.connect(pos, dest_map, dest_pos)
+        return pos
 
     def touching_mazes(self, pos, ignore):
         """ Return the list of mazes touched by a position. 

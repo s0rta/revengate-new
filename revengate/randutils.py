@@ -100,4 +100,12 @@ class RandomGenerator(random.Random):
         idx = self.randrange(len(seq))
         return seq[idx], seq[:idx] + seq[idx+1:]
 
+    def pos_in_rect(self, rect):
+        """ Return a random position that is inside rect. 
+        
+        The perimeter of rect is included in the possible results. """
+        (x1, y1), (x2, y2) = rect
+        x, y = rng.randrange(x1, x2+1), rng.randrange(y1, y2+1)
+        return (x, y)
+
 rng = RandomGenerator()

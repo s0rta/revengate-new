@@ -32,7 +32,7 @@ class SelectionCache:
         self._dist = None
         self._los = None
         self._path = None
-        
+
     @property
     def dist(self):
         if self._dist is None:

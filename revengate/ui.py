@@ -29,6 +29,7 @@ LEFT = '\x1b[D'
 TEXT_HELP = """UP, DOWN, RIGHT, LEFT: move or attack
 q, ESC: quit
 c: show credits
+f: follow stairs
 ?: show help"""
 
 
@@ -49,6 +50,7 @@ class TextUI(UI):
         self.action_keys = {"?": self.show_help, 
                             "q": self.quit,
                             "c": "show_credits", 
+                            "f": "follow-stairs",
                             UP: "move_or_act_up",
                             DOWN: "move_or_act_down",
                             RIGHT: "move_or_act_right",
