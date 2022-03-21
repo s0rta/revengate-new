@@ -30,6 +30,7 @@ TEXT_HELP = """UP, DOWN, RIGHT, LEFT: move or attack
 q, ESC: quit
 c: show credits
 f: follow stairs
+p: pickup an item from the ground
 ?: show help"""
 
 
@@ -51,6 +52,7 @@ class TextUI(UI):
                             "q": self.quit,
                             "c": "show_credits", 
                             "f": "follow-stairs",
+                            "p": "pickup_item",
                             UP: "move_or_act_up",
                             DOWN: "move_or_act_down",
                             RIGHT: "move_or_act_right",

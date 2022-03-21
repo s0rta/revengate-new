@@ -133,8 +133,27 @@ class Miss(StatusEvent):
         return f"{self.attacker} misses {self.target}."
 
 
+class InventoryChange(StatusEvent):
+    """ Added or lossed something form the inventory """
+    def __init__(self, target, item):
+        super().__init__(target)
+        self.item = item
+        
+    def __str__(self):
+        return f"{self.item} changed possession."
+
+
+class Pickup(InventoryChange):
+    """ Picked something from the ground """
+    def __init__(self, target, item):
+        super().__init__(target, item)
+        
+    def __str__(self):
+        return f"Picked {self.item} from the ground."
+
+
 class Events(list):
-    """ A group of StatusEvents.  None-events are implicitely ignored. """
+    """ A group of StatusEvents.  None-events are implicitly ignored. """
     def __init__(self, *events):
         if events:
             events = filter(bool, events)

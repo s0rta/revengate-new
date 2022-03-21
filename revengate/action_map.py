@@ -21,6 +21,7 @@ import functools
 from .tags import Tag
 from .geometry import vect
 from .dialogue import Action
+from .events import Pickup
 from . import tender, CREDITS
 
 
@@ -119,3 +120,15 @@ class ActionMap:
 
     def move_or_act_left(self):
         return self.move_or_act(vect(-1, 0))
+
+    def pickup_item(self):
+        pos = tender.engine.map.find(tender.hero)
+        stack = tender.engine.map.items_at(pos)
+        if stack:
+            item = stack.pop()
+            tender.hero.inventory.append(item)
+            return Pickup(tender.hero, item)
+        else:
+            print(f"there is nothing to pickup at {pos}")
+            return None
+        

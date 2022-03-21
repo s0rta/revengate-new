@@ -225,11 +225,17 @@ class Map:
     def clear_overlays(self):
         self.overlays = []
     
+    def items_at(self, pos):
+        if pos in self._pos_to_i:
+            return self._pos_to_i[pos]
+        else:
+            return None
+    
     def char_at(self, pos):
         """ Return the character representation of what is at pos. """
         if pos in self._pos_to_a:
             return self._pos_to_a[pos].char
-        if pos in self._pos_to_i:
+        if pos in self._pos_to_i and self._pos_to_i[pos]:
             return self._pos_to_i[pos].char
         
         tile = self[pos]
@@ -413,8 +419,8 @@ class Map:
             for t in tiles:
                 yield t
 
-    def random_tile(self, free):
-        """ Return a random tile (x, y) coordinate. 
+    def random_pos(self, free):
+        """ Return the (x, y) coordinate of a random tile inside the map.
         
         If free=True, the tile can allow an actor to step on.
         Raise a RuntimeError if no suitable tile can be found. """
@@ -529,7 +535,7 @@ class Map:
             raise ValueError(f"{thing} is already on the map, use Map.move()" 
                              " to change it's position.")
         if pos is None:
-            pos = self.random_tile(free=True)
+            pos = self.random_pos(free=True)
         if isinstance(thing, Actor):
             if pos in self._pos_to_a:
                 if fallback:

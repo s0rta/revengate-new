@@ -38,6 +38,10 @@ class ItemCollection:
     def remove(self, item):
         del self.items[self.items.find(item)]
         
+    def pop(self):
+        """ Return the item at the top of the stack and stop tracking it. """
+        return self.items.pop()
+    
     def weight(self):
         return sum([i.weight for i in self.items])
     

@@ -17,8 +17,19 @@ https://buildozer.readthedocs.io/en/latest/installation.html#targeting-android
 ## Coding style and conventions
 * max line length is 88
 * pos, which stands for position is always an (x, y) tuple in carterian coordinates (origin at bottom left corner).
+* tile: what the environment is made of at a given pos (floor, wall, door, ...)
 * funct, not func: a Python callable
 * action and ftag: a string referencing a registered Python function; must be resolved before it can be called
 * params, not parms
 * hero: the player character, never referrer to as PC
 * when in doubt, name things after steam engine parts or concepts at the core of the industrial revolution
+
+
+## Artwork
+Artwork must be licenced under one of CC-BY, CC-BY-SA (4.0+), CC0, or GPLv3. 
+
+CC-NC and CC-NC-SA are not GPL compatible and are therefore not usable in this project. More details here:
+https://creativecommons.org/share-your-work/licensing-considerations/compatible-licenses
+https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing#Content_Licenses
+https://help.ubuntu.com/community/Repositories/Ubuntu
+
