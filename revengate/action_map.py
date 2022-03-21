@@ -125,8 +125,9 @@ class ActionMap:
         pos = tender.engine.map.find(tender.hero)
         stack = tender.engine.map.items_at(pos)
         if stack:
-            item = stack.pop()
+            item = stack.top()
             tender.hero.inventory.append(item)
+            tender.engine.map.remove(item)
             return Pickup(tender.hero, item)
         else:
             print(f"there is nothing to pickup at {pos}")

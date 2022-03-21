@@ -561,8 +561,8 @@ class Map:
             del self._pos_to_a[pos]
             del self._a_to_pos[thing]
         elif thing in self._i_to_pos:
-            pos = self._a_to_pos[thing]
-            self._pos_to_i.remove(pos)
+            pos = self._i_to_pos[thing]
+            self._pos_to_i[pos].remove(thing)
             del self._i_to_pos[thing]
         else:
             raise ValueError(f"{thing} is not on the current map.")
