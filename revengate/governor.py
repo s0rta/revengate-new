@@ -19,6 +19,7 @@
 
 
 import os
+import glob
 import shutil
 import pickle
 
@@ -69,6 +70,12 @@ class Condenser:
         if os.path.isfile(fpath):
             os.unlink(fpath)
 
+    def random_builder(self):
+        maps_pat = os.path.join(DATA_DIR, "maps", "map-*.pickle")
+        map_files = glob.glob(maps_pat)
+        fname = rng.choice(map_files)
+        return pickle.load(open(fname, "rb"))
+
 
 class Governor:
     def __init__(self):
@@ -105,12 +112,9 @@ class Governor:
 
     def make_map(self, nb_monsters, item, from_pos=None, parent_map=None):
         lvl = len(self.dungeon.maps) + 1
-        map = Map(f"level {lvl}")
-        builder = Builder(map)
-        builder.init(60, 20)
-        builder.room((5, 5), (20, 15), True)
-        # FIXME: the inner room does not show up
-        builder.room((12, 7), (13, 12), True)
+        
+        builder = self.condenser.random_builder()
+        map = builder.map
 
         # stairs
         if lvl < 5:
@@ -152,6 +156,7 @@ class Governor:
         
         return True if the hero is still alive, False otherwise. 
         """
+
         done = False
         while not done:
             if tender.hero.is_dead:

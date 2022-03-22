@@ -46,7 +46,8 @@ class TileType(IntEnum):
     WALL = auto()
     WALL_V = auto()
     WALL_H = auto()
-    DOORWAY = auto()
+    DOORWAY_OPEN = auto()
+    DOORWAY_CLOSED = auto()
 
 
 TEXT_TILE = {TileType.SOLID_ROCK: '▓',
@@ -54,10 +55,11 @@ TEXT_TILE = {TileType.SOLID_ROCK: '▓',
              TileType.WALL: '░', 
              TileType.WALL_V: '|', 
              TileType.WALL_H: '─', 
-             TileType.DOORWAY: '◠'}
+             TileType.DOORWAY_OPEN: '╦', 
+             TileType.DOORWAY_CLOSED: '╥'}
 
-WALKABLE = [TileType.FLOOR]
-SEE_THROUGH = [TileType.FLOOR, TileType.DOORWAY]
+WALKABLE = [TileType.FLOOR, TileType.DOORWAY_OPEN]
+SEE_THROUGH = [TileType.FLOOR, TileType.DOORWAY_OPEN]
 WALLS = [TileType.WALL, TileType.WALL_H, TileType.WALL_V]
 
 
@@ -447,6 +449,10 @@ class Map:
         tile = self[pos]
         return isinstance(tile, Connector) or tile in WALKABLE
 
+    def is_doorway(self, pos):
+        tile = self[pos]
+        return tile in [TileType.DOORWAY_OPEN, TileType.DOORWAY_CLOSED]
+
     def is_free(self, pos):
         """ Is the tile at pos=(x, y) free for a nactor to step on?"""
         if self.is_walkable(pos) and pos not in self._pos_to_a:
@@ -468,7 +474,7 @@ class Map:
         
         Return the path as a list of (x, y) tuples. """
         # Using the A* algorithm
-        came_from = {} # a back track map from one point to it's predecessor
+        came_from = {} # a back track map from one point to its predecessor
         open_q = Queue()
         open_set = {start}
         prev = None
@@ -680,7 +686,7 @@ class Builder:
     doors_range = (1, 5)
     
     def __init__(self, map):
-        super(Builder, self).__init__()
+        super().__init__()
         self.map = map
         self._rooms = []
         self.mazes = []
@@ -746,7 +752,7 @@ class Builder:
                 raise RuntimeError("Staircases can only be placed after rooms "
                                    "have been created.")
             room = rng.choice(self._rooms)
-            pos = rng.pos_in_rect(room.to_rect())
+            pos = rng.pos_in_rect(room.to_rect(inside_walls=True))
         self.map[pos] = Connector(char)
         if dest_map is not None:
             self.map.connect(pos, dest_map, dest_pos)
@@ -801,14 +807,16 @@ class Builder:
         """ Return True if pos is a good place to start growing the maze. """
         cross = self.map.cross(pos)
         for pos in cross:
-            x, y = pos
-            if self.map.is_in_map(pos) and self.map.tiles[x][y] == TileType.DOORWAY:
+            if self.map.is_in_map(pos) and self.map.is_doorway(pos):
                 return False
         return True
         
-    def maze_connect(self, ratio=0.5):
+    def maze_connect(self, ratio=0.5, debug=False):
         """ Connect all the rooms with a maze of corridors until `ratio` 
-        fraction of the map is covered. """
+        fraction of the map is covered. 
+        
+        debug: add debugging annotations to the generated map and log generation metrics
+        """
         w, h = self.map.size()
         
         self.mazes = [MazePlan(self.map, [room]) for room in self._rooms]
@@ -833,12 +841,13 @@ class Builder:
         w, h = self.map.size()
         tot_area = w * h
         maze_ratio = sum(m.area for m in self.mazes) / tot_area
-        print(f"Initial ratio is {maze_ratio}")
+        if debug:
+            print(f"Initial ratio is {maze_ratio}")
         prev = None
         
-        # XXX
-        debug_overlay = MapOverlay()
-        self.map.add_overlay(debug_overlay)
+        if debug:
+            debug_overlay = MapOverlay()
+            self.map.add_overlay(debug_overlay)
         
         nb_iter = 0
         while maze_ratio < .25 and nb_iter <= 2000: 
@@ -855,7 +864,8 @@ class Builder:
             run_lenght = 0
             if self.valid_run_start(run_start, cur_maze):
                 cur_maze.add(run_start)
-                debug_overlay.place('x', run_start)
+                if debug:
+                    debug_overlay.place('x', run_start)
                 step = next_step((x, y), cur_maze=cur_maze, other_mazes=other_mazes)
             else:
                 step = None  # abandon the run
@@ -868,12 +878,14 @@ class Builder:
                     cur_maze = self.merge_mazes(step.mazes + [cur_maze])
                 cur_maze.add(step.pos)
 
-                debug_overlay.place(str(run_lenght % 10), step.pos)
+                if debug:
+                    debug_overlay.place(str(run_lenght % 10), step.pos)
 
                 if len(step.mazes) > 0:  # finalize the connection
                     conn = self.map.connectedness(step.pos)
-                    print(f"now conneted at {step.pos}, ({len(self.mazes)} mazes) "
-                          f"connectedness: {conn}")
+                    if debug:
+                        print(f"now conneted at {step.pos}, ({len(self.mazes)} mazes) "
+                              f"connectedness: {conn}")
                         
                     diags = self.map.front_diags(prev, step.pos)
                     if (any(map(self.in_mazes, diags)) 
@@ -890,8 +902,9 @@ class Builder:
         # TODO: force connect all rooms still unconnect after ratio is reached
         # TODO: fix the doorways into nowhere
         # TODO: debug joints with overlays
-        print(f"Final ratio is {maze_ratio:0.3} after {nb_iter} iterations" 
-              f" ({len(self.mazes)} mazes)")
+        if debug:
+            print(f"Final ratio is {maze_ratio:0.3} after {nb_iter} iterations" 
+                  f" ({len(self.mazes)} mazes)")
 
     def merge_mazes(self, mazes):
         """ Merge all the MazePlans in mazes and update self.mazes. 
@@ -945,8 +958,13 @@ class RoomPlan:
             raise NotImplemtedError(f"Don't know how to compare {type(other)}"
                                     " to RoomPlan")
 
-    def to_rect(self): 
-        return (self.bl, self.tr)
+    def to_rect(self, inside_walls=False):
+        if inside_walls and self.has_walls:
+            x1, y1 = self.bl
+            x2, y2 = self.tr
+            return ((x1+1, y1+1), (x2-1, y2-1))
+        else:
+            return (self.bl, self.tr)
     
     @property
     def area(self):
@@ -959,8 +977,7 @@ class RoomPlan:
 
     def add_door(self, pos):
         self.doors.append(pos)
-        x, y = pos
-        self.map.tiles[x][y] = TileType.DOORWAY
+        self.map[pos] = TileType.DOORWAY_OPEN
 
     def rand_wall(self):
         """ Return a random non-corner wall in of a room. """
@@ -1167,7 +1184,7 @@ class MazePlan:
 def main():
     RSTATE = ".randstate.json"
     # rng.state_save(RSTATE)
-    rng.state_restore(RSTATE)
+    # rng.state_restore(RSTATE)
 
     map = Map()
     builder = Builder(map)
@@ -1175,7 +1192,7 @@ def main():
     # builder.room(5, 5, 35, 15, True)
     for i in range(5):
         builder.random_room((5, 20), (5, 10))
-    builder.maze_connect()
+    builder.maze_connect(debug=True)
     print(map.to_text(True))
     
     #intersect = builder._interstect(*builder._rooms)

@@ -47,8 +47,16 @@ class SelectionCache:
 
     @property
     def path(self):
+        if self._path is False:
+            # we know for sure that there is no way to reach the target
+            return None
         if self._path is None:
-            self._path = list(self.map.path(self._pos_a, self._pos_t))
+            path = self.map.path(self._pos_a, self._pos_t)
+            if path is None:
+                self._path = False
+                return None
+            else:
+                self._path = list(path)
         return self._path
 
 
