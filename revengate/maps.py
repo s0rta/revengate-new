@@ -446,6 +446,10 @@ class Map:
                                " to be completely full!")
 
     def is_walkable(self, pos):
+        w, h = self.size()
+        x, y = pos
+        if not (0 <= x < w and 0 <= y < h):
+            return False
         tile = self[pos]
         return isinstance(tile, Connector) or tile in WALKABLE
 
