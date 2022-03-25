@@ -35,10 +35,11 @@ from kivy import resources
 from .maps import TileType, Map, Builder
 
 # TileType -> path
-TILE_SIZE = 32
 IMG_TILE = {TileType.SOLID_ROCK: "dungeon/floor/lair_1_new.png", 
             TileType.FLOOR: "dungeon/floor/rect_gray_1_old.png", 
-            TileType.WALL: "dungeon/wall/brick_brown_0.png"}
+            TileType.WALL: "dungeon/wall/brick_brown_0.png", 
+            TileType.DOORWAY_OPEN: "dungeon/open_door.png"}
+TILE_SIZE = 32
 
 
 class MapWidget(Scatter):
@@ -52,10 +53,10 @@ class MapWidget(Scatter):
     def __init__(self, map, *args, **kwargs):
         w, h = map.size()
         size = (w*TILE_SIZE, h*TILE_SIZE)
-        super(MapWidget, self).__init__(*args, size=size, **kwargs)
+        super().__init__(*args, size=size, **kwargs)
         self.map = map
         # pre-load all the textures
-        self._tex = {} # TileType->texture map
+        self._tex = {}  # TileType->texture map
         for t_type, path in IMG_TILE.items():
             fq_path = resources.resource_find(path)
             self._tex[t_type] = Image(source=fq_path).texture
@@ -95,7 +96,7 @@ class MapWidget(Scatter):
 
 class Controller(FloatLayout):
     def __init__(self, *args, **kwargs):
-        super(Controller, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self._keyboard.bind(on_key_down=self.on_key_down)
 
@@ -119,16 +120,20 @@ class DemoApp(App):
         return cont
 
 
+from .governor import Condenser
 def main():
     kivy.require('2.0.0')
     resources.resource_add_path("revengate/data/images/")
     
-    map = Map()
-    builder = Builder(map)
-    builder.init(40, 20)
-    builder.room(5, 5, 35, 15, True)
-
+    condenser = Condenser()
+    builder = condenser.random_builder()
+    map = builder.map
     
+    #map = Map()
+    #builder = Builder(map)
+    #builder.init(40, 20)
+    #builder.room((5, 5), (35, 15), True)
+
     DemoApp(map).run()
 
 
