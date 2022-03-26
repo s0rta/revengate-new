@@ -17,11 +17,14 @@
 
 """ 2D graphics rendering and graphical UI elements. """
 
+import os
 from pprint import pprint
+
 import kivy
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.core.text import Label as CoreLabel
+from kivy.graphics.texture import Texture
 from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.button import Button
@@ -33,6 +36,7 @@ from kivy.graphics import Color, Rectangle
 from kivy import resources
 
 from .maps import TileType, Map, Builder
+from .loader import DATA_DIR
 
 # TileType -> path
 IMG_TILE = {TileType.SOLID_ROCK: "dungeon/floor/lair_1_new.png", 
@@ -41,6 +45,33 @@ IMG_TILE = {TileType.SOLID_ROCK: "dungeon/floor/lair_1_new.png",
             TileType.DOORWAY_OPEN: "dungeon/open_door.png"}
 TILE_SIZE = 32
 
+
+class ImgSourceCache:
+    def __init__(self):
+        resources.resource_add_path(os.path.join(DATA_DIR, "images"))
+        self._cache = {}            
+
+    def texture_key(self, thing):
+        if thing in TileType:
+            return thing
+        else: 
+            raise TypeError(f"Unsupported type for texture conversion {type(thing)}")
+
+    def img_source(self, thing):
+        key = self.texture_key(thing)
+        if key not in self._cache:
+            self.load_image(thing)
+        return self._cache[key]
+        
+    def load_image(self, thing):
+        if thing in IMG_TILE:
+            path = IMG_TILE[thing]
+            fq_path = resources.resource_find(path)
+            self._cache[thing] = fq_path
+            return fq_path
+        else:
+            raise TypeError(f"Unsupported type for texture conversion {type(thing)}")
+            
 
 class MapWidget(Scatter):
     """ A widget to display a dungeon with graphical tiles. 
@@ -56,11 +87,7 @@ class MapWidget(Scatter):
         super().__init__(*args, size=size, **kwargs)
         self.map = map
         # pre-load all the textures
-        self._tex = {}  # TileType->texture map
-        for t_type, path in IMG_TILE.items():
-            fq_path = resources.resource_find(path)
-            self._tex[t_type] = Image(source=fq_path).texture
-        
+        self.cache = ImgSourceCache()
         self.init_rects()
     
     def init_rects(self, *args):
@@ -72,10 +99,10 @@ class MapWidget(Scatter):
                 row = []
                 for my in range(h):
                     pos = self.map_to_canvas((mx, my))
-                    t = self._tex[self.map.tiles[mx][my]]
+                    source = self.cache.img_source(self.map[mx, my])
                     r = Rectangle(pos=pos, 
-                              size=t.size, 
-                              texture=t)
+                              size=(TILE_SIZE, TILE_SIZE), 
+                              source=source)
                     row.append(r)
                 self.rects.append(row)
 
