@@ -33,6 +33,7 @@ from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scatter import Scatter
 from kivy.graphics import Color, Rectangle
+from kivy.uix.behaviors.focus import FocusBehavior
 from kivy import resources
 
 from .maps import TileType, Map, Builder
@@ -73,7 +74,7 @@ class ImgSourceCache:
             raise TypeError(f"Unsupported type for texture conversion {type(thing)}")
             
 
-class MapWidget(Scatter):
+class MapWidget(FocusBehavior, Scatter):
     """ A widget to display a dungeon with graphical tiles. 
     
     Two coordinate systems are used:
@@ -85,10 +86,13 @@ class MapWidget(Scatter):
         w, h = map.size()
         size = (w*TILE_SIZE, h*TILE_SIZE)
         super().__init__(*args, size=size, **kwargs)
+        self.is_focusable = True
         self.map = map
         # pre-load all the textures
         self.cache = ImgSourceCache()
         self.init_rects()
+        with self.canvas:
+            self.hero = Label(text="@", font_size="28sp", size=(TILE_SIZE, TILE_SIZE))
     
     def init_rects(self, *args):
         self.rects = []
@@ -120,19 +124,35 @@ class MapWidget(Scatter):
         cx, cy = pos
         return (cx//TILE_SIZE, cy//TILE_SIZE)
 
+    def on_parent(self, widget, parent):
+        self.focus = True
+    
+    def keyboard_on_key_down(self, window, key, text, modifiers):
+        kcode, kname = key
+        if kname in ["right", "left", "up", "down"]:
+            if kname == "right":
+                self.hero.x += TILE_SIZE
+            elif kname == "left":
+                self.hero.x -= TILE_SIZE
+            elif kname == "up":
+                self.hero.y += TILE_SIZE
+            elif kname == "down":
+                self.hero.y -= TILE_SIZE
+            return True
+        else:
+            return super().keyboard_on_key_down(window, key, text, modifiers)
+
 
 class Controller(FloatLayout):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
-        self._keyboard.bind(on_key_down=self.on_key_down)
+        self.bind(on_key_down=self.on_key_down)
 
-    def _keyboard_closed(self):
-        self._keyboard.unbind(on_key_down=self.on_key_down)
-        self._keyboard = None
+    def on_parent(self, widget, parent):
+        self.focus = True
     
-    def on_key_down(self, kb, key, scancode, codepoint, modifier, **kwargs):
-        print(f"key_down: {key}")
+    def on_key_down(self, key, **kwargs):
+        print(f"key_down: {key} {kwargs!r}")
 
 
 class DemoApp(App):
