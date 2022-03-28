@@ -6,13 +6,14 @@ digraph {
     governor -> engine
     governor -> loader
     governor -> ui
+    governor -> condensor
     engine -> map
     loader
     ui -> kivy
     ui -> engine
     
     subgraph cluster_globals {
-        label = "globals"
+        label = "globals / tender"
         engine
         ui
         map

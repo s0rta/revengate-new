@@ -25,6 +25,12 @@ https://buildozer.readthedocs.io/en/latest/installation.html#targeting-android
 * when in doubt, name things after steam engine parts or concepts at the core of the industrial revolution
 
 
+## Code structure
+The main layers of the code are in described below:
+
+![Revengate code structure](deps.png)
+
+
 ## Artwork
 Artwork must be licenced under one of CC-BY, CC-BY-SA (4.0+), CC0, or GPLv3. 
 
