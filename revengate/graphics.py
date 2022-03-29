@@ -1,4 +1,4 @@
-# Copyright © 2020 Yannick Gingras <ygingras@ygingras.net>
+# Copyright © 2020–2022 Yannick Gingras <ygingras@ygingras.net>
 
 # This file is part of Revengate.
 
@@ -74,10 +74,30 @@ class ImgSourceCache:
             raise TypeError(f"Unsupported type for texture conversion {type(thing)}")
             
 
+def best_font(text):
+    """ Return a font that looks for the given text.
+    
+    The main criterion is emoji vs normal text. Pure emoji fonts don't look good for 
+    normal text and Kivy does not automatically fall back to alternative fonts if 
+    it can't find the requested glyph.
+
+    """
+    # other non-emoji: Nimbus Roman Sans, Sans Bold, Tex Gyre Bonum
+    # other emoji: Noko Color Emoji, Emoji One
+    if text.isascii():
+        return "kalimati.ttf"
+    else:
+        return "Symbola_hint.ttf"
+
+
 class MapElement(Label):
     def __init__(self, *args, **kwargs):
+        text = kwargs.pop("text")
         size = (TILE_SIZE, TILE_SIZE)
-        super().__init__(*args, font_size="28sp", size=size, **kwargs)
+        super().__init__(*args, text=text, 
+                         font_size="28sp", size=size, bold=True, 
+                         font_name=best_font(text), 
+                         **kwargs)
 
 class MapWidget(FocusBehavior, Scatter):
     """ A widget to display a dungeon with graphical tiles. 
@@ -87,6 +107,7 @@ class MapWidget(FocusBehavior, Scatter):
     - canvas: pixel position on the canvas, convition is (cy, cy)
     Both systems have (0, 0) at the bottom-left corner.
     """
+    
     def __init__(self, map, *args, **kwargs):
         w, h = map.size()
         size = (w*TILE_SIZE, h*TILE_SIZE)
@@ -97,13 +118,20 @@ class MapWidget(FocusBehavior, Scatter):
         self.cache = ImgSourceCache()
         self.init_rects()
         self._elems = {}  # thing -> MapElement with thing being Actor or ItemCollection
-        with self.canvas:
-            self.hero = MapElement(text="@")
-            for mpos, actor in map.iter_actors():
-                pos = self.map_to_canvas(mpos)
-                self._elems[actor] = MapElement(text=actor.char, pos=pos)
+        self.refresh_map()
         
-    
+    def _update_elem(self, mpos, thing):
+        cpos = self.map_to_canvas(mpos)
+
+        if thing in self._elems:
+            elem = self._elems[thing]
+            if cpos != tuple(elem.pos):
+                elem.pos = cpos
+        else:
+            elem = MapElement(text=thing.char, pos=cpos)
+            self._elems[thing] = elem
+            self.add_widget(elem)
+
     def init_rects(self, *args):
         self.rects = []
         w, h = self.map.size()
@@ -136,19 +164,26 @@ class MapWidget(FocusBehavior, Scatter):
 
     def refresh_map(self):
         """ Refresh the display of the map with actors and items. """
-        # TODO refresh all the rectangles
+        # TODO refresh all the ground tiles
         seen = set()
+                    
         for mpos, actor in self.map.iter_actors():
             seen.add(actor)
-            pos = self.map_to_canvas(mpos)
-            if actor in self._elems:
-                elem = self._elems[actor]
-                if pos != tuple(elem.pos):
-                    elem.pos = pos
-            else:
-                pos = self.map_to_canvas(mpos)
-                self._elems[actor] = MapElement(text=actor.char, pos=pos)
-        # TODO: remove elems that have not been seen
+            self._update_elem(mpos, actor)
+        for mpos, stack in self.map.iter_items():
+            if stack:
+                seen.add(stack)
+                self._update_elem(mpos, stack)
+                actor = self.map.actor_at(mpos)
+                if actor:
+                    self._elems[stack].opacity = 0
+                else:
+                    self._elems[stack].opacity = 1
+        gone = set(self._elems.keys()) - seen
+        for thing in gone:
+            elem = self._elems.pop(thing)
+            elem.opacity = 0
+            self.remove_widget(elem)
 
     def on_parent(self, widget, parent):
         self.focus = True
@@ -157,17 +192,22 @@ class MapWidget(FocusBehavior, Scatter):
         kcode, kname = key
         if kname in ["right", "left", "up", "down"]:
             if kname == "right":
-                self.hero.x += TILE_SIZE
+                for mpos, actor in self.map.iter_actors():
+                    mx, my = mpos
+                    self.map.move(actor, (mx+1, my))
             elif kname == "left":
                 for mpos, actor in self.map.iter_actors():
                     mx, my = mpos
                     self.map.move(actor, (mx-1, my))
-                self.hero.x -= TILE_SIZE
-                self.refresh_map()
             elif kname == "up":
-                self.hero.y += TILE_SIZE
+                for mpos, actor in self.map.iter_actors():
+                    mx, my = mpos
+                    self.map.move(actor, (mx, my+1))
             elif kname == "down":
-                self.hero.y -= TILE_SIZE
+                for mpos, actor in self.map.iter_actors():
+                    mx, my = mpos
+                    self.map.move(actor, (mx, my-1))
+            self.refresh_map()
             return True
         else:
             return super().keyboard_on_key_down(window, key, text, modifiers)
@@ -208,10 +248,17 @@ def main():
     loader = TopLevelLoader()
     with data_file("core.toml") as f:
         loader.load(f)
+    for name in ["pen", "sword"]:
+        item = loader.invoke(name)
+        map.place(item)
     rat = loader.invoke("rat")
     map.place(rat)
     pos = map.find(rat)
     print(f"rat at {pos}")
+
+    elem = MapElement(text="$")
+    print(elem.font_family)
+    print(elem.font_name)
     
     #map = Map()
     #builder = Builder(map)

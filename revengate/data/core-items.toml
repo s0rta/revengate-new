@@ -13,7 +13,7 @@ weight = 5
 
 [templates.pen] 
 _class = "Item"
-char = "🖊️"
+char = "🖋"
 weight = 1
 
 # Weapons

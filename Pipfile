@@ -4,9 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-Kivy = ">=2.0.0"
 tomlkit = "*"
 click = "*"
+pillow = "*"
+kivy = ">=2.0.0"
 
 [dev-packages]
 PySnooper = "*"
