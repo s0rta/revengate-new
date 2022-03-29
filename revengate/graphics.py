@@ -37,7 +37,7 @@ from kivy.uix.behaviors.focus import FocusBehavior
 from kivy import resources
 
 from .maps import TileType, Map, Builder
-from .loader import DATA_DIR
+from .loader import DATA_DIR, data_file, TopLevelLoader
 
 # TileType -> path
 IMG_TILE = {TileType.SOLID_ROCK: "dungeon/floor/lair_1_new.png", 
@@ -74,6 +74,11 @@ class ImgSourceCache:
             raise TypeError(f"Unsupported type for texture conversion {type(thing)}")
             
 
+class MapElement(Label):
+    def __init__(self, *args, **kwargs):
+        size = (TILE_SIZE, TILE_SIZE)
+        super().__init__(*args, font_size="28sp", size=size, **kwargs)
+
 class MapWidget(FocusBehavior, Scatter):
     """ A widget to display a dungeon with graphical tiles. 
     
@@ -91,8 +96,13 @@ class MapWidget(FocusBehavior, Scatter):
         # pre-load all the textures
         self.cache = ImgSourceCache()
         self.init_rects()
+        self._elems = {}  # thing -> MapElement with thing being Actor or ItemCollection
         with self.canvas:
-            self.hero = Label(text="@", font_size="28sp", size=(TILE_SIZE, TILE_SIZE))
+            self.hero = MapElement(text="@")
+            for mpos, actor in map.iter_actors():
+                pos = self.map_to_canvas(mpos)
+                self._elems[actor] = MapElement(text=actor.char, pos=pos)
+        
     
     def init_rects(self, *args):
         self.rects = []
@@ -124,6 +134,22 @@ class MapWidget(FocusBehavior, Scatter):
         cx, cy = pos
         return (cx//TILE_SIZE, cy//TILE_SIZE)
 
+    def refresh_map(self):
+        """ Refresh the display of the map with actors and items. """
+        # TODO refresh all the rectangles
+        seen = set()
+        for mpos, actor in self.map.iter_actors():
+            seen.add(actor)
+            pos = self.map_to_canvas(mpos)
+            if actor in self._elems:
+                elem = self._elems[actor]
+                if pos != tuple(elem.pos):
+                    elem.pos = pos
+            else:
+                pos = self.map_to_canvas(mpos)
+                self._elems[actor] = MapElement(text=actor.char, pos=pos)
+        # TODO: remove elems that have not been seen
+
     def on_parent(self, widget, parent):
         self.focus = True
     
@@ -133,7 +159,11 @@ class MapWidget(FocusBehavior, Scatter):
             if kname == "right":
                 self.hero.x += TILE_SIZE
             elif kname == "left":
+                for mpos, actor in self.map.iter_actors():
+                    mx, my = mpos
+                    self.map.move(actor, (mx-1, my))
                 self.hero.x -= TILE_SIZE
+                self.refresh_map()
             elif kname == "up":
                 self.hero.y += TILE_SIZE
             elif kname == "down":
@@ -175,6 +205,13 @@ def main():
     condenser = Condenser()
     builder = condenser.random_builder()
     map = builder.map
+    loader = TopLevelLoader()
+    with data_file("core.toml") as f:
+        loader.load(f)
+    rat = loader.invoke("rat")
+    map.place(rat)
+    pos = map.find(rat)
+    print(f"rat at {pos}")
     
     #map = Map()
     #builder = Builder(map)

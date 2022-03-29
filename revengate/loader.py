@@ -64,6 +64,21 @@ def data_path(fname):
     return os.path.join(DATA_DIR, fname)
 
 
+def data_file(fname):
+    """ 
+    Return an open file in reading for fname. If fname is a not in the local directory, 
+    we try to find it in the DATA_DIR.
+    
+    ValueError is raised if the file can't be found.
+    """
+    path = fname
+    if not os.path.isfile(path):
+        path = data_path(fname)
+    if not os.path.isfile(path):
+        raise ValueError(f"Can't find {fname}")
+    return open(path, "rt")
+
+
 class Template:
     """ Template are recipes for creating entities.  
     
