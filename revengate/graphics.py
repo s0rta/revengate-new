@@ -37,14 +37,18 @@ from kivy.uix.behaviors.focus import FocusBehavior
 from kivy import resources
 from kivy.animation import Animation
 
-from .maps import TileType, Map, Builder
+from .maps import TileType, Map, Builder, Connector
 from .loader import DATA_DIR, data_file, TopLevelLoader
 
 # TileType -> path
-IMG_TILE = {TileType.SOLID_ROCK: "dungeon/floor/lair_1_new.png", 
+TILE_IMG = {TileType.SOLID_ROCK: "dungeon/floor/lair_1_new.png", 
             TileType.FLOOR: "dungeon/floor/rect_gray_1_old.png", 
             TileType.WALL: "dungeon/wall/brick_brown_0.png", 
             TileType.DOORWAY_OPEN: "dungeon/open_door.png"}
+
+# tile.char -> path
+CONNECTOR_IMG = {"<": "dungeon/gateways/stone_stairs_up.png", 
+                 ">": "dungeon/gateways/stone_stairs_down.png"}
 TILE_SIZE = 32
 
 
@@ -54,7 +58,9 @@ class ImgSourceCache:
         self._cache = {}            
 
     def texture_key(self, thing):
-        if thing in TileType:
+        if isinstance(thing, Connector):
+            return (Connector, thing.char)
+        elif thing in TileType:
             return thing
         else: 
             raise TypeError(f"Unsupported type for texture conversion {type(thing)}")
@@ -66,13 +72,16 @@ class ImgSourceCache:
         return self._cache[key]
         
     def load_image(self, thing):
-        if thing in IMG_TILE:
-            path = IMG_TILE[thing]
-            fq_path = resources.resource_find(path)
-            self._cache[thing] = fq_path
-            return fq_path
+        key = self.texture_key(thing)
+        if isinstance(thing, Connector):
+            path = CONNECTOR_IMG[thing.char]
+        elif thing in TILE_IMG:
+            path = TILE_IMG[thing]
         else:
             raise TypeError(f"Unsupported type for texture conversion {type(thing)}")
+        fq_path = resources.resource_find(path)
+        self._cache[key] = fq_path
+        return fq_path
             
 
 def best_font(text):
@@ -249,6 +258,9 @@ def main():
     
     condenser = Condenser()
     builder = condenser.random_builder()
+    builder.staircase(char=">")
+    builder.staircase(char="<")
+    
     map = builder.map
     loader = TopLevelLoader()
     with data_file("core.toml") as f:
@@ -260,15 +272,6 @@ def main():
     map.place(rat)
     pos = map.find(rat)
     print(f"rat at {pos}")
-
-    elem = MapElement(text="$")
-    print(elem.font_family)
-    print(elem.font_name)
-    
-    #map = Map()
-    #builder = Builder(map)
-    #builder.init(40, 20)
-    #builder.room((5, 5), (35, 15), True)
 
     DemoApp(map).run()
 
