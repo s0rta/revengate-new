@@ -35,6 +35,7 @@ from kivy.uix.scatter import Scatter
 from kivy.graphics import Color, Rectangle
 from kivy.uix.behaviors.focus import FocusBehavior
 from kivy import resources
+from kivy.animation import Animation
 
 from .maps import TileType, Map, Builder
 from .loader import DATA_DIR, data_file, TopLevelLoader
@@ -126,7 +127,8 @@ class MapWidget(FocusBehavior, Scatter):
         if thing in self._elems:
             elem = self._elems[thing]
             if cpos != tuple(elem.pos):
-                elem.pos = cpos
+                anim = Animation(pos=cpos, duration=0.2, t="in_out_sine")
+                anim.start(elem)
         else:
             elem = MapElement(text=thing.char, pos=cpos)
             self._elems[thing] = elem
@@ -176,9 +178,12 @@ class MapWidget(FocusBehavior, Scatter):
                 self._update_elem(mpos, stack)
                 actor = self.map.actor_at(mpos)
                 if actor:
-                    self._elems[stack].opacity = 0
+                    opa = 0
                 else:
-                    self._elems[stack].opacity = 1
+                    opa = 1
+                if opa != self._elems[stack].opacity:
+                    anim = Animation(opacity=opa, duration=0.3)
+                    anim.start(self._elems[stack])
         gone = set(self._elems.keys()) - seen
         for thing in gone:
             elem = self._elems.pop(thing)
