@@ -28,14 +28,17 @@ def main():
     parser = ArgumentParser(sys.argv[0], description=__doc__)
     parser.add_argument("--version", action="store_true", 
                         help="Print version and exit.")
+    parser.add_argument("-g", "--graphical", action="store_true", 
+                        help="Load the graphical interface.")
     args = parser.parse_args()
     
     if args.version:
         print(f"Revengate version {__version__}")
         sys.exit(0)
 
-    gov = Governor()
+    gov = Governor(args.graphical)
     gov.start()
+
 
 if __name__ == "__main__":
     main()

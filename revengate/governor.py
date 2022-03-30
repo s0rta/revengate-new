@@ -27,7 +27,7 @@ from . import tender
 from .randutils import rng
 from .loader import DATA_DIR, TopLevelLoader, data_path
 from .engine import Engine
-from .ui import TextUI, Quitting
+from .ui import TextUI, Quitting, KivyUI
 from .action_map import ActionMap
 from .maps import Map, Builder, Connector
 from .area import Area
@@ -78,7 +78,8 @@ class Condenser:
 
 
 class Governor:
-    def __init__(self):
+    def __init__(self, graphical):
+        self.graphical = graphical
         self.condenser = Condenser()
         tender.loader = TopLevelLoader()
         tender.loader.load(open(data_path(CORE_FILE), "rt"))
@@ -88,9 +89,13 @@ class Governor:
         if tender.engine is None:
             tender.engine = Engine()
         
-        tender.ui = TextUI()
         tender.action_map = ActionMap()
         tender.action_map.register(self.follow_stairs, "follow-stairs")
+        
+        if graphical:
+            tender.ui = KivyUI()
+        else:
+            tender.ui = TextUI()
 
     def del_game(self):
         for key in ["hero", "engine", "mapid", "dungeon"]:
@@ -146,11 +151,43 @@ class Governor:
             map.place(tender.hero)
 
         try:
-            self.play()
+            if self.graphical:
+                from .graphics import DemoApp
+                app = DemoApp(tender.engine.map, self.npc_turn)
+                app.run()
+            else:
+                self.play()
         except Quitting:
             self.save_game()
             print(f"See you later, brave {tender.hero.name}...")
             
+    def npc_turn(self, *args):
+        """ Let all non-player actors do their turn, return if the hero is still alive.
+        
+        This function is no-op if actors have already played and the turn has not been 
+        advanced on the engine.
+        """
+        for actor in tender.engine.all_actors():
+            if actor.has_played or actor.is_dead:
+                continue
+            if actor is tender.hero and not tender.hero.has_played:
+                return tender.hero.is_alive
+            elif actor in tender.engine.map and not actor.has_played:
+                event = actor.act()
+                if event:
+                    tender.ui.show_turn_events(event)
+            if tender.hero.is_dead:
+                return False
+
+    def hero_turn(self):
+        while not tender.hero.has_played:
+            print(tender.engine.map.to_text())
+            move = tender.ui.read_next_move()
+            if isinstance(move, (StatusEvent, Events)):
+                if move:
+                    tender.ui.show_turn_events(move)
+                    tender.hero.set_played()
+        
     def play(self):
         """ Main game loop. 
         
@@ -162,28 +199,19 @@ class Governor:
             if tender.hero.is_dead:
                 return False
 
-            for actor in tender.engine.all_actors():
-                if actor.has_played or actor.is_dead:
-                    continue
-                if actor is tender.hero:
-                    while not tender.hero.has_played:
-                        print(tender.engine.map.to_text())
-                        move = tender.ui.read_next_move()
-                        if isinstance(move, (StatusEvent, Events)):
-                            if move:
-                                print(move)
-                                actor.set_played()
-                elif actor in tender.engine.map:
-                    event = actor.act()
-                    if event:
-                        print(event)
-                if tender.hero.is_dead:
-                    self.del_game()
-                    return False
+            # There is an NPC turn before and after the hero's turn to cover for 
+            # monsters with higher and lower initiatives respectively.
+            self.npc_turn()
+            self.hero_turn()
+            self.npc_turn()
+            if tender.hero.is_dead:
+                self.del_game()
+                return False
 
             if tender.hero.has_played:
                 events = tender.engine.advance_turn()
                 print(events or "no turn updates")
+
         return True
     
     def create_hero(self):
@@ -191,6 +219,7 @@ class Governor:
         print("Character creation is really easy since all the stats are "
               "either random or abitrary. However, you get to chose the "
               "name of your character.")
+        # FIXME: use the UI to do the prompting
         name = input("Name: ")
         tender.hero = tender.loader.invoke("novice")
         tender.hero.name = name

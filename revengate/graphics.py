@@ -29,7 +29,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.image import Image
-from kivy.properties import ObjectProperty, StringProperty
+from kivy.properties import NumericProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scatter import Scatter
 from kivy.graphics import Color, Rectangle
@@ -39,6 +39,7 @@ from kivy.animation import Animation
 
 from .maps import TileType, Map, Builder, Connector
 from .loader import DATA_DIR, data_file, TopLevelLoader
+from . import tender
 
 # TileType -> path
 TILE_IMG = {TileType.SOLID_ROCK: "dungeon/floor/lair_1_new.png", 
@@ -108,6 +109,7 @@ class MapElement(Label):
                          font_size="28sp", size=size, bold=True, 
                          font_name=best_font(text), 
                          **kwargs)
+        
 
 class MapWidget(FocusBehavior, Scatter):
     """ A widget to display a dungeon with graphical tiles. 
@@ -118,16 +120,28 @@ class MapWidget(FocusBehavior, Scatter):
     Both systems have (0, 0) at the bottom-left corner.
     """
     
-    def __init__(self, map, *args, **kwargs):
-        w, h = map.size()
-        size = (w*TILE_SIZE, h*TILE_SIZE)
-        super().__init__(*args, size=size, **kwargs)
-        self.is_focusable = True
+    turn = NumericProperty(defaultvalue=0)
+    
+    def __init__(self, *args, map=None, **kwargs):
+        if map is not None:
+            w, h = map.size()
+            size = (w*TILE_SIZE, h*TILE_SIZE)
+            kwargs["size"] = size
+        super().__init__(*args, **kwargs)
         self.map = map
+        self.is_focusable = True
         # pre-load all the textures
         self.cache = ImgSourceCache()
-        self.init_rects()
         self._elems = {}  # thing -> MapElement with thing being Actor or ItemCollection
+        if map is not None:
+            self.init_rects()
+            self.refresh_map()
+        
+    def set_map(self, map):
+        w, h = map.size()
+        self.size = (w*TILE_SIZE, h*TILE_SIZE)
+        self.map = map
+        self.init_rects()
         self.refresh_map()
         
     def _update_elem(self, mpos, thing):
@@ -206,21 +220,17 @@ class MapWidget(FocusBehavior, Scatter):
         kcode, kname = key
         if kname in ["right", "left", "up", "down"]:
             if kname == "right":
-                for mpos, actor in self.map.iter_actors():
-                    mx, my = mpos
-                    self.map.move(actor, (mx+1, my))
+                tender.action_map.call("move_or_act_right")
             elif kname == "left":
-                for mpos, actor in self.map.iter_actors():
-                    mx, my = mpos
-                    self.map.move(actor, (mx-1, my))
+                tender.action_map.call("move_or_act_left")
             elif kname == "up":
-                for mpos, actor in self.map.iter_actors():
-                    mx, my = mpos
-                    self.map.move(actor, (mx, my+1))
+                tender.action_map.call("move_or_act_up")
             elif kname == "down":
-                for mpos, actor in self.map.iter_actors():
-                    mx, my = mpos
-                    self.map.move(actor, (mx, my-1))
+                tender.action_map.call("move_or_act_down")
+            tender.hero.set_played()
+            self.turn = tender.hero._last_action
+            self.refresh_map()
+            tender.engine.advance_turn()
             self.refresh_map()
             return True
         else:
@@ -240,16 +250,25 @@ class Controller(FloatLayout):
 
 
 class DemoApp(App):
-    def __init__(self, map, *args):
+    def __init__(self, map, npc_callback, *args):
         super(DemoApp, self).__init__(*args)
         self.map = map
+        self.npc_callback = npc_callback
+
+    def set_map(self, map):
+        self.map = map
+        self.map_wid.set_map(map)
         
     def build(self):
         cont = Controller()
-        map_wid = MapWidget(self.map, do_rotation=False)
-        cont.add_widget(map_wid)
-        return cont
+        self.map_wid = MapWidget(map=self.map, do_rotation=False)
 
+        # FIXME: we need a pre-turn and a post-turn callbacks to cover all the various 
+        # initiative values
+        self.map_wid.bind(turn=self.npc_callback)
+        
+        cont.add_widget(self.map_wid)
+        return cont
 
 from .governor import Condenser
 def main():
@@ -277,5 +296,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
-    
+    main()    

@@ -715,7 +715,7 @@ class Builder:
         if isinstance(width, (tuple, list)):
             width = rng.rint(width)
         if isinstance(height, (tuple, list)):
-            height= rng.rint(height)
+            height = rng.rint(height)
         mw, mh = self.map.size()
         
         for i in range(nb_retry+1):
@@ -737,7 +737,7 @@ class Builder:
         return False
         
     def room(self, corner1, corner2, doors_target=None, walls=False):
-        if doors_target == None:
+        if doors_target is None:
             doors_target = rng.rint(self.doors_range)
         room = RoomPlan(self.map, corner1, corner2, doors_target, walls)
         self._rooms.append(room)

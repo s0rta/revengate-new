@@ -16,6 +16,8 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 import click
+from pprint import pprint
+from warnings import warn
 
 from .tags import Tag
 from .dialogue import Action
@@ -44,6 +46,46 @@ class UI:
     both terminal and graphical interfaces.
     """
 
+    def quit(self):
+        # FIXME: there has to be a better way!
+        raise Quitting("Giving up!")
+
+    def show_dia(self, dia):
+        raise NotImplementedError()
+    
+    def prompt(self, *options):
+        raise NotImplementedError()
+
+    def show_text(self, text):
+        raise NotImplementedError()
+
+    def show_turn_events(self, events):
+        raise NotImplementedError()
+
+
+class KivyUI(UI):
+    def __init__(self, *args, **kwargs):
+        # TODO: store the app or the root widget
+        super().__init__(*args, **kwargs)
+
+    def show_dia(self, dia):
+        warn("Not fully implemented")
+        pprint(dia)
+
+    def prompt(self, *options):
+        warn("Not fully implemented")
+        pprint(options)
+        choice = input("Make a choice: ")
+        return choice
+
+    def show_text(self, text):
+        warn("Not fully implemented")
+        print(text)
+
+    def show_turn_events(self, events):
+        warn("Not fully implemented")
+        print(events)
+
 
 class TextUI(UI):
     def __init__(self, *args, **kwargs):
@@ -58,9 +100,6 @@ class TextUI(UI):
                             RIGHT: "move_or_act_right",
                             LEFT: "move_or_act_left"}
     
-    def quit(self):
-        # FIXME: there has to be a better way!
-        raise Quitting("Giving up!")
     
     def show_help(self):
         print(TEXT_HELP)
@@ -113,3 +152,5 @@ class TextUI(UI):
     def show_text(self, text):
         print(text)
 
+    def show_turn_events(self, events):
+        print(events)
