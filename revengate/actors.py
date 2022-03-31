@@ -80,6 +80,14 @@ class Actor(object):
         if self._last_action is None:
             return False
         return self._last_action >= tender.engine.current_turn
+
+    @property
+    def last_action(self):
+        """ Return the last turn when Actor made an action. 
+        
+        This property is read-only. 
+        """
+        return self._last_action
         
     def set_played(self):
         self._last_action = tender.engine.current_turn

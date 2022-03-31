@@ -18,6 +18,12 @@
 """ Events keep track of everything that change.  This allows the game to  if Events 
 display or animate the changes. """
 
+
+def is_action(event):
+    """ Return whether event (or Events) counts as a turn action. """
+    return isinstance(event, (Events, StatusEvent)) and bool(event)
+
+
 class StatusEvent:
     """ Something that changes the status of an actor. 
     

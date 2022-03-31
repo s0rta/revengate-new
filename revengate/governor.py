@@ -31,7 +31,7 @@ from .ui import TextUI, Quitting, KivyUI
 from .action_map import ActionMap
 from .maps import Map, Builder, Connector
 from .area import Area
-from .events import StatusEvent, Events
+from .events import is_action
 
 CONFIG_DIR = "~/.config/revengate"
 CORE_FILE = "core.toml"
@@ -183,10 +183,9 @@ class Governor:
         while not tender.hero.has_played:
             print(tender.engine.map.to_text())
             move = tender.ui.read_next_move()
-            if isinstance(move, (StatusEvent, Events)):
-                if move:
-                    tender.ui.show_turn_events(move)
-                    tender.hero.set_played()
+            if is_action(move):
+                tender.ui.show_turn_events(move)
+                tender.hero.set_played()
         
     def play(self):
         """ Main game loop. 

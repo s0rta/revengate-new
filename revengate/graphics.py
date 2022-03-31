@@ -39,6 +39,7 @@ from kivy.animation import Animation
 
 from .maps import TileType, Map, Builder, Connector
 from .loader import DATA_DIR, data_file, TopLevelLoader
+from .events import is_action
 from . import tender
 
 # TileType -> path
@@ -120,7 +121,8 @@ class MapWidget(FocusBehavior, Scatter):
     Both systems have (0, 0) at the bottom-left corner.
     """
     
-    turn = NumericProperty(defaultvalue=0)
+    engine_turn = NumericProperty(defaultvalue=0)  # turn currently being played
+    hero_turn = NumericProperty(defaultvalue=0)  # last turn the hero did an action
     
     def __init__(self, *args, map=None, **kwargs):
         if map is not None:
@@ -217,21 +219,24 @@ class MapWidget(FocusBehavior, Scatter):
         self.focus = True
     
     def keyboard_on_key_down(self, window, key, text, modifiers):
+        res = None
         kcode, kname = key
         if kname in ["right", "left", "up", "down"]:
             if kname == "right":
-                tender.action_map.call("move_or_act_right")
+                res = tender.action_map.call("move_or_act_right")
             elif kname == "left":
-                tender.action_map.call("move_or_act_left")
+                res = tender.action_map.call("move_or_act_left")
             elif kname == "up":
-                tender.action_map.call("move_or_act_up")
+                res = tender.action_map.call("move_or_act_up")
             elif kname == "down":
-                tender.action_map.call("move_or_act_down")
-            tender.hero.set_played()
-            self.turn = tender.hero._last_action
-            self.refresh_map()
-            tender.engine.advance_turn()
-            self.refresh_map()
+                res = tender.action_map.call("move_or_act_down")
+            if is_action(res):
+                tender.hero.set_played()
+                self.hero_turn = tender.hero.last_action
+                self.refresh_map()
+                tender.engine.advance_turn()
+                self.engine_turn = tender.engine.current_turn
+                self.refresh_map()
             return True
         else:
             return super().keyboard_on_key_down(window, key, text, modifiers)
@@ -263,9 +268,8 @@ class DemoApp(App):
         cont = Controller()
         self.map_wid = MapWidget(map=self.map, do_rotation=False)
 
-        # FIXME: we need a pre-turn and a post-turn callbacks to cover all the various 
-        # initiative values
-        self.map_wid.bind(turn=self.npc_callback)
+        self.map_wid.bind(engine_turn=self.npc_callback)
+        self.map_wid.bind(hero_turn=self.npc_callback)
         
         cont.add_widget(self.map_wid)
         return cont
