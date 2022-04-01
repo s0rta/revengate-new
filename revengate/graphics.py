@@ -138,8 +138,18 @@ class MapWidget(FocusBehavior, Scatter):
         if map is not None:
             self.init_rects()
             self.refresh_map()
+            
+    def _clear_elem(self, thing):
+        elem = self._elems.pop(thing)
+        elem.opacity = 0
+        self.remove_widget(elem)
+        
+    def _clear_elems(self):
+        for thing in list(self._elems.keys()):
+            self._clear_elem(thing)
         
     def set_map(self, map):
+        self._clear_elems()
         w, h = map.size()
         self.size = (w*TILE_SIZE, h*TILE_SIZE)
         self.map = map
@@ -189,8 +199,11 @@ class MapWidget(FocusBehavior, Scatter):
         cx, cy = pos
         return (cx//TILE_SIZE, cy//TILE_SIZE)
 
-    def refresh_map(self):
+    def refresh_map(self, *args):
         """ Refresh the display of the map with actors and items. """
+        if tender.engine.map is not self.map:
+            self.set_map(tender.engine.map)
+        
         # TODO refresh all the ground tiles
         seen = set()
                     
@@ -211,32 +224,30 @@ class MapWidget(FocusBehavior, Scatter):
                     anim.start(self._elems[stack])
         gone = set(self._elems.keys()) - seen
         for thing in gone:
-            elem = self._elems.pop(thing)
-            elem.opacity = 0
-            self.remove_widget(elem)
+            self._clear_elem(thing)
 
     def on_parent(self, widget, parent):
         self.focus = True
     
     def keyboard_on_key_down(self, window, key, text, modifiers):
+        key_map = {"right": "move_or_act_right", 
+                   "left": "move_or_act_left", 
+                   "up": "move_or_act_up", 
+                   "down": "move_or_act_down", 
+                   "f": "follow-stairs",
+                   "p": "pickup_item",
+                   }
+
         res = None
         kcode, kname = key
-        if kname in ["right", "left", "up", "down"]:
-            if kname == "right":
-                res = tender.action_map.call("move_or_act_right")
-            elif kname == "left":
-                res = tender.action_map.call("move_or_act_left")
-            elif kname == "up":
-                res = tender.action_map.call("move_or_act_up")
-            elif kname == "down":
-                res = tender.action_map.call("move_or_act_down")
+        if kname in key_map:
+            funct = tender.action_map[key_map[kname]]
+            res = funct()
             if is_action(res):
                 tender.hero.set_played()
                 self.hero_turn = tender.hero.last_action
-                self.refresh_map()
                 tender.engine.advance_turn()
                 self.engine_turn = tender.engine.current_turn
-                self.refresh_map()
             return True
         else:
             return super().keyboard_on_key_down(window, key, text, modifiers)
@@ -269,7 +280,9 @@ class DemoApp(App):
         self.map_wid = MapWidget(map=self.map, do_rotation=False)
 
         self.map_wid.bind(engine_turn=self.npc_callback)
+        self.map_wid.bind(engine_turn=self.map_wid.refresh_map)
         self.map_wid.bind(hero_turn=self.npc_callback)
+        self.map_wid.bind(hero_turn=self.map_wid.refresh_map)
         
         cont.add_widget(self.map_wid)
         return cont

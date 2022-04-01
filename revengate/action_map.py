@@ -65,7 +65,12 @@ class ActionMap:
             funct = functools.partial(funct, **kwargs)
         return funct
 
-    def call(self, action, *args):
+    def __getitem__(self, action):
+        """ Retrun a callable for given action.
+        Globals are partially applied to the callable. 
+        
+        `action` can be an ActionTag or a string.
+        """
         if isinstance(action, Tag):
             action = action.name
         if action in self._actions:
@@ -75,7 +80,10 @@ class ActionMap:
         else:
             raise ValueError(f"Action {action} is not registered or defined "
                              "as a class method.")
-        funct = self._apply_global_args(funct)
+        return self._apply_global_args(funct)
+
+    def call(self, action, *args):
+        funct = self[action]
         return funct(*args)
 
     def prompt(self, *options):

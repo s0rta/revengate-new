@@ -79,6 +79,14 @@ class Move(StatusEvent):
     def __str__(self):
         return f"{self.target} moved from {self.old_pos} to {self.new_pos}."
 
+class StairsEvent(StatusEvent):
+    """ The actor moved. """
+    def __init__(self, target, from_pos):
+        super().__init__(target)
+        self.from_pos = from_pos
+        
+    def __str__(self):
+        return f"{self.target} followed stairs at {self.from_pos}."
 
 class Death(StatusEvent):
     """ The actor died. """

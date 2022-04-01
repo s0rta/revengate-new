@@ -31,7 +31,7 @@ from .ui import TextUI, Quitting, KivyUI
 from .action_map import ActionMap
 from .maps import Map, Builder, Connector
 from .area import Area
-from .events import is_action
+from .events import is_action, StairsEvent
 
 CONFIG_DIR = "~/.config/revengate"
 CORE_FILE = "core.toml"
@@ -242,12 +242,9 @@ class Governor:
             tender.engine.change_map(map)
             map.place(tender.hero, next_pos)
 
-            # TODO: return a Move event instead
-            tender.hero.set_played()
-            return True
-
+            return StairsEvent(tender.hero, from_pos)
         else:
-            print(f"there are no stairs at {pos}")
+            print(f"there are no stairs at {from_pos}")
             return None
         
         
