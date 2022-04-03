@@ -14,6 +14,7 @@ PySnooper = "*"
 buildozer = "*"
 ipdb = "*"
 flit = "*"
+invoke = "*"
 
 [requires]
 python_version = "3.9"
