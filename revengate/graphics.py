@@ -40,6 +40,7 @@ from kivy.animation import Animation
 from .maps import TileType, Map, Builder, Connector
 from .loader import DATA_DIR, data_file, TopLevelLoader
 from .events import is_action
+from .utils import Array
 from . import tender
 
 # TileType -> path
@@ -51,6 +52,7 @@ TILE_IMG = {TileType.SOLID_ROCK: "dungeon/floor/lair_1_new.png",
 # tile.char -> path
 CONNECTOR_IMG = {"<": "dungeon/gateways/stone_stairs_up.png", 
                  ">": "dungeon/gateways/stone_stairs_down.png"}
+EMPTY_IMG = "dungeon/black.png"
 TILE_SIZE = 32
 
 
@@ -62,7 +64,7 @@ class ImgSourceCache:
     def texture_key(self, thing):
         if isinstance(thing, Connector):
             return (Connector, thing.char)
-        elif thing in TileType:
+        elif thing is None or thing in TileType:
             return thing
         else: 
             raise TypeError(f"Unsupported type for texture conversion {type(thing)}")
@@ -77,6 +79,8 @@ class ImgSourceCache:
         key = self.texture_key(thing)
         if isinstance(thing, Connector):
             path = CONNECTOR_IMG[thing.char]
+        elif thing is None:
+            path = EMPTY_IMG
         elif thing in TILE_IMG:
             path = TILE_IMG[thing]
         else:
@@ -121,8 +125,8 @@ class MapWidget(FocusBehavior, Scatter):
     Both systems have (0, 0) at the bottom-left corner.
     """
     
-    engine_turn = NumericProperty(defaultvalue=0)  # turn currently being played
-    hero_turn = NumericProperty(defaultvalue=0)  # last turn the hero did an action
+    engine_turn = NumericProperty(defaultvalue=None)  # turn currently being played
+    hero_turn = NumericProperty(defaultvalue=None)  # last turn the hero did an action
     
     def __init__(self, *args, map=None, **kwargs):
         if map is not None:
@@ -135,6 +139,7 @@ class MapWidget(FocusBehavior, Scatter):
         # pre-load all the textures
         self.cache = ImgSourceCache()
         self._elems = {}  # thing -> MapElement with thing being Actor or ItemCollection
+        self.rects = []
         if map is not None:
             self.init_rects()
             self.refresh_map()
@@ -170,20 +175,32 @@ class MapWidget(FocusBehavior, Scatter):
             self.add_widget(elem)
 
     def init_rects(self, *args):
-        self.rects = []
+        # we do our best to recycle the old rectangles
+        if self.rects:
+            for rect in self.rects:
+                rect.source = self.cache.img_source(None)
+            old_rects = self.rects
+        else:
+            old_rects = None
+            
         w, h = self.map.size()
+        self.rects = Array(w, h)
 
         with self.canvas:
             for mx in range(w):
-                row = []
                 for my in range(h):
                     pos = self.map_to_canvas((mx, my))
                     source = self.cache.img_source(self.map[mx, my])
-                    r = Rectangle(pos=pos, 
-                              size=(TILE_SIZE, TILE_SIZE), 
-                              source=source)
-                    row.append(r)
-                self.rects.append(row)
+                    # TODO: reuse and old rect if possible
+                    if old_rects:
+                        r = old_rects.pop()
+                        r.pos = pos
+                        r.source = source
+                    else:
+                        r = Rectangle(pos=pos, 
+                                      size=(TILE_SIZE, TILE_SIZE), 
+                                      source=source)
+                    self.rects[mx, my] = r
 
     def map_to_canvas(self, pos):
         """ Convert an (x, y) tile reference to a pixel position on the canvas.

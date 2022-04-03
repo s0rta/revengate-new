@@ -30,6 +30,7 @@ from . import tender
 from .randutils import rng
 from .actors import Actor
 from .items import Item, ItemCollection
+from .utils import Array
 
 # Only Square tiles are implemented, but being able to switch between Square 
 # and Hex would be great.  Hex math is well explained here:
@@ -61,11 +62,7 @@ TEXT_TILE = {TileType.SOLID_ROCK: '▓',
 WALKABLE = [TileType.FLOOR, TileType.DOORWAY_OPEN]
 SEE_THROUGH = [TileType.FLOOR, TileType.DOORWAY_OPEN]
 WALLS = [TileType.WALL, TileType.WALL_H, TileType.WALL_V]
-
-
-def array(width, height, fill=None):
-    return [[fill] * height for i in range(width)]
-
+         
 
 class Connector:
     """ A tile that connects to another map or another area. """
@@ -602,7 +599,7 @@ class Map:
         # Convert to text
         #  not using iter_tiles() because we let actors and items take precedence
         w, h = self.size()
-        cols = array(w, h, None)
+        cols = Array(w, h, None)
         for x, y in self.iter_coords():
             cols[x][y] = self.char_at((x, y))
             
@@ -611,7 +608,7 @@ class Map:
             cols[x][y] = char
 
         if axes:
-            mat = array(w+2, h+2, " ")
+            mat = Array(w+2, h+2, " ")
 
             for i in range(w):
                 for j in range(h):
@@ -699,12 +696,12 @@ class Builder:
         """ Add a random room to the map, return it's bottom-left and top-right 
         corners or False if the room can't be generated.
         
-        If width or height are tupples, they are taken to represent the range of 
+        If width or height are tuples, they are taken to represent the range of 
         acceptable random dimensions, otherwise, they are to be integers 
         representing exact dimensions. 
         
         The new room is tested for intersection with existing rooms. If there 
-        is a clash, nb_retry attemps are done.
+        is a clash, nb_retry attempts are done.
         """
         def any_intersect(rect):
             for r in self._rooms:
@@ -728,7 +725,7 @@ class Builder:
         return False
                 
     def init(self, width, height, fill=TileType.SOLID_ROCK):
-        self.map.tiles = array(width, height, fill)
+        self.map.tiles = Array(width, height, fill)
         
     def is_frozen(self, pos):
         for m in self.mazes:
