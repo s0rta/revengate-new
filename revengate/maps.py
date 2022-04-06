@@ -96,7 +96,7 @@ class Map:
         super().__init__()
         self.id = str(uuid4())
         self.name = name
-        self.tiles = []
+        self.tiles = None
         self.overlays = []
         self._a_to_pos = {}  # actor to position mapping
         self._pos_to_a = {}  # position to actor mapping
@@ -147,6 +147,9 @@ class Map:
         else:
             hero_pos = None
 
+        if "tiles" in state and not isinstance(state["tiles"], Array):
+            state["tiles"] = Array.from_list(state["tiles"])
+
         self.__dict__.update(state)
         
         if hero_pos:
@@ -162,12 +165,10 @@ class Map:
 
     def size(self):
         """ Return a (width, height) tuple. """
-        w = len(self.tiles)
-        if w > 0:
-            h = len(self.tiles[0])
+        if self.tiles:
+            return self.tiles.size()
         else:
-            h = 0
-        return w, h
+            return (0, 0)
 
     def is_in_map(self, pos):
         """ Return true if the position is inside the map. """
@@ -599,20 +600,20 @@ class Map:
         # Convert to text
         #  not using iter_tiles() because we let actors and items take precedence
         w, h = self.size()
-        cols = Array(w, h, None)
+        chars = Array(w, h, None)
         for x, y in self.iter_coords():
-            cols[x][y] = self.char_at((x, y))
+            chars[x][y] = self.char_at((x, y))
             
         # overlay extra layers
         for (x, y), char in self.iter_overlays_text():
-            cols[x][y] = char
+            chars[x][y] = char
 
         if axes:
             mat = Array(w+2, h+2, " ")
 
             for i in range(w):
                 for j in range(h):
-                    mat[i+1][j+1] = cols[i][j]
+                    mat[i+1][j+1] = chars[i][j]
                 if i % 5 == 0 and i % 10:
                     mat[i+1][0] = '|'
                     mat[i+1][-1] = '|'
@@ -628,12 +629,13 @@ class Map:
                     c = f"{j//10 % 10}"
                     mat[0][j+1] = c
                     mat[-1][j+1] = c
-            cols = mat
+            chars = mat
 
-        # transpose and stringify
+        # stringify
         lines = []
-        for l in zip(*cols):
-            lines.append("".join(l))
+        for row in chars.iter_rows():
+            lines.append("".join(row))
+        # move the origin to bottom left
         return "\n".join(reversed(lines))
 
 

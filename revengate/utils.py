@@ -20,6 +20,16 @@ class Array:
     """ A 2-dimensional array. 
     
     Data in each cell can be heterogeneous. """
+
+    @classmethod
+    def from_list(cls, lst):
+        width = len(lst)
+        height = len(lst[0])
+        arr = cls(width, height)
+        for x in range(width):
+            for y in range(height):
+                arr[x, y] = lst[x][y]
+        return arr
     
     def __init__(self, width, height, fill=None):
         self.width = width
@@ -58,3 +68,17 @@ class Array:
         if not self.cells[-1]:
             self.cells.pop()
         return elem
+
+    def size(self):
+        return (self.width, self.height)
+
+    def transpose(self):
+        """ Swap columns and rows in places. """
+        self.width, self.height = self.height, self.width
+        self.cells = list(map(list, zip(*self.cells)))
+
+    def iter_rows(self):
+        return map(list, zip(*self.cells))
+
+    def iter_cols(self):
+        return iter(self.cells)

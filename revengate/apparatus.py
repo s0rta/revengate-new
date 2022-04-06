@@ -18,9 +18,11 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 
+import os
 import sys
 from argparse import ArgumentParser
 
+os.environ["KIVY_NO_ARGS"] = "1"
 from . import __version__, __doc__
 from .governor import Governor
 
@@ -42,3 +44,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    

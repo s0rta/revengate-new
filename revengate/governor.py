@@ -36,6 +36,7 @@ from .events import is_action, StairsEvent
 CONFIG_DIR = "~/.config/revengate"
 CORE_FILE = "core.toml"
 
+
 class Condenser:
     """ Save and reload game objects """
 
@@ -91,6 +92,7 @@ class Governor:
         
         tender.action_map = ActionMap()
         tender.action_map.register(self.follow_stairs, "follow-stairs")
+        tender.action_map.register(self.new_hero_response)
         
         if graphical:
             tender.ui = KivyUI()
@@ -123,7 +125,7 @@ class Governor:
 
         # stairs
         if lvl < 5:
-            # we after 5 levels, we can't go down anymore
+            # after 5 levels, we can't go down anymore
             builder.staircase()
         if parent_map:
             builder.staircase(None, "<", from_pos, parent_map)
@@ -137,8 +139,9 @@ class Governor:
 
     def start(self):
         """ Start a game. """
-        if tender.hero is None:
+        if tender.hero is None and not self.graphical:
             self.create_hero()
+        has_hero = tender.hero is not None
         
         # pre-game naration
         dia = tender.loader.get_instance("intro")
@@ -148,12 +151,14 @@ class Governor:
             pen = tender.loader.invoke("pen")
             map = self.make_map(2, pen)
             tender.engine.change_map(map)
-            map.place(tender.hero)
+            if has_hero:
+                map.place(tender.hero)
 
         try:
             if self.graphical:
+                # root is None until app.build() is called, which we have no control on
                 from .graphics import DemoApp
-                app = DemoApp(tender.engine.map, self.npc_turn)
+                app = DemoApp(has_hero, tender.engine.map, self.npc_turn)
                 app.run()
             else:
                 self.play()
@@ -215,15 +220,21 @@ class Governor:
     
     def create_hero(self):
         """ Prompt the user on what their character should be like. """
+        self.new_hero_text_prompt(self.new_hero_response)
+
+    def new_hero_text_prompt(self, resp_funct):
         print("Character creation is really easy since all the stats are "
               "either random or abitrary. However, you get to chose the "
               "name of your character.")
-        # FIXME: use the UI to do the prompting
+        # FIXME: use the UI instance to do the prompting
         name = input("Name: ")
+        resp_funct(name)
+        
+    def new_hero_response(self, hero_name):
         tender.hero = tender.loader.invoke("novice")
-        tender.hero.name = name
+        tender.hero.name = hero_name
         self.condenser.save("hero", tender.hero)
-
+        
     def follow_stairs(self):
         from_pos = tender.engine.map.find(tender.hero)
         tile = tender.engine.map[from_pos]

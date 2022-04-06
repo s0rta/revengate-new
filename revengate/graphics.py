@@ -21,7 +21,8 @@ import os
 from pprint import pprint
 
 import kivy
-from kivy.app import App
+from kivymd.app import MDApp
+# from kivy.app import App
 from kivy.core.window import Window
 from kivy.core.text import Label as CoreLabel
 from kivy.graphics.texture import Texture
@@ -29,13 +30,18 @@ from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.image import Image
-from kivy.properties import NumericProperty
+from kivy.uix.textinput import TextInput
+from kivy.properties import (NumericProperty, StringProperty, ObjectProperty,            
+                             BooleanProperty)
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scatter import Scatter
 from kivy.graphics import Color, Rectangle
 from kivy.uix.behaviors.focus import FocusBehavior
 from kivy import resources
 from kivy.animation import Animation
+from kivy.uix.boxlayout import BoxLayout
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.dialog import MDDialog
 
 from .maps import TileType, Map, Builder, Connector
 from .loader import DATA_DIR, data_file, TopLevelLoader
@@ -111,7 +117,7 @@ class MapElement(Label):
         text = kwargs.pop("text")
         size = (TILE_SIZE, TILE_SIZE)
         super().__init__(*args, text=text, 
-                         font_size="28sp", size=size, bold=True, 
+                         font_size="28px", size=size, bold=True, 
                          font_name=best_font(text), 
                          **kwargs)
         
@@ -127,6 +133,7 @@ class MapWidget(FocusBehavior, Scatter):
     
     engine_turn = NumericProperty(defaultvalue=None)  # turn currently being played
     hero_turn = NumericProperty(defaultvalue=None)  # last turn the hero did an action
+    app = ObjectProperty(None)
     
     def __init__(self, *args, map=None, **kwargs):
         if map is not None:
@@ -257,6 +264,10 @@ class MapWidget(FocusBehavior, Scatter):
 
         res = None
         kcode, kname = key
+        if kname == "d":
+            self.app.show_hero_name_dia()
+            return True
+
         if kname in key_map:
             funct = tender.action_map[key_map[kname]]
             res = funct()
@@ -273,20 +284,88 @@ class MapWidget(FocusBehavior, Scatter):
 class Controller(FloatLayout):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.bind(on_key_down=self.on_key_down)
 
-    def on_parent(self, widget, parent):
-        self.focus = True
+class RevDialog(MDDialog):
+    app = ObjectProperty(None)
+
     
-    def on_key_down(self, key, **kwargs):
-        print(f"key_down: {key} {kwargs!r}")
+    def __init__(self, response_funct, content_cls, *args, **kwargs):
+        self.response_funct = response_funct
+        self.cancel_btn = MDFlatButton(text="CANCEL", on_release=self.dismiss)
+        self.ok_btn = MDFlatButton(text="OK", 
+                                   on_release=self.try_accept, 
+                                   disabled=True)
+        super().__init__(content_cls=content_cls, 
+                         buttons=[self.cancel_btn, self.ok_btn])
+
+    def form_values(self):
+        """ Return the values contained in the form as a dictionnary. 
+        
+        Form fields must have a `data_name` attribute to be captired; `data_name` is 
+        used as the key in the returned dictionnary. 
+        """
+        values = {}
+        for wid in self.walk(restrict=True):
+            if isinstance(wid, TextInput):
+                if hasattr(wid, "data_name"):
+                    values[wid.data_name] = wid.text
+        return values
+        
+    def accept(self, *args, **kwargs):
+        """ Dimiss the popup and consume the supplied data. """
+        if self.response_funct:
+            self.response_funct(**self.form_values())
+        self.dismiss()
+
+    def try_accept(self, *args, **kwargs):
+        """ Accept the form if data is valid, refuse with visual feedback otherwise. 
+        """
+        if self.is_valid():
+            self.accept()
+
+    def is_valid(self, *args, **kwargs): 
+        """ See if the supplied data is ready for consumption. """
+        raise NotImplementedError()
+    
+    def validate(self, *args, **kwargs):
+        """ See if the data is ready for consumption and adjust the UI to reflect that. 
+        
+        Subclasses are encouraged to overload this method to provide a richer 
+        experience.
+        """
+        self.ok_btn.disabled = not self.is_valid()
 
 
-class DemoApp(App):
-    def __init__(self, map, npc_callback, *args):
+class HeroNameDialog(RevDialog):
+    def __init__(self, response_funct, *args, **kwargs):
+        cont = HeroNameDialogContent()
+        cont.ids.hero_name_field.bind(text=self.validate,
+                                      on_text_validate=self.try_accept)
+        super().__init__(response_funct, content_cls=cont)
+
+    def is_valid(self, *args, **kwargs): 
+        return bool(self.form_values()["hero_name"])
+
+
+class HeroNameDialogContent(BoxLayout):
+    pass
+
+
+class DemoApp(MDApp):
+    has_hero = BooleanProperty(False)
+    hero_name = StringProperty(None)
+    hero_name_dia = ObjectProperty(None)
+    
+    def __init__(self, has_hero, map, npc_callback, *args):
         super(DemoApp, self).__init__(*args)
+        self.has_hero = has_hero
         self.map = map
         self.npc_callback = npc_callback
+
+    def show_hero_name_dia(self):
+        if not self.hero_name_dia:
+            self.hero_name_dia = HeroNameDialog(tender.action_map["new_hero_response"])
+        self.hero_name_dia.open()
 
     def set_map(self, map):
         self.map = map
@@ -295,13 +374,16 @@ class DemoApp(App):
     def build(self):
         cont = Controller()
         self.map_wid = MapWidget(map=self.map, do_rotation=False)
+        cont.add_widget(self.map_wid)
 
         self.map_wid.bind(engine_turn=self.npc_callback)
         self.map_wid.bind(engine_turn=self.map_wid.refresh_map)
         self.map_wid.bind(hero_turn=self.npc_callback)
         self.map_wid.bind(hero_turn=self.map_wid.refresh_map)
+
+        if not self.has_hero: 
+            self.show_hero_name_dia()
         
-        cont.add_widget(self.map_wid)
         return cont
 
 from .governor import Condenser

@@ -22,7 +22,14 @@ https://buildozer.readthedocs.io/en/latest/installation.html#targeting-android
 * action and ftag: a string referencing a registered Python function; must be resolved before it can be called
 * params, not parms
 * hero: the player character, never referrer to as PC
+* dialog: a popup window
+* dialogue: a conversation between actors or a speech by the narrator 
 * when in doubt, name things after steam engine parts or concepts at the core of the industrial revolution
+
+
+## UI paradigms
+* prompt: a function to all for a user response. It can be a direct question or just a change to the environment that invites for some user input that may never come
+* response: the callback function to a prompt. The callback might be registered for a single call or for every occurences of the target user input.
 
 
 ## Code structure
