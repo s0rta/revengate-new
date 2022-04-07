@@ -47,6 +47,10 @@ List of Open Gaming Systems:
 Good Public Domain tiles:
 * https://opengameart.org/content/dungeon-crawl-32x32-tiles
 
+Material Design Icons:
+* most of those are included in KivyMD
+* https://materialdesignicons.com/
+
 Azgaar's Fantasy Map Generator
 * https://azgaar.github.io/Fantasy-Map-Generator
 

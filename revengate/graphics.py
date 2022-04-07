@@ -22,7 +22,6 @@ from pprint import pprint
 
 import kivy
 from kivymd.app import MDApp
-# from kivy.app import App
 from kivy.core.window import Window
 from kivy.core.text import Label as CoreLabel
 from kivy.graphics.texture import Texture
@@ -42,6 +41,7 @@ from kivy.animation import Animation
 from kivy.uix.boxlayout import BoxLayout
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
+from kivy.uix.screenmanager import ScreenManager, WipeTransition
 
 from .maps import TileType, Map, Builder, Connector
 from .loader import DATA_DIR, data_file, TopLevelLoader
@@ -177,9 +177,10 @@ class MapWidget(FocusBehavior, Scatter):
                 anim = Animation(pos=cpos, duration=0.2, t="in_out_sine")
                 anim.start(elem)
         else:
-            elem = MapElement(text=thing.char, pos=cpos)
-            self._elems[thing] = elem
-            self.add_widget(elem)
+            with self.canvas:
+                elem = MapElement(text=thing.char, pos=cpos)
+                self._elems[thing] = elem
+                self.add_widget(elem)
 
     def init_rects(self, *args):
         # we do our best to recycle the old rectangles
@@ -351,6 +352,10 @@ class HeroNameDialogContent(BoxLayout):
     pass
 
 
+class RevScreenManager(ScreenManager):
+    map_wid = ObjectProperty(None)
+
+
 class DemoApp(MDApp):
     has_hero = BooleanProperty(False)
     hero_name = StringProperty(None)
@@ -362,29 +367,51 @@ class DemoApp(MDApp):
         self.map = map
         self.npc_callback = npc_callback
 
+    def init_new_game(self, hero_name):
+        tender.action_map["new-game-response"](hero_name)
+        self.map_wid.set_map(tender.engine.map)
+        self.root.current = "mapscreen"
+        
     def show_hero_name_dia(self):
         if not self.hero_name_dia:
-            self.hero_name_dia = HeroNameDialog(tender.action_map["new_hero_response"])
+            self.hero_name_dia = HeroNameDialog(self.init_new_game)
         self.hero_name_dia.open()
 
     def set_map(self, map):
         self.map = map
         self.map_wid.set_map(map)
         
-    def build(self):
-        cont = Controller()
-        self.map_wid = MapWidget(map=self.map, do_rotation=False)
-        cont.add_widget(self.map_wid)
+    def show_map_screen(self, *args):
+        self.map_wid.set_map(tender.engine.map)
+        self.root.current = "mapscreen"
 
+    def show_main_screen(self, *args):
+        if tender.hero and tender.hero.is_alive:
+            tender.action_map["save-game"]
+        self.root.current = "mainscreen"
+    
+    def stop(self):
+        if tender.hero and tender.hero.is_alive:
+            tender.action_map["save-game"]        
+        super().stop()
+        
+    def build(self):
+        super().build()
+        self.root.transition = WipeTransition()
+        self.theme_cls.theme_style = "Dark"
+        self.theme_cls.material_style = "M3"
+        self.theme_cls.primary_palette = "Amber"
+        self.theme_cls.accent_palette = "Brown"
+
+        self.map_wid = self.root.map_wid
         self.map_wid.bind(engine_turn=self.npc_callback)
         self.map_wid.bind(engine_turn=self.map_wid.refresh_map)
         self.map_wid.bind(hero_turn=self.npc_callback)
         self.map_wid.bind(hero_turn=self.map_wid.refresh_map)
 
-        if not self.has_hero: 
-            self.show_hero_name_dia()
+        # TODO: disable "resume" button unless there is a saved game
         
-        return cont
+        return self.root
 
 from .governor import Condenser
 def main():

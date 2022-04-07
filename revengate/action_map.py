@@ -47,7 +47,7 @@ class ActionMap:
             if not hasattr(funct, "__name__") or "lambda" in funct.__name__:
                 raise ValueError("Can't register function: name not provided "
                                  "and funct is not a named function.")
-            name = funct.__name__
+            name = funct.__name__.replace("_", "-")
         self._actions[name] = funct
         
     def _apply_global_args(self, funct):

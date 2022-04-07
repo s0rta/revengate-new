@@ -91,8 +91,12 @@ class Governor:
             tender.engine = Engine()
         
         tender.action_map = ActionMap()
-        tender.action_map.register(self.follow_stairs, "follow-stairs")
+        tender.action_map.register(self.follow_stairs)
         tender.action_map.register(self.new_hero_response)
+        tender.action_map.register(self.new_game_response)
+        tender.action_map.register(self.npc_turn)
+        tender.action_map.register(self.save_game)
+        tender.action_map.register(self.del_game)
         
         if graphical:
             tender.ui = KivyUI()
@@ -137,6 +141,14 @@ class Governor:
         self.dungeon.add_map(map, parent_map)
         return map
 
+    def make_first_map(self):
+        pen = tender.loader.invoke("pen")
+        map = self.make_map(2, pen)
+        tender.engine.change_map(map)
+        if tender.hero:
+            map.place(tender.hero)
+        return map
+
     def start(self):
         """ Start a game. """
         if tender.hero is None and not self.graphical:
@@ -148,11 +160,7 @@ class Governor:
         tender.ui.show_dia(dia)
 
         if tender.engine.map is None:
-            pen = tender.loader.invoke("pen")
-            map = self.make_map(2, pen)
-            tender.engine.change_map(map)
-            if has_hero:
-                map.place(tender.hero)
+            self.make_first_map()
 
         try:
             if self.graphical:
@@ -234,6 +242,11 @@ class Governor:
         tender.hero = tender.loader.invoke("novice")
         tender.hero.name = hero_name
         self.condenser.save("hero", tender.hero)
+
+    def new_game_response(self, hero_name):
+        self.del_game()
+        self.new_hero_response(hero_name)
+        self.make_first_map()
         
     def follow_stairs(self):
         from_pos = tender.engine.map.find(tender.hero)
