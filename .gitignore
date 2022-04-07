@@ -7,3 +7,5 @@ core
 .randstate.json
 .envrc
 dist
+bin
+.buildozer

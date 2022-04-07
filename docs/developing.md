@@ -6,7 +6,7 @@ Most of the pure Python dependencies are specified in Pipfile. This command shou
 `pipenv install --dev`
 
 There are many non-Python dependencies, almost all for the Android backend. On Ubuntu 21.10, this works to get you up to speed:
-`sudo apt install -y build-essentials java-common default-jre default-jdk and libjffi-java google-android-build-tools-24-installer android-sdk-build-tools android-sdk-platform-tools android-sdk-platform-23 android-sdk libltdl7-dev`
+`sudo apt install -y build-essentials cmake java-common default-jre default-jdk and libjffi-java google-android-build-tools-24-installer android-sdk-build-tools android-sdk-platform-tools android-sdk-platform-23 android-sdk libltdl7-dev lld`
 
 It's probably possible to simplify this list, but the errors you get come very late and are rather cryptic. 
 

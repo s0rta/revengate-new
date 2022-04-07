@@ -6,9 +6,10 @@ name = "pypi"
 [packages]
 tomlkit = "*"
 click = "*"
-pillow = "*"
 kivy = ">=2.0.0"
 kivymd = ">=0.104.2"
+pillow = "*"
+buildozer = "*"
 
 [dev-packages]
 PySnooper = "*"

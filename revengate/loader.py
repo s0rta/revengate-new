@@ -109,11 +109,12 @@ class TopLevelLoader:
     def load(self, fp):
         serializer = None
         if fp.name:
+            base, ext = os.path.splitext(fp.name)
             if self.master_file is None:
                 self.master_file = fp.name
-            if fp.name.endswith(".toml"):
+            if ext in (".toml", ".tml"):
                 serializer = tomlkit
-            elif fp.name.endswith(".json"):
+            elif ext == ".json":
                 serializer = json
         return self.loads(fp.read(), serializer)
         

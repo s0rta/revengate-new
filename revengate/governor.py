@@ -33,15 +33,19 @@ from .maps import Map, Builder, Connector
 from .area import Area
 from .events import is_action, StairsEvent
 
-CONFIG_DIR = "~/.config/revengate"
-CORE_FILE = "core.toml"
+CONFIG_ROOT = os.environ.get("XDG_CONFIG_HOME", "~/.config")
+CONFIG_DIR = os.path.join(CONFIG_ROOT, "revengate")
+CORE_FILE = "core.tml"
 
 
 class Condenser:
     """ Save and reload game objects """
 
-    def __init__(self):
-        self.config_dir = os.path.expanduser(CONFIG_DIR)
+    @property
+    def config_dir(self):
+        # we resolve the globals every time to allow different plateforms to update them 
+        # late during the startup
+        return os.path.expanduser(CONFIG_DIR)
 
     def file_path(self, key):
         fname = f"{key}.pickle"
@@ -100,6 +104,11 @@ class Governor:
         
         if graphical:
             tender.ui = KivyUI()
+            # late import to avoid making Kivy a hard requirement
+            from .graphics import DemoApp
+            self.app = DemoApp(None, self.npc_turn)
+            global CONFIG_DIR
+            CONFIG_DIR = self.app.user_data_dir
         else:
             tender.ui = TextUI()
 
@@ -153,7 +162,6 @@ class Governor:
         """ Start a game. """
         if tender.hero is None and not self.graphical:
             self.create_hero()
-        has_hero = tender.hero is not None
         
         # pre-game naration
         dia = tender.loader.get_instance("intro")
@@ -164,10 +172,7 @@ class Governor:
 
         try:
             if self.graphical:
-                # root is None until app.build() is called, which we have no control on
-                from .graphics import DemoApp
-                app = DemoApp(has_hero, tender.engine.map, self.npc_turn)
-                app.run()
+                self.app.run()
             else:
                 self.play()
         except Quitting:

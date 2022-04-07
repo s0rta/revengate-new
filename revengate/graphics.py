@@ -22,6 +22,7 @@ from pprint import pprint
 
 import kivy
 from kivymd.app import MDApp
+from kivy.utils import platform
 from kivy.core.window import Window
 from kivy.core.text import Label as CoreLabel
 from kivy.graphics.texture import Texture
@@ -64,7 +65,6 @@ TILE_SIZE = 32
 
 class ImgSourceCache:
     def __init__(self):
-        resources.resource_add_path(os.path.join(DATA_DIR, "images"))
         self._cache = {}            
 
     def texture_key(self, thing):
@@ -107,9 +107,10 @@ def best_font(text):
     # other non-emoji: Nimbus Roman Sans, Sans Bold, Tex Gyre Bonum
     # other emoji: Noko Color Emoji, Emoji One
     if text.isascii():
-        return "kalimati.ttf"
+        fname = "kalimati.ttf"
     else:
-        return "Symbola_hint.ttf"
+        fname = "Symbola_hint.ttf"
+    return resources.resource_find(fname)
 
 
 class MapElement(Label):
@@ -142,7 +143,7 @@ class MapWidget(FocusBehavior, Scatter):
             kwargs["size"] = size
         super().__init__(*args, **kwargs)
         self.map = map
-        self.is_focusable = True
+        self.is_focusable = platform not in ("ios", "android")
         # pre-load all the textures
         self.cache = ImgSourceCache()
         self._elems = {}  # thing -> MapElement with thing being Actor or ItemCollection
@@ -298,7 +299,7 @@ class RevDialog(MDDialog):
                                    disabled=True)
         super().__init__(content_cls=content_cls, 
                          buttons=[self.cancel_btn, self.ok_btn])
-
+        
     def form_values(self):
         """ Return the values contained in the form as a dictionnary. 
         
@@ -361,11 +362,12 @@ class DemoApp(MDApp):
     hero_name = StringProperty(None)
     hero_name_dia = ObjectProperty(None)
     
-    def __init__(self, has_hero, map, npc_callback, *args):
+    def __init__(self, map, npc_callback, *args):
         super(DemoApp, self).__init__(*args)
-        self.has_hero = has_hero
         self.map = map
         self.npc_callback = npc_callback
+        resources.resource_add_path(os.path.join(DATA_DIR, "images"))
+        resources.resource_add_path(os.path.join(DATA_DIR, "fonts"))
 
     def init_new_game(self, hero_name):
         tender.action_map["new-game-response"](hero_name)
@@ -417,6 +419,7 @@ from .governor import Condenser
 def main():
     kivy.require('2.0.0')
     resources.resource_add_path("revengate/data/images/")
+    resources.resource_add_path("revengate/data/fonts/")
     
     condenser = Condenser()
     builder = condenser.random_builder()
