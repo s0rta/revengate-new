@@ -34,7 +34,7 @@ from kivy.uix.textinput import TextInput
 from kivy.properties import (NumericProperty, StringProperty, ObjectProperty,            
                              BooleanProperty)
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.scatter import Scatter
+from kivy.uix.scatter import Scatter, ScatterPlane
 from kivy.graphics import Color, Rectangle
 from kivy.uix.behaviors.focus import FocusBehavior
 from kivy import resources
@@ -123,7 +123,7 @@ class MapElement(Label):
                          **kwargs)
         
 
-class MapWidget(FocusBehavior, Scatter):
+class MapWidget(FocusBehavior, ScatterPlane):
     """ A widget to display a dungeon with graphical tiles. 
     
     Two coordinate systems are used:
