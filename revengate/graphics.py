@@ -19,6 +19,7 @@
 
 import os
 from pprint import pprint
+from math import sqrt
 
 import kivy
 from kivymd.app import MDApp
@@ -223,7 +224,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
         """ Convert an (x, y) canvas pixel coordinate into a map tile reference. 
         """
         cx, cy = pos
-        return (cx//TILE_SIZE, cy//TILE_SIZE)
+        return (int(cx//TILE_SIZE), int(cy//TILE_SIZE))
 
     def refresh_map(self, *args):
         """ Refresh the display of the map with actors and items. """
@@ -255,6 +256,37 @@ class MapWidget(FocusBehavior, ScatterPlane):
     def on_parent(self, widget, parent):
         self.focus = True
     
+    def drag_dist(self, touch_event):
+        """ Return the scale adjusted magnitude for a touch drag event. """
+        return sqrt(touch_event.dx**2 + touch_event.dy**2) / self.scale
+        
+    def is_drag(self, touch_event):
+        """ Return if we have reasons to believe that the event is a drag rather than a 
+        tap.
+
+        There is no hard science to this and our guess might be wrong at times.
+        """
+        duration = touch_event.time_end - touch_event.time_start
+        return self.drag_dist(touch_event) > 1.5 or duration > 0.12
+        
+    def on_touch_up(self, event):        
+        if not self.is_drag(event):
+            res = None
+            cpos = self.to_local(*event.pos)
+            mpos = self.canvas_to_map(cpos)
+            hero_pos = self.map.find(tender.hero)
+            if mpos in self.map.adjacents(hero_pos, free=True):
+                res = tender.hero.move(mpos)
+            elif mpos in self.map.adjacents(hero_pos, free=False):
+                victim = self.map.actor_at(mpos)
+                if victim:
+                    res = tender.hero.attack(victim)
+            if is_action(res):
+                print(res)
+                self.finalize_turn()
+                return True
+        return super().on_touch_up(event)
+    
     def keyboard_on_key_down(self, window, key, text, modifiers):
         key_map = {"right": "move_or_act_right", 
                    "left": "move_or_act_left", 
@@ -274,13 +306,20 @@ class MapWidget(FocusBehavior, ScatterPlane):
             funct = tender.action_map[key_map[kname]]
             res = funct()
             if is_action(res):
-                tender.hero.set_played()
-                self.hero_turn = tender.hero.last_action
-                tender.engine.advance_turn()
-                self.engine_turn = tender.engine.current_turn
+                self.finalize_turn()
             return True
         else:
             return super().keyboard_on_key_down(window, key, text, modifiers)
+
+    def finalize_turn(self):
+        """ Let all NPC play, update all statuses, refresh map.
+        
+        Call this after every hero action. 
+        """
+        tender.hero.set_played()
+        self.hero_turn = tender.hero.last_action
+        tender.engine.advance_turn()
+        self.engine_turn = tender.engine.current_turn
 
 
 class Controller(FloatLayout):

@@ -51,6 +51,9 @@ Material Design Icons:
 * most of those are included in KivyMD
 * https://materialdesignicons.com/
 
+Creative Commons sounds:
+* https://freesound.org/
+
 Azgaar's Fantasy Map Generator
 * https://azgaar.github.io/Fantasy-Map-Generator
 
