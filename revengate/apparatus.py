@@ -23,6 +23,7 @@ import sys
 from argparse import ArgumentParser
 
 os.environ["KIVY_NO_ARGS"] = "1"
+os.environ["KIVY_GL_DEBUG"] = "0"
 from . import __version__, __doc__
 from .governor import Governor
 

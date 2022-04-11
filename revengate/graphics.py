@@ -43,7 +43,7 @@ from kivy.animation import Animation
 from kivy.uix.boxlayout import BoxLayout
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
-from kivy.uix.screenmanager import ScreenManager, WipeTransition
+from kivy.uix.screenmanager import ScreenManager, WipeTransition, ShaderTransition
 
 from .maps import TileType, Map, Builder, Connector
 from .loader import DATA_DIR, data_file, TopLevelLoader
@@ -446,7 +446,8 @@ class DemoApp(MDApp):
         
     def build(self):
         super().build()
-        self.root.transition = WipeTransition()
+        self.root.transition = CoolTransition()
+        self.root.transition.duration = 2.0
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.material_style = "M3"
         self.theme_cls.primary_palette = "Amber"
@@ -461,6 +462,34 @@ class DemoApp(MDApp):
         # TODO: disable "resume" button unless there is a saved game
         
         return self.root
+
+
+class CoolTransition(ShaderTransition):
+    COOL_TRANSITION_FS = '''$HEADER$
+    uniform float t;
+    uniform sampler2D tex_in;
+    uniform sampler2D tex_out;
+
+    void main(void) {
+        vec4 cin = texture2D(tex_in, tex_coord0);
+        vec4 cout = texture2D(tex_out, tex_coord0);
+        
+        vec2 pos = tex_coord0 * 2.0 - 1.0;
+        
+        /*
+        float val = clamp(t*2.0-length(pos), 0.0, 1.0);
+        vec4 col = vec4(val, val, val, 1.0);
+        gl_FragColor = col;
+        */
+         
+        gl_FragColor = mix(cout, cin,
+                           clamp(t*3.0-length(pos), 0.0, 1.0)
+                          );
+  
+    }
+    '''
+    fs = StringProperty(COOL_TRANSITION_FS)
+
 
 from .governor import Condenser
 def main():
