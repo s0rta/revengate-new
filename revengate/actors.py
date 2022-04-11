@@ -23,7 +23,7 @@ from .randutils import rng
 from .tags import TagBag, TagSlot, Faction
 from .strategies import StrategySlot
 from .weapons import Condition, Injurious, Weapon, Spell, Families
-from .events import Hit, Miss, Events, HealthEvent, Move, Death
+from .events import Hit, Miss, Events, HealthEvent, Move, Rest, Death
 from .items import ItemsSlot
 from . import tender
 
@@ -159,6 +159,9 @@ class Actor(object):
         self._last_action = tender.engine.current_turn
         return result
     
+    def rest(self):
+        return Rest(self)
+    
     def move(self, new_pos):
         """ Move to new_pos on the map, if we can get there, raise otherwise.
         """
@@ -184,7 +187,7 @@ class Actor(object):
         # to-hit roll
         roll = rng.normalvariate(MU, SIGMA)
         if roll < foe.get_evasion():
-            return Miss(foe, self, weapon)
+            return Miss(self, foe, weapon)
 
         if roll > MU+2*SIGMA:
             # critical hit!
@@ -192,7 +195,7 @@ class Actor(object):
         h_delta = self.make_delta(weapon, crit)
 
         h_delta, events = foe.apply_delta(weapon, h_delta)
-        return Events(Hit(foe, self, weapon, -h_delta, crit), events)
+        return Events(Hit(self, foe, weapon, -h_delta, crit), events)
 
     def apply_delta(self, vector, h_delta):
         """ 
@@ -315,7 +318,7 @@ class Character(Actor):
         h_delta = self.make_delta(spell)
         h_delta, events = target.apply_delta(spell, h_delta)
         self.mana -= spell.cost
-        return Events(Hit(target, self, spell, -h_delta), events)
+        return Events(Hit(self, target, spell, -h_delta), events)
 
 
 class Humanoid(Character):

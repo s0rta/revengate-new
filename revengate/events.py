@@ -1,4 +1,4 @@
-# Copyright © 2020 Yannick Gingras <ygingras@ygingras.net>
+# Copyright © 2020-2022 Yannick Gingras <ygingras@ygingras.net>
 
 # This file is part of Revengate.
 
@@ -32,11 +32,15 @@ class StatusEvent:
     
     Any function that could return a StatusEvent can also return None if the 
     event didn't occur. 
+    
+    actor: either the performer or the victim of the action. Sub-classes are encouraged 
+    to make this obivous by renaming contructor arguments and possibly aliasing instance 
+    attributes.    
     """
-    def __init__(self, target):
+    
+    def __init__(self, actor):
         super(StatusEvent, self).__init__()
-        self.target = target
-
+        self.actor = actor
 
 class Events:
     """ A group of StatusEvents.  None-events are implicitely ignored. """
@@ -71,65 +75,78 @@ class Events:
 
 class Move(StatusEvent):
     """ The actor moved. """
-    def __init__(self, target, old_pos, new_pos):
-        super().__init__(target)
+    def __init__(self, performer, old_pos, new_pos):
+        super().__init__(performer)
         self.old_pos = old_pos
         self.new_pos = new_pos
         
     def __str__(self):
-        return f"{self.target} moved from {self.old_pos} to {self.new_pos}."
+        return f"{self.actor} moved from {self.old_pos} to {self.new_pos}."
+
 
 class StairsEvent(StatusEvent):
-    """ The actor moved. """
-    def __init__(self, target, from_pos):
-        super().__init__(target)
+    """ The actor took a flight of stairs. """
+    def __init__(self, performer, from_pos):
+        super().__init__(performer)
         self.from_pos = from_pos
         
     def __str__(self):
-        return f"{self.target} followed stairs at {self.from_pos}."
+        return f"{self.actor} followed stairs at {self.from_pos}."
+
+
+class Rest(StatusEvent):
+    """ The actor did nothing. """        
+    def __str__(self):
+        return f"{self.actor} waits patiently."
+
 
 class Death(StatusEvent):
     """ The actor died. """
-    def __init__(self, target):
-        super().__init__(target)
+    def __init__(self, victim):
+        super().__init__(victim)
         
     def __str__(self):
-        return f"{self.target} died!"
+        return f"{self.actor} died!"
 
 
 class HealthEvent(StatusEvent):
     """ The actor's health just got better or worse. """
-    def __init__(self, target, h_delta):
-        super().__init__(target)
+    def __init__(self, actor, h_delta):
+        super().__init__(actor)
         self.h_delta = h_delta
         
     def __str__(self):
         if self.h_delta >= 0:
-            return f"{self.target} heals {self.h_delta} points."
+            return f"{self.actor} heals {self.h_delta} points."
         else:
-            return (f"{self.target} suffers {-self.h_delta} damages" 
+            return (f"{self.actor} suffers {-self.h_delta} damages" 
                     " from injuries.")
                         
+
 class Injury(HealthEvent):
     """ Something that hurts """
-    def __init__(self, target, damage):
-        super().__init__(target, -damage)
+    def __init__(self, victim, damage):
+        super().__init__(victim, -damage)
 
     @property
     def damage(self):
         return -self.h_delta
         
+    @property
+    def victim(self):
+        return self.actor
+
 
 class Hit(Injury):
     """ A successful hit with a weapon. """
-    def __init__(self, target, attacker, weapon, damage, critical=False):
-        super().__init__(target, damage)
+    def __init__(self, attacker, victim, weapon, damage, critical=False):
+        super().__init__(victim, damage)
         self.attacker = attacker
         self.weapon = weapon
         self.critical = critical
         
     def __str__(self):
-        s = (f"{self.attacker} hit {self.target} with a {self.weapon}"
+        s = (f"{self.attacker} hit {self.victim} with a {self.weapon}"
              f" for {self.damage} damages!")
         if self.critical:
             s += " Critical hit!"
@@ -138,19 +155,19 @@ class Hit(Injury):
 
 class Miss(StatusEvent):
     """ Tried to attack, but didn't make contact with the target. """
-    def __init__(self, target, attacker, weapon):
-        super().__init__(target)
-        self.attacker = attacker
+    def __init__(self, attacker, target, weapon):
+        super().__init__(attacker)
+        self.target = target
         self.weapon = weapon
         
     def __str__(self):
-        return f"{self.attacker} misses {self.target}."
+        return f"{self.actor} misses {self.target}."
 
 
 class InventoryChange(StatusEvent):
     """ Added or lossed something form the inventory """
-    def __init__(self, target, item):
-        super().__init__(target)
+    def __init__(self, actor, item):
+        super().__init__(actor)
         self.item = item
         
     def __str__(self):
@@ -159,8 +176,8 @@ class InventoryChange(StatusEvent):
 
 class Pickup(InventoryChange):
     """ Picked something from the ground """
-    def __init__(self, target, item):
-        super().__init__(target, item)
+    def __init__(self, actor, item):
+        super().__init__(actor, item)
         
     def __str__(self):
         return f"Picked {self.item} from the ground."
