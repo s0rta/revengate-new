@@ -47,6 +47,9 @@ List of Open Gaming Systems:
 Good Public Domain tiles:
 * https://opengameart.org/content/dungeon-crawl-32x32-tiles
 
+Many Creative Commonts icons:
+* https://www.flaticon.com/
+
 Material Design Icons:
 * most of those are included in KivyMD
 * https://materialdesignicons.com/
