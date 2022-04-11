@@ -267,7 +267,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
         There is no hard science to this and our guess might be wrong at times.
         """
         duration = touch_event.time_end - touch_event.time_start
-        return self.drag_dist(touch_event) > 1.5 or duration > 0.12
+        return self.drag_dist(touch_event) > 2.0 or duration > 0.2
         
     def on_touch_up(self, event):        
         if not self.is_drag(event):
@@ -282,8 +282,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 if victim:
                     res = tender.hero.attack(victim)
             if is_action(res):
-                print(res)
-                self.finalize_turn()
+                self.finalize_turn(res)
                 return True
         return super().on_touch_up(event)
     
@@ -306,20 +305,29 @@ class MapWidget(FocusBehavior, ScatterPlane):
             funct = tender.action_map[key_map[kname]]
             res = funct()
             if is_action(res):
-                self.finalize_turn()
+                self.finalize_turn(res)
             return True
         else:
             return super().keyboard_on_key_down(window, key, text, modifiers)
 
-    def finalize_turn(self):
-        """ Let all NPC play, update all statuses, refresh map.
+    def finalize_turn(self, events=None):
+        """ Let all NPCs play, update all statuses, refresh map.
         
-        Call this after every hero action. 
+        events: if supplied, a collection of status events that will be displayed.
+        
+        Call this after every hero actions. 
         """
+        if events:
+            # TODO: show those in a scrollable view pane
+            print(events)
         tender.hero.set_played()
         self.hero_turn = tender.hero.last_action
         tender.engine.advance_turn()
         self.engine_turn = tender.engine.current_turn
+
+    def rest(self, *args):
+        res = tender.hero.rest()
+        self.finalize_turn(res)
 
 
 class Controller(FloatLayout):
