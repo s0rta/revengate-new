@@ -465,6 +465,7 @@ class DemoApp(MDApp):
 
 
 class CoolTransition(ShaderTransition):
+    # TODO: blank the background with the theme background color
     COOL_TRANSITION_FS = '''$HEADER$
     uniform float t;
     uniform sampler2D tex_in;
