@@ -32,6 +32,15 @@ https://buildozer.readthedocs.io/en/latest/installation.html#targeting-android
 * response: the callback function to a prompt. The callback might be registered for a single call or for every occurences of the target user input.
 
 
+## Actions and turns
+If an actor does something that counts as an action, they should be `set_played()` to 
+avoid giving them the opportunity to do something else during the same turn. Most of 
+the times, the actor should do it themselves, but there are a few actions that require 
+more global context to be performed, such as entering a new map or dungeon. In those 
+cases, the governor is the best place to call `actor.set_played()`. Calling it 
+additional times during the same turn is a no-op, so when it doubt, just call it.
+
+
 ## Code structure
 The main layers of the code are in described below:
 

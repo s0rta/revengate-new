@@ -271,6 +271,7 @@ class Governor:
             tender.engine.change_map(map)
             map.place(tender.hero, next_pos)
 
+            tender.hero.set_played()
             return StairsEvent(tender.hero, from_pos)
         else:
             print(f"there are no stairs at {from_pos}")

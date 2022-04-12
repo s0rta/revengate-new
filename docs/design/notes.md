@@ -60,6 +60,8 @@ Creative Commons sounds:
 Azgaar's Fantasy Map Generator
 * https://azgaar.github.io/Fantasy-Map-Generator
 
+Aseprite: animated sprite editor
+
 Kassoon NPC Generator
 * https://www.kassoon.com/dnd/npc-generator/
 

@@ -23,7 +23,8 @@ from .randutils import rng
 from .tags import TagBag, TagSlot, Faction
 from .strategies import StrategySlot
 from .weapons import Condition, Injurious, Weapon, Spell, Families
-from .events import Hit, Miss, Events, HealthEvent, Move, Rest, Death
+from .events import (Hit, Miss, Events, HealthEvent, Move, Rest, Death, is_action, 
+                     Pickup)
 from .items import ItemsSlot
 from . import tender
 
@@ -156,10 +157,12 @@ class Actor(object):
             raise RuntimeError("Trying to perform an action before assigning " 
                                "a strategy.")
         result = self.strategy.act()
-        self._last_action = tender.engine.current_turn
+        if is_action(result):
+            self.set_played()
         return result
     
     def rest(self):
+        self.set_played()
         return Rest(self)
     
     def move(self, new_pos):
@@ -170,18 +173,39 @@ class Actor(object):
             old_pos = map.find(self)
             if map.distance(old_pos, new_pos) == 1:
                 map.move(self, new_pos)
+                self.set_played()
                 return Move(self, old_pos, new_pos)
-
+            
+    def pickup(self, item=None):
+        """ Pickup an item from the ground. 
+        
+        If item is not provided, pick the first item on top of the stack. 
+        """
+        pos = tender.engine.map.find(self)
+        stack = tender.engine.map.items_at(pos)
+        if stack:
+            if item is None:
+                item = stack.top()
+            self.inventory.append(item)
+            tender.engine.map.remove(item)
+            self.set_played()
+            return Pickup(self, item)
+        
     def attack(self, foe):
         """ Do all the stikes allowed in one turn against foe. """
         if self.weapon:
-            return Events(self.strike(foe, self.weapon))
+            result = Events(self.strike(foe, self.weapon))
+            self.set_played()
+            return result
         else:
             return None
 
     def strike(self, foe, weapon):
         """ Try to hit foe, another actor, with weapon. 
-        Automatically adjust foe's health when there is a hit. """
+        Automatically adjust foe's health when there is a hit. 
+        
+        A single strike does not count as an action, but a full attack() does.
+        """
         crit = False
 
         # to-hit roll

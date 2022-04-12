@@ -1,4 +1,4 @@
-# Copyright © 2020 – 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2020–2022 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -79,6 +79,8 @@ class Strategy:
                 path = tc.path
                 if path:
                     return self.actor.move(path[1])
+        # Rest when there nothing better to do
+        return self.actor.rest()
         
     def select_target(self, targets):
         raise NotImplementedError()

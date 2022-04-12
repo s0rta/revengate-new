@@ -320,7 +320,6 @@ class MapWidget(FocusBehavior, ScatterPlane):
         if events:
             # TODO: show those in a scrollable view pane
             print(events)
-        tender.hero.set_played()
         self.hero_turn = tender.hero.last_action
         tender.engine.advance_turn()
         self.engine_turn = tender.engine.current_turn
