@@ -62,6 +62,8 @@ CONNECTOR_IMG = {"<": "dungeon/gateways/stone_stairs_up.png",
                  ">": "dungeon/gateways/stone_stairs_down.png"}
 EMPTY_IMG = "dungeon/black.png"
 TILE_SIZE = 32
+WINDOW_SIZE = (1280, 720)
+WINDOW_SIZE_WIDE = (2164, 1080)
 
 
 class ImgSourceCache:
@@ -95,7 +97,12 @@ class ImgSourceCache:
         fq_path = resources.resource_find(path)
         self._cache[key] = fq_path
         return fq_path
-            
+
+
+def is_mobile():
+    """ Return whether we are running on a mobile device. """
+    return platform in ("ios", "android")
+
 
 def best_font(text):
     """ Return a font that looks for the given text.
@@ -144,7 +151,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
             kwargs["size"] = size
         super().__init__(*args, **kwargs)
         self.map = map
-        self.is_focusable = platform not in ("ios", "android")
+        self.is_focusable = not is_mobile()
         # pre-load all the textures
         self.cache = ImgSourceCache()
         self._elems = {}  # thing -> MapElement with thing being Actor or ItemCollection
@@ -155,7 +162,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
             
     def _clear_elem(self, thing):
         elem = self._elems.pop(thing)
-        elem.opacity = 0
+        elem.opqacity = 0
         self.remove_widget(elem)
         
     def _clear_elems(self):
@@ -430,6 +437,9 @@ class DemoApp(MDApp):
         self.map_wid.set_map(map)
         
     def show_map_screen(self, *args):
+        screen = self.root.current_screen
+        print(f"Screen resolution is {screen.size}")
+
         self.map_wid.set_map(tender.engine.map)
         self.root.current = "mapscreen"
 
@@ -445,12 +455,13 @@ class DemoApp(MDApp):
         
     def build(self):
         super().build()
-        self.root.transition = CoolTransition()
-        self.root.transition.duration = 2.0
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.material_style = "M3"
         self.theme_cls.primary_palette = "Amber"
         self.theme_cls.accent_palette = "Brown"
+
+        self.root.transition = CoolTransition(self)
+        self.root.transition.duration = 2.0
 
         self.map_wid = self.root.map_wid
         self.map_wid.bind(engine_turn=self.npc_callback)
@@ -459,12 +470,16 @@ class DemoApp(MDApp):
         self.map_wid.bind(hero_turn=self.map_wid.refresh_map)
 
         # TODO: disable "resume" button unless there is a saved game
-        
+
         return self.root
+
+    def on_start(self):
+        if not is_mobile():
+            self.root_window.size = WINDOW_SIZE
+        return super().on_start()
 
 
 class CoolTransition(ShaderTransition):
-    # TODO: blank the background with the theme background color
     COOL_TRANSITION_FS = '''$HEADER$
     uniform float t;
     uniform sampler2D tex_in;
@@ -473,23 +488,23 @@ class CoolTransition(ShaderTransition):
     void main(void) {
         vec4 cin = texture2D(tex_in, tex_coord0);
         vec4 cout = texture2D(tex_out, tex_coord0);
+
+        // scaled distance to the centre of the screen in from 0 to 1
+        float s_dist = distance(tex_coord0, vec2(0.5)) / 0.7071067811865476;
         
-        vec2 pos = tex_coord0 * 2.0 - 1.0;
+        // what percentage of the new screen to take
+        float mix_pct = clamp(2.0*t - s_dist, 0.0, 1.0);
+                
+        gl_FragColor = mix(cout, cin, mix_pct);
         
-        /*
-        float val = clamp(t*2.0-length(pos), 0.0, 1.0);
-        vec4 col = vec4(val, val, val, 1.0);
-        gl_FragColor = col;
-        */
-         
-        gl_FragColor = mix(cout, cin,
-                           clamp(t*3.0-length(pos), 0.0, 1.0)
-                          );
-  
     }
     '''
     fs = StringProperty(COOL_TRANSITION_FS)
 
+    def __init__(self, app):
+        self.app = app
+        self.clearcolor = self.app.theme_cls.bg_normal
+        super().__init__()
 
 from .governor import Condenser
 def main():
