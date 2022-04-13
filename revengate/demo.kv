@@ -79,8 +79,12 @@ ScreenManager:
                     on_release: map_wid.rest()
 
                 MDRectangleFlatButton:
-                    text: "Open"
-                    on_release: print("open!")
+                    text: "Loot"
+                    on_release: map_wid.loot()
+
+                MDRectangleFlatButton:
+                    text: "Follow stairs"
+                    on_release: map_wid.follow_stairs()
                     
                 MDRectangleFlatButton:
                     text: "Home"

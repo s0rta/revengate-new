@@ -77,6 +77,9 @@ class ActionMap:
             funct = self._actions[action]
         elif hasattr(self, action):
             funct = getattr(self, action)
+        elif hasattr(self, action.replace("-", "_")):  
+            # FIXME: redoing the replace() is very ugly
+            funct = getattr(self, action.replace("-", "_"))
         else:
             raise ValueError(f"Action {action} is not registered or defined "
                              "as a class method.")

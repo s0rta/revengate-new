@@ -294,12 +294,12 @@ class MapWidget(FocusBehavior, ScatterPlane):
         return super().on_touch_up(event)
     
     def keyboard_on_key_down(self, window, key, text, modifiers):
-        key_map = {"right": "move_or_act_right", 
-                   "left": "move_or_act_left", 
-                   "up": "move_or_act_up", 
-                   "down": "move_or_act_down", 
+        key_map = {"right": "move-or-act-right", 
+                   "left": "move-or-act-left", 
+                   "up": "move-or-act-up", 
+                   "down": "move-or-act-down", 
                    "f": "follow-stairs",
-                   "p": "pickup_item",
+                   "p": "pickup-item",
                    }
 
         res = None
@@ -334,6 +334,18 @@ class MapWidget(FocusBehavior, ScatterPlane):
     def rest(self, *args):
         res = tender.hero.rest()
         self.finalize_turn(res)
+
+    def loot(self, *args):
+        res = tender.action_map["pickup-item"]()
+        if is_action(res):
+            self.finalize_turn(res)
+        return True
+
+    def follow_stairs(self, *args):
+        res = tender.action_map["follow-stairs"]()
+        if is_action(res):
+            self.finalize_turn(res)
+        return True
 
 
 class Controller(FloatLayout):
