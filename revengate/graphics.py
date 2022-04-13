@@ -162,7 +162,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
             
     def _clear_elem(self, thing):
         elem = self._elems.pop(thing)
-        elem.opqacity = 0
+        elem.opacity = 0
         self.remove_widget(elem)
         
     def _clear_elems(self):
@@ -238,7 +238,6 @@ class MapWidget(FocusBehavior, ScatterPlane):
         if tender.engine.map is not self.map:
             self.set_map(tender.engine.map)
         
-        # TODO refresh all the ground tiles
         seen = set()
                     
         for mpos, actor in self.map.iter_actors():
@@ -275,6 +274,16 @@ class MapWidget(FocusBehavior, ScatterPlane):
         """
         duration = touch_event.time_end - touch_event.time_start
         return self.drag_dist(touch_event) > 2.0 or duration > 0.2
+        
+    def on_touch_down(self, event):
+        if event.device == "mouse":
+            if event.button == "scrolldown":
+                self.scale *= 1.1
+                return True
+            elif event.button == "scrollup":
+                self.scale /= 1.1
+                return True
+        return super().on_touch_down(event)
         
     def on_touch_up(self, event):        
         if not self.is_drag(event):
