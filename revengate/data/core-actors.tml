@@ -12,12 +12,19 @@ name = "lumiere"
 _class = "Faction"
 name = "beasts"
 
+[instances.neutrals]
+_class = "Faction"
+name = "neutrals"
+
 [templates]
 
 # Strategies, these are templates rather than instances because everyone need their own 
 # instance.
 [templates.tribal]
 _class = "Tribal"
+
+[templates.wandering]
+_class = "Wandering"
 
 # Beasts
 [templates.bite]
@@ -50,6 +57,18 @@ faction = "#beasts"
 strategy = "*tribal"
 char = "d"
 
+[templates.observer]
+_class = "Character"
+name = "observer"
+health = 40
+armor = 0
+strength = 40
+agility = 35
+intelligence = 80
+weapon = "*dagger"
+faction = "#neutrals"
+strategy = "*wandering"
+char = "o"
 
 # humans
 [templates.novice]

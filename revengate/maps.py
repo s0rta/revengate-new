@@ -468,7 +468,7 @@ class Map:
         while current != start:
             current = seen_map[current]
             path.append(current)
-        return reversed(path)
+        return list(reversed(path))
 
     def path(self, start, goal):
         """ Find an optimal path going from (x1, y1) to (x2, y2) taking 

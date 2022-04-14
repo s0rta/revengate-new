@@ -153,6 +153,8 @@ class Governor:
     def make_first_map(self):
         pen = tender.loader.invoke("pen")
         map = self.make_map(2, pen)
+        obs = tender.loader.invoke("observer")
+        map.place(obs)
         tender.engine.change_map(map)
         if tender.hero:
             map.place(tender.hero)

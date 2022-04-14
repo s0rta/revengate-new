@@ -138,5 +138,28 @@ class Tribal(Strategy):
             short_list.sort(key=lambda x:len(x.path))
             return short_list[0]
         else:
-            return None # no one to attack
+            return None  # no one to attack
 
+
+class Wandering(Strategy):
+    """ Roam around aimlessly. """
+
+    def __init__(self, name, actor=None):
+        super().__init__(name, actor)
+        self.waypoint = None
+    
+    def act(self):
+        map = tender.engine.map
+        if not self.waypoint:
+            self.waypoint = map.random_pos(free=True)
+            
+        my_pos = map.find(self.actor)
+        path = map.path(my_pos, self.waypoint)
+        if path:
+            res = self.actor.move(path[1])
+            if len(path) <= 2:
+                self.waypoint = None
+            return res
+        else:
+            # FIXME be more explicit
+            return self.actor.rest()
