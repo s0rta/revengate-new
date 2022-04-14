@@ -153,8 +153,8 @@ class Wandering(Strategy):
         if not self.waypoint:
             self.waypoint = map.random_pos(free=True)
             
-        my_pos = map.find(self.actor)
-        path = map.path(my_pos, self.waypoint)
+        here = map.find(self.actor)
+        path = map.path(here, self.waypoint)
         if path:
             res = self.actor.move(path[1])
             if len(path) <= 2:

@@ -461,7 +461,7 @@ class TemplatizedObjectsLoader(SubLoader):
             return self.invoke(field[1:])
         return field
 
-    def _instanciate(self, cls_name, fields, template_name=None):
+    def _instantiate(self, cls_name, fields, template_name=None):
         """ Create an instance of cls_name with all the fields specified.
         
         As many fields as possible are passed to the constructor, the other 
@@ -508,7 +508,7 @@ class TemplatizedObjectsLoader(SubLoader):
             msg = f"Parent specified in an instance record name: {rec}"
             raise ValueError(msg)
     
-        obj = self._instanciate(rec.pop("_class"), rec)
+        obj = self._instantiate(rec.pop("_class"), rec)
         self._instances[name] = obj
         return obj
 
@@ -626,7 +626,7 @@ class TemplatizedObjectsLoader(SubLoader):
                                          f"Can't apply {prefix!r} transform.")
             # batch apply the other fields
             fields.update(tfields)
-        return self._instanciate(fields.pop("_class"), fields, oname)
+        return self._instantiate(fields.pop("_class"), fields, oname)
 
     def get_instance(self, name):
         return self._instances.get(name)
