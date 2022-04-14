@@ -24,6 +24,7 @@ from math import sqrt
 import kivy
 from kivymd.app import MDApp
 from kivy.utils import platform
+from kivy.vector import Vector
 from kivy.core.window import Window
 from kivy.core.text import Label as CoreLabel
 from kivy.graphics.texture import Texture
@@ -47,7 +48,7 @@ from kivy.uix.screenmanager import ScreenManager, WipeTransition, ShaderTransiti
 
 from .maps import TileType, Map, Builder, Connector
 from .loader import DATA_DIR, data_file, TopLevelLoader
-from .events import is_action
+from .events import is_action, is_move
 from .utils import Array
 from . import tender
 
@@ -175,6 +176,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
         self.size = (w*TILE_SIZE, h*TILE_SIZE)
         self.map = map
         self.init_rects()
+        self.center_on_hero()
         self.refresh_map()
         
     def _update_elem(self, mpos, thing):
@@ -307,18 +309,21 @@ class MapWidget(FocusBehavior, ScatterPlane):
                    "left": "move-or-act-left", 
                    "up": "move-or-act-up", 
                    "down": "move-or-act-down", 
-                   "f": "follow-stairs",
+                   "f": self.follow_stairs,
                    "p": "pickup-item",
                    }
 
         res = None
         kcode, kname = key
-        if kname == "d":
-            self.app.show_hero_name_dia()
+        if kname == "c":
+            self.center_on_hero(anim=True)
             return True
 
         if kname in key_map:
-            funct = tender.action_map[key_map[kname]]
+            if callable(key_map[kname]):
+                funct = key_map[kname]
+            else:
+                funct = tender.action_map[key_map[kname]]
             res = funct()
             if is_action(res):
                 self.finalize_turn(res)
@@ -326,6 +331,35 @@ class MapWidget(FocusBehavior, ScatterPlane):
         else:
             return super().keyboard_on_key_down(window, key, text, modifiers)
 
+    def center_on_hero(self, anim=False):
+        """ Move the tiles to have the hero at the center of the screen. """
+        if not tender.hero or not tender.engine.map:
+            return
+            
+        mpos = tender.engine.map.find(tender.hero)
+        cpos = Vector(self.map_to_canvas(mpos))
+        spos = cpos * self.scale
+        
+        center = Vector(self.parent.size) / 2
+        delta = center - spos        
+        if anim:
+            anim = Animation(pos=delta, duration=0.2)
+            anim.start(self)
+        else:
+            self.pos = delta
+        
+    def verify_centering(self, anim=False):
+        """ See if we should recenter the screen on the hero, do so if needed. """
+        mpos = tender.engine.map.find(tender.hero)
+        cpos = Vector(self.map_to_canvas(mpos))
+        ppos = self.to_parent(*cpos)
+        
+        cut_dist = 2.5*TILE_SIZE*self.scale
+        cutoff = Vector(cut_dist, cut_dist)
+        top_right = Vector(self.parent.size) - cutoff
+        if not Vector.in_bbox(ppos, cutoff, top_right):
+            self.center_on_hero(anim)
+        
     def finalize_turn(self, events=None):
         """ Let all NPCs play, update all statuses, refresh map.
         
@@ -334,6 +368,9 @@ class MapWidget(FocusBehavior, ScatterPlane):
         Call this after every hero actions. 
         """
         if events:
+            if is_move(events):
+                self.verify_centering(anim=True)
+                
             # TODO: show those in a scrollable view pane
             print(events)
         self.hero_turn = tender.hero.last_action
@@ -458,10 +495,8 @@ class DemoApp(MDApp):
         self.map_wid.set_map(map)
         
     def show_map_screen(self, *args):
-        screen = self.root.current_screen
-        print(f"Screen resolution is {screen.size}")
-
         self.map_wid.set_map(tender.engine.map)
+        self.map_wid.center_on_hero()
         self.root.current = "mapscreen"
 
     def show_main_screen(self, *args):

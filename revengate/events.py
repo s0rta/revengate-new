@@ -24,6 +24,20 @@ def is_action(event):
     return isinstance(event, (Events, StatusEvent)) and bool(event)
 
 
+def is_move(event):
+    """ Return whether event (or Events) includes an in-map movement. 
+    
+    Following a map-connector to a different map is not counted as a move.
+    """
+    if isinstance(event, Events):
+        for evt in event:
+            if isinstance(evt, Move) and bool(evt):
+                return True
+    elif isinstance(event, Move) and bool(event):
+        return True
+    return False
+        
+
 class StatusEvent:
     """ Something that changes the status of an actor. 
     
