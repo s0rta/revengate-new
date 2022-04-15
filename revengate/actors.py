@@ -38,6 +38,8 @@ class Actor(object):
     """ Base class of all actors. """
     # everyone defaults to 35% more damage with a critical hit
     critical_mult = 0.35 
+    # how strong your sentiment has to be to move from neutral 
+    sentiment_threshold = 0.75  
     faction = TagSlot(Faction)
     strategy = StrategySlot()
     inventory = ItemsSlot()
@@ -142,6 +144,21 @@ class Actor(object):
             return f"the {self.role}"
         order = self.__class__.__name__.lower()
         return f"the {order}"
+
+    def sentiment(self, other):
+        """ Return the sentiment numeric value in [-1..1]. """
+        if tender.sentiments:
+            return tender.sentiments.sentiment(self.faction, other.faction)
+        # neutral unless we found a stronger source of information
+        return 0
+    
+    def likes(self, other):
+        """ Return whether self likes the other actor. """
+        return self.sentiment(other) > self.sentiment_threshold
+    
+    def hates(self, other):
+        """ Return whether self hates the other actor. """
+        return self.sentiment(other) < -self.sentiment_threshold
 
     def act(self):
         """ Perform a action for this turn, return the Event summarizing 

@@ -25,12 +25,14 @@ from .ui import UI
 from .action_map import ActionMap
 from .actors import Actor
 from .loader import TopLevelLoader
+from .sentiment import SentimentChart
 
 loader: TopLevelLoader = None
 engine: Engine = None
 ui: UI = None
 action_map: ActionMap = None
 hero: Actor = None
+sentiments: SentimentChart = None
 
 
 def is_init():

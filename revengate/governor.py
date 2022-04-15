@@ -88,6 +88,8 @@ class Governor:
         self.condenser = Condenser()
         tender.loader = TopLevelLoader()
         tender.loader.load(open(data_path(CORE_FILE), "rt"))
+        tender.sentiments = tender.loader.get_instance("core_sentiments")
+        
         self.restore_game()
         if self.dungeon is None:
             self.dungeon = Area()
@@ -140,6 +142,12 @@ class Governor:
         if lvl < 5:
             # after 5 levels, we can't go down anymore
             builder.staircase()
+        else:
+            # TODO: it would be convenient to be able to pass name directly to invoke()
+            omandar = tender.loader.invoke("observer")
+            omandar.name = "Omandar"
+            map.place(omandar)
+
         if parent_map:
             builder.staircase(None, "<", from_pos, parent_map)
 

@@ -112,20 +112,23 @@ class StrategySlot:
         setattr(obj, self.slot, strategy)
         
         
-class Tribal(Strategy):
-    """ Attack anyone not in the same faction. """
+class AttackOriented(Strategy):
+    """ Does nothing but looking for some to attack. """
+
+    def is_enemy(self, target):
+        """ Return whether a target actor should be considered an enemy. """
+        raise NotImplementedError()
+        
     def select_target(self, targets):
-        map = tender.engine.map
-        pos = map.find(self.actor)
         # TODO: tune-down the awareness and only start chasing a target if you 
         #       can reasonably suspect where it is
         options = [SelectionCache(self.actor, t) 
                    for t in targets
-                   if t.faction != self.actor.faction]
+                   if self.is_enemy(t)]
         # path finding is very expensive, so we start by looking at 
-        # map.distance() to find a smaller set, then we sort by actually path
+        # map.distance() to find a smaller set, then we sort by actual path
         # finding.
-        options.sort(key=lambda x:x.dist)
+        options.sort(key=lambda x: x.dist)
         short_list = []
         for opt in options:
             if opt.dist == 1:
@@ -135,10 +138,26 @@ class Tribal(Strategy):
                 if len(short_list) == 5:
                     break
         if short_list:
-            short_list.sort(key=lambda x:len(x.path))
+            short_list.sort(key=lambda x: len(x.path))
             return short_list[0]
         else:
             return None  # no one to attack
+        
+
+class Tribal(AttackOriented):
+    """ Attack anyone not in the same faction. """
+
+    def is_enemy(self, target):
+        """ Return whether a target actor should be considered an enemy. """
+        return target.faction != self.actor.faction
+
+
+class PoliticalHater(AttackOriented):
+    """ Attack anyone if their faction thinks poorly of them. """
+
+    def is_enemy(self, target):
+        """ Return whether a target actor should be considered an enemy. """
+        return self.actor.hates(target)
 
 
 class Wandering(Strategy):

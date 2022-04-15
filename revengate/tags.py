@@ -72,11 +72,14 @@ def _find_tag(name, cls=Tag):
         if tag:
             return tag
 
+
 def t(tag_name):
     """ 
     Return the Tag instance for tag_name if it was pre-registered.
     Raise ValueError it tag_name was never registered.
     """
+    if tag_name.startswith("#"):
+        tag_name = tag_name[1:]
     tag = _find_tag(tag_name)
     if not tag:
         raise ValueError(f"{tag_name} is not a registered Tag")

@@ -47,6 +47,7 @@ from .items import Item
 from .weapons import HealthVector, Effect
 from .actors import Actor
 from .dialogue import Dialogue, Line, Action, SpeakerTag, ActionTag
+from .sentiment import SentimentChart
 
 
 TOP_SECTION = "RevengateFile"
@@ -377,7 +378,6 @@ class DialogueLoader(SubLoader):
         return None
 
 
-
 class TemplatizedObjectsLoader(SubLoader):
     """ Factory class for creating templatized object instances.
     
@@ -440,7 +440,7 @@ class TemplatizedObjectsLoader(SubLoader):
         
         # Templates and instances can only be for those and their sub-classes. 
         # It would make sens to factor this out at some point. 
-        for cls in [Tag, Item, HealthVector, Effect, Strategy, Actor]:
+        for cls in [Tag, Item, HealthVector, Effect, Strategy, Actor, SentimentChart]:
             self._map_class_tree(cls)
         
     def _map_class_tree(self, cls):

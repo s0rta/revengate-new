@@ -16,12 +16,21 @@ name = "beasts"
 _class = "Faction"
 name = "neutrals"
 
+[instances.core_sentiments]
+_class = "SentimentChart"
+mutual_pos = [["#lumiere", "#neutrals"], ["#beasts", "#neutrals"]]
+mutual_neg = [["#lumiere", "#beasts"]]
+
+
 [templates]
 
 # Strategies, these are templates rather than instances because everyone need their own 
 # instance.
 [templates.tribal]
 _class = "Tribal"
+
+[templates.pol_hater]
+_class = "PoliticalHater"
 
 [templates.wandering]
 _class = "Wandering"
@@ -35,31 +44,31 @@ family = "#pierce"
 
 [templates.rat]
 _class = "Monster"
-name = "rat"
+species = "rat"
 health = 5
 armor = 0
 strength = 15
 agility = 50
 weapon = "*bite"
 faction = "#beasts"
-strategy = "*tribal"
+strategy = "*pol_hater"
 char = "r"
 
 [templates.wolf]
 _class = "Monster"
-name = "wolf"
+species = "wolf"
 health = 30
 armor = 0
 strength = 35
 agility = 55
 weapon = "*bite"
 faction = "#beasts"
-strategy = "*tribal"
+strategy = "*pol_hater"
 char = "d"
 
 [templates.observer]
 _class = "Character"
-name = "observer"
+role = "observer"
 health = 40
 armor = 0
 strength = 40
