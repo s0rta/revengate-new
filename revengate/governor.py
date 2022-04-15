@@ -107,8 +107,8 @@ class Governor:
         if graphical:
             tender.ui = KivyUI()
             # late import to avoid making Kivy a hard requirement
-            from .graphics import DemoApp
-            self.app = DemoApp(None, self.npc_turn)
+            from .graphics import RevengateApp
+            self.app = RevengateApp(None, self.npc_turn)
             global CONFIG_DIR
             CONFIG_DIR = self.app.user_data_dir
         else:

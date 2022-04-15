@@ -468,13 +468,41 @@ class RevScreenManager(ScreenManager):
     map_wid = ObjectProperty(None)
 
 
-class DemoApp(MDApp):
+class CoolTransition(ShaderTransition):
+    COOL_TRANSITION_FS = '''$HEADER$
+    uniform float t;
+    uniform sampler2D tex_in;
+    uniform sampler2D tex_out;
+
+    void main(void) {
+        vec4 cin = texture2D(tex_in, tex_coord0);
+        vec4 cout = texture2D(tex_out, tex_coord0);
+
+        // scaled distance to the centre of the screen in from 0 to 1
+        float s_dist = distance(tex_coord0, vec2(0.5)) / 0.7071067811865476;
+        
+        // what percentage of the new screen to take
+        float mix_pct = clamp(2.0*t - s_dist, 0.0, 1.0);
+                
+        gl_FragColor = mix(cout, cin, mix_pct);
+        
+    }
+    '''
+    fs = StringProperty(COOL_TRANSITION_FS)
+
+    def __init__(self, app):
+        self.app = app
+        self.clearcolor = self.app.theme_cls.bg_normal
+        super().__init__()
+
+
+class RevengateApp(MDApp):
     has_hero = BooleanProperty(False)
     hero_name = StringProperty(None)
     hero_name_dia = ObjectProperty(None)
     
     def __init__(self, map, npc_callback, *args):
-        super(DemoApp, self).__init__(*args)
+        super().__init__(*args)
         self.map = map
         self.npc_callback = npc_callback
         resources.resource_add_path(os.path.join(DATA_DIR, "images"))
@@ -535,58 +563,3 @@ class DemoApp(MDApp):
         return super().on_start()
 
 
-class CoolTransition(ShaderTransition):
-    COOL_TRANSITION_FS = '''$HEADER$
-    uniform float t;
-    uniform sampler2D tex_in;
-    uniform sampler2D tex_out;
-
-    void main(void) {
-        vec4 cin = texture2D(tex_in, tex_coord0);
-        vec4 cout = texture2D(tex_out, tex_coord0);
-
-        // scaled distance to the centre of the screen in from 0 to 1
-        float s_dist = distance(tex_coord0, vec2(0.5)) / 0.7071067811865476;
-        
-        // what percentage of the new screen to take
-        float mix_pct = clamp(2.0*t - s_dist, 0.0, 1.0);
-                
-        gl_FragColor = mix(cout, cin, mix_pct);
-        
-    }
-    '''
-    fs = StringProperty(COOL_TRANSITION_FS)
-
-    def __init__(self, app):
-        self.app = app
-        self.clearcolor = self.app.theme_cls.bg_normal
-        super().__init__()
-
-from .governor import Condenser
-def main():
-    kivy.require('2.0.0')
-    resources.resource_add_path("revengate/data/images/")
-    resources.resource_add_path("revengate/data/fonts/")
-    
-    condenser = Condenser()
-    builder = condenser.random_builder()
-    builder.staircase(char=">")
-    builder.staircase(char="<")
-    
-    map = builder.map
-    loader = TopLevelLoader()
-    with data_file("core.toml") as f:
-        loader.load(f)
-    for name in ["pen", "sword"]:
-        item = loader.invoke(name)
-        map.place(item)
-    rat = loader.invoke("rat")
-    map.place(rat)
-    pos = map.find(rat)
-    print(f"rat at {pos}")
-
-    DemoApp(map).run()
-
-
-if __name__ == "__main__":
-    main()    
