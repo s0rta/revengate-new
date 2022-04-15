@@ -293,6 +293,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
             cpos = self.to_local(*event.pos)
             mpos = self.canvas_to_map(cpos)
             hero_pos = self.map.find(tender.hero)
+            # FIXME: compute a vector, call move_or_act()
             if mpos in self.map.adjacents(hero_pos, free=True):
                 res = tender.hero.move(mpos)
             elif mpos in self.map.adjacents(hero_pos, free=False):

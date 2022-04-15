@@ -107,15 +107,18 @@ class ActionMap:
         map = tender.engine.map
         cur_pos = map.find(tender.hero)
         new_pos = direction + cur_pos
+        other = map.actor_at(new_pos)
+
         if map.is_free(new_pos):
             res = tender.hero.move(new_pos)
-        else: 
-            other = map.actor_at(new_pos)
-            if other is not None:
+        elif other is not None:
+            if tender.hero.hates(other):
                 # TODO: prompt the player before attacking a friend
                 res = tender.hero.attack(other)
             else:
-                print(f"there is already something at {new_pos}")
+                print(f"{other} is in the way!")
+        else:
+            print(f"there is already something at {new_pos}")
         if res:
             tender.hero.set_played()
         return res

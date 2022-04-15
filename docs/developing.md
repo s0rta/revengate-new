@@ -29,8 +29,10 @@ https://buildozer.readthedocs.io/en/latest/installation.html#targeting-android
 
 ## UI paradigms
 * prompt: a function to all for a user response. It can be a direct question or just a change to the environment that invites for some user input that may never come
-* response: the callback function to a prompt. The callback might be registered for a single call or for every occurences of the target user input.
+* response: the callback function to a prompt. The callback might be registered for a single call or for every occurrences of the target user input.
 
+## User Experience
+* go with the [Material Design](https://material.io/) guidelines unless they interfere with a good game experience.
 
 ## Actions and turns
 If an actor does something that counts as an action, they should be `set_played()` to 

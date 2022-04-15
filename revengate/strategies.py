@@ -18,7 +18,7 @@
 """ Various ways to decide who to attack and how to attack them. """
 
 from . import tender
-
+from .randutils import rng
 
 class SelectionCache:
     """ A placeholder for various properties about a target so we don't keep 
@@ -162,12 +162,18 @@ class PoliticalHater(AttackOriented):
 
 class Wandering(Strategy):
     """ Roam around aimlessly. """
+    rest_bias = 0.2  # rest instead a moving once in a while
 
     def __init__(self, name, actor=None):
         super().__init__(name, actor)
         self.waypoint = None
     
     def act(self):
+        # A more interesting way to go about this would be to look at the recent forced 
+        # rests events and to base the current rest bias on that.
+        if rng.rstest(self.rest_bias):
+            return self.actor.rest()
+        
         map = tender.engine.map
         if not self.waypoint:
             self.waypoint = map.random_pos(free=True)
