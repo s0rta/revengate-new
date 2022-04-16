@@ -475,17 +475,42 @@ class CoolTransition(ShaderTransition):
     uniform sampler2D tex_in;
     uniform sampler2D tex_out;
 
-    void main(void) {
-        vec4 cin = texture2D(tex_in, tex_coord0);
-        vec4 cout = texture2D(tex_out, tex_coord0);
+    const float PI = 3.141592653589793;
+    const float ROOT_2 = 1.4142135623730951;
 
-        // scaled distance to the centre of the screen in from 0 to 1
-        float s_dist = distance(tex_coord0, vec2(0.5)) / 0.7071067811865476;
+    // return how much of the effect we should apply at a given radius
+    // the effect's shape is a ring
+    float effect_zone(float t, float r) {
+        const float ring_w = 0.5;
+        const float slope = -1.0/ring_w;
+
+        // stretch time a little bit so the effect gets to complete rather than 
+        // aborting when it starts touching the edges
+        t *= (1.0+ring_w);  
+
+        float intensity = clamp((r-t) * slope, 0.0, 1.0);
+        return step(r, t) * intensity;
+    }
+
+    // sin() compressed and translated up to be in 0..1
+    float pos_sin(float theta) {
+        return 0.5+sin(theta)*0.5;
+    }
+
+    void main(void) {
+        // must end at int+1/4 boudary to yeild sin(theta)=1
+        const float nb_periods = 2.25;
+        const float theta_max = 2.0 * nb_periods * PI;
+        vec4 next = texture2D(tex_in, tex_coord0);
+        vec4 current = texture2D(tex_out, tex_coord0);
+
+        // scaled distance to the centre of the screen in 0..1
+        float s_dist = distance(tex_coord0, vec2(0.5)) * ROOT_2;
         
-        // what percentage of the new screen to take
-        float mix_pct = clamp(2.0*t - s_dist, 0.0, 1.0);
-                
-        gl_FragColor = mix(cout, cin, mix_pct);
+        float zone = effect_zone(t, s_dist);
+        float mix_pct = zone * pos_sin(zone*theta_max);
+           
+        gl_FragColor = mix(current, next, mix_pct);
         
     }
     '''
@@ -546,7 +571,7 @@ class RevengateApp(MDApp):
         self.theme_cls.accent_palette = "Brown"
 
         self.root.transition = CoolTransition(self)
-        self.root.transition.duration = 2.0
+        self.root.transition.duration = 0.5
 
         self.map_wid = self.root.map_wid
         self.map_wid.bind(engine_turn=self.npc_callback)
