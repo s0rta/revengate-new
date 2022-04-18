@@ -24,7 +24,7 @@ from .tags import TagBag, TagSlot, Faction
 from .strategies import StrategySlot
 from .weapons import Condition, Injurious, Weapon, Spell, Families
 from .events import (Hit, Miss, Events, HealthEvent, Move, Rest, Death, is_action, 
-                     Pickup)
+                     Pickup, Conversation)
 from .items import ItemsSlot
 from . import tender
 
@@ -63,6 +63,9 @@ class Actor(object):
         self.role = None
         self.rank = None
         self.name = None
+
+        # dialogues
+        self.next_dialogue = None
 
         # turns logic
         self.initiative = rng.random()
@@ -207,6 +210,12 @@ class Actor(object):
             tender.engine.map.remove(item)
             self.set_played()
             return Pickup(self, item)
+
+    def talk(self, other):
+        if other.next_dialogue:
+            self.set_played()
+            return Conversation(self, other, other.next_dialogue)
+        return None
         
     def attack(self, foe):
         """ Do all the stikes allowed in one turn against foe. """

@@ -1,7 +1,7 @@
 [RevengateFile]
 format = 0
 content = "dialogues"
-speakers = ["narrator"]
+speakers = ["narrator", "responder"]
 actions = []
 
 [dialogues.intro]
@@ -9,4 +9,14 @@ script="""
 #narrator: After years of training as an architect, you are now an inspector for a secretive organization called La Compagnie des Lumières. What a strange turn of events.
 
 Your first job is to find out why the warehouse no.5 is scaring the hell out of all the sailors.
+"""
+
+[dialogues.deepest_level]
+script="""
+#responder: Congratulations! You have reached the deepest level of the dungeon.
+"""
+
+[dialogues.first_level]
+script="""
+#responder: This is the first level, keep exploring!
 """

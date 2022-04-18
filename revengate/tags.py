@@ -17,6 +17,9 @@
 
 """ Textual tagging. """
 
+from itertools import chain
+
+
 class Tag:
     """ An individual tag. """
     _registry = None
@@ -59,9 +62,14 @@ class Tag:
             return False
         return tag in cls._registry
 
-
-class Faction(Tag):
-    pass
+    @classmethod
+    def iter_tags(cls):
+        """ Return an iterator for all registered tag in `cls` and its subclasses. """
+        if cls._registry:
+            local = iter(cls._registry)
+        else:
+            local = ()            
+        return chain(local, *[sub.iter_tags() for sub in cls.__subclasses__()])
 
 
 def _find_tag(name, cls=Tag):
@@ -82,14 +90,14 @@ def t(tag_name):
         tag_name = tag_name[1:]
     tag = _find_tag(tag_name)
     if not tag:
-        raise ValueError(f"{tag_name} is not a registered Tag")
+        raise ValueError(f"{tag_name!r} is not a registered Tag")
     return tag
 
 
 class TagRegistry(set):
     """ Keep track of all tags that were instanciated. """
     def __init__(self):
-        super(TagRegistry, self).__init__()        
+        super().__init__()        
 
 
 def _find_ns_class(ns, parent=Tag):
@@ -163,3 +171,6 @@ class TagSlot:
             raise ValueError(msg)
         setattr(obj, self.slot, tag)
 
+
+class Faction(Tag):
+    pass

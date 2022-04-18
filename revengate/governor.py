@@ -32,6 +32,7 @@ from .action_map import ActionMap
 from .maps import Map, Builder, Connector
 from .area import Area
 from .events import is_action, StairsEvent
+from .tags import Tag, t
 
 CONFIG_ROOT = os.environ.get("XDG_CONFIG_HOME", "~/.config")
 CONFIG_DIR = os.path.join(CONFIG_ROOT, "revengate")
@@ -146,6 +147,7 @@ class Governor:
             # TODO: it would be convenient to be able to pass name directly to invoke()
             omandar = tender.loader.invoke("observer")
             omandar.name = "Omandar"
+            omandar.next_dialogue = t("deepest_level")
             map.place(omandar)
 
         if parent_map:
@@ -162,6 +164,7 @@ class Governor:
         pen = tender.loader.invoke("pen")
         map = self.make_map(2, pen)
         obs = tender.loader.invoke("observer")
+        obs.next_dialogue = t("first_level")
         map.place(obs)
         tender.engine.change_map(map)
         if tender.hero:

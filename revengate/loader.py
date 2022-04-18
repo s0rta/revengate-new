@@ -46,7 +46,7 @@ from .strategies import Strategy
 from .items import Item
 from .weapons import HealthVector, Effect
 from .actors import Actor
-from .dialogue import Dialogue, Line, Action, SpeakerTag, ActionTag
+from .dialogue import Dialogue, Line, Action, DialogueTag, SpeakerTag, ActionTag
 from .sentiment import SentimentChart
 
 
@@ -278,13 +278,15 @@ class DialogueLoader(SubLoader):
             cmt_pos = line.find(style)
             if cmt_pos >= 0:
                 line = line[:cmt_pos]
-        # typically the '\n' has already been stripped, so we also check this
+        # Typically the '\n' has already been stripped, but we also have to check for 
+        # this:
         if line == "#":
             line = ""
         return line
 
     def _decode_one(self, name, record):
-        dia = Dialogue(name)
+        tag = DialogueTag(name)
+        dia = Dialogue(tag)
         lines = record["script"].split("\n")
         lines = [self._strip_comments(l) for l in lines]
         

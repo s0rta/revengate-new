@@ -68,8 +68,24 @@ class Move(StatusEvent):
         return f"{self.actor} moved from {self.old_pos} to {self.new_pos}."
 
 
+class Narration(StatusEvent):
+    # TODO: those should not cost an action
+    pass
+
+
+class Conversation(StatusEvent):
+    def __init__(self, initiator, responder, dialogue_tag):
+        super().__init__(initiator)
+        self.responder = responder
+        self.tag = dialogue_tag
+        
+    def __str__(self):
+        return (f"{self.actor} had a chat with {self.responder} about {self.tag}.")
+    
+
 class StairsEvent(StatusEvent):
     """ The actor took a flight of stairs. """
+
     def __init__(self, performer, from_pos):
         super().__init__(performer)
         self.from_pos = from_pos

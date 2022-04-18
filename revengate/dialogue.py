@@ -26,6 +26,10 @@ import functools
 import inspect
 
 
+class DialogueTag(Tag):
+    pass
+
+
 class SpeakerTag(Tag):
     pass
 

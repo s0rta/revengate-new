@@ -116,7 +116,9 @@ class ActionMap:
                 # TODO: prompt the player before attacking a friend
                 res = tender.hero.attack(other)
             else:
-                print(f"{other} is in the way!")
+                res = tender.hero.talk(other)
+                if not res:
+                    print(f"{other} is in the way!")
         else:
             print(f"there is already something at {new_pos}")
         if res:
