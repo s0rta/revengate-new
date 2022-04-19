@@ -1,26 +1,9 @@
+#:kivy 2.0.0
+#:include revengate/forms.kv
+
 <MapWidget>
     app: app
     do_rotation: False
-
-    
-<HeroNameDialog>
-    app: app
-    title: "Create your hero"
-    type: "custom"
-    
-    
-<HeroNameDialogContent>
-    id: dia_content
-    orientation: "vertical"
-    spacing: "12dp"
-    size_hint_y: None
-    height: "72dp"
-    
-    MDTextField:
-        data_name: "hero_name"
-        id: hero_name_field
-        hint_text: "Name"
-        multiline: False
 
         
 <MainScreenButton@MDRectangleFlatButton>:

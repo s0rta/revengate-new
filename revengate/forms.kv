@@ -1,0 +1,36 @@
+<RevDialog>
+    app: app
+
+<HeroNameDialog>
+    title: "Create your hero"
+    type: "custom"
+
+<HeroNameDialogContent>
+    id: dia_content
+    orientation: "vertical"
+    spacing: "12dp"
+    size_hint_y: None
+    height: "72dp"
+    
+    MDTextField:
+        data_name: "hero_name"
+        id: hero_name_field
+        hint_text: "Name"
+        multiline: False
+
+    
+<ConversationDialog>
+    title: "Someone has something to say"
+    type: "custom"
+    
+<ConversationDialogContent>
+    id: dia_content
+    orientation: "vertical"
+    spacing: "12dp"
+    size_hint_y: None
+    height: "72dp"
+    
+    ScrollView:
+        MDLabel:
+            id: convo_label
+            text: "He gazed up at the enormous face. \nForty years it had taken him to learn what kind of smile was hidden beneath the dark moustache. \nO cruel, needless misunderstanding! O stubborn, self-willed exile from the loving breast! Two gin-scented tears trickled down the sides of his nose. But it was all right, everything was all right, the struggle was finished. He had won the victory  over himself. He loved Big Brother."
