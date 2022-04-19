@@ -413,39 +413,39 @@ class CoolTransition(ShaderTransition):
 
     const float PI = 3.141592653589793;
     const float ROOT_2 = 1.4142135623730951;
+    const float RING_W = 0.2;
+    const float EFFECT_SLOPE = -1.0/RING_W;
 
-    // return how much of the effect we should apply at a given radius
-    // the effect's shape is a ring
-    float effect_zone(float t, float r) {
-        const float ring_w = 0.5;
-        const float slope = -1.0/ring_w;
-
-        // stretch time a little bit so the effect gets to complete rather than 
-        // aborting when it starts touching the edges
-        t *= (1.0+ring_w);  
-
-        float intensity = clamp((r-t) * slope, 0.0, 1.0);
-        return step(r, t) * intensity;
-    }
-
-    // sin() compressed and translated up to be in 0..1
-    float pos_sin(float theta) {
-        return 0.5+sin(theta)*0.5;
+    // cos() compressed and translated up to be in 0..1
+    float pos_cos(float theta) {
+        return 0.5+cos(theta)*0.5;
     }
 
     void main(void) {
-        // must end at int+1/4 boudary to yeild sin(theta)=1
-        const float nb_periods = 2.25;
+        // must end at an integer boudary to yeild cos(theta)=1
+        const float nb_periods = 2.0;
         const float theta_max = 2.0 * nb_periods * PI;
-        vec4 next = texture2D(tex_in, tex_coord0);
-        vec4 current = texture2D(tex_out, tex_coord0);
 
         // scaled distance to the centre of the screen in 0..1
-        float s_dist = distance(tex_coord0, vec2(0.5)) * ROOT_2;
+        float r = distance(tex_coord0, vec2(0.5)) * ROOT_2;
+
+        // stretch time a little bit so the effect gets to complete rather than 
+        // aborting when it starts touching the edges
+        float fast_t = t * (1.0+RING_W);  
+
+        float zone = clamp((r - fast_t) * EFFECT_SLOPE, 0.0, 1.0);
         
-        float zone = effect_zone(t, s_dist);
-        float mix_pct = zone * pos_sin(zone*theta_max);
+        float wave_height = pos_cos(zone*theta_max);
+        float mix_pct = zone * wave_height;
            
+        vec2 offset = vec2(0.0);
+        if (wave_height < 0.3) {
+            offset = vec2(0.01);
+        }
+           
+        vec4 current = texture2D(tex_out, tex_coord0+offset);
+        vec4 next = texture2D(tex_in, tex_coord0+offset);
+        
         gl_FragColor = mix(current, next, mix_pct);
         
     }
@@ -507,7 +507,7 @@ class RevengateApp(MDApp):
         self.theme_cls.accent_palette = "Brown"
 
         self.root.transition = CoolTransition(self)
-        self.root.transition.duration = 0.5
+        self.root.transition.duration = 1.0
 
         self.map_wid = self.root.map_wid
         self.map_wid.bind(engine_turn=self.npc_callback)
