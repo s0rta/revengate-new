@@ -405,15 +405,15 @@ class RevScreenManager(ScreenManager):
     map_wid = ObjectProperty(None)
 
 
-class CoolTransition(ShaderTransition):
-    COOL_TRANSITION_FS = '''$HEADER$
+class RipplesTransition(ShaderTransition):
+    TRANSITION_FS = '''$HEADER$
     uniform float t;
     uniform sampler2D tex_in;
     uniform sampler2D tex_out;
 
     const float PI = 3.141592653589793;
     const float ROOT_2 = 1.4142135623730951;
-    const float RING_W = 0.2;
+    const float RING_W = 0.35;
     const float EFFECT_SLOPE = -1.0/RING_W;
 
     // cos() compressed and translated up to be in 0..1
@@ -433,24 +433,24 @@ class CoolTransition(ShaderTransition):
         // aborting when it starts touching the edges
         float fast_t = t * (1.0+RING_W);  
 
-        float zone = clamp((r - fast_t) * EFFECT_SLOPE, 0.0, 1.0);
+        float effect_zone = clamp((r - fast_t) * EFFECT_SLOPE, 0.0, 1.0);
         
-        float wave_height = pos_cos(zone*theta_max);
-        float mix_pct = zone * wave_height;
+        float wave_height = pos_cos(effect_zone*theta_max);
+        float mix_pct = effect_zone * wave_height;
            
         vec2 offset = vec2(0.0);
         if (wave_height < 0.3) {
             offset = vec2(0.01);
         }
            
-        vec4 current = texture2D(tex_out, tex_coord0+offset);
-        vec4 next = texture2D(tex_in, tex_coord0+offset);
+        vec4 current = texture2D(tex_out, tex_coord0-offset);
+        vec4 next = texture2D(tex_in, tex_coord0-offset);
         
         gl_FragColor = mix(current, next, mix_pct);
         
     }
     '''
-    fs = StringProperty(COOL_TRANSITION_FS)
+    fs = StringProperty(TRANSITION_FS)
 
     def __init__(self, app):
         self.app = app
@@ -506,7 +506,9 @@ class RevengateApp(MDApp):
         self.theme_cls.primary_palette = "Amber"
         self.theme_cls.accent_palette = "Brown"
 
-        self.root.transition = CoolTransition(self)
+        pprint(dir(self.theme_cls))
+
+        self.root.transition = RipplesTransition(self)
         self.root.transition.duration = 1.0
 
         self.map_wid = self.root.map_wid
