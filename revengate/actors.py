@@ -19,9 +19,11 @@
 monsters, characters, etc. 
 """
 
+from operator import attrgetter
+
+from .utils import best
 from .randutils import rng
 from .tags import TagBag, TagSlot, Faction
-from .strategies import StrategySlot
 from .weapons import Condition, Injurious, Weapon, Spell, Families
 from .events import (Hit, Miss, Events, HealthEvent, Move, Rest, Death, is_action, 
                      Pickup, Conversation)
@@ -43,7 +45,7 @@ class Actor(object):
     faction = TagSlot(Faction)
     # strategy = StrategySlot()  # TODO: keep doing that validation at contruction time
     inventory = ItemsSlot()
-    char = "X" # How to render this actor on the text map
+    char = "X"  # How to render this actor on the text map
 
     def __init__(self, health, armor, strength, agility):
         super().__init__()
@@ -76,9 +78,8 @@ class Actor(object):
 
     @property
     def strategy(self):
-        strats = [strat for strat in self.strategies if strat.is_valid(self)]
-        strats.sort(key=lambda x: x.priority, reverse=True)
-        return strats[0]
+        key=attrgetter("priority")
+        return best([strat for strat in self.strategies if strat.is_valid(self)], key)
         
     @property
     def is_alive(self):

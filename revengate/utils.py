@@ -82,3 +82,13 @@ class Array:
 
     def iter_cols(self):
         return iter(self.cells)
+
+
+def best(seq, key=None, reverse=False):
+    """ Return the highest scoring element of seq.
+    
+    key: like for sorted()
+    reverse: like for sorted() 
+    """
+    # We could implement this in O(n) with a one-pass for-loop if needed
+    return sorted(seq, key=key, reverse=reverse)[-1]

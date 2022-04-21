@@ -42,30 +42,12 @@ _class = "Wandering"
 [templates.fleeing]
 _class = "Fleeing"
 
-# Beasts
+# Inunus
 [templates.slime_slam]
 _class = "Injurious"
 name = "slam"
 damage = 1
 family = "#impact"
-
-[templates.bite]
-_class = "Injurious"
-name = "bite"
-damage = 5
-family = "#pierce"
-
-[templates.rat]
-_class = "Monster"
-species = "rat"
-health = 5
-armor = 0
-strength = 15
-agility = 50
-weapon = "*bite"
-faction = "#beasts"
-strategies = ["*pol_hater"]
-char = "r"
 
 [templates.slime]
 _class = "Monster"
@@ -79,18 +61,38 @@ faction = "#inunus"
 strategies = ["*pol_hater", "*fleeing"]
 char = "P"
 
-[templates.wolf]
+# Beasts
+[templates.bite]
+_class = "Injurious"
+name = "bite"
+damage = 5
+family = "#pierce"
+
+[templates.animal]
 _class = "Monster"
-species = "wolf"
-health = 30
 armor = 0
-strength = 35
-agility = 55
 weapon = "*bite"
 faction = "#beasts"
 strategies = ["*pol_hater"]
+
+[templates.rat]
+_parent = "animal"
+species = "rat"
+health = 5
+strength = 15
+agility = 50
+char = "r"
+
+[templates.wolf]
+_parent = "animal"
+species = "wolf"
+health = 30
+strength = 35
+agility = 55
 char = "d"
 
+
+# humans
 [templates.observer]
 _class = "Character"
 role = "observer"
@@ -104,7 +106,6 @@ faction = "#neutrals"
 strategies = ["*wandering"]
 char = "o"
 
-# humans
 [templates.novice]
 _class = "Humanoid"
 health = 60
