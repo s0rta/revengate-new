@@ -3,7 +3,11 @@ Developing Revengate
 
 ## Dependencies
 Most of the pure Python dependencies are specified in Pipfile. This command should install them all for you:
-`pipenv install --dev`
+`pipenv sync --dev`
+
+See if it's working by typing: 
+`flit install -s`
+`revcli -g`
 
 There are many non-Python dependencies, almost all for the Android backend. On Ubuntu 21.10, this works to get you up to speed:
 `sudo apt install -y build-essentials cmake java-common default-jre default-jdk and libjffi-java google-android-build-tools-24-installer android-sdk-build-tools android-sdk-platform-tools android-sdk-platform-23 android-sdk libltdl7-dev lld`
@@ -12,6 +16,11 @@ It's probably possible to simplify this list, but the errors you get come very l
 
 More details are available in the Kivy official documentation:
 https://buildozer.readthedocs.io/en/latest/installation.html#targeting-android
+
+See if it's plugging an Android device over USB then typing: 
+`buildozer android debug deploy run`
+
+This will take up to 30 mins the first time, less then a minute after that. The mobile device must have USB-debugging enabled. 
 
 
 ## Coding style and conventions
@@ -22,7 +31,7 @@ https://buildozer.readthedocs.io/en/latest/installation.html#targeting-android
 * action and ftag: a string referencing a registered Python function; must be resolved before it can be called
 * params, not parms
 * hero: the player character, never referrer to as PC
-* dialog: a popup window
+* dialog: a popup window, when possible, use "form" or "popup" instead 
 * dialogue: a conversation between actors or a speech by the narrator 
 * when in doubt, name things after steam engine parts or concepts at the core of the industrial revolution
 
