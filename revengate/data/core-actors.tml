@@ -12,6 +12,10 @@ name = "lumiere"
 _class = "Faction"
 name = "beasts"
 
+[instances.inunus]
+_class = "Faction"
+name = "inunus"
+
 [instances.neutrals]
 _class = "Faction"
 name = "neutrals"
@@ -20,7 +24,7 @@ name = "neutrals"
 _class = "SentimentChart"
 mutual_pos = [["#lumiere", "#neutrals"], ["#beasts", "#neutrals"]]
 mutual_neg = [["#lumiere", "#beasts"]]
-
+onesided_neg = {"#lumiere" = ["#inunus"]}
 
 [templates]
 
@@ -35,7 +39,16 @@ _class = "PoliticalHater"
 [templates.wandering]
 _class = "Wandering"
 
+[templates.fleeing]
+_class = "Fleeing"
+
 # Beasts
+[templates.slime_slam]
+_class = "Injurious"
+name = "slam"
+damage = 1
+family = "#impact"
+
 [templates.bite]
 _class = "Injurious"
 name = "bite"
@@ -51,8 +64,20 @@ strength = 15
 agility = 50
 weapon = "*bite"
 faction = "#beasts"
-strategy = "*pol_hater"
+strategies = ["*pol_hater"]
 char = "r"
+
+[templates.slime]
+_class = "Monster"
+species = "yellow slime"
+health = 10
+armor = 0
+strength = 7
+agility = 5
+weapon = "*slime_slam"
+faction = "#inunus"
+strategies = ["*pol_hater", "*fleeing"]
+char = "P"
 
 [templates.wolf]
 _class = "Monster"
@@ -63,7 +88,7 @@ strength = 35
 agility = 55
 weapon = "*bite"
 faction = "#beasts"
-strategy = "*pol_hater"
+strategies = ["*pol_hater"]
 char = "d"
 
 [templates.observer]
@@ -76,7 +101,7 @@ agility = 35
 intelligence = 80
 weapon = "*dagger"
 faction = "#neutrals"
-strategy = "*wandering"
+strategies = ["*wandering"]
 char = "o"
 
 # humans

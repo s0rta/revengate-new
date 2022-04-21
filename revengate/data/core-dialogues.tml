@@ -14,6 +14,8 @@ Your first job is to find out why the warehouse no.5 is scaring the hell out of 
 [dialogues.deepest_level]
 script="""
 #responder: Congratulations! You have reached the deepest level of the dungeon.
+
+Your job now is to go back up.
 """
 
 [dialogues.first_level]

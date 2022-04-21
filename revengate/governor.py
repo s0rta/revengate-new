@@ -153,7 +153,7 @@ class Governor:
         if parent_map:
             builder.staircase(None, "<", from_pos, parent_map)
 
-        for name in rng.choices(["rat", "wolf"], k=nb_monsters):
+        for name in rng.choices(["slime", "rat", "wolf"], k=nb_monsters):
             a = tender.loader.invoke(name)
             map.place(a)
         map.place(item)
@@ -163,9 +163,10 @@ class Governor:
     def make_first_map(self):
         pen = tender.loader.invoke("pen")
         map = self.make_map(2, pen)
+        
         obs = tender.loader.invoke("observer")
         obs.next_dialogue = t("first_level")
-        
+                
         # FIXME: debug
         tender.obs = obs
         

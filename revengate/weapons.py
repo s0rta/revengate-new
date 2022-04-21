@@ -30,6 +30,7 @@ class Families:
     PIERCE = Family("pierce")
     ARCANE = Family("arcane")
     HEAT   = Family("heat")
+    ACID   = Family("acid")
 
 
 class StatusEvent:

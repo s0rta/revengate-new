@@ -62,27 +62,30 @@ class SelectionCache:
 
 class Strategy:
     """ A play strategy to automate an actor's actions. """
+    priority = 0.5  # in [0..1] for normal circumstances 
     
-    def __init__(self, name, actor=None):
+    def __init__(self, name):
         super(Strategy, self).__init__()
         self.name = name
-        self.actor = actor
+        
+    def is_valid(self, actor):
+        return True
 
-    def act(self):
+    def act(self, actor):
         map = tender.engine.map
         actors = map.all_actors()  # TODO: ignore the out of sight ones
-        tc = self.select_target(actors)
+        tc = self.select_target(actor, actors)
         if tc:
             if tc.dist == 1:
-                return self.actor.attack(tc.target)
+                return actor.attack(tc.target)
             else:
                 path = tc.path
                 if path:
-                    return self.actor.move(path[1])
+                    return actor.move(path[1])
         # Rest when there nothing better to do
-        return self.actor.rest()
+        return actor.rest()
         
-    def select_target(self, targets):
+    def select_target(self, actor, targets):
         raise NotImplementedError()
 
 
@@ -115,16 +118,16 @@ class StrategySlot:
 class AttackOriented(Strategy):
     """ Does nothing but looking for some to attack. """
 
-    def is_enemy(self, target):
+    def is_enemy(self, actor, target):
         """ Return whether a target actor should be considered an enemy. """
         raise NotImplementedError()
         
-    def select_target(self, targets):
+    def select_target(self, actor, targets):
         # TODO: tune-down the awareness and only start chasing a target if you 
         #       can reasonably suspect where it is
-        options = [SelectionCache(self.actor, t) 
+        options = [SelectionCache(actor, t) 
                    for t in targets
-                   if self.is_enemy(t)]
+                   if self.is_enemy(actor, t)]
         # path finding is very expensive, so we start by looking at 
         # map.distance() to find a smaller set, then we sort by actual path
         # finding.
@@ -147,44 +150,106 @@ class AttackOriented(Strategy):
 class Tribal(AttackOriented):
     """ Attack anyone not in the same faction. """
 
-    def is_enemy(self, target):
+    def is_enemy(self, actor, target):
         """ Return whether a target actor should be considered an enemy. """
-        return target.faction != self.actor.faction
+        return target.faction != actor.faction
 
 
 class PoliticalHater(AttackOriented):
     """ Attack anyone if their faction thinks poorly of them. """
 
-    def is_enemy(self, target):
+    priority = 0.2
+
+    def is_enemy(self, actor, target):
         """ Return whether a target actor should be considered an enemy. """
-        return self.actor.hates(target)
+        return actor.hates(target)
 
 
 class Wandering(Strategy):
     """ Roam around aimlessly. """
     rest_bias = 0.2  # rest instead a moving once in a while
 
-    def __init__(self, name, actor=None):
-        super().__init__(name, actor)
+    def __init__(self, name):
+        super().__init__(name)
         self.waypoint = None
     
-    def act(self):
+    def act(self, actor):
         # A more interesting way to go about this would be to look at the recent forced 
         # rests events and to base the current rest bias on that.
         if rng.rstest(self.rest_bias):
-            return self.actor.rest()
+            return actor.rest()
         
         map = tender.engine.map
         if not self.waypoint:
             self.waypoint = map.random_pos(free=True)
             
-        here = map.find(self.actor)
+        here = map.find(actor)
         path = map.path(here, self.waypoint)
         if path:
-            res = self.actor.move(path[1])
+            res = actor.move(path[1])
             if len(path) <= 2:
                 self.waypoint = None
             return res
         else:
             # FIXME be more explicit
-            return self.actor.rest()
+            return actor.rest()
+
+
+class Fleeing(Strategy):
+    """ Run away from an attacker. """
+
+    priority = 0.75
+
+    def is_valid(self, actor):
+        map = tender.engine.map
+        my_pos = map.find(actor)
+        for pos in map.adjacents(my_pos, free=False):
+            threat = map.actor_at(pos)
+            if threat and threat.hates(actor):
+                return True
+        return False
+
+    def is_menacing(self, actor, target):
+        """ Return whether a target actor should be considered an enemy. """
+        return target.hates(actor)
+        
+    def select_target(self, actor, targets):
+        # TODO: tune-down the awareness and only start chasing a target if you 
+        #       can reasonably suspect where it is
+        options = [SelectionCache(actor, t) 
+                   for t in targets
+                   if self.is_menacing(actor, t)]
+        # path finding is very expensive, so we start by looking at 
+        # map.distance() to find a smaller set, then we sort by actual path
+        # finding.
+        options.sort(key=lambda x: x.dist)
+        short_list = []
+        for opt in options:
+            if opt.dist == 1:
+                return opt
+            elif opt.path:
+                short_list.append(opt)
+                if len(short_list) == 5:
+                    break
+        if short_list:
+            short_list.sort(key=lambda x: len(x.path))
+            return short_list[0]
+        else:
+            return None  # no one to attack
+
+    def act(self, actor):
+        map = tender.engine.map
+        actors = map.all_actors()  # TODO: ignore the out of sight ones
+        threat = self.select_target(actor, actors)
+        
+        if threat:
+            threat_pos = map.find(threat.target)
+            my_pos = map.find(actor)
+            next_positions = map.adjacents(my_pos, free=True)
+            if next_positions:
+                next_positions.sort(key=lambda pos: map.distance(threat_pos, pos), 
+                                    reverse=True)                
+                there = next_positions[0]
+                return actor.move(there)
+        # TODO: be explicit that we have no other options
+        return actor.rest()

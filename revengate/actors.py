@@ -41,7 +41,7 @@ class Actor(object):
     # how strong your sentiment has to be to move from neutral 
     sentiment_threshold = 0.75  
     faction = TagSlot(Faction)
-    strategy = StrategySlot()
+    # strategy = StrategySlot()  # TODO: keep doing that validation at contruction time
     inventory = ItemsSlot()
     char = "X" # How to render this actor on the text map
 
@@ -50,6 +50,7 @@ class Actor(object):
         self.health = health
         self.armor = armor
         self.inventory = []
+        self.strategies = []
 
         # main attributes
         self.strength = strength
@@ -73,6 +74,12 @@ class Actor(object):
         self._last_update = None  # last time we computed conditions and regen
         self.conditions = []  # mostly stuff that does damage over time
 
+    @property
+    def strategy(self):
+        strats = [strat for strat in self.strategies if strat.is_valid(self)]
+        strats.sort(key=lambda x: x.priority, reverse=True)
+        return strats[0]
+        
     @property
     def is_alive(self):
         return self.health > 0
@@ -176,7 +183,7 @@ class Actor(object):
         if not self.strategy:
             raise RuntimeError("Trying to perform an action before assigning " 
                                "a strategy.")
-        result = self.strategy.act()
+        result = self.strategy.act(self)
         if is_action(result):
             self.set_played()
         return result

@@ -113,7 +113,6 @@ class ActionMap:
             res = tender.hero.move(new_pos)
         elif other is not None:
             if tender.hero.hates(other):
-                # TODO: prompt the player before attacking a friend
                 res = tender.hero.attack(other)
             else:
                 res = tender.hero.talk(other)

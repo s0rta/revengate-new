@@ -406,6 +406,9 @@ class RevScreenManager(ScreenManager):
 
 
 class RipplesTransition(ShaderTransition):
+    # TODO: We can recompute the center of effect dynamically by turning this into an 
+    # f-string and binding the app.root.current to a function that updates the params 
+    # that get passed to TRANSITION_FS.format()
     TRANSITION_FS = '''$HEADER$
     uniform float t;
     uniform sampler2D tex_in;
@@ -480,6 +483,10 @@ class RevengateApp(MDApp):
             self.hero_name_dia = forms.HeroNameDialog(self.init_new_game)
         self.hero_name_dia.open()
 
+    def show_dialogue(self, dia):
+        
+        raise NotImplementedError()
+
     def set_map(self, map):
         self.map = map
         self.map_wid.set_map(map)
@@ -505,8 +512,6 @@ class RevengateApp(MDApp):
         self.theme_cls.material_style = "M3"
         self.theme_cls.primary_palette = "Amber"
         self.theme_cls.accent_palette = "Brown"
-
-        pprint(dir(self.theme_cls))
 
         self.root.transition = RipplesTransition(self)
         self.root.transition.duration = 1.0
