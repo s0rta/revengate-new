@@ -25,7 +25,7 @@ from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 
 
-class RevDialog(MDDialog):
+class RevPopup(MDDialog):
     app = ObjectProperty(None)
     
     def __init__(self, response_funct, content_cls, *args, **kwargs):
@@ -75,9 +75,9 @@ class RevDialog(MDDialog):
         self.ok_btn.disabled = not self.is_valid()
 
 
-class HeroNameDialog(RevDialog):
+class HeroNameForm(RevPopup):
     def __init__(self, response_funct, *args, **kwargs):
-        cont = HeroNameDialogContent()
+        cont = HeroNameFormContent()
         cont.ids.hero_name_field.bind(text=self.validate,
                                       on_text_validate=self.try_accept)
         super().__init__(response_funct, content_cls=cont)
@@ -86,15 +86,15 @@ class HeroNameDialog(RevDialog):
         return bool(self.form_values()["hero_name"])
 
 
-class HeroNameDialogContent(BoxLayout):
+class HeroNameFormContent(BoxLayout):
     pass
 
 
-class ConversationDialog(RevDialog):
+class ConversationPopup(RevPopup):
     def __init__(self, response_funct, *args, **kwargs):
-        cont = ConversationDialogContent()
+        cont = ConversationPopupContent()
         super().__init__(response_funct, content_cls=cont)
 
 
-class ConversationDialogContent(BoxLayout):
+class ConversationPopupContent(BoxLayout):
     pass

@@ -296,8 +296,8 @@ class MapWidget(FocusBehavior, ScatterPlane):
     
     def _chat_test(self):
         res = tender.hero.talk(tender.obs)
-        dia = forms.ConversationDialog(print)
-        dia.open()
+        form = forms.ConversationPopup(print)
+        form.open()
         return res
     
     def keyboard_on_key_down(self, window, key, text, modifiers):
@@ -460,7 +460,7 @@ class RipplesTransition(ShaderTransition):
 class RevengateApp(MDApp):
     has_hero = BooleanProperty(False)
     hero_name = StringProperty(None)
-    hero_name_dia = ObjectProperty(None)
+    hero_name_form = ObjectProperty(None)
     
     def __init__(self, map, npc_callback, *args):
         super().__init__(*args)
@@ -475,9 +475,9 @@ class RevengateApp(MDApp):
         self.root.current = "mapscreen"
         
     def show_hero_name_dia(self):
-        if not self.hero_name_dia:
-            self.hero_name_dia = forms.HeroNameDialog(self.init_new_game)
-        self.hero_name_dia.open()
+        if not self.hero_name_form:
+            self.hero_name_form = forms.HeroNameForm(self.init_new_game)
+        self.hero_name_form.open()
 
     def show_dialogue(self, dia):
         
