@@ -436,7 +436,8 @@ class RipplesTransition(ShaderTransition):
         
         float wave_height = pos_cos(effect_zone*theta_max);
         float mix_pct = effect_zone * wave_height;
-           
+        
+        // refraction
         vec2 offset = vec2(0.0);
         if (wave_height < 0.3) {
             offset = vec2(0.01);
