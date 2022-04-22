@@ -106,7 +106,7 @@ class ActionMap:
         res = None
         map = tender.engine.map
         cur_pos = map.find(tender.hero)
-        new_pos = direction + cur_pos
+        new_pos = tuple(direction + cur_pos)
         other = map.actor_at(new_pos)
 
         if map.is_free(new_pos):

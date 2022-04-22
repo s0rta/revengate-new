@@ -286,13 +286,9 @@ class MapWidget(FocusBehavior, ScatterPlane):
             cpos = self.to_local(*event.pos)
             mpos = self.canvas_to_map(cpos)
             hero_pos = self.map.find(tender.hero)
-            # FIXME: compute a vector, call move_or_act()
-            if mpos in self.map.adjacents(hero_pos, free=True):
-                res = tender.hero.move(mpos)
-            elif mpos in self.map.adjacents(hero_pos, free=False):
-                victim = self.map.actor_at(mpos)
-                if victim:
-                    res = tender.hero.attack(victim)
+            if mpos in self.map.adjacents(hero_pos, free=False):
+                direction = Vector(mpos) - Vector(hero_pos)
+                res = tender.action_map["move-or-act"](direction)
             if is_action(res):
                 self.finalize_turn(res)
                 return True
