@@ -20,7 +20,9 @@ https://buildozer.readthedocs.io/en/latest/installation.html#targeting-android
 See if it's plugging an Android device over USB then typing: 
 `buildozer android debug deploy run`
 
-This will take up to 30 mins the first time, less then a minute after that. The mobile device must have USB-debugging enabled. 
+This will take up to 30 mins the first time, less then a minute after that. The mobile device must have [USB-debugging enabled][usb-debug]. 
+
+[usb-debug]: https://developer.android.com/studio/command-line/adb#Enabling
 
 
 ## Coding style and conventions
