@@ -130,7 +130,9 @@ class Map:
         state = self.__dict__.copy()
         if tender.hero in self._a_to_pos:
             # the hero must be serialized by whoever is in charge or saving the tender
+            state["_a_to_pos"] = self._a_to_pos.copy()
             pos = state["_a_to_pos"].pop(tender.hero)
+            state["_pos_to_a"] = self._pos_to_a.copy()
             del state["_pos_to_a"][pos]
             state["__hero_pos"] = pos
         return state

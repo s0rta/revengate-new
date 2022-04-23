@@ -7,9 +7,9 @@ Most of the pure Python dependencies are specified in Pipfile. This command shou
 
 See if it's working by typing: 
 `flit install -s`
-`revcli -g`
+`revcli`
 
-There are many non-Python dependencies, almost all for the Android backend. On Ubuntu 21.10, this works to get you up to speed:
+There are many non-Python dependencies, almost all for the Android backend. On Ubuntu 21.10, this command will get you up to speed:
 `sudo apt install -y build-essentials cmake java-common default-jre default-jdk and libjffi-java google-android-build-tools-24-installer android-sdk-build-tools android-sdk-platform-tools android-sdk-platform-23 android-sdk libltdl7-dev lld`
 
 It's probably possible to simplify this list, but the errors you get come very late and are rather cryptic. 
@@ -17,7 +17,7 @@ It's probably possible to simplify this list, but the errors you get come very l
 More details are available in the Kivy official documentation:
 https://buildozer.readthedocs.io/en/latest/installation.html#targeting-android
 
-See if it's plugging an Android device over USB then typing: 
+See if it's working by plugging an Android device over USB then typing: 
 `buildozer android debug deploy run`
 
 This will take up to 30 mins the first time, less then a minute after that. The mobile device must have [USB-debugging enabled][usb-debug]. 

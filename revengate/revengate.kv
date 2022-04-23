@@ -13,6 +13,7 @@
 ScreenManager:
     id: sm
     map_wid: map_wid
+    resume_game_bt: resume_game_bt
     
     MDScreen:
         name: 'mainscreen'
@@ -37,6 +38,7 @@ ScreenManager:
             
             MainScreenButton:
                 id: resume_game_bt
+                disabled: True
                 text: "Resume"
                 on_release: app.show_map_screen()
 

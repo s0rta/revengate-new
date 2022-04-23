@@ -20,7 +20,6 @@
 
 import os
 import glob
-import shutil
 import pickle
 
 from . import tender
@@ -29,15 +28,20 @@ from .loader import DATA_DIR, TopLevelLoader, data_path
 from .engine import Engine
 from .ui import TextUI, Quitting, KivyUI
 from .action_map import ActionMap
-from .maps import Map, Builder, Connector
+from .maps import Connector
 from .area import Area
 from .events import is_action, StairsEvent
-from .tags import Tag, t
+from .tags import t
+
+from .graphics import RevengateApp
+
 
 CONFIG_ROOT = os.environ.get("XDG_CONFIG_HOME", "~/.config")
 CONFIG_DIR = os.path.join(CONFIG_ROOT, "revengate")
 CORE_FILE = "core.tml"
 
+# all the file keys you need to get a complete saved game
+SAVED_GAME_KEYS = ["hero", "engine", "mapid", "dungeon"]
 
 class Condenser:
     """ Save and reload game objects """
@@ -82,42 +86,44 @@ class Condenser:
         fname = rng.choice(map_files)
         return pickle.load(open(fname, "rb"))
 
+    def has_file(self, key):
+        fpath = self.file_path(key)
+        return os.path.isfile(fpath)
+    
+    def has_saved_game(self):
+        return all(map(self.has_file, SAVED_GAME_KEYS))
+
+    def delete_game(self):
+        for key in SAVED_GAME_KEYS:
+            self.delete(key)
+
 
 class Governor:
-    def __init__(self, graphical):
-        self.graphical = graphical
+    def __init__(self):
         self.condenser = Condenser()
         tender.loader = TopLevelLoader()
         tender.loader.load(open(data_path(CORE_FILE), "rt"))
         tender.sentiments = tender.loader.get_instance("core_sentiments")
-        
-        self.restore_game()
-        if self.dungeon is None:
-            self.dungeon = Area()
+        self.dungeon = None
+
+        # FIXME: move that somewhere else
+        # self.restore_game()
         if tender.engine is None:
             tender.engine = Engine()
         
         tender.action_map = ActionMap()
         tender.action_map.register(self.follow_stairs)
-        tender.action_map.register(self.new_hero_response)
         tender.action_map.register(self.new_game_response)
         tender.action_map.register(self.npc_turn)
         tender.action_map.register(self.save_game)
-        tender.action_map.register(self.del_game)
+        tender.action_map.register(self.restore_game)
+        tender.action_map.register(self.condenser.delete_game)
+        tender.action_map.register(self.condenser.has_saved_game)
         
-        if graphical:
-            tender.ui = KivyUI()
-            # late import to avoid making Kivy a hard requirement
-            from .graphics import RevengateApp
-            self.app = RevengateApp(None, self.npc_turn)
-            global CONFIG_DIR
-            CONFIG_DIR = self.app.user_data_dir
-        else:
-            tender.ui = TextUI()
-
-    def del_game(self):
-        for key in ["hero", "engine", "mapid", "dungeon"]:
-            self.condenser.delete(key)
+        tender.ui = KivyUI()
+        self.app = RevengateApp(None, self.npc_turn)
+        global CONFIG_DIR
+        CONFIG_DIR = self.app.user_data_dir
 
     def save_game(self):
         self.condenser.save("engine", tender.engine)
@@ -178,24 +184,7 @@ class Governor:
 
     def start(self):
         """ Start a game. """
-        if tender.hero is None and not self.graphical:
-            self.create_hero()
-        
-        # pre-game naration
-        dia = tender.loader.get_instance("intro")
-        tender.ui.show_dia(dia)
-
-        if tender.engine.map is None:
-            self.make_first_map()
-
-        try:
-            if self.graphical:
-                self.app.run()
-            else:
-                self.play()
-        except Quitting:
-            self.save_game()
-            print(f"See you later, brave {tender.hero.name}...")
+        self.app.run()
             
     def npc_turn(self, *args):
         """ Let all non-player actors do their turn, return if the hero is still alive.
@@ -216,6 +205,7 @@ class Governor:
                 return False
 
     def hero_turn(self):
+        # not used anymore, only kept to illustate how self.play() works
         while not tender.hero.has_played:
             print(tender.engine.map.to_text())
             move = tender.ui.read_next_move()
@@ -228,6 +218,9 @@ class Governor:
         
         return True if the hero is still alive, False otherwise. 
         """
+        # This game loop is obsolete, but it's usufull for showing what the event-based 
+        # loop is emulating with its callbacks bound to app.engine_turn and 
+        # app.hero_turn.
 
         done = False
         while not done:
@@ -240,7 +233,7 @@ class Governor:
             self.hero_turn()
             self.npc_turn()
             if tender.hero.is_dead:
-                self.del_game()
+                self.condenser.delete_game()
                 return False
 
             if tender.hero.has_played:
@@ -248,28 +241,21 @@ class Governor:
                 print(events or "no turn updates")
 
         return True
-    
-    def create_hero(self):
-        """ Prompt the user on what their character should be like. """
-        self.new_hero_text_prompt(self.new_hero_response)
-
-    def new_hero_text_prompt(self, resp_funct):
-        print("Character creation is really easy since all the stats are "
-              "either random or abitrary. However, you get to chose the "
-              "name of your character.")
-        # FIXME: use the UI instance to do the prompting
-        name = input("Name: ")
-        resp_funct(name)
-        
+            
     def new_hero_response(self, hero_name):
-        tender.hero = tender.loader.invoke("novice")
-        tender.hero.name = hero_name
         self.condenser.save("hero", tender.hero)
 
     def new_game_response(self, hero_name):
-        self.del_game()
-        self.new_hero_response(hero_name)
-        self.make_first_map()
+        self.condenser.delete_game()
+        self.dungeon = Area()
+
+        # FIXME: we really should be able to pass the name to invoke()
+        tender.hero = tender.loader.invoke("novice")
+        tender.hero.name = hero_name
+
+        map = self.make_first_map()
+        self.dungeon.add_map(map, parent=None)
+        self.save_game()
         
     def follow_stairs(self):
         from_pos = tender.engine.map.find(tender.hero)
@@ -295,8 +281,6 @@ class Governor:
             print(f"there are no stairs at {from_pos}")
             return None
         
-        
     def shutdown(self):
         """ Gracefully shutdown after saving everything. """
         ...
-        

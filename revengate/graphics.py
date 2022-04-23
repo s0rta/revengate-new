@@ -332,7 +332,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
         """ Move the tiles to have the hero at the center of the screen. """
         if not tender.hero or not tender.engine.map:
             return
-            
+        
         mpos = tender.engine.map.find(tender.hero)
         cpos = Vector(self.map_to_canvas(mpos))
         spos = cpos * self.scale
@@ -465,7 +465,6 @@ class RevengateApp(MDApp):
     
     def __init__(self, map, npc_callback, *args):
         super().__init__(*args)
-        self.map = map
         self.npc_callback = npc_callback
         resources.resource_add_path(os.path.join(DATA_DIR, "images"))
         resources.resource_add_path(os.path.join(DATA_DIR, "fonts"))
@@ -474,6 +473,11 @@ class RevengateApp(MDApp):
         tender.action_map["new-game-response"](hero_name)
         self.map_wid.set_map(tender.engine.map)
         self.root.current = "mapscreen"
+        
+        # pre-game naration
+        # TODO: put those in a dialogue
+        dia = tender.loader.get_instance("intro")
+        tender.ui.show_dia(dia)
         
     def show_hero_name_dia(self):
         if not self.hero_name_form:
@@ -485,17 +489,17 @@ class RevengateApp(MDApp):
         raise NotImplementedError()
 
     def set_map(self, map):
-        self.map = map
         self.map_wid.set_map(map)
         
     def show_map_screen(self, *args):
         self.map_wid.set_map(tender.engine.map)
-        self.map_wid.center_on_hero()
         self.root.current = "mapscreen"
 
     def show_main_screen(self, *args):
         if tender.hero and tender.hero.is_alive:
-            tender.action_map["save-game"]
+            tender.action_map["save-game"]()
+        self.root.resume_game_bt.disabled = not tender.action_map["has-saved-game"]()
+
         self.root.current = "mainscreen"
     
     def stop(self):
