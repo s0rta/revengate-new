@@ -469,6 +469,9 @@ class RevengateApp(MDApp):
         resources.resource_add_path(os.path.join(DATA_DIR, "images"))
         resources.resource_add_path(os.path.join(DATA_DIR, "fonts"))
 
+    def has_saved_game(self):
+        return tender.action_map["has-saved-game"]()
+
     def init_new_game(self, hero_name):
         tender.action_map["new-game-response"](hero_name)
         self.map_wid.set_map(tender.engine.map)
@@ -492,6 +495,8 @@ class RevengateApp(MDApp):
         self.map_wid.set_map(map)
         
     def show_map_screen(self, *args):
+        if not tender.hero or tender.hero.is_dead() or not tender.engine.map:
+            tender.action_map["restore-game"]()
         self.map_wid.set_map(tender.engine.map)
         self.root.current = "mapscreen"
 

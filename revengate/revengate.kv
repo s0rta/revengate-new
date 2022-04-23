@@ -1,5 +1,6 @@
 #:kivy 2.0.0
 #:include revengate/forms.kv
+#:import tender revengate
 
 <MapWidget>
     app: app
@@ -11,6 +12,7 @@
 
 
 ScreenManager:
+    app: app
     id: sm
     map_wid: map_wid
     resume_game_bt: resume_game_bt
@@ -38,7 +40,7 @@ ScreenManager:
             
             MainScreenButton:
                 id: resume_game_bt
-                disabled: True
+                disabled: not app.has_saved_game()
                 text: "Resume"
                 on_release: app.show_map_screen()
 

@@ -136,6 +136,7 @@ class Governor:
         tender.engine = self.condenser.load("engine")
         self.dungeon = self.condenser.load("dungeon")
         mapid = self.condenser.load("mapid")
+        
         if mapid is not None and tender.engine is not None:
             tender.engine.change_map(self.dungeon[mapid])
 
