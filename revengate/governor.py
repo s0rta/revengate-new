@@ -36,25 +36,26 @@ from .tags import t
 from .graphics import RevengateApp
 
 
+CORE_FILE = "core.tml"
+# Reasonable Linux defaults, but ideally get a more cross plateform value from Kivy
 CONFIG_ROOT = os.environ.get("XDG_CONFIG_HOME", "~/.config")
 CONFIG_DIR = os.path.join(CONFIG_ROOT, "revengate")
-CORE_FILE = "core.tml"
 
 # all the file keys you need to get a complete saved game
 SAVED_GAME_KEYS = ["hero", "engine", "mapid", "dungeon"]
 
+
 class Condenser:
     """ Save and reload game objects """
 
-    @property
-    def config_dir(self):
-        # we resolve the globals every time to allow different plateforms to update them 
-        # late during the startup
-        return os.path.expanduser(CONFIG_DIR)
+    def __init__(self, data_dir=CONFIG_DIR):
+        """data_dir: the top-level directory for per-player files like saved games. 
+        if None, a Linux-specific default is used. """
+        self.data_dir = os.path.expanduser(data_dir)
 
     def file_path(self, key):
         fname = f"{key}.pickle"
-        return os.path.join(self.config_dir, "save", fname)
+        return os.path.join(self.data_dir, "save", fname)
         
     def ensure_dir(self, path):
         if path.endswith("/"):
@@ -100,16 +101,14 @@ class Condenser:
 
 class Governor:
     def __init__(self):
-        self.condenser = Condenser()
         tender.loader = TopLevelLoader()
         tender.loader.load(open(data_path(CORE_FILE), "rt"))
         tender.sentiments = tender.loader.get_instance("core_sentiments")
         self.dungeon = None
 
-        # FIXME: move that somewhere else
-        # self.restore_game()
-        if tender.engine is None:
-            tender.engine = Engine()
+        tender.ui = KivyUI()
+        self.app = RevengateApp()
+        self.condenser = Condenser(self.app.user_data_dir)
         
         tender.action_map = ActionMap()
         tender.action_map.register(self.follow_stairs)
@@ -120,10 +119,6 @@ class Governor:
         tender.action_map.register(self.condenser.delete_game)
         tender.action_map.register(self.condenser.has_saved_game)
         
-        tender.ui = KivyUI()
-        self.app = RevengateApp(None, self.npc_turn)
-        global CONFIG_DIR
-        CONFIG_DIR = self.app.user_data_dir
 
     def save_game(self):
         self.condenser.save("engine", tender.engine)
@@ -253,6 +248,7 @@ class Governor:
         # FIXME: we really should be able to pass the name to invoke()
         tender.hero = tender.loader.invoke("novice")
         tender.hero.name = hero_name
+        tender.engine = Engine()
 
         map = self.make_first_map()
         self.dungeon.add_map(map, parent=None)

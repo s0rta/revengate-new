@@ -464,9 +464,8 @@ class RevengateApp(MDApp):
     hero_name = StringProperty(None)
     hero_name_form = ObjectProperty(None)
     
-    def __init__(self, map, npc_callback, *args):
+    def __init__(self, *args):
         super().__init__(*args)
-        self.npc_callback = npc_callback
         resources.resource_add_path(os.path.join(DATA_DIR, "images"))
         resources.resource_add_path(os.path.join(DATA_DIR, "fonts"))
 
@@ -524,9 +523,10 @@ class RevengateApp(MDApp):
         self.root.transition.duration = 1.0
 
         self.map_wid = self.root.map_wid
-        self.map_wid.bind(engine_turn=self.npc_callback)
+        npc_callback = tender.action_map["npc-turn"]
+        self.map_wid.bind(engine_turn=npc_callback)
         self.map_wid.bind(engine_turn=self.map_wid.refresh_map)
-        self.map_wid.bind(hero_turn=self.npc_callback)
+        self.map_wid.bind(hero_turn=npc_callback)
         self.map_wid.bind(hero_turn=self.map_wid.refresh_map)
 
         # TODO: disable "resume" button unless there is a saved game
