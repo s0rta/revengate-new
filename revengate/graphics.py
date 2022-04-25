@@ -372,6 +372,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
             print(events)
         self.hero_turn = tender.hero.last_action
         tender.engine.advance_turn()
+        tender.action_map["save-game"]()
         self.engine_turn = tender.engine.current_turn
 
     def rest(self, *args):
