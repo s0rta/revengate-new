@@ -36,13 +36,14 @@ ScreenManager:
             MainScreenButton:
                 id: new_game_bt
                 text: "New Game"
+                on_press: app.root.transition.center_on_button()
                 on_release: app.show_hero_name_dia()
             
             MainScreenButton:
                 id: resume_game_bt
                 disabled: not app.has_saved_game()
                 text: "Resume"
-                on_release: app.show_map_screen()
+                on_release: app.show_map_screen(*args)
 
     Screen:
         name: 'mapscreen'
@@ -64,6 +65,10 @@ ScreenManager:
                 padding: "16dp"
 
                 MDRectangleFlatButton:
+                    text: "Home"
+                    on_release: app.show_main_screen(*args)
+                    
+                MDRectangleFlatButton:
                     text: "Rest"
                     on_release: map_wid.rest()
 
@@ -74,10 +79,6 @@ ScreenManager:
                 MDRectangleFlatButton:
                     text: "Follow stairs"
                     on_release: map_wid.follow_stairs()
-                    
-                MDRectangleFlatButton:
-                    text: "Home"
-                    on_release: app.show_main_screen()
                     
                 MDRectangleFlatButton:
                     text: "Quit"

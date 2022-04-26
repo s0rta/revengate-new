@@ -132,3 +132,4 @@ class ConversationPopupContent(BoxLayout):
 class GameOverPopup(RevPopup):
     def __init__(self, response_funct, *args, **kwargs):
         super().__init__(response_funct, content_cls=None)
+        self.ok_btn.bind(on_press=self.app.root.transition.center_on_button)

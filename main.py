@@ -31,7 +31,7 @@ def main():
     show_all_files()
 
     from revengate.governor import Governor
-    gov = Governor(graphical=True)
+    gov = Governor()
     gov.start()
 
 

@@ -412,14 +412,12 @@ class RevScreenManager(ScreenManager):
 
 
 class RipplesTransition(ShaderTransition):
-    # TODO: We can recompute the center of effect dynamically by turning this into an 
-    # f-string and binding the app.root.current to a function that updates the params 
-    # that get passed to TRANSITION_FS.format()
     TRANSITION_FS = '''$HEADER$
     uniform float t;
     uniform sampler2D tex_in;
     uniform sampler2D tex_out;
 
+    const vec2 eff_center = vec2(%f, %f);
     const float PI = 3.141592653589793;
     const float ROOT_2 = 1.4142135623730951;
     const float RING_W = 0.35;
@@ -435,8 +433,14 @@ class RipplesTransition(ShaderTransition):
         const float nb_periods = 2.0;
         const float theta_max = 2.0 * nb_periods * PI;
 
-        // scaled distance to the centre of the screen in 0..1
-        float r = distance(tex_coord0, vec2(0.5)) * ROOT_2;
+        float max_bl_tr = max(distance(eff_center, vec2(0.0)), 
+                              distance(eff_center, vec2(1.0)));
+        float max_tl_br = max(distance(eff_center, vec2(0.0, 1.0)), 
+                              distance(eff_center, vec2(1.0, 0.0)));
+        float max_r = max(max_bl_tr, max_tl_br);
+
+        // scaled distance to the centre of effect in 0..1
+        float r = distance(tex_coord0, eff_center) / max_r;
 
         // stretch time a little bit so the effect gets to complete rather than 
         // aborting when it starts touching the edges
@@ -459,12 +463,25 @@ class RipplesTransition(ShaderTransition):
         gl_FragColor = mix(current, next, mix_pct);
     }
     '''
-    fs = StringProperty(TRANSITION_FS)
+    fs = StringProperty(None)
 
     def __init__(self, app):
         self.app = app
         self.clearcolor = self.app.theme_cls.bg_normal
         super().__init__()
+
+    def update_eff_center(self, eff_center):
+        x, y = eff_center
+        w, h = self.app.root.size
+        sx, sy = 1.0 * x / w, 1.0 * y / h
+        self.fs = self.TRANSITION_FS % (sx, sy)
+
+    def center_on_button(self, button=None):
+        if button:
+            eff_center = button.last_touch.pos
+        else:
+            eff_center = self.app.root.center
+        self.update_eff_center(eff_center)
 
 
 class RevengateApp(MDApp):
@@ -502,13 +519,17 @@ class RevengateApp(MDApp):
     def set_map(self, map):
         self.map_wid.set_map(map)
         
-    def show_map_screen(self, *args):
+    def show_map_screen(self, button=None):
+        self.root.transition.center_on_button(button)
+        
         if not tender.hero or tender.hero.is_dead or not tender.engine.map:
             tender.action_map["restore-game"]()
         self.map_wid.set_map(tender.engine.map)
         self.root.current = "mapscreen"
 
-    def show_main_screen(self, *args):
+    def show_main_screen(self, button=None):
+        self.root.transition.center_on_button(button)
+        
         if tender.hero and tender.hero.is_alive:
             tender.action_map["save-game"]()
         self.root.resume_game_bt.disabled = not tender.action_map["has-saved-game"]()
@@ -530,7 +551,7 @@ class RevengateApp(MDApp):
     
     def stop(self):
         if tender.hero and tender.hero.is_alive:
-            tender.action_map["save-game"]        
+            tender.action_map["save-game"]()   
         super().stop()
         
     def build(self):
