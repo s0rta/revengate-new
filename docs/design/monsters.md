@@ -360,3 +360,47 @@ The mandibles deliver cutting attacks and are strong enough to cut through leath
 The giant locust are usually found in groups of 6 to 120 individuals. They eat some plants, but usually prefer to hunt small animals. When food is scares, they can burrow underground and enter a state of stasis. It is not well understood what triggers them to come back from stasis, but when it happens, the whole group usually emerges almost all at once.
 
 Colonies do not have a queen.
+
+
+## Trinian Bat
+Illustration: to do
+
+The trinian bat is a large distant relative of the very common pipistrelle bat.
+
+The face and body of the trinian bat is similar to that of the common bat, but the neck is about times as long and the pointy teeth are more prominent. The animal also has a long rat-like tail it coils around its victims to stay in place while it feeds on their blood. Individuals can get as large as 1.5m wingspan, but 75cm is more common.
+
+Trinian bats are omnivores. They feed on fruits, insects, small animals that they tear up, chew, and consume in small pieces, as well as larger animals from which they only drink blood. They are not true vampire bats, but feeding on blood significantly speeds up their healing.
+
+Trinian bats can hunt solo or in large groups. An encounter can be with as few as a single bat or with as many as fifty. In colonies, they exhibit collective behaviors where nursing females will stay with their youngs and other individuals will go out and hunt for them. This behavior is not limited to mating pairs: unrelated individuals are often seen sharing food. It is believed that they are capable or advanced communication.
+
+Trinian bats sometimes steal items from people, which they bring back to their colony as treasure. What makes them attracted to certain objects and completely indifferent to others is not understood. Finding a large nesting site is as likely to be the promise of precious loot as it could be the location of nothing more than a large pile of old socks.
+
+
+## Elementals
+
+Elementals form a large class of beings spawned from animated mater. The two most common ones are the air and the water elementals. Both look vaguely like a small tornado that is obviously moving around with some sort of purpose. 
+
+The vortex – or column of mater – can bend around itself like a snake. Elementals can lift objects then release them at high velocity to cause destruction. Large elementals can engulf a person and lift them off the ground. While air elementals would typically then throw them back down from some height in order to cause injury, the water elementals are more likely to drag the unlucky victim underwater in an attempt to drown them.
+
+How the elementals come to be is not known, but it is almost certainly the work of skilled magicians. Every manifestation of an elemental carries around its talisman, which is an intricate clockwork mechanism featuring at least two core crystals. The talisman of an elemental has many similarities with the vital assemblage of a phantruch, but the talisman is almost always a much simpler device. If the talisman is damaged, the creature ceases to be animated and collapses to the ground. Elementals seems to be aware of this vulnerability and always keep their talisman out of the reach of whoever they are attacking.
+
+How much intelligence an elemental posses is not clear. They are clearly aware of their surroundings, but they are also usually in a mindless destruction spree.
+
+### Flesh elemental
+The flesh elemental is an amalgamation of a large number of smaller organisms all moving together as a single creature. Since most of the organisms are typically plants or insects, "biomass elemental" would be a more accurate name for the creature, but the term never caught on.
+
+The creature looks like a long twisty tube made of hundreds or oven thousands of small organisms. Plants like ivy and other vines usually run along the length of the body while insects and other invertebrates tend to cluster in patches: one big and colony here, a bee swarm there, some maggots forming a smaller segment, and maybe dozens of moths on one side of another segment. There might be a handful of small vertebrate animals in there as well, such as mice, snakes, and small birds, but those will always be vastly outnumbered by less sentient invertebrates.
+
+Everything inside a flesh elemental is alive. Plant roots and limbs grow to reach every single organism and provide nutrition. The creature also engages in odd behaviors such as rolling in pools of blood in order to feed its numerous components. If an organism dies, it will be ejected and another organism of similar size will soon be incorporated in the elemental. How the elemental decides how big to grow is not understood.
+
+The creature's movement is more like that of a worm or a caterpillar than that of a snake, except for constriction, which is a common method that it uses to finish a victim. It will usually apply enough form to pulverize its prey and convert it into a shapeless soup of nutrients that is easily to absorbed. It will also attack by slapping, by delivering dozens of venomous stings all at once, and by producing a variety of irritant secretions of vegetal origin. 
+
+
+## Catrena (cactus mole)
+The catrena is a distant relative of the porcupines that look more like a cross between a gerbil and a cactus.
+
+While the general shape is that of a gerbil, the animal is much bigger: just a little smaller than a beaver, weighing 15kg on average. The skin and the short fuzzy hair takes various shades of green, which helps the animal to hide under foliage. On most of the back of the animal are long stiff needle-like quills that are somewhat reminiscent of cactus spines. There are lengthwise stripes on the animal that give the impression that it's body is ribbed like a barrel cactus, but that impression is merely an optical illusion. 
+
+Catrenas are good tree climbers. They move on the ground by hopping around like kangaroos. During short sprints, they can match the running speed of an average human. They can roll into a ball for defense and they have very sharp incisor teeth like all rodents, which they readily use for attack. The quills easily break on impact and the tiny barbs along the length of the quills ensure that they keep digging deeper into a victim's flesh over time. A mild acid on the quill causes intense pain and swelling at the puncture site. The animal can regrow damaged quills in about a week.
+
+Catrenas are strictly vegetarian. They are particularly found of dates and coconuts, which they have no problem opening with their incisors.
