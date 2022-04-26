@@ -280,7 +280,9 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 return True
         return super().on_touch_down(event)
         
-    def on_touch_up(self, event):        
+    def on_touch_up(self, event):
+        if not tender.hero or tender.hero.is_dead:
+            return False
         if not self.is_drag(event):
             res = None
             cpos = self.to_local(*event.pos)
@@ -301,6 +303,8 @@ class MapWidget(FocusBehavior, ScatterPlane):
         return res
     
     def keyboard_on_key_down(self, window, key, text, modifiers):
+        if not tender.hero or tender.hero.is_dead:
+            return False
         key_map = {"right": "move-or-act-right", 
                    "left": "move-or-act-left", 
                    "up": "move-or-act-up", 
@@ -367,13 +371,18 @@ class MapWidget(FocusBehavior, ScatterPlane):
         if events:
             if is_move(events):
                 self.verify_centering(anim=True)
-                
-            # TODO: show those in a scrollable view pane
-            print(events)
+            self.app.display_status_events(events)
+            
+        # trigger the NPC turn
         self.hero_turn = tender.hero.last_action
-        tender.engine.advance_turn()
-        tender.action_map["save-game"]()
-        self.engine_turn = tender.engine.current_turn
+        
+        if tender.engine:
+            events = tender.engine.advance_turn()
+            self.app.display_status_events(events)
+            
+        if tender.engine:
+            tender.action_map["save-game"]()
+            self.engine_turn = tender.engine.current_turn
 
     def rest(self, *args):
         res = tender.hero.rest()
@@ -448,7 +457,6 @@ class RipplesTransition(ShaderTransition):
         vec4 next = texture2D(tex_in, tex_coord0-offset);
         
         gl_FragColor = mix(current, next, mix_pct);
-        
     }
     '''
     fs = StringProperty(TRANSITION_FS)
@@ -495,7 +503,7 @@ class RevengateApp(MDApp):
         self.map_wid.set_map(map)
         
     def show_map_screen(self, *args):
-        if not tender.hero or tender.hero.is_dead() or not tender.engine.map:
+        if not tender.hero or tender.hero.is_dead or not tender.engine.map:
             tender.action_map["restore-game"]()
         self.map_wid.set_map(tender.engine.map)
         self.root.current = "mapscreen"
@@ -506,6 +514,19 @@ class RevengateApp(MDApp):
         self.root.resume_game_bt.disabled = not tender.action_map["has-saved-game"]()
 
         self.root.current = "mainscreen"
+    
+    def display_status_events(self, events):
+        # TODO: put those on the MapWidget
+        print(events)
+        if tender.hero.is_dead:
+            tender.action_map["purge-game"]()
+            form = forms.GameOverPopup(self.show_main_screen)
+            form.open()
+    
+    def play_npcs_and_refresh(self, *args):
+        events = tender.action_map["npc-turn"]()
+        self.map_wid.refresh_map()
+        self.display_status_events(events)
     
     def stop(self):
         if tender.hero and tender.hero.is_alive:
@@ -523,11 +544,8 @@ class RevengateApp(MDApp):
         self.root.transition.duration = 1.0
 
         self.map_wid = self.root.map_wid
-        npc_callback = tender.action_map["npc-turn"]
-        self.map_wid.bind(engine_turn=npc_callback)
-        self.map_wid.bind(engine_turn=self.map_wid.refresh_map)
-        self.map_wid.bind(hero_turn=npc_callback)
-        self.map_wid.bind(hero_turn=self.map_wid.refresh_map)
+        self.map_wid.bind(engine_turn=self.play_npcs_and_refresh)
+        self.map_wid.bind(hero_turn=self.play_npcs_and_refresh)
 
         # TODO: disable "resume" button unless there is a saved game
 

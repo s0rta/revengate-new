@@ -15,11 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-import click
 from pprint import pprint
 from warnings import warn
 
-from .tags import Tag
 from .dialogue import Action
 from . import tender
 
@@ -46,17 +44,10 @@ class UI:
     both terminal and graphical interfaces.
     """
 
-    def quit(self):
-        # FIXME: there has to be a better way!
-        raise Quitting("Giving up!")
-
     def show_dia(self, dia):
         raise NotImplementedError()
     
     def prompt(self, *options):
-        raise NotImplementedError()
-
-    def show_text(self, text):
         raise NotImplementedError()
 
     def show_turn_events(self, events):
@@ -78,32 +69,8 @@ class KivyUI(UI):
         choice = input("Make a choice: ")
         return choice
 
-    def show_text(self, text):
-        warn("Not fully implemented")
-        print(text)
-
-    def show_turn_events(self, events):
-        warn("Not fully implemented")
-        print(events)
-
 
 class TextUI(UI):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.action_keys = {"?": self.show_help, 
-                            "q": self.quit,
-                            "c": "show_credits", 
-                            "f": "follow-stairs",
-                            "p": "pickup_item",
-                            UP: "move_or_act_up",
-                            DOWN: "move_or_act_down",
-                            RIGHT: "move_or_act_right",
-                            LEFT: "move_or_act_left"}
-    
-    
-    def show_help(self):
-        print(TEXT_HELP)
-
     def show_dia(self, dia):
         for part in dia.elems:
             # TODO: if this moves inside the ActionMap, UI doesn't need ActionMap
@@ -136,21 +103,3 @@ class TextUI(UI):
         if getattr(opt_map[choice], "after_ftag"):
             tender.action_map.call(opt_map[choice].after_ftag)
         return choice
-
-    def read_next_move(self):
-        c = click.getchar()
-        directions = {UP: "up", DOWN: "down", RIGHT: "right", LEFT: "left"}
-        if c in self.action_keys:
-            action = self.action_keys[c]
-            if callable(action):
-                return action()
-            else:
-                return tender.action_map.call(action)
-        else:
-            print("invalid direction")
-
-    def show_text(self, text):
-        print(text)
-
-    def show_turn_events(self, events):
-        print(events)

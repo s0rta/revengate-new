@@ -26,6 +26,35 @@ from kivymd.uix.dialog import MDDialog
 
 
 class RevPopup(MDDialog):
+    """ A popup notification. 
+    
+    Callers must provide a response_funct callback that will be called once the player 
+    acknowledges the notification.
+    """
+    app = ObjectProperty(None)
+    
+    def __init__(self, response_funct, content_cls, *args, **kwargs):
+        self.response_funct = response_funct
+        self.ok_btn = MDFlatButton(text="OK", 
+                                   on_release=self.dismiss)
+        super().__init__(content_cls=content_cls, 
+                         buttons=[self.ok_btn])
+        
+    def dismiss(self, *args):
+        super().dismiss(*args)
+        if self.response_funct:
+            self.response_funct()
+
+
+class RevForm(MDDialog):
+    """ A popup form. 
+    
+    Subclasses must define the is_valid() method and an inner content class that 
+    contains the data widgets.
+    
+    Callers must provide a response_funct callback that will receive the content of the 
+    form once it passes validation.
+    """
     app = ObjectProperty(None)
     
     def __init__(self, response_funct, content_cls, *args, **kwargs):
@@ -75,7 +104,7 @@ class RevPopup(MDDialog):
         self.ok_btn.disabled = not self.is_valid()
 
 
-class HeroNameForm(RevPopup):
+class HeroNameForm(RevForm):
     def __init__(self, response_funct, *args, **kwargs):
         cont = HeroNameFormContent()
         cont.ids.hero_name_field.bind(text=self.validate,
@@ -90,7 +119,7 @@ class HeroNameFormContent(BoxLayout):
     pass
 
 
-class ConversationPopup(RevPopup):
+class ConversationPopup(RevForm):
     def __init__(self, response_funct, *args, **kwargs):
         cont = ConversationPopupContent()
         super().__init__(response_funct, content_cls=cont)
@@ -98,3 +127,8 @@ class ConversationPopup(RevPopup):
 
 class ConversationPopupContent(BoxLayout):
     pass
+
+
+class GameOverPopup(RevPopup):
+    def __init__(self, response_funct, *args, **kwargs):
+        super().__init__(response_funct, content_cls=None)

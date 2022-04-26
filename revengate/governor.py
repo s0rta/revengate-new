@@ -30,14 +30,15 @@ from .ui import TextUI, Quitting, KivyUI
 from .action_map import ActionMap
 from .maps import Connector
 from .area import Area
-from .events import is_action, StairsEvent
+from .events import is_action, StairsEvent, Events
 from .tags import t
 
 from .graphics import RevengateApp
 
 
 CORE_FILE = "core.tml"
-# Reasonable Linux defaults, but ideally get a more cross plateform value from Kivy
+# Reasonable Linux defaults, but ideally we get a more cross platform value from Kivy 
+# after initializing the App.
 CONFIG_ROOT = os.environ.get("XDG_CONFIG_HOME", "~/.config")
 CONFIG_DIR = os.path.join(CONFIG_ROOT, "revengate")
 
@@ -116,10 +117,10 @@ class Governor:
         tender.action_map.register(self.npc_turn)
         tender.action_map.register(self.save_game)
         tender.action_map.register(self.restore_game)
+        tender.action_map.register(self.purge_game)
         tender.action_map.register(self.condenser.delete_game)
         tender.action_map.register(self.condenser.has_saved_game)
         
-
     def save_game(self):
         self.condenser.save("engine", tender.engine)
         self.condenser.save("hero", tender.hero)
@@ -135,6 +136,13 @@ class Governor:
         if mapid is not None and tender.engine is not None:
             tender.engine.change_map(self.dungeon[mapid])
 
+    def purge_game(self):
+        """ Get rid of a game, both from disk and from in-memory state. """
+        self.condenser.delete_game()
+        tender.dungeon = None
+        tender.hero = None
+        tender.engine = None
+        
     def make_map(self, nb_monsters, item, from_pos=None, parent_map=None):
         lvl = len(self.dungeon.maps) + 1
         
@@ -183,22 +191,23 @@ class Governor:
         self.app.run()
             
     def npc_turn(self, *args):
-        """ Let all non-player actors do their turn, return if the hero is still alive.
+        """ Let all non-player actors do their turn, return return the events from their 
+        actions.
         
         This function is no-op if actors have already played and the turn has not been 
         advanced on the engine.
         """
+        events = Events()
         for actor in tender.engine.all_actors():
             if actor.has_played or actor.is_dead:
                 continue
             if actor is tender.hero and not tender.hero.has_played:
-                return tender.hero.is_alive
+                return events
             elif actor in tender.engine.map and not actor.has_played:
-                event = actor.act()
-                if event:
-                    tender.ui.show_turn_events(event)
+                events.add(actor.act())
             if tender.hero.is_dead:
-                return False
+                return events
+        return events
 
     def hero_turn(self):
         # not used anymore, only kept to illustate how self.play() works
