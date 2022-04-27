@@ -2,25 +2,42 @@ Developing Revengate
 ====================
 
 ## Dependencies
-The pure Python dependencies are specified in `requirements-dev.txt`. This command should install them all for you:
-`pip install -r requirements-dev.txt`
+The pure Python dependencies are specified in `requirements-dev.txt`. 
 
-See if it's working by typing: 
-`flit install -s`
-`revcli`
+If you are not already using a virtual environment, it's a good idea to create one now: 
+``` bash
+python3 -m venv .venv
+. .venv/bin/activate
+```
 
-There are many non-Python dependencies, almost all for the Android backend. On Ubuntu 21.10, this command will get you up to speed:
+This command should then install all the development dependencies for you:
+``` bash
+pip install -r requirements-dev.txt
+```
+
+You can see if your setup is working by installing the game in development mode and then launching it: 
+``` bash
+flit install -s
+revcli
+```
+
+There are many non-Python dependencies, almost all for the Android backend. If you do not plan on deploying the game on Android, you don't have anything else to do!
+
+On Ubuntu 21.10, this command will get you up to speed for Android development:
 `sudo apt install -y build-essentials cmake java-common default-jre default-jdk and libjffi-java google-android-build-tools-24-installer android-sdk-build-tools android-sdk-platform-tools android-sdk-platform-23 android-sdk libltdl7-dev lld`
 
-It's probably possible to simplify this list, but the errors you get come very late and are rather cryptic. 
+It's probably possible to simplify this list, but the errors you get come very late and are rather cryptic, so we didn't get into simplifying it yet.
 
-More details are available in the Kivy official documentation:
-https://buildozer.readthedocs.io/en/latest/installation.html#targeting-android
+More details are available in the [Kivy official documentation][kivy-for-a]
 
-See if it's working by plugging an Android device over USB then typing: 
-`buildozer android debug deploy run`
+[kivy-for-a]: https://buildozer.readthedocs.io/en/latest/installation.html#targeting-android
 
-This will take up to 30 mins the first time, less then a minute after that. The mobile device must have [USB-debugging enabled][usb-debug]. 
+You can test your Android development setup by plugging an Android device over USB then typing: 
+``` bash
+buildozer android debug deploy run
+```
+
+This command will take up to 30 mins the first time, less then a minute after that. The mobile device must have [USB-debugging enabled][usb-debug]. 
 
 [usb-debug]: https://developer.android.com/studio/command-line/adb#Enabling
 
@@ -61,7 +78,7 @@ The main layers of the code are in described below:
 
 
 ## Artwork
-Artwork must be licenced under one of CC-BY, CC-BY-SA (4.0+), CC0, or GPLv3. 
+Artwork must be licensed under one of CC-BY, CC-BY-SA (4.0+), CC0, or GPLv3. 
 
 CC-NC and CC-NC-SA are not GPL compatible and are therefore not usable in this project. More details here:
 https://creativecommons.org/share-your-work/licensing-considerations/compatible-licenses
