@@ -377,6 +377,7 @@ Trinian bats sometimes steal items from people, which they bring back to their c
 
 
 ## Elementals
+Illustration: to do
 
 Elementals form a large class of beings spawned from animated mater. The two most common ones are the air and the water elementals. Both look vaguely like a small tornado that is obviously moving around with some sort of purpose. 
 
@@ -397,6 +398,8 @@ The creature's movement is more like that of a worm or a caterpillar than that o
 
 
 ## Catrena (cactus mole)
+Illustration: to do
+
 The catrena is a distant relative of the porcupines that look more like a cross between a gerbil and a cactus.
 
 While the general shape is that of a gerbil, the animal is much bigger: just a little smaller than a beaver, weighing 15kg on average. The skin and the short fuzzy hair takes various shades of green, which helps the animal to hide under foliage. On most of the back of the animal are long stiff needle-like quills that are somewhat reminiscent of cactus spines. There are lengthwise stripes on the animal that give the impression that it's body is ribbed like a barrel cactus, but that impression is merely an optical illusion. 

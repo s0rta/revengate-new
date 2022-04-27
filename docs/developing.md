@@ -2,8 +2,8 @@ Developing Revengate
 ====================
 
 ## Dependencies
-Most of the pure Python dependencies are specified in Pipfile. This command should install them all for you:
-`pipenv sync --dev`
+The pure Python dependencies are specified in `requirements-dev.txt`. This command should install them all for you:
+`pip install -r requirements-dev.txt`
 
 See if it's working by typing: 
 `flit install -s`
