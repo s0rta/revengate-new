@@ -176,9 +176,6 @@ class Governor:
         
         obs = tender.loader.invoke("observer")
         obs.next_dialogue = t("first_level")
-                
-        # FIXME: debug
-        tender.obs = obs
         
         map.place(obs)
         tender.engine.change_map(map)

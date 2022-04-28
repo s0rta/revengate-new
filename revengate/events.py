@@ -38,6 +38,13 @@ def is_move(event):
     return False
         
 
+def iter_events(events):
+    if isinstance(events, StatusEvent):
+        return iter((events,))
+    else:
+        return iter(events)
+
+
 class StatusEvent:
     """ Something that changes the status of an actor. 
     

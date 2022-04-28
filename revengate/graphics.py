@@ -38,7 +38,7 @@ from kivy.uix.screenmanager import ScreenManager, ShaderTransition
 
 from .maps import TileType, Connector
 from .loader import DATA_DIR
-from .events import is_action, is_move
+from .events import is_action, is_move, iter_events, Conversation, Death
 from .utils import Array
 from .tags import t
 from . import tender, forms
@@ -294,14 +294,6 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 return True
         return super().on_touch_up(event)
     
-    def _chat_test(self):
-        res = tender.hero.talk(tender.obs)
-        if res:
-            dialogue = tender.loader.invoke(res.tag)
-            form = forms.ConversationPopup(print, dialogue)
-            form.open()
-        return res
-    
     def keyboard_on_key_down(self, window, key, text, modifiers):
         if not tender.hero or tender.hero.is_dead:
             return False
@@ -310,7 +302,6 @@ class MapWidget(FocusBehavior, ScatterPlane):
                    "up": "move-or-act-up", 
                    "down": "move-or-act-down", 
                    "f": self.follow_stairs,
-                   "2": self._chat_test,
                    "p": "pickup-item",
                    }
 
@@ -509,6 +500,11 @@ class RevengateApp(MDApp):
         popup = forms.ConversationPopup(dialogue, response_funct)
         popup.open()
 
+    def show_conversation(self, dialogue, response_funct=None):
+        # TODO: pause time
+        popup = forms.ConversationPopup(dialogue, response_funct)
+        popup.open()
+
     def show_hero_name_form(self):
         if not self.hero_name_form:
             self.hero_name_form = forms.HeroNameForm(self.init_new_game)
@@ -539,12 +535,17 @@ class RevengateApp(MDApp):
         self.root.current = "mainscreen"
     
     def display_status_events(self, events):
-        # TODO: put those on the MapWidget
-        print(events)
-        if tender.hero.is_dead:
-            tender.action_map["purge-game"]()
-            form = forms.GameOverPopup(self.show_main_screen)
-            form.open()
+        for event in iter_events(events):
+            if isinstance(event, Conversation):
+                convo = tender.loader.invoke(event.tag)
+                self.show_conversation(convo)
+            elif isinstance(event, Death) and event.actor == tender.hero:
+                tender.action_map["purge-game"]()
+                form = forms.GameOverPopup(self.show_main_screen)
+                form.open()
+            else:
+                # TODO: put in a scrollable view on the MapWidget
+                print(event)
     
     def play_npcs_and_refresh(self, *args):
         events = tender.action_map["npc-turn"]()
