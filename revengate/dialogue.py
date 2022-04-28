@@ -19,11 +19,11 @@
 
 # TODO: placeholder for values like the hero's name
 
-
-from .tags import Tag, t
-
 import functools
 import inspect
+from copy import copy
+
+from .tags import Tag, t
 
 
 class DialogueTag(Tag):
@@ -82,8 +82,49 @@ class Dialogue:
     def __init__(self, key):
         self.key = key
         self.elems = []
+        self.cur_idx = None
+
+    def clone(self):
+        return copy(self)
+    
+    def advance(self):
+        self.cur_idx += 1
+        return self.elems[self.cur_idx]
+    
+    def current(self):
+        if self.cur_idx is None:
+            raise RuntimeError("You must start the dialogue with `start()` before "
+                               "accessing the current element.")
+        return self.elems[self.cur_idx]
+    
+    def start(self):
+        self.cur_idx = 0
+        return self.elems[0]
+        
+    def start_lines(self):
+        from warnings import warn
+        warn("this function will go away once we can handle all action tags")
+        for i, elem in enumerate(self.elems):
+            if isinstance(elem, Line):
+                self.cur_idx = i
+                return elem
+        raise ValueError(f"Dialoge {self.key} has no lines.")
+        
+    def is_last(self):
+        """ Return if this is the last line of text in this dialogue. """
+        return self.cur_idx == len(self.elems) - 1
+    
+    def callback(self):
+        """ Return a callback function to be called after displaying the current line of 
+        speech. """
+        if self.cur_idx is not None and self.elems[self.cur_idx].after_ftag:
+            # FIXME: convert the tag to a function
+            ...
+        return None
 
     @property
     def sequence(self):
         # Writers out there might find this terminology easier to remember
         return self.elems
+
+

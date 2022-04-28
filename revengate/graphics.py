@@ -34,15 +34,13 @@ from kivy.graphics import Rectangle
 from kivy.uix.behaviors.focus import FocusBehavior
 from kivy import resources
 from kivy.animation import Animation
-from kivy.uix.boxlayout import BoxLayout
-from kivymd.uix.button import MDFlatButton
-from kivymd.uix.dialog import MDDialog
 from kivy.uix.screenmanager import ScreenManager, ShaderTransition
 
-from .maps import TileType, Map, Builder, Connector
-from .loader import DATA_DIR, data_file, TopLevelLoader
+from .maps import TileType, Connector
+from .loader import DATA_DIR
 from .events import is_action, is_move
 from .utils import Array
+from .tags import t
 from . import tender, forms
 
 # TileType -> path
@@ -298,8 +296,10 @@ class MapWidget(FocusBehavior, ScatterPlane):
     
     def _chat_test(self):
         res = tender.hero.talk(tender.obs)
-        form = forms.ConversationPopup(print)
-        form.open()
+        if res:
+            dialogue = tender.loader.invoke(res.tag)
+            form = forms.ConversationPopup(print, dialogue)
+            form.open()
         return res
     
     def keyboard_on_key_down(self, window, key, text, modifiers):
@@ -310,7 +310,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
                    "up": "move-or-act-up", 
                    "down": "move-or-act-down", 
                    "f": self.follow_stairs,
-                   "1": self._chat_test,
+                   "2": self._chat_test,
                    "p": "pickup-item",
                    }
 
@@ -502,12 +502,14 @@ class RevengateApp(MDApp):
         self.map_wid.set_map(tender.engine.map)
         self.root.current = "mapscreen"
         
-        # pre-game naration
-        # TODO: put those in a dialogue
-        dia = tender.loader.get_instance("intro")
-        tender.ui.show_dia(dia)
+        dialogue = tender.loader.invoke(t("intro"))
+        self.show_narration(dialogue)
         
-    def show_hero_name_dia(self):
+    def show_narration(self, dialogue, response_funct=None):
+        popup = forms.ConversationPopup(dialogue, response_funct)
+        popup.open()
+
+    def show_hero_name_form(self):
         if not self.hero_name_form:
             self.hero_name_form = forms.HeroNameForm(self.init_new_game)
         self.hero_name_form.open()

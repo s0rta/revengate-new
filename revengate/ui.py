@@ -59,10 +59,6 @@ class KivyUI(UI):
         # TODO: store the app or the root widget
         super().__init__(*args, **kwargs)
 
-    def show_dia(self, dia):
-        warn("Not fully implemented")
-        pprint(dia)
-
     def prompt(self, *options):
         warn("Not fully implemented")
         pprint(options)

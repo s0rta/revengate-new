@@ -238,7 +238,7 @@ class DialogueLoader(SubLoader):
     strings.
     
     The file is composed of multiple dialogues, each as subsections of [dialogues], each 
-    with a unique name. A dialogue must define a 'script' attribute: a multiline 
+    with a unique name. A dialogue must define a 'script' attribute: a multi-line 
     string in the following format:
     - comments start with '# ' and continue until the end of the line;
     - tags start with '#' and are immediately followed by alphanumerics, "_" or "-";
@@ -372,6 +372,11 @@ class DialogueLoader(SubLoader):
         return dias
         
     def invoke(self, template):
+        # We can't easily take advantage of the full power of TemplatizedObjects without 
+        # deriving from their loader and making the Dialogue DSL compatible with it, so 
+        # we return a fresh clone of the pristine instance of Dialogue instead.
+        if template in self.dialogues:
+            return self.dialogues[template].clone()
         return None
         
     def get_instance(self, name):
@@ -583,6 +588,8 @@ class TemplatizedObjectsLoader(SubLoader):
         The template can be a name or a Template intsance. 
         """
         if not isinstance(template, Template):
+            if template not in self._templates:
+                return None
             template = self._templates[template]
         
         # resolution is two steps: 
@@ -606,16 +613,16 @@ class TemplatizedObjectsLoader(SubLoader):
         
         fields = {}
         for t in reversed(stack):
-            tfields = dict(t.fields) # we don't want to modify the original
+            tfields = dict(t.fields)  # we don't want to modify the original
             # manually apply the fields with special overrides: +, -, ...
-            for prefix, action in [("!", self._random_field)]: # single actions
+            for prefix, action in [("!", self._random_field)]:  # single actions
                 keys = [k for k in tfields if k.startswith(prefix)]
                 for k in keys:
                     v = tfields.pop(k)
                     k = k[1:]
                     fields[k] = action(v)
             for prefix, action in [("+", self._add_to_field), 
-                                   ("-", self._sub_from_field)]: # transforms
+                                   ("-", self._sub_from_field)]:  # transforms
                 keys = [k for k in tfields if k.startswith(prefix)]
                 for k in keys:
                     v = tfields.pop(k)

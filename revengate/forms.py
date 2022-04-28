@@ -119,14 +119,41 @@ class HeroNameFormContent(BoxLayout):
     pass
 
 
-class ConversationPopup(RevForm):
-    def __init__(self, response_funct, *args, **kwargs):
-        cont = ConversationPopupContent()
-        super().__init__(response_funct, content_cls=cont)
+class ConversationPopup(RevPopup):    
+    def __init__(self, dialogue, response_funct=None, *args, **kwargs):
+        self.content = ConversationPopupContent()
+        self.dialogue = dialogue
+        self.dialogue.start_lines()
+        super().__init__(response_funct, content_cls=self.content)
+        self.bind(on_dismiss=self.is_not_done)
+        self.ok_btn.bind(on_release=self.try_advance)
+        self.show_line()
+        
+    def is_not_done(self, *args):
+        return not self.dialogue.is_last()
+
+    def try_advance(self, *args):
+        if not self.dialogue.is_last():
+            self.dialogue.advance()
+            self.show_line()
+        else:
+            self.dismiss()
+        return True
+        
+    def show_line(self):
+        if self.dialogue.is_last():
+            self.ok_btn.text = "OK"
+        else:
+            self.ok_btn.text = "Next"
+
+        # TODO: append it to the history
+        line = self.dialogue.current()
+        self.title = str(line.speaker)
+        self.content.convo_label.text = line.text
 
 
 class ConversationPopupContent(BoxLayout):
-    pass
+    convo_label = ObjectProperty(None)
 
 
 class GameOverPopup(RevPopup):
