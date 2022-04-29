@@ -101,14 +101,14 @@ class Condenser:
 
 
 class Governor:
-    def __init__(self):
+    def __init__(self, cheats=False):
         tender.loader = TopLevelLoader()
         tender.loader.load(open(data_path(CORE_FILE), "rt"))
         tender.sentiments = tender.loader.get_instance("core_sentiments")
         self.dungeon = None
 
         tender.ui = KivyUI()
-        self.app = RevengateApp()
+        self.app = RevengateApp(cheats)
         self.condenser = Condenser(self.app.user_data_dir)
         
         tender.action_map = ActionMap()

@@ -38,7 +38,7 @@ from kivy.uix.screenmanager import ScreenManager, ShaderTransition
 
 from .maps import TileType, Connector
 from .loader import DATA_DIR
-from .events import is_action, is_move, iter_events, Conversation, Death
+from .events import is_action, is_move, iter_events, Conversation, Death, Teleport
 from .utils import Array
 from .tags import t
 from . import tender, forms
@@ -56,6 +56,8 @@ EMPTY_IMG = "dungeon/black.png"
 TILE_SIZE = 32
 WINDOW_SIZE = (1280, 720)
 WINDOW_SIZE_WIDE = (2164, 1080)
+
+CHEATS = True
 
 
 class ImgSourceCache:
@@ -135,6 +137,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
     engine_turn = NumericProperty(defaultvalue=None)  # turn currently being played
     hero_turn = NumericProperty(defaultvalue=None)  # last turn the hero did an action
     app = ObjectProperty(None)
+    _next_selection_action = ObjectProperty(None, allownone=True)
     
     def __init__(self, *args, map=None, **kwargs):
         if map is not None:
@@ -144,6 +147,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
         super().__init__(*args, **kwargs)
         self.map = map
         self.is_focusable = not is_mobile()
+
         # pre-load all the textures
         self.cache = ImgSourceCache()
         self._elems = {}  # thing -> MapElement with thing being Actor or ItemCollection
@@ -151,6 +155,39 @@ class MapWidget(FocusBehavior, ScatterPlane):
         if map is not None:
             self.init_rects()
             self.refresh_map()
+
+            
+        self.key_map = {"right": "move-or-act-right", 
+                     "left": "move-or-act-left", 
+                     "up": "move-or-act-up", 
+                     "down": "move-or-act-down", 
+                     "f": self.follow_stairs,
+                     "p": "pickup-item",
+                   } | (CHEATS and { 
+                     "f2": self._print_help,
+                     "t": self._start_teleport, 
+                   } or {})
+
+        self.bind(_next_selection_action=self._update_selection_lbl)
+    
+    def _update_selection_lbl(self, *args):
+        if self._next_selection_action is None:
+            text = ""
+        else:
+            text = str(self._next_selection_action)
+        self.app.root.select_mode_lbl.text = text
+    
+    def _print_help(self, *args):
+        pprint(self.key_map)
+        
+    def _start_teleport(self):
+        self._next_selection_action = self._teleport_to
+
+    # TODO: factor this out 
+    def _teleport_to(self, there):
+        tender.engine.map.move(tender.hero, there)
+        here = tender.engine.map.find(tender.hero)
+        return Teleport(tender.hero, here, there)
             
     def _clear_elem(self, thing):
         elem = self._elems.pop(thing)
@@ -285,10 +322,14 @@ class MapWidget(FocusBehavior, ScatterPlane):
             res = None
             cpos = self.to_local(*event.pos)
             mpos = self.canvas_to_map(cpos)
-            hero_pos = self.map.find(tender.hero)
-            if mpos in self.map.adjacents(hero_pos, free=False):
-                direction = Vector(mpos) - Vector(hero_pos)
-                res = tender.action_map["move-or-act"](direction)
+            if self._next_selection_action is not None:
+                res = self._next_selection_action(mpos)
+                self._next_selection_action = None
+            else:
+                hero_pos = self.map.find(tender.hero)
+                if mpos in self.map.adjacents(hero_pos, free=False):
+                    direction = Vector(mpos) - Vector(hero_pos)
+                    res = tender.action_map["move-or-act"](direction)
             if is_action(res):
                 self.finalize_turn(res)
                 return True
@@ -297,25 +338,17 @@ class MapWidget(FocusBehavior, ScatterPlane):
     def keyboard_on_key_down(self, window, key, text, modifiers):
         if not tender.hero or tender.hero.is_dead:
             return False
-        key_map = {"right": "move-or-act-right", 
-                   "left": "move-or-act-left", 
-                   "up": "move-or-act-up", 
-                   "down": "move-or-act-down", 
-                   "f": self.follow_stairs,
-                   "p": "pickup-item",
-                   }
-
         res = None
         kcode, kname = key
         if kname == "c":
             self.center_on_hero(anim=True)
             return True
 
-        if kname in key_map:
-            if callable(key_map[kname]):
-                funct = key_map[kname]
+        if kname in self.key_map:
+            if callable(self.key_map[kname]):
+                funct = self.key_map[kname]
             else:
-                funct = tender.action_map[key_map[kname]]
+                funct = tender.action_map[self.key_map[kname]]
             res = funct()
             if is_action(res):
                 self.finalize_turn(res)
@@ -480,7 +513,8 @@ class RevengateApp(MDApp):
     hero_name = StringProperty(None)
     hero_name_form = ObjectProperty(None)
     
-    def __init__(self, *args):
+    def __init__(self, cheats=False, *args):
+        self.cheats = cheats
         super().__init__(*args)
         resources.resource_add_path(os.path.join(DATA_DIR, "images"))
         resources.resource_add_path(os.path.join(DATA_DIR, "fonts"))

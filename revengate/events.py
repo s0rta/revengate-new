@@ -58,10 +58,15 @@ class StatusEvent:
     to make this obivous by renaming contructor arguments and possibly aliasing instance 
     attributes.    
     """
+
+    cost = 1
     
     def __init__(self, actor):
         super(StatusEvent, self).__init__()
         self.actor = actor
+
+    def __bool__(self):
+        return self.cost > 0
 
 
 class Move(StatusEvent):
@@ -74,6 +79,17 @@ class Move(StatusEvent):
     def __str__(self):
         return f"{self.actor} moved from {self.old_pos} to {self.new_pos}."
 
+
+class Teleport(Move):
+    """ The actor materialized somewhere else (not an action). """
+    cost = 1
+    
+    def __init__(self, performer, old_pos, new_pos):
+        super().__init__(performer, old_pos, new_pos)
+        
+    def __str__(self):
+        return f"{self.actor} teleported from {self.old_pos} to {self.new_pos}."
+    
 
 class Narration(StatusEvent):
     # TODO: those should not cost an action

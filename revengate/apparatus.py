@@ -32,13 +32,15 @@ def main():
     parser = ArgumentParser(sys.argv[0], description=__doc__)
     parser.add_argument("--version", action="store_true", 
                         help="Print version and exit.")
+    parser.add_argument("--wizard-mode", action="store_true", 
+                        help="Enable all cheat codes.")
     args = parser.parse_args()
     
     if args.version:
         print(f"Revengate version {__version__}")
         sys.exit(0)
 
-    gov = Governor()
+    gov = Governor(cheats=args.wizard_mode)
     gov.start()
 
 

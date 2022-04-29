@@ -19,17 +19,8 @@
 
 """ Top-level Android entry point """
 
-import os
-from pprint import pprint
-
-
-def show_all_files():
-    for d in os.environ["PYTHONPATH"].split(":"):
-        print(os.system(f"ls -R {d}"))
 
 def main():
-    show_all_files()
-
     from revengate.governor import Governor
     gov = Governor()
     gov.start()

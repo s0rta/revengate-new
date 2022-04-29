@@ -16,6 +16,7 @@ ScreenManager:
     id: sm
     map_wid: map_wid
     resume_game_bt: resume_game_bt
+    select_mode_lbl: select_mode_lbl
     
     MDScreen:
         name: 'mainscreen'
@@ -83,3 +84,7 @@ ScreenManager:
                 MDRectangleFlatButton:
                     text: "Quit"
                     on_release: app.stop()
+
+                MDLabel:
+                    id: select_mode_lbl
+                    text: ""
