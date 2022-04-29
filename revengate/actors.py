@@ -50,6 +50,7 @@ class Actor(object):
     def __init__(self, health, armor, strength, agility):
         super().__init__()
         self.health = health
+        self.initial_health = health
         self.armor = armor
         self.inventory = []
         self.strategies = []
@@ -155,6 +156,20 @@ class Actor(object):
             return f"the {self.role}"
         order = self.__class__.__name__.lower()
         return f"the {order}"
+    
+    def status_str(self):
+        if self.health > self.initial_health * .5:
+            health = "healthy"
+        elif self.health > self.initial_health * .1:
+            health = "injured"
+        else:
+            health = "weak"
+        return f"{self} looks {health}"
+
+    def debug_inspect(self):
+        import pprint, ipdb
+        pprint.pprint(self.__dict__)
+        ipdb.set_trace()
 
     def sentiment(self, other):
         """ Return the sentiment numeric value in [-1..1]. """
@@ -254,6 +269,12 @@ class Actor(object):
 
         h_delta, events = foe.apply_delta(weapon, h_delta)
         return Events(Hit(self, foe, weapon, -h_delta, crit), events)
+
+    def suffer_damage(self, damage):
+        """ Apply some damage to self bypassing any resistances. """
+        self.health -= damage
+        if self.health <= 0:
+            return self.die()
 
     def apply_delta(self, vector, h_delta):
         """ 

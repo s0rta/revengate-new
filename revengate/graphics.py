@@ -38,7 +38,8 @@ from kivy.uix.screenmanager import ScreenManager, ShaderTransition
 
 from .maps import TileType, Connector
 from .loader import DATA_DIR
-from .events import is_action, is_move, iter_events, Conversation, Death, Teleport
+from .events import (is_action, is_move, iter_events, Conversation, Death, 
+                     Teleport, Injury)
 from .utils import Array
 from .tags import t
 from . import tender, forms
@@ -166,6 +167,9 @@ class MapWidget(FocusBehavior, ScatterPlane):
                    } | (CHEATS and { 
                      "f2": self._print_help,
                      "t": self._start_teleport, 
+                     "6": self._start_insta_kill, 
+                     ";": self._start_look,
+                     "f5": self._start_debug_inspect,
                    } or {})
 
         self.bind(_next_selection_action=self._update_selection_lbl)
@@ -183,11 +187,41 @@ class MapWidget(FocusBehavior, ScatterPlane):
     def _start_teleport(self):
         self._next_selection_action = self._teleport_to
 
+    def _start_insta_kill(self):
+        self._next_selection_action = self._insta_kill_at
+
+    def _start_look(self):
+        self._next_selection_action = self._look_at
+
+    def _start_debug_inspect(self):
+        self._next_selection_action = self._debug_at
+
+    def _look_at(self, there):
+        actor = tender.engine.map.actor_at(there)
+        if actor:
+            # TODO: put on the screen
+            print(actor.status_str())
+        
+    def _debug_at(self, there):
+        actor = tender.engine.map.actor_at(there)
+        if actor:
+            print(f"inspecting {actor}")
+            actor.debug_inspect()
+        else:
+            import ipdb
+            ipdb.set_trace()
+
     # TODO: factor this out 
     def _teleport_to(self, there):
         tender.engine.map.move(tender.hero, there)
         here = tender.engine.map.find(tender.hero)
         return Teleport(tender.hero, here, there)
+
+    def _insta_kill_at(self, there):
+        foe = tender.engine.map.actor_at(there)
+        dmg = foe.health
+        foe.suffer_damage(dmg)
+        return Injury(foe, dmg)
             
     def _clear_elem(self, thing):
         elem = self._elems.pop(thing)
