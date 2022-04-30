@@ -5,3 +5,4 @@ buildozer
 ipdb
 flit
 invoke
+cython

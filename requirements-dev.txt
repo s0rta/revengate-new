@@ -20,6 +20,8 @@ charset-normalizer==2.0.12
     #   requests
 click==8.1.2
     # via pip-tools
+cython==0.29.28
+    # via -r requirements-dev.in
 decorator==5.1.1
     # via
     #   ipdb
