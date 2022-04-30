@@ -150,20 +150,26 @@ class ActionMap:
         funct = self[action]
         return funct(*args)
 
+
+class CoreActions(ActionMap):
+    """ Main actions that are used in multiple game contexts """
+    def __init__(self, name="Core Actions"):
+        super().__init__(name)
+
+    # TODO: move this to UIActions
     def prompt(self, *options):
         """ Prompt the player to make a choice. """
         return tender.ui.prompt(*options)
     
+    # TODO: move this to UIActions    
     def yes_no_prompt(self):
         return self.promp("Yes", "No")
-    
-    def show_credits(self):
-        tender.ui.show_text(CREDITS)
-    
+        
     def log(self, *args):
         print(f"Dialogue action called with args: {args}")
         
     def move_or_act(self, direction):
+        """ Perform the default action in direction (a vector). """
         res = None
         map = tender.engine.map
         cur_pos = map.find(tender.hero)
@@ -197,9 +203,8 @@ class ActionMap:
     def move_or_act_left(self):
         return self.move_or_act(vect(-1, 0))
 
-        
-class SimpleMap(ActionMap):
     def pickup_item(self):
+        """ Take the first item on top of the loot pile where we are. """
         pos = tender.engine.map.find(tender.hero)
         stack = tender.engine.map.items_at(pos)
         if stack:

@@ -27,7 +27,7 @@ from .randutils import rng
 from .loader import DATA_DIR, TopLevelLoader, data_path
 from .engine import Engine
 from .ui import TextUI, Quitting, KivyUI
-from .action_map import ActionMap, SimpleMap
+from .action_map import CoreActions
 from .maps import Connector
 from .area import Area
 from .events import is_action, StairsEvent, Events
@@ -111,7 +111,7 @@ class Governor:
         self.app = RevengateApp(cheats)
         self.condenser = Condenser(self.app.user_data_dir)
         
-        tender.action_map = ActionMap(name="core-actions")
+        tender.action_map = CoreActions(name="core-actions")
         tender.action_map.register(self.follow_stairs)
         tender.action_map.register(self.new_game_response)
         tender.action_map.register(self.npc_turn)
@@ -120,10 +120,6 @@ class Governor:
         tender.action_map.register(self.purge_game)
         tender.action_map.register(self.condenser.delete_game)
         tender.action_map.register(self.condenser.has_saved_game)
-
-        simple_map = SimpleMap(name="easy stuff")
-        tender.action_map.register_sub_map(simple_map)
-        tender.action_map.dump()
         
     def save_game(self):
         self.condenser.save("engine", tender.engine)
