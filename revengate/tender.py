@@ -22,7 +22,7 @@ things in motion must also make sure that this the required globals are initiali
 """
 from .engine import Engine
 from .ui import UI
-from .action_map import ActionMap
+# from .action_map import ActionMap
 from .actors import Actor
 from .loader import TopLevelLoader
 from .sentiment import SentimentChart
@@ -30,13 +30,15 @@ from .sentiment import SentimentChart
 loader: TopLevelLoader = None
 engine: Engine = None
 ui: UI = None
-action_map: ActionMap = None
+# action_map: ActionMap = None
+action_map = None
 hero: Actor = None
 sentiments: SentimentChart = None
 
 
 def is_init():
     """ Return whether all parts of the tender have been initialized. """
+    # TODO: might want to merge the logic we use in the Governor.purge_game()
     for part in [loader, engine, ui, action_map, hero]:
         if part is None:
             return False

@@ -17,7 +17,7 @@ script="""
 script="""
 #salapou: I think this a good deal. What do you say?
 # This is another comment
-#prompt: #log
+#ui-prompt: #log
   I'll do this for you.
   No way!
 """

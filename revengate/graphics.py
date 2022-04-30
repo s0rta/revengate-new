@@ -159,9 +159,14 @@ class MapWidget(FocusBehavior, ScatterPlane):
 
             
         self.key_map = {"right": "move-or-act-right", 
+                     "l": "move-or-act-right", 
                      "left": "move-or-act-left", 
+                     "h": "move-or-act-left", 
                      "up": "move-or-act-up", 
+                     "k": "move-or-act-up", 
                      "down": "move-or-act-down", 
+                     "j": "move-or-act-down", 
+                     
                      "f": self.follow_stairs,
                      "p": "pickup-item",
                    } | (CHEATS and { 
@@ -272,7 +277,6 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 for my in range(h):
                     pos = self.map_to_canvas((mx, my))
                     source = self.cache.img_source(self.map[mx, my])
-                    # TODO: reuse and old rect if possible
                     if old_rects:
                         r = old_rects.pop()
                         r.pos = pos
@@ -374,10 +378,6 @@ class MapWidget(FocusBehavior, ScatterPlane):
             return False
         res = None
         kcode, kname = key
-        if kname == "c":
-            self.center_on_hero(anim=True)
-            return True
-
         if kname in self.key_map:
             if callable(self.key_map[kname]):
                 funct = self.key_map[kname]

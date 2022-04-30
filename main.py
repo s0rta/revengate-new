@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net>
+# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 

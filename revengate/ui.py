@@ -21,18 +21,6 @@ from warnings import warn
 from .dialogue import Action
 from . import tender
 
-UP = '\x1b[A'
-DOWN = '\x1b[B'
-RIGHT = '\x1b[C'
-LEFT = '\x1b[D'
-
-TEXT_HELP = """UP, DOWN, RIGHT, LEFT: move or attack
-q, ESC: quit
-c: show credits
-f: follow stairs
-p: pickup an item from the ground
-?: show help"""
-
 
 class Quitting(Exception):
     pass
