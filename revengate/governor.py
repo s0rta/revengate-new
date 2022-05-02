@@ -104,6 +104,8 @@ class GameMgmtActions(ActionMap):
     def __init__(self, condenser, name="Game Management"):
         super().__init__(name)
         self.condenser = condenser
+        self.register(self.condenser.delete_game)
+        self.register(self.condenser.has_saved_game)
 
     def is_tender_ready(self):
         """ Return whether all parts of the tender have been initialized. """
@@ -151,8 +153,6 @@ class Governor:
         tender.action_map.register(self.follow_stairs)
         tender.action_map.register(self.new_game_response)
         tender.action_map.register(self.npc_turn)
-        tender.action_map.register(self.condenser.delete_game)
-        tender.action_map.register(self.condenser.has_saved_game)
         
         tender.action_map.register_sub_map(GameMgmtActions(self.condenser))
         

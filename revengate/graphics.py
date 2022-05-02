@@ -58,8 +58,6 @@ TILE_SIZE = 32
 WINDOW_SIZE = (1280, 720)
 WINDOW_SIZE_WIDE = (2164, 1080)
 
-CHEATS = True
-
 
 class ImgSourceCache:
     def __init__(self):
@@ -157,27 +155,30 @@ class MapWidget(FocusBehavior, ScatterPlane):
             self.init_rects()
             self.refresh_map()
 
-            
-        self.key_map = {"right": "move-or-act-right", 
-                     "l": "move-or-act-right", 
-                     "left": "move-or-act-left", 
-                     "h": "move-or-act-left", 
-                     "up": "move-or-act-up", 
-                     "k": "move-or-act-up", 
-                     "down": "move-or-act-down", 
-                     "j": "move-or-act-down", 
-                     
-                     "f": self.follow_stairs,
-                     "p": "pickup-item",
-                   } | (CHEATS and { 
-                     "f2": self._print_help,
-                     "t": self._start_teleport, 
-                     "6": self._start_insta_kill, 
-                     ";": self._start_look,
-                     "f5": self._start_debug_inspect,
-                   } or {})
+        self.key_map = None
+        self.bind(app=self._init_key_map)
 
         self.bind(_next_selection_action=self._update_selection_lbl)
+
+    def _init_key_map(self, *args):
+        self.key_map = { "f2": self._print_help,
+                         "right": "move-or-act-right", 
+                         "l": "move-or-act-right", 
+                         "left": "move-or-act-left", 
+                         "h": "move-or-act-left", 
+                         "up": "move-or-act-up", 
+                         "k": "move-or-act-up", 
+                         "down": "move-or-act-down", 
+                         "j": "move-or-act-down", 
+                         "f": self.follow_stairs,
+                         "p": "pickup-item" } 
+        
+        if self.app.cheats:
+            cheats = { "t": self._start_teleport, 
+                       "6": self._start_insta_kill, 
+                       ";": self._start_look,
+                       "f5": self._start_debug_inspect }
+            self.key_map.update(cheats)
     
     def _update_selection_lbl(self, *args):
         if self._next_selection_action is None:
