@@ -206,7 +206,7 @@ class Actor(object):
     
     def rest(self):
         self.set_played()
-        return Rest(self)
+        return [Rest(self)]
     
     def move(self, new_pos):
         """ Move to new_pos on the map, if we can get there, raise otherwise.
@@ -217,7 +217,7 @@ class Actor(object):
             if map.distance(old_pos, new_pos) == 1:
                 map.move(self, new_pos)
                 self.set_played()
-                return Move(self, old_pos, new_pos)
+                return [Move(self, old_pos, new_pos)]
             
     def pickup(self, item=None):
         """ Pickup an item from the ground. 
@@ -243,7 +243,7 @@ class Actor(object):
     def attack(self, foe):
         """ Do all the stikes allowed in one turn against foe. """
         if self.weapon:
-            result = Events(self.strike(foe, self.weapon))
+            result = Events(*self.strike(foe, self.weapon))
             self.set_played()
             return result
         else:
@@ -260,7 +260,7 @@ class Actor(object):
         # to-hit roll
         roll = rng.normalvariate(MU, SIGMA)
         if roll < foe.get_evasion():
-            return Miss(self, foe, weapon)
+            return [Miss(self, foe, weapon)]
 
         if roll > MU+2*SIGMA:
             # critical hit!
@@ -268,10 +268,10 @@ class Actor(object):
         h_delta = self.make_delta(weapon, crit)
 
         h_delta, events = foe.apply_delta(weapon, h_delta)
-        return Events(Hit(self, foe, weapon, -h_delta, crit), events)
+        return Events(Hit(self, foe, weapon, -h_delta, crit), *events)
 
     def suffer_damage(self, damage):
-        """ Apply some damage to self bypassing any resistances. """
+        """ Apply some damage to self, bypassing any resistances. """
         self.health -= damage
         if self.health <= 0:
             return self.die()

@@ -38,7 +38,7 @@ from kivy.uix.screenmanager import ScreenManager, ShaderTransition
 
 from .maps import TileType, Connector
 from .loader import DATA_DIR
-from .events import (is_action, is_move, iter_events, Conversation, Death, 
+from .events import (Events, is_action, is_move, iter_events, Conversation, Death, 
                      Teleport, Injury)
 from .utils import Array
 from .tags import t
@@ -226,8 +226,8 @@ class MapWidget(FocusBehavior, ScatterPlane):
     def _insta_kill_at(self, there):
         foe = tender.engine.map.actor_at(there)
         dmg = foe.health
-        foe.suffer_damage(dmg)
-        return Injury(foe, dmg)
+        death = foe.suffer_damage(dmg)
+        return Events(Injury(foe, dmg), death)
             
     def _clear_elem(self, thing):
         elem = self._elems.pop(thing)
@@ -431,10 +431,11 @@ class MapWidget(FocusBehavior, ScatterPlane):
             if is_move(events):
                 self.verify_centering(anim=True)
             self.app.display_status_events(events)
-            
-        # trigger the NPC turn
-        self.hero_turn = tender.hero.last_action
-        
+
+        # if the hero hasn't killed themself, trigger the NPC turn
+        if tender.hero and tender.hero.is_alive:
+            self.hero_turn = tender.hero.last_action
+
         if tender.engine:
             events = tender.engine.advance_turn()
             self.app.display_status_events(events)
@@ -609,6 +610,7 @@ class RevengateApp(MDApp):
                 convo = tender.loader.invoke(event.tag)
                 self.show_conversation(convo)
             elif isinstance(event, Death) and event.actor == tender.hero:
+                print(event)
                 tender.action_map["purge-game"]()
                 form = forms.GameOverPopup(self.show_main_screen)
                 form.open()

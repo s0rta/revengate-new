@@ -108,7 +108,7 @@ char = "o"
 
 [templates.novice]
 _class = "Humanoid"
-health = 60
+health = 10  # was 60
 armor = 0
 strength = 50
 agility = 50

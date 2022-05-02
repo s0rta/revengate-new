@@ -209,6 +209,9 @@ class Pickup(InventoryChange):
 class Events(list):
     """ A group of StatusEvents.  None-events are implicitly ignored. """
     def __init__(self, *events):
+        if len(events) >= 1 and isinstance(events[0], Events):
+            raise ValueError("Nested Events is unsuported. Did you mean do "
+                             "call Events(*events) instead?")
         if events:
             events = filter(bool, events)
             super(Events, self).__init__(events)
@@ -223,5 +226,7 @@ class Events(list):
         return super(Events, self).__iadd__(other)
     
     def add(self, event):
-        if event:
+        if isinstance(event, Events):
+            self += event
+        elif event:
             self.append(event)

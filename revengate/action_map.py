@@ -37,11 +37,11 @@ def no_auto_reg(funct):
 class ActionMap:
     """ Mapping between action names and functions 
     
-    Action funtions can be explicitely registered or be implicitely defined as instance 
+    Action functions can be explicitly registered or be implicitly defined as instance 
     methods of ActionMap or one of it's subclasses.
     
-    Actions functions will receive "engine" and "ui" as their first two paramers if they 
-    declare them in their signature.
+    Action functions will receive "engine" and "ui" as their first two parameters if 
+    they declare them in their signature.
     """
 
     def __init__(self, name):
