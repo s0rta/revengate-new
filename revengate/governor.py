@@ -27,7 +27,7 @@ from .randutils import rng
 from .loader import DATA_DIR, TopLevelLoader, data_path
 from .engine import Engine
 from .ui import TextUI, Quitting, KivyUI
-from .action_map import CoreActions
+from .action_map import ActionMap, CoreActions
 from .maps import Connector
 from .area import Area
 from .events import is_action, StairsEvent, Events
@@ -100,12 +100,48 @@ class Condenser:
             self.delete(key)
 
 
+class GameMgmtActions(ActionMap):
+    def __init__(self, condenser, name="Game Management"):
+        super().__init__(name)
+        self.condenser = condenser
+
+    def is_tender_ready(self):
+        """ Return whether all parts of the tender have been initialized. """
+        for part in ["loader", "engine", "ui", "action_map", "hero", "dungeon"]:
+            if getattr(tender, part) is None:
+                return False
+        return True
+
+    def save_game(self):
+        """ Save an ongoing game to disk. """
+        self.condenser.save("engine", tender.engine)
+        self.condenser.save("hero", tender.hero)
+        self.condenser.save("mapid", tender.engine.map.id)
+        self.condenser.save("dungeon", tender.dungeon)
+        
+    def restore_game(self):
+        """ Load a saved game from disk. """
+        tender.hero = self.condenser.load("hero")
+        tender.engine = self.condenser.load("engine")
+        tender.dungeon = self.condenser.load("dungeon")
+        mapid = self.condenser.load("mapid")
+        
+        if mapid is not None and tender.engine is not None:
+            tender.engine.change_map(tender.dungeon[mapid])
+
+    def purge_game(self):
+        """ Get rid of a game, both from disk and from in-memory state. """
+        self.condenser.delete_game()
+        tender.dungeon = None
+        tender.hero = None
+        tender.engine = None
+
+
 class Governor:
     def __init__(self, cheats=False):
         tender.loader = TopLevelLoader()
         tender.loader.load(open(data_path(CORE_FILE), "rt"))
         tender.sentiments = tender.loader.get_instance("core_sentiments")
-        self.dungeon = None
 
         tender.ui = KivyUI()
         self.app = RevengateApp(cheats)
@@ -115,36 +151,13 @@ class Governor:
         tender.action_map.register(self.follow_stairs)
         tender.action_map.register(self.new_game_response)
         tender.action_map.register(self.npc_turn)
-        tender.action_map.register(self.save_game)
-        tender.action_map.register(self.restore_game)
-        tender.action_map.register(self.purge_game)
         tender.action_map.register(self.condenser.delete_game)
         tender.action_map.register(self.condenser.has_saved_game)
         
-    def save_game(self):
-        self.condenser.save("engine", tender.engine)
-        self.condenser.save("hero", tender.hero)
-        self.condenser.save("mapid", tender.engine.map.id)
-        self.condenser.save("dungeon", self.dungeon)
-        
-    def restore_game(self):
-        tender.hero = self.condenser.load("hero")
-        tender.engine = self.condenser.load("engine")
-        self.dungeon = self.condenser.load("dungeon")
-        mapid = self.condenser.load("mapid")
-        
-        if mapid is not None and tender.engine is not None:
-            tender.engine.change_map(self.dungeon[mapid])
-
-    def purge_game(self):
-        """ Get rid of a game, both from disk and from in-memory state. """
-        self.condenser.delete_game()
-        tender.dungeon = None
-        tender.hero = None
-        tender.engine = None
+        tender.action_map.register_sub_map(GameMgmtActions(self.condenser))
         
     def make_map(self, nb_monsters, item, from_pos=None, parent_map=None):
-        lvl = len(self.dungeon.maps) + 1
+        lvl = len(tender.dungeon.maps) + 1
         
         builder = self.condenser.random_builder()
         map = builder.map
@@ -167,7 +180,7 @@ class Governor:
             a = tender.loader.invoke(name)
             map.place(a)
         map.place(item)
-        self.dungeon.add_map(map, parent_map)
+        tender.dungeon.add_map(map, parent_map)
         return map
 
     def make_first_map(self):
@@ -249,7 +262,7 @@ class Governor:
 
     def new_game_response(self, hero_name):
         self.condenser.delete_game()
-        self.dungeon = Area()
+        tender.dungeon = Area()
 
         # FIXME: we really should be able to pass the name to invoke()
         tender.hero = tender.loader.invoke("novice")
@@ -257,8 +270,8 @@ class Governor:
         tender.engine = Engine()
 
         map = self.make_first_map()
-        self.dungeon.add_map(map, parent=None)
-        self.save_game()
+        tender.dungeon.add_map(map, parent=None)
+        tender.action_map["save-game"]()
         
     def follow_stairs(self):
         from_pos = tender.engine.map.find(tender.hero)
@@ -271,7 +284,7 @@ class Governor:
                 map = self.make_map(3, sword, from_pos, tender.engine.map)
                 
             else:
-                map = self.dungeon[mapid]
+                map = tender.dungeon[mapid]
             # switch the map
             next_pos = map.arrival_pos(tender.engine.map.id)
             tender.engine.map.remove(tender.hero)

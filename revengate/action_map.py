@@ -17,13 +17,11 @@
 
 import inspect
 import functools
-from pprint import pprint
 
 from .tags import Tag
 from .geometry import vect
 from .dialogue import Action
-from .events import Pickup
-from . import tender, CREDITS
+from . import tender
 
 # all the methods we do not want to auto register
 _NO_AUTO_REG = set()
@@ -68,27 +66,31 @@ class ActionMap:
     def register_sub_map(self, sub_map):
         self._sub_maps.append(sub_map)
 
-    def _format_dump_entry(self, name, funct):
+    def _format_entry(self, name, funct):
+        name = name.replace("_", "-")
         if hasattr(funct, "__doc__") and funct.__doc__ is not None:
-            return f"{name}: {funct.__doc__!r}"
+            return f"- {name}: {funct.__doc__.strip()!r}"
         else:
-            return name
+            return f"- {name}"
         
     @no_auto_reg
-    def dump(self):
+    def summary(self):
+        """ Return a string that summarized which commands are available in this 
+        ActionMap and all it's sub-maps. """
         entries = []
-        print(f"Dumping the content of ActionMap(name={self.name!r})")
+        
+        lines = [f"Content of {self.__class__.__name__}(name={self.name!r}):"]
         for name, funct in self._actions.items():
-            entries.append(self._format_dump_entry(name, funct))
+            entries.append(self._format_entry(name, funct))
         for name, value in inspect.getmembers(self):
             if name.startswith("_"):
                 continue
             if callable(value) and not self._do_not_reg(value):
-                entries.append(self._format_dump_entry(name, value))
-        for name in sorted(entries):
-            print(f"- {name}")
+                entries.append(self._format_entry(name, value))
+        lines += sorted(entries)
         for sub in self._sub_maps:
-            sub.dump()
+            lines.append(sub.summary())
+        return "\n".join(lines)
         
     def _do_not_reg(self, funct):
         return hasattr(funct, "__qualname__") and funct.__qualname__ in _NO_AUTO_REG

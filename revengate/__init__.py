@@ -2,7 +2,13 @@
 
 __version__ = "0.1"
 
-CREDITS = """Programming: Yannick Gingras
+CREDITS = """Main Programming: Yannick Gingras
+
+Additional Programming: 
+- Nicole Schwartz
+- Ryan Prior
+- Steve Smith
+
 Illustrations: 
 - Jonathan Timmons
 - Clara Baltoré Pooter

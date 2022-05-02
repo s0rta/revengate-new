@@ -33,12 +33,5 @@ ui: UI = None
 action_map: ActionMap = None
 hero: Actor = None
 sentiments: SentimentChart = None
+dungeon = None
 
-
-def is_init():
-    """ Return whether all parts of the tender have been initialized. """
-    # TODO: might want to merge the logic we use in the Governor.purge_game()
-    for part in [loader, engine, ui, action_map, hero]:
-        if part is None:
-            return False
-    return True
