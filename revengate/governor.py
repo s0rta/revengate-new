@@ -214,7 +214,7 @@ class Governor:
             if actor is tender.hero and not tender.hero.has_played:
                 return events
             elif actor in tender.engine.map and not actor.has_played:
-                events.add(actor.act())
+                events += actor.act()
             if tender.hero.is_dead:
                 return events
         return events

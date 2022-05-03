@@ -6,3 +6,4 @@ ipdb
 flit
 invoke
 cython
+pytest >= 7.0.0

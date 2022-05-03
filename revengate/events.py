@@ -19,9 +19,13 @@
 display or animate the changes. """
 
 
+def not_none(val):
+    return val is not None
+
+
 def is_action(event):
     """ Return whether event (or Events) counts as a turn action. """
-    return isinstance(event, (Events, StatusEvent)) and bool(event)
+    return isinstance(event, (list, StatusEvent)) and bool(event)
 
 
 def is_move(event):
@@ -29,7 +33,7 @@ def is_move(event):
     
     Following a map-connector to a different map is not counted as a move.
     """
-    if isinstance(event, Events):
+    if isinstance(event, list):
         for evt in event:
             if isinstance(evt, Move) and bool(evt):
                 return True
@@ -208,12 +212,13 @@ class Pickup(InventoryChange):
 
 class Events(list):
     """ A group of StatusEvents.  None-events are implicitly ignored. """
+    
     def __init__(self, *events):
-        if len(events) >= 1 and isinstance(events[0], Events):
-            raise ValueError("Nested Events is unsuported. Did you mean do "
+        if len(events) >= 1 and isinstance(events[0], list):
+            raise ValueError("Nesting Events is unsuported. Did you mean do "
                              "call Events(*events) instead?")
         if events:
-            events = filter(bool, events)
+            events = filter(not_none, events)
             super(Events, self).__init__(events)
         else:
             super(Events, self).__init__()
@@ -222,11 +227,12 @@ class Events(list):
         return " ".join(map(str, self))
        
     def __iadd__(self, other):
-        other = filter(bool, other)
+        other = filter(not_none, other)
         return super(Events, self).__iadd__(other)
     
     def add(self, event):
-        if isinstance(event, Events):
-            self += event
-        elif event:
+        if isinstance(event, list):
+            raise ValueError("Nesting Events is unsuported. Did you mean do "
+                             "call `events += other_events` instead?")
+        if event is not None:
             self.append(event)
