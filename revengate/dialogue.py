@@ -34,7 +34,7 @@ class SpeakerTag(Tag):
     pass
 
 
-class ActionTag(Tag):
+class CommandTag(Tag):
     pass
 
 

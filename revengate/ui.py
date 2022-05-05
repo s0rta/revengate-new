@@ -59,14 +59,14 @@ class TextUI(UI):
         for part in dia.elems:
             # TODO: if this moves inside the ActionMap, UI doesn't need ActionMap
             if isinstance(part, Action):
-                result = tender.action_map.call(part.name, *part.args)
+                result = tender.commands.call(part.name, *part.args)
                 if part.after_ftag:
-                    tender.action_map.call(part.after_ftag, result)
+                    tender.commands.call(part.after_ftag, result)
                     
             else:
                 print(part)
                 if part.after_ftag:
-                    tender.action_map.call(part.after_ftag)
+                    tender.commands.call(part.after_ftag)
                 input("Press ENTER to continue...")
             
     def prompt(self, *options):
@@ -85,5 +85,5 @@ class TextUI(UI):
                 if choice not in opt_map:
                     print(f"{choice} is not a valid option.")
         if getattr(opt_map[choice], "after_ftag"):
-            tender.action_map.call(opt_map[choice].after_ftag)
+            tender.commands.call(opt_map[choice].after_ftag)
         return choice

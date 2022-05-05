@@ -15,12 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
+""" Registry for commands that can be called from various parts of the game. """
+
 import inspect
 import functools
 
 from .tags import Tag
 from .geometry import vect
-from .dialogue import Action
 from . import tender
 
 # all the methods we do not want to auto register
@@ -28,29 +29,37 @@ _NO_AUTO_REG = set()
 
 
 def no_auto_reg(funct):
-    """ Decorator to mark a callable as not exported as an ActionMap action. """
+    """ Decorator to mark a callable as not exported as an CommandMap command. """
     if hasattr(funct, "__qualname__"):
         _NO_AUTO_REG.add(funct.__qualname__)
     return funct
 
 
-class ActionMap:
-    """ Mapping between action names and functions 
+class CommandMap:
+    """ Mapping between command names and functions 
     
-    Action functions can be explicitly registered or be implicitly defined as instance 
-    methods of ActionMap or one of it's subclasses.
+    command functions can be explicitly registered or be implicitly defined as instance 
+    methods of CommandMap or one of it's subclasses.
     
-    Action functions will receive "engine" and "ui" as their first two parameters if 
+    command functions will receive "engine" and "ui" as their first two parameters if 
     they declare them in their signature.
     """
 
-    def __init__(self, name):
-        self._actions = {}
+    def __init__(self, name, prefix=None):
+        """ 
+        name: for documentation purpose only
+        prefix: all command lookups must include this prefix, useful to avoid clashes 
+                between multiple sub-maps. Ex.: if prefix='foo-', then accessing `bar()` 
+                is done with `commands["foo-bar"]()`
+        """
+        
+        self._commands = {}
         self._sub_maps = []
         self.name = name
+        self.prefix = prefix
     
-    def __contains__(self, action):
-        return action in self._actions or hasattr(self, action)
+    def __contains__(self, command):
+        return command in self._commands or hasattr(self, command)
 
     @no_auto_reg
     def register(self, funct, name=None):
@@ -60,13 +69,15 @@ class ActionMap:
                 raise ValueError("Can't register function: name not provided "
                                  "and funct is not a named function.")
             name = funct.__name__.replace("_", "-")
-        self._actions[name] = funct
+        self._commands[name] = funct
         
     @no_auto_reg
     def register_sub_map(self, sub_map):
         self._sub_maps.append(sub_map)
 
     def _format_entry(self, name, funct):
+        if self.prefix:
+            name = self.prefix + name
         name = name.replace("_", "-")
         if hasattr(funct, "__doc__") and funct.__doc__ is not None:
             return f"- {name}: {funct.__doc__.strip()!r}"
@@ -76,11 +87,11 @@ class ActionMap:
     @no_auto_reg
     def summary(self):
         """ Return a string that summarized which commands are available in this 
-        ActionMap and all it's sub-maps. """
+        CommandMap and all it's sub-maps. """
         entries = []
         
         lines = [f"Content of {self.__class__.__name__}(name={self.name!r}):"]
-        for name, funct in self._actions.items():
+        for name, funct in self._commands.items():
             entries.append(self._format_entry(name, funct))
         for name, value in inspect.getmembers(self):
             if name.startswith("_"):
@@ -98,7 +109,7 @@ class ActionMap:
     def _apply_global_args(self, funct):
         """ 
         Return a function with partial binding of arguments that we already know about 
-        and do not receive from the caller when the action is later called.
+        and do not receive from the caller when the command is later called.
         """
         sig = inspect.signature(funct)
         params = sig.parameters
@@ -110,68 +121,69 @@ class ActionMap:
             funct = functools.partial(funct, **kwargs)
         return funct
 
-    def _get_action(self, action, strict=True):
-        if isinstance(action, Tag):
-            action = action.name
+    def _get_command(self, command):
+        if isinstance(command, Tag):
+            command = command.name
+        if self.prefix:
+            if not command.startswith(self.prefix):
+                return None
+            command = command.replace(self.prefix, "", 1)
             
         funct = None
-        if action in self._actions:
-            funct = self._actions[action]
-        elif hasattr(self, action):
-            funct = getattr(self, action)
-        elif hasattr(self, action.replace("-", "_")):  
+        if command in self._commands:
+            funct = self._commands[command]
+        elif hasattr(self, command):
+            funct = getattr(self, command)
+        elif hasattr(self, command.replace("-", "_")):  
             # FIXME: redoing the replace() is very ugly
-            funct = getattr(self, action.replace("-", "_"))
-        elif strict:            
-            raise ValueError(f"Action {action} is not registered or defined "
-                             "as a class method.")
+            funct = getattr(self, command.replace("-", "_"))
         return funct
 
-    def __getitem__(self, action):
-        """ Retrun a callable for given action.
+    def __getitem__(self, command):
+        """ Retrun a callable for given command.
         Globals are partially applied to the callable. 
         
-        `action` can be an ActionTag or a string.
+        `command` can be an CommandTag or a string.
         """
-        funct = self._get_action(action, strict=False)
+        funct = self._get_command(command)
         if self._do_not_reg(funct):
             funct = None
         if funct is None:
             for sub_map in self._sub_maps:
-                funct = sub_map._get_action(action, strict=False)
+                funct = sub_map._get_command(command)
                 if funct is not None:
                     break
                  
         if funct is None:
-            raise ValueError(f"Action {action} is not registered or defined "
-                             "as a class method.")
+            raise ValueError(f"command {command} is not registered or defined "
+                             "as a method.")
         return self._apply_global_args(funct)
 
     @no_auto_reg
-    def call(self, action, *args):
-        funct = self[action]
+    def call(self, command, *args):
+        funct = self[command]
         return funct(*args)
 
 
-class CoreActions(ActionMap):
-    """ Main actions that are used in multiple game contexts """
-    def __init__(self, name="Core Actions"):
-        super().__init__(name)
+class CoreCommands(CommandMap):
+    """ Main commands that are used in multiple game contexts """
+    def __init__(self, name="Core commands", prefix=None):
+        super().__init__(name, prefix)
 
-    # TODO: move this to UIActions
+    # TODO: move this to UIcommands
     def prompt(self, *options):
         """ Prompt the player to make a choice. """
         return tender.ui.prompt(*options)
     
-    # TODO: move this to UIActions    
+    # TODO: move this to UIcommands    
     def yes_no_prompt(self):
         return self.promp("Yes", "No")
         
     def log(self, *args):
-        print(f"Dialogue action called with args: {args}")
+        print(f"Dialogue command called with args: {args}")
         
     def move_or_act(self, direction):
-        """ Perform the default action in direction (a vector). """
+        """ Perform the default command in direction (a vector). """
         res = None
         map = tender.engine.map
         cur_pos = map.find(tender.hero)

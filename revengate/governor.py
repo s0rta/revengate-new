@@ -27,7 +27,7 @@ from .randutils import rng
 from .loader import DATA_DIR, TopLevelLoader, data_path
 from .engine import Engine
 from .ui import TextUI, Quitting, KivyUI
-from .action_map import ActionMap, CoreActions
+from .commands import CommandMap, CoreCommands
 from .maps import Connector
 from .area import Area
 from .events import is_action, StairsEvent, Events
@@ -100,7 +100,7 @@ class Condenser:
             self.delete(key)
 
 
-class GameMgmtActions(ActionMap):
+class GameMgmtCommands(CommandMap):
     def __init__(self, condenser, name="Game Management"):
         super().__init__(name)
         self.condenser = condenser
@@ -149,12 +149,12 @@ class Governor:
         self.app = RevengateApp(cheats)
         self.condenser = Condenser(self.app.user_data_dir)
         
-        tender.action_map = CoreActions(name="core-actions")
-        tender.action_map.register(self.follow_stairs)
-        tender.action_map.register(self.new_game_response)
-        tender.action_map.register(self.npc_turn)
+        tender.commands = CoreCommands(name="core-actions")
+        tender.commands.register(self.follow_stairs)
+        tender.commands.register(self.new_game_response)
+        tender.commands.register(self.npc_turn)
         
-        tender.action_map.register_sub_map(GameMgmtActions(self.condenser))
+        tender.commands.register_sub_map(GameMgmtCommands(self.condenser))
         
     def make_map(self, nb_monsters, item, from_pos=None, parent_map=None):
         lvl = len(tender.dungeon.maps) + 1
@@ -271,7 +271,7 @@ class Governor:
 
         map = self.make_first_map()
         tender.dungeon.add_map(map, parent=None)
-        tender.action_map["save-game"]()
+        tender.commands["save-game"]()
         
     def follow_stairs(self):
         from_pos = tender.engine.map.find(tender.hero)

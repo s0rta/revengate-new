@@ -46,7 +46,7 @@ from .strategies import Strategy
 from .items import Item
 from .weapons import HealthVector, Effect
 from .actors import Actor
-from .dialogue import Dialogue, Line, Action, DialogueTag, SpeakerTag, ActionTag
+from .dialogue import Dialogue, Line, Action, DialogueTag, SpeakerTag, CommandTag
 from .sentiment import SentimentChart
 
 
@@ -363,7 +363,7 @@ class DialogueLoader(SubLoader):
         for tag in record[TOP_SECTION]["speakers"]:
             self._speakers[tag] = SpeakerTag(tag)
         for tag in record[TOP_SECTION]["actions"]:
-            self._actions[tag] = ActionTag(tag)
+            self._actions[tag] = CommandTag(tag)
 
         dias = {}
         for name, subrec in record["dialogues"].items():

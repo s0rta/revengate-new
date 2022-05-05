@@ -22,7 +22,7 @@ things in motion must also make sure that this the required globals are initiali
 """
 from .engine import Engine
 from .ui import UI
-from .action_map import ActionMap
+# from .commands import CommandMap
 from .actors import Actor
 from .loader import TopLevelLoader
 from .sentiment import SentimentChart
@@ -30,7 +30,7 @@ from .sentiment import SentimentChart
 loader: TopLevelLoader = None
 engine: Engine = None
 ui: UI = None
-action_map: ActionMap = None
+commands = None
 hero: Actor = None
 sentiments: SentimentChart = None
 dungeon = None

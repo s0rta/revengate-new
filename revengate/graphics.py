@@ -368,7 +368,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 hero_pos = self.map.find(tender.hero)
                 if mpos in self.map.adjacents(hero_pos, free=False):
                     direction = Vector(mpos) - Vector(hero_pos)
-                    res = tender.action_map["move-or-act"](direction)
+                    res = tender.commands["move-or-act"](direction)
             if is_action(res):
                 self.finalize_turn(res)
                 return True
@@ -383,7 +383,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
             if callable(self.key_map[kname]):
                 funct = self.key_map[kname]
             else:
-                funct = tender.action_map[self.key_map[kname]]
+                funct = tender.commands[self.key_map[kname]]
             res = funct()
             if is_action(res):
                 self.finalize_turn(res)
@@ -441,7 +441,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
             self.app.display_status_events(events)
             
         if tender.engine:
-            tender.action_map["save-game"]()
+            tender.commands["save-game"]()
             self.engine_turn = tender.engine.current_turn
 
     def rest(self, *args):
@@ -449,13 +449,13 @@ class MapWidget(FocusBehavior, ScatterPlane):
         self.finalize_turn(res)
 
     def loot(self, *args):
-        res = tender.action_map["pickup-item"]()
+        res = tender.commands["pickup-item"]()
         if is_action(res):
             self.finalize_turn(res)
         return True
 
     def follow_stairs(self, *args):
-        res = tender.action_map["follow-stairs"]()
+        res = tender.commands["follow-stairs"]()
         if is_action(res):
             self.finalize_turn(res)
         return True
@@ -556,10 +556,10 @@ class RevengateApp(MDApp):
         resources.resource_add_path(os.path.join(DATA_DIR, "fonts"))
 
     def has_saved_game(self):
-        return tender.action_map["has-saved-game"]()
+        return tender.commands["has-saved-game"]()
 
     def init_new_game(self, hero_name):
-        tender.action_map["new-game-response"](hero_name)
+        tender.commands["new-game-response"](hero_name)
         self.map_wid.set_map(tender.engine.map)
         self.root.current = "mapscreen"
         
@@ -591,7 +591,7 @@ class RevengateApp(MDApp):
         self.root.transition.center_on_button(button)
         
         if not tender.hero or tender.hero.is_dead or not tender.engine.map:
-            tender.action_map["restore-game"]()
+            tender.commands["restore-game"]()
         self.map_wid.set_map(tender.engine.map)
         self.root.current = "mapscreen"
 
@@ -599,8 +599,8 @@ class RevengateApp(MDApp):
         self.root.transition.center_on_button(button)
         
         if tender.hero and tender.hero.is_alive:
-            tender.action_map["save-game"]()
-        self.root.resume_game_bt.disabled = not tender.action_map["has-saved-game"]()
+            tender.commands["save-game"]()
+        self.root.resume_game_bt.disabled = not tender.commands["has-saved-game"]()
 
         self.root.current = "mainscreen"
     
@@ -611,7 +611,7 @@ class RevengateApp(MDApp):
                 self.show_conversation(convo)
             elif isinstance(event, Death) and event.actor == tender.hero:
                 print(event)
-                tender.action_map["purge-game"]()
+                tender.commands["purge-game"]()
                 form = forms.GameOverPopup(self.show_main_screen)
                 form.open()
             else:
@@ -619,13 +619,13 @@ class RevengateApp(MDApp):
                 print(event)
     
     def play_npcs_and_refresh(self, *args):
-        events = tender.action_map["npc-turn"]()
+        events = tender.commands["npc-turn"]()
         self.map_wid.refresh_map()
         self.display_status_events(events)
     
     def stop(self):
         if tender.hero and tender.hero.is_alive:
-            tender.action_map["save-game"]()   
+            tender.commands["save-game"]()   
         super().stop()
         
     def build(self):
