@@ -37,6 +37,7 @@ from kivy.animation import Animation
 from kivy.uix.screenmanager import ScreenManager, ShaderTransition
 
 from .maps import TileType, Connector
+from .commands import CommandMap
 from .loader import DATA_DIR
 from .events import (Events, is_action, is_move, iter_events, Conversation, Death, 
                      Teleport, Injury)
@@ -155,30 +156,41 @@ class MapWidget(FocusBehavior, ScatterPlane):
             self.init_rects()
             self.refresh_map()
 
+        # keep track of the keys we already took care of
+        self._processed_keys = set()  
+        
         self.key_map = None
         self.bind(app=self._init_key_map)
 
         self.bind(_next_selection_action=self._update_selection_lbl)
 
+    def _expand_multi_keys(self, key_map):
+        """ De-normalize the keyboard actions that have more that one key into 
+        {single_key:action} layout for fast lookup. """
+        items = []
+        for key, value in key_map.items():
+            if isinstance(key, tuple):
+                items += [(sub_key, value) for sub_key in key]
+            else:
+                items.append((key, value))
+        return dict(items)
+        
     def _init_key_map(self, *args):
-        self.key_map = { "f2": self._print_help,
-                         "right": "move-or-act-right", 
-                         "l": "move-or-act-right", 
-                         "left": "move-or-act-left", 
-                         "h": "move-or-act-left", 
-                         "up": "move-or-act-up", 
-                         "k": "move-or-act-up", 
-                         "down": "move-or-act-down", 
-                         "j": "move-or-act-down", 
-                         "f": self.follow_stairs,
-                         "p": "pickup-item" } 
+        key_map = {("f2", "?"): self._print_help,
+                   ("right", "l"): "move-or-act-right", 
+                   ("left", "h"): "move-or-act-left", 
+                   ("up", "k"): "move-or-act-up", 
+                   ("down", "j"): "move-or-act-down", 
+                   "f": self.follow_stairs,
+                   "p": "pickup-item"} 
         
         if self.app.cheats:
-            cheats = { "t": self._start_teleport, 
-                       "6": self._start_insta_kill, 
-                       ";": self._start_look,
-                       "f5": self._start_debug_inspect }
-            self.key_map.update(cheats)
+            cheats = {"t": self._start_teleport, 
+                      "6": self._start_insta_kill, 
+                      ":": self._start_look,
+                      "f5": self._start_debug_inspect}
+            key_map.update(cheats)
+        self.key_map = self._expand_multi_keys(key_map)
     
     def _update_selection_lbl(self, *args):
         if self._next_selection_action is None:
@@ -374,11 +386,12 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 return True
         return super().on_touch_up(event)
     
-    def keyboard_on_key_down(self, window, key, text, modifiers):
+    def _try_key_command(self, kname):
+        """ Try to perform the keyboard action associated with kname (char or long name 
+        of a key). Return wheter an action was performed, regardless of the success of 
+        said action."""
         if not tender.hero or tender.hero.is_dead:
             return False
-        res = None
-        kcode, kname = key
         if kname in self.key_map:
             if callable(self.key_map[kname]):
                 funct = self.key_map[kname]
@@ -388,8 +401,25 @@ class MapWidget(FocusBehavior, ScatterPlane):
             if is_action(res):
                 self.finalize_turn(res)
             return True
+        return False
+    
+    def keyboard_on_textinput(self, window, text):
+        if text not in self._processed_keys and self._try_key_command(text):
+            return True
+        else:
+            return super().keyboard_on_textinput(window, text)
+    
+    def keyboard_on_key_down(self, window, key, text, modifiers):
+        kcode, kname = key
+        if self._try_key_command(kname):
+            self._processed_keys.add(kname)
+            return True
         else:
             return super().keyboard_on_key_down(window, key, text, modifiers)
+
+    def keyboard_on_key_up(self, window, key):
+        kcode, kname = key
+        self._processed_keys.discard(kname)
 
     def center_on_hero(self, anim=False):
         """ Move the tiles to have the hero at the center of the screen. """
@@ -461,11 +491,11 @@ class MapWidget(FocusBehavior, ScatterPlane):
         return True
 
 
-class Controller(FloatLayout):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-
+class UICommands(CommandMap):
+    def __init__(self, name, app):
+        self.app = app
+        super().__init__(name, prefix="ui-")
+    
 
 class RevScreenManager(ScreenManager):
     map_wid = ObjectProperty(None)
@@ -554,6 +584,9 @@ class RevengateApp(MDApp):
         super().__init__(*args)
         resources.resource_add_path(os.path.join(DATA_DIR, "images"))
         resources.resource_add_path(os.path.join(DATA_DIR, "fonts"))
+
+        ui_cmds = UICommands("UI Commands", app=self)
+        tender.commands.register_sub_map(ui_cmds)
 
     def has_saved_game(self):
         return tender.commands["has-saved-game"]()

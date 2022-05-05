@@ -418,11 +418,11 @@ class Humanoid(Character):
             
     def attack(self, foe):
         if self.weapon:
-            return Events(self.strike(foe, self.weapon))
+            return self.strike(foe, self.weapon)
         else:
             hits = Events()
             if self.fist_r:
-                hits.add(self.strike(foe, self.fist_r))
+                hits += self.strike(foe, self.fist_r)
             if self.fist_l:
-                hits.add(self.strike(foe, self.fist_l))
+                hits += self.strike(foe, self.fist_l)
             return hits or None

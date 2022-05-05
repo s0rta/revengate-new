@@ -144,16 +144,16 @@ class Governor:
         tender.loader = TopLevelLoader()
         tender.loader.load(open(data_path(CORE_FILE), "rt"))
         tender.sentiments = tender.loader.get_instance("core_sentiments")
-
-        tender.ui = KivyUI()
-        self.app = RevengateApp(cheats)
-        self.condenser = Condenser(self.app.user_data_dir)
         
         tender.commands = CoreCommands(name="core-actions")
         tender.commands.register(self.follow_stairs)
         tender.commands.register(self.new_game_response)
         tender.commands.register(self.npc_turn)
         
+        tender.ui = KivyUI()
+        self.app = RevengateApp(cheats)
+
+        self.condenser = Condenser(self.app.user_data_dir)
         tender.commands.register_sub_map(GameMgmtCommands(self.condenser))
         
     def make_map(self, nb_monsters, item, from_pos=None, parent_map=None):
