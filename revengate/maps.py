@@ -40,6 +40,93 @@ from .utils import Array
 # - Hexy: coordinate transforms, good for tap events
 # - hexutil: Hex.distance and A* implementation
 
+class ScopeType(IntEnum):
+    VISIBLE = auto()
+
+class MapScope:
+    def __init__(self, map, scope_type, at, radius=None, pred=None, include_at=False):
+        """ at: a coord tupple or an actor
+        pred: a callable that receives a coord tupple OR a class that is used to test 
+              things at the coord
+        """
+        self.map = map
+        self.scope_type = scope_type
+        if isinstance(at, Actor):
+            at = self.map.find(at)
+        self.at = at
+        self.radius = radius
+        self.pred = pred
+        self.include_at = include_at
+
+    def _disc(self, at, max_radius):
+        for radius in range(1, max_radius+1):
+            tiles = self.map._ring(at, radius, free=False, shuffle=False)
+            for t in tiles:
+                yield t
+
+    def _run_query(self):
+        if self.include_at:
+            all_coords = []
+        else:
+            all_coords = [self.at]
+        if self.scope_type == ScopeType.VISIBLE:
+            all_coords += [coord for coord in self._disc(self.at, self.radius) 
+                           if self.map.line_of_sight(self.at, coord)]
+        if self.pred:
+            return iter(self._filter_with_pred(all_coords))
+        else:
+            return iter(all_coords)
+
+    def _filter_with_pred(self, coords):
+        if self.pred == Actor:  # TODO: check for sub classes
+            return [coord for coord in coords 
+                    if isinstance(self.map.actor_at(coord), self.pred)]
+        elif self.pred == Item:
+            return [coord for coord in coords 
+                    if isinstance(self.map.item_at(coord), self.pred)]
+        elif callable(self.pred):
+            return [coord for coord in coords if self.pred(coord)]
+             
+    def __iter__(self):
+        return self.iter_coords()
+
+    @property
+    def coords(self):
+        list(self.iter_coords)
+        
+    def iter_coords(self):
+        return self._run_query()
+
+    @property
+    def actors(self):
+        return list(self.iter_actors())
+
+    def iter_actors(self):
+        for coord in self:
+            actor = self.map.actor_at(coord)
+            if actor is not None:
+                yield coord, actor
+
+    @property
+    def items(self):
+        return list(self.iter_items())
+
+    def iter_items(self):
+        for coord in self:
+            stack = self.map.items_at(coord)
+            if stack:
+                for item in stack:
+                    yield coord, item
+
+    @property
+    def tiles(self):
+        return list(self.iter_tiles())
+
+    def iter_tiles(self):
+        for coord in self:
+            yield coord, self.map[coord]
+
+    
 
 class TileType(IntEnum):
     SOLID_ROCK = auto()
@@ -217,6 +304,9 @@ class Map:
     def iter_overlays_text(self):
         """ Like Map.iter_overlays() but for text representation of things. """
         return itertools.chain(*[o.text_items() for o in self.overlays])
+    
+    def visible_scope(self, at, radius, pred=None, include_at=False):
+        return MapScope(self, ScopeType.VISIBLE, at, radius, pred, include_at)
 
     def add_overlay(self, overlay):
         self.overlays.append(overlay)
