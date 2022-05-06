@@ -404,12 +404,14 @@ class MapWidget(FocusBehavior, ScatterPlane):
         return False
     
     def keyboard_on_textinput(self, window, text):
+        # handle litteral keys with the modifier applied by Kivy. ex.: "Shift+/" -> "?"
         if text not in self._processed_keys and self._try_key_command(text):
             return True
         else:
             return super().keyboard_on_textinput(window, text)
     
     def keyboard_on_key_down(self, window, key, text, modifiers):
+        # handle things like arrow keys
         kcode, kname = key
         if self._try_key_command(kname):
             self._processed_keys.add(kname)
@@ -495,7 +497,11 @@ class UICommands(CommandMap):
     def __init__(self, name, app):
         self.app = app
         super().__init__(name, prefix="ui-")
-    
+
+    def show_value(self, value, response_funct=None):
+        value_popup = forms.ShowValuePopup(str(value), response_funct)
+        value_popup.open()
+
 
 class RevScreenManager(ScreenManager):
     map_wid = ObjectProperty(None)
@@ -612,10 +618,6 @@ class RevengateApp(MDApp):
         if not self.hero_name_form:
             self.hero_name_form = forms.HeroNameForm(self.init_new_game)
         self.hero_name_form.open()
-
-    def show_dialogue(self, dia):
-        
-        raise NotImplementedError()
 
     def set_map(self, map):
         self.map_wid.set_map(map)

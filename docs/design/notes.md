@@ -84,6 +84,10 @@ GURPS: http://www.warehouse23.com/products/SJG37-0339
 Castle Falkenstein: https://www.drivethrurpg.com/m/product/2370
 Engines and Empires: free! https://www.drivethrurpg.com/product/329066/Engines--Empires-Core-Rules
 
+
+## Other Steampunk inspiration
+* how clockworks work: https://ciechanow.ski/mechanical-watch/
+
 ## Credit
 * Map based on Europe's map by u/CroBorn
 https://azgaar.github.io/Fantasy-Map-Generator/?maplink=https://dl.dropbox.com/s/lhtikydmyedu8kp/Europe%20Jul19%2013-07.map?dl=0

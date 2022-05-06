@@ -24,6 +24,8 @@ from kivy.uix.textinput import TextInput
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 
+from .dialogue import Action
+from . import tender
 
 class RevPopup(MDDialog):
     """ A popup notification. 
@@ -127,7 +129,7 @@ class ConversationPopup(RevPopup):
         super().__init__(response_funct, content_cls=self.content)
         self.bind(on_dismiss=self.is_not_done)
         self.ok_btn.bind(on_release=self.try_advance)
-        self.show_line()
+        self.show_part()
         
     def is_not_done(self, *args):
         return not self.dialogue.is_last()
@@ -135,21 +137,27 @@ class ConversationPopup(RevPopup):
     def try_advance(self, *args):
         if not self.dialogue.is_last():
             self.dialogue.advance()
-            self.show_line()
+            self.show_part()
         else:
             self.dismiss()
         return True
         
-    def show_line(self):
+    def show_part(self):
         if self.dialogue.is_last():
             self.ok_btn.text = "OK"
         else:
             self.ok_btn.text = "Next"
-
-        # TODO: append it to the history
-        line = self.dialogue.current()
-        self.title = str(line.speaker)
-        self.content.convo_label.text = line.text
+            
+        part = self.dialogue.current()
+        if isinstance(part, Action):
+            res = tender.commands[part.name](*part.args)
+            callback = self.dialogue.callback()
+            if callback:
+                callback(res)
+        else:
+            # TODO: append it to the history
+            self.title = str(part.speaker)
+            self.content.convo_label.text = part.text
 
 
 class ConversationPopupContent(BoxLayout):
@@ -160,3 +168,15 @@ class GameOverPopup(RevPopup):
     def __init__(self, response_funct, *args, **kwargs):
         super().__init__(response_funct, content_cls=None)
         self.ok_btn.bind(on_press=self.app.root.transition.center_on_button)
+
+
+class ShowValuePopup(RevPopup):
+    def __init__(self, value, response_funct=None, *args, **kwargs):
+        content = ShowValuePopupContent()
+        content.value_label.text = value
+        super().__init__(response_funct, content_cls=content)
+
+
+class ShowValuePopupContent(BoxLayout):
+    value_label = ObjectProperty(None)
+    

@@ -57,7 +57,6 @@ class KivyUI(UI):
 class TextUI(UI):
     def show_dia(self, dia):
         for part in dia.elems:
-            # TODO: if this moves inside the ActionMap, UI doesn't need ActionMap
             if isinstance(part, Action):
                 result = tender.commands.call(part.name, *part.args)
                 if part.after_ftag:

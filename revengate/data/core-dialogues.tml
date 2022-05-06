@@ -2,7 +2,7 @@
 format = 0
 content = "dialogues"
 speakers = ["narrator", "responder"]
-actions = []
+actions = ["ui-show-value"]
 
 [dialogues.intro]
 script="""
@@ -21,4 +21,5 @@ Your job now is to go back up.
 [dialogues.first_level]
 script="""
 #responder: This is the first level, keep exploring!
+#ui-show-value: It worked!
 """

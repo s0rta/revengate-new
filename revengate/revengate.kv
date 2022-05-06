@@ -1,6 +1,6 @@
 #:kivy 2.0.0
 #:include revengate/forms.kv
-#:import tender revengate
+#:import tender revengate.tender
 
 <MapWidget>
     app: app
@@ -85,6 +85,10 @@ ScreenManager:
                     text: "Quit"
                     on_release: app.stop()
 
+                MDRectangleFlatButton:
+                    text: "test"
+                    on_release: tender.commands["ui-show-value"]("some value")
+                    
                 MDLabel:
                     id: select_mode_lbl
                     text: ""

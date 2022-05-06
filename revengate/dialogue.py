@@ -24,7 +24,7 @@ import inspect
 from copy import copy
 
 from .tags import Tag, t
-
+from . import tender
 
 class DialogueTag(Tag):
     pass
@@ -117,9 +117,10 @@ class Dialogue:
     def callback(self):
         """ Return a callback function to be called after displaying the current line of 
         speech. """
-        if self.cur_idx is not None and self.elems[self.cur_idx].after_ftag:
-            # FIXME: convert the tag to a function
-            ...
+        if self.cur_idx is not None:
+            current = self.current()
+            if current.after_ftag:
+                return tender.commands[current.after_ftag]
         return None
 
     @property
