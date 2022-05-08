@@ -5,26 +5,31 @@ Developing Revengate
 The pure Python dependencies are specified in `requirements-dev.txt`. 
 
 If you are not already using a virtual environment, it's a good idea to create one now: 
-``` bash
+```sh-session
 python3 -m venv .venv
 . .venv/bin/activate
 ```
 
 This command should then install all the development dependencies for you:
-``` bash
+```sh-session
 pip install -r requirements-dev.txt
 ```
 
 You can see if your setup is working by installing the game in development mode and then launching it: 
-``` bash
-flit install -s
-revcli
+```sh-session
+$ flit install -s
+$ revcli
 ```
 
 There are many non-Python dependencies, almost all for the Android backend. If you do not plan on deploying the game on Android, you don't have anything else to do!
 
 On Ubuntu 21.10, this command will get you up to speed for Android development:
-`sudo apt install -y build-essentials cmake java-common default-jre default-jdk and libjffi-java google-android-build-tools-24-installer android-sdk-build-tools android-sdk-platform-tools android-sdk-platform-23 android-sdk libltdl7-dev lld`
+
+```sh-session
+$ sudo apt install -y build-essentials cmake java-common default-jre default-jdk \
+  and libjffi-java google-android-build-tools-24-installer android-sdk-build-tools \
+  android-sdk-platform-tools android-sdk-platform-23 android-sdk libltdl7-dev lld
+```
 
 It's probably possible to simplify this list, but the errors you get come very late and are rather cryptic, so we didn't get into simplifying it yet.
 
@@ -33,13 +38,28 @@ More details are available in the [Kivy official documentation][kivy-for-a]
 [kivy-for-a]: https://buildozer.readthedocs.io/en/latest/installation.html#targeting-android
 
 You can test your Android development setup by plugging an Android device over USB then typing: 
-``` bash
-buildozer android debug deploy run
+```sh-session
+$ buildozer android debug deploy run
 ```
 
 This command will take up to 30 mins the first time, less then a minute after that. The mobile device must have [USB-debugging enabled][usb-debug]. 
 
 [usb-debug]: https://developer.android.com/studio/command-line/adb#Enabling
+
+### Alternate: manage depenencies with Guix
+
+If you prefer to use [Guix](guix.gnu.org/) rather than pip+virtualenv, use the
+provided [manifest](../manifest.scm). For example, you can launch the game like so:
+
+```sh-session
+$ guix shell -m manifest.scm -- python3 -m revegate.apparatus
+```
+
+You can add the directory to your "safe directories" list to avoid having to even type `-m manifest.scm`- to do so:
+
+```sh-session
+$ echo $PWD >> $HOME/.config/guix/shell-authorized-directories
+```
 
 
 ## Coding style and conventions
