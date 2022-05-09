@@ -6,13 +6,13 @@ The pure Python dependencies are specified in `requirements-dev.txt`.
 
 If you are not already using a virtual environment, it's a good idea to create one now: 
 ```sh-session
-python3 -m venv .venv
+$ python3 -m venv .venv
 . .venv/bin/activate
 ```
 
 This command should then install all the development dependencies for you:
 ```sh-session
-pip install -r requirements-dev.txt
+$ pip install -r requirements-dev.txt
 ```
 
 You can see if your setup is working by installing the game in development mode and then launching it: 

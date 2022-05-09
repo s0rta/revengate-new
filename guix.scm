@@ -19,7 +19,7 @@
   (define-public revengate
     (package
       (name "revengate")
-      (version "0.0.1")
+      (version "0.1")
       (source (local-file project-dir #:recursive? #t))
       (build-system python-build-system)
       (arguments
@@ -38,17 +38,17 @@ based on Earth in the Victorian era. Magic exists, human races are more spread
 out than they are on our Earth, guns are still impractical, Europe is widely
 developed, but so are many other cities around the world.
 
+The game starts in ~505AP (Ante-Pestis, Après la Peste, After the Plague), which
+roughly corresponds to 1855 of our world. The setting is Victorian era
+Franconia, located roughly where modern France is.
 
-The game starts in 955 AD, which roughly corresponds to 1855 of our world. The
-setting is Victorian era Franconia, located roughly where modern France is.
-
-Technology, science, and medicine is comparable to that of 1855 of our world,
-except for a few specific discoveries that came a couple decades early or a
-couple decades late. The industrial revolution is getting started. Guns are all
-impractical muzzle loaders. Magic is fairly common and its proponents are at odd
-with the industrial elite. Electricity is rare, steam and clockwork mechanisms
-are the main sources of mechanized work. Hot air balloons can be seen once in a
-while, steerable airships are about to be invented.
+Technology, science, and medicine is comparable to that of our world in that
+time, except for a few specific discoveries that came a couple decades early or
+a couple decades late. The industrial revolution is getting started. Guns are
+all impractical muzzle loaders. Magic is fairly common and its proponents are at
+odds with the industrial elite. Electricity is rare, steam and clockwork
+mechanisms are the main sources of mechanized work. Hot air balloons can be seen
+once in a while, steerable airships are about to be invented.
 
 There are many ideological conflicts in the world: science vs magic, democracy
 vs autocratic rule, hedonism vs industrial efficiency, colonialism vs local
