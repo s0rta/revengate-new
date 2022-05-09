@@ -23,12 +23,20 @@
       (source (local-file project-dir #:recursive? #t))
       (build-system python-build-system)
       (arguments
-       '(#:phases
-         (modify-phases %standard-phases
-           (replace 'check
-             (lambda _
-               (invoke/quiet "pytest"))))))
-      (native-inputs (list git python-setuptools-scm python-pytest))
+       (list #:phases
+         #~(modify-phases %standard-phases
+             (replace 'build
+               (lambda _
+                 (invoke "flit" "build" "--no-setup-py")))
+             (replace 'check
+               (lambda _
+                 (invoke "pytest")))
+             (replace 'install
+               (lambda _
+                 (let ((whl (car (find-files "dist" "\\.whl$"))))
+                   (invoke "pip" "--no-cache-dir" "--no-input"
+                           "install" "--no-deps" "--prefix" #$output whl)))))))
+      (native-inputs (list git python-flit python-pytest))
       (inputs
        (list python python-tomlkit python-click python-kivy python-kivymd
              python-pillow libbsd mesa libx11))
