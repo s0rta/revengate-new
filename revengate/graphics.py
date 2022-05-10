@@ -130,7 +130,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
     
     Two coordinate systems are used:
     - map: tile id (map.tiles[x][y]), convention is (mx, my)
-    - canvas: pixel position on the canvas, convition is (cy, cy)
+    - canvas: pixel position on the canvas, convention is (cy, cy)
     Both systems have (0, 0) at the bottom-left corner.
     """
     
