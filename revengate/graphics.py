@@ -340,8 +340,6 @@ class MapWidget(FocusBehavior, ScatterPlane):
         for thing in gone:
             self._clear_elem(thing)
 
-    def on_parent(self, widget, parent):
-        self.focus = True
     
     def drag_dist(self, touch_event):
         """ Return the scale adjusted magnitude for a touch drag event. """
@@ -603,7 +601,7 @@ class RevengateApp(MDApp):
         self.root.current = "mapscreen"
         
         dialogue = tender.loader.invoke(t("intro"))
-        self.show_narration(dialogue)
+        self.show_narration(dialogue, self.focus_map)
         
     def show_narration(self, dialogue, response_funct=None):
         popup = forms.ConversationPopup(dialogue, response_funct)
@@ -622,6 +620,10 @@ class RevengateApp(MDApp):
     def set_map(self, map):
         self.map_wid.set_map(map)
         
+    def focus_map(self):
+        if self.map_wid.is_focusable:
+            self.map_wid.focus = True    
+
     def show_map_screen(self, button=None):
         self.root.transition.center_on_button(button)
         
@@ -629,6 +631,7 @@ class RevengateApp(MDApp):
             tender.commands["restore-game"]()
         self.map_wid.set_map(tender.engine.map)
         self.root.current = "mapscreen"
+        self.focus_map()
 
     def show_main_screen(self, button=None):
         self.root.transition.center_on_button(button)
@@ -643,7 +646,7 @@ class RevengateApp(MDApp):
         for event in iter_events(events):
             if isinstance(event, Conversation):
                 convo = tender.loader.invoke(event.tag)
-                self.show_conversation(convo)
+                self.show_conversation(convo, self.focus_map)
             elif isinstance(event, Death) and event.actor == tender.hero:
                 print(event)
                 tender.commands["purge-game"]()
