@@ -18,7 +18,8 @@
 """ Kivy dialogs and pop-up forms """
 
 
-from kivy.properties import ObjectProperty
+import asynckivy as ak
+from kivy.properties import ObjectProperty, BooleanProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivymd.uix.button import MDFlatButton
@@ -51,28 +52,39 @@ class RevPopup(MDDialog):
 class RevForm(MDDialog):
     """ A popup form. 
     
-    Subclasses must define the is_valid() method and an inner content class that 
-    contains the data widgets.
+    Subclasses must define the .is_valid() method and an inner content class that 
+    contains the data widgets. .form_values() might need subclassing if the subclass 
+    uses more than just TextInput widgets.
     
-    Callers must provide a response_funct callback that will receive the content of the 
-    form once it passes validation.
+    Callers can either provide a response_funct callback that will receive the content 
+    of the form once it passes validation or await .values_when_ready().
     """
     app = ObjectProperty(None)
+    rejected = BooleanProperty(False)
+    accepted = BooleanProperty(False)
     
     def __init__(self, response_funct, content_cls, *args, **kwargs):
         self.response_funct = response_funct
-        self.cancel_btn = MDFlatButton(text="CANCEL", on_release=self.dismiss)
+        self.cancel_btn = MDFlatButton(text="CANCEL", on_release=self.reject)
         self.ok_btn = MDFlatButton(text="OK", 
                                    on_release=self.try_accept, 
                                    disabled=True)
         super().__init__(content_cls=content_cls, 
                          buttons=[self.cancel_btn, self.ok_btn])
         
-    def form_values(self):
-        """ Return the values contained in the form as a dictionnary. 
+    def reset(self):
+        """ Reset all value on the on form, making it ready for the next display. 
         
-        Form fields must have a `data_name` attribute to be captired; `data_name` is 
-        used as the key in the returned dictionnary. 
+        Sub-classes should override this to clear the fields of the content_cls.
+        """
+        self.accepted = False
+        self.rejected = False
+        
+    def form_values(self):
+        """ Return the values contained in the form as a dictionary. 
+        
+        Form fields must have a `data_name` attribute to be captured; `data_name` is 
+        used as the key in the returned dictionary. 
         """
         values = {}
         for wid in self.walk(restrict=True):
@@ -81,10 +93,40 @@ class RevForm(MDDialog):
                     values[wid.data_name] = wid.text
         return values
         
+    async def values_when_ready(self):
+        """ awaitable version of `.form_values()`
+        
+        When awaiting the form, you don't have to supply a `response_funct` to the 
+        constructor and you don't have to call `.open()`, but you should `.reset()` in 
+        between awaits on `.values_when_ready()` when you are recycling the form.
+
+        None is returned if the form has been dismissed with the Cancel button or by 
+        pressing Escape.
+        """
+        self.open()
+        await ak.or_(ak.event(self, "accepted"), 
+                     ak.event(self, "rejected"))
+        if self.accepted:
+            return self.form_values()
+        else:
+            return None
+        
+    def dismiss(self, *args):
+        if not self.accepted:
+            self.rejected = True
+        super().dismiss(*args)
+
+    def reject(self, *args, **kwargs):
+        """ Dismiss the popup, ignoring the supplied data. """
+        self.accepted = False
+        self.rejected = True
+        self.dismiss()
+        
     def accept(self, *args, **kwargs):
-        """ Dimiss the popup and consume the supplied data. """
+        """ Dismiss the popup and consume the supplied data. """
         if self.response_funct:
             self.response_funct(**self.form_values())
+        self.accepted = True
         self.dismiss()
 
     def try_accept(self, *args, **kwargs):
@@ -105,9 +147,14 @@ class RevForm(MDDialog):
         """
         self.ok_btn.disabled = not self.is_valid()
 
+    def open(self, *args, **kwargs):
+        """ Display the form. """
+        self.reject()
+        super().open(*args, **kwargs)
+
 
 class HeroNameForm(RevForm):
-    def __init__(self, response_funct, *args, **kwargs):
+    def __init__(self, response_funct=None, *args, **kwargs):
         cont = HeroNameFormContent()
         cont.ids.hero_name_field.bind(text=self.validate,
                                       on_text_validate=self.try_accept)

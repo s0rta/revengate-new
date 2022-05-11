@@ -35,6 +35,7 @@ from kivy.uix.behaviors.focus import FocusBehavior
 from kivy import resources
 from kivy.animation import Animation
 from kivy.uix.screenmanager import ScreenManager, ShaderTransition
+import asynckivy as ak
 
 from .maps import TileType, Connector
 from .commands import CommandMap
@@ -594,14 +595,6 @@ class RevengateApp(MDApp):
 
     def has_saved_game(self):
         return tender.commands["has-saved-game"]()
-
-    def init_new_game(self, hero_name):
-        tender.commands["new-game-response"](hero_name)
-        self.map_wid.set_map(tender.engine.map)
-        self.root.current = "mapscreen"
-        
-        dialogue = tender.loader.invoke(t("intro"))
-        self.show_narration(dialogue, self.focus_map)
         
     def show_narration(self, dialogue, response_funct=None):
         popup = forms.ConversationPopup(dialogue, response_funct)
@@ -612,10 +605,21 @@ class RevengateApp(MDApp):
         popup = forms.ConversationPopup(dialogue, response_funct)
         popup.open()
 
-    def show_hero_name_form(self):
+    async def start_new_game_coro(self):
         if not self.hero_name_form:
-            self.hero_name_form = forms.HeroNameForm(self.init_new_game)
-        self.hero_name_form.open()
+            self.hero_name_form = forms.HeroNameForm()
+        values = await self.hero_name_form.values_when_ready()
+
+        if values is not None and "hero_name" in values:
+            tender.commands["new-game-response"](values["hero_name"])
+            self.map_wid.set_map(tender.engine.map)
+            self.root.current = "mapscreen"
+            
+            dialogue = tender.loader.invoke(t("intro"))
+            self.show_narration(dialogue, self.focus_map)
+
+    def start_new_game(self):
+        ak.start(self.start_new_game_coro())
 
     def set_map(self, map):
         self.map_wid.set_map(map)
