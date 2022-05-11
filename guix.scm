@@ -46,7 +46,7 @@ based on Earth in the Victorian era. Magic exists, human races are more spread
 out than they are on our Earth, guns are still impractical, Europe is widely
 developed, but so are many other cities around the world.
 
-The game starts in ~505AP (Ante-Pestis, Après la Peste, After the Plague), which
+The game starts in ~502AP (Abscido Pestis, Après la Peste, After the Plague), which
 roughly corresponds to 1855 of our world. The setting is Victorian era
 Franconia, located roughly where modern France is.
 
