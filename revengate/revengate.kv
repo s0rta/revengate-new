@@ -48,6 +48,7 @@ ScreenManager:
 
     Screen:
         name: 'mapscreen'
+        on_enter: app.focus_map()
         
         FloatLayout:
             on_size: map_wid.center_on_hero()

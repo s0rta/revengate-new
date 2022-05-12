@@ -616,7 +616,7 @@ class RevengateApp(MDApp):
             self.root.current = "mapscreen"
             
             dialogue = tender.loader.invoke(t("intro"))
-            self.show_narration(dialogue, self.focus_map)
+            self.show_narration(dialogue)
 
     def start_new_game(self):
         ak.start(self.start_new_game_coro())
@@ -635,7 +635,6 @@ class RevengateApp(MDApp):
             tender.commands["restore-game"]()
         self.map_wid.set_map(tender.engine.map)
         self.root.current = "mapscreen"
-        self.focus_map()
 
     def show_main_screen(self, button=None):
         self.root.transition.center_on_button(button)
@@ -650,7 +649,7 @@ class RevengateApp(MDApp):
         for event in iter_events(events):
             if isinstance(event, Conversation):
                 convo = tender.loader.invoke(event.tag)
-                self.show_conversation(convo, self.focus_map)
+                self.show_conversation(convo)
             elif isinstance(event, Death) and event.actor == tender.hero:
                 print(event)
                 tender.commands["purge-game"]()

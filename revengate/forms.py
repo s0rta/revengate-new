@@ -47,6 +47,7 @@ class RevPopup(MDDialog):
         super().dismiss(*args)
         if self.response_funct:
             self.response_funct()
+        self.app.focus_map()
 
 
 class RevForm(MDDialog):
@@ -115,6 +116,7 @@ class RevForm(MDDialog):
         if not self.accepted:
             self.rejected = True
         super().dismiss(*args)
+        self.app.focus_map()
 
     def reject(self, *args, **kwargs):
         """ Dismiss the popup, ignoring the supplied data. """
