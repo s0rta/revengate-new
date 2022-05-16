@@ -20,6 +20,8 @@
 import os
 from pprint import pprint
 from math import sqrt
+from functools import wraps
+import asyncio
 
 import kivy
 from kivymd.app import MDApp
@@ -35,6 +37,7 @@ from kivy.uix.behaviors.focus import FocusBehavior
 from kivy import resources
 from kivy.animation import Animation
 from kivy.uix.screenmanager import ScreenManager, ShaderTransition
+from kivy.input.motionevent import MotionEvent
 import asynckivy as ak
 
 from .maps import TileType, Connector
@@ -124,7 +127,54 @@ class MapElement(Label):
                          font_size="28px", size=size, bold=True, 
                          font_name=best_font(text), 
                          **kwargs)
-        
+
+
+def syncify(funct):
+    """ Convert a coroutine into a synchronous stub that uses asynckivy to invoke 
+    launch the async processing. 
+    
+    The stub function returns an asynckivy.Task when called. 
+    """
+    
+    @wraps(funct)
+    def sync_funct(*args, **kwargs):        
+        return ak.start(funct(*args, **kwargs))
+
+    return sync_funct
+
+
+def cancelable_selection(funct):
+    """ Decorator to mark a selection method at cancelable. """
+    @wraps(funct)
+    def helper(self, *args, **kwargs):
+        task = funct(self, *args, **kwargs)
+        self._selection_tasks.add(task)
+        return task
+    return helper
+
+
+def clear_selection_label(coro):
+    """ Ensures that the coroutine will clear the selection label, even if it gets 
+    cancelled. """
+    @wraps(coro)
+    async def helper(self, *args, **kwargs):
+        try:
+            return await coro(self, *args, **kwargs)
+        finally:
+            self._update_selection_lbl(text="")
+    return helper
+
+
+def async_turn_actions(coro):
+    """ Process the turn actions of a coroutine wherever they become available. """
+    @wraps(coro)
+    async def helper(self, *args, **kwargs):
+        res = await coro(self, *args, **kwargs)
+        if is_action(res):
+            self.finalize_turn(res)
+        return res
+    return helper
+
 
 class MapWidget(FocusBehavior, ScatterPlane):
     """ A widget to display a dungeon with graphical tiles. 
@@ -163,6 +213,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
         self.key_map = None
         self.bind(app=self._init_key_map)
 
+        self._selection_tasks = set()
         self.bind(_next_selection_action=self._update_selection_lbl)
 
     def _expand_multi_keys(self, key_map):
@@ -183,7 +234,8 @@ class MapWidget(FocusBehavior, ScatterPlane):
                    ("up", "k"): "move-or-act-up", 
                    ("down", "j"): "move-or-act-down", 
                    "f": self.follow_stairs,
-                   "p": "pickup-item"} 
+                   "p": "pickup-item", 
+                   "escape": self._cancel_selection_tasks} 
         
         if self.app.cheats:
             cheats = {"t": self._start_teleport, 
@@ -193,19 +245,36 @@ class MapWidget(FocusBehavior, ScatterPlane):
             key_map.update(cheats)
         self.key_map = self._expand_multi_keys(key_map)
     
-    def _update_selection_lbl(self, *args):
-        if self._next_selection_action is None:
-            text = ""
-        else:
-            text = str(self._next_selection_action)
+    def _update_selection_lbl(self, *args, text=None):
+        if text is None: 
+            if self._next_selection_action is None:
+                text = ""
+            else:
+                text = str(self._next_selection_action)
         self.app.root.select_mode_lbl.text = text
+
+    def _cancel_selection_tasks(self):
+        """ Cancel all pending async selection tasks. """
+        for task in self._selection_tasks:
+            task.cancel()
+        self._selection_tasks.clear()            
     
     def _print_help(self, *args):
         pprint(self.key_map)
         
-    def _start_teleport(self):
-        self._next_selection_action = self._teleport_to
+    @cancelable_selection
+    @syncify
+    @async_turn_actions
+    @clear_selection_label
+    async def _start_teleport(self):
+        self._update_selection_lbl(text="Teleporting...")
+        wid, event = await ak.event(self, "on_touch_up", filter=self.is_not_drag)
 
+        here = tender.engine.map.find(tender.hero)
+        there = self.canvas_to_map(event)
+        tender.engine.map.move(tender.hero, there)
+        return Teleport(tender.hero, here, there)
+        
     def _start_insta_kill(self):
         self._next_selection_action = self._insta_kill_at
 
@@ -229,12 +298,6 @@ class MapWidget(FocusBehavior, ScatterPlane):
         else:
             import ipdb
             ipdb.set_trace()
-
-    # TODO: factor this out 
-    def _teleport_to(self, there):
-        tender.engine.map.move(tender.hero, there)
-        here = tender.engine.map.find(tender.hero)
-        return Teleport(tender.hero, here, there)
 
     def _insta_kill_at(self, there):
         foe = tender.engine.map.actor_at(there)
@@ -311,7 +374,12 @@ class MapWidget(FocusBehavior, ScatterPlane):
         
     def canvas_to_map(self, pos):
         """ Convert an (x, y) canvas pixel coordinate into a map tile reference. 
+        
+        If pos is a Kivy event, then the coordinate is also converted to local canvas 
+        coordinates before converting to map coordiates.
         """
+        if isinstance(pos, MotionEvent):
+            pos = self.to_local(*pos.pos)
         cx, cy = pos
         return (int(cx//TILE_SIZE), int(cy//TILE_SIZE))
 
@@ -346,14 +414,20 @@ class MapWidget(FocusBehavior, ScatterPlane):
         """ Return the scale adjusted magnitude for a touch drag event. """
         return sqrt(touch_event.dx**2 + touch_event.dy**2) / self.scale
         
-    def is_drag(self, touch_event):
+    def is_drag(self, wid, touch_event):
         """ Return if we have reasons to believe that the event is a drag rather than a 
         tap.
 
         There is no hard science to this and our guess might be wrong at times.
         """
-        duration = touch_event.time_end - touch_event.time_start
-        return self.drag_dist(touch_event) > 2.0 or duration > 0.2
+        if wid == self:
+            duration = touch_event.time_end - touch_event.time_start
+            return self.drag_dist(touch_event) > 2.0 or duration > 0.2
+        else:
+            return False
+        
+    def is_not_drag(self, wid, touch_event):
+        return not self.is_drag(wid, touch_event)
         
     def on_touch_down(self, event):
         if event.device == "mouse":
@@ -368,7 +442,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
     def on_touch_up(self, event):
         if not tender.hero or tender.hero.is_dead:
             return False
-        if not self.is_drag(event):
+        if not self.is_drag(self, event):
             res = None
             cpos = self.to_local(*event.pos)
             mpos = self.canvas_to_map(cpos)

@@ -773,7 +773,8 @@ class MapOverlay:
             for y in self.tiles[x]:
                 yield ((x, y), self._as_char(self.tiles[x][y]))
 
-
+# Alternate ideas to explore for maze generation:
+# - https://github.com/mxgmn/WaveFunctionCollapse
 class Builder:
     """ Builder for map features. """
     straight_line_bias = 3.0
