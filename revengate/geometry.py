@@ -47,7 +47,14 @@ def rect_center(bl, tr):
     return x, y
 
 
-def iter_tiles(rect):
+def is_in_rect(coord, rect):
+    """ Return whether coord is inside rect, perimeter included. """
+    (rx1, ry1), (rx2, ry2) = rect
+    x, y = coord
+    return rx1 <= x <= rx2 and ry1 <= y <= ry2
+
+
+def iter_coords(rect):
     (x1, y1), (x2, y2) = rect
     for x in range(x1, x2+1):
         for y in range(y1, y2+1):
@@ -90,7 +97,17 @@ class Vector:
         else:
             raise TypeError(f"Addition undefined between Vector and {type(other)}")
 
+    def __mul__(self, num):
+        """ Multiply the vector by a scalar. 
+        
+        Vector multiplication is not supported. """
+
+        if isinstance(num, (int, float)):
+            return Vector(self.dx*num, self.dy*num)
+        else:
+            raise TypeError(f"Multiplication undefined between Vector and {type(num)}")
     
+
 vect = Vector
 
 

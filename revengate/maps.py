@@ -258,6 +258,10 @@ class Map:
             return self.tiles.size()
         else:
             return (0, 0)
+        
+    def rect(self):
+        w, h = self.size()
+        return ((0, 0), (w-1, h-1))
 
     def is_in_map(self, pos):
         """ Return true if the position is inside the map. """
@@ -835,6 +839,16 @@ class Builder:
         self._rooms.append(room)
         room.set_tiles()
 
+    def maze_fill(self, algo, rect=None):
+        """ Fill an area with a maze. 
+        
+        rect: if provided, only this area is filled, fill the whole map otherwise
+        """
+        if rect is None:
+            rect = self.map.rect()
+        
+        algo.fill(rect)
+            
     def staircase(self, pos=None, char=">", dest_pos=None, dest_map=None):
         """ Add a staircase. 
         
@@ -1119,9 +1133,9 @@ class RoomPlan:
         if self.has_walls:
             (x1, y1) = self.bl
             (x2, y2) = self.tr
-            return geom.iter_tiles(((x1+1, y1+1), (x2-1, y2-1)))
+            return geom.iter_coords(((x1+1, y1+1), (x2-1, y2-1)))
         else:
-            return geom.iter_tiles(self.to_rect())
+            return geom.iter_coords(self.to_rect())
 
 
 class MazeStep:
@@ -1277,40 +1291,47 @@ class MazePlan:
         return sum([r.select_weight() for r in self._rooms])
 
 
+class MazeAlgo:
+    def __init__(self, builder):
+        self.builder = builder
+        self.map = builder.map
+    
+    def fill(self, rect):
+        raise NotImplementedError()
+
+
+class BinaryTree(MazeAlgo):
+    def fill(self, rect):
+        if rect is None:
+            rect = self.map.rect()
+        
+        for coord in geom.iter_coords(rect):
+            x, y = coord
+            choices = []
+            if x%2 == 0 and y%2 == 0:
+                self.map[coord] = TileType.FLOOR
+                if geom.is_in_rect((x+2, y), rect):
+                    choices.append(geom.vect(1, 0))
+                if geom.is_in_rect((x, y+2), rect):
+                    choices.append(geom.vect(0, 1))
+            if choices:
+                offset = rng.choice(choices)
+                self.map[offset+coord] = TileType.FLOOR
+                self.map[offset*2+coord] = TileType.FLOOR
+        
+
 def main():
     RSTATE = ".randstate.json"
-    # rng.state_save(RSTATE)
+    rng.state_save(RSTATE)
     # rng.state_restore(RSTATE)
 
     map = Map()
     builder = Builder(map)
-    builder.init(140, 30)
-    # builder.room(5, 5, 35, 15, True)
-    for i in range(5):
-        builder.random_room((5, 20), (5, 10))
-    builder.maze_connect(debug=True)
+    builder.init(120, 26)
+    algo = BinaryTree(builder)
+    builder.maze_fill(algo)
     print(map.to_text(True))
     
-    #intersect = builder._interstect(*builder._rooms)
-    #print(f"Intersect: {intersect}")
-    
-    # for i in range(20):
-
-    #for i in range(10):
-        #x1, y1 = random.randrange(5, 35), random.randrange(5, 15)
-        #x2, y2 = random.randrange(5, 35), random.randrange(5, 15)
-        #los = map.line_of_sight((x1, y1), (x2, y2))
-        #if los:
-            #overlay = MapOverlay()
-            #for c in los[1:-1]:
-                #overlay.place('x', c)
-            #overlay.place('@', (x1, y1))
-            #overlay.place('d', (x2, y2))
-            #map.add_overlay(overlay)
-            #print(map.to_text())
-            #map.clear_overlays()
-        #print(f"LOS from {(x1, y1)} to {(x2, y2)}: {los}")
-        
 
 if __name__ == "__main__":
     main()
