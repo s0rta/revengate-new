@@ -1302,13 +1302,10 @@ class MazeAlgo:
 
 class BinaryTree(MazeAlgo):
     def fill(self, rect):
-        if rect is None:
-            rect = self.map.rect()
-        
         for coord in geom.iter_coords(rect):
             x, y = coord
             choices = []
-            if x%2 == 0 and y%2 == 0:
+            if x % 2 == 0 and y % 2 == 0:
                 self.map[coord] = TileType.FLOOR
                 if geom.is_in_rect((x+2, y), rect):
                     choices.append(geom.vect(1, 0))
@@ -1318,6 +1315,35 @@ class BinaryTree(MazeAlgo):
                 offset = rng.choice(choices)
                 self.map[offset+coord] = TileType.FLOOR
                 self.map[offset*2+coord] = TileType.FLOOR
+
+
+class SideWinder(MazeAlgo):
+    def fill(self, rect):
+        (x1, y1), (x2, y2) = rect
+        for y in range(y1, y2+1, 2):
+            run = []
+            for x in range(x1, x2+1, 2):
+                self.map[x, y] = TileType.FLOOR
+                run.append((x, y))
+                if self.is_top((x, y), rect):
+                    self.map[x+1, y] = TileType.FLOOR
+                elif self.is_r_edge((x, y), rect) or rng.rstest(0.5):
+                    self.finalize_run(run)
+                    run = []
+                else:
+                    self.map[x+1, y] = TileType.FLOOR
+
+    def finalize_run(self, run):
+        x, y = rng.choice(run)
+        self.map[x, y+1] = TileType.FLOOR
+                
+    def is_top(self, coord, rect):
+        """ Return whether coord is on the top row of the maze. """
+        return not geom.is_in_rect(geom.vect(0, 2)+coord, rect)
+        
+    def is_r_edge(self, coord, rect):
+        """ Return whether coord is right edge of the maze. """
+        return not geom.is_in_rect(geom.vect(2, 0)+coord, rect)
         
 
 def main():
@@ -1328,8 +1354,8 @@ def main():
     map = Map()
     builder = Builder(map)
     builder.init(120, 26)
-    algo = BinaryTree(builder)
-    builder.maze_fill(algo)
+    algo = SideWinder(builder)
+    builder.maze_fill(algo, ((4, 4), (112, 22)))
     print(map.to_text(True))
     
 
