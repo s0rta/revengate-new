@@ -1300,6 +1300,7 @@ class MazeAlgo:
         raise NotImplementedError()
 
 
+http://weblog.jamisbuck.org/2011/2/1/maze-generation-binary-tree-algorithm
 class BinaryTree(MazeAlgo):
     def fill(self, rect):
         for coord in geom.iter_coords(rect):
@@ -1314,9 +1315,9 @@ class BinaryTree(MazeAlgo):
             if choices:
                 offset = rng.choice(choices)
                 self.map[offset+coord] = TileType.FLOOR
-                self.map[offset*2+coord] = TileType.FLOOR
 
 
+# http://weblog.jamisbuck.org/2011/2/3/maze-generation-sidewinder-algorithm
 class SideWinder(MazeAlgo):
     def fill(self, rect):
         (x1, y1), (x2, y2) = rect
@@ -1344,6 +1345,48 @@ class SideWinder(MazeAlgo):
     def is_r_edge(self, coord, rect):
         """ Return whether coord is right edge of the maze. """
         return not geom.is_in_rect(geom.vect(2, 0)+coord, rect)
+
+        
+# http://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
+class RecursiveBacktrackers(MazeAlgo):
+    def fill(self, rect, coord=None):
+        if coord is None:
+            start = rng.pos_in_rect(rect)
+            self.map[start] = TileType.FLOOR
+            self.visited = set(start)
+            self.fill(rect, start)
+            return 
+
+        self.map[coord] = TileType.FLOOR
+        self.visited.add(coord)
+        
+        next_options = [cell for cell in self.neighbors(coord, rect)
+                        if self.unvisited(cell)]
+        rng.shuffle(next_options)
+        while next_options:
+            next_cell = next_options.pop()
+            if next_cell not in self.visited:
+                x1, y1 = coord
+                x2, y2 = next_cell
+                connector = ((x1+x2)//2, (y1+y2)//2)
+                self.map[connector] = TileType.FLOOR
+                self.fill(rect, next_cell)
+        
+    def unvisited(self, coord):
+        return coord not in self.visited
+        
+    def neighbors(self, coord, rect):
+        coords = []
+        x, y = coord
+        if geom.is_in_rect((x+2, y), rect):
+            coords.append((x+2, y))
+        if geom.is_in_rect((x-2, y), rect):
+            coords.append((x-2, y))
+        if geom.is_in_rect((x, y+2), rect):
+            coords.append((x, y+2))
+        if geom.is_in_rect((x, y-2), rect):
+            coords.append((x, y-2))
+        return coords
         
 
 def main():
@@ -1353,9 +1396,11 @@ def main():
 
     map = Map()
     builder = Builder(map)
-    builder.init(120, 26)
-    algo = SideWinder(builder)
-    builder.maze_fill(algo, ((4, 4), (112, 22)))
+    builder.init(120, 25)
+    # algo = SideWinder(builder)
+    # algo = BinaryTree(builder)
+    algo = RecursiveBacktrackers(builder)
+    builder.maze_fill(algo)  # , ((4, 4), (112, 22)))
     print(map.to_text(True))
     
 
