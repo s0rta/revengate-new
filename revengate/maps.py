@@ -1292,15 +1292,32 @@ class MazePlan:
 
 
 class MazeAlgo:
+    """ An algorithm to generate mazes. 
+    
+    Sub-classes must definie at least .fill().
+    
+    Most sub-classe work with 2x2 square groups of coordinates refered to as "cells". 
+    """
+    
     def __init__(self, builder):
         self.builder = builder
         self.map = builder.map
     
     def fill(self, rect):
+        """ Main entry point for the builder to invoke the algo. Sub-classes should fill 
+        the rect with a maze as completely as possible. """
         raise NotImplementedError()
 
+    def is_top_edge(self, coord, rect):
+        """ Return whether coord is on the top edge of the maze. """
+        return not geom.is_in_rect(geom.vect(0, 2)+coord, rect)
+        
+    def is_right_edge(self, coord, rect):
+        """ Return whether coord is on the right edge of the maze. """
+        return not geom.is_in_rect(geom.vect(2, 0)+coord, rect)
 
-http://weblog.jamisbuck.org/2011/2/1/maze-generation-binary-tree-algorithm
+
+# http://weblog.jamisbuck.org/2011/2/1/maze-generation-binary-tree-algorithm
 class BinaryTree(MazeAlgo):
     def fill(self, rect):
         for coord in geom.iter_coords(rect):
@@ -1308,9 +1325,9 @@ class BinaryTree(MazeAlgo):
             choices = []
             if x % 2 == 0 and y % 2 == 0:
                 self.map[coord] = TileType.FLOOR
-                if geom.is_in_rect((x+2, y), rect):
+                if not self.is_right_edge(coord, rect):
                     choices.append(geom.vect(1, 0))
-                if geom.is_in_rect((x, y+2), rect):
+                if not self.is_top_edge(coord, rect):
                     choices.append(geom.vect(0, 1))
             if choices:
                 offset = rng.choice(choices)
@@ -1326,9 +1343,9 @@ class SideWinder(MazeAlgo):
             for x in range(x1, x2+1, 2):
                 self.map[x, y] = TileType.FLOOR
                 run.append((x, y))
-                if self.is_top((x, y), rect):
+                if self.is_top_edge((x, y), rect):
                     self.map[x+1, y] = TileType.FLOOR
-                elif self.is_r_edge((x, y), rect) or rng.rstest(0.5):
+                elif self.is_right_edge((x, y), rect) or rng.rstest(0.5):
                     self.finalize_run(run)
                     run = []
                 else:
@@ -1338,14 +1355,6 @@ class SideWinder(MazeAlgo):
         x, y = rng.choice(run)
         self.map[x, y+1] = TileType.FLOOR
                 
-    def is_top(self, coord, rect):
-        """ Return whether coord is on the top row of the maze. """
-        return not geom.is_in_rect(geom.vect(0, 2)+coord, rect)
-        
-    def is_r_edge(self, coord, rect):
-        """ Return whether coord is right edge of the maze. """
-        return not geom.is_in_rect(geom.vect(2, 0)+coord, rect)
-
         
 # http://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
 class RecursiveBacktrackers(MazeAlgo):
