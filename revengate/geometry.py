@@ -18,6 +18,7 @@
 """ Cartesian geometry helpers. """
 
 import itertools
+import operator
 
 
 def cannon_corners(corner1, corner2):
@@ -68,6 +69,15 @@ def is_diag(pos1, pos2):
     if x1 == x2 or y1 == y2:
         return False
     return abs(x1 - x2) == abs(y1 - y2)
+
+
+def mid_point(coord1, coord2):
+    """ Return the mid-point between coord1 and coord2. If the two are not far apart 
+    enough, the mid-point can be one of the two coordinates.
+    """
+    x1, y1 = coord1
+    x2, y2 = coord2
+    return ((x1+x2)//2, (y1+y2)//2)
 
 
 def y_sorted(seq):

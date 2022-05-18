@@ -1337,10 +1337,10 @@ class BinaryTree(MazeAlgo):
 # http://weblog.jamisbuck.org/2011/2/3/maze-generation-sidewinder-algorithm
 class SideWinder(MazeAlgo):
     def fill(self, rect):
-        (x1, y1), (x2, y2) = rect
-        for y in range(y1, y2+1, 2):
+        (rx1, ry1), (rx2, ry2) = rect
+        for y in range(ry1, ry2+1, 2):
             run = []
-            for x in range(x1, x2+1, 2):
+            for x in range(rx1, rx2+1, 2):
                 self.map[x, y] = TileType.FLOOR
                 run.append((x, y))
                 if self.is_top_edge((x, y), rect):
@@ -1357,7 +1357,15 @@ class SideWinder(MazeAlgo):
                 
         
 # http://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
-class RecursiveBacktrackers(MazeAlgo):
+class RecursiveBacktracker(MazeAlgo):
+    neighbor_offsets = [geom.vect(2, 0), geom.vect(-2, 0), 
+                        geom.vect(0, 2), geom.vect(0, -2)]
+    
+    def __init__(self, builder):
+        super().__init__(builder)
+        # set of visited cells, initialized when the recursion starts.
+        self.visited = None  
+
     def fill(self, rect, coord=None):
         if coord is None:
             start = rng.pos_in_rect(rect)
@@ -1370,33 +1378,73 @@ class RecursiveBacktrackers(MazeAlgo):
         self.visited.add(coord)
         
         next_options = [cell for cell in self.neighbors(coord, rect)
-                        if self.unvisited(cell)]
+                        if cell not in self.visited]
         rng.shuffle(next_options)
         while next_options:
             next_cell = next_options.pop()
             if next_cell not in self.visited:
-                x1, y1 = coord
-                x2, y2 = next_cell
-                connector = ((x1+x2)//2, (y1+y2)//2)
+                connector = geom.mid_point(coord, next_cell)
                 self.map[connector] = TileType.FLOOR
                 self.fill(rect, next_cell)
-        
-    def unvisited(self, coord):
-        return coord not in self.visited
-        
+                
     def neighbors(self, coord, rect):
         coords = []
-        x, y = coord
-        if geom.is_in_rect((x+2, y), rect):
-            coords.append((x+2, y))
-        if geom.is_in_rect((x-2, y), rect):
-            coords.append((x-2, y))
-        if geom.is_in_rect((x, y+2), rect):
-            coords.append((x, y+2))
-        if geom.is_in_rect((x, y-2), rect):
-            coords.append((x, y-2))
+        for offset in self.neighbor_offsets:
+            next_coord = offset + coord
+            if geom.is_in_rect(next_coord, rect):
+                coords.append(next_coord)
         return coords
+
+
+class BiasedRecursiveBacktracker(RecursiveBacktracker):
+    def __init__(self, builder, start_coord=None, straight_line_bias=1.0):
+        super().__init__(builder)
+        self.start_coord = start_coord
         
+        # how many time are we more likely to select a straight line?
+        self.straight_line_bias = straight_line_bias  
+        
+        # TODO:
+        # - trend towards a position
+        # - braid the maze
+        # - winding bias
+    
+    def fill(self, rect, cur=None, prev=None):
+        if cur is None:
+            start = self.start_cell(rect)
+            self.visited = set(start)
+            self.fill(rect, start)
+            return 
+
+        self.map[cur] = TileType.FLOOR
+        self.visited.add(cur)
+        
+        options = self.step_options(rect, cur, prev)
+        while options:
+            step = self.next_cell(options, rect, cur, prev)
+            self.map[geom.mid_point(cur, step)] = TileType.FLOOR
+            self.fill(rect, step, cur)
+            options = self.step_options(rect, cur, prev)
+
+    def next_cell(self, options, rect, cur, prev):
+        if prev is not None:
+            prefered_step = self.map.opposite(prev, cur)
+        else: 
+            prefered_step = None
+            
+        return rng.biased_choice(options, self.straight_line_bias, prefered_step)
+
+    def step_options(self, rect, cur, prev):
+        return [cell for cell in self.neighbors(cur, rect)
+                if cell not in self.visited]
+
+    def start_cell(self, rect):
+        if self.start_coord:
+            bl, tr = rect
+            return geom.vect(*self.start_coord) + bl
+        else:
+            return rng.pos_in_rect(rect)
+
 
 def main():
     RSTATE = ".randstate.json"
@@ -1408,7 +1456,8 @@ def main():
     builder.init(120, 25)
     # algo = SideWinder(builder)
     # algo = BinaryTree(builder)
-    algo = RecursiveBacktrackers(builder)
+    algo = BiasedRecursiveBacktracker(builder, start_coord=(0, 0),          
+                                      straight_line_bias=0.2)
     builder.maze_fill(algo)  # , ((4, 4), (112, 22)))
     print(map.to_text(True))
     
