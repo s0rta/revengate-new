@@ -17,6 +17,7 @@
 
 """ Cartesian geometry helpers. """
 
+import math
 import itertools
 import operator
 
@@ -119,6 +120,51 @@ class Vector:
     
 
 vect = Vector
+
+
+def turn_dir(from_pos, pivot_pos, next_pos):
+    """ Return the orientatin of the turn that `next_pos` took if the previous too steps 
+    were `from_pos` and then `pivot_pos`.
+    -1: counter clockwise
+    0: straight line
+    1: clockwise
+    
+    Anything that is not a straight line or a 90º turn in one direction or the other 
+    will raise a ValueError
+    """
+    fx, fy = from_pos
+    px, py = pivot_pos
+    dx, dy = px-fx, py-fy
+
+    # There is probably an elegant way to simplify the calculation without this, but the 
+    # direction of turn in the formula below changes sign depending of if from and pivot 
+    # are vertically or horizontally aligned.
+    if fx == px:
+        sign = -1
+    else: 
+        sign = 1
+    
+    # swapping the coords on the delta gives a turn rather than a step in a straight 
+    # line
+    if next_pos == (px+dy, py+dx):
+        return -1 * sign 
+    elif next_pos == (px+dx, py+dy):
+        return 0
+    elif next_pos == (px-dy, py-dx):
+        return 1 * sign
+    else:
+        raise ValueError(f"{next_pos} does not appear to be at right angle with " 
+                         f"{from_pos} and {pivot_pos}")
+
+
+def euclid_dist(coord1, coord2):
+    """ Return the Euclidean distance between two coordinates. 
+    
+    This a float in straight line between two points. For the integer distance in number 
+    of tile moves, see Map.distance(). """
+    x1, y1 = coord1
+    x2, y2 = coord2
+    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
 
 class PolyCont:

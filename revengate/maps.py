@@ -23,7 +23,8 @@ import itertools
 from uuid import uuid4
 from copy import deepcopy
 from enum import IntEnum, auto
-from collections import defaultdict
+from functools import partial
+from collections import defaultdict, deque
 
 from . import geometry as geom
 from . import tender
@@ -350,7 +351,6 @@ class Map:
         """ Return the grid distance between two points.  
         
         This is not the path length taking obstables into account. """
-        # Chebyshev distance (Hex maps will need a different distance metric)
         # This is not the Manhattan distance since we allow diagonal movement.
         x1, y1 = pos1
         x2, y2 = pos2
@@ -839,15 +839,10 @@ class Builder:
         self._rooms.append(room)
         room.set_tiles()
 
-    def maze_fill(self, algo, rect=None):
+    def maze_fill(self, algo):
         """ Fill an area with a maze. 
-        
-        rect: if provided, only this area is filled, fill the whole map otherwise
         """
-        if rect is None:
-            rect = self.map.rect()
-        
-        algo.fill(rect)
+        algo.fill()
             
     def staircase(self, pos=None, char=">", dest_pos=None, dest_map=None):
         """ Add a staircase. 
@@ -1299,35 +1294,39 @@ class MazeAlgo:
     Most sub-classe work with 2x2 square groups of coordinates refered to as "cells". 
     """
     
-    def __init__(self, builder):
+    def __init__(self, builder, rect=None):
+        """ 
+        rect: if provided, only this area is filled, fill the whole map otherwise
+        """
         self.builder = builder
         self.map = builder.map
+        self.rect = rect or self.map.rect()
     
     def fill(self, rect):
         """ Main entry point for the builder to invoke the algo. Sub-classes should fill 
         the rect with a maze as completely as possible. """
         raise NotImplementedError()
 
-    def is_top_edge(self, coord, rect):
+    def is_top_edge(self, coord):
         """ Return whether coord is on the top edge of the maze. """
-        return not geom.is_in_rect(geom.vect(0, 2)+coord, rect)
+        return not geom.is_in_rect(geom.vect(0, 2)+coord, self.rect)
         
-    def is_right_edge(self, coord, rect):
+    def is_right_edge(self, coord):
         """ Return whether coord is on the right edge of the maze. """
-        return not geom.is_in_rect(geom.vect(2, 0)+coord, rect)
+        return not geom.is_in_rect(geom.vect(2, 0)+coord, self.rect)
 
 
 # http://weblog.jamisbuck.org/2011/2/1/maze-generation-binary-tree-algorithm
 class BinaryTree(MazeAlgo):
-    def fill(self, rect):
-        for coord in geom.iter_coords(rect):
+    def fill(self):
+        for coord in geom.iter_coords(self.rect):
             x, y = coord
             choices = []
             if x % 2 == 0 and y % 2 == 0:
                 self.map[coord] = TileType.FLOOR
-                if not self.is_right_edge(coord, rect):
+                if not self.is_right_edge(coord):
                     choices.append(geom.vect(1, 0))
-                if not self.is_top_edge(coord, rect):
+                if not self.is_top_edge(coord):
                     choices.append(geom.vect(0, 1))
             if choices:
                 offset = rng.choice(choices)
@@ -1336,16 +1335,16 @@ class BinaryTree(MazeAlgo):
 
 # http://weblog.jamisbuck.org/2011/2/3/maze-generation-sidewinder-algorithm
 class SideWinder(MazeAlgo):
-    def fill(self, rect):
-        (rx1, ry1), (rx2, ry2) = rect
+    def fill(self):
+        (rx1, ry1), (rx2, ry2) = self.rect
         for y in range(ry1, ry2+1, 2):
             run = []
             for x in range(rx1, rx2+1, 2):
                 self.map[x, y] = TileType.FLOOR
                 run.append((x, y))
-                if self.is_top_edge((x, y), rect):
+                if self.is_top_edge((x, y)):
                     self.map[x+1, y] = TileType.FLOOR
-                elif self.is_right_edge((x, y), rect) or rng.rstest(0.5):
+                elif self.is_right_edge((x, y)) or rng.rstest(0.5):
                     self.finalize_run(run)
                     run = []
                 else:
@@ -1361,23 +1360,23 @@ class RecursiveBacktracker(MazeAlgo):
     neighbor_offsets = [geom.vect(2, 0), geom.vect(-2, 0), 
                         geom.vect(0, 2), geom.vect(0, -2)]
     
-    def __init__(self, builder):
-        super().__init__(builder)
+    def __init__(self, builder, rect=None):
+        super().__init__(builder, rect)
         # set of visited cells, initialized when the recursion starts.
         self.visited = None  
 
-    def fill(self, rect, coord=None):
+    def fill(self, coord=None):
         if coord is None:
-            start = rng.pos_in_rect(rect)
+            start = rng.pos_in_rect(self.rect)
             self.map[start] = TileType.FLOOR
             self.visited = set(start)
-            self.fill(rect, start)
+            self.fill(start)
             return 
 
         self.map[coord] = TileType.FLOOR
         self.visited.add(coord)
         
-        next_options = [cell for cell in self.neighbors(coord, rect)
+        next_options = [cell for cell in self.neighbors(coord)
                         if cell not in self.visited]
         rng.shuffle(next_options)
         while next_options:
@@ -1385,65 +1384,103 @@ class RecursiveBacktracker(MazeAlgo):
             if next_cell not in self.visited:
                 connector = geom.mid_point(coord, next_cell)
                 self.map[connector] = TileType.FLOOR
-                self.fill(rect, next_cell)
+                self.fill(next_cell)
                 
-    def neighbors(self, coord, rect):
+    def neighbors(self, coord):
         coords = []
         for offset in self.neighbor_offsets:
             next_coord = offset + coord
-            if geom.is_in_rect(next_coord, rect):
+            if geom.is_in_rect(next_coord, self.rect):
                 coords.append(next_coord)
         return coords
 
 
 class BiasedRecursiveBacktracker(RecursiveBacktracker):
-    def __init__(self, builder, start_coord=None, straight_line_bias=1.0):
-        super().__init__(builder)
-        self.start_coord = start_coord
+    def __init__(self, builder, rect=None, start_offset=None, 
+                 straight_line_bias=None, 
+                 winding_bias=None, 
+                 winding_offset=None):
+        super().__init__(builder, rect)
+        self.start = self.start_cell(start_offset)
         
         # how many time are we more likely to select a straight line?
         self.straight_line_bias = straight_line_bias  
+        self.winding_bias = winding_bias
+        self.winding_center = self.start_cell(winding_offset)
         
         # TODO:
         # - trend towards a position
         # - braid the maze
         # - winding bias
     
-    def fill(self, rect, cur=None, prev=None):
+    def fill(self, cur=None, prev=None):
         if cur is None:
-            start = self.start_cell(rect)
-            self.visited = set(start)
-            self.fill(rect, start)
+            self.visited = set(self.start)
+            self.fill(self.start)
             return 
 
         self.map[cur] = TileType.FLOOR
         self.visited.add(cur)
         
-        options = self.step_options(rect, cur, prev)
+        options = self.step_options(cur, prev)
         while options:
-            step = self.next_cell(options, rect, cur, prev)
+            step = self.next_cell(options, cur, prev)
             self.map[geom.mid_point(cur, step)] = TileType.FLOOR
-            self.fill(rect, step, cur)
-            options = self.step_options(rect, cur, prev)
+            self.fill(step, cur)
+            options = self.step_options(cur, prev)
 
-    def next_cell(self, options, rect, cur, prev):
-        if prev is not None:
+    def next_cell(self, options, cur, prev):
+        if prev is None:
+            # all supported biases are based on what the previous step was, therefore 
+            # the first step can't be biased
+            return rng.choice(options)
+        
+        weights = [1] * len(options)
+        if self.straight_line_bias is not None:
             prefered_step = self.map.opposite(prev, cur)
-        else: 
-            prefered_step = None
-            
-        return rng.biased_choice(options, self.straight_line_bias, prefered_step)
+            for i, opt in enumerate(options):
+                if opt == prefered_step:
+                    weights[i] *= self.straight_line_bias
+            step = rng.choices(options, weights)[0]
+        elif self.winding_bias is not None:
+            dists = [geom.euclid_dist(self.winding_center, opt)
+                     for opt in options]
+            min_dist = min(dists)
+            for i, dist in enumerate(dists):
+                if dist < min_dist + 0.5:
+                    weights[i] *= self.winding_bias
+                
+        step = rng.choices(options, weights)[0]
+        return step
 
-    def step_options(self, rect, cur, prev):
-        return [cell for cell in self.neighbors(cur, rect)
+    def step_options(self, cur, prev):
+        return [cell for cell in self.neighbors(cur)
                 if cell not in self.visited]
 
-    def start_cell(self, rect):
-        if self.start_coord:
-            bl, tr = rect
-            return geom.vect(*self.start_coord) + bl
+    def start_cell(self, offset=None):
+        """ Return a cell where to start the maze generation based on the supplied 
+        offset relative to the maze rectangle.
+        
+        If offset is not supplied, a random position inside the rectangle is selected. 
+        """
+        if offset is not None:
+            bl, tr = self.rect
+            return geom.vect(*offset) + bl
         else:
-            return rng.pos_in_rect(rect)
+            shift = rng.sample([-1, 1], 2)
+            x, y = rng.pos_in_rect(self.rect)
+            # make sure the selected coord aligns with the 2x2 cell grid
+            if x % 2:
+                if geom.is_in_rect((x+shift[0], y), self.rect):
+                    x += shift[0]
+                else:
+                    x += shift[1]
+            if y % 2:
+                if geom.is_in_rect((x, y+shift[0]), self.rect):
+                    y += shift[0]
+                else:
+                    y += shift[1]
+            return (x, y)
 
 
 def main():
@@ -1451,14 +1488,18 @@ def main():
     rng.state_save(RSTATE)
     # rng.state_restore(RSTATE)
 
+    rect = ((10, 5), (110, 20))
     map = Map()
     builder = Builder(map)
     builder.init(120, 25)
-    # algo = SideWinder(builder)
-    # algo = BinaryTree(builder)
-    algo = BiasedRecursiveBacktracker(builder, start_coord=(0, 0),          
-                                      straight_line_bias=0.2)
-    builder.maze_fill(algo)  # , ((4, 4), (112, 22)))
+    algo = BiasedRecursiveBacktracker(builder, rect, start_offset=(0, 0),          
+                                      straight_line_bias=3,
+                                      winding_bias=3, 
+                                      winding_offset=(10, 20)
+                                      )
+    # algo = SideWinder(builder, rect)
+    # algo = BinaryTree(builder, rect)
+    builder.maze_fill(algo)  
     print(map.to_text(True))
     
 
