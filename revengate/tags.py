@@ -23,6 +23,10 @@ from itertools import chain
 class Tag:
     """ An individual tag. """
     _registry = None
+    
+    def __init_subclass__(cls):
+        cls._registry = None
+        
     def __init__(self, name, desc=None):
         super(Tag, self).__init__()
         if not name[0].isalpha():
@@ -50,11 +54,10 @@ class Tag:
         else:
             return f"<{self.__class__.__name__}({self.name!r})>"
             
-
     def _register(self):
         if self.__class__._registry is None:
             self.__class__._registry = TagRegistry()
-        self.__class__._registry.add(self)
+        self.__class__._registry[self.name] = self
 
     @classmethod
     def is_registered(cls, tag):
@@ -63,18 +66,24 @@ class Tag:
         return tag in cls._registry
 
     @classmethod
+    def from_registry(cls, tag_name):
+        if cls._registry is None or tag_name not in cls._registry:
+            raise ValueError(f"{tag_name} is not registered in {cls.__name__}")
+        return cls._registry[tag_name]
+
+    @classmethod
     def iter_tags(cls):
         """ Return an iterator for all registered tag in `cls` and its subclasses. """
         if cls._registry:
-            local = iter(cls._registry)
+            local = cls._registry.values()
         else:
-            local = ()            
+            local = ()
         return chain(local, *[sub.iter_tags() for sub in cls.__subclasses__()])
 
 
 def _find_tag(name, cls=Tag):
     if cls.is_registered(name):
-        return cls(name)
+        return cls.from_registry(name)
     for sub in cls.__subclasses__():
         tag = _find_tag(name, sub)
         if tag:
@@ -94,7 +103,7 @@ def t(tag_name):
     return tag
 
 
-class TagRegistry(set):
+class TagRegistry(dict):
     """ Keep track of all tags that were instanciated. """
     def __init__(self):
         super().__init__()        
@@ -174,3 +183,11 @@ class TagSlot:
 
 class Faction(Tag):
     pass
+
+
+class ConvoTopic(Tag):
+    """ Topic that can launch an conversation with someone. """
+
+    def __init__(self, name, desc=None, register=None):
+        super().__init__(name, desc)
+        self.register = register
