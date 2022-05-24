@@ -1,4 +1,4 @@
-# Copyright © 2020–2022 Yannick Gingras <ygingras@ygingras.net>
+# Copyright © 2020–2022 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -1315,6 +1315,13 @@ class MazeAlgo:
         """ Return whether coord is on the right edge of the maze. """
         return not geom.is_in_rect(geom.vect(2, 0)+coord, self.rect)
 
+    def nb_cells(self):
+        """ Return how many cells we can fill. """
+        (x1, y1), (x2, y2) = self.rect
+        w = sum(divmod(x2-x1+1, 2))
+        h = sum(divmod(y2-y1+1, 2))
+        return w*h
+
 
 # http://weblog.jamisbuck.org/2011/2/1/maze-generation-binary-tree-algorithm
 class BinaryTree(MazeAlgo):
@@ -1363,13 +1370,13 @@ class RecursiveBacktracker(MazeAlgo):
     def __init__(self, builder, rect=None):
         super().__init__(builder, rect)
         # set of visited cells, initialized when the recursion starts.
-        self.visited = None  
+        self.visited = set()  
 
     def fill(self, coord=None):
         if coord is None:
             start = rng.pos_in_rect(self.rect)
             self.map[start] = TileType.FLOOR
-            self.visited = set(start)
+            self.visited.add(start)
             self.fill(start)
             return 
 
@@ -1400,7 +1407,10 @@ class BiasedRecursiveBacktracker(RecursiveBacktracker):
                  straight_line_bias=None, 
                  winding_bias=None, 
                  winding_offset=None, 
-                 reconnect_prob=None):
+                 dest_bias=None, 
+                 dest_offset=None, 
+                 reconnect_prob=None,
+                 fill_ratio=1):
         super().__init__(builder, rect)
         self.start = self.start_cell(start_offset)
         
@@ -1411,12 +1421,21 @@ class BiasedRecursiveBacktracker(RecursiveBacktracker):
         self.winding_bias = winding_bias
         self.winding_center = self.start_cell(winding_offset)
         
+        # how many times are we more likely to head straith to a specific point and to 
+        # stop the maze generation once we get there
+        self.dest_bias = dest_bias
+        self.dest_center = self.start_cell(dest_offset)
+
         # braiding: probability to turn a dead-end into a loop in 0..1
         self.reconnect_prob = reconnect_prob
+        
+        # what proportion of the rect to fill with the maze, in 0..1
+        self.fill_ratio = fill_ratio
+        self.max_fill = self.nb_cells()
     
     def fill(self, cur=None, prev=None):
         if cur is None:
-            self.visited = set(self.start)
+            self.visited.add(self.start)
             self.fill(self.start)
             return 
 
@@ -1424,7 +1443,7 @@ class BiasedRecursiveBacktracker(RecursiveBacktracker):
         self.visited.add(cur)
         
         options = self.step_options(cur, prev)
-        while options:
+        while options and not self.is_done():
             step = self.next_cell(options, cur, prev)
             self.map[geom.mid_point(cur, step)] = TileType.FLOOR
             self.fill(step, cur)
@@ -1450,6 +1469,13 @@ class BiasedRecursiveBacktracker(RecursiveBacktracker):
             for i, dist in enumerate(dists):
                 if dist < min_dist + 0.5:
                     weights[i] *= self.winding_bias
+        if self.dest_bias is not None:
+            dists = [geom.euclid_dist(self.dest_center, opt)
+                     for opt in options]
+            min_dist = min(dists)
+            for i, dist in enumerate(dists):
+                if dist < min_dist + 0.5:
+                    weights[i] *= self.dest_bias
                 
         step = rng.choices(options, weights)[0]
         return step
@@ -1472,22 +1498,41 @@ class BiasedRecursiveBacktracker(RecursiveBacktracker):
         """
         if offset is not None:
             bl, tr = self.rect
-            return geom.vect(*offset) + bl
+            coord = geom.vect(*offset) + bl
         else:
-            shift = rng.sample([-1, 1], 2)
-            x, y = rng.pos_in_rect(self.rect)
-            # make sure the selected coord aligns with the 2x2 cell grid
-            if x % 2:
-                if geom.is_in_rect((x+shift[0], y), self.rect):
-                    x += shift[0]
-                else:
-                    x += shift[1]
-            if y % 2:
-                if geom.is_in_rect((x, y+shift[0]), self.rect):
-                    y += shift[0]
-                else:
-                    y += shift[1]
-            return (x, y)
+            coord = rng.pos_in_rect(self.rect)
+        return self._cell_align(coord)
+
+    def _cell_align(self, coord):
+        """ Shift a coordiate to make it align with the bottom left corner of a cell. 
+        
+        If coord already aligns with a cell, return it as is. 
+        """
+        x, y = coord
+        shift = rng.sample([-1, 1], 2)
+        if x % 2:
+            if geom.is_in_rect((x+shift[0], y), self.rect):
+                x += shift[0]
+            else:
+                x += shift[1]
+        if y % 2:
+            if geom.is_in_rect((x, y+shift[0]), self.rect):
+                y += shift[0]
+            else:
+                y += shift[1]
+        return (x, y)
+
+    def is_done(self):
+        """ Have we met an early success criterion? 
+        
+        The algorithm still finishes when all posible cells have been visited once no 
+        matter if this method ever returns True. """
+        if len(self.visited) >= self.fill_ratio * self.max_fill:
+            return True
+        if self.dest_center in self.visited:  
+            # FIXME: anything inside the cell would do, but don't touch the other cells
+            return True
+        return False
 
 
 def main():
@@ -1501,9 +1546,12 @@ def main():
     builder.init(120, 25)
     algo = BiasedRecursiveBacktracker(builder, rect, start_offset=(0, 0),
                                       reconnect_prob=0.2,
-                                      straight_line_bias=3,
-                                      winding_bias=3, 
-                                      winding_offset=(10, 20)
+                                      fill_ratio=0.25,
+                                      straight_line_bias=2,
+                                      winding_bias=None, 
+                                      winding_offset=(4, 11),
+                                      dest_bias=3, 
+                                      dest_offset=(80, 11),
                                       )
     # algo = SideWinder(builder, rect)
     # algo = BinaryTree(builder, rect)
