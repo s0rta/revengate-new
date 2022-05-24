@@ -1399,19 +1399,20 @@ class BiasedRecursiveBacktracker(RecursiveBacktracker):
     def __init__(self, builder, rect=None, start_offset=None, 
                  straight_line_bias=None, 
                  winding_bias=None, 
-                 winding_offset=None):
+                 winding_offset=None, 
+                 reconnect_prob=None):
         super().__init__(builder, rect)
         self.start = self.start_cell(start_offset)
         
         # how many time are we more likely to select a straight line?
         self.straight_line_bias = straight_line_bias  
+
+        # how many times are we more likely to wind around a specific point
         self.winding_bias = winding_bias
         self.winding_center = self.start_cell(winding_offset)
         
-        # TODO:
-        # - trend towards a position
-        # - braid the maze
-        # - winding bias
+        # braiding: probability to turn a dead-end into a loop in 0..1
+        self.reconnect_prob = reconnect_prob
     
     def fill(self, cur=None, prev=None):
         if cur is None:
@@ -1442,7 +1443,7 @@ class BiasedRecursiveBacktracker(RecursiveBacktracker):
                 if opt == prefered_step:
                     weights[i] *= self.straight_line_bias
             step = rng.choices(options, weights)[0]
-        elif self.winding_bias is not None:
+        if self.winding_bias is not None:
             dists = [geom.euclid_dist(self.winding_center, opt)
                      for opt in options]
             min_dist = min(dists)
@@ -1453,9 +1454,15 @@ class BiasedRecursiveBacktracker(RecursiveBacktracker):
         step = rng.choices(options, weights)[0]
         return step
 
-    def step_options(self, cur, prev):
-        return [cell for cell in self.neighbors(cur)
-                if cell not in self.visited]
+    def step_options(self, cur, prev=None):
+        options = [cell for cell in self.neighbors(cur)
+                   if cell not in self.visited]
+        if not options and prev is not None:
+            if self.reconnect_prob is not None and rng.rstest(self.reconnect_prob):
+                opposite = self.map.opposite(prev, cur)
+                if opposite and geom.is_in_rect(opposite, self.rect):
+                    options.append(opposite)
+        return options
 
     def start_cell(self, offset=None):
         """ Return a cell where to start the maze generation based on the supplied 
@@ -1492,7 +1499,8 @@ def main():
     map = Map()
     builder = Builder(map)
     builder.init(120, 25)
-    algo = BiasedRecursiveBacktracker(builder, rect, start_offset=(0, 0),          
+    algo = BiasedRecursiveBacktracker(builder, rect, start_offset=(0, 0),
+                                      reconnect_prob=0.2,
                                       straight_line_bias=3,
                                       winding_bias=3, 
                                       winding_offset=(10, 20)
