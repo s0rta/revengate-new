@@ -31,7 +31,7 @@ from .commands import CommandMap, CoreCommands
 from .maps import Connector
 from .area import Area
 from .events import is_action, StairsEvent, Events
-from .tags import t
+from .tags import t, ConvoTopic
 
 from .graphics import RevengateApp
 

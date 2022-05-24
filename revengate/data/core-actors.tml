@@ -4,6 +4,16 @@ content = "templatized-objects"
 description = "Core actors, including monsters"
 
 [instances]
+[instances.peace]
+_class = "ConvoTopic"
+name = "peace"
+register = "shouting"
+
+[instances.dungeon]
+_class = "ConvoTopic"
+name = "dungeon"
+register = "talk"
+
 [instances.lumiere]
 _class = "Faction"
 name = "lumiere"
@@ -104,6 +114,7 @@ intelligence = 80
 weapon = "*dagger"
 faction = "#neutrals"
 strategies = ["*wandering"]
+convo_topics = ["#peace", "#dungeon"]
 char = "o"
 
 [templates.novice]

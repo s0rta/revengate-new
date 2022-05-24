@@ -296,8 +296,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
             print(f"inspecting {actor}")
             actor.debug_inspect()
         else:
-            import ipdb
-            ipdb.set_trace()
+            breakpoint()
 
     def _insta_kill_at(self, there):
         foe = tender.engine.map.actor_at(there)

@@ -68,8 +68,9 @@ class Actor(object):
         self.rank = None
         self.name = None
 
-        # dialogues
+        # dialogues and conversations
         self.next_dialogue = None
+        self.convo_topics = TagBag('ConvoTopic')
 
         # turns logic
         self.initiative = rng.random()
@@ -167,9 +168,9 @@ class Actor(object):
         return f"{self} looks {health}"
 
     def debug_inspect(self):
-        import pprint, ipdb
+        import pprint
         pprint.pprint(self.__dict__)
-        ipdb.set_trace()
+        breakpoint()
 
     def sentiment(self, other):
         """ Return the sentiment numeric value in [-1..1]. """

@@ -49,6 +49,12 @@ def rect_center(bl, tr):
     return x, y
 
 
+def rect_area(rect):
+    """ Return the area of the rectangle in number of tiles, perimeter included. """
+    (x1, y1), (x2, y2) = rect
+    return (x2-x1+1) * (y2-y1+1)
+
+
 def is_in_rect(coord, rect):
     """ Return whether coord is inside rect, perimeter included. """
     (rx1, ry1), (rx2, ry2) = rect
