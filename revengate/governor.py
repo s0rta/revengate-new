@@ -28,7 +28,7 @@ from .loader import DATA_DIR, TopLevelLoader, data_path
 from .engine import Engine
 from .ui import TextUI, Quitting, KivyUI
 from .commands import CommandMap, CoreCommands
-from .maps import Connector
+from .maps import Connector, Builder, Map
 from .area import Area
 from .events import is_action, StairsEvent, Events
 from .tags import t, ConvoTopic
@@ -158,9 +158,11 @@ class Governor:
         
     def make_map(self, nb_monsters, item, from_pos=None, parent_map=None):
         lvl = len(tender.dungeon.maps) + 1
-        
-        builder = self.condenser.random_builder()
-        map = builder.map
+
+        map = Map()
+        builder = Builder(map)
+        builder.init(80, 25)
+        builder.gen_level()
 
         # stairs
         if lvl < 5:

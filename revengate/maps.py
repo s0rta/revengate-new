@@ -238,9 +238,6 @@ class Map:
         else:
             hero_pos = None
 
-        if "tiles" in state and not isinstance(state["tiles"], Array):
-            state["tiles"] = Array.from_list(state["tiles"])
-
         self.__dict__.update(state)
         
         if hero_pos:
@@ -922,7 +919,6 @@ class Builder:
             if min(geom.rect_dimension(areas[idx])) < 7:
                 continue
             areas[idx:idx+1] = self.area_split(areas[idx])
-            pprint(areas)
         
         # make the rooms
         area_rooms = {}
@@ -970,154 +966,6 @@ class Builder:
                 return False
         return True                
 
-    def mk_step(self, pos, cur_pos, prev_pos, cur_maze, force_connect=False):
-        """ Return a MazeStep for pos or None if the step would be illegal 
-        with the current state of maze generation. """
-        if pos == prev_pos or not self.map.is_in_map(pos) or self.is_frozen(pos):
-            return None
-
-        ignore = [cur_pos, prev_pos]
-        if len(self.mazes) == 1:
-            ignore += self.map.back_diags(cur_pos, pos)
-        step = MazeStep(pos)
-        step.mazes = self.touching_mazes(pos, ignore)
-
-        # Don't connect back to self until we are fully connected (no 
-        # other mazes), then connect back to self according to the 
-        # target branching_factor
-        if force_connect:
-            return step
-        elif len(self.mazes) > 1:
-            if cur_maze in step.mazes:
-                return None
-        elif cur_maze in step.mazes:
-            if rng.rftest(1 - self.branching_factor):
-                return None
-        return step
-        
-    def valid_run_start(self, pos, cur_maze):
-        """ Return True if pos is a good place to start growing the maze. """
-        cross = self.map.cross(pos)
-        for pos in cross:
-            if self.map.is_in_map(pos) and self.map.is_doorway(pos):
-                return False
-        return True
-        
-    def maze_connect(self, ratio=0.5, debug=False):
-        """ Connect all the rooms with a maze of corridors until `ratio` 
-        fraction of the map is covered. 
-        
-        debug: add debugging annotations to the generated map and log generation metrics
-        """
-        # This implementation is brittle and overly complicated. It's currently being 
-        # phased out. It tried to do the work as statelessly as possible, but as a 
-        # result, it ends up having to query the surroundings to regain awareness of the 
-        # work that has been done.
-        w, h = self.map.size()
-        
-        self.mazes = [MazePlan(self.map, [room]) for room in self._rooms]
-
-        def next_step(pos, prev=None, cur_maze=None, other_mazes=None):
-            """ Return the next step to take. """
-            steps = [self.mk_step(p, pos, prev, cur_maze) 
-                     for p in self.map.front_cross(prev, pos)]
-            steps = [s for s in steps if s]
-            
-            if steps:
-                if prev:
-                    prefered_step = self.map.opposite(prev, pos)
-                else:
-                    prefered_step = None
-                return rng.biased_choice(steps, 
-                                         self.straight_line_bias, 
-                                         prefered_step)
-            else:
-                return None
-
-        w, h = self.map.size()
-        tot_area = w * h
-        maze_ratio = sum(m.area for m in self.mazes) / tot_area
-        if debug:
-            print(f"Initial ratio is {maze_ratio}")
-        prev = None
-        
-        if debug:
-            debug_overlay = MapOverlay()
-            self.map.add_overlay(debug_overlay)
-        
-        nb_iter = 0
-        while maze_ratio < .25 and nb_iter <= 2000: 
-            nb_iter += 1
-            # TODO: force exit after max-iter (probably 100)
-            # TODO: connect new branches when we restart
-            if self.mazes:                    
-                cur_maze, other_mazes = rng.rpop(self.mazes)
-                x, y = cur_maze.rand_cor_start()
-            else:
-                break
-                # FIXME: start in a hallway instead
-            run_start = (x, y)
-            run_lenght = 0
-            if self.valid_run_start(run_start, cur_maze):
-                cur_maze.add(run_start)
-                if debug:
-                    debug_overlay.place('x', run_start)
-                step = next_step((x, y), cur_maze=cur_maze, other_mazes=other_mazes)
-            else:
-                step = None  # abandon the run
-            while step:
-                run_lenght += 1
-                prev = (x, y)
-                x, y = step.pos
-
-                if len(step.mazes) > 0:  # just made a connection
-                    cur_maze = self.merge_mazes(step.mazes + [cur_maze])
-                cur_maze.add(step.pos)
-
-                if debug:
-                    debug_overlay.place(str(run_lenght % 10), step.pos)
-
-                if len(step.mazes) > 0:  # finalize the connection
-                    conn = self.map.connectedness(step.pos)
-                    if debug:
-                        print(f"now conneted at {step.pos}, ({len(self.mazes)} mazes) "
-                              f"connectedness: {conn}")
-                        
-                    diags = self.map.front_diags(prev, step.pos)
-                    if (any(map(self.in_mazes, diags)) 
-                         and self.free_front_cross(prev, step.pos)):
-                        opp = self.map.opposite(prev, step.pos)
-                        step = self.mk_step(opp, step.pos, prev, cur_maze, True)
-                    else:
-                        # FIXME: this is only good if the make is not fully connected
-                        step = None  # go back to sub-maze selection
-                else:
-                    step = next_step((x, y), prev, cur_maze, other_mazes)
-            maze_ratio = sum(m.area for m in self.mazes) / tot_area
-            connected = False
-        # TODO: force connect all rooms still unconnect after ratio is reached
-        # TODO: fix the doorways into nowhere
-        # TODO: debug joints with overlays
-        if debug:
-            print(f"Final ratio is {maze_ratio:0.3} after {nb_iter} iterations" 
-                  f" ({len(self.mazes)} mazes)")
-
-    def merge_mazes(self, mazes):
-        """ Merge all the MazePlans in mazes and update self.mazes. 
-        
-        Return the merged MazePlan.
-        """
-        mazes = set(mazes) # dedups before merging
-        self.mazes = [m for m in self.mazes if m not in mazes] 
-
-        merged = mazes.pop()
-        for m in mazes:
-            merged = merged.union(m)
-        self.mazes.append(merged)
-
-        return merged
-
-
 # TODO: move this to a utils module or something more general than here
 def partition(seq, predicate):
     """ Partition a sequence into sub-sequences according the value returned 
@@ -1126,7 +974,7 @@ def partition(seq, predicate):
     groups = {True: [], False: []}
     for item in seq:
         groups[bool(predicate(item))].append(item)
-    return [g for k,g in sorted(groups.items(), reverse=True)]
+    return [g for k, g in sorted(groups.items(), reverse=True)]
 
 
 class RoomPlan:
@@ -1227,35 +1075,12 @@ class RoomPlan:
             return geom.iter_coords(self.to_rect())
 
 
-class MazeStep:
-    """ A step in the maze creation. 
-    
-    This is basically a cache so we don't have to recompute expensive 
-    operation after we decided which direction to take. 
-    """
-    
-    def __init__(self, pos, mazes=None):
-        self.pos = pos
-        self.mazes = mazes or []
-        self.is_self_connect = False
-        self.is_cross_connect = False
-        
-    def __eq__(self, other):
-        if isinstance(other, MazeStep):
-            return self.pos == other.pos
-        elif isinstance(other, tuple):
-            return self.pos == other
-        elif other == None:
-            return False
-        else:
-            msg = f"Don't know how to compare MazePlan and {type(other)}"
-            raise NotImplementedError(msg)
-
-
 class MazePlan:
     """ A twisty set of corridors and rooms inside a map. There can be more than one. 
     They must all converge and merge before the map is considered playable. 
     """
+    # FIXME: this class is probably obsolete, but there might be a few things worth 
+    # factoring out before we delete it.
 
     def __init__(self, map, rooms=None, corridors=None):
         self.map = map
@@ -1515,10 +1340,13 @@ class BiasedRecursiveBacktracker(RecursiveBacktracker):
         self.winding_bias = winding_bias
         self.winding_center = self.start_cell(winding_offset)
         
-        # how many times are we more likely to head straith to a specific point and to 
+        # how many times are we more likely to head straight to a specific point and to 
         # stop the maze generation once we get there
         self.dest_bias = dest_bias
-        self.dest_center = self.start_cell(dest_offset)
+        if dest_bias or dest_offset:
+            self.dest_center = self.start_cell(dest_offset)
+        else:
+            self.dest_center = None
 
         # braiding: probability to turn a dead-end into a loop in 0..1
         self.reconnect_prob = reconnect_prob
@@ -1600,7 +1428,7 @@ class BiasedRecursiveBacktracker(RecursiveBacktracker):
     def is_done(self):
         """ Have we met an early success criterion? 
         
-        The algorithm still finishes when all posible cells have been visited once no 
+        The algorithm still finishes when all possible cells have been visited once no 
         matter if this method ever returns True. """
         if len(self.visited) >= self.fill_ratio * self.max_fill:
             return True
@@ -1614,23 +1442,23 @@ def main():
     rng.state_save(RSTATE)
     # rng.state_restore(RSTATE)
 
-    rect = ((10, 5), (110, 20))
+    rect = None # ((10, 5), (110, 20))
     map = Map()
     builder = Builder(map)
     builder.init(120, 25)
     algo = BiasedRecursiveBacktracker(builder, rect, start_offset=(0, 0),
-                                      reconnect_prob=0.2,
-                                      fill_ratio=0.25,
-                                      straight_line_bias=2,
-                                      winding_bias=None, 
-                                      winding_offset=(4, 11),
-                                      dest_bias=3, 
-                                      dest_offset=(80, 11),
+                                      #reconnect_prob=0.1,
+                                      # fill_ratio=100,
+                                      # straight_line_bias=4,
+                                      #winding_bias=5, 
+                                      #winding_offset=(50, 10),
+                                      # dest_bias=3, 
+                                      # dest_offset=(80, 18),
                                       )
     # algo = SideWinder(builder, rect)
     # algo = BinaryTree(builder, rect)
-    # builder.maze_fill(algo)  
-    builder.gen_level()
+    builder.maze_fill(algo)  
+    # builder.gen_level()
     print(map.to_text(True))
     
 
