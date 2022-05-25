@@ -23,6 +23,7 @@ import itertools
 from uuid import uuid4
 from copy import deepcopy
 from enum import IntEnum, auto
+from pprint import pprint
 from functools import partial
 from collections import defaultdict, deque
 
@@ -352,9 +353,33 @@ class Map:
         
         This is not the path length taking obstables into account. """
         # This is not the Manhattan distance since we allow diagonal movement.
+        # TODO: use geom.grid_disance() instead
         x1, y1 = pos1
         x2, y2 = pos2
         return max(abs(x1 - x2), abs(y1 - y2))
+    
+    def cell_align(self, coord, rect=None):
+        """ Shift a coordiate to make it align with the bottom left corner of a 2x2 
+        cell.
+        
+        If coord already aligns with a cell, return it as is. 
+        """
+        if rect is None:
+            rect = self.rect()
+            
+        x, y = coord
+        shift = rng.sample([-1, 1], 2)
+        if x % 2:
+            if geom.is_in_rect((x+shift[0], y), rect):
+                x += shift[0]
+            else:
+                x += shift[1]
+        if y % 2:
+            if geom.is_in_rect((x, y+shift[0]), rect):
+                y += shift[0]
+            else:
+                y += shift[1]
+        return (x, y)
     
     def _ring(self, center, radius=1, free=False, shuffle=False, 
               filter_pred=None, in_map=True, sparse=True):
@@ -838,6 +863,7 @@ class Builder:
         room = RoomPlan(self.map, corner1, corner2, doors_target, walls)
         self._rooms.append(room)
         room.set_tiles()
+        return room
 
     def maze_fill(self, algo):
         """ Fill an area with a maze. 
@@ -862,6 +888,67 @@ class Builder:
         if dest_map is not None:
             self.map.connect(pos, dest_map, dest_pos)
         return pos
+
+    def area_split(self, rect):
+        """ Cut rect in two, return the two adjacent but non-overlapping rects. """
+        # TODO: should probably move this to rng
+        (x1, y1), (x2, y2) = rect
+        w, h = geom.rect_dimension(rect)
+        if w > h:
+            # split horizontally 
+            border = rng.randrange(x1+round(w*.3), x1+round(w*.7))
+            if border % 2:
+                border += rng.choice([-1, 1])
+            rect1 = ((x1, y1), (border, y2))
+            rect2 = ((border+1, y1), (x2, y2))
+        else:
+            # split vertically
+            border = rng.randrange(y1+round(h*.3), y1+round(h*.7))
+            if border % 2:
+                border += rng.choice([-1, 1])
+            rect1 = ((x1, y1), (x2, border))
+            rect2 = ((x1, border+1), (x2, y2))
+        return rect1, rect2
+
+    def gen_level(self):
+        """ Turn the map into a playable level. """
+        # sub-divide
+        split_attempts = 12
+        nb_areas = rng.randrange(3, 8)
+        areas = list(self.area_split(self.map.rect()))
+        while split_attempts and len(areas) < nb_areas:
+            split_attempts -= 1
+            idx = rng.randrange(len(areas))
+            if min(geom.rect_dimension(areas[idx])) < 7:
+                continue
+            areas[idx:idx+1] = self.area_split(areas[idx])
+            pprint(areas)
+        
+        # make the rooms
+        area_rooms = {}
+        for area in areas:
+            # TODO: letting the room fill the area would make a perfect warehouse level
+            # rand sub-rect
+            room = self.room(*rng.sub_rect(area, min_side=4, max_side=12), walls=True)
+            area_rooms[area] = room
+
+        # connect everything
+        cur_area = areas.pop()
+        while areas:
+            next_area= areas.pop()
+            cur_room = area_rooms[cur_area]
+            next_room = area_rooms[next_area]
+
+            self.line_connect(cur_room, next_room)
+            
+            cur_area = next_area
+
+    def line_connect(self, room1, room2):
+        """ Connect two rooms with as straight of a corridor as possible. """
+        c1 = geom.rect_center(room1.to_rect())
+        c2 = geom.rect_center(room2.to_rect())
+        for coord in geom.line(c1, c2):
+            self.map[coord] = TileType.FLOOR
 
     def touching_mazes(self, pos, ignore):
         """ Return the list of mazes touched by a position. 
@@ -922,6 +1009,10 @@ class Builder:
         
         debug: add debugging annotations to the generated map and log generation metrics
         """
+        # This implementation is brittle and overly complicated. It's currently being 
+        # phased out. It tried to do the work as statelessly as possible, but as a 
+        # result, it ends up having to query the surroundings to regain awareness of the 
+        # work that has been done.
         w, h = self.map.size()
         
         self.mazes = [MazePlan(self.map, [room]) for room in self._rooms]
@@ -1060,8 +1151,11 @@ class RoomPlan:
         elif isinstance(other, tuple):
             return other == rect
         else:
-            raise NotImplemtedError(f"Don't know how to compare {type(other)}"
-                                    " to RoomPlan")
+            raise NotImplementedError(f"Don't know how to compare {type(other)}"
+                                      " to RoomPlan")
+
+    def __hash__(self):
+        return hash(self.to_rect())
 
     def to_rect(self, inside_walls=False):
         if inside_walls and self.has_walls:
@@ -1501,26 +1595,7 @@ class BiasedRecursiveBacktracker(RecursiveBacktracker):
             coord = geom.vect(*offset) + bl
         else:
             coord = rng.pos_in_rect(self.rect)
-        return self._cell_align(coord)
-
-    def _cell_align(self, coord):
-        """ Shift a coordiate to make it align with the bottom left corner of a cell. 
-        
-        If coord already aligns with a cell, return it as is. 
-        """
-        x, y = coord
-        shift = rng.sample([-1, 1], 2)
-        if x % 2:
-            if geom.is_in_rect((x+shift[0], y), self.rect):
-                x += shift[0]
-            else:
-                x += shift[1]
-        if y % 2:
-            if geom.is_in_rect((x, y+shift[0]), self.rect):
-                y += shift[0]
-            else:
-                y += shift[1]
-        return (x, y)
+        return self.map.cell_align(coord, self.rect)
 
     def is_done(self):
         """ Have we met an early success criterion? 
@@ -1530,7 +1605,6 @@ class BiasedRecursiveBacktracker(RecursiveBacktracker):
         if len(self.visited) >= self.fill_ratio * self.max_fill:
             return True
         if self.dest_center in self.visited:  
-            # FIXME: anything inside the cell would do, but don't touch the other cells
             return True
         return False
 
@@ -1555,7 +1629,8 @@ def main():
                                       )
     # algo = SideWinder(builder, rect)
     # algo = BinaryTree(builder, rect)
-    builder.maze_fill(algo)  
+    # builder.maze_fill(algo)  
+    builder.gen_level()
     print(map.to_text(True))
     
 

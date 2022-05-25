@@ -17,8 +17,11 @@
 
 """ Helper functions for random number generation and selections. """
 
-import random
+import math
 import json
+import random
+
+from . import geometry as geom
 
 # Global instance of the random number generator. This must be initialized 
 # before we start using random numbers. This is separate from the build-in RNG 
@@ -107,5 +110,24 @@ class RandomGenerator(random.Random):
         (x1, y1), (x2, y2) = rect
         x, y = rng.randrange(x1, x2+1), rng.randrange(y1, y2+1)
         return (x, y)
+
+    def sub_rect(self, rect, min_side=3, max_side=math.inf):
+        """ Return a possibly smaller rectangle that fits inside `rect` with random size 
+        and position.
+        
+        The perimeter of `rect` is included. """
+        (x1, y1), (x2, y2) = rect
+        w, h = geom.rect_dimension(rect)
+            
+        sub_w = self.randint(min(w, min_side), min(w, max_side))
+        sub_h = self.randint(min(h, min_side), min(h, max_side))
+        
+        dx = self.rint(w - sub_w)
+        dy = self.rint(h - sub_h)
+
+        bl = (x1+dx, y1+dy)
+        tr = (x1+dx+sub_w-1, y1+dy+sub_h-1)  # -1 because tr in included in the rect
+        return (bl, tr)
+
 
 rng = RandomGenerator()

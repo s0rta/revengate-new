@@ -23,8 +23,8 @@ import operator
 
 
 def cannon_corners(corner1, corner2):
-    """ Return the rectangle defined by the two points as a cannonnical 
-    bottom-left and top-right corners rectange.
+    """ Return the rectangle defined by the two points as a canonical 
+    bottom-left and top-right corners rectangle.
     """ 
     (x1, y1), (x2, y2) = corner1, corner2
     x1, x2 = sorted((x1, x2))
@@ -42,8 +42,8 @@ def rect_interstect(rect1, rect2):
     return True
 
 
-def rect_center(bl, tr):
-    (x1, y1), (x2, y2) = bl, tr
+def rect_center(rect):
+    (x1, y1), (x2, y2) = rect
     x = x1 + (x2 - x1) // 2
     y = y1 + (y2 - y1) // 2
     return x, y
@@ -54,6 +54,12 @@ def rect_area(rect):
     (x1, y1), (x2, y2) = rect
     return (x2-x1+1) * (y2-y1+1)
 
+
+def rect_dimension(rect):
+    """ Return the (width, height) tuple of a rect. """
+    (x1, y1), (x2, y2) = rect
+    return (x2-x1+1), (y2-y1+1)
+    
 
 def is_in_rect(coord, rect):
     """ Return whether coord is inside rect, perimeter included. """
@@ -172,6 +178,41 @@ def euclid_dist(coord1, coord2):
     x2, y2 = coord2
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
+
+def grid_distance(coord1, coord2):
+    """ Return the grid distance between two points. """
+    x1, y1 = coord1
+    x2, y2 = coord2
+    return max(abs(x1 - x2), abs(y1 - y2))
+
+
+def diag_to_elbow(coord1, coord2):
+    """ Return a coordinate that can turn a pure diagonal into a 90º elbow in a 
+    corridor. """
+    x1, y1 = coord1
+    x2, y2 = coord2
+    dx = x2-x1
+    return (x1+dx, y1)
+
+
+def line(coord1, coord2): 
+    """ Return a sequence of coords roughly describing a blocky line going from coord1 
+    to coord2 following legal board movements, but ignoring obstacles. Arguments are 
+    included as the two end points of the sequence. """
+    steps = []
+    nb_steps = grid_distance(coord1, coord2) + 1
+    mult = max(1, nb_steps - 1)
+    # move to continuous coords from the center of the tiles
+    x1, y1, x2, y2 = (c+0.5 for c in coord1 + coord2) 
+    for i in range(nb_steps):
+        x = int(((mult-i)*x1 + i*x2) / mult)
+        y = int(((mult-i)*y1 + i*y2) / mult)
+        if steps and is_diag((x, y), steps[-1]):
+            steps.append(diag_to_elbow((x, y), steps[-1]))
+        steps.append((x, y))
+        
+    return steps
+    
 
 class PolyCont:
     """ A collection of multiple coordinate containers. """
