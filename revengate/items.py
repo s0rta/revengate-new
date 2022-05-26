@@ -17,8 +17,10 @@
 
 """ Items and inventory. """
 
+
 class Item:
     """ Something that can be picked up and dropped. """
+
     def __init__(self, name, weight, char='🛠️'):
         self.name = name
         self.weight = weight
@@ -27,10 +29,20 @@ class Item:
 
 class ItemCollection:
     """ A group of Items. """
+
     def __init__(self, *items):
         super(ItemCollection, self).__init__()
         self.items = list(items)
 
+    def __bool__(self):
+        return bool(self.items)
+    
+    def __iter__(self):
+        return iter(self.items)
+
+    def __getitem__(self, idx):
+        return self.items[idx]
+    
     def append(self, item):
         assert isinstance(item, Item)
         self.items.append(item)
@@ -52,12 +64,6 @@ class ItemCollection:
     def weight(self):
         return sum([i.weight for i in self.items])
     
-    def __bool__(self):
-        return bool(self.items)
-    
-    def __iter__(self):
-        return iter(self.items)
-    
     @property
     def char(self):
         if self.items:
@@ -73,8 +79,8 @@ class ItemsSlot:
     This is using the descriptor protocol and should be set as a class 
     attribute.
     """
+    
     def __init__(self):
-        super(ItemsSlot, self).__init__()
         self.slot = None
 
     def __set_name__(self, owner, name):

@@ -929,14 +929,15 @@ class Builder:
 
     def add_vibe(self, room, faction, radius_of_influence=8):
         vibe_budget = 10
-        center_of_influence = rng.pos_in_rect(room.to_rect())
-        area_of_influence = list(self.map.traversable_scope(center_of_influence, 
-                                                       radius=radius_of_influence))
-        
-        while (mood := faction.gen_mood()) and vibe_budget > 0: 
-            coord = rng.choice(area_of_influence)
-            
-            vibe_budget -= mood.score
+        center_of_influence = rng.pos_in_rect(room.to_rect(inside_walls=True))
+        vibe_area = list(self.map.traversable_scope(center_of_influence, 
+                                                    radius=radius_of_influence))
+
+        # FIXME: we could go over budget if the expensive mood comes at the end
+        while (res := faction.gen_mood()) and vibe_budget > 0: 
+            mood, score = res
+            coord = rng.choice(vibe_area)
+            vibe_budget -= score
             self.map.place(mood, coord)
             
     def gen_level(self):

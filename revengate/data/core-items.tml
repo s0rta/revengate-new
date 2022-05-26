@@ -16,10 +16,17 @@ _class = "Item"
 char = "🖋"
 weight = 1
 
+[templates.old_map]
+_class = "Item"
+name = "old_map"
+weight = 1
+char = "🗺️"
+
 # Weapons
 [templates.blade]
 _class = "Weapon"
 family = "#slice"
+char = "🗡️"
 verb = "cut"
 
 [templates.dagger]
@@ -28,10 +35,16 @@ name = "dagger"
 weight = 5
 "!damage" = [4, 6]
 
+[templates.saber]
+_parent = "blade"
+name = "saber"
+weight = 7
+"!damage" = [5, 9]
+
+
 [templates.sword]
 _parent = "blade"
 name = "sword"
-char = "🗡️"
 weight = 7
 "!damage" = [5, 8]
 

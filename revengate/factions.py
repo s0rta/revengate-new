@@ -18,7 +18,7 @@
 """ Politics, allegiances and mood """
 
 from .randutils import rng
-
+from . import tender
 
 # ideas:
 # - seen or other sense, ex.: 
@@ -36,6 +36,7 @@ from .randutils import rng
 class Mood: 
     """ Context information about a place that favours the immersion without obviously 
     influencing the game play. """
+    material = False
 
     def __init__(self, desc, score=1):
         self.desc = desc
@@ -43,6 +44,24 @@ class Mood:
 
     def __str__(self):
         return self.desc
+
+    def materialize(self):
+        """ Convert the mood into something more concrete that can be placed on the map. 
+        
+        Callers should only only call this is self.material is True.
+        """
+        return NotImplementedError()
+
+
+class MoodItem(Mood): 
+    material = True
+
+    def __init__(self, template_name, score=1):
+        super().__init__(None, score)
+        self.template_name = template_name.lstrip("*")
+
+    def materialize(self):
+        return tender.loader.invoke(self.template_name)
 
 
 class Faction: 
@@ -52,10 +71,15 @@ class Faction:
         
         # list of (mood, weight) tuples:
         # - None is allowed, 
-        # - weight semantic of random.choices()
+        # - same weight semantic as random.choices()
         self._moods = []  
 
-    def add_mood(self, mood, weight=1):
+    def add_mood(self, mood, weight=1, score=1):
+        if isinstance(mood, str):
+            if mood.startswith("*"):
+                mood = MoodItem(mood, score)
+            else:
+                mood = Mood(mood, score)                
         self._moods.append((mood, weight))
 
     def gen_moods(self):
@@ -66,7 +90,7 @@ class Faction:
         return [mood for mood, weight in self._moods]
     
     def gen_mood(self):
-        """ Return a single mood associated with the faction. 
+        """ Return a (mood, score) tuple for the faction. 
         
         The probability of getting any specific mood is adjusted. 
 
@@ -74,10 +98,9 @@ class Faction:
         have low probability of occurring.
         """
         if self._moods:
-            moods, weights = zip(*self._moods)
-            options = rng.choices(moods, weights=weights)
-            if options:
-                return options[0]
-        
+            mood = rng.weighted_choice(self._moods)
+            if mood.material:
+                return mood.materialize(), mood.score
+            else:
+                return mood, mood.score
         return None
-    

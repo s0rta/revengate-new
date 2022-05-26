@@ -169,6 +169,7 @@ class Governor:
         builder.init(80, 25)
         builder.gen_level()
         
+        # TODO: add more vibe!
         room = rng.choice(builder._rooms)
         fact = rng.choice(self.factions)
         builder.add_vibe(room, fact)
@@ -204,9 +205,7 @@ class Governor:
         map.place(obs)
         tender.engine.change_map(map)
         if tender.hero:
-            pos = map.place(tender.hero)
-            map.place(Mood("there are rodent droppings here"), pos)
-
+            map.place(tender.hero)
         return map
 
     def start(self):
@@ -235,7 +234,7 @@ class Governor:
         return events
 
     def hero_turn(self):
-        # not used anymore, only kept to illustate how self.play() works
+        # not used anymore, only kept to illustrate how self.play() works
         while not tender.hero.has_played:
             print(tender.engine.map.to_text())
             move = tender.ui.read_next_move()
@@ -278,19 +277,22 @@ class Governor:
     def init_factions(self):
         # beasts
         beasts = Faction("Beasts", "beasts")
-        beasts.add_mood(Mood("mouse droppings"))
-        beasts.add_mood(Mood("scratches on the floor"))
-        beasts.add_mood(Mood("half eaten old animal corpse"))
+        beasts.add_mood("mouse droppings")
+        beasts.add_mood("scratches on the floor")
+        beasts.add_mood("half eaten old animal corpse")
         self.factions.append(beasts)
         # lumiere
         # neutral
         # canut
         # smugglers
         smugglers = Faction("Smugglers", "smugglers")
-        smugglers.add_mood(Mood("old tobacco smell"))
-        smugglers.add_mood(Mood("cigar stubs on the ground"))
-        smugglers.add_mood(Mood("fragments of broken pottery"))
-        smugglers.add_mood(Mood("dirty terracotta pot", 1/30))
+        smugglers.add_mood("*dagger", weight=1/10)
+        smugglers.add_mood("*saber", weight=1/20)
+        smugglers.add_mood("*old_map", weight=1/15)
+        smugglers.add_mood("old tobacco smell")
+        smugglers.add_mood("cigar stubs on the ground")
+        smugglers.add_mood("fragments of broken pottery")
+        smugglers.add_mood("dirty terracotta pot", weight=1/30)
         # smugglers.add_mood(some item, 1/30)
 
         self.factions.append(smugglers)

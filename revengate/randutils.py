@@ -93,6 +93,18 @@ class RandomGenerator(random.Random):
             bias_idx = 0
         weights = [i==bias_idx and bias or 1 for i in range(len(seq))]
         return self.choices(seq, weights=weights)[0]
+    
+    def weighted_choice(self, seq, weights=None):
+        """ Return a random element from seq using weights to bias the selection. 
+        
+        weights: same semantic as random.choices(), if not provided, assume that seq is 
+        in the series of (elem, weight) tuples.
+        """
+        if not seq:
+            raise ValueError("Can't select element from an empty sequence.")
+        if weights is None:
+            seq, weights = zip(*seq)
+        return rng.choices(seq, weights=weights, k=1)[0]
 
     def rpop(self, seq):
         """ Select a random elememt from a sequence, return both the element 
