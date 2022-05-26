@@ -23,7 +23,7 @@ from operator import attrgetter
 
 from .utils import best
 from .randutils import rng
-from .tags import TagBag, TagSlot, Faction
+from .tags import TagBag, TagSlot, FactionTag
 from .weapons import Condition, Injurious, Weapon, Spell, Families
 from .events import (Hit, Miss, Events, HealthEvent, Move, Rest, Death, is_action, 
                      Pickup, Conversation)
@@ -42,8 +42,7 @@ class Actor(object):
     critical_mult = 0.35 
     # how strong your sentiment has to be to move from neutral 
     sentiment_threshold = 0.75  
-    faction = TagSlot(Faction)
-    # strategy = StrategySlot()  # TODO: keep doing that validation at contruction time
+    faction = TagSlot(FactionTag)
     inventory = ItemsSlot()
     char = "X"  # How to render this actor on the text map
 

@@ -31,6 +31,7 @@ from . import geometry as geom
 from . import tender
 from .randutils import rng
 from .actors import Actor
+from .factions import Mood
 from .items import Item, ItemCollection
 from .utils import Array
 
@@ -42,13 +43,16 @@ from .utils import Array
 # - Hexy: coordinate transforms, good for tap events
 # - hexutil: Hex.distance and A* implementation
 
+
 class ScopeType(IntEnum):
     VISIBLE = auto()
+    TRAVERSABLE = auto()
+
 
 class MapScope:
     def __init__(self, map, scope_type, at, radius=None, pred=None, include_at=False):
-        """ at: a coord tupple or an actor
-        pred: a callable that receives a coord tupple OR a class that is used to test 
+        """ at: a coord tuple or an actor
+        pred: a callable that receives a coord tuple OR a class that is used to test 
               things at the coord
         """
         self.map = map
@@ -60,9 +64,10 @@ class MapScope:
         self.pred = pred
         self.include_at = include_at
 
-    def _disc(self, at, max_radius):
+    def _disc(self, at, max_radius, filter_pred=None):
         for radius in range(1, max_radius+1):
-            tiles = self.map._ring(at, radius, free=False, shuffle=False)
+            tiles = self.map._ring(at, radius, filter_pred=filter_pred, 
+                                   free=False, shuffle=False)
             for t in tiles:
                 yield t
 
@@ -74,6 +79,9 @@ class MapScope:
         if self.scope_type == ScopeType.VISIBLE:
             all_coords += [coord for coord in self._disc(self.at, self.radius) 
                            if self.map.line_of_sight(self.at, coord)]
+        elif self.scope_type == ScopeType.TRAVERSABLE:
+            all_coords += self._disc(self.at, self.radius,  
+                                     filter_pred=self.map.is_walkable)
         if self.pred:
             return iter(self._filter_with_pred(all_coords))
         else:
@@ -191,6 +199,7 @@ class Map:
         self._pos_to_a = {}  # position to actor mapping
         self._i_to_pos = {}  # item to position
         self._pos_to_i = defaultdict(ItemCollection)  # position to items
+        self._pos_to_m = {}  # position to mood mapping
         
         # connections to neighbouring maps ({mapid:pos}), our side of the connection
         self._map_to_conn = {}  
@@ -310,6 +319,9 @@ class Map:
     
     def visible_scope(self, at, radius, pred=None, include_at=False):
         return MapScope(self, ScopeType.VISIBLE, at, radius, pred, include_at)
+    
+    def traversable_scope(self, at, radius, pred=None, include_at=False):
+        return MapScope(self, ScopeType.TRAVERSABLE, at, radius, pred, include_at)
 
     def add_overlay(self, overlay):
         self.overlays.append(overlay)
@@ -325,6 +337,9 @@ class Map:
             return self._pos_to_i[pos]
         else:
             return None
+
+    def mood_at(self, pos):
+        return self._pos_to_m.get(pos)
     
     def char_at(self, pos):
         """ Return the character representation of what is at pos. """
@@ -656,6 +671,8 @@ class Map:
         """ Put thing on the map at pos=(x, y). 
         If pos is not not supplied, a random position is selected. 
         If fallback=True, a nearby space is selected when pos is not available.
+        
+        The final position is returned.
         """
         if thing in self:
             raise ValueError(f"{thing} is already on the map, use Map.move()" 
@@ -677,8 +694,11 @@ class Map:
         elif isinstance(thing, Item):
             self._i_to_pos[thing] = pos
             self._pos_to_i[pos].append(thing)
+        elif isinstance(thing, Mood):
+            self._pos_to_m[pos] = thing
         else:
             raise ValueError(f"Unsupported type for placing {thing} on the map.")
+        return pos
 
     def remove(self, thing):
         """ Remove something from the map."""
@@ -907,6 +927,18 @@ class Builder:
             rect2 = ((x1, border+1), (x2, y2))
         return rect1, rect2
 
+    def add_vibe(self, room, faction, radius_of_influence=8):
+        vibe_budget = 10
+        center_of_influence = rng.pos_in_rect(room.to_rect())
+        area_of_influence = list(self.map.traversable_scope(center_of_influence, 
+                                                       radius=radius_of_influence))
+        
+        while (mood := faction.gen_mood()) and vibe_budget > 0: 
+            coord = rng.choice(area_of_influence)
+            
+            vibe_budget -= mood.score
+            self.map.place(mood, coord)
+            
     def gen_level(self):
         """ Turn the map into a playable level. """
         # sub-divide
@@ -1447,13 +1479,13 @@ def main():
     builder = Builder(map)
     builder.init(120, 25)
     algo = BiasedRecursiveBacktracker(builder, rect, start_offset=(0, 0),
-                                      #reconnect_prob=0.1,
-                                      # fill_ratio=100,
+                                      reconnect_prob=0.1,
+                                      # fill_ratio=0.5,
                                       # straight_line_bias=4,
                                       #winding_bias=5, 
                                       #winding_offset=(50, 10),
-                                      # dest_bias=3, 
-                                      # dest_offset=(80, 18),
+                                        dest_bias=3, 
+                                        dest_offset=(80, 18),
                                       )
     # algo = SideWinder(builder, rect)
     # algo = BinaryTree(builder, rect)

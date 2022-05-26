@@ -31,6 +31,7 @@ from .commands import CommandMap, CoreCommands
 from .maps import Connector, Builder, Map
 from .area import Area
 from .events import is_action, StairsEvent, Events
+from .factions import Mood, Faction
 from .tags import t, ConvoTopic
 
 from .graphics import RevengateApp
@@ -140,7 +141,10 @@ class GameMgmtCommands(CommandMap):
 
 
 class Governor:
-    def __init__(self, cheats=False):
+    def __init__(self, wizard_mode=False, new_game=False, **kwargs):
+        self.factions = []
+        self.new_game = new_game
+
         tender.loader = TopLevelLoader()
         tender.loader.load(open(data_path(CORE_FILE), "rt"))
         tender.sentiments = tender.loader.get_instance("core_sentiments")
@@ -151,11 +155,12 @@ class Governor:
         tender.commands.register(self.npc_turn)
         
         tender.ui = KivyUI()
-        self.app = RevengateApp(cheats)
+        self.app = RevengateApp(wizard_mode)
 
         self.condenser = Condenser(self.app.user_data_dir)
         tender.commands.register_sub_map(GameMgmtCommands(self.condenser))
-        
+        self.init_factions()
+    
     def make_map(self, nb_monsters, item, from_pos=None, parent_map=None):
         lvl = len(tender.dungeon.maps) + 1
 
@@ -163,6 +168,10 @@ class Governor:
         builder = Builder(map)
         builder.init(80, 25)
         builder.gen_level()
+        
+        room = rng.choice(builder._rooms)
+        fact = rng.choice(self.factions)
+        builder.add_vibe(room, fact)
 
         # stairs
         if lvl < 5:
@@ -195,11 +204,15 @@ class Governor:
         map.place(obs)
         tender.engine.change_map(map)
         if tender.hero:
-            map.place(tender.hero)
+            pos = map.place(tender.hero)
+            map.place(Mood("there are rodent droppings here"), pos)
+
         return map
 
     def start(self):
         """ Start a game. """
+        tender.commands["purge_game"]()
+        self.new_game_response("Baw")
         self.app.run()
             
     def npc_turn(self, *args):
@@ -261,6 +274,26 @@ class Governor:
             
     def new_hero_response(self, hero_name):
         self.condenser.save("hero", tender.hero)
+
+    def init_factions(self):
+        # beasts
+        beasts = Faction("Beasts", "beasts")
+        beasts.add_mood(Mood("mouse droppings"))
+        beasts.add_mood(Mood("scratches on the floor"))
+        beasts.add_mood(Mood("half eaten old animal corpse"))
+        self.factions.append(beasts)
+        # lumiere
+        # neutral
+        # canut
+        # smugglers
+        smugglers = Faction("Smugglers", "smugglers")
+        smugglers.add_mood(Mood("old tobacco smell"))
+        smugglers.add_mood(Mood("cigar stubs on the ground"))
+        smugglers.add_mood(Mood("fragments of broken pottery"))
+        smugglers.add_mood(Mood("dirty terracotta pot", 1/30))
+        # smugglers.add_mood(some item, 1/30)
+
+        self.factions.append(smugglers)
 
     def new_game_response(self, hero_name):
         self.condenser.delete_game()

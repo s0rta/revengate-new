@@ -533,6 +533,10 @@ class MapWidget(FocusBehavior, ScatterPlane):
         """
         if events:
             if is_move(events):
+                mpos = tender.engine.map.find(tender.hero)
+                mood = tender.engine.map.mood_at(mpos)
+                if mood:
+                    print(mood)
                 self.verify_centering(anim=True)
             self.app.display_status_events(events)
 

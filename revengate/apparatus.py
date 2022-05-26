@@ -34,13 +34,15 @@ def main():
                         help="Print version and exit.")
     parser.add_argument("--wizard-mode", action="store_true", 
                         help="Enable all cheat codes.")
+    parser.add_argument("--new-game", action="store_true", 
+                        help="Automatically generate and start a new game")
     args = parser.parse_args()
     
     if args.version:
         print(f"Revengate version {__version__}")
         sys.exit(0)
 
-    gov = Governor(cheats=args.wizard_mode)
+    gov = Governor(**args.__dict__)
     gov.start()
 
 

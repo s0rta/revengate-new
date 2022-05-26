@@ -15,19 +15,19 @@ name = "dungeon"
 register = "talk"
 
 [instances.lumiere]
-_class = "Faction"
+_class = "FactionTag"
 name = "lumiere"
 
 [instances.beasts]
-_class = "Faction"
+_class = "FactionTag"
 name = "beasts"
 
 [instances.inunus]
-_class = "Faction"
+_class = "FactionTag"
 name = "inunus"
 
 [instances.neutrals]
-_class = "Faction"
+_class = "FactionTag"
 name = "neutrals"
 
 [instances.core_sentiments]

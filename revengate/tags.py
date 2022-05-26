@@ -181,7 +181,7 @@ class TagSlot:
         setattr(obj, self.slot, tag)
 
 
-class Faction(Tag):
+class FactionTag(Tag):
     pass
 
 
