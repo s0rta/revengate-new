@@ -833,12 +833,29 @@ class Builder:
         self._rooms = []
         self.mazes = []
 
+    def init(self, width, height, fill=TileType.SOLID_ROCK):
+        self.map.tiles = Array(width, height, fill)
+        
+    def is_frozen(self, pos):
+        for m in self.mazes:
+            if m.is_frozen(pos):
+                return True
+        return False
+        
+    def room(self, corner1, corner2, doors_target=None, walls=False):
+        if doors_target is None:
+            doors_target = rng.rint(self.doors_range)
+        room = RoomPlan(self.map, corner1, corner2, doors_target, walls)
+        self._rooms.append(room)
+        room.set_tiles()
+        return room
+
     def random_room(self, width, height, nb_retry=4):
-        """ Add a random room to the map, return it's bottom-left and top-right 
+        """ Add a random room to the map, return its bottom-left and top-right 
         corners or False if the room can't be generated.
         
         If width or height are tuples, they are taken to represent the range of 
-        acceptable random dimensions, otherwise, they are to be integers 
+        acceptable random dimensions, otherwise, they must be integers 
         representing exact dimensions. 
         
         The new room is tested for intersection with existing rooms. If there 
@@ -864,24 +881,10 @@ class Builder:
                 self.room(*rect, walls=True)
                 return rect
         return False
-                
-    def init(self, width, height, fill=TileType.SOLID_ROCK):
-        self.map.tiles = Array(width, height, fill)
-        
-    def is_frozen(self, pos):
-        for m in self.mazes:
-            if m.is_frozen(pos):
-                return True
-        return False
-        
-    def room(self, corner1, corner2, doors_target=None, walls=False):
-        if doors_target is None:
-            doors_target = rng.rint(self.doors_range)
-        room = RoomPlan(self.map, corner1, corner2, doors_target, walls)
-        self._rooms.append(room)
-        room.set_tiles()
-        return room
 
+    def iter_rooms(self):
+        return iter(self._rooms)
+                
     def maze_fill(self, algo):
         """ Fill an area with a maze. 
         """

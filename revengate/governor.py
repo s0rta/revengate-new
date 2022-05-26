@@ -169,10 +169,11 @@ class Governor:
         builder.init(80, 25)
         builder.gen_level()
         
-        # TODO: add more vibe!
-        room = rng.choice(builder._rooms)
-        fact = rng.choice(self.factions)
-        builder.add_vibe(room, fact)
+        nb_passes = 3  # very arbitrary, should be tuned during play testing
+        pairs = zip(rng.choices(list(builder.iter_rooms()), k=nb_passes), 
+                    rng.choices(self.factions, k=nb_passes))
+        for room, fact in pairs:
+            builder.add_vibe(room, fact)
 
         # stairs
         if lvl < 5:
@@ -293,7 +294,6 @@ class Governor:
         smugglers.add_mood("cigar stubs on the ground")
         smugglers.add_mood("fragments of broken pottery")
         smugglers.add_mood("dirty terracotta pot", weight=1/30)
-        # smugglers.add_mood(some item, 1/30)
 
         self.factions.append(smugglers)
 
