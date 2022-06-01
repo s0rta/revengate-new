@@ -22,7 +22,12 @@ CODE_OF_CONDUCT.md for the details.
 
 ## Credits
 Lead coding: Yannick Gingras
-Additionnal coding: Nicole Schwartz, Ryan Prior, Steve Smith, Josephine Maya Simple
+Additionnal coding: 
+- Nicole Schwartz
+- Ryan Prior
+- Steve Smith
+- Josephine Maya Simple
+- Victor Hunt
 
 2D tiles: CC0, released by the Craw Stone Soup team
 https://opengameart.org/content/dungeon-crawl-32x32-tiles
