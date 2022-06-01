@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-# Copyright © 2020–2022 Yannick Gingras <ygingras@ygingras.net>
+# Copyright © 2020–2022 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -398,7 +398,7 @@ class TemplatizedObjectsLoader(SubLoader):
     be invoked by calling invoke() to create a new instance.
     
     Special fields:
-    _class: the class to instanciate
+    _class: the class to instantiate
     _parent: another template that this template inherits from
 
     field names can be prefixed by the following for special action:
@@ -408,6 +408,7 @@ class TemplatizedObjectsLoader(SubLoader):
 
     values can be prefixed by the following for special actions:
     '*': invoke a sub-template by name
+    '@': return an existing instance by name
     '#': invoke a tag by name, similar to tags.t()
 
     Fields that are named in the constructor of an object's Python class are set at 
@@ -435,23 +436,29 @@ class TemplatizedObjectsLoader(SubLoader):
     """
     
     content_key = "templatized-objects"
+    
+    # Templates and instances can only be for those classes and their sub-classes. It 
+    # would make sens to factor this out at some point. This list is processed during 
+    # the instantiating of the sub-loader and therefore all changes to it must be done 
+    # before the first file is loaded.
+    loadable_classes = [Tag, Item, HealthVector, Effect, Strategy, Actor, 
+                        SentimentChart]
 
     def __init__(self, top_loader):
         super().__init__(top_loader)
         
         self._class_map = {}  # name -> class object mapping
         
-        # for by-name invokations
+        # for by-name invocations
         self._instances = {} 
         self._templates = {}
         
-        # Templates and instances can only be for those and their sub-classes. 
-        # It would make sens to factor this out at some point. 
-        for cls in [Tag, Item, HealthVector, Effect, Strategy, Actor, SentimentChart]:
+        for cls in self.loadable_classes:
             self._map_class_tree(cls)
         
     def _map_class_tree(self, cls):
-        """ Add all the subclasses of cls to the class map. """
+        """ Add `cls` and all its subclasses to the registry of loadable object types. 
+        """
         self._class_map[cls.__name__] = cls
         for sub in cls.__subclasses__():
             self._map_class_tree(sub)
@@ -464,6 +471,8 @@ class TemplatizedObjectsLoader(SubLoader):
             return field()
         if isinstance(field, str) and field.startswith("#"):  # tag
             return tags.t(field[1:])
+        if isinstance(field, str) and field.startswith("@"):  # instance ref
+            return self.get_instance(field[1:])
         if isinstance(field, str) and field.startswith("*"):  # sub-template
             return self.invoke(field[1:])
         return field
