@@ -211,8 +211,9 @@ class Governor:
 
     def start(self):
         """ Start a game. """
-        tender.commands["purge_game"]()
-        self.new_game_response("Baw")
+        if self.new_game:
+            tender.commands["purge_game"]()
+            self.new_game_response("Baw")
         self.app.run()
             
     def npc_turn(self, *args):
