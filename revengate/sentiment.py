@@ -19,9 +19,6 @@
 
 from collections import defaultdict 
 
-from .tags import t
-
-
 class SentimentChart:
     """ Main sentiment representation between factions. """
 
@@ -31,32 +28,24 @@ class SentimentChart:
         onesided_X is a {"feeler": [targets...]} mapping """
         self._chart = defaultdict(dict)  # me -> other -> sentiment in [-1..1]
 
-        # TODO: make the loader to tag expansion inside nested lists so we don't have to 
-        # do late validation with t()
         if mutual_pos:
             for a, b in mutual_pos:
-                a, b = t(a), t(b)
                 self._chart[a][b] = 1
                 self._chart[b][a] = 1
             
         if mutual_neg:
             for a, b in mutual_neg:
-                a, b = t(a), t(b)
                 self._chart[a][b] = -1
                 self._chart[b][a] = -1
         
         if onesided_pos:
             for k, targets in onesided_pos.items():
-                k = t(k)
                 for target in targets:
-                    target = t(target)
                     self._chart[k][target] = 1
 
         if onesided_neg:
             for k, targets in onesided_neg.items():
-                k = t(k)
                 for target in targets:
-                    target = t(target)
                     self._chart[k][target] = -1
         
     def sentiment(self, me, other):

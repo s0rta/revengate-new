@@ -464,18 +464,29 @@ class TemplatizedObjectsLoader(SubLoader):
             self._map_class_tree(sub)
 
     def _expand_one(self, field):
-        """ Expand invokations (tags and templates), and generators in field.
+        """ Expand invocations (tags, templates, refs), and generators in field.
         
         Return the field unmodified if there are no references. """
         if callable(field):
             return field()
-        if isinstance(field, str) and field.startswith("#"):  # tag
+        elif isinstance(field, str) and field.startswith("#"):  # tag
             return tags.t(field[1:])
-        if isinstance(field, str) and field.startswith("@"):  # instance ref
+        elif isinstance(field, str) and field.startswith("@"):  # instance ref
             return self.get_instance(field[1:])
-        if isinstance(field, str) and field.startswith("*"):  # sub-template
+        elif isinstance(field, str) and field.startswith("*"):  # sub-template
             return self.invoke(field[1:])
         return field
+    
+    def _expand_many(self, field):
+        """ Expand a compound field recursively. """
+        if isinstance(field, list):
+            return [self._expand_many(s) for s in field]
+        if isinstance(field, list):
+            return tuple(self._expand_many(s) for s in field)
+        if isinstance(field, dict):
+            return {self._expand_many(k): self._expand_many(v) 
+                    for k, v in field.items()}
+        return self._expand_one(field)
 
     def _instantiate(self, cls_name, fields, template_name=None):
         """ Create an instance of cls_name with all the fields specified.
@@ -488,9 +499,9 @@ class TemplatizedObjectsLoader(SubLoader):
         for k, v in list(fields.items()):
             if isinstance(v, str) or callable(v):
                 fields[k] = self._expand_one(v)
-            if isinstance(v, list):
-                fields[k] = [self._expand_one(s) for s in v]
-        # find which fields are contructor friendly
+            if isinstance(v, (list, tuple, dict)):
+                fields[k] = self._expand_many(v)
+        # find which fields are constructor-friendly
         init_args = {}
         params = inspect.signature(cls).parameters
         for arg in params:
@@ -536,10 +547,14 @@ class TemplatizedObjectsLoader(SubLoader):
         # only instances and templates for the current file are returned
         instances = {}
         for name, subrec in rec["instances"].items():
+            # transform mappings specific to the file format into a plain dict
+            subrec = dict(subrec)  
             obj = self._decode_instance(name, subrec)
             instances[name] = obj
         templates = {}
         for name, subrec in rec["templates"].items():
+            # transform mappings specific to the file format into a plain dict
+            subrec = dict(subrec)
             obj = self._decode_template(name, subrec)
             templates[name] = obj
         return dict(instances=instances, templates=templates)
@@ -548,7 +563,7 @@ class TemplatizedObjectsLoader(SubLoader):
         """ Convert val into a random generator.
         
         val: either max or a [min, max] list.
-        The generator is called at invokation time.
+        The generator is called at invocation time.
         """
         if isinstance(val, int):
             return lambda: rng.randrange(val+1)
@@ -590,11 +605,10 @@ class TemplatizedObjectsLoader(SubLoader):
         raise ValueError(f"Subtracting ${val} from base value ${parent_val} is"
                          " unsupported.")
 
-
     def invoke(self, template):
-        """ Instanciate an object based on a template.  
+        """ Instantiate an object based on a template.  
         
-        The template can be a name or a Template intsance. 
+        The template can be a name or a Template instance. 
         """
         if not isinstance(template, Template):
             if template not in self._templates:
@@ -648,23 +662,3 @@ class TemplatizedObjectsLoader(SubLoader):
 
     def get_instance(self, name):
         return self._instances.get(name)
-
-
-def main():
-    loader = TopLevelLoader()
-    objs = loader.load(open(sys.argv[1], "rt"))
-    pprint(objs)
-    
-    from .dialogue import TextUI
-    ui = TextUI()
-    ui.show_dia(objs["intro"])
-    
-    #print(loader.get_instance("beasts"))
-    #print(loader.invoke("hero"))
-    #print(loader.invoke("bob").weapon.damage)
-    # obj = loader.invoke("hero")
-    # print(obj.weapon.damage)
-
-if __name__ == "__main__":
-    main()
-    

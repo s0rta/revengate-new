@@ -26,6 +26,23 @@ format = 0
 content = "templatized-objects"
 """
 
+
+
+
+
+
+class Foo:
+    def __init__(self, bar, baz):
+        self.bar = bar
+        self.baz = baz
+
+class NamedObj:
+    def __init__(self, name):
+        self.name = name
+
+TemplatizedObjectsLoader.loadable_classes += [Foo, NamedObj]
+
+
 SAMPLE_1 = f"""{HEADER}
 [instances]
 [instances.something]
@@ -35,6 +52,14 @@ baz = 42
 
 [templates]
 """
+
+
+def test_get_instance():
+    loader = TopLevelLoader()
+    loader.loads(SAMPLE_1)
+    thing = loader.get_instance("something")
+    assert thing.bar == "this is something"
+
 
 SAMPLE_2 = f"""{HEADER}
 [instances]
@@ -48,8 +73,16 @@ baz = ["one"]
 [templates.composite]
 _parent = "composite_base"
 "+baz" = ["two"]
-
 """
+
+
+def test_list_append():
+    loader = TopLevelLoader()
+    loader.loads(SAMPLE_2)
+    thing = loader.invoke("composite")
+    assert len(thing.baz) == 2
+    assert "two" in thing.baz
+
 
 SAMPLE_3 = f"""{HEADER}
 [instances]
@@ -73,48 +106,6 @@ bar = ["*inner", "*inner"]
 baz = ["#tag1", "#tag1"]
 """
 
-SAMPLE_4 = f"""{HEADER}
-[instances]
-[instances.inner]
-_class = "NamedObj"
-name = "inner"
-
-[templates]
-
-[templates.outer]
-_class = "Foo"
-bar = "@inner"
-baz = "@inner"
-
-"""
-
-
-class Foo:
-    def __init__(self, bar, baz):
-        self.bar = bar
-        self.baz = baz
-
-class NamedObj:
-    def __init__(self, name):
-        self.name = name
-
-TemplatizedObjectsLoader.loadable_classes += [Foo, NamedObj]
-
-
-def test_get_instance():
-    loader = TopLevelLoader()
-    loader.loads(SAMPLE_1)
-    thing = loader.get_instance("something")
-    assert thing.bar == "this is something"
-
-
-def test_list_append():
-    loader = TopLevelLoader()
-    loader.loads(SAMPLE_2)
-    thing = loader.invoke("composite")
-    assert len(thing.baz) == 2
-    assert "two" in thing.baz
-
 
 def test_sub_template():
     loader = TopLevelLoader()
@@ -131,6 +122,21 @@ def test_sub_template():
     # tags are always loaded from the registry, which preserves identity
     assert thing.baz[0] is thing.baz[1]
     assert thing.baz[0] is t("tag1")
+
+
+SAMPLE_4 = f"""{HEADER}
+[instances]
+[instances.inner]
+_class = "NamedObj"
+name = "inner"
+
+[templates]
+
+[templates.outer]
+_class = "Foo"
+bar = "@inner"
+baz = "@inner"
+"""
     
 
 def test_instance_ref():
@@ -141,3 +147,33 @@ def test_instance_ref():
     # instance refs return the object from the registry, identity is preserved
     assert thing.bar is thing.baz
 
+
+SAMPLE_5 = f"""{HEADER}
+[instances]
+[instances.tag1]
+_class = "Tag"
+name = "tag1"
+
+[instances.inner]
+_class = "NamedObj"
+name = "inner"
+
+[templates]
+
+[templates.outer]
+_class = "Foo"
+bar = {{"#tag1" = "@inner"}}
+baz = [["b", "@inner"], ["#tag1", "#tag1"]]
+"""
+
+
+def test_instance_ref_in_deeply_nested():
+    """ Test that instance refs are expanded even when deeply nested. """
+    loader = TopLevelLoader()
+    loader.loads(SAMPLE_5)
+    thing = loader.invoke("outer")
+    assert isinstance(thing.bar, dict)
+    assert thing.bar["tag1"].name == "inner"
+
+    key, val = thing.baz[0]
+    assert val.name == "inner"
