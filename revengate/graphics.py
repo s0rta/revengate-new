@@ -63,6 +63,8 @@ TILE_SIZE = 32
 WINDOW_SIZE = (1280, 720)
 WINDOW_SIZE_WIDE = (2164, 1080)
 
+DEF_ICON_OPACITY = 0.7
+ACTIVE_ICON_OPACITY = 1.0
 
 class ImgSourceCache:
     def __init__(self):
@@ -262,6 +264,50 @@ class MapWidget(FocusBehavior, ScatterPlane):
     def _print_help(self, *args):
         pprint(self.key_map)
         
+    def _has_no_grab(self, widget, event):
+        return event.grab_current is None
+        
+    def _no_drab_no_grab(self, widget, event):
+        return self.is_not_drag(widget, event) and self._has_no_grab(widget, event)
+        
+    def description_at(self, there):
+        map = tender.engine.map
+        lines = []
+        
+        actor = map.actor_at(there)
+        if actor:
+            lines.append(f"{actor} is here.".capitalize())
+        
+        items = map.items_at(there)
+        if items:
+            top = items.top()
+            if lines:
+                lines.append(f"There is also a {top.name}.")
+            else:
+                lines.append(f"There is a {top.name} here.")
+        
+        mood = map.mood_at(there)
+        if mood:
+            lines.append(f"You notice {mood}.")
+        return "\n".join(lines)
+        
+    @cancelable_selection
+    @syncify
+    @clear_selection_label
+    async def start_look(self, button):
+        button.opacity = ACTIVE_ICON_OPACITY
+        try:
+            self._update_selection_lbl(text="Looking...")
+            wid, event = await ak.event(self, "on_touch_up", 
+                                        filter=self._no_drab_no_grab)
+            there = self.canvas_to_map(event)
+            desc = self.description_at(there)
+            self.app.root.messages_lbl.text = desc
+            # TODO: make it decay
+        finally:
+            button.opacity = DEF_ICON_OPACITY
+            
+
     @cancelable_selection
     @syncify
     @async_turn_actions

@@ -17,6 +17,7 @@ ScreenManager:
     map_wid: map_wid
     resume_game_bt: resume_game_bt
     select_mode_lbl: select_mode_lbl
+    messages_lbl: messages_lbl
     
     MDScreen:
         name: 'mainscreen'
@@ -82,14 +83,20 @@ ScreenManager:
                     text: "Follow stairs"
                     on_release: map_wid.follow_stairs()
                     
-                MDRectangleFlatButton:
-                    text: "Quit"
-                    on_release: app.stop()
-
-                MDRectangleFlatButton:
-                    text: "test"
-                    on_release: tender.commands["ui-show-value"]("some value")
-                    
+                MDIconButton:
+                    icon: "eye-circle"
+                    opacity: 0.7
+                    on_release: map_wid.start_look(self)
+                                        
                 MDLabel:
                     id: select_mode_lbl
                     text: ""
+
+        AnchorLayout:
+            id: anchor_cont
+            padding: "16dp"
+            anchor_x: "left"
+            anchor_y: "bottom"
+            MDLabel:
+                id: messages_lbl
+

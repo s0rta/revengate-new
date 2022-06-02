@@ -137,7 +137,6 @@ class MapScope:
             yield coord, self.map[coord]
 
     
-
 class TileType(IntEnum):
     SOLID_ROCK = auto()
     FLOOR = auto()
