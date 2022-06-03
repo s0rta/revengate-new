@@ -180,9 +180,7 @@ class Governor:
             # after 5 levels, we can't go down anymore
             builder.staircase()
         else:
-            # TODO: it would be convenient to be able to pass name directly to invoke()
-            omandar = tender.loader.invoke("observer")
-            omandar.name = "Omandar"
+            omandar = tender.loader.invoke("observer", name="Omandar")
             omandar.next_dialogue = t("deepest_level")
             map.place(omandar)
 
@@ -302,9 +300,7 @@ class Governor:
         self.condenser.delete_game()
         tender.dungeon = Area()
 
-        # FIXME: we really should be able to pass the name to invoke()
-        tender.hero = tender.loader.invoke("novice")
-        tender.hero.name = hero_name
+        tender.hero = tender.loader.invoke("novice", name=hero_name)
         tender.engine = Engine()
 
         map = self.make_first_map()

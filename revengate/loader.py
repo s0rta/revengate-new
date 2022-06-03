@@ -147,14 +147,19 @@ class TopLevelLoader:
         loader = self.sub_loaders[content_type]
         return loader.decode(root_record)
 
-    def invoke(self, template):
+    def invoke(self, template_name, **kwargs):
+        """ Create a fresh instance based on `template_name`. 
+        
+        Values in kwargs overwrite the ones specified in the template. 
+        """
         for loader in self.sub_loaders.values():
-            obj = loader.invoke(template)
+            obj = loader.invoke(template_name, **kwargs)
             if obj:
                 return obj
-        raise ValueError(f"Could not find a sub-loader to handle {template}.")
+        raise ValueError(f"Could not find a sub-loader to handle {template_name}.")
         
     def get_instance(self, name):
+        """ Return the existing object instance registered as `name`. """
         for loader in self.sub_loaders.values():
             obj = loader.get_instance(name)
             if obj:
@@ -176,10 +181,20 @@ class SubLoader:
     def decode(self, record):
         raise NotImplementedError()
 
-    def invoke(self, template):
+    def invoke(self, template_name, **kwargs):
+        """ Create a fresh instance based on `template_name`. 
+        
+        Values in kwargs overwrite the ones specified in the template. 
+        
+        sub-classes should return None if they can't handle the request.
+        """
         raise NotImplementedError()
         
     def get_instance(self, name):
+        """ Return the existing object instance registered as `name`. 
+
+        sub-classes should return None if they can't handle the request.
+        """
         raise NotImplementedError()
 
 
@@ -224,7 +239,7 @@ class FileMapLoader(SubLoader):
                 objs.append(self.top_loader.load(fp))
         return objs
 
-    def invoke(self, template):
+    def invoke(self, template_name, **kwargs):
         return None
         
     def get_instance(self, name):
@@ -371,12 +386,12 @@ class DialogueLoader(SubLoader):
         self.dialogues.update(dias)
         return dias
         
-    def invoke(self, template):
+    def invoke(self, template_name, **kwargs):
         # We can't easily take advantage of the full power of TemplatizedObjects without 
         # deriving from their loader and making the Dialogue DSL compatible with it, so 
         # we return a fresh clone of the pristine instance of Dialogue instead.
-        if template in self.dialogues:
-            return self.dialogues[template].clone()
+        if template_name in self.dialogues:
+            return self.dialogues[template_name].clone()
         return None
         
     def get_instance(self, name):
@@ -607,7 +622,7 @@ class TemplatizedObjectsLoader(SubLoader):
         raise ValueError(f"Subtracting ${val} from base value ${parent_val} is"
                          " unsupported.")
 
-    def invoke(self, template):
+    def invoke(self, template, **kwargs):
         """ Instantiate an object based on a template.  
         
         The template can be a name or a Template instance. 
@@ -620,8 +635,8 @@ class TemplatizedObjectsLoader(SubLoader):
         # resolution is two steps: 
         # 1) find all the parents
         # 2) populate all the fields starting at the oldest ancestor
-        oname = template.name # the original name before we resolve inheritance
-        seen = set() # to prevent infinite loops
+        oname = template.name  # the original name before we resolve inheritance
+        seen = set()  # to prevent infinite loops
         stack = []
         while template is not None:
             if template.name in seen:
@@ -660,6 +675,7 @@ class TemplatizedObjectsLoader(SubLoader):
                                          f"Can't apply {prefix!r} transform.")
             # batch apply the other fields
             fields.update(tfields)
+        fields.update(kwargs)  # the invoke() kwargs override everything
         return self._instantiate(fields.pop("_class"), fields, oname)
 
     def get_instance(self, name):

@@ -172,3 +172,11 @@ def test_instance_ref_in_deeply_nested():
 
     key, val = thing.baz[0]
     assert val.name == "inner"
+
+
+def test_invoke_kwargs():
+    """ Test that instance refs are expanded even when deeply nested. """
+    loader = TopLevelLoader()
+    loader.loads(SAMPLE_5)
+    thing = loader.invoke("outer", baz="something else")
+    assert thing.baz == "something else"
