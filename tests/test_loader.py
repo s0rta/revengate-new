@@ -88,12 +88,10 @@ SAMPLE_3 = f"""{HEADER}
 [instances]
 [instances.tag1]
 _class = "Tag"
-name = "tag1"
 
 [templates]
 [templates.inner]
 _class = "NamedObj"
-name = "inner"
 
 [templates.outer1]
 _class = "Foo"
@@ -128,7 +126,6 @@ SAMPLE_4 = f"""{HEADER}
 [instances]
 [instances.inner]
 _class = "NamedObj"
-name = "inner"
 
 [templates]
 
@@ -152,11 +149,9 @@ SAMPLE_5 = f"""{HEADER}
 [instances]
 [instances.tag1]
 _class = "Tag"
-name = "tag1"
 
 [instances.inner]
 _class = "NamedObj"
-name = "inner"
 
 [templates]
 

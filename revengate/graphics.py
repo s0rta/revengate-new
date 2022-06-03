@@ -307,7 +307,6 @@ class MapWidget(FocusBehavior, ScatterPlane):
         finally:
             button.opacity = DEF_ICON_OPACITY
             
-
     @cancelable_selection
     @syncify
     @async_turn_actions

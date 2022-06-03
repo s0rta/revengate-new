@@ -18,7 +18,7 @@ weight = 1
 
 [templates.old_map]
 _class = "Item"
-name = "old_map"
+name = "old map"
 weight = 1
 char = "🗺️"
 
@@ -44,7 +44,6 @@ weight = 7
 
 [templates.sword]
 _parent = "blade"
-name = "sword"
 weight = 7
 "!damage" = [5, 8]
 

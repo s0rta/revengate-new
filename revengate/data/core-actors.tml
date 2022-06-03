@@ -20,15 +20,12 @@ name = "lumiere"
 
 [instances.beasts]
 _class = "FactionTag"
-name = "beasts"
 
 [instances.inunus]
 _class = "FactionTag"
-name = "inunus"
 
 [instances.neutrals]
 _class = "FactionTag"
-name = "neutrals"
 
 [instances.core_sentiments]
 _class = "SentimentChart"
@@ -55,7 +52,7 @@ _class = "Fleeing"
 # Inunus
 [templates.slime_slam]
 _class = "Injurious"
-name = "slam"
+verb = "slammed"
 damage = 1
 family = "#impact"
 
@@ -74,7 +71,7 @@ char = "P"
 # Beasts
 [templates.bite]
 _class = "Injurious"
-name = "bite"
+verb = "bit"
 damage = 5
 family = "#pierce"
 

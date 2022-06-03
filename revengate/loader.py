@@ -403,7 +403,7 @@ class TemplatizedObjectsLoader(SubLoader):
 
     field names can be prefixed by the following for special action:
     '+': add value to the value of the parent template (appends with lists)
-    '-': subtrack value to the value of the parent (not implemented for lists)
+    '-': subtract value to the value of the parent (not implemented for lists)
     '!': random value, pass the max int or a [min, max] list for a range
 
     values can be prefixed by the following for special actions:
@@ -488,11 +488,13 @@ class TemplatizedObjectsLoader(SubLoader):
                     for k, v in field.items()}
         return self._expand_one(field)
 
-    def _instantiate(self, cls_name, fields, template_name=None):
+    def _instantiate(self, cls_name, fields, record_name=None):
         """ Create an instance of cls_name with all the fields specified.
         
-        As many fields as possible are passed to the constructor, the other 
-        ones are set as attributes after creation. 
+        Fields with names that match argument names in the constructor signature are 
+        passed at creation time, the other ones are set as attributes after creation.
+        
+        `record_name`: uses as `name` unless `name` is explicitly specified.
         """
         cls = self._class_map[cls_name]
         # apply fields references
@@ -508,10 +510,10 @@ class TemplatizedObjectsLoader(SubLoader):
             if arg in fields:
                 init_args[arg] = fields.pop(arg)
                 
-        # 'name' is a special case: it's often the same at the Template name
+        # 'name' is a special case: it's often the same as the Template name
         if "name" in params and "name" not in init_args:
-            if template_name:
-                init_args["name"] = template_name
+            if record_name:
+                init_args["name"] = record_name
         
         obj = cls(**init_args)
         # set the other fields after creation
@@ -535,7 +537,7 @@ class TemplatizedObjectsLoader(SubLoader):
             msg = f"Parent specified in an instance record name: {rec}"
             raise ValueError(msg)
     
-        obj = self._instantiate(rec.pop("_class"), rec)
+        obj = self._instantiate(rec.pop("_class"), rec, record_name=name)
         self._instances[name] = obj
         return obj
 
