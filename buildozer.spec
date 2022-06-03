@@ -33,7 +33,7 @@ version.filename = %(source.dir)s/revengate/__init__.py
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd,tomlkit,pillow
+requirements = python3,kivy,kivymd,tomlkit,pillow,asynckivy,asyncgui
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
