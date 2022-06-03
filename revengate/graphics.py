@@ -299,7 +299,8 @@ class MapWidget(FocusBehavior, ScatterPlane):
         try:
             self._update_selection_lbl(text="Looking...")
             wid, event = await ak.event(self, "on_touch_up", 
-                                        filter=self._no_drab_no_grab)
+                                        filter=self._no_drab_no_grab, 
+                                        stop_dispatching=True)
             there = self.canvas_to_map(event)
             desc = self.description_at(there)
             self.app.root.messages_lbl.text = desc
@@ -486,7 +487,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
     def on_touch_up(self, event):
         if not tender.hero or tender.hero.is_dead:
             return False
-        if not self.is_drag(self, event):
+        if not event.grab_state and not self.is_drag(self, event):
             res = None
             cpos = self.to_local(*event.pos)
             mpos = self.canvas_to_map(cpos)
