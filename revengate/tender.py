@@ -34,4 +34,4 @@ commands = None
 hero: Actor = None
 sentiments: SentimentChart = None
 dungeon = None
-
+messages = None

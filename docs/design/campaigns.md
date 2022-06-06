@@ -118,6 +118,7 @@ People:
 Story elements:
 - La Compagnie des Lumières is pro-royalist (subtle)
 - Beaudelaire is very partial to fine silks
+- Beaudelaire prefers wine to any other intoxicant
 - Pacherrs follow the direction of their matriarch without a second thought
 
 Charles Beaudelaire recently arrived in Lyon. His visit is more the result of him fleeing his creditors in Paris rather than sight seeing. The 32 year-old has yet to make a name for himself with poetry, but his beautiful prose as an art critic is widely recognized. La Compagnie seeks to restore the writer's standing and get him back to his former routine.

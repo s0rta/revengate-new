@@ -45,6 +45,12 @@ class Mood:
     def __str__(self):
         return self.desc
 
+    def __eq__(self, other):
+        return self.desc == other.desc
+
+    def __hash__(self):
+        return hash(self.desc)
+
     def materialize(self):
         """ Convert the mood into something more concrete that can be placed on the map. 
         

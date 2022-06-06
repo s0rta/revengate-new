@@ -289,7 +289,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
         mood = map.mood_at(there)
         if mood:
             lines.append(f"You notice {mood}.")
-        return "\n".join(lines)
+        return "\n".join(lines), mood
         
     @cancelable_selection
     @syncify
@@ -302,7 +302,8 @@ class MapWidget(FocusBehavior, ScatterPlane):
                                         filter=self._no_drab_no_grab, 
                                         stop_dispatching=True)
             there = self.canvas_to_map(event)
-            desc = self.description_at(there)
+            desc, mood = self.description_at(there)
+            tender.messages.append(desc, mood=mood)
             self.app.root.messages_lbl.text = desc
             # TODO: make it decay
         finally:

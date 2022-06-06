@@ -33,6 +33,7 @@ from .area import Area
 from .events import is_action, StairsEvent, Events
 from .factions import Mood, Faction
 from .tags import t, ConvoTopic
+from .messages import MessageStore
 
 from .graphics import RevengateApp
 
@@ -44,7 +45,7 @@ CONFIG_ROOT = os.environ.get("XDG_CONFIG_HOME", "~/.config")
 CONFIG_DIR = os.path.join(CONFIG_ROOT, "revengate")
 
 # all the file keys you need to get a complete saved game
-SAVED_GAME_KEYS = ["hero", "engine", "mapid", "dungeon"]
+SAVED_GAME_KEYS = ["hero", "engine", "mapid", "dungeon", "messages"]
 
 
 class Condenser:
@@ -83,12 +84,6 @@ class Condenser:
         if os.path.isfile(fpath):
             os.unlink(fpath)
 
-    def random_builder(self):
-        maps_pat = os.path.join(DATA_DIR, "maps", "map-*.pickle")
-        map_files = glob.glob(maps_pat)
-        fname = rng.choice(map_files)
-        return pickle.load(open(fname, "rb"))
-
     def has_file(self, key):
         fpath = self.file_path(key)
         return os.path.isfile(fpath)
@@ -110,7 +105,9 @@ class GameMgmtCommands(CommandMap):
 
     def is_tender_ready(self):
         """ Return whether all parts of the tender have been initialized. """
-        for part in ["loader", "engine", "ui", "action_map", "hero", "dungeon"]:
+        parts = set(SAVED_GAME_KEYS) - {"mapid"} 
+        parts |= {"ui", "loader", "commands"}
+        for part in parts:
             if getattr(tender, part) is None:
                 return False
         return True
@@ -121,12 +118,14 @@ class GameMgmtCommands(CommandMap):
         self.condenser.save("hero", tender.hero)
         self.condenser.save("mapid", tender.engine.map.id)
         self.condenser.save("dungeon", tender.dungeon)
+        self.condenser.save("messages", tender.messages)
         
     def restore_game(self):
         """ Load a saved game from disk. """
         tender.hero = self.condenser.load("hero")
         tender.engine = self.condenser.load("engine")
         tender.dungeon = self.condenser.load("dungeon")
+        tender.messages = self.condenser.load("messages")
         mapid = self.condenser.load("mapid")
         
         if mapid is not None and tender.engine is not None:
@@ -138,6 +137,7 @@ class GameMgmtCommands(CommandMap):
         tender.dungeon = None
         tender.hero = None
         tender.engine = None
+        tender.messages = None
 
 
 class Governor:
@@ -302,6 +302,7 @@ class Governor:
 
         tender.hero = tender.loader.invoke("novice", name=hero_name)
         tender.engine = Engine()
+        tender.messages = MessageStore()
 
         map = self.make_first_map()
         tender.dungeon.add_map(map, parent=None)
