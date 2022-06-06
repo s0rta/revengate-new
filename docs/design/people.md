@@ -65,6 +65,7 @@ Historical Bessemer:
 - https://media.sciencephoto.com/image/h4020114/800wm/H4020114-Portrait_of_metallurgist,_Sir_Henry_Bessemer.jpg
 - https://media.gettyimages.com/photos/threequarter-length-portrait-of-sir-henry-bessemer-inventor-of-a-picture-id526917692
 
+
 ## Ambrose Hamillois
 Ambrose Hamillois is a potion maker with a workshop in Lyon. The very first impression of him might be of a very dishevelled Victorian Santa Claus. He is in his mid-60s with a large grey beard and long hairs that run in all directions. He is typically seen in a three piece suit of dark colours that is of great need for a pressing. A small bow tie and a propped up collar at his neck and a well worn top hat complete his signature look.
 
@@ -73,3 +74,13 @@ The store front where he does business looks line a small cramped and overfilled
 Hamillois harvests some of the herbs and spices that go into the potions himself, mostly from the countryside near Lyon. Most of his supplies however come from a solid network of trusted merchants and smugglers. 
 
 Hamillois is not completely anti-science, but he is distrusting of physics and engineering. He is however completely up to date on all the recent development and discoveries in the field of botany. He is slightly partial to royalists.
+
+
+## Charles Beaudelaire
+Charles Beaudelaire is a writer from Paris. At the time of our adventure he is 32 years old and he is not doing poetry full time yet. He writes an art review column for a living and occasionally some anti-royalist articles in his spare time.
+
+Beaudelaire is a self-described "dandy" who likes to dress in fancy cloths. Most commonly, he is seen dressed in a three piece suit with his signature pointy-end bow tie made of fine silk. He likes a high-collar great coat to fight the cold weather. He can't grow much of a mustache and therefore goes for the clean shaven look. At 32, his hairline has already started receding. He keeps his blond hair cut short. His eyes are blue.
+
+From previous trips to India and Morocco, Beaudelaire has kept some connections and does small time private imports of exotic goods. Notably, he is a member of the hashish society and has sponsored a few drug runs.
+
+He is a very occasional hashish user, preferring wine on most days and shunning absinthe as well as most hard liquors. He loves to hang out in cafés, drink a lot, and then let the alcohol infused inspiration move his poetry projects forward. 
