@@ -28,6 +28,7 @@ Additionnal coding:
 - Steve Smith
 - Josephine Maya Simple
 - Victor Hunt
+- Chris J. Wallace
 
 2D tiles: CC0, released by the Craw Stone Soup team
 https://opengameart.org/content/dungeon-crawl-32x32-tiles

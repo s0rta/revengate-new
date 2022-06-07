@@ -230,6 +230,11 @@ class MapWidget(FocusBehavior, ScatterPlane):
         return dict(items)
         
     def _init_key_map(self, *args):
+        # TODO: MacOS key codes: 
+        # Up: 1073741906
+        # Down: 1073741905
+        # Left: 1073741904
+        # Right: 1073741903
         key_map = {("f2", "?"): self._print_help,
                    ("right", "l"): "move-or-act-right", 
                    ("left", "h"): "move-or-act-left", 
@@ -242,7 +247,6 @@ class MapWidget(FocusBehavior, ScatterPlane):
         if self.app.cheats:
             cheats = {"t": self._start_teleport, 
                       "6": self._start_insta_kill, 
-                      ":": self._start_look,
                       "f5": self._start_debug_inspect}
             key_map.update(cheats)
         self.key_map = self._expand_multi_keys(key_map)
@@ -308,7 +312,31 @@ class MapWidget(FocusBehavior, ScatterPlane):
             # TODO: make it decay
         finally:
             button.opacity = DEF_ICON_OPACITY
-            
+    
+    @cancelable_selection
+    @syncify
+    @clear_selection_label
+    async def start_stats(self, button):
+        self._update_selection_lbl(text="select monster...")
+        wid, event = await ak.event(self, "on_touch_up", 
+                                    filter=self._no_drab_no_grab, 
+                                    stop_dispatching=True)
+        map = tender.engine.map
+        there = self.canvas_to_map(event)
+        them = map.actor_at(there)
+        
+        # fill the stats page
+        screen = self.app.root.ids.statsscreen
+
+        screen.stats_img.source = them.bestiary_img or EMPTY_IMG
+        screen.stats_name_lbl.text = f"Name: {them}"
+        screen.stats_str_lbl.text = f"Strength: {them.strength}"
+        screen.stats_ag_lbl.text = f"Agility: {them.agility}"
+        screen.stats_desc_lbl.text = them.desc
+
+        # show the stats page
+        self.app.root.current = "statsscreen"
+        
     @cancelable_selection
     @syncify
     @async_turn_actions
@@ -325,17 +353,8 @@ class MapWidget(FocusBehavior, ScatterPlane):
     def _start_insta_kill(self):
         self._next_selection_action = self._insta_kill_at
 
-    def _start_look(self):
-        self._next_selection_action = self._look_at
-
     def _start_debug_inspect(self):
         self._next_selection_action = self._debug_at
-
-    def _look_at(self, there):
-        actor = tender.engine.map.actor_at(there)
-        if actor:
-            # TODO: put on the screen
-            print(actor.status_str())
         
     def _debug_at(self, there):
         actor = tender.engine.map.actor_at(there)
@@ -751,6 +770,11 @@ class RevengateApp(MDApp):
     def focus_map(self):
         if self.map_wid.is_focusable:
             self.map_wid.focus = True    
+
+    def show_stats_screen(self, button=None):
+        self.root.transition.center_on_button(button)
+        
+        self.root.current = "statsscreen"
 
     def show_map_screen(self, button=None):
         self.root.transition.center_on_button(button)

@@ -66,6 +66,10 @@ class Actor(object):
         self.role = None
         self.rank = None
         self.name = None
+        
+        # lore and bestiary entry
+        self.bestiary_img = None
+        self.desc = ""
 
         # dialogues and conversations
         self.next_dialogue = None

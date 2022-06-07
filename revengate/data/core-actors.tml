@@ -98,6 +98,17 @@ strength = 35
 agility = 55
 char = "d"
 
+[templates.centipede]
+_parent = "animal"
+species = "desert centipede"
+health = 20
+strength = 25
+agility = 50
+char = "c"
+bestiary_img = "bestiary/desert-centipede.jpg"
+desc="""The Tripolitan Desert Centipede is not the kind of bug that you can hope to crush under your boot. These distant cousins of the more common house centipede measure 1m on average and feature a very thick armored exoskeleton. 
+
+The creature often hides by burrowing under loose sand, which also protects it from the scorching heat of the desert sun. Desert centipedes are very good as sensing vibrations and they know when a prey is approaching even when burrowed."""
 
 # humans
 [templates.observer]

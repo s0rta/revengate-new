@@ -200,8 +200,11 @@ class Governor:
         
         obs = tender.loader.invoke("observer")
         obs.next_dialogue = t("first_level")
-        
         map.place(obs)
+
+        cent = tender.loader.invoke("centipede")
+        map.place(cent)
+        
         tender.engine.change_map(map)
         if tender.hero:
             map.place(tender.hero)
