@@ -38,6 +38,7 @@ from kivy import resources
 from kivy.animation import Animation
 from kivy.uix.screenmanager import ScreenManager, ShaderTransition
 from kivy.input.motionevent import MotionEvent
+from kivymd.uix.label import MDLabel
 import asynckivy as ak
 
 from .maps import TileType, Connector
@@ -308,8 +309,15 @@ class MapWidget(FocusBehavior, ScatterPlane):
             there = self.canvas_to_map(event)
             desc, mood = self.description_at(there)
             tender.messages.append(desc, mood=mood)
-            self.app.root.messages_lbl.text = desc
-            # TODO: make it decay
+            
+            cont = self.app.root.messages_lbl_cont
+            label = MDLabel(text=desc)
+            cont.add_widget(label)
+            
+            # make it decay
+            await ak.sleep(5)
+            await ak.animate(label, opacity=0, d=1)
+            cont.remove_widget(label)
         finally:
             button.opacity = DEF_ICON_OPACITY
     
@@ -321,12 +329,14 @@ class MapWidget(FocusBehavior, ScatterPlane):
         wid, event = await ak.event(self, "on_touch_up", 
                                     filter=self._no_drab_no_grab, 
                                     stop_dispatching=True)
+        # TODO: center the ripple effect on the monster, not on the stats button
+        # self.app.center_on_button(event.pos)
         map = tender.engine.map
         there = self.canvas_to_map(event)
         them = map.actor_at(there)
         
         # fill the stats page
-        screen = self.app.root.ids.statsscreen
+        screen = self.app.root.ids.stats_screen
 
         screen.stats_img.source = them.bestiary_img or EMPTY_IMG
         screen.stats_name_lbl.text = f"Name: {them}"
@@ -335,7 +345,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
         screen.stats_desc_lbl.text = them.desc
 
         # show the stats page
-        self.app.root.current = "statsscreen"
+        self.app.root.current = "stats_screen"
         
     @cancelable_selection
     @syncify
@@ -756,7 +766,7 @@ class RevengateApp(MDApp):
         if values is not None and "hero_name" in values:
             tender.commands["new-game-response"](values["hero_name"])
             self.map_wid.set_map(tender.engine.map)
-            self.root.current = "mapscreen"
+            self.root.current = "map_screen"
             
             dialogue = tender.loader.invoke(t("intro"))
             self.show_narration(dialogue)
@@ -774,7 +784,7 @@ class RevengateApp(MDApp):
     def show_stats_screen(self, button=None):
         self.root.transition.center_on_button(button)
         
-        self.root.current = "statsscreen"
+        self.root.current = "stats_screen"
 
     def show_map_screen(self, button=None):
         self.root.transition.center_on_button(button)
@@ -782,7 +792,7 @@ class RevengateApp(MDApp):
         if not tender.hero or tender.hero.is_dead or not tender.engine.map:
             tender.commands["restore-game"]()
         self.map_wid.set_map(tender.engine.map)
-        self.root.current = "mapscreen"
+        self.root.current = "map_screen"
 
     def show_main_screen(self, button=None):
         self.root.transition.center_on_button(button)
@@ -791,7 +801,7 @@ class RevengateApp(MDApp):
             tender.commands["save-game"]()
         self.root.resume_game_bt.disabled = not tender.commands["has-saved-game"]()
 
-        self.root.current = "mainscreen"
+        self.root.current = "main_screen"
     
     def display_status_events(self, events):
         for event in iter_events(events):

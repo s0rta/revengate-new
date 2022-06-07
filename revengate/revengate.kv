@@ -1,5 +1,6 @@
 #:kivy 2.0.0
 #:include revengate/forms.kv
+#:include revengate/stats_screen.kv
 #:import tender revengate.tender
 
 <MapWidget>
@@ -17,11 +18,11 @@ ScreenManager:
     map_wid: map_wid
     resume_game_bt: resume_game_bt
     select_mode_lbl: select_mode_lbl
-    messages_lbl: messages_lbl
-    statsscreen: statsscreen
+    messages_lbl_cont: messages_lbl_cont
+    stats_screen: stats_screen
     
     MDScreen:
-        name: 'mainscreen'
+        name: 'main_screen'
         
         MDBoxLayout:
             spacing: "32dp"
@@ -49,7 +50,7 @@ ScreenManager:
                 on_release: app.show_map_screen(*args)
 
     Screen:
-        name: 'mapscreen'
+        name: 'map_screen'
         on_enter: app.focus_map()
         
         FloatLayout:
@@ -91,7 +92,7 @@ ScreenManager:
 
                 MDRectangleFlatButton:
                     text: "Stats"
-                    on_release: map_wid.start_stats()
+                    on_release: map_wid.start_stats(self)
 
                 MDLabel:
                     id: select_mode_lbl
@@ -102,59 +103,11 @@ ScreenManager:
             padding: "16dp"
             anchor_x: "left"
             anchor_y: "bottom"
-            MDLabel:
-                id: messages_lbl
-
-    Screen:
-        name: 'statsscreen'
-        id: statsscreen
-        stats_img: stats_img
-        stats_name_lbl: stats_name_lbl
-        stats_str_lbl: stats_str_lbl
-        stats_ag_lbl: stats_ag_lbl
-        stats_desc_lbl: stats_desc_lbl
-        
-        MDBoxLayout:
-            orientation: "horizontal"
-            padding: "16dp"
-
-            FitImage:
-                pos_hint: {"top": 1}
-                id: stats_img
-                
+            
             MDBoxLayout:
+                id: messages_lbl_cont
                 orientation: "vertical"
-                padding: "16dp"
-                
-                MDLabel:
-                    id: stats_name_lbl
-                    text: "name: ..."
-                    size_hint_y: 0.4
-                    valign: "top"
-                    text_size: self.size
 
-                MDLabel:
-                    id: stats_str_lbl
-                    text: "str: ..."
-                    size_hint_y: 0.4
-                    valign: "top"
-                    text_size: self.size
-                
-                MDLabel:
-                    id: stats_ag_lbl
-                    text: "agility: ..."
-                    size_hint_y: 0.4
-                    valign: "top"
-                    text_size: self.size
-
-                MDLabel:
-                    id: stats_desc_lbl
-                    text: "description: ..."
-                    size_hint_y: 1
-                    valign: "top"
-                    text_size: self.size
-
-                MDRectangleFlatButton:
-                    pos_hint: {'right': 1}
-                    text: "Back"
-                    on_release: app.show_map_screen(self)
+    StatsScreen
+        name: 'stats_screen'
+        id: stats_screen

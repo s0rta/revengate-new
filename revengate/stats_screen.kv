@@ -1,0 +1,51 @@
+<StatsScreen@Screen>:
+    stats_img: stats_img
+    stats_name_lbl: stats_name_lbl
+    stats_str_lbl: stats_str_lbl
+    stats_ag_lbl: stats_ag_lbl
+    stats_desc_lbl: stats_desc_lbl
+    
+    MDBoxLayout:
+        orientation: "horizontal"
+        padding: "16dp"
+
+        FitImage:
+            pos_hint: {"top": 1}
+            id: stats_img
+            
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: "16dp"
+            
+            MDLabel:
+                id: stats_name_lbl
+                text: "name: ..."
+                size_hint_y: 0.4
+                valign: "top"
+                text_size: self.size
+
+            MDLabel:
+                id: stats_str_lbl
+                text: "str: ..."
+                size_hint_y: 0.4
+                valign: "top"
+                text_size: self.size
+            
+            MDLabel:
+                id: stats_ag_lbl
+                text: "agility: ..."
+                size_hint_y: 0.4
+                valign: "top"
+                text_size: self.size
+
+            MDLabel:
+                id: stats_desc_lbl
+                text: "description: ..."
+                size_hint_y: 1
+                valign: "top"
+                text_size: self.size
+
+            MDRectangleFlatButton:
+                pos_hint: {'right': 1}
+                text: "Back"
+                on_release: app.show_map_screen(self)
