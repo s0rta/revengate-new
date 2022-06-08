@@ -124,7 +124,7 @@ class Actor(object):
                                "performing turn updates.")
         events = Events()
         for t in range(self._last_update or 0, tender.engine.current_turn + 1):
-            events.add(self._update_one(t))
+            events += self._update_one(t)
         if self.health <= 0:
             events.add(self.die())
         return events
@@ -142,7 +142,7 @@ class Actor(object):
                 events.add(HealthEvent(self, cond.h_delta))
         self.conditions = [c for c in self.conditions if c.stop > turn]
         self._last_update = turn
-        return events or None
+        return events
 
     def __str__(self):
         if self.name:

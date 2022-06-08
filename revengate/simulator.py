@@ -111,7 +111,7 @@ def last_actor_standing(a, b, debug=False):
         if debug:
             print(turn_updates or "no turn updates")
 
-    name = None
+    winner = None
     duration = engine.current_turn - start
     for name in actors:
         if actors[name].is_alive:
@@ -120,10 +120,6 @@ def last_actor_standing(a, b, debug=False):
         print("Battle is over!")
         print(f"{winner} won in {duration} turns!")
     return winner, duration
-
-
-def wolf_pack_skirmish(engine):
-    return last_faction_standing(engine, ["mage", "wolf", "wolf", "wolf"])
 
 
 def run_many(combat_funct, nbtimes=100):
@@ -201,6 +197,8 @@ def main():
                               "of actor."))
     parser.add_argument("-m", "--map", action="store_true", 
                         help="Run the map simulation instead of the combat one.")
+    parser.add_argument("-d", "--debug", action="store_true", 
+                        help="Display debugging messages.")
     
     args = parser.parse_args()
 
@@ -214,7 +212,7 @@ def main():
     else:
         def sim(engine):
             tender.engine = Engine()
-            return last_actor_standing(*args.actors)
+            return last_actor_standing(*args.actors, debug=args.debug)
         run_many(sim)
 
 
