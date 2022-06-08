@@ -231,16 +231,11 @@ class MapWidget(FocusBehavior, ScatterPlane):
         return dict(items)
         
     def _init_key_map(self, *args):
-        # TODO: MacOS key codes: 
-        # Up: 1073741906
-        # Down: 1073741905
-        # Left: 1073741904
-        # Right: 1073741903
         key_map = {("f2", "?"): self._print_help,
-                   ("right", "l"): "move-or-act-right", 
-                   ("left", "h"): "move-or-act-left", 
-                   ("up", "k"): "move-or-act-up", 
-                   ("down", "j"): "move-or-act-down", 
+                   ("right", "l", 1073741903): "move-or-act-right", 
+                   ("left", "h", 1073741904): "move-or-act-left", 
+                   ("up", "k", 1073741906): "move-or-act-up", 
+                   ("down", "j", 1073741905): "move-or-act-down", 
                    "f": self.follow_stairs,
                    "p": "pickup-item", 
                    "escape": self._cancel_selection_tasks} 
@@ -561,15 +556,15 @@ class MapWidget(FocusBehavior, ScatterPlane):
     def keyboard_on_key_down(self, window, key, text, modifiers):
         # handle things like arrow keys
         kcode, kname = key
-        if self._try_key_command(kname):
-            self._processed_keys.add(kname)
+        if self._try_key_command(kname or kcode):
+            self._processed_keys.add(kname or kcode)
             return True
         else:
             return super().keyboard_on_key_down(window, key, text, modifiers)
 
     def keyboard_on_key_up(self, window, key):
         kcode, kname = key
-        self._processed_keys.discard(kname)
+        self._processed_keys.discard(kname or kcode)
 
     def center_on_hero(self, anim=False):
         """ Move the tiles to have the hero at the center of the screen. """
@@ -846,8 +841,6 @@ class RevengateApp(MDApp):
         return self.root
 
     def on_start(self):
-        if not is_mobile():
+        if platform == "linux":
             self.root_window.size = WINDOW_SIZE
         return super().on_start()
-
-
