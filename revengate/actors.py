@@ -163,6 +163,7 @@ class Actor(object):
         return f"the {order}"
     
     def status_str(self):
+        # TODO: use perception
         if self.health > self.initial_health * .5:
             health = "healthy"
         elif self.health > self.initial_health * .1:

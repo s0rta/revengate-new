@@ -11,6 +11,20 @@
 <MainScreenButton@MDRectangleFlatButton>:
     pos_hint: {"center_x": 0.5}
 
+<HeroStatusBox>:
+    orientation: "horizontal"
+    name_lbl: name_lbl
+    health_lbl: health_lbl
+    
+    MDLabel:
+        id: name_lbl
+        adaptive_width: True
+        text: "name goes here"
+
+    MDLabel:
+        id: health_lbl
+        adaptive_width: True
+        text: "HP: no as good as we'd like"
 
 ScreenManager:
     app: app
@@ -20,6 +34,7 @@ ScreenManager:
     select_mode_lbl: select_mode_lbl
     messages_lbl_cont: messages_lbl_cont
     stats_screen: stats_screen
+    hero_status: hero_status
     
     MDScreen:
         name: 'main_screen'
@@ -98,6 +113,9 @@ ScreenManager:
                     id: select_mode_lbl
                     text: ""
 
+                HeroStatusBox:
+                    id: hero_status
+                    
         AnchorLayout:
             id: anchor_cont
             padding: "16dp"

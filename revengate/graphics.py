@@ -30,7 +30,7 @@ from kivy.vector import Vector
 from kivy.uix.label import Label
 from kivy.properties import (NumericProperty, StringProperty, ObjectProperty,            
                              BooleanProperty)
-from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.scatter import ScatterPlane
 from kivy.graphics import Rectangle
 from kivy.uix.behaviors.focus import FocusBehavior
@@ -684,6 +684,13 @@ class RevScreenManager(ScreenManager):
     map_wid = ObjectProperty(None)
 
 
+class HeroStatusBox(BoxLayout):
+    def update_status(self):
+        if not tender.hero:
+            return
+        self.ids.name_lbl.text = str(tender.hero)
+        self.ids.health_lbl.text = tender.hero.status_str()
+
 class RipplesTransition(ShaderTransition):
     TRANSITION_FS = '''$HEADER$
     uniform float t;
@@ -817,6 +824,7 @@ class RevengateApp(MDApp):
         if not tender.hero or tender.hero.is_dead or not tender.engine.map:
             tender.commands["restore-game"]()
         self.map_wid.set_map(tender.engine.map)
+        self.root.hero_status.update_status()
         self.root.current = "map_screen"
 
     def show_main_screen(self, button=None):
@@ -829,6 +837,8 @@ class RevengateApp(MDApp):
         self.root.current = "main_screen"
     
     def display_status_events(self, events):
+        self.root.hero_status.update_status()
+        
         for event in iter_events(events):
             if isinstance(event, Injury):
                 ak.start(self.map_wid.animate_health_event(event))
