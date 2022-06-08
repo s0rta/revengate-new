@@ -331,13 +331,15 @@ class MapWidget(FocusBehavior, ScatterPlane):
         there = self.canvas_to_map(event)
         them = map.actor_at(there)
         
+        stats = tender.hero.perceived_stats(them)
+        
         # fill the stats page
         screen = self.app.root.ids.stats_screen
 
         screen.stats_img.source = them.bestiary_img or EMPTY_IMG
-        screen.stats_name_lbl.text = f"Name: {them}"
-        screen.stats_str_lbl.text = f"Strength: {them.strength}"
-        screen.stats_ag_lbl.text = f"Agility: {them.agility}"
+        screen.stats_name_lbl.text = f"Name: {stats['name']}"
+        screen.stats_str_lbl.text = f"Strength: {stats['strength']}"
+        screen.stats_ag_lbl.text = f"Agility: {stats['agility']}"
         screen.stats_desc_lbl.text = them.desc
 
         # show the stats page

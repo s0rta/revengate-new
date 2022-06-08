@@ -46,7 +46,7 @@ class Actor(object):
     inventory = ItemsSlot()
     char = "X"  # How to render this actor on the text map
 
-    def __init__(self, health, armor, strength, agility):
+    def __init__(self, health, armor, strength, agility, perception=50):
         super().__init__()
         self.health = health
         self.initial_health = health
@@ -57,6 +57,7 @@ class Actor(object):
         # main attributes
         self.strength = strength
         self.agility = agility
+        self.perception = perception
 
         self.resistances = TagBag('Family')
         self.weapon = None
@@ -174,6 +175,54 @@ class Actor(object):
         import pprint
         pprint.pprint(self.__dict__)
         breakpoint()
+
+    def _vague_desc(self, value, percent):
+        """ Return a vague descrption `value` as a percentage (in 0..1) of it's possible 
+        range.
+        
+        The descrption is gets better as self.perception improves. """
+        if self.perception >= 85:  # there is no guess when you are that perceptive
+            return str(value)
+        elif 60 <= self.perception < 85:
+            bounds = [(.8, "excellent"), (.6, "good"), (.4, "average"), 
+                      (.2, "mediocre,"), (0, "feeble,")]
+            for floor, adj in bounds:
+                if percent < floor:
+                    return adj
+        elif 35 <= self.perception < 60:
+            bounds = [(.7, "solid"), (.4, "good"), (.2, "weak"), (0, "very weak")]
+            for floor, adj in bounds:
+                if percent < floor:
+                    return adj
+        else:
+            return rng.choice(["considerable", "substantial", "real", "so so", "wow!", 
+                               "medium", "legit", "meh"])
+        
+    def perceived_stats(self, other):
+        """ Return a dictionary of stats for other with text value using vagueness that 
+        is inversely proportional to self.perception.
+        """
+        stats = dict(name=str(other))
+        num_attr = ["strength", "agility"]
+        for attr in num_attr:
+            val = getattr(other, attr)
+            stats[attr] = self._vague_desc(val, val/100.0)
+        return stats
+        
+    def notices(self, thing):
+        """ Return whether self can notice `thing`. """
+        awareness_radius = 20
+        sight_radius = 30
+        map = tender.engine.map
+        here = map.find(self)
+        there = map.find(thing)
+        dist = map.distance(here, there)
+        if map.line_of_sight(here, there):
+            radius = sight_radius
+        else:
+            radius = awareness_radius
+
+        return dist < self.perception / 100.0 * radius
 
     def sentiment(self, other):
         """ Return the sentiment numeric value in [-1..1]. """
