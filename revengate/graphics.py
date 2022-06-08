@@ -45,9 +45,10 @@ from .maps import TileType, Connector
 from .commands import CommandMap
 from .loader import DATA_DIR
 from .events import (Events, is_action, is_move, iter_events, Conversation, Death, 
-                     Teleport, Injury)
+                     Teleport, Injury, HealthEvent)
 from .utils import Array
 from .tags import t
+from . import geometry as geom
 from . import tender, forms
 
 # TileType -> path
@@ -595,6 +596,33 @@ class MapWidget(FocusBehavior, ScatterPlane):
         if not Vector.in_bbox(ppos, cutoff, top_right):
             self.center_on_hero(anim)
         
+    async def animate_health_event(self, event):
+        """ Animate a health event, which is typically the result of an attack. """
+        red = "#DD1010"
+        if event.victim in self._elems:
+            v_elem = self._elems[event.victim]
+        else:
+            return
+        if hasattr(event, "attacker") and event.attacker in self._elems:
+            a_elem = self._elems[event.attacker]
+            # calling tuple() because we need a copy or the value will change under our 
+            # feet
+            old_pos = tuple(a_elem.pos)  
+            mid_point = geom.mid_point(a_elem.pos, v_elem.pos)
+            await ak.animate(a_elem, pos=mid_point, d=0.1)
+            retreat = ak.animate(a_elem, pos=old_pos, d=0.2)
+        else:
+            retreat = ak.sleep(0)
+
+        with self.canvas:
+            rect = MapElement(text="◯", pos=v_elem.pos, opacity=0.3, 
+                              color=red, outline_color=red, outline_width=0)
+            fade_in = ak.animate(rect, font_size=rect.font_size*1.3, outline_width=3,
+                                 opacity=.7, d=0.3)
+            await ak.and_(retreat, fade_in)
+            await ak.animate(rect, font_size=rect.font_size*1.3, outline_width=0,
+                             opacity=0, d=0.3)
+
     def finalize_turn(self, events=None):
         """ Let all NPCs play, update all statuses, refresh map.
         
@@ -800,6 +828,8 @@ class RevengateApp(MDApp):
     
     def display_status_events(self, events):
         for event in iter_events(events):
+            if isinstance(event, Injury):
+                ak.start(self.map_wid.animate_health_event(event))
             if isinstance(event, Conversation):
                 convo = tender.loader.invoke(event.tag)
                 self.show_conversation(convo)
