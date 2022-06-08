@@ -22,6 +22,7 @@ CODE_OF_CONDUCT.md for the details.
 
 ## Credits
 Lead coding: Yannick Gingras
+
 Additionnal coding: 
 - Nicole Schwartz
 - Ryan Prior

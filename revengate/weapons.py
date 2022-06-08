@@ -31,6 +31,7 @@ class Families:
     ARCANE = Family("arcane")
     HEAT   = Family("heat")
     ACID   = Family("acid")
+    POISON = Family("poison")
 
 
 class StatusEvent:

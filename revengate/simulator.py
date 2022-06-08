@@ -24,6 +24,7 @@ import itertools
 from collections import Counter, defaultdict
 from pprint import pprint
 from argparse import ArgumentParser
+import itertools
 
 from .engine import Engine
 from .tags import t
@@ -87,45 +88,37 @@ def _split_factions(actors):
         factions[a.faction].add(a)
     return factions
 
-def last_faction_standing(engine, actor_names):
+
+def last_actor_standing(a, b, debug=False):
+    engine = tender.engine
     start = engine.current_turn
-    actors = set()
+    actors = {a: tender.loader.invoke(a),
+              b: tender.loader.invoke(b)}
+    
+    engine.register(actors[a])
+    engine.register(actors[b])
 
-    def filter_empties():
-        nonlocal actors
-        for f in factions:
-            factions[f] = {a for a in factions[f] if a.health > 0}
-        actors = {a for a in actors if a.health > 0}
-
-    for name in actor_names:
-        actor = tender.loader.invoke(name)
-        actors.add(actor)
-        engine.register(actor)
-    orig_cast = list(actors)
-    factions = _split_factions(actors)
-
-    while len([f for f in factions if len(factions[f]) > 0]) > 1:
-        print(engine.advance_turn() or "no turn updates")
-        filter_empties()
-        for a in actors:
-            if a.health <= 0:
-                continue
-            target = a.strategy.select_target(actors - {a})
-            if target:
-                hit = a.attack(target)
+    while actors[a].is_alive and actors[b].is_alive:
+        for attacker, victim in itertools.permutations(actors.values(), 2):
+            hit = attacker.attack(victim)
+            if debug:
                 print(hit)
-                if target.health <= 0:
-                    print(f"{target} died!")
-        filter_empties()
+            if victim.is_dead:
+                if debug:
+                    print(f"{victim} died!")
+                break
+        turn_updates = engine.advance_turn()
+        if debug:
+            print(turn_updates or "no turn updates")
 
-    for actor in orig_cast:
-        engine.deregister(actor)
+    name = None
     duration = engine.current_turn - start
-    winner = [f for f in factions if len(factions[f]) > 0][0]
-    print("Battle is over!")
-    print(f"{winner.name} won in {duration} turns!")
-    print("Survivors: " +
-          ", ".join([f"{a.name} ({a.health}HP)" for a in factions[winner]]))
+    for name in actors:
+        if actors[name].is_alive:
+            winner = name
+    if debug:
+        print("Battle is over!")
+        print(f"{winner} won in {duration} turns!")
     return winner, duration
 
 
@@ -133,22 +126,24 @@ def wolf_pack_skirmish(engine):
     return last_faction_standing(engine, ["mage", "wolf", "wolf", "wolf"])
 
 
-def run_many(engine, combat_funct, nbtimes=100):
+def run_many(combat_funct, nbtimes=100):
     """ Run a simulation nbtimes and print a statistical summary. """
+    engine = tender.engine
     winners = Counter()
     durations = []
     
     for i in range(nbtimes):
         winner, duration = combat_funct(engine)
         durations.append(duration)
-        winners[winner.name] += 1
+        winners[winner] += 1
     champ, victories = winners.most_common(1)[0]
     avg = sum(durations) / len(durations)
     print(f"{champ} won {victories} times. "
           f"Fights lasted {avg} turns on average.")
 
 
-def map_demo(eng, actor_names):
+def map_demo(actor_names):
+    eng = tender.engine
     map = Map()
     builder = Builder(map)
     builder.init(40, 20)
@@ -156,17 +151,15 @@ def map_demo(eng, actor_names):
     builder.room((12, 7), (13, 12), True)
     eng.change_map(map)
 
-    bag = eng.loader.invoke("bag")
+    bag = tender.loader.invoke("pen")
     map.place(bag)
     
     actors = set()
     for name in actor_names:
-        a = eng.loader.invoke(name)
+        a = tender.loader.invoke(name)
         actors.add(a)
         map.place(a)
-        eng.register(a)
     factions = _split_factions(actors)
-    orig_cast = list(actors)
 
     def filter_empties():
         # TODO: find a more graceful way to handle death
@@ -182,7 +175,7 @@ def map_demo(eng, actor_names):
         for a in actors:
             if a.health <= 0:
                 continue
-            event = a.act(map)
+            event = a.act()
             if event:
                 print(event)
         filter_empties()
@@ -214,14 +207,15 @@ def main():
     tender.loader = TopLevelLoader()
     for f in args.load:
         tender.loader.load(f)
-    eng = Engine()
 
     if args.map:
-        map_demo(eng, args.actors)
+        tender.engine = Engine()
+        map_demo(args.actors)
     else:
         def sim(engine):
-            return last_faction_standing(engine, args.actors)
-        run_many(eng, sim)
+            tender.engine = Engine()
+            return last_actor_standing(*args.actors)
+        run_many(sim)
 
 
 if __name__ == '__main__':

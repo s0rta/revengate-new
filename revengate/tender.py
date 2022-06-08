@@ -20,7 +20,7 @@
 There are no guarantees on initialization. Whatever governor or simulation is setting 
 things in motion must also make sure that this the required globals are initialized.
 """
-from .engine import Engine
+# from .engine import Engine
 from .ui import UI
 # from .commands import CommandMap
 from .actors import Actor
@@ -28,7 +28,7 @@ from .loader import TopLevelLoader
 from .sentiment import SentimentChart
 
 loader: TopLevelLoader = None
-engine: Engine = None
+engine = None
 ui: UI = None
 commands = None
 hero: Actor = None

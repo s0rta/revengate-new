@@ -69,6 +69,20 @@ strategies = ["*pol_hater", "*fleeing"]
 char = "P"
 
 # Beasts
+[templates.poison_eff] 
+_class = "Effect"
+name = "poison"
+duration = 3
+h_delta = -2
+family = "#poison"
+
+[templates.poison_bite] 
+_parent = "bite"
+verb = "bite"
+damage = 3
+family = "#pierce"
+effects = ["*poison_eff"]
+
 [templates.bite]
 _class = "Injurious"
 verb = "bit"
@@ -105,6 +119,7 @@ health = 20
 strength = 25
 agility = 50
 char = "c"
+weapon = "*poison_bite"
 bestiary_img = "bestiary/desert-centipede.jpg"
 desc="""The Tripolitan Desert Centipede is not the kind of bug that you can hope to crush under your boot. These distant cousins of the more common house centipede measure 1m on average and feature a very thick armored exoskeleton. 
 
@@ -134,3 +149,14 @@ agility = 50
 intelligence = 50
 weapon = "*sword"
 faction = "#lumiere"
+
+[templates.average_joe]
+_class = "Humanoid"
+name = "Average Joe"
+health = 50
+armor = 0
+strength = 50
+agility = 50
+intelligence = 50
+weapon = "*sword"
+strategies = ["*tribal"]
