@@ -19,6 +19,9 @@
 display or animate the changes. """
 
 
+from . import tender
+
+
 def not_none(val):
     return val is not None
 
@@ -66,22 +69,51 @@ class StatusEvent:
     cost = 1
     
     def __init__(self, actor):
-        super(StatusEvent, self).__init__()
-        self.actor = actor
+        self._actor_id = actor and actor.id or None
+        self.actor_stats = actor and actor.stats() or {}
 
+        # This is cached at creation time because the actor might not be available 
+        # anymore by the time we need to display the message.
+        self.summary_str = self.summary()  
+        
     def __bool__(self):
         return self.cost > 0
+
+    def __str__(self):
+        return self.summary_str
+
+    def _actor_by_id(self, actor_id):
+        if tender.engine and self._actor_id:
+            return tender.engine.actor_by_id(actor_id)
+        else:
+            return None
+    
+    @property
+    def actor(self):
+        return self._actor_by_id(self._actor_id)
+
+    def summary(self):
+        """ Return a summary of the event that is fit for showing directly to the 
+        player. 
+        
+        Sub-classes should override this. """
+        return repr(self)
 
 
 class Move(StatusEvent):
     """ The actor moved. """
+
     def __init__(self, performer, old_pos, new_pos):
-        super().__init__(performer)
         self.old_pos = old_pos
         self.new_pos = new_pos
+        super().__init__(performer)
         
-    def __str__(self):
+    def summary(self):
         return f"{self.actor} moved from {self.old_pos} to {self.new_pos}."
+
+    @property
+    def performer(self):
+        return self.actor
 
 
 class Teleport(Move):
@@ -91,7 +123,7 @@ class Teleport(Move):
     def __init__(self, performer, old_pos, new_pos):
         super().__init__(performer, old_pos, new_pos)
         
-    def __str__(self):
+    def summary(self):
         return f"{self.actor} teleported from {self.old_pos} to {self.new_pos}."
     
 
@@ -102,47 +134,55 @@ class Narration(StatusEvent):
 
 class Conversation(StatusEvent):
     def __init__(self, initiator, responder, dialogue_tag):
-        super().__init__(initiator)
-        self.responder = responder
+        self._responder_id = responder.id
         self.tag = dialogue_tag
+        super().__init__(initiator)
         
-    def __str__(self):
+    def summary(self):
         return (f"{self.actor} had a chat with {self.responder} about {self.tag}.")
+    
+    @property
+    def responder(self):
+        return self._actor_by_id(self._responder_id)
     
 
 class StairsEvent(StatusEvent):
     """ The actor took a flight of stairs. """
 
     def __init__(self, performer, from_pos):
-        super().__init__(performer)
         self.from_pos = from_pos
+        super().__init__(performer)
         
-    def __str__(self):
+    def summary(self):
         return f"{self.actor} followed stairs at {self.from_pos}."
 
 
 class Rest(StatusEvent):
     """ The actor did nothing. """        
-    def __str__(self):
+
+    def summary(self):
         return f"{self.actor} waits patiently."
 
 
 class Death(StatusEvent):
     """ The actor died. """
+
     def __init__(self, victim):
         super().__init__(victim)
         
-    def __str__(self):
-        return f"{self.actor} died!"
+    def summary(self):
+        # FIXME: must use the cached actor stats for this one
+        return f"{self.actor_stats['str']} died!"
 
 
 class HealthEvent(StatusEvent):
     """ The actor's health just got better or worse. """
+
     def __init__(self, actor, h_delta):
-        super().__init__(actor)
         self.h_delta = h_delta
+        super().__init__(actor)
         
-    def __str__(self):
+    def summary(self):
         if self.h_delta >= 0:
             return f"{self.actor} heals {self.h_delta} points."
         else:
@@ -152,6 +192,7 @@ class HealthEvent(StatusEvent):
 
 class Injury(HealthEvent):
     """ Something that hurts """
+
     def __init__(self, victim, damage):
         super().__init__(victim, -damage)
 
@@ -166,47 +207,70 @@ class Injury(HealthEvent):
 
 class Hit(Injury):
     """ A successful hit with a weapon. """
+
     def __init__(self, attacker, victim, weapon, damage, critical=False):
-        super().__init__(victim, damage)
-        self.attacker = attacker
+        self._attacker_id = attacker.id
         self.weapon = weapon
         self.critical = critical
+        super().__init__(victim, damage)
         
-    def __str__(self):
+    def summary(self):
         s = (f"{self.attacker} hit {self.victim} with a {self.weapon}"
              f" for {self.damage} damages!")
         if self.critical:
             s += " Critical hit!"
         return s
 
+    @property
+    def attacker(self):
+        return self._actor_by_id(self._attacker_id)
+
 
 class Miss(StatusEvent):
     """ Tried to attack, but didn't make contact with the target. """
+
     def __init__(self, attacker, target, weapon):
-        super().__init__(attacker)
-        self.target = target
+        self._target_id = target.id
         self.weapon = weapon
+        super().__init__(attacker)
         
-    def __str__(self):
+    def summary(self):
         return f"{self.actor} misses {self.target}."
+
+    @property
+    def target(self):
+        return self._actor_by_id(self._target_id)
+
+
+class Yell(StatusEvent):
+    """ Yell something in no particular direction. """
+    
+    def __init__(self, actor, msg):
+        self.msg = msg
+        super().__init__(actor)
+        
+    def summary(self):
+        return f"{self.actor} yells {self.msg}."
 
 
 class InventoryChange(StatusEvent):
     """ Added or lossed something form the inventory """
+
     def __init__(self, actor, item):
-        super().__init__(actor)
         self.item = item
+        super().__init__(actor)
         
-    def __str__(self):
+    def summary(self):
         return f"{self.item} changed possession."
 
 
 class Pickup(InventoryChange):
     """ Picked something from the ground """
+
     def __init__(self, actor, item):
         super().__init__(actor, item)
         
-    def __str__(self):
+    def summary(self):
         return f"Picked {self.item} from the ground."
 
 
@@ -225,7 +289,7 @@ class Events(list):
         
     def __str__(self):
         return " ".join(map(str, self))
-       
+
     def __iadd__(self, other):
         other = filter(not_none, other)
         return super(Events, self).__iadd__(other)

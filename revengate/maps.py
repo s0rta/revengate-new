@@ -17,15 +17,12 @@
 
 """ Maps and movement. """
 
-import time
 import heapq
 import itertools
 from uuid import uuid4
-from copy import deepcopy
 from enum import IntEnum, auto
 from pprint import pprint
-from functools import partial
-from collections import defaultdict, deque
+from collections import defaultdict
 
 from . import geometry as geom
 from . import tender
@@ -194,6 +191,7 @@ class Map:
         self.name = name
         self.tiles = None
         self.overlays = []
+        self._id_to_a = {}   # actor.id to actor
         self._a_to_pos = {}  # actor to position mapping
         self._pos_to_a = {}  # position to actor mapping
         self._i_to_pos = {}  # item to position
@@ -227,6 +225,8 @@ class Map:
         state = self.__dict__.copy()
         if tender.hero in self._a_to_pos:
             # the hero must be serialized by whoever is in charge or saving the tender
+            state["_id_to_a"] = self._id_to_a.copy()
+            del state["_id_to_a"][tender.hero.id]
             state["_a_to_pos"] = self._a_to_pos.copy()
             pos = state["_a_to_pos"].pop(tender.hero)
             state["_pos_to_a"] = self._pos_to_a.copy()
@@ -354,6 +354,9 @@ class Map:
     
     def actor_at(self, pos):
         return self._pos_to_a.get(pos)
+
+    def actor_by_id(self, actor_id):
+        return self._id_to_a.get(actor_id)
         
     def all_actors(self):
         """ Return a list of all actors known to be on the map. """
@@ -664,7 +667,10 @@ class Map:
         return None
 
     def __contains__(self, thing):
-        return thing in self._a_to_pos or thing in self._i_to_pos
+        if isinstance(thing, str):
+            return thing in self._id_to_a
+        else:
+            return thing in self._a_to_pos or thing in self._i_to_pos
 
     def place(self, thing, pos=None, fallback=False):
         """ Put thing on the map at pos=(x, y). 
@@ -688,6 +694,7 @@ class Map:
                         raise RuntimeError("The map appears to be full!")
                 else:
                     raise ValueError(f"There is already an actor at {pos}!")
+            self._id_to_a[thing.id] = thing
             self._a_to_pos[thing] = pos
             self._pos_to_a[pos] = thing
         elif isinstance(thing, Item):
@@ -705,6 +712,7 @@ class Map:
             pos = self._a_to_pos[thing]
             del self._pos_to_a[pos]
             del self._a_to_pos[thing]
+            del self._id_to_a[thing.id]
         elif thing in self._i_to_pos:
             pos = self._i_to_pos[thing]
             self._pos_to_i[pos].remove(thing)

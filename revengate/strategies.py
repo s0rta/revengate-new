@@ -20,6 +20,7 @@
 from functools import partial
 from operator import attrgetter
 
+from . import events
 from .utils import best
 from . import tender
 from .randutils import rng
@@ -220,3 +221,48 @@ class Fleeing(Strategy):
                 return me.move(there)
         # TODO: be explicit that we have no other options
         return me.rest()
+
+
+class Panicking(Fleeing):
+    yell_frequency = 5
+    
+    def __init__(self, name):
+        super().__init__(name)
+        self.last_yell = None
+
+    def act(self, me):
+        cur_turn = tender.engine.current_turn
+        if self.last_yell is None or self.last_yell < cur_turn - self.yell_frequency:
+            self.last_yell = cur_turn
+            me.set_played()
+            return [events.Yell(me, "I'm out, you win!!")]
+        
+        map = tender.engine.map
+        others = map.all_actors()  # TODO: ignore the out of sight ones
+        threat = self.select_other(me, others)
+        
+        if threat:
+            my_pos = map.find(me)
+            next_positions = map.adjacents(my_pos, free=True)
+            if next_positions:
+                dist_f = partial(map.distance, threat.pos)
+                there = best(next_positions, key=dist_f)
+                return me.move(there)
+        # TODO: be explicit that we have no other options
+        return me.rest()
+
+    def is_valid(self, me):
+        return True
+
+
+class SelfDefence(AttackOriented):
+    """ Attack back if has been attacked. """
+
+    # FIXME this one relies on inspection of previous events
+    def is_enemy(self, me, other):
+        """ Return whether a other actor should be considered an enemy by me. """
+        raise NotImplementedError()
+        
+    def is_interesting(self, me, other):
+        """ Return whether other should be considered as a potential selection. """
+        return self.is_enemy(me, other)

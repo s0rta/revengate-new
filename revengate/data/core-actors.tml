@@ -49,6 +49,9 @@ _class = "Wandering"
 [templates.fleeing]
 _class = "Fleeing"
 
+[templates.panicking]
+_class = "Panicking"
+
 # Inunus
 [templates.slime_slam]
 _class = "Injurious"
@@ -160,3 +163,16 @@ agility = 50
 intelligence = 50
 weapon = "*sword"
 strategies = ["*tribal"]
+
+[templates.rob]
+_class = "Humanoid"
+char = "A"
+name = "André Robeloire"
+health = 50
+armor = 0
+strength = 50
+agility = 50
+intelligence = 50
+weapon = "*sword"
+faction = "#neutrals"
+strategies = ["*panicking"]

@@ -20,6 +20,7 @@ monsters, characters, etc.
 """
 
 from operator import attrgetter
+from uuid import uuid4
 
 from .utils import best
 from .randutils import rng
@@ -48,6 +49,7 @@ class Actor(object):
 
     def __init__(self, health, armor, strength, agility, perception=50):
         super().__init__()
+        self.id = str(uuid4())
         self.health = health
         self.initial_health = health
         self.armor = armor
@@ -81,6 +83,9 @@ class Actor(object):
         self._last_action = None  # last turn when self made an action
         self._last_update = None  # last time we computed conditions and regen
         self.conditions = []  # mostly stuff that does damage over time
+
+    def __hash__(self):
+        return hash(self.id)
 
     @property
     def strategy(self):
@@ -193,7 +198,7 @@ class Actor(object):
         elif 35 <= self.perception < 60:
             bounds = [(.7, "solid"), (.4, "good"), (.2, "weak"), (0, "very weak")]
             for floor, adj in bounds:
-                if percent < floor:
+                if percent >= floor:
                     return adj
         else:
             return rng.choice(["considerable", "substantial", "real", "so so", "wow!", 
@@ -209,6 +214,12 @@ class Actor(object):
             val = getattr(other, attr)
             stats[attr] = self._vague_desc(val, val/100.0)
         return stats
+        
+    def stats(self):
+        """ Return the core stats of an actor. """
+        return dict(str=str(self), 
+                    agility=self.agility, 
+                    strength=self.strength)
         
     def notices(self, thing):
         """ Return whether self can notice `thing`. """

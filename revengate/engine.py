@@ -24,12 +24,12 @@ import operator
 from .weapons import Events
 from . import tender
 
-class Engine(object):
+
+class Engine:
     """ Keep track of all the actors and implement the turns logic. """
     
     def __init__(self):
-        super(Engine, self).__init__()
-        self._actors = []  # actors who are not on the map but we still track
+        self._actors = {}  # actors who are not on the map but we still track
         self.current_turn = 0
         self.map = None
 
@@ -50,11 +50,22 @@ class Engine(object):
 
         self.__dict__.update(state)
 
+    def actor_by_id(self, actor_id):
+        """ Return the actor with id=actor_id or None if we don't know about this actor. 
+
+        The actor must be registerd directly with the engine or placed on the current 
+        map.
+        """
+        if actor_id in self.map:
+            return self.map.actor_by_id(actor_id)
+        else:
+            return self._actors.get(actor_id)
+
     def all_actors(self):
         if self.map:
-            actors = itertools.chain(self._actors, self.map.all_actors())
+            actors = itertools.chain(self._actors.values(), self.map.all_actors())
         else:
-            actors = self._actors
+            actors = self._actors.values()
         return sorted(actors, key=operator.attrgetter("initiative"))
 
     def register(self, actor):
@@ -62,10 +73,11 @@ class Engine(object):
         if self.map is not None and actor in self.map:
             raise RuntimeError(f"{actor} is already on the active map. Only off-map "
                                "actors should be manually registered with the engine. ")
-        self._actors.append(actor)
+        self._actors[actor.id] = actor
 
     def deregister(self, actor):
-        self._actors = [a for a in self._actors if a != actor]
+        if actor.id in self._actors:
+            del self._actors[actor.id]
 
     def advance_turn(self):
         """ Update everything that needs to be updated at the start of a new
@@ -77,7 +89,6 @@ class Engine(object):
         return events
 
     def change_map(self, map):
-        # TODO: save the status of the old map so we can go back to it
         self.map = map
 
     def to_charon(self, actor):
