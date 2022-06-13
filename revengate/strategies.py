@@ -77,37 +77,59 @@ class Strategy:
     """ A play strategy to automate an actor's actions. """
     priority = 0.5  # in [0..1] for normal circumstances 
     
-    def __init__(self, name):
+    def __init__(self, name, me=None):
         super(Strategy, self).__init__()
         self.name = name
+        self.me = me
         
-    def is_valid(self, me):
+    def is_valid(self):
         """ Return whether the strategy is a valid one for `me` at the present time. """
         return True
 
-    def act(self, me):
+    def is_expired(self):
+        """ Return whether the strategy has outlived it's usefulness. 
+        
+        Expired strategies won't become valid ever again and are deleted by the actor. 
+        
+        Sub-classes that implement an expiration logic should override this method.
+        """
+        return False
+        
+    def update(self):
+        """ Inspect the state of the world and adjust internal parameters. 
+        
+        Sub-classes should override this.
+        """
+        pass
+        
+    def assign(self, me):
+        """ Assign the strategy to the Actor `me`. """
+        self.me = me
+
+    def act(self):
+        self.update()
         map = tender.engine.map
         actors = map.all_actors()  # TODO: ignore the out of sight ones
-        sel = self.select_other(me, actors)
+        sel = self.select_other(actors)
         if sel:
             if sel.dist == 1:
-                return me.attack(sel.other)
+                return self.me.attack(sel.other)
             else:
                 path = sel.path
                 if path:
-                    return me.move(path[1])
+                    return self.me.move(path[1])
         # Rest when there nothing better to do
-        return me.rest()
+        return self.me.rest()
         
-    def is_interesting(self, me, other):
+    def is_interesting(self, other):
         return NotImplementedError()
 
-    def select_other(self, me, others):
+    def select_other(self, others):
         # TODO: tune-down the awareness and only start chasing a target if you 
         #       can reasonably suspect where it is
-        options = [SelectionCache(me, other) 
+        options = [SelectionCache(self.me, other) 
                    for other in others
-                   if self.is_interesting(me, other)]
+                   if self.is_interesting(other)]
         # path finding is very expensive, so we start by looking at 
         # map.distance() to find a smaller set, then we sort by actual path
         # finding.
@@ -129,21 +151,21 @@ class Strategy:
 class AttackOriented(Strategy):
     """ Does nothing but looking for some to attack. """
 
-    def is_enemy(self, me, other):
+    def is_enemy(self, other):
         """ Return whether a other actor should be considered an enemy by me. """
         raise NotImplementedError()
         
-    def is_interesting(self, me, other):
+    def is_interesting(self, other):
         """ Return whether other should be considered as a potential selection. """
-        return self.is_enemy(me, other)
+        return self.is_enemy(other)
                 
 
 class Tribal(AttackOriented):
     """ Attack anyone not in my faction. """
 
-    def is_enemy(self, me, other):
+    def is_enemy(self, other):
         """ Return whether a target actor should be considered an enemy. """
-        return me.faction != other.faction
+        return self.me.faction != other.faction
 
 
 class PoliticalHater(AttackOriented):
@@ -151,9 +173,9 @@ class PoliticalHater(AttackOriented):
 
     priority = 0.2
 
-    def is_enemy(self, me, other):
+    def is_enemy(self, other):
         """ Return whether a target actor should be considered an enemy. """
-        return me.hates(other)
+        return self.me.hates(other)
 
 
 class Wandering(Strategy):
@@ -164,26 +186,26 @@ class Wandering(Strategy):
         super().__init__(name)
         self.waypoint = None
     
-    def act(self, me):
+    def act(self):
         # A more interesting way to go about this would be to look at the recent forced 
         # rests events and to base the current rest bias on that.
         if rng.rstest(self.rest_bias):
-            return me.rest()
+            return self.me.rest()
         
         map = tender.engine.map
         if not self.waypoint:
             self.waypoint = map.random_pos(free=True)
             
-        here = map.find(me)
+        here = map.find(self.me)
         path = map.path(here, self.waypoint)
         if path:
-            res = me.move(path[1])
+            res = self.me.move(path[1])
             if len(path) <= 2:  # we got to our destination
                 self.waypoint = None
             return res
         else:
             # FIXME be more explicit
-            return me.rest()
+            return self.me.rest()
 
 
 class Fleeing(Strategy):
@@ -191,36 +213,36 @@ class Fleeing(Strategy):
 
     priority = 0.75
 
-    def is_valid(self, me):
+    def is_valid(self):
         map = tender.engine.map
-        my_pos = map.find(me)
+        my_pos = map.find(self.me)
         for pos in map.adjacents(my_pos, free=False):
             threat = map.actor_at(pos)
-            if threat and threat.hates(me):
+            if threat and threat.hates(self.me):
                 return True
         return False
 
-    def is_interesting(self, me, other):
-        return self.is_menacing(me, other)
+    def is_interesting(self, other):
+        return self.is_menacing(other)
 
-    def is_menacing(self, me, other):
+    def is_menacing(self, other):
         """ Return whether a target actor should be considered an enemy. """
-        return other.hates(me)
+        return other.hates(self.me)
 
-    def act(self, me):
+    def act(self):
         map = tender.engine.map
         others = map.all_actors()  # TODO: ignore the out of sight ones
-        threat = self.select_other(me, others)
+        threat = self.select_other(others)
         
         if threat:
-            my_pos = map.find(me)
+            my_pos = map.find(self.me)
             next_positions = map.adjacents(my_pos, free=True)
             if next_positions:
                 dist_f = partial(map.distance, threat.pos)
                 there = best(next_positions, key=dist_f)
-                return me.move(there)
+                return self.me.move(there)
         # TODO: be explicit that we have no other options
-        return me.rest()
+        return self.me.rest()
 
 
 class Panicking(Fleeing):
@@ -230,28 +252,28 @@ class Panicking(Fleeing):
         super().__init__(name)
         self.last_yell = None
 
-    def act(self, me):
+    def act(self):
         cur_turn = tender.engine.current_turn
         if self.last_yell is None or self.last_yell < cur_turn - self.yell_frequency:
             self.last_yell = cur_turn
-            me.set_played()
-            return [events.Yell(me, "I'm out, you win!!")]
+            self.me.set_played()
+            return [events.Yell(self.me, "I'm out, you win!!")]
         
         map = tender.engine.map
         others = map.all_actors()  # TODO: ignore the out of sight ones
-        threat = self.select_other(me, others)
+        threat = self.select_other(others)
         
         if threat:
-            my_pos = map.find(me)
+            my_pos = map.find(self.me)
             next_positions = map.adjacents(my_pos, free=True)
             if next_positions:
                 dist_f = partial(map.distance, threat.pos)
                 there = best(next_positions, key=dist_f)
-                return me.move(there)
+                return self.me.move(there)
         # TODO: be explicit that we have no other options
-        return me.rest()
+        return self.me.rest()
 
-    def is_valid(self, me):
+    def is_valid(self):
         return True
 
 
@@ -259,10 +281,10 @@ class SelfDefence(AttackOriented):
     """ Attack back if has been attacked. """
 
     # FIXME this one relies on inspection of previous events
-    def is_enemy(self, me, other):
+    def is_enemy(self, other):
         """ Return whether a other actor should be considered an enemy by me. """
         raise NotImplementedError()
         
-    def is_interesting(self, me, other):
+    def is_interesting(self, other):
         """ Return whether other should be considered as a potential selection. """
-        return self.is_enemy(me, other)
+        return self.is_enemy(other)

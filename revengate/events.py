@@ -69,7 +69,7 @@ class StatusEvent:
     cost = 1
     
     def __init__(self, actor):
-        self._actor_id = actor and actor.id or None
+        self.actor_id = actor and actor.id or None
         self.actor_stats = actor and actor.stats() or {}
 
         # This is cached at creation time because the actor might not be available 
@@ -83,14 +83,14 @@ class StatusEvent:
         return self.summary_str
 
     def _actor_by_id(self, actor_id):
-        if tender.engine and self._actor_id:
+        if tender.engine and self.actor_id:
             return tender.engine.actor_by_id(actor_id)
         else:
             return None
     
     @property
     def actor(self):
-        return self._actor_by_id(self._actor_id)
+        return self._actor_by_id(self.actor_id)
 
     def summary(self):
         """ Return a summary of the event that is fit for showing directly to the 
@@ -134,7 +134,8 @@ class Narration(StatusEvent):
 
 class Conversation(StatusEvent):
     def __init__(self, initiator, responder, dialogue_tag):
-        self._responder_id = responder.id
+        self.responder_id = responder.id
+        self.responder_stats = responder.stats()
         self.tag = dialogue_tag
         super().__init__(initiator)
         
@@ -143,7 +144,7 @@ class Conversation(StatusEvent):
     
     @property
     def responder(self):
-        return self._actor_by_id(self._responder_id)
+        return self._actor_by_id(self.responder_id)
     
 
 class StairsEvent(StatusEvent):
@@ -209,7 +210,8 @@ class Hit(Injury):
     """ A successful hit with a weapon. """
 
     def __init__(self, attacker, victim, weapon, damage, critical=False):
-        self._attacker_id = attacker.id
+        self.attacker_id = attacker.id
+        self.attacker_stats = attacker.stats()
         self.weapon = weapon
         self.critical = critical
         super().__init__(victim, damage)
@@ -223,14 +225,15 @@ class Hit(Injury):
 
     @property
     def attacker(self):
-        return self._actor_by_id(self._attacker_id)
+        return self._actor_by_id(self.attacker_id)
 
 
 class Miss(StatusEvent):
     """ Tried to attack, but didn't make contact with the target. """
 
     def __init__(self, attacker, target, weapon):
-        self._target_id = target.id
+        self.target_id = target.id
+        self.target_stats = target.stats()
         self.weapon = weapon
         super().__init__(attacker)
         
@@ -239,7 +242,7 @@ class Miss(StatusEvent):
 
     @property
     def target(self):
-        return self._actor_by_id(self._target_id)
+        return self._actor_by_id(self.target_id)
 
 
 class Yell(StatusEvent):

@@ -54,12 +54,13 @@ class Actor(object):
         self.initial_health = health
         self.armor = armor
         self.inventory = []
-        self.strategies = []
+        self._strategies = []
 
         # main attributes
         self.strength = strength
         self.agility = agility
         self.perception = perception
+        self._perception_cache = {}  # value -> perceived_text
 
         self.resistances = TagBag('Family')
         self.weapon = None
@@ -89,9 +90,20 @@ class Actor(object):
 
     @property
     def strategy(self):
+        self._strategies = [strat for strat in self._strategies 
+                            if not strat.is_expired()]
         key=attrgetter("priority")
-        return best([strat for strat in self.strategies if strat.is_valid(self)], key)
+        return best([strat for strat in self._strategies if strat.is_valid()], key)
         
+    def _get_strategies(self):
+        return self._strategies
+        
+    def _set_strategies(self, strategies):
+        for strat in strategies:
+            strat.assign(self)
+        self._strategies = strategies
+    strategies = property(_get_strategies, _set_strategies)
+    
     @property
     def is_alive(self):
         return self.health > 0
@@ -201,8 +213,11 @@ class Actor(object):
                 if percent >= floor:
                     return adj
         else:
-            return rng.choice(["considerable", "substantial", "real", "so so", "wow!", 
-                               "medium", "legit", "meh"])
+            if value not in self._perception_cache:
+                adj = rng.choice(["considerable", "substantial", "real", "so so", 
+                                  "wow!", "medium", "legit", "meh"])
+                self._perception_cache[value] = adj
+            return self._perception_cache[value]
         
     def perceived_stats(self, other):
         """ Return a dictionary of stats for other with text value using vagueness that 
@@ -264,7 +279,7 @@ class Actor(object):
         if not self.strategy:
             raise RuntimeError("Trying to perform an action before assigning " 
                                "a strategy.")
-        result = self.strategy.act(self)
+        result = self.strategy.act()
         if is_action(result):
             self.set_played()
         return result

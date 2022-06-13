@@ -845,7 +845,7 @@ class RevengateApp(MDApp):
             if isinstance(event, Conversation):
                 convo = tender.loader.invoke(event.tag)
                 self.show_conversation(convo)
-            elif isinstance(event, Death) and event.actor == tender.hero:
+            elif isinstance(event, Death) and event.actor_id == tender.hero.id:
                 print(event)
                 tender.commands["purge-game"]()
                 form = forms.GameOverPopup(self.show_main_screen)
