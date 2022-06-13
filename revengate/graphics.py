@@ -688,8 +688,9 @@ class HeroStatusBox(BoxLayout):
     def update_status(self):
         if not tender.hero:
             return
+        stats = tender.hero.perceived_stats(tender.hero)
         self.ids.name_lbl.text = str(tender.hero)
-        self.ids.health_lbl.text = tender.hero.status_str()
+        self.ids.health_lbl.text = f"Health: {stats['health']}"
 
 class RipplesTransition(ShaderTransition):
     TRANSITION_FS = '''$HEADER$

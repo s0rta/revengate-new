@@ -228,6 +228,8 @@ class Actor(object):
         for attr in num_attr:
             val = getattr(other, attr)
             stats[attr] = self._vague_desc(val, val/100.0)
+        stats["health"] = self._vague_desc(other.health, 
+                                           other.health/other.initial_health)
         return stats
         
     def stats(self):
