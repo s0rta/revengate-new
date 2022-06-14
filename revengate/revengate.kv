@@ -2,13 +2,14 @@
 #:include revengate/forms.kv
 #:include revengate/stats_screen.kv
 #:import tender revengate.tender
+#:import uidefs revengate.uidefs
 
 <MapWidget>
     app: app
     do_rotation: False
 
 <MapIconButton@MDIconButton>:
-    opacity: 0.7
+    opacity: uidefs.DEF_ICON_OPACITY
     
 <MainScreenButton@MDRectangleFlatButton>:
     pos_hint: {"center_x": 0.5}

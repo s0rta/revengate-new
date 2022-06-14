@@ -50,7 +50,7 @@ from .events import (Events, is_action, is_move, iter_events, Conversation, Deat
 from .utils import Array
 from .tags import t
 from . import geometry as geom
-from . import tender, forms
+from . import tender, forms, uidefs
 
 # TileType -> path
 TILE_IMG = {TileType.SOLID_ROCK: "dungeon/floor/lair_1_new.png", 
@@ -65,9 +65,6 @@ EMPTY_IMG = "dungeon/black.png"
 TILE_SIZE = 32
 WINDOW_SIZE = (1280, 720)
 WINDOW_SIZE_WIDE = (2164, 1080)
-
-DEF_ICON_OPACITY = 0.7
-ACTIVE_ICON_OPACITY = 1.0
 
 class ImgSourceCache:
     def __init__(self):
@@ -297,7 +294,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
     @syncify
     @clear_selection_label
     async def start_look(self, button):
-        button.opacity = ACTIVE_ICON_OPACITY
+        button.opacity = uidefs.ACTIVE_ICON_OPACITY
         try:
             self._update_selection_lbl(text="Looking...")
             wid, event = await ak.event(self, "on_touch_up", 
@@ -309,7 +306,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
 
             await cont.append_message(desc, mood=mood)
         finally:
-            button.opacity = DEF_ICON_OPACITY
+            button.opacity = uidefs.DEF_ICON_OPACITY
     
     @cancelable_selection
     @syncify
