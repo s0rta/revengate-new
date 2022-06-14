@@ -17,5 +17,6 @@
 
 """ Various constants used in both the UI logic and the .kv definition files. """
 
+DEF_ELEM_COLOR = "FFFFFF"
 DEF_ICON_OPACITY = 0.7
 ACTIVE_ICON_OPACITY = 1.0

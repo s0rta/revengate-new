@@ -74,7 +74,8 @@ class Actor(object):
         self.rank = None
         self.name = None
         
-        # lore and bestiary entry
+        # presentation, lore, bestiary entry
+        self.color = "CCCCCC"
         self.bestiary_img = None
         self.desc = ""
 

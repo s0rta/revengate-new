@@ -397,7 +397,8 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 anim.start(elem)
         else:
             with self.canvas:
-                elem = MapElement(text=thing.char, pos=cpos)
+                color = getattr(thing, "color", uidefs.DEF_ELEM_COLOR)
+                elem = MapElement(text=thing.char, color=color, pos=cpos)
                 self._elems[thing] = elem
                 self.add_widget(elem)
 
