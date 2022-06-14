@@ -21,8 +21,10 @@ import enum
 from .tags import Tag, TagSlot
 from .items import Item
 
+
 class Family(Tag):
     pass 
+
 
 class Families:
     IMPACT = Family("impact")

@@ -205,8 +205,11 @@ class Governor:
         rob = tender.loader.invoke("rob", rank="landlord")
         map.place(rob)
 
-        cent = tender.loader.invoke("centipede")
-        map.place(cent)
+        for species in ["sentry-scarab", "giant-locust", "plasus-rat", "sulant-tiger", 
+                        "sahwakoon", "labras", "cave-cat", "sewer-otter", "trinian-bat",
+                        "pacherr", "pacherr-matriarch", "eguis"]:
+            foe = tender.loader.invoke(species)
+            map.place(foe)
         
         tender.engine.change_map(map)
         if tender.hero:

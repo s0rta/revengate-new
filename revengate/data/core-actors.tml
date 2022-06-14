@@ -92,6 +92,24 @@ verb = "bit"
 damage = 5
 family = "#pierce"
 
+[templates.incisors]
+_class = "Injurious"
+verb = "bit"
+damage = 4
+family = "#slice"
+
+[templates.mandibles]
+_class = "Injurious"
+verb = "bit"
+damage = 3
+family = "#slice"
+
+[templates.claw]
+_class = "Injurious"
+verb = "slashed"
+damage = 5
+family = "#slice"
+
 [templates.animal]
 _class = "Monster"
 armor = 0
@@ -107,6 +125,32 @@ strength = 15
 agility = 50
 char = "r"
 
+[templates.trinian-bat]
+_parent = "animal"
+species = "trinian bat"
+health = 10
+strength = 15
+agility = 65
+char = "b"
+desc = """The trinian bat is a large distant relative of the very common pipistrelle bat.
+
+The face and body of the trinian bat is similar to that of the common bat, but the neck is about times as long and the pointy teeth are more prominent. The animal also has a long rat-like tail it coils around its victims to stay in place while it feeds on their blood. Individuals can get as large as 1.5m wingspan, but 75cm is more common.
+
+An encounter can be with as few as a single bat or with as many as fifty. In colonies, they exhibit collective behaviors where nursing females will stay with their youngs and other individuals will go out and hunt for them. 
+
+Trinian bats sometimes steal items from people, which they bring back to their colony as treasure. """
+
+[templates.plasus-rat]
+_parent = "animal"
+species = "plasus rat"
+health = 7
+strength = 20
+agility = 50
+weapon = "*incisors"
+char = "r"
+color = "ae531f"
+desc = """Plasus rats are vicious rodents. Usually reddish brown with a stripped bald tail. They are much bigger than Norwegian rats: from the size of a house cat to that of a beaver. They have the general shape of a Norwegian rat, except that their face is stubbier, a bit like a gerbil."""
+
 [templates.wolf]
 _parent = "animal"
 species = "wolf"
@@ -114,6 +158,68 @@ health = 30
 strength = 35
 agility = 55
 char = "d"
+
+[templates.sulant-tiger]
+_parent = "animal"
+species = "Sulant tiger"
+health = 30
+strength = 40
+agility = 60
+weapon = "*claw"
+char = "f"
+color = "57af37"
+bestiary_img = "bestiary/sulant-tiger.png"
+desc = """Sulant tigers have the general shape and size of a Bengal tiger, but they are all light brown with light green stripes. Their backs have spines like those of porcupines and their tail is twice as long as that of a Bengal tiger.
+
+Sulant tigers use their tails as monkeys do to grab objects or the limbs of unsuspecting adventurers who venture too close."""
+
+[templates.cave-cat]
+_parent = "animal"
+species = "cave cat"
+health = 20
+strength = 35
+agility = 50
+char = "f"
+color = "ff79cb"
+desc = """Cave cats are large hairless felines usually encountered in sewers and other underground tunnels. They prey on raccoons, cats, and dogs. Miners and dockers release cave cats in mines and warehouses to keep the rodent population under control.
+
+Cave cats are slightly larger than a lynx; they have very wrinkly pink to gray bald skin, oversized bat-like ears, large protruding yellow eyes, roughly similar to those of lemurs and tarsiers, and a long skinny rat-like tail. Because they hunt and fight all the time, they are often covered in scars and they sometimes miss some sections of their ears.
+
+Their sharp canine teeth protrude out of their mouth, about half as much as saber tooth tiger's did."""
+
+[templates.sahwakoon]
+_parent = "animal"
+species = "sahwakoon"
+health = 18
+strength = 20
+agility = 60
+char = "s"
+color = "a17022"
+# TODO: implement the stun attack
+bestiary_img = "bestiary/sahwakoon.png"
+desc ="""Sahwakoons are large badgers with rigid scales on their head and back. Their scales often feature colourful intricate line patterns. More often then not, the line patterns are too flashy to serve as effective camouflage.
+
+They are very aggressive, jumping on anything that they perceive as either food or as a threat. They can stun a target who is within their grasp with an electrical shock."""
+
+[templates.labras-claw]
+_parent = "claw"
+damage = 7
+
+[templates.labras]
+_parent = "animal"
+species = "labras"
+health = 25
+strength = 35
+agility = 65
+weapon = "*labras-claw"
+char = "l"
+color = "73ce00"
+bestiary_img = "bestiary/labras.jpg"
+desc ="""The labra is a gliding reptile. It's front claws are slightly curved, sharp and serrated, 20cm to 40cm long. 
+
+Connected to the first joints from the body on each limb is a membrane that also runs along the torso. The membrane is usually held retracted and in this position, it merely looks like a skin flap. When all limbs are extended, however, the membrane deploys like a sail and allows the labra to glide great distances. 
+
+The typical specimen measures 60cm to 1m tall from head to toes, 120cm to 2m from their nose to the end of their tail. Most specimens are plain green, but some display elaborate skin patterns similar to many snakes."""
 
 [templates.centipede]
 _parent = "animal"
@@ -129,6 +235,108 @@ desc="""The Tripolitan Desert Centipede is not the kind of bug that you can hope
 
 The creature often hides by burrowing under loose sand, which also protects it from the scorching heat of the desert sun. Desert centipedes are very good as sensing vibrations and they know when a prey is approaching even when burrowed. Their bite is said to be poisonous. """
 
+[templates.sentry-scarab]
+_parent = "animal"
+species = "sentry scarab"
+health = 18
+strength = 20
+agility = 40
+char = "s"
+color = "61871d"
+weapon = "*bite"
+resistances = ["#slice"]
+bestiary_img = "bestiary/sentry-scarab.png"
+desc="""Sentry Scarabs are very large insects, measuring up to 75 cm in length. They look like horned beetles standing on their four back legs in the fashion of mantis. Their front limbs are equipped with two powerful claws that vaguely resemble those of crabs.
+
+They have vestigial wings, but due to their weight, they are incapable of flight. They can however flap their wings to produce some wind or to moderately break a fall. Their thick exoskeleton is very resistant to cuts. """
+
+[templates.giant-locust]
+_parent = "animal"
+species = "Algerian giant locust"
+health = 15
+strength = 15
+agility = 45
+char = "l"
+color = "508710"
+weapon = "*mandibles"
+# TODO: implement the paralizing venom
+bestiary_img = "bestiary/giant-locust.jpg"
+desc="""The Algerian giant locust is a large insect that looks like a cross between a wood wasp and a grasshopper. A single one of them poses little threat on its own, but they tend to come in very large numbers. 
+
+The insect is about 30 cm to 40 cm long from head to tail. The body is sparsely covered in long hair. Most of the body has stripes of dark green and a beautiful iridescent blue. 
+
+Their stinger delivers a strong venom that causes intense pain. Repeated strings will eventually paralyze a human. 
+
+The giant locust are usually found in groups of 6 to 120 individuals. They eat some plants, but usually prefer to hunt small animals. When food is scares, they can burrow underground and enter a state of stasis. It is not well understood what triggers them to come back from stasis, but when it happens, the whole group usually emerges almost all at once."""
+
+[templates.sewer-otter]
+_parent = "animal"
+species = "sewer otter"
+health = 35
+strength = 35
+agility = 55
+char = "o"
+color = "5466de"
+weapon = "*claw"
+desc="""Sewer otters probably didn't evolve in sewers, but this is where most people are likely to encounter them. They look like a very large, very ferocious otter.
+
+They can be as long as 2m, but most specimens are 1.5m long. The head has a longer nose and and jaw than a river otter, almost as long as that of a fox, with very sharp teeth pointing up and down. Paws are webbed with very sharp claws, a bit like a mix between duck and wolverine paws. 
+
+Sewer otters are most commonly seen dripping with mud. Several diseased patches of skin are likely to be missing hair. 
+
+They are very good swimmers and can stay underwater for up to 10 minutes. They have been seen dragging preys with them to drown them."""
+
+# Non-human Characters
+[templates.pacherr]
+_class = "Humanoid"
+species = "pacherr"
+health = 70
+armor = 0
+strength = 65
+agility = 45
+intelligence = 70
+weapon = "*saber"
+faction = "#neutrals"
+strategies = ["*wandering"]
+char = "P"
+color = "986952"
+bestiary_img = "bestiary/pacherr.jpg"
+desc = """Pacherrs are human-sized bipedal wholly mammoths. They are essentially the closest one gets to Norse dwarves: stubby with elaborate braiding on their long facial wool. Celtic knots are often carved in the ivory of their tusks, less commonly, jewels are also set in their tusks.
+
+They rarely go taller than 1.5m, but because they are greatly muscular, 100kg is pretty much as light as an adult can be. Thanks to their massive head, they are also much smarter than the typical human can be.  Their clothing has a lot in common with Cossack attires, including robe-like gowns and long coats for males as well as fluffy hats. 
+
+Pacherrs come from nomadic tribes in Ukraine and Eastern Russian. They form strong bonds within their clan and will readily help any individual within the clan. Clans have a matriarchal structure with an elder female having the final word on internal affairs.
+
+Among themselves, Pacherrs love music and dancing with both genders taking interchangeable roles in their traditional dances. Their music often includes the tambourine and the balalaika."""
+
+[templates.pacherr-matriarch]
+_parent = "pacherr"
+role = "matriarch"
+health = 90
+strength = 55
+agility = 35
+intelligence = 80
+weapon = "*dagger"
+color = "8d4d2e"
+
+[templates.eguis]
+_class = "Humanoid"
+species = "éguis"
+health = 50
+armor = 0
+strength = 50
+agility = 65
+intelligence = 40
+weapon = "*dagger"
+faction = "#neutrals"
+strategies = ["*wandering"]
+char = "é"
+color = "2e8d52"
+bestiary_img = "bestiary/éguis-bw.jpg"
+desc = """Éguis are what you get if a cobra had limbs. They stand like a kangaroo using two legs and their tail. They are smart enough to use weapons and will invariably take offense at being compared to a snake. Most are 140 to 160 cm tall form head to toes (longer from head to tail). Very old individuals can reach 2m.
+
+Éguis are master of assassination, patient and cunning. You will rarely see one fire a gun, they prefer quiet and discrete alternatives like blow darts and shuriken."""
+
 # humans
 [templates.observer]
 _class = "Character"
@@ -142,7 +350,6 @@ weapon = "*dagger"
 faction = "#neutrals"
 strategies = ["*wandering"]
 convo_topics = ["#peace", "#dungeon"]
-char = "o"
 
 [templates.novice]
 _class = "Humanoid"

@@ -108,7 +108,7 @@ Their thick exoskeleton is very resistant to cuts. Their joints are less well pr
 
 They are rather slow, moving roughly at the pace of a brisk walking average human. They can climb on most vertical surfaces, except the most polished ones. The less textured a surface is, the slower the vertical progress is.
 
-Lire regular scarabs, they tend to display elaborate patterns and flashy colours on their body, including metallic and iridescent light effects.
+Like regular scarabs, they tend to display elaborate patterns and flashy colours on their body, including metallic and iridescent light effects.
 
 Sentry scarabs have a high mental capacity for insects due to their large head size. They can be trained and a few individuals can collaborate in the resolution of simple tasks. 
 
@@ -119,7 +119,7 @@ Pacherrs are human-sized bipedal wholly mammoths. They are essentially the close
 
 They rarely go taller than 1.5m, but because they are greatly muscular, 100kg is pretty much as light as an adult can be. Thanks to their massive head, they are also much smarter than the typical human can be.  Their clothing has a lot in common with Cossack attires, including robe-like gowns and long coats for males as well as fluffy hats. 
 
-Pacherrs come from nomadic tribes in Eastern Russian. They form strong bonds within their clan and will readily help any individual within the clan. Clans have a matriarchal structure with an elder female having the final word on internal affairs.
+Pacherrs come from nomadic tribes in Ukraine and Eastern Russian. They form strong bonds within their clan and will readily help any individual within the clan. Clans have a matriarchal structure with an elder female having the final word on internal affairs.
 
 Among themselves, Pacherrs love music and dancing with both genders taking interchangeable roles in their traditional dances. Their music often includes the tambourine and the balalaika. 
 

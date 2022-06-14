@@ -182,6 +182,9 @@ class Actor(object):
             return f"the {self.role}"
         order = self.__class__.__name__.lower()
         return f"the {order}"
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__} {self}>"
     
     def status_str(self):
         # TODO: use perception
@@ -458,6 +461,7 @@ class Monster(Actor):
     """ Monsters follow their instinct; they do not posses soffisticated 
     aspirations nor ethics. """
     char = "x"
+
     def __init__(self, health, armor, strength, agility):
         super(Monster, self).__init__(health, armor, strength, agility)
         
@@ -465,6 +469,7 @@ class Monster(Actor):
 class Character(Actor):
     """ Characters are everyone smart enough to become angry at something.  
     Most characters can use equipment.  Can be PC or NPC."""
+
     def __init__(self, health, armor, strength, agility, intelligence):
         super(Character, self).__init__(health, armor, strength, agility)
         self.intelligence = intelligence
@@ -495,6 +500,7 @@ class Humanoid(Character):
     """ Your average human shapped creature. 
     Most creatures of that shape know how to throw a punch. """
     char = "@"
+
     def __init__(self, health, armor, strength, agility, intelligence, fist_r=4, fist_l=None):
         super(Humanoid, self).__init__(health, armor, strength, agility, intelligence)
         if fist_r:
