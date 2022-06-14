@@ -187,6 +187,7 @@ class Wandering(Strategy):
         self.waypoint = None
     
     def act(self):
+        self.update()
         # A more interesting way to go about this would be to look at the recent forced 
         # rests events and to base the current rest bias on that.
         if rng.rstest(self.rest_bias):
@@ -230,6 +231,7 @@ class Fleeing(Strategy):
         return other.hates(self.me)
 
     def act(self):
+        self.update()
         map = tender.engine.map
         others = map.all_actors()  # TODO: ignore the out of sight ones
         threat = self.select_other(others)
@@ -253,6 +255,7 @@ class Panicking(Fleeing):
         self.last_yell = None
 
     def act(self):
+        self.update()
         cur_turn = tender.engine.current_turn
         if self.last_yell is None or self.last_yell < cur_turn - self.yell_frequency:
             self.last_yell = cur_turn

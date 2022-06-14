@@ -39,6 +39,7 @@ from kivy.animation import Animation
 from kivy.uix.screenmanager import ScreenManager, ShaderTransition
 from kivy.input.motionevent import MotionEvent
 from kivymd.uix.label import MDLabel
+from kivymd.uix.boxlayout import MDBoxLayout
 import asynckivy as ak
 
 from .maps import TileType, Connector
@@ -304,16 +305,9 @@ class MapWidget(FocusBehavior, ScatterPlane):
                                         stop_dispatching=True)
             there = self.canvas_to_map(event)
             desc, mood = self.description_at(there)
-            tender.messages.append(desc, mood=mood)
-            
             cont = self.app.root.messages_lbl_cont
-            label = MDLabel(text=desc)
-            cont.add_widget(label)
-            
-            # make it decay
-            await ak.sleep(5)
-            await ak.animate(label, opacity=0, d=1)
-            cont.remove_widget(label)
+
+            await cont.append_message(desc, mood=mood)
         finally:
             button.opacity = DEF_ICON_OPACITY
     
@@ -691,6 +685,20 @@ class HeroStatusBox(BoxLayout):
         stats = tender.hero.perceived_stats(tender.hero)
         self.ids.name_lbl.text = str(tender.hero)
         self.ids.health_lbl.text = f"Health: {stats['health']}"
+
+
+class MessagesBox(MDBoxLayout):
+    async def append_message(self, desc, mood=None):
+        tender.messages.append(desc, mood=mood)
+
+        label = MDLabel(text=desc)
+        self.add_widget(label)
+        
+        # make it decay
+        await ak.sleep(5)
+        await ak.animate(label, opacity=0, d=1)
+        self.remove_widget(label)
+
 
 class RipplesTransition(ShaderTransition):
     TRANSITION_FS = '''$HEADER$

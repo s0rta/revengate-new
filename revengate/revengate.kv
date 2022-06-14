@@ -7,7 +7,9 @@
     app: app
     do_rotation: False
 
-        
+<MapIconButton@MDIconButton>:
+    opacity: 0.7
+    
 <MainScreenButton@MDRectangleFlatButton>:
     pos_hint: {"center_x": 0.5}
 
@@ -24,6 +26,10 @@
         id: health_lbl
         adaptive_width: True
 
+<MessagesBox>:
+    orientation: "vertical"
+    adaptive_height: True
+        
 ScreenManager:
     app: app
     id: sm
@@ -82,29 +88,28 @@ ScreenManager:
                 spacing: "16dp"
                 padding: "16dp"
 
-                MDRectangleFlatButton:
-                    text: "Home"
+                MapIconButton:
+                    icon: "home-circle"
                     on_release: app.show_main_screen(*args)
                     
-                MDRectangleFlatButton:
-                    text: "Rest"
+                MapIconButton:
+                    icon: "timer-sand"
                     on_release: map_wid.rest()
 
                 MDRectangleFlatButton:
                     text: "Loot"
                     on_release: map_wid.loot()
 
-                MDRectangleFlatButton:
-                    text: "Follow stairs"
+                MapIconButton:
+                    icon: "stairs-box"
                     on_release: map_wid.follow_stairs()
                     
-                MDIconButton:
+                MapIconButton:
                     icon: "eye-circle"
-                    opacity: 0.7
                     on_release: map_wid.start_look(self)
 
-                MDRectangleFlatButton:
-                    text: "Stats"
+                MapIconButton:
+                    icon: "book-open-page-variant-outline"
                     on_release: map_wid.start_stats(self)
 
                 MDLabel:
@@ -118,11 +123,10 @@ ScreenManager:
             id: anchor_cont
             padding: "16dp"
             anchor_x: "left"
-            anchor_y: "bottom"
+            anchor_y: "top"
             
-            MDBoxLayout:
+            MessagesBox:
                 id: messages_lbl_cont
-                orientation: "vertical"
 
     StatsScreen
         name: 'stats_screen'

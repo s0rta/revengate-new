@@ -25,6 +25,7 @@ from uuid import uuid4
 from .utils import best
 from .randutils import rng
 from .tags import TagBag, TagSlot, FactionTag
+from .memory import Memory
 from .weapons import Condition, Injurious, Weapon, Spell, Families
 from .events import (Hit, Miss, Events, HealthEvent, Move, Rest, Death, is_action, 
                      Pickup, Conversation)
@@ -51,10 +52,12 @@ class Actor(object):
         super().__init__()
         self.id = str(uuid4())
         self.health = health
-        self.initial_health = health
+        # It's possible to go above "full", used a reference point for perception.
+        self.full_health = health
         self.armor = armor
         self.inventory = []
         self._strategies = []
+        self.memory = Memory(self)
 
         # main attributes
         self.strength = strength
@@ -181,9 +184,9 @@ class Actor(object):
     
     def status_str(self):
         # TODO: use perception
-        if self.health > self.initial_health * .5:
+        if self.health > self.full_health * .5:
             health = "healthy"
-        elif self.health > self.initial_health * .1:
+        elif self.health > self.full_health * .1:
             health = "injured"
         else:
             health = "weak"
@@ -194,7 +197,7 @@ class Actor(object):
         pprint.pprint(self.__dict__)
         breakpoint()
 
-    def _vague_desc(self, value, percent):
+    def vague_desc(self, value, percent):
         """ Return a vague descrption `value` as a percentage (in 0..1) of it's possible 
         range.
         
@@ -227,16 +230,18 @@ class Actor(object):
         num_attr = ["strength", "agility"]
         for attr in num_attr:
             val = getattr(other, attr)
-            stats[attr] = self._vague_desc(val, val/100.0)
-        stats["health"] = self._vague_desc(other.health, 
-                                           other.health/other.initial_health)
+            stats[attr] = self.vague_desc(val, val/100.0)
+        stats["health"] = self.vague_desc(other.health, 
+                                          other.health/other.full_health)
         return stats
         
     def stats(self):
         """ Return the core stats of an actor. """
         return dict(str=str(self), 
                     agility=self.agility, 
-                    strength=self.strength)
+                    strength=self.strength, 
+                    health=self.health, 
+                    full_health=self.full_health)
         
     def notices(self, thing):
         """ Return whether self can notice `thing`. """

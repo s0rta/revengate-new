@@ -74,7 +74,7 @@ class StatusEvent:
 
         # This is cached at creation time because the actor might not be available 
         # anymore by the time we need to display the message.
-        self.summary_str = self.summary()  
+        self.summary_str = self.summary()
         
     def __bool__(self):
         return self.cost > 0
@@ -94,9 +94,15 @@ class StatusEvent:
 
     def summary(self):
         """ Return a summary of the event that is fit for showing directly to the 
-        player. 
+        player. Perception is taken into account.
         
         Sub-classes should override this. """
+        return repr(self)
+
+    def details(self):
+        """ Return a summary of the event that is fit debugging. 
+        
+        Sub-classes might have to override this. """
         return repr(self)
 
 
@@ -172,23 +178,32 @@ class Death(StatusEvent):
         super().__init__(victim)
         
     def summary(self):
-        # FIXME: must use the cached actor stats for this one
         return f"{self.actor_stats['str']} died!"
 
 
 class HealthEvent(StatusEvent):
     """ The actor's health just got better or worse. """
+    big_delta = .4  # as a fraction of full_health
 
     def __init__(self, actor, h_delta):
-        self.h_delta = h_delta
+        self.h_delta = h_delta 
         super().__init__(actor)
+
+    def _delta_to_adj(self, actor_stats):
+        """ Return an adjective to describe how big a health delta is as perceived by 
+        the hero. """
+        if tender.hero:
+            percent = abs(self.h_delta) / (actor_stats["full_health"] * self.big_delta)
+            return tender.hero.vague_desc(self.h_delta, percent)
+        else: 
+            return str(abs(self.h_delta))
         
     def summary(self):
+        adj = self._delta_to_adj(self.actor_stats)
         if self.h_delta >= 0:
-            return f"{self.actor} heals {self.h_delta} points."
+            return f"{self.actor} heals {adj} points."
         else:
-            return (f"{self.actor} suffers {-self.h_delta} damages" 
-                    " from injuries.")
+            return (f"{self.actor} suffers {adj} damages from injuries.")
                         
 
 class Injury(HealthEvent):
@@ -205,6 +220,9 @@ class Injury(HealthEvent):
     def victim(self):
         return self.actor
 
+    @property
+    def victim_stats(self):
+        return self.actor_stats
 
 class Hit(Injury):
     """ A successful hit with a weapon. """
@@ -217,8 +235,9 @@ class Hit(Injury):
         super().__init__(victim, damage)
         
     def summary(self):
-        s = (f"{self.attacker} hit {self.victim} with a {self.weapon}"
-             f" for {self.damage} damages!")
+        adj = self._delta_to_adj(self.victim_stats)
+        s = (f"{self.attacker} hit {self.victim_stats['str']} with a {self.weapon}"
+             f" for {adj} damages!")
         if self.critical:
             s += " Critical hit!"
         return s
