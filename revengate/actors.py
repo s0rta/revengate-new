@@ -242,6 +242,9 @@ class Actor(object):
                     strength=self.strength, 
                     health=self.health, 
                     full_health=self.full_health)
+    
+    def remember(self, event):
+        self.memory.append(event)
         
     def notices(self, thing):
         """ Return whether self can notice `thing`. """

@@ -21,6 +21,7 @@
 import itertools
 import operator
 
+from .events import iter_events
 from .weapons import Events
 from . import tender
 
@@ -31,6 +32,7 @@ class Engine:
     def __init__(self):
         self._actors = {}  # actors who are not on the map but we still track
         self.current_turn = 0
+        self._seen_events = set()  # events that were seen during the current turn
         self.map = None
 
     def __getstate__(self):
@@ -79,13 +81,25 @@ class Engine:
         if actor.id in self._actors:
             del self._actors[actor.id]
 
+    def remember(self, events):
+        for event in iter_events(events):
+            if event in self._seen_events:
+                continue
+            else:
+                self._seen_events.add(event)
+            for aid in event.actor_ids:
+                if actor := self.actor_by_id(aid):
+                    actor.remember(event)
+
     def advance_turn(self):
         """ Update everything that needs to be updated at the start of a new
         turn. """
         self.current_turn += 1
+        self._seen_events.clear()
         events = Events()
         for actor in self.all_actors():
             events += actor.update()
+        self.remember(events)
         return events
 
     def change_map(self, map):

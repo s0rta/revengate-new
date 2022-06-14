@@ -69,8 +69,16 @@ class StatusEvent:
     cost = 1
     
     def __init__(self, actor):
+        # We only store the actor id rather than a strong ref to make StatusEvent pickle 
+        # nicer.
         self.actor_id = actor and actor.id or None
         self.actor_stats = actor and actor.stats() or {}
+
+        # Everyone who is involved with an event. Subclasses should append to this.
+        if actor:
+            self.actor_ids = [actor.id]
+        else:
+            self.actor_ids = []
 
         # This is cached at creation time because the actor might not be available 
         # anymore by the time we need to display the message.
@@ -144,6 +152,7 @@ class Conversation(StatusEvent):
         self.responder_stats = responder.stats()
         self.tag = dialogue_tag
         super().__init__(initiator)
+        self.actor_ids.append(responder.id)
         
     def summary(self):
         return (f"{self.actor} had a chat with {self.responder} about {self.tag}.")
@@ -224,6 +233,7 @@ class Injury(HealthEvent):
     def victim_stats(self):
         return self.actor_stats
 
+
 class Hit(Injury):
     """ A successful hit with a weapon. """
 
@@ -233,6 +243,7 @@ class Hit(Injury):
         self.weapon = weapon
         self.critical = critical
         super().__init__(victim, damage)
+        self.actor_ids.append(attacker.id)
         
     def summary(self):
         adj = self._delta_to_adj(self.victim_stats)
@@ -255,6 +266,7 @@ class Miss(StatusEvent):
         self.target_stats = target.stats()
         self.weapon = weapon
         super().__init__(attacker)
+        self.actor_ids.append(target.id)
         
     def summary(self):
         return f"{self.actor} misses {self.target}."
@@ -313,8 +325,11 @@ class Events(list):
         return " ".join(map(str, self))
 
     def __iadd__(self, other):
-        other = filter(not_none, other)
-        return super(Events, self).__iadd__(other)
+        if other:
+            other = filter(not_none, other)
+            return super(Events, self).__iadd__(other)
+        else:
+            return self
     
     def add(self, event):
         if isinstance(event, list):

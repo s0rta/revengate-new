@@ -845,6 +845,7 @@ class RevengateApp(MDApp):
     def display_status_events(self, events):
         self.root.hero_status.update_status()
         
+        tender.engine.remember(events)
         for event in iter_events(events):
             if isinstance(event, Injury):
                 ak.start(self.map_wid.animate_health_event(event))
