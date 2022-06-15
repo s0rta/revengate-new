@@ -26,64 +26,14 @@ from pprint import pprint
 from argparse import ArgumentParser
 import itertools
 
+from . import tender
 from .engine import Engine
-from .tags import t
-from .actors import Humanoid, Monster
-from . import weapons, tender
 from .loader import TopLevelLoader
-from .maps import Map, Builder, MapOverlay
+from .maps import Map, Builder
 
-
-def man_vs_wolf(engine):
-    start = engine.current_turn
-    me = tender.loader.invoke("hero")
-    wolf = tender.loader.invoke("wolf")
-
-    engine.register(me)
-    engine.register(wolf)
-    # FIXME: deregister after the combat
-
-    while (me.health > 0 and wolf.health > 0):
-        print(engine.advance_turn() or "no turn updates")
-        hits = me.attack(wolf)
-        print(hits or f"{me} miss!")
-        hits = wolf.attack(me)
-        print(hits or f"{wolf} miss!")
-    duration = engine.current_turn - start
-    victim = me.health <= 0 and me or wolf
-    winner = victim is me and wolf or me
-    print(f"{victim} died!  ({me.health} vs {wolf.health} HP;"
-          f" {duration} turns)")
-    return winner, duration
-
-
-def mage_vs_wolf(engine):
-    start = engine.current_turn
-    me = tender.loader.invoke("mage")
-    wolf = tender.loader.invoke("wolf")
-
-    engine.register(me)
-    engine.register(wolf)
-    # FIXME: deregister after the combat
-
-    while (me.health > 0 and wolf.health > 0):
-        print(engine.advance_turn() or "no turn updates")
-        if me.mana > 5:
-            hits = me.cast("fire-arc", wolf)
-        else:
-            hits = me.attack(wolf)
-        print(hits or f"{me} miss!")
-        hits = wolf.attack(me)
-        print(hits or f"{wolf} miss!")
-    duration = engine.current_turn - start
-    victim = me.health <= 0 and me or wolf
-    winner = victim is me and wolf or me
-    print(f"{victim} died!  ({me.health} vs {wolf.health} HP;"
-          f" {duration} turns)")
-    return winner, duration
 
 def _split_factions(actors):
-    factions = defaultdict(lambda: set()) # name->actors map
+    factions = defaultdict(lambda: set())  # name->actors map
     for a in actors:
         factions[a.faction].add(a)
     return factions
@@ -205,6 +155,8 @@ def main():
     tender.loader = TopLevelLoader()
     for f in args.load:
         tender.loader.load(f)
+        
+    all_templates = list(tender.loader.templates())
 
     if args.map:
         tender.engine = Engine()

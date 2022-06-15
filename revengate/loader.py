@@ -35,6 +35,7 @@ import sys
 import json
 import inspect
 from pprint import pprint
+from itertools import chain
 
 import tomlkit
 
@@ -90,8 +91,7 @@ class Template:
 
     def __init__(self, name, parent=None, fields=None):
         super(Template, self).__init__()
-        # Templates must know their name,  it simplifies the inheritance 
-        # resolution
+        # Templates must know their name: it simplifies the inheritance resolution
         self.name = name  
         self.parent = parent
         self.fields = fields or {}
@@ -166,6 +166,14 @@ class TopLevelLoader:
                 return obj
         raise ValueError("Could not find a sub-loader with an instance "
                          f"registered as {name}.")
+    
+    def templates(self):
+        """ Return all known template names. """
+        return chain(*(loader.templates() for loader in self.sub_loaders.values()))
+
+    def instances(self):
+        """ Return all known instance names. """
+        return chain(*(loader.instances() for loader in self.sub_loaders.values()))
 
 
 class SubLoader:
@@ -189,13 +197,19 @@ class SubLoader:
         sub-classes should return None if they can't handle the request.
         """
         raise NotImplementedError()
-        
+
+    def templates(self):
+        return ()
+            
     def get_instance(self, name):
         """ Return the existing object instance registered as `name`. 
 
         sub-classes should return None if they can't handle the request.
         """
         raise NotImplementedError()
+
+    def instances(self):
+        return ()
 
 
 class FileMapLoader(SubLoader):
@@ -398,6 +412,9 @@ class DialogueLoader(SubLoader):
         if name in self.dialogues:
             return self.dialogues[name]
         return None
+    
+    def instances(self):
+        return self.dialogues.keys()
 
 
 class TemplatizedObjectsLoader(SubLoader):
@@ -680,3 +697,10 @@ class TemplatizedObjectsLoader(SubLoader):
 
     def get_instance(self, name):
         return self._instances.get(name)
+
+    def templates(self):
+        return self._templates.keys()
+    
+    def instances(self):
+        return self._instances.keys()
+    

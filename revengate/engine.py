@@ -21,8 +21,7 @@
 import itertools
 import operator
 
-from .events import iter_events
-from .weapons import Events
+from .events import Events, iter_events
 from . import tender
 
 
@@ -58,7 +57,7 @@ class Engine:
         The actor must be registerd directly with the engine or placed on the current 
         map.
         """
-        if actor_id in self.map:
+        if self.map and actor_id in self.map:
             return self.map.actor_by_id(actor_id)
         else:
             return self._actors.get(actor_id)

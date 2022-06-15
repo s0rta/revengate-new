@@ -241,7 +241,7 @@ class Actor(object):
         
     def stats(self):
         """ Return the core stats of an actor. """
-        return dict(str=str(self), 
+        return dict(str=self.__str__(), 
                     agility=self.agility, 
                     strength=self.strength, 
                     health=self.health, 
