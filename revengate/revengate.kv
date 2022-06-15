@@ -14,6 +14,11 @@
 <MainScreenButton@MDRectangleFlatButton>:
     pos_hint: {"center_x": 0.5}
 
+<MinorButton@MDRectangleFlatButton>:
+    theme_text_color: "Secondary"
+    line_color: app.theme_cls.secondary_text_color
+
+
 <HeroStatusBox>:
     orientation: "horizontal"
     name_lbl: name_lbl
@@ -30,44 +35,88 @@
 <MessagesBox>:
     orientation: "vertical"
     adaptive_height: True
+
+<RevScrollView@ScrollView>:
+    lbl: lbl
+    
+    do_scroll_x: False
+    do_scroll_y: True
+    size_hint_x: 1
+    bar_color: app.theme_cls.accent_color
+    bar_inactive_color: app.theme_cls.accent_dark
+    bar_width: "4dp"
+    scroll_type: ["bars", "content"]
+
+    MDLabel:
+        id: lbl
+        valign: "top"
+        size_hint_y: None
+        height: self.texture_size[1]
+        text_size: self.width, None
+    
+<MainScreen@MDScreen>:
+    name: 'main_screen'
+    resume_game_bt: resume_game_bt
+    
+    MDBoxLayout:
+        spacing: "32dp"
+        padding: "32dp"
+        orientation: "vertical"
+        halign: "center"
+        width: self.parent.width
+
+        MDLabel:
+            halign: "center"
+            text: "Welcome to Revengate!"
+            font_size: "45sp"
+            font_weight: "bold"
+            
+        MainScreenButton:
+            id: new_game_bt
+            text: "New Game"
+            on_press: app.root.transition.center_on_button()
+            on_release: app.start_new_game()
         
+        MainScreenButton:
+            id: resume_game_bt
+            disabled: not app.has_saved_game()
+            text: "Resume"
+            on_release: app.show_map_screen(*args)
+
+        AnchorLayout:
+            anchor_x: "right"
+            anchor_y: "bottom"
+            size_hint_y: 0.1
+            
+            MDBoxLayout:
+                orientation: "horizontal"
+                adaptive_size: True
+                spacing: "16dp"
+                
+                MinorButton:
+                    text: "Credits"
+                    on_release: app.show_credits_screen(self)
+                    
+                MinorButton:
+                    text: "License"
+                    on_release: app.show_license_screen(self)
+
+
 ScreenManager:
     app: app
     id: sm
     map_wid: map_wid
-    resume_game_bt: resume_game_bt
+    resume_game_bt: main_screen.resume_game_bt
     select_mode_lbl: select_mode_lbl
     messages_lbl_cont: messages_lbl_cont
     stats_screen: stats_screen
     hero_status: hero_status
+    credits_screen: credits_screen
+    license_screen: license_screen
     
-    MDScreen:
+    MainScreen:
+        id: main_screen
         name: 'main_screen'
-        
-        MDBoxLayout:
-            spacing: "32dp"
-            padding: "32dp"
-            orientation: "vertical"
-            halign: "center"
-            width: self.parent.width
-
-            MDLabel:
-                halign: "center"
-                text: "Welcome to Revengate!"
-                font_size: "45sp"
-                font_weight: "bold"
-                
-            MainScreenButton:
-                id: new_game_bt
-                text: "New Game"
-                on_press: app.root.transition.center_on_button()
-                on_release: app.start_new_game()
-            
-            MainScreenButton:
-                id: resume_game_bt
-                disabled: not app.has_saved_game()
-                text: "Resume"
-                on_release: app.show_map_screen(*args)
 
     Screen:
         name: 'map_screen'
@@ -129,6 +178,64 @@ ScreenManager:
             MessagesBox:
                 id: messages_lbl_cont
 
-    StatsScreen
-        name: 'stats_screen'
+    StatsScreen:
+        name: "stats_screen"
         id: stats_screen
+
+    CreditsScreen:
+        name: "credits_screen"
+        id: credits_screen
+
+    LicenseScreen:
+        name: "license_screen"
+        id: license_screen
+
+<CreditsScreen@MDScreen>:
+    credits_scroller: credits_scroller
+
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: "16dp"
+        spacing: "8dp"
+        
+        MDLabel:
+            size_hint_y: 0.2
+            font_size: "30sp"
+            text_size: self.size
+            adaptive_height: True
+            valign: "top"
+            halign: "center"
+            text: "Credits"
+
+        RevScrollView:
+            id: credits_scroller
+                
+        MDRectangleFlatButton:
+            pos_hint: {'right': 1}
+            text: "Back"
+            on_release: app.show_main_screen(self)
+
+<LicenseScreen@MDScreen>:
+    license_scroller: license_scroller
+
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: "16dp"
+        spacing: "8dp"
+        
+        MDLabel:
+            size_hint_y: 0.2
+            font_size: "30sp"
+            text_size: self.size
+            adaptive_height: True
+            valign: "top"
+            halign: "center"
+            text: "Revengate is Free Software"
+
+        RevScrollView:
+            id: license_scroller
+                
+        MDRectangleFlatButton:
+            pos_hint: {'right': 1}
+            text: "Back"
+            on_release: app.show_main_screen(self)

@@ -41,7 +41,6 @@ name = "saber"
 weight = 7
 "!damage" = [5, 9]
 
-
 [templates.sword]
 _parent = "blade"
 weight = 7

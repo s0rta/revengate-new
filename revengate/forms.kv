@@ -28,33 +28,16 @@
     
 <ConversationPopupContent>
     id: form_content
-    convo_label: convo_label
+    scroller: scroller
+    
     orientation: "vertical"
     spacing: "12dp"
     size_hint_y: None
     height: "124dp"
     
-    ScrollView:
-        do_scroll_x: False
-        do_scroll_y: True
-        size: form_content.size
-        size_hint: 1, None
-        bar_color: app.theme_cls.accent_color
-        bar_inactive_color: app.theme_cls.accent_dark
-        bar_width: "4dp"
-        scroll_type: ["bars", "content"]
-        
-        MDBoxLayout:
-            adaptive_height: True
-            
-            MDLabel:
-                size_hint_y: None
-                height: self.texture_size[1]
-                text_size: self.width, None
-            
-                id: convo_label
-                text: "He gazed up at the enormous face. \nForty years it had taken him to learn what kind of smile was hidden beneath the dark moustache. \nO cruel, needless misunderstanding! \nO stubborn, self-willed exile from the loving breast! \nTwo gin-scented tears trickled down the sides of his nose. \nBut it was all right, everything was all right, the struggle was finished. \nHe had won the victory over himself. \nHe loved Big Brother.\n" * 3
-
+    RevScrollView:
+        id: scroller
+    
 <GameOverPopup>
     title: "Game Over!"
     type: "custom"

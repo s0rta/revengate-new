@@ -206,7 +206,7 @@ class ConversationPopup(RevPopup):
         else:
             # TODO: append it to the history
             self.title = str(part.speaker)
-            self.content.convo_label.text = part.text
+            self.content.scroller.lbl.text = part.text
 
 
 class ConversationPopupContent(BoxLayout):

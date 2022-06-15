@@ -779,6 +779,7 @@ class RevengateApp(MDApp):
     def __init__(self, cheats=False, *args):
         self.cheats = cheats
         super().__init__(*args)
+        resources.resource_add_path(DATA_DIR)
         resources.resource_add_path(os.path.join(DATA_DIR, "images"))
         resources.resource_add_path(os.path.join(DATA_DIR, "fonts"))
 
@@ -822,8 +823,25 @@ class RevengateApp(MDApp):
 
     def show_stats_screen(self, button=None):
         self.root.transition.center_on_button(button)
-        
         self.root.current = "stats_screen"
+
+    def show_credits_screen(self, button=None):
+        self.root.transition.center_on_button(button)
+        
+        screen = self.root.ids.credits_screen
+        fq_path = resources.resource_find("CREDITS.md")
+        screen.credits_scroller.lbl.text = open(fq_path, "tr").read()
+        
+        self.root.current = "credits_screen"
+
+    def show_license_screen(self, button=None):
+        self.root.transition.center_on_button(button)
+        
+        screen = self.root.ids.license_screen
+        fq_path = resources.resource_find("GPLv3.txt")
+        screen.license_scroller.lbl.text = open(fq_path, "tr").read()
+        
+        self.root.current = "license_screen"
 
     def show_map_screen(self, button=None):
         self.root.transition.center_on_button(button)
@@ -885,9 +903,6 @@ class RevengateApp(MDApp):
         self.map_wid = self.root.map_wid
         self.map_wid.bind(engine_turn=self.play_npcs_and_refresh)
         self.map_wid.bind(hero_turn=self.play_npcs_and_refresh)
-
-        # TODO: disable "resume" button unless there is a saved game
-
         return self.root
 
     def on_start(self):

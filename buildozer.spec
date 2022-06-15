@@ -13,7 +13,7 @@ package.domain = org.revengate
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas,ttf,pickle,tml
+source.include_exts = py,png,jpg,kv,atlas,ttf,pickle,tml,md,txt
 
 # (list) List of inclusions using pattern matching
 #source.include_patterns = revengate/data/*.toml
