@@ -230,6 +230,10 @@ class Injury(HealthEvent):
         return self.actor
 
     @property
+    def victim_id(self):
+        return self.actor_id
+
+    @property
     def victim_stats(self):
         return self.actor_stats
 

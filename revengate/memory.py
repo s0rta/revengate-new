@@ -44,8 +44,14 @@ class Memory:
         self.events.append(event)
 
     def last_attacker(self):
-        ...
+        for event in reversed(self.events):
+            if hasattr(event, "attacker") and event.attacker_id != self.actor.id:
+                if attacker := event.attacker:
+                    return attacker
         
     def last_victim(self):
-        ...
+        for event in reversed(self.events):
+            if hasattr(event, "victim") and event.victim_id != self.actor.id:
+                if victim := event.victim:
+                    return victim
         
