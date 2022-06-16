@@ -28,6 +28,7 @@ import itertools
 
 from . import tender
 from .engine import Engine
+from .actors import Actor
 from .loader import TopLevelLoader
 from .maps import Map, Builder
 
@@ -72,7 +73,7 @@ def last_actor_standing(a, b, debug=False):
     return winner, duration
 
 
-def run_many(combat_funct, nbtimes=100):
+def run_many(combat_funct, nbtimes=100, ref_actor=None):
     """ Run a simulation nbtimes and print a statistical summary. """
     engine = tender.engine
     winners = Counter()
@@ -82,10 +83,16 @@ def run_many(combat_funct, nbtimes=100):
         winner, duration = combat_funct(engine)
         durations.append(duration)
         winners[winner] += 1
-    champ, victories = winners.most_common(1)[0]
-    avg = sum(durations) / len(durations)
-    print(f"{champ} won {victories} times. "
-          f"Fights lasted {avg} turns on average.")
+    if ref_actor:
+        champ = ref_actor
+        victories = winners[ref_actor]
+    else:
+        champ, victories = winners.most_common(1)[0]
+    pct = victories / nbtimes
+    avg_turns = sum(durations) / len(durations)
+    print(f"{champ:20} won {pct*100:5.1f}% of combats. "
+          f"Fights lasted {avg_turns:4.1f} turns on average.")
+    return pct, avg_turns
 
 
 def map_demo(actor_names):
@@ -149,6 +156,11 @@ def main():
                         help="Run the map simulation instead of the combat one.")
     parser.add_argument("-d", "--debug", action="store_true", 
                         help="Display debugging messages.")
+    parser.add_argument("-n", "--nb-iter", type=int, default=100,  
+                        help="Run simulation NB_ITER times [%(default)s].")
+    parser.add_argument("--all", action="store_true", 
+                        help=("Run the simulation on all actors in the file against "
+                              "the first value supplied to --actors."))
     
     args = parser.parse_args()
 
@@ -161,11 +173,26 @@ def main():
     if args.map:
         tender.engine = Engine()
         map_demo(args.actors)
+    elif args.all:
+        for t_name in all_templates:
+            if t_name == args.actors[0]:
+                continue
+            try:
+                thing = tender.loader.invoke(t_name)
+            except:
+                print(f"can't simulate {t_name}")
+                continue
+            if not isinstance(thing, Actor):
+                continue
+            def sim(engine):
+                tender.engine = Engine()
+                return last_actor_standing(*[args.actors[0], t_name], debug=args.debug)
+            run_many(sim, args.nb_iter, t_name)
     else:
         def sim(engine):
             tender.engine = Engine()
             return last_actor_standing(*args.actors, debug=args.debug)
-        run_many(sim)
+        run_many(sim, args.nb_iter, args.actors[0])
 
 
 if __name__ == '__main__':

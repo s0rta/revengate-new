@@ -362,7 +362,7 @@ intelligence = 50
 weapon = "*sword"
 faction = "#lumiere"
 
-[templates.average_joe]
+[templates.average-joe]
 _class = "Humanoid"
 name = "Average Joe"
 health = 50
