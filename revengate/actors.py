@@ -394,6 +394,8 @@ class Actor(object):
 
         # damage over time effects
         for effect in vector.effects:
+            if not rng.rstest(effect.prob):
+                continue
             cond_delta = effect.h_delta
             if effect.family in self.resistances:
                 cond_delta *= RES_FACTOR

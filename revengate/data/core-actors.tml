@@ -77,6 +77,7 @@ _class = "Effect"
 name = "poison"
 duration = 3
 h_delta = -2
+prob = 0.55
 family = "#poison"
 
 [templates.poison_bite] 
@@ -107,7 +108,7 @@ family = "#slice"
 [templates.claw]
 _class = "Injurious"
 verb = "slashed"
-damage = 5
+damage = 6
 family = "#slice"
 
 [templates.animal]
@@ -120,17 +121,17 @@ strategies = ["*pol_hater"]
 [templates.rat]
 _parent = "animal"
 species = "rat"
-health = 5
-strength = 15
-agility = 50
+health = 3
+strength = 17
+agility = 57
 char = "r"
 
 [templates.trinian-bat]
 _parent = "animal"
 species = "trinian bat"
-health = 10
-strength = 15
-agility = 65
+health = 6
+strength = 8
+agility = 59
 char = "b"
 desc = """The trinian bat is a large distant relative of the very common pipistrelle bat.
 
@@ -143,9 +144,9 @@ Trinian bats sometimes steal items from people, which they bring back to their c
 [templates.plasus-rat]
 _parent = "animal"
 species = "plasus rat"
-health = 7
-strength = 20
-agility = 50
+health = 5
+strength = 19
+agility = 60
 weapon = "*incisors"
 char = "r"
 color = "ae531f"
@@ -154,17 +155,17 @@ desc = """Plasus rats are vicious rodents. Usually reddish brown with a stripped
 [templates.wolf]
 _parent = "animal"
 species = "wolf"
-health = 30
-strength = 35
-agility = 55
+health = 12
+strength = 29
+agility = 53
 char = "d"
 
 [templates.sulant-tiger]
 _parent = "animal"
 species = "Sulant tiger"
-health = 30
-strength = 40
-agility = 60
+health = 15
+strength = 30
+agility = 55
 weapon = "*claw"
 char = "f"
 color = "57af37"
@@ -176,9 +177,9 @@ Sulant tigers use their tails as monkeys do to grab objects or the limbs of unsu
 [templates.cave-cat]
 _parent = "animal"
 species = "cave cat"
-health = 20
-strength = 35
-agility = 50
+health = 17
+strength = 20
+agility = 56
 char = "f"
 color = "ff79cb"
 desc = """Cave cats are large hairless felines usually encountered in sewers and other underground tunnels. They prey on raccoons, cats, and dogs. Miners and dockers release cave cats in mines and warehouses to keep the rodent population under control.
@@ -190,9 +191,9 @@ Their sharp canine teeth protrude out of their mouth, about half as much as sabe
 [templates.sahwakoon]
 _parent = "animal"
 species = "sahwakoon"
-health = 18
-strength = 20
-agility = 60
+health = 16
+strength = 17
+agility = 53
 char = "s"
 color = "a17022"
 # TODO: implement the stun attack
@@ -208,9 +209,9 @@ damage = 7
 [templates.labras]
 _parent = "animal"
 species = "labras"
-health = 25
+health = 21
 strength = 35
-agility = 65
+agility = 52
 weapon = "*labras-claw"
 char = "l"
 color = "73ce00"
@@ -224,9 +225,9 @@ The typical specimen measures 60cm to 1m tall from head to toes, 120cm to 2m fro
 [templates.centipede]
 _parent = "animal"
 species = "desert centipede"
-health = 20
+health = 18
 strength = 25
-agility = 50
+agility = 40
 char = "c"
 color = "ea9d1a"
 weapon = "*poison_bite"
@@ -238,9 +239,9 @@ The creature often hides by burrowing under loose sand, which also protects it f
 [templates.sentry-scarab]
 _parent = "animal"
 species = "sentry scarab"
-health = 18
-strength = 20
-agility = 40
+health = 15
+strength = 16
+agility = 47
 char = "s"
 color = "61871d"
 weapon = "*bite"
@@ -253,7 +254,7 @@ They have vestigial wings, but due to their weight, they are incapable of flight
 [templates.giant-locust]
 _parent = "animal"
 species = "Algerian giant locust"
-health = 15
+health = 12
 strength = 15
 agility = 45
 char = "l"
@@ -272,9 +273,9 @@ The giant locust are usually found in groups of 6 to 120 individuals. They eat s
 [templates.sewer-otter]
 _parent = "animal"
 species = "sewer otter"
-health = 35
-strength = 35
-agility = 55
+health = 23
+strength = 29
+agility = 52
 char = "o"
 color = "5466de"
 weapon = "*claw"
@@ -290,10 +291,10 @@ They are very good swimmers and can stay underwater for up to 10 minutes. They h
 [templates.pacherr]
 _class = "Humanoid"
 species = "pacherr"
-health = 70
+health = 60
 armor = 0
-strength = 65
-agility = 45
+strength = 63
+agility = 40
 intelligence = 70
 weapon = "*saber"
 faction = "#neutrals"
@@ -322,10 +323,10 @@ color = "8d4d2e"
 [templates.eguis]
 _class = "Humanoid"
 species = "éguis"
-health = 50
+health = 45
 armor = 0
-strength = 50
-agility = 65
+strength = 55
+agility = 46
 intelligence = 40
 weapon = "*dagger"
 faction = "#neutrals"

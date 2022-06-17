@@ -207,7 +207,7 @@ class Governor:
 
         for species in ["sentry-scarab", "giant-locust", "plasus-rat", "sulant-tiger", 
                         "sahwakoon", "labras", "cave-cat", "sewer-otter", "trinian-bat",
-                        "pacherr", "pacherr-matriarch", "eguis"]:
+                        "pacherr", "pacherr-matriarch", "eguis", "centipede"]:
             foe = tender.loader.invoke(species)
             map.place(foe)
         

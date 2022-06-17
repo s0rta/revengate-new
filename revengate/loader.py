@@ -166,6 +166,15 @@ class TopLevelLoader:
                 return obj
         raise ValueError("Could not find a sub-loader with an instance "
                          f"registered as {name}.")
+
+    def get_template(self, name):
+        """ Return template `name` without invoking it. """
+        for loader in self.sub_loaders.values():
+            tmpl = loader.get_template(name)
+            if tmpl:
+                return tmpl
+        raise ValueError("Could not find a sub-loader with a template "
+                         f"registered as {name}.")
     
     def templates(self):
         """ Return all known template names. """
@@ -201,6 +210,9 @@ class SubLoader:
     def templates(self):
         return ()
             
+    def get_template(self, name):
+        return None
+    
     def get_instance(self, name):
         """ Return the existing object instance registered as `name`. 
 
@@ -697,6 +709,9 @@ class TemplatizedObjectsLoader(SubLoader):
 
     def get_instance(self, name):
         return self._instances.get(name)
+
+    def get_template(self, name):
+        return self._templates.get(name)
 
     def templates(self):
         return self._templates.keys()

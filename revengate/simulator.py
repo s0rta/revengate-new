@@ -31,7 +31,7 @@ from .engine import Engine
 from .actors import Actor
 from .loader import TopLevelLoader
 from .maps import Map, Builder
-
+from .randutils  import rng
 
 def _split_factions(actors):
     factions = defaultdict(lambda: set())  # name->actors map
@@ -40,16 +40,22 @@ def _split_factions(actors):
     return factions
 
 
+def _sim_key(template):
+    if isinstance(template, str):
+        return template
+    else:
+        return template.name
+
+
 def last_actor_standing(a, b, debug=False):
     engine = tender.engine
     start = engine.current_turn
-    actors = {a: tender.loader.invoke(a),
-              b: tender.loader.invoke(b)}
-    
-    engine.register(actors[a])
-    engine.register(actors[b])
+    actors = {_sim_key(tmpl): tender.loader.invoke(tmpl) 
+              for tmpl in [a, b]}
+    for actor in actors.values():
+        engine.register(actor)
 
-    while actors[a].is_alive and actors[b].is_alive:
+    while all(actor.is_alive for actor in actors.values()):
         for attacker, victim in itertools.permutations(actors.values(), 2):
             hit = attacker.attack(victim)
             if debug:
@@ -93,6 +99,55 @@ def run_many(combat_funct, nbtimes=100, ref_actor=None):
     print(f"{champ:20} won {pct*100:5.1f}% of combats. "
           f"Fights lasted {avg_turns:4.1f} turns on average.")
     return pct, avg_turns
+
+
+def close_enough(value, target, margin):
+    """ Return if value is close to taget +/- margin as a proportion of target in 0..1 
+    """
+
+    return target * (1 - margin) <= value <= target * (1 + margin)
+
+
+def auto_tune(ref_actor, tunable_actor, nb_iter, 
+              win_ratio=0.7, win_ratio_margin=0.1, 
+              win_turns=18, win_turns_margin=0.3):
+    
+    tunable_tmpl = tender.loader.get_template(tunable_actor)
+    
+    diff = defaultdict(int)
+    last_tuned = None
+    last_val = None
+    tunable_attr = [a for a in ["health", "agility", "strength"]
+                    if a in tunable_tmpl.fields]
+    
+    def sim(engine):
+        tender.engine = Engine()
+        return last_actor_standing(ref_actor, tunable_tmpl)
+
+    pct, avg_turn = run_many(sim, nb_iter, ref_actor)
+    while not all((close_enough(pct, win_ratio, win_ratio_margin),
+                   close_enough(avg_turn, win_turns, win_turns_margin))):
+        attr = rng.biased_choice(tunable_attr, 3, last_tuned)
+        if attr == last_tuned:
+            val = min(1, last_val // 2)
+        else:
+            val = rng.randrange(1, 5)
+        if pct < win_ratio or avg_turn > win_turns:
+            val = -abs(val)
+        
+        tunable_tmpl.fields[attr] += val
+        diff[attr] += val
+        
+        print(f"was {pct=} {avg_turn=}, going with")
+        pprint(dict(diff))
+        
+        pct, avg_turn = run_many(sim, nb_iter, ref_actor)
+
+        last_tuned = attr
+        last_val = val
+        
+    print("good enough!")
+    pprint(tunable_tmpl.__dict__)
 
 
 def map_demo(actor_names):
@@ -161,6 +216,11 @@ def main():
     parser.add_argument("--all", action="store_true", 
                         help=("Run the simulation on all actors in the file against "
                               "the first value supplied to --actors."))
+    parser.add_argument("--auto-tune", action="store_true", 
+                        help=("Auto-tune the value of an actor template. Two templates"
+                              " must be passed to --actors, the first one is the"
+                              " reference, the second one is the one that will be"
+                              " auto-tuned."))
     
     args = parser.parse_args()
 
@@ -174,6 +234,7 @@ def main():
         tender.engine = Engine()
         map_demo(args.actors)
     elif args.all:
+        ref = tender.loader.get_template(args.actors[0])
         for t_name in all_templates:
             if t_name == args.actors[0]:
                 continue
@@ -186,8 +247,11 @@ def main():
                 continue
             def sim(engine):
                 tender.engine = Engine()
-                return last_actor_standing(*[args.actors[0], t_name], debug=args.debug)
+                return last_actor_standing(*[ref, t_name], debug=args.debug)
             run_many(sim, args.nb_iter, t_name)
+    elif args.auto_tune:
+        auto_tune(*args.actors, args.nb_iter)
+        
     else:
         def sim(engine):
             tender.engine = Engine()

@@ -108,22 +108,25 @@ class Events(list):
             self.append(event)
 
 
-class Effect(object):
+class Effect:
     """ A long term effect. """
     family = TagSlot(Family)
+
     def __init__(self, name, duration, h_delta, family, verb=None):
-        super(Effect, self).__init__()
         self.name = name
-        self.duration = duration # either an int or a (min, max) tuple 
+        self.duration = duration  # either an int or a (min, max) tuple 
         self.h_delta = h_delta
         self.family = family
         self.verb = verb
+        self.prob = 1.0  # probability that the effect will happen
 
     def _get_damage(self):
         """ For weapons, it's easier to think in terms of damage. """
         return -self.h_delta
+
     def _set_damage(self, dmg):
         self.h_delta = -dmg
+        
     damage = property(_get_damage, _set_damage)
 
 
@@ -137,7 +140,7 @@ class Condition(object):
         self.effect = effect
         self.start = start
         self.stop = stop
-        self.h_delta = h_delta # per-turn health delta 
+        self.h_delta = h_delta  # per-turn health delta 
 
 
 class HealthVector:
