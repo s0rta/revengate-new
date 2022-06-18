@@ -333,7 +333,7 @@ faction = "#neutrals"
 strategies = ["*wandering"]
 char = "é"
 color = "2e8d52"
-bestiary_img = "bestiary/éguis-bw.jpg"
+bestiary_img = "bestiary/éguis-bw.png"
 desc = """Éguis are what you get if a cobra had limbs. They stand like a kangaroo using two legs and their tail. They are smart enough to use weapons and will invariably take offense at being compared to a snake. Most are 140 to 160 cm tall form head to toes (longer from head to tail). Very old individuals can reach 2m.
 
 Éguis are master of assassination, patient and cunning. You will rarely see one fire a gun, they prefer quiet and discrete alternatives like blow darts and shuriken."""

@@ -28,7 +28,7 @@ from .loader import DATA_DIR, TopLevelLoader, data_path
 from .engine import Engine
 from .ui import TextUI, Quitting, KivyUI
 from .commands import CommandMap, CoreCommands
-from .maps import Connector, Builder, Map
+from .maps import Connector, Builder, Map, BiasedRecursiveBacktracker
 from .area import Area
 from .events import is_action, StairsEvent, Events
 from .factions import Mood, Faction
@@ -46,6 +46,11 @@ CONFIG_DIR = os.path.join(CONFIG_ROOT, "revengate")
 
 # all the file keys you need to get a complete saved game
 SAVED_GAME_KEYS = ["hero", "engine", "mapid", "dungeon", "messages"]
+
+ALL_MONSTERS = ["sentry-scarab", "giant-locust", "plasus-rat", "sulant-tiger", 
+                "sahwakoon", "labras", "cave-cat", "sewer-otter", "trinian-bat",
+                "pacherr", "pacherr-matriarch", "eguis", "centipede",
+                "slime", "rat", "wolf"]
 
 
 class Condenser:
@@ -167,27 +172,51 @@ class Governor:
         map = Map()
         builder = Builder(map)
         builder.init(80, 25)
-        builder.gen_level()
-        
-        nb_passes = 3  # very arbitrary, should be tuned during play testing
-        pairs = zip(rng.choices(list(builder.iter_rooms()), k=nb_passes), 
-                    rng.choices(self.factions, k=nb_passes))
-        for room, fact in pairs:
-            builder.add_vibe(room, fact)
+        if lvl < 3:
+            builder.gen_level()
 
+            # FIXME: vibe gen centers on rooms and does not work on pure mazes
+            nb_passes = 3  # very arbitrary, should be tuned during play testing
+            pairs = zip(rng.choices(list(builder.iter_rooms()), k=nb_passes), 
+                        rng.choices(self.factions, k=nb_passes))
+            for room, fact in pairs:
+                builder.add_vibe(room, fact)
+
+        elif lvl < 5:
+            # traboules
+            algo = BiasedRecursiveBacktracker(builder, rect=None, 
+                                              reconnect_prob=0.1,
+                                              straight_line_bias=5)
+            builder.maze_fill(algo)  
+        else:
+            # catacombs
+            algo = BiasedRecursiveBacktracker(builder, rect=None, 
+                                              reconnect_prob=0.05,
+                                              straight_line_bias=.2)
+            builder.maze_fill(algo)  
+        
         # stairs
         if lvl < 5:
             # after 5 levels, we can't go down anymore
-            builder.staircase()
+            if lvl < 3:
+                pos = None
+            else:
+                pos = map.random_pos(free=True)
+            builder.staircase(pos=pos)
         else:
+            # omadar has something to tell us on the last level
             omandar = tender.loader.invoke("observer", name="Omandar")
             omandar.next_dialogue = t("deepest_level")
             map.place(omandar)
 
         if parent_map:
-            builder.staircase(None, "<", from_pos, parent_map)
+            if lvl < 3:
+                pos = None
+            else:
+                pos = map.random_pos(free=True)
+            builder.staircase(pos, "<", from_pos, parent_map)
 
-        for name in rng.choices(["slime", "rat", "wolf"], k=nb_monsters):
+        for name in rng.choices(ALL_MONSTERS, k=nb_monsters):
             a = tender.loader.invoke(name)
             map.place(a)
         map.place(item)
@@ -196,7 +225,7 @@ class Governor:
 
     def make_first_map(self):
         pen = tender.loader.invoke("pen")
-        map = self.make_map(2, pen)
+        map = self.make_map(3, pen)
         
         obs = tender.loader.invoke("observer")
         obs.next_dialogue = t("first_level")
@@ -205,12 +234,6 @@ class Governor:
         rob = tender.loader.invoke("rob", rank="landlord")
         map.place(rob)
 
-        for species in ["sentry-scarab", "giant-locust", "plasus-rat", "sulant-tiger", 
-                        "sahwakoon", "labras", "cave-cat", "sewer-otter", "trinian-bat",
-                        "pacherr", "pacherr-matriarch", "eguis", "centipede"]:
-            foe = tender.loader.invoke(species)
-            map.place(foe)
-        
         tender.engine.change_map(map)
         if tender.hero:
             map.place(tender.hero)
@@ -325,7 +348,7 @@ class Governor:
             mapid = tile.dest_map
             if mapid is None:
                 sword = tender.loader.invoke("sword")
-                map = self.make_map(3, sword, from_pos, tender.engine.map)
+                map = self.make_map(5, sword, from_pos, tender.engine.map)
                 
             else:
                 map = tender.dungeon[mapid]
@@ -333,7 +356,7 @@ class Governor:
             next_pos = map.arrival_pos(tender.engine.map.id)
             tender.engine.map.remove(tender.hero)
             tender.engine.change_map(map)
-            map.place(tender.hero, next_pos)
+            map.place(tender.hero, next_pos, fallback=True)
 
             tender.hero.set_played()
             return StairsEvent(tender.hero, from_pos)

@@ -1492,11 +1492,11 @@ def main():
     algo = BiasedRecursiveBacktracker(builder, rect, start_offset=(0, 0),
                                       reconnect_prob=0.1,
                                       # fill_ratio=0.5,
-                                      # straight_line_bias=4,
+                                      straight_line_bias=5,
                                       #winding_bias=5, 
                                       #winding_offset=(50, 10),
-                                        dest_bias=3, 
-                                        dest_offset=(80, 18),
+                                      #  dest_bias=3, 
+                                      #  dest_offset=(80, 18),
                                       )
     # algo = SideWinder(builder, rect)
     # algo = BinaryTree(builder, rect)

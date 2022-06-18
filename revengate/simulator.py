@@ -111,7 +111,6 @@ def close_enough(value, target, margin):
 def auto_tune(ref_actor, tunable_actor, nb_iter, 
               win_ratio=0.7, win_ratio_margin=0.1, 
               win_turns=18, win_turns_margin=0.3):
-    
     tunable_tmpl = tender.loader.get_template(tunable_actor)
     
     diff = defaultdict(int)

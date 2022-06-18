@@ -326,8 +326,8 @@ class MapWidget(FocusBehavior, ScatterPlane):
         
         # fill the stats page
         screen = self.app.root.ids.stats_screen
-
-        screen.stats_img.source = them.bestiary_img or EMPTY_IMG
+        img_source = resources.resource_find(them.bestiary_img) or EMPTY_IMG
+        screen.stats_img.source = img_source
         screen.stats_name_lbl.text = f"Name: {stats['name']}"
         screen.stats_str_lbl.text = f"Strength: {stats['strength']}"
         screen.stats_ag_lbl.text = f"Agility: {stats['agility']}"
