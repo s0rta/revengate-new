@@ -27,3 +27,7 @@ kalimati.ttf:
 Symbola_hint.ttf:
 - Copyright (C) 2007-2015 George Douros
 - "Fonts are free for any use; they may be opened, edited, modified, regenerated, packaged and redistributed."
+
+Shield outline on the launch icon: 
+Public Domain by OpenClipart
+https://freesvg.org/vector-drawing-of-blank-silver-shield

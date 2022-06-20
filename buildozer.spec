@@ -44,7 +44,7 @@ requirements.source.kivymd = ../kivymd
 presplash.filename = %(source.dir)s/revengate/data/images/splash-screen.png
 
 # (str) Icon of the application
-#icon.filename = %(source.dir)s/data/icon.png
+icon.filename = %(source.dir)s/revengate/data/images/launch-icon.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
 orientation = landscape
