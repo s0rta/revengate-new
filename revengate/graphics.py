@@ -66,6 +66,23 @@ TILE_SIZE = 32
 WINDOW_SIZE = (1280, 720)
 WINDOW_SIZE_WIDE = (2164, 1080)
 
+
+GPLv3_SUMMARY = """
+Revengate is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Revengate is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You can find the full text of the GPL licence on the GNU website:
+https://www.gnu.org/licenses/ .
+"""
+
+
 class ImgSourceCache:
     def __init__(self):
         self._cache = {}            
@@ -870,8 +887,7 @@ class RevengateApp(MDApp):
         self.root.transition.center_on_button(button)
         
         screen = self.root.ids.license_screen
-        fq_path = resources.resource_find("GPLv3.txt")
-        screen.license_scroller.lbl.text = open(fq_path, "tr").read(4000) + " ..."
+        screen.license_scroller.lbl.text = GPLv3_SUMMARY
         
         self.root.current = "license_screen"
 
