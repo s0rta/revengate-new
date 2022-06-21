@@ -117,6 +117,10 @@ class Actor(object):
         return self.health <= 0
 
     @property
+    def is_hyper_perceptive(self):
+        return self.perception >= 85
+
+    @property
     def has_played(self):
         if self._last_action is None:
             return False
@@ -206,7 +210,8 @@ class Actor(object):
         range.
         
         The descrption is gets better as self.perception improves. """
-        if self.perception >= 85:  # there is no guess when you are that perceptive
+        if self.is_hyper_perceptive:  
+            # there's no guessing when you are that perceptive
             return str(value)
         elif 60 <= self.perception < 85:
             bounds = [(.8, "excellent"), (.6, "good"), (.4, "average"), 

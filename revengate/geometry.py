@@ -93,6 +93,24 @@ def mid_point(coord1, coord2):
     return ((x1+x2)//2, (y1+y2)//2)
 
 
+def towards_point(coord1, coord2, percent):
+    """ Return a point that is somewhere in beween coord1 and coord2.
+    
+    percent=0: coord1
+    percent=0.25: one quarter of the way between coord1 and coord2
+    ...
+    percent=1: coord2
+    """
+    x1, y1 = coord1
+    x1 *= 1 - percent
+    y1 *= 1 - percent
+    
+    x2, y2 = coord2
+    x2 *= percent 
+    y2 *= percent     
+    return (int(x1+x2), int(y1+y2)) 
+
+
 def y_sorted(seq):
     """ Return a sequence of (x, y) coords sorted by its y component. """
     return sorted(seq, key=operator.itemgetter(1))

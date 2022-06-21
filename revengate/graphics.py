@@ -517,7 +517,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
             else:
                 hero_pos = self.map.find(tender.hero)
                 if mpos in self.map.adjacents(hero_pos, free=False):
-                    direction = Vector(mpos) - Vector(hero_pos)
+                    direction =  - Vector(hero_pos)
                     res = tender.commands["move-or-act"](direction)
             if is_action(res):
                 self.finalize_turn(res)
@@ -592,11 +592,25 @@ class MapWidget(FocusBehavior, ScatterPlane):
         
     async def animate_health_event(self, event):
         """ Animate a health event, which is typically the result of an attack. """
+        # TODO: make HPs fly off
+        # [x] inspect perception, (in actors.py)
+        # - decide on animation style: 
+        #   - based on the type of event and sign of event.h_delta
+        #   - red for injury, green for healing
+        # [x] create HP labels
+        # [x] animate HP labels
+        # [ ] animation follows the actors
+        # [ ] tune the transition function (linear vs sine, log, ...)
         red = "#DD1010"
+        green = "#10DD10"
+
         if event.victim in self._elems:
+            # TODO: conditions are HealthEvents, which do not have a victim, so we 
+            # forget to animate them. :-(
             v_elem = self._elems[event.victim]
         else:
             return
+        
         if hasattr(event, "attacker") and event.attacker in self._elems:
             a_elem = self._elems[event.attacker]
             # calling tuple() because we need a copy or the value will change under our 
@@ -608,14 +622,32 @@ class MapWidget(FocusBehavior, ScatterPlane):
         else:
             retreat = ak.sleep(0)
 
-        with self.canvas:
-            rect = MapElement(text="◯", pos=v_elem.pos, opacity=0.3, 
-                              color=red, outline_color=red, outline_width=0)
-            fade_in = ak.animate(rect, font_size=rect.font_size*1.3, outline_width=3,
-                                 opacity=.7, d=0.3)
-            await ak.and_(retreat, fade_in)
-            await ak.animate(rect, font_size=rect.font_size*1.3, outline_width=0,
-                             opacity=0, d=0.3)
+        if tender.hero and tender.hero.is_hyper_perceptive:
+            text = str(event.damage)
+            with self.canvas:
+                # TODO: follow the actors as they are clashing with each other
+                rect = MapElement(text=text, pos=v_elem.pos, opacity=0.3, 
+                                  color=red, outline_color=red, outline_width=0)
+                offset = Vector(v_elem.size)
+                slightly_above = geom.towards_point(v_elem.pos, 
+                                                    offset + v_elem.pos, 
+                                                    0.25)
+                # TODO: higher, not further right
+                way_above = geom.towards_point(v_elem.pos, 
+                                               offset*2 + v_elem.pos, 
+                                               0.25)
+                fade_in = ak.animate(rect, pos=slightly_above, opacity=.7, d=0.3)
+                await ak.and_(retreat, fade_in)
+                await ak.animate(rect, pos=way_above, opacity=0, d=0.3)
+        else:
+            with self.canvas:
+                rect = MapElement(text="◯", pos=v_elem.pos, opacity=0.3, 
+                                    color=red, outline_color=red, outline_width=0)
+                fade_in = ak.animate(rect, font_size=rect.font_size*1.3, outline_width=3,
+                                        opacity=.7, d=0.3)
+                await ak.and_(retreat, fade_in)
+                await ak.animate(rect, font_size=rect.font_size*1.3, outline_width=0,
+                                    opacity=0, d=0.3)
 
     def finalize_turn(self, events=None):
         """ Let all NPCs play, update all statuses, refresh map.
