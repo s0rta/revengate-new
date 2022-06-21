@@ -101,6 +101,9 @@
                     text: "License"
                     on_release: app.show_license_screen(self)
 
+                MinorButton:
+                    text: "Privacy"
+                    on_release: app.show_privacy_screen(self)
 
 ScreenManager:
     app: app
@@ -190,6 +193,11 @@ ScreenManager:
         name: "license_screen"
         id: license_screen
 
+    PrivacyScreen
+        name: "privacy_screen"
+        id: privacy_screen
+
+
 <CreditsScreen@MDScreen>:
     credits_scroller: credits_scroller
 
@@ -234,6 +242,31 @@ ScreenManager:
 
         RevScrollView:
             id: license_scroller
+                
+        MDRectangleFlatButton:
+            pos_hint: {'right': 1}
+            text: "Back"
+            on_release: app.show_main_screen(self)
+
+<PrivacyScreen@MDScreen>:
+    scroller: scroller
+
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: "16dp"
+        spacing: "8dp"
+        
+        MDLabel:
+            size_hint_y: 0.2
+            font_size: "30sp"
+            text_size: self.size
+            adaptive_height: True
+            valign: "top"
+            halign: "center"
+            text: "Revengate does not track you in any way"
+
+        RevScrollView:
+            id: scroller
                 
         MDRectangleFlatButton:
             pos_hint: {'right': 1}

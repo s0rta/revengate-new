@@ -33,12 +33,12 @@ version.filename = %(source.dir)s/revengate/__init__.py
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd,tomlkit,pillow,asynckivy,asyncgui
+requirements = python3,kivy==2.0.0,kivymd,tomlkit,pillow,asynckivy,asyncgui
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
-requirements.source.kivy = ../kivy
-requirements.source.kivymd = ../kivymd
+#requirements.source.kivy = ../kivy
+#requirements.source.kivymd = ../kivymd
 
 # (str) Presplash of the application
 presplash.filename = %(source.dir)s/revengate/data/images/splash-screen.png
@@ -105,7 +105,7 @@ android.minapi = 27
 #android.sdk = 20
 
 # (str) Android NDK version to use
-android.ndk = 23b
+android.ndk = 23c
 
 # (int) Android NDK API to use. This is the minimum API your app will support, it should usually match android.minapi.
 android.ndk_api = 27
@@ -115,7 +115,7 @@ android.ndk_api = 27
 
 # (str) Android NDK directory (if empty, it will be automatically downloaded.)
 # d/l at: https://dl.google.com/android/repository/android-ndk-r23b-linux.zip
-android.ndk_path = ../android-ndk-r23b/
+android.ndk_path = ../android-ndk-r23c/
 
 # (str) Android SDK directory (if empty, it will be automatically downloaded.)
 #android.sdk_path =
@@ -126,7 +126,7 @@ android.ndk_path = ../android-ndk-r23b/
 # (bool) If True, then skip trying to update the Android sdk
 # This can be useful to avoid excess Internet downloads or save time
 # when an update is due and you just want to test/build your package
-android.skip_update = True
+# android.skip_update = True
 
 # (bool) If True, then automatically accept SDK license
 # agreements. This is intended for automation only. If set to False,

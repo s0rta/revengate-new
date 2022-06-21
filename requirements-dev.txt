@@ -63,7 +63,7 @@ ipython==8.2.0
     # via ipdb
 jedi==0.18.1
     # via ipython
-kivy==2.1.0
+kivy==2.0.0
     # via
     #   -r requirements.txt
     #   kivymd

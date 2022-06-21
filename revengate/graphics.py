@@ -839,9 +839,18 @@ class RevengateApp(MDApp):
         
         screen = self.root.ids.license_screen
         fq_path = resources.resource_find("GPLv3.txt")
-        screen.license_scroller.lbl.text = open(fq_path, "tr").read()
+        screen.license_scroller.lbl.text = open(fq_path, "tr").read(4000) + " ..."
         
         self.root.current = "license_screen"
+
+    def show_privacy_screen(self, button=None):
+        self.root.transition.center_on_button(button)
+        
+        screen = self.root.ids.privacy_screen
+        fq_path = resources.resource_find("PRIVACY.md")
+        screen.scroller.lbl.text = open(fq_path, "tr").read()
+        
+        self.root.current = "privacy_screen"
 
     def show_map_screen(self, button=None):
         self.root.transition.center_on_button(button)

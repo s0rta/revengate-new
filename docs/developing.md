@@ -40,9 +40,9 @@ More details are available in the [Kivy official documentation][kivy-for-a]
 Buildozer also fails to auto-download our target Android NDK, so you should download it manually:
 
 ```sh-session
-$ cd ..
-$ wget https://dl.google.com/android/repository/android-ndk-r23b-linux.zip
-$ unzip android-ndk-r23b-linux.zip
+$ cd ..  # anywhere else is OK, but you should edit buildozer.spec or add a symlink
+$ wget https://dl.google.com/android/repository/android-ndk-r23c-linux.zip
+$ unzip android-ndk-r23c-linux.zip
 ```
 
 You can test your Android development setup by plugging an Android device over USB then typing: 
