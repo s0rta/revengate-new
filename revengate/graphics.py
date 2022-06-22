@@ -51,6 +51,7 @@ from .events import (Events, is_action, is_move, iter_events, Conversation, Deat
 from . import events
 from .utils import Array
 from .tags import t
+from .actors import Actor
 from . import geometry as geom
 from . import tender, forms, uidefs
 
@@ -115,6 +116,32 @@ class ImgSourceCache:
         fq_path = resources.resource_find(path)
         self._cache[key] = fq_path
         return fq_path
+
+
+class AudioCache:
+    def __init__(self):
+        self._cache = {}  # sound filename to Sound
+
+    def __getitem__(self, fname):
+        if fname not in self._cache:
+            self.pre_load(fname)
+        return self._cache[fname]
+
+    def pre_load(self, thing):
+        """ Pre-load all the sounds that could be emited by an actor. """
+        if isinstance(thing, str):  # file name
+            fname = thing
+            sound = SoundLoader.load(fname)
+            def rewind(*args):
+                sound.seek(0)
+            sound.bind(on_stop=rewind)
+            sound.load()
+            self._cache[fname] = sound
+        elif isinstance(thing, Actor):
+            if thing.weapon and thing.weapon.hit_sound:
+                self.pre_load(thing.weapon.hit_sound)
+        else:
+            raise ValueError(f"Don't know how to pre-load {type(thing)}")
 
 
 def is_mobile():
@@ -414,6 +441,8 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 anim = Animation(pos=cpos, duration=0.2, t="in_out_sine")
                 anim.start(elem)
         else:
+            if isinstance(thing, Actor):
+                self.app.audio_cache.pre_load(thing)
             with self.canvas:
                 color = getattr(thing, "color", uidefs.DEF_ELEM_COLOR)
                 elem = MapElement(text=thing.char, color=color, pos=cpos)
@@ -535,7 +564,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
             else:
                 hero_pos = self.map.find(tender.hero)
                 if mpos in self.map.adjacents(hero_pos, free=False):
-                    direction =  - Vector(hero_pos)
+                    direction = Vector(mpos) - Vector(hero_pos)
                     res = tender.commands["move-or-act"](direction)
             if is_action(res):
                 self.finalize_turn(res)
@@ -630,8 +659,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
             return
         
         if isinstance(event, events.Hit) and event.weapon.hit_sound:
-            sound = SoundLoader.load(event.weapon.hit_sound)
-            print(f"playing {sound}")
+            sound = self.app.audio_cache[event.weapon.hit_sound]
             sound.play()
 
         if hasattr(event, "attacker") and event.attacker in self._elems:
@@ -833,6 +861,7 @@ class RevengateApp(MDApp):
     
     def __init__(self, cheats=False, *args):
         self.cheats = cheats
+        self.audio_cache = AudioCache()
         super().__init__(*args)
         resources.resource_add_path(DATA_DIR)
         resources.resource_add_path(os.path.join(DATA_DIR, "images"))
