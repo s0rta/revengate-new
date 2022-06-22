@@ -81,6 +81,7 @@ class Strategy:
         super(Strategy, self).__init__()
         self.name = name
         self.me = me
+        self.ttl = None
         
     def is_valid(self):
         """ Return whether the strategy is a valid one for `me` at the present time. """
@@ -93,7 +94,10 @@ class Strategy:
         
         Sub-classes that implement an expiration logic should override this method.
         """
-        return False
+        if self.ttl is not None and self.ttl <= 0:
+            return True
+        else:
+            return False
         
     def update(self):
         """ Inspect the state of the world and adjust internal parameters. 
@@ -107,7 +111,9 @@ class Strategy:
         self.me = me
 
     def act(self):
-        self.update()
+        if self.ttl is not None:
+            self.ttl -= 1
+
         map = tender.engine.map
         actors = map.all_actors()  # TODO: ignore the out of sight ones
         sel = self.select_other(actors)
@@ -187,7 +193,8 @@ class Wandering(Strategy):
         self.waypoint = None
     
     def act(self):
-        self.update()
+        if self.ttl is not None:
+            self.ttl -= 1
         # A more interesting way to go about this would be to look at the recent forced 
         # rests events and to base the current rest bias on that.
         if rng.rstest(self.rest_bias):
@@ -255,7 +262,8 @@ class Panicking(Fleeing):
         self.last_yell = None
 
     def act(self):
-        self.update()
+        if self.ttl is not None:
+            self.ttl -= 1
         cur_turn = tender.engine.current_turn
         if self.last_yell is None or self.last_yell < cur_turn - self.yell_frequency:
             self.last_yell = cur_turn
@@ -291,3 +299,8 @@ class SelfDefence(AttackOriented):
     def is_interesting(self, other):
         """ Return whether other should be considered as a potential selection. """
         return self.is_enemy(other)
+
+
+class FlightOrFight(Strategy):
+    """ Flee, but fight back when cornered. """
+    

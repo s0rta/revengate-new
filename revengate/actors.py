@@ -294,11 +294,16 @@ class Actor(object):
         In most cases, the choice of the action is delegated to the strategy 
         while the selected action is performed by this class. """
         if self.health < 0:
-            raise RuntimeError(f"{self} can't attack because of being dead!")
-        if not self.strategy:
-            raise RuntimeError("Trying to perform an action before assigning " 
-                               "a strategy.")
-        result = self.strategy.act()
+            raise RuntimeError(f"{self} can't act because of being dead!")
+        
+        for strat in self._strategies:
+            strat.update()
+
+        strat = self.strategy
+        if not strat:
+            raise RuntimeError("Trying to perform an action without a valid strategy.")
+        result = strat.act()
+
         if is_action(result):
             self.set_played()
         return result
