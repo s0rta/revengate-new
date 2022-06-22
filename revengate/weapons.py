@@ -17,7 +17,7 @@
 
 """ Weapons logic and common weapon types. """
 
-import enum
+
 from .tags import Tag, TagSlot
 from .items import Item
 
@@ -34,78 +34,6 @@ class Families:
     HEAT   = Family("heat")
     ACID   = Family("acid")
     POISON = Family("poison")
-
-
-class StatusEvent:
-    """ Something that changes the status of an actor. 
-    
-    This is mostly to keep track of what happened so we can show it to the 
-    player. 
-    
-    Any function that could return a StatusEvent can also return None if the 
-    event didn't occur. 
-    """
-    def __init__(self, target):
-        super(StatusEvent, self).__init__()
-        self.target = target
-
-class HealthEvent(StatusEvent):
-    """ The actor's health just got better or worse. """
-    def __init__(self, target, h_delta):
-        super(HealthEvent, self).__init__(target)
-        self.h_delta = h_delta
-        
-    def __str__(self):
-        if self.h_delta >= 0:
-            return f"{self.target} heals {self.h_delta} points."
-        else:
-            return (f"{self.target} suffers {-self.h_delta} damages" 
-                    " from injuries.")
-                        
-class Injury(HealthEvent):
-    """ Something that hurts """
-    def __init__(self, target, damage):
-        super(Injury, self).__init__(target, -damage)
-
-    @property
-    def damage(self):
-        return -self.h_delta
-        
-
-class Hit(Injury):
-    """ A successful hit with a weapon. """
-    def __init__(self, target, attacker, weapon, damage, critical=False):
-        super(Hit, self).__init__(target, damage)
-        self.attacker = attacker
-        self.weapon = weapon
-        self.critical = critical
-        
-    def __str__(self):
-        s = (f"{self.attacker} hit {self.target} with a {self.weapon}"
-             f" for {self.damage} damages!")
-        if self.critical:
-            s += " Critical hit!"
-        return s
-
-class Events(list):
-    """ A group of StatusEvents.  None-events are implicitely ignored. """
-    def __init__(self, *events):
-        if events:
-            events = filter(bool, events)
-            super(Events, self).__init__(events)
-        else:
-            super(Events, self).__init__()
-        
-    def __str__(self):
-        return " ".join(map(str, self))
-       
-    def __iadd__(self, other):
-        other = filter(bool, other)
-        return super(Events, self).__iadd__(other)
-    
-    def add(self, event):
-        if event:
-            self.append(event)
 
 
 class Effect:
@@ -135,6 +63,7 @@ class Condition(object):
     
     If an effect is successfully appied to someone, they carry the condition. 
     """
+
     def __init__(self, effect, start, stop, h_delta):
         super(Condition, self).__init__()
         self.effect = effect
@@ -146,13 +75,15 @@ class Condition(object):
 class HealthVector:
     """ Something that changes health and that is directed at an actor. """
     family = TagSlot(Family)
+    
     def __init__(self, name, h_delta, family, verb=None):
         super(HealthVector, self).__init__()
         self.name = name
         self.h_delta = h_delta
         self.family = family
         self.verb = verb
-        self.effects = [] # long term effects of applying the vector
+        self.effects = []  # long term effects of applying the vector
+        self.hit_sound = None  # any sound file that the UI can handle
         
     def __str__(self):
         return self.name
@@ -160,6 +91,7 @@ class HealthVector:
     def _get_damage(self):
         """ For weapons, it's easier to think in terms of damage. """
         return -self.h_delta
+    
     def _set_damage(self, dmg):
         self.h_delta = -dmg
     damage = property(_get_damage, _set_damage)
@@ -168,13 +100,15 @@ class HealthVector:
 class Injurious(HealthVector):
     """ Something that can hurt someone or something.  This could be a tool,
     a body part, a spell, or a toxin. """
+
     def __init__(self, name, damage, family, verb=None):
-        super(Injurious, self).__init__(name, -damage, family, verb)
+        super().__init__(name, -damage, family, verb)
 
 
 class Weapon(Item, Injurious):
     """ An actual weapon.  Something that takes inventory space and must be 
     weilded. """
+
     def __init__(self, name, damage, family, weight, char='⚔️', verb=None):
         Item.__init__(self, name, weight, char)
         Injurious.__init__(self, name, damage, family, verb)
@@ -182,6 +116,7 @@ class Weapon(Item, Injurious):
 
 class Spell(HealthVector):
     """ A magical invocation """
+
     def __init__(self, name, h_delta, family, cost, verb=None):
         super(Spell, self).__init__(name, h_delta, family, verb)
         self.cost = cost

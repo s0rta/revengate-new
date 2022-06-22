@@ -28,6 +28,7 @@ _class = "Weapon"
 family = "#slice"
 char = "🗡️"
 verb = "cut"
+hit_sound = "sounds/sword-3.wav"
 
 [templates.dagger]
 _parent = "blade"

@@ -14,6 +14,8 @@ charset-normalizer==2.0.12
     # via requests
 docutils==0.18.1
     # via kivy
+ffpyplayer==4.3.5
+    # via -r requirements.in
 idna==3.3
     # via requests
 kivy==2.0.0

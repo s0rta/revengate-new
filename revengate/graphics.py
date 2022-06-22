@@ -30,6 +30,7 @@ from kivy.vector import Vector
 from kivy.uix.label import Label
 from kivy.properties import (NumericProperty, StringProperty, ObjectProperty,            
                              BooleanProperty)
+from kivy.core.audio import SoundLoader
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.scatter import ScatterPlane
 from kivy.graphics import Rectangle
@@ -47,6 +48,7 @@ from .commands import CommandMap
 from .loader import DATA_DIR
 from .events import (Events, is_action, is_move, iter_events, Conversation, Death, 
                      Teleport, Injury, HealthEvent)
+from . import events
 from .utils import Array
 from .tags import t
 from . import geometry as geom
@@ -65,7 +67,6 @@ EMPTY_IMG = "dungeon/black.png"
 TILE_SIZE = 32
 WINDOW_SIZE = (1280, 720)
 WINDOW_SIZE_WIDE = (2164, 1080)
-
 
 GPLv3_SUMMARY = """
 Revengate is free software: you can redistribute it and/or modify
@@ -628,6 +629,11 @@ class MapWidget(FocusBehavior, ScatterPlane):
         else:
             return
         
+        if isinstance(event, events.Hit) and event.weapon.hit_sound:
+            sound = SoundLoader.load(event.weapon.hit_sound)
+            print(f"playing {sound}")
+            sound.play()
+
         if hasattr(event, "attacker") and event.attacker in self._elems:
             a_elem = self._elems[event.attacker]
             # calling tuple() because we need a copy or the value will change under our 
@@ -659,12 +665,12 @@ class MapWidget(FocusBehavior, ScatterPlane):
         else:
             with self.canvas:
                 rect = MapElement(text="◯", pos=v_elem.pos, opacity=0.3, 
-                                    color=red, outline_color=red, outline_width=0)
-                fade_in = ak.animate(rect, font_size=rect.font_size*1.3, outline_width=3,
-                                        opacity=.7, d=0.3)
+                                  color=red, outline_color=red, outline_width=0)
+                fade_in = ak.animate(rect, font_size=rect.font_size*1.3, 
+                                     outline_width=3, opacity=.7, d=0.3)
                 await ak.and_(retreat, fade_in)
                 await ak.animate(rect, font_size=rect.font_size*1.3, outline_width=0,
-                                    opacity=0, d=0.3)
+                                 opacity=0, d=0.3)
 
     def finalize_turn(self, events=None):
         """ Let all NPCs play, update all statuses, refresh map.
