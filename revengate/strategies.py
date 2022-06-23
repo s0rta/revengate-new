@@ -302,10 +302,9 @@ class SelfDefence(AttackOriented):
 
 
 class FlightOrFight(Strategy):
+    """ Flee, but fight back when cornered. """
     priority = 0.8
     calm_down_turns = 20
-
-    """ Flee, but fight back when cornered. """
 
     def __init__(self, name):
         super().__init__(name)
@@ -327,13 +326,13 @@ class FlightOrFight(Strategy):
         my_dist = dist_f(my_pos)
 
         options = []
-        for pos in map.adjacents(my_pos, free=True):
+        for pos in map.adjacents(my_pos, free=True, shuffled=True):
             dist = dist_f(pos)
             if dist > my_dist:
                 options.append((dist, pos))
 
         if options:
-            # move there the furthest away we can
+            # move the furthest away we can
             options = sorted(options, reverse=True)
             _, pos = options[0]
             return self.me.move(pos)
