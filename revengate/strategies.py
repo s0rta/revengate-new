@@ -326,7 +326,7 @@ class FlightOrFight(Strategy):
         my_dist = dist_f(my_pos)
 
         options = []
-        for pos in map.adjacents(my_pos, free=True, shuffled=True):
+        for pos in map.adjacents(my_pos, free=True, shuffle=True):
             dist = dist_f(pos)
             if dist > my_dist:
                 options.append((dist, pos))
