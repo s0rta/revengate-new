@@ -231,6 +231,10 @@ class Governor:
         obs.next_dialogue = t("first_level")
         map.place(obs)
 
+        for i in range(5):
+            rat = tender.loader.invoke("rat")
+            map.place(rat)
+
         rob = tender.loader.invoke("rob", rank="landlord")
         map.place(rob)
 

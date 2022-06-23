@@ -52,6 +52,9 @@ _class = "Fleeing"
 [templates.panicking]
 _class = "Panicking"
 
+[templates.flight-or-fight]
+_class = "FlightOrFight"
+
 # Inunus
 [templates.slime_slam]
 _class = "Injurious"
@@ -125,6 +128,7 @@ health = 3
 strength = 17
 agility = 57
 char = "r"
+"+strategies" = ["*flight-or-fight"]
 
 [templates.trinian-bat]
 _parent = "animal"

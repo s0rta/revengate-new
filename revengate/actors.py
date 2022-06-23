@@ -190,6 +190,12 @@ class Actor(object):
     def __repr__(self):
         return f"<{self.__class__.__name__} {self}>"
     
+    @property
+    def health_percent(self):
+        """ Return the percentage from full_health. Typically in 0..1, but can go above 
+        in rare cases. """
+        return self.health / self.full_health
+    
     def status_str(self):
         # TODO: use perception
         if self.health > self.full_health * .5:
@@ -513,7 +519,8 @@ class Humanoid(Character):
     Most creatures of that shape know how to throw a punch. """
     char = "@"
 
-    def __init__(self, health, armor, strength, agility, intelligence, fist_r=4, fist_l=None):
+    def __init__(self, health, armor, strength, agility, intelligence, 
+                 fist_r=4, fist_l=None):
         super(Humanoid, self).__init__(health, armor, strength, agility, intelligence)
         if fist_r:
             self.fist_r = Injurious("fist", fist_r, Families.IMPACT)

@@ -302,5 +302,64 @@ class SelfDefence(AttackOriented):
 
 
 class FlightOrFight(Strategy):
+    priority = 0.8
+    calm_down_turns = 20
+
     """ Flee, but fight back when cornered. """
-    
+
+    def __init__(self, name):
+        super().__init__(name)
+        self.last_threatened = 0  # how many turns since we've seen our attacker?
+        
+    def act(self):
+        if self.ttl is not None:
+            self.ttl -= 1
+            
+        map = tender.engine.map
+        my_pos = map.find(self.me)
+        foe = self.me.memory.last_attacker()
+        if not foe or not self.me.notices(foe):
+            # this should not happen if self.is_valid() did the right thing
+            return self.me.rest()
+
+        foe_pos = map.find(foe)
+        dist_f = partial(map.distance, foe_pos)
+        my_dist = dist_f(my_pos)
+
+        options = []
+        for pos in map.adjacents(my_pos, free=True):
+            dist = dist_f(pos)
+            if dist > my_dist:
+                options.append((dist, pos))
+
+        if options:
+            # move there the furthest away we can
+            options = sorted(options, reverse=True)
+            _, pos = options[0]
+            return self.me.move(pos)
+        else:
+            # Can't move! Attack the main threat, or anyone else if it gets to that...
+            if my_dist == 1:
+                return self.me.attack(foe)
+            else:
+                for pos in map.adjacents(my_pos, free=False):
+                    if bystander:=map.actor_at(pos):
+                        return self.me.attack(bystander)
+        return self.me.rest()  # wait for a turn when everything else seems impossible
+        
+    def update(self):
+        super().update()
+        foe = self.me.memory.last_attacker()
+        if foe and self.me.notices(foe):
+            self.last_threatened = 0
+        else:
+            self.last_threatened += 1
+
+    def is_valid(self):
+        if self.calm_down_turns <= self.last_threatened:
+            return False
+        
+        if self.me.health_percent < .2 or self.me.health <= 2:
+            if self.me.memory.last_attacker():
+                return True
+        return False
