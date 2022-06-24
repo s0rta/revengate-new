@@ -29,7 +29,7 @@ from kivy.utils import platform
 from kivy.vector import Vector
 from kivy.uix.label import Label
 from kivy.properties import (NumericProperty, StringProperty, ObjectProperty,            
-                             BooleanProperty)
+                             BooleanProperty, ReferenceListProperty)
 from kivy.core.audio import SoundLoader
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.scatter import ScatterPlane
@@ -52,6 +52,7 @@ from . import events
 from .utils import Array
 from .tags import t
 from .actors import Actor
+from .randutils import rng
 from . import geometry as geom
 from . import tender, forms, uidefs
 
@@ -174,6 +175,45 @@ class MapElement(Label):
                          font_size="28px", size=size, bold=True, 
                          font_name=best_font(text), 
                          **kwargs)
+
+
+class ElemAnnotation(Label):
+    """ A label that follows a MapElement. 
+    
+    Where the label is placed relative to its parent is controlled by offset. 
+    """
+    dx = NumericProperty(0)
+    dy = NumericProperty(0)
+    offset = ReferenceListProperty(dx, dy)
+
+    def __init__(self, parent, *args, offset=None, font_size="16px", **kwargs):
+        text = kwargs.pop("text")
+        super().__init__(*args, text=text, 
+                         font_size=font_size,
+                         font_name=best_font(text), 
+                         **kwargs)
+        self.size = self.texture_size
+        self.parent = parent
+        if offset:
+            self.offset = offset
+        parent.bind(pos=self.follow)
+        self.bind(offset=self.follow)
+        self.bind(texture_size=self.set_size)
+
+    def set_size(self, wid, size):
+        self.size = size
+        
+    def _unbind_parent(self):
+        self.parent.unbind(pos=self.follow)
+
+    def follow(self, *args):
+        """ Adjust our position to follow self.parent. """
+        self.pos = Vector(self.offset) + self.parent.pos
+
+    async def clear(self):
+        """ Fadeout and remove external refereces to allow the GC to do its deed. """
+        await ak.animate(self, opacity=0, d=0.3)
+        self._unbind_parent()
 
 
 def syncify(funct):
@@ -448,7 +488,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 elem = MapElement(text=thing.char, color=color, pos=cpos)
                 self._elems[thing] = elem
                 self.add_widget(elem)
-
+                
     def init_rects(self, *args):
         # we do our best to recycle the old rectangles
         if self.rects:
@@ -676,20 +716,18 @@ class MapWidget(FocusBehavior, ScatterPlane):
         if tender.hero and tender.hero.is_hyper_perceptive:
             text = str(event.damage)
             with self.canvas:
-                # TODO: follow the actors as they are clashing with each other
-                rect = MapElement(text=text, pos=v_elem.pos, opacity=0.3, 
-                                  color=red, outline_color=red, outline_width=0)
-                offset = Vector(v_elem.size)
-                slightly_above = geom.towards_point(v_elem.pos, 
-                                                    offset + v_elem.pos, 
-                                                    0.25)
-                # TODO: higher, not further right
-                way_above = geom.towards_point(v_elem.pos, 
-                                               offset*2 + v_elem.pos, 
-                                               0.25)
-                fade_in = ak.animate(rect, pos=slightly_above, opacity=.7, d=0.3)
+                ann = ElemAnnotation(v_elem, text=text, opacity=0.4,
+                                     font_size="20sp", color=red)
+                w, h = v_elem.size
+                # random x offset to avoid stacking simultaneous attacks
+                x = rng.randrange(w//2, w)
+                slightly_above = [x, h]
+                way_above = [x, h+h//2]
+
+                fade_in = ak.animate(ann, offset=slightly_above, opacity=.7, d=0.3)
                 await ak.and_(retreat, fade_in)
-                await ak.animate(rect, pos=way_above, opacity=0, d=0.3)
+                await ak.animate(ann, offset=way_above, opacity=0, d=0.3)
+                await ann.clear()
         else:
             with self.canvas:
                 rect = MapElement(text="◯", pos=v_elem.pos, opacity=0.3, 
