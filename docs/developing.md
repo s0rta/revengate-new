@@ -10,6 +10,8 @@ $ python3 -m venv .venv
 . .venv/bin/activate
 ```
 
+Creating and activating the virtual environment is [slightly different](https://docs.python.org/3/library/venv.html) on Windows.
+
 This command should then install all the development dependencies for you:
 ```sh-session
 $ pip install -r requirements-dev.txt
@@ -20,6 +22,10 @@ You can see if your setup is working by installing the game in development mode 
 $ flit install -s
 $ revcli
 ```
+
+On Windows, your system might not default to UTF-8 file encoding, which will greatly confuse Revengate given the high number of emojis scattered through the game files. You can tell Python to default to UTF-8 regardless of the system settings by exporting `PYTHONUTF8=1` or by calling Python with the `-Xutf8` command line flag.
+
+TODO: mention https://dev.to/methane/python-use-utf-8-mode-on-windows-212i
 
 There are many non-Python dependencies, almost all for the Android backend. If you do not plan on deploying the game on Android, you don't have anything else to do!
 
