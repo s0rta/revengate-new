@@ -178,7 +178,7 @@ class MapElement(Label):
 
 
 class ElemAnnotation(Label):
-    """ A label that follows a MapElement. 
+    """ A label that follows its parent. 
     
     Where the label is placed relative to its parent is controlled by offset. 
     """
@@ -192,13 +192,13 @@ class ElemAnnotation(Label):
                          font_size=font_size,
                          font_name=best_font(text), 
                          **kwargs)
-        self.size = self.texture_size
         self.parent = parent
         if offset:
             self.offset = offset
         parent.bind(pos=self.follow)
         self.bind(offset=self.follow)
         self.bind(texture_size=self.set_size)
+        self.follow()
 
     def set_size(self, wid, size):
         self.size = size
@@ -211,7 +211,7 @@ class ElemAnnotation(Label):
         self.pos = Vector(self.offset) + self.parent.pos
 
     async def clear(self):
-        """ Fadeout and remove external refereces to allow the GC to do its deed. """
+        """ Fadeout then remove external references to allow the GC to do its deed. """
         await ak.animate(self, opacity=0, d=0.3)
         self._unbind_parent()
 
@@ -730,13 +730,21 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 await ann.clear()
         else:
             with self.canvas:
-                rect = MapElement(text="◯", pos=v_elem.pos, opacity=0.3, 
-                                  color=red, outline_color=red, outline_width=0)
-                fade_in = ak.animate(rect, font_size=rect.font_size*1.3, 
-                                     outline_width=3, opacity=.7, d=0.3)
+                # we keep the outline centered by shifting it down and left as it grows
+                growth = 1.3
+                offset = Vector(-3, -6)  
+                ann = ElemAnnotation(v_elem, offset=offset,
+                                     text="◯", opacity=0.3,
+                                     font_size=v_elem.font_size, 
+                                     color=red, outline_color=red, outline_width=0)
+                fade_in = ak.animate(ann, font_size=ann.font_size*growth, 
+                                     outline_width=3, opacity=.7, d=0.3,
+                                     offset=offset*1.3)
                 await ak.and_(retreat, fade_in)
-                await ak.animate(rect, font_size=rect.font_size*1.3, outline_width=0,
-                                 opacity=0, d=0.3)
+                await ak.animate(ann, font_size=ann.font_size*growth, outline_width=0,
+                                 opacity=0, d=0.3, 
+                                 offset=offset*growth**2)
+                await ann.clear()
 
     def finalize_turn(self, events=None):
         """ Let all NPCs play, update all statuses, refresh map.
