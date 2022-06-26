@@ -732,7 +732,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
             with self.canvas:
                 # we keep the outline centered by shifting it down and left as it grows
                 growth = 1.3
-                offset = Vector(-3, -6)  
+                offset = Vector(-3, -6)
                 ann = ElemAnnotation(v_elem, offset=offset,
                                      text="◯", opacity=0.3,
                                      font_size=v_elem.font_size, 
@@ -747,7 +747,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 await ann.clear()
 
     def finalize_turn(self, events=None):
-        """ Let all NPCs play, update all statuses, refresh map.
+        """ Let all NPCs play, update all statuses, refresh map. 
         
         events: if supplied, a collection of status events that will be displayed.
         

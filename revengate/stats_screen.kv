@@ -9,9 +9,18 @@
         orientation: "horizontal"
         padding: "16dp"
 
-        FitImage:
-            pos_hint: {"top": 1}
-            id: stats_img
+        MDBoxLayout:
+            canvas:
+                Color:
+                    rgba: (1, 1, 1, 1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        
+            FitImage:
+                color: app.theme_cls.primary_light
+                pos_hint: {"top": 1}
+                id: stats_img
             
         MDBoxLayout:
             orientation: "vertical"
