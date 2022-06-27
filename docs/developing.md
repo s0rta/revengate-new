@@ -17,6 +17,8 @@ This command should then install all the development dependencies for you:
 $ pip install -r requirements-dev.txt
 ```
 
+On Windows, you might have to also do `pip install kivy[sdl2]==2.0.0`.
+
 You can see if your setup is working by installing the game in development mode and then launching it: 
 ```sh-session
 $ flit install -s
