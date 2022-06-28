@@ -52,7 +52,8 @@ from . import events
 from .utils import Array
 from .tags import t
 from .actors import Actor
-from .randutils import rng
+from .weapons import Weapon
+from .randutils import rng    
 from . import geometry as geom
 from . import tender, forms, uidefs
 
@@ -827,6 +828,48 @@ class MessagesBox(MDBoxLayout):
         self.remove_widget(label)
 
 
+class InventoryContainer(MDBoxLayout):
+    def refresh(self, *args):
+        for wid in self.children:
+            if hasattr(wid, "refresh"):
+                wid.refresh()
+
+
+class InventoryRow(MDBoxLayout):
+    from pysnooper import snoop
+    @snoop()
+    def __init__(self, container, item, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.is_bound = False
+        self.item = item
+        self.cont = container
+        self.refresh()
+        
+    def refresh(self):
+        text = self.item.name
+        self.ids.name_lbl.text = text
+        if isinstance(self.item, Weapon):
+            btn = self.ids.action_btn
+            if self.item == tender.hero.weapon:
+                self.ids.status_lbl.text = "Wielded"
+                btn.disabled = True
+            else:
+                self.ids.status_lbl.text = ""
+                btn.disabled = False
+
+            if not self.is_bound:
+                btn.text = "Equip"
+                
+                def action_f(*args):
+                    tender.commands["equip-item"](self.item)
+                    self.cont.refresh()
+                
+                btn.bind(on_release=action_f)
+                self.is_bound = True
+        else:
+            self.ids.action_btn.opacity = 0
+
+
 class RipplesTransition(ShaderTransition):
     TRANSITION_FS = '''$HEADER$
     uniform float t;
@@ -954,6 +997,17 @@ class RevengateApp(MDApp):
     def show_stats_screen(self, button=None):
         self.root.transition.center_on_button(button)
         self.root.current = "stats_screen"
+
+    def show_inventory_screen(self, button=None):
+        self.root.transition.center_on_button(button)
+        
+        cont = self.root.ids.inventory_screen.items_cont
+        cont.clear_widgets()
+
+        # fill with current inventory
+        for item in tender.hero.inventory:
+            cont.add_widget(InventoryRow(cont, item))
+        self.root.current = "inventory_screen"
 
     def show_credits_screen(self, button=None):
         self.root.transition.center_on_button(button)

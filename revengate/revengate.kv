@@ -36,16 +36,20 @@
     orientation: "vertical"
     adaptive_height: True
 
+
+<ScrollView>:
+    bar_color: app.theme_cls.accent_color
+    bar_inactive_color: app.theme_cls.accent_dark
+    bar_width: "4dp"
+    scroll_type: ["bars", "content"]
+
+    
 <RevScrollView@ScrollView>:
     lbl: lbl
     
     do_scroll_x: False
     do_scroll_y: True
     size_hint_x: 1
-    bar_color: app.theme_cls.accent_color
-    bar_inactive_color: app.theme_cls.accent_dark
-    bar_width: "4dp"
-    scroll_type: ["bars", "content"]
 
     MDLabel:
         id: lbl
@@ -53,7 +57,16 @@
         size_hint_y: None
         height: self.texture_size[1]
         text_size: self.width, None
-    
+
+<TopSceenLabel@MDLabel>:
+    size_hint_y: 0.2
+    font_size: "30sp"
+    text_size: self.size
+    adaptive_height: True
+    valign: "top"
+    halign: "center"
+
+        
 <MainScreen@MDScreen>:
     name: 'main_screen'
     resume_game_bt: resume_game_bt
@@ -165,6 +178,10 @@ ScreenManager:
                     icon: "book-open-page-variant-outline"
                     on_release: map_wid.start_stats(self)
 
+                MapIconButton:
+                    icon: "bag-checked"
+                    on_release: app.show_inventory_screen(self)
+                    
                 MDLabel:
                     id: select_mode_lbl
                     text: ""
@@ -187,6 +204,10 @@ ScreenManager:
         name: "stats_screen"
         id: stats_screen
 
+    InventoryScreen:
+        name: "inventory_screen"
+        id: inventory_screen
+        
     CreditsScreen:
         name: "credits_screen"
         id: credits_screen
@@ -200,6 +221,56 @@ ScreenManager:
         id: privacy_screen
 
 
+<InventoryContainer>
+    orientation: "vertical"
+
+
+<InventoryRow>:
+    orientation: "horizontal"
+    padding: "4dp"
+    spacing: "8dp"
+    adaptive_height: True
+    
+    MDLabel:
+        id: name_lbl
+        size_hint_x: 0.7
+
+    MDRectangleFlatButton:
+        id: action_btn
+        size_hint_x: 0.1
+        
+    MDLabel:
+        id: status_lbl
+        size_hint_x: 0.2
+
+        
+<InventoryScreen@MDScreen>:
+    items_cont: items_cont
+    
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: "16dp"
+        spacing: "8dp"
+        
+        TopSceenLabel:
+            text: "Inventory"
+                
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            size_hint_x: 1
+
+            InventoryContainer:
+                id: items_cont
+                adaptive_height: True
+                size_hint_y: None
+            
+        MDRectangleFlatButton:
+            pos_hint: {'right': 1}
+            text: "Back"
+            on_release: app.show_map_screen(self)
+
+
 <CreditsScreen@MDScreen>:
     credits_scroller: credits_scroller
 
@@ -208,13 +279,7 @@ ScreenManager:
         padding: "16dp"
         spacing: "8dp"
         
-        MDLabel:
-            size_hint_y: 0.2
-            font_size: "30sp"
-            text_size: self.size
-            adaptive_height: True
-            valign: "top"
-            halign: "center"
+        TopSceenLabel:
             text: "Credits"
 
         RevScrollView:
@@ -233,13 +298,7 @@ ScreenManager:
         padding: "16dp"
         spacing: "8dp"
         
-        MDLabel:
-            size_hint_y: 0.2
-            font_size: "30sp"
-            text_size: self.size
-            adaptive_height: True
-            valign: "top"
-            halign: "center"
+        TopSceenLabel:
             text: "Revengate is Free Software"
 
         RevScrollView:
@@ -258,13 +317,7 @@ ScreenManager:
         padding: "16dp"
         spacing: "8dp"
         
-        MDLabel:
-            size_hint_y: 0.2
-            font_size: "30sp"
-            text_size: self.size
-            adaptive_height: True
-            valign: "top"
-            halign: "center"
+        TopSceenLabel:
             text: "Revengate does not track you in any way"
 
         RevScrollView:

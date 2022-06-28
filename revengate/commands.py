@@ -22,6 +22,7 @@ import functools
 
 from .tags import Tag
 from .geometry import vect
+from .weapons import Weapon
 from . import tender
 
 # all the methods we do not want to auto register
@@ -226,3 +227,10 @@ class CoreCommands(CommandMap):
         else:
             print(f"there is nothing to pickup at {pos}")
             return None
+
+    def equip_item(self, item, *args):
+        """ Wield a weapon, or don a piece of armor. """
+        if isinstance(item, Weapon):
+            tender.hero.weapon = item
+        else:
+            raise ValueError(f"Can't equip {item.__class__}")

@@ -26,6 +26,9 @@ class Item:
         self.weight = weight
         self.char = char
 
+    def __str__(self):
+        return self.name
+
 
 class ItemCollection:
     """ A group of Items. """

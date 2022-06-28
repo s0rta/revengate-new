@@ -113,6 +113,9 @@ class Weapon(Item, Injurious):
         Item.__init__(self, name, weight, char)
         Injurious.__init__(self, name, damage, family, verb)
 
+    def __str__(self):
+        return self.name
+
 
 class Spell(HealthVector):
     """ A magical invocation """
