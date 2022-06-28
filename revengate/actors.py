@@ -29,7 +29,7 @@ from .memory import Memory
 from .weapons import Condition, Injurious, Weapon, Spell, Families
 from .events import (Hit, Miss, Events, HealthEvent, Move, Rest, Death, is_action, 
                      Pickup, Conversation)
-from .items import ItemsSlot
+from .items import Item, ItemsSlot
 from . import tender
 
 
@@ -66,7 +66,7 @@ class Actor(object):
         self._perception_cache = {}  # value -> perceived_text
 
         self.resistances = TagBag('Family')
-        self.weapon = None
+        self._weapon = None
 
         # taxon and identifiers
         self.species = None
@@ -107,6 +107,17 @@ class Actor(object):
             strat.assign(self)
         self._strategies = strategies
     strategies = property(_get_strategies, _set_strategies)
+
+    def _get_weapon(self):
+        return self._weapon
+    
+    def _set_weapon(self, weapon):
+        # Add the new weapon to the inventory if it's an item and it's not already 
+        # there. Non-item weapons include body parts on animals, like claws and bites.
+        if isinstance(weapon, Item) and weapon not in self.inventory:
+            self.inventory.append(weapon)
+        self._weapon = weapon
+    weapon = property(_get_weapon, _set_weapon)
     
     @property
     def is_alive(self):
