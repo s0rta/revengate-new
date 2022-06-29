@@ -45,7 +45,7 @@ from .tags import Tag, t
 from .randutils import rng
 from .strategies import Strategy
 from .items import Item
-from .weapons import HealthVector, Effect
+from .effects import EffectVector, Effect
 from .actors import Actor
 from .dialogue import Dialogue, Line, Action, DialogueTag, SpeakerTag, CommandTag
 from .sentiment import SentimentChart
@@ -485,7 +485,7 @@ class TemplatizedObjectsLoader(SubLoader):
     # would make sens to factor this out at some point. This list is processed during 
     # the instantiating of the sub-loader and therefore all changes to it must be done 
     # before the first file is loaded.
-    loadable_classes = [Tag, Item, HealthVector, Effect, Strategy, Actor, 
+    loadable_classes = [Tag, Item, EffectVector, Effect, Strategy, Actor, 
                         SentimentChart]
 
     def __init__(self, top_loader):

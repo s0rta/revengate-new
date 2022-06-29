@@ -836,20 +836,18 @@ class InventoryContainer(MDBoxLayout):
 
 
 class InventoryRow(MDBoxLayout):
-    from pysnooper import snoop
-    @snoop()
     def __init__(self, container, item, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.is_bound = False
+        self.is_bound = False  # set to True after we put a funct on the button
         self.item = item
         self.cont = container
         self.refresh()
         
     def refresh(self):
+        btn = self.ids.action_btn
         text = self.item.name
         self.ids.name_lbl.text = text
         if isinstance(self.item, Weapon):
-            btn = self.ids.action_btn
             if self.item == tender.hero.weapon:
                 self.ids.status_lbl.text = "Wielded"
                 btn.disabled = True
@@ -866,8 +864,26 @@ class InventoryRow(MDBoxLayout):
                 
                 btn.bind(on_release=action_f)
                 self.is_bound = True
+        elif self.item.consumable:
+            if not self.is_bound:
+                btn.text = "Use"
+                
+                def action_f(*args):
+                    btn.disabled = True
+                    ak.start(self.fadeout())
+                    res = tender.hero.use_item(self.item)
+                    # TODO we should probably display the result of the action.
+                
+                btn.bind(on_release=action_f)
+                self.is_bound = True
+            
         else:
             self.ids.action_btn.opacity = 0
+            
+    async def fadeout(self):
+        """ Slowly disappear, then remove ourselves from the parent widget. """
+        await ak.animate(self, opacity=0, d=0.5)
+        self.cont.remove_widget(self)
 
 
 class RipplesTransition(ShaderTransition):

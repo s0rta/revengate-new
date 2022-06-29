@@ -19,8 +19,16 @@ weight = 1
 [templates.old_map]
 _class = "Item"
 name = "old map"
-weight = 1
 char = "🗺️"
+weight = 1
+
+[templates.potion]
+_class = "PotentItem"
+consumable = true
+char = "🍸"
+weight = 1
+h_delta = 10
+family = "#chemical"
 
 # Weapons
 [templates.blade]

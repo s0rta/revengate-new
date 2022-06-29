@@ -26,7 +26,8 @@ from .utils import best
 from .randutils import rng
 from .tags import TagBag, TagSlot, FactionTag
 from .memory import Memory
-from .weapons import Condition, Injurious, Weapon, Spell, Families
+from .effects import Condition, Injurious, Families, EffectVector
+from .weapons import Weapon, Spell
 from .events import (Hit, Miss, Events, HealthEvent, Move, Rest, Death, is_action, 
                      Pickup, Conversation)
 from .items import Item, ItemsSlot
@@ -355,6 +356,20 @@ class Actor(object):
             self.set_played()
             return Pickup(self, item)
 
+    def use_item(self, item):
+        """ Use an item.
+
+        The actor might use is voluntarily or be forced to use it, like having a potion 
+        thrown at them.
+        """
+        res = Events(item.use(self))
+        if item.is_consumed and item in self.inventory:
+            self.inventory = [it for it in self.inventory if it != item]
+        if isinstance(item, EffectVector):
+            delta, effect_res = self.apply_delta(item, item.h_delta)
+            res += effect_res
+        return res
+
     def talk(self, other):
         if other.next_dialogue:
             self.set_played()
@@ -399,7 +414,7 @@ class Actor(object):
 
     def apply_delta(self, vector, h_delta):
         """ 
-        Receive damage or healing from a HealthVector.  Compute armor 
+        Receive damage or healing from an EffectVector.  Compute armor 
         protection, resistances, and weaknesses; update health. 
         
         Return a (delta, events) tuple.

@@ -17,17 +17,34 @@
 
 """ Items and inventory. """
 
+from .effects import EffectVector
+
 
 class Item:
     """ Something that can be picked up and dropped. """
 
-    def __init__(self, name, weight, char='🛠️'):
+    def __init__(self, name, weight, char='🛠️', consumable=False):
         self.name = name
         self.weight = weight
         self.char = char
+        self.consumable = consumable  # disappears after being used
+        self.is_consumed = False
 
     def __str__(self):
         return self.name
+    
+    def use(self, user):
+        """ Use the item, activate its effect on the user. """
+        if self.consumable:
+            self.is_consumed = True
+
+
+class PotentItem(Item, EffectVector):
+    """ An Item that can carry effects when used. """
+    
+    def __init__(self, name, h_delta, family, weight):
+        Item.__init__(self, name, weight)
+        EffectVector.__init__(self, name, h_delta, family)
 
 
 class ItemCollection:
