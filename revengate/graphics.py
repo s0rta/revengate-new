@@ -836,6 +836,8 @@ class InventoryContainer(MDBoxLayout):
 
 
 class InventoryRow(MDBoxLayout):
+    app = ObjectProperty(None)
+    
     def __init__(self, container, item, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.is_bound = False  # set to True after we put a funct on the button
@@ -872,8 +874,8 @@ class InventoryRow(MDBoxLayout):
                     btn.disabled = True
                     ak.start(self.fadeout())
                     res = tender.hero.use_item(self.item)
-                    # TODO we should probably display the result of the action.
-                
+                    self.app.display_status_events(res)
+
                 btn.bind(on_release=action_f)
                 self.is_bound = True
             

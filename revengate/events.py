@@ -213,7 +213,40 @@ class HealthEvent(StatusEvent):
             return f"{self.actor} heals {adj} points."
         else:
             return (f"{self.actor} suffers {adj} damages from injuries.")
+
+
+class ItemUsage(StatusEvent):
+    """ The actor used (or was subjected to) an item """
+
+    def __init__(self, actor, item, voluntary=True):
+        self.voluntary = voluntary
+        self.item = item
+        super().__init__(actor)
+        
+    def summary(self):
+        if self.voluntary:
+            verb = self.item.verb
+        else:
+            verb = "was subjected to"
+        return f"{self.actor} {verb} a {self.item}"
                         
+
+class PotentItemUsage(ItemUsage, HealthEvent):
+    """ The actor used (or was subjected to) a potent item """
+
+    def __init__(self, actor, item, voluntary=True):
+        self.voluntary = voluntary
+        self.item = item
+        HealthEvent.__init__(self, actor, item.h_delta)
+        
+    def summary(self):
+        adj = self._delta_to_adj(self.actor_stats)
+        if self.voluntary:
+            verb = self.item.verb
+        else:
+            verb = "was subjected to"
+        return f"{self.actor} {verb} a {self.item} for {adj} HPs"
+
 
 class Injury(HealthEvent):
     """ Something that hurts """

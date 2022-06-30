@@ -71,6 +71,9 @@ Royalty Free Music:
 Openverse is a search engine for Creative Commons images:
 * https://wordpress.org/openverse/
 
+Test a font for Emoji rendering:
+* https://www.fontspace.com/symbola-font-f22021
+
 ## Steampunk RPGs
 Iron Kingdoms
 Blades in the Dark: https://www.evilhat.com/home/blades-in-the-dark

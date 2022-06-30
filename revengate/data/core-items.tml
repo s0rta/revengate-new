@@ -22,13 +22,24 @@ name = "old map"
 char = "🗺️"
 weight = 1
 
-[templates.potion]
+[templates._potion]
 _class = "PotentItem"
 consumable = true
 char = "🍸"
+verb = "drank"
 weight = 1
-h_delta = 10
 family = "#chemical"
+
+[templates.health_potion]
+_parent = "_potion"
+name = "health potion"
+h_delta = 10
+
+[templates.poison_potion]
+_parent = "_potion"
+name = "vial of poison"
+h_delta = -10
+family = "#poison"
 
 # Weapons
 [templates.blade]

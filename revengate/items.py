@@ -18,25 +18,30 @@
 """ Items and inventory. """
 
 from .effects import EffectVector
+from .events import ItemUsage, PotentItemUsage
 
 
 class Item:
     """ Something that can be picked up and dropped. """
 
-    def __init__(self, name, weight, char='🛠️', consumable=False):
+    def __init__(self, name, weight, char='🛠️', verb="used", consumable=False):
         self.name = name
         self.weight = weight
         self.char = char
+        self.verb = verb
         self.consumable = consumable  # disappears after being used
         self.is_consumed = False
 
     def __str__(self):
         return self.name
     
-    def use(self, user):
-        """ Use the item, activate its effect on the user. """
+    def use(self, user, voluntary):
+        """ Use the item, activate its effect on the user, return StatusEvent(s) 
+        representing the action.
+        """
         if self.consumable:
             self.is_consumed = True
+        return [ItemUsage(user, self, voluntary)]
 
 
 class PotentItem(Item, EffectVector):
@@ -45,6 +50,10 @@ class PotentItem(Item, EffectVector):
     def __init__(self, name, h_delta, family, weight):
         Item.__init__(self, name, weight)
         EffectVector.__init__(self, name, h_delta, family)
+
+    def use(self, user, voluntary):
+        _ = super().use(user, voluntary)
+        return [PotentItemUsage(user, self, voluntary)]
 
 
 class ItemCollection:
@@ -110,6 +119,8 @@ class ItemsSlot:
         return getattr(obj, self.slot)
 
     def __set__(self, obj, items):
+        if getattr(obj, self.slot, None):
+            raise RuntimeError("Attempt to a replace a non-empty inventory.")
         if isinstance(items, list):
             items = ItemCollection(*items)
         setattr(obj, self.slot, items)

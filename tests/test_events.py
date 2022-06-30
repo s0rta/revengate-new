@@ -20,11 +20,6 @@ import pytest
 
 from revengate.events import Events, Injury, Move
 
-# TODO:
-# raise if nested: constructor and .add
-# += does the right thing
-# Nones are filtered out
-
 
 def test_event_iter():
     """ Test that we can access all individual events by using the iterator protocol. 
@@ -48,3 +43,14 @@ def test_no_nesting():
     with pytest.raises(ValueError):
         Events(sub_events)
         
+        
+def test_filter_none_and_emtpy():
+    assert not Events(None, None)
+    assert not Events(*[])
+    assert not Events(*[None, None])
+    events = Events()
+    events.add(None)
+    assert not events
+    events += [None]
+    assert not events
+    assert len(Events(None, None, Injury(None, 10))) == 1

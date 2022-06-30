@@ -356,15 +356,15 @@ class Actor(object):
             self.set_played()
             return Pickup(self, item)
 
-    def use_item(self, item):
+    def use_item(self, item, voluntary=True):
         """ Use an item.
 
-        The actor might use is voluntarily or be forced to use it, like having a potion 
+        The actor might use it voluntarily or be forced to use it, like having a potion 
         thrown at them.
         """
-        res = Events(item.use(self))
+        res = Events(*item.use(self, voluntary))
         if item.is_consumed and item in self.inventory:
-            self.inventory = [it for it in self.inventory if it != item]
+            self.inventory.remove(item)
         if isinstance(item, EffectVector):
             delta, effect_res = self.apply_delta(item, item.h_delta)
             res += effect_res
