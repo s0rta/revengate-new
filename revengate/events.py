@@ -125,6 +125,9 @@ class Move(StatusEvent):
     def summary(self):
         return f"{self.actor} moved from {self.old_pos} to {self.new_pos}."
 
+    def details(self):
+        return self.summary()
+
     @property
     def performer(self):
         return self.actor
@@ -179,6 +182,9 @@ class Rest(StatusEvent):
     def summary(self):
         return f"{self.actor} waits patiently."
 
+    def details(self):
+        return self.summary()
+
 
 class Death(StatusEvent):
     """ The actor died. """
@@ -201,11 +207,12 @@ class HealthEvent(StatusEvent):
     def _delta_to_adj(self, actor_stats):
         """ Return an adjective to describe how big a health delta is as perceived by 
         the hero. """
+        delta = abs(self.h_delta)
         if tender.hero:
-            percent = abs(self.h_delta) / (actor_stats["full_health"] * self.big_delta)
-            return tender.hero.vague_desc(self.h_delta, percent)
+            percent = delta / (actor_stats["full_health"] * self.big_delta)
+            return tender.hero.vague_desc(delta, percent)
         else: 
-            return str(abs(self.h_delta))
+            return str(delta)
         
     def summary(self):
         adj = self._delta_to_adj(self.actor_stats)
@@ -290,6 +297,13 @@ class Hit(Injury):
             s += " Critical hit!"
         return s
 
+    def details(self):
+        s = (f"{self.attacker} hit {self.victim_stats['str']} with a {self.weapon}"
+             f" for {self.damage} damages!")
+        if self.critical:
+            s += " Critical hit!"
+        return s
+
     @property
     def attacker(self):
         return self._actor_by_id(self.attacker_id)
@@ -307,6 +321,9 @@ class Miss(StatusEvent):
         
     def summary(self):
         return f"{self.actor} misses {self.target}."
+    
+    def details(self):
+        return self.summary()
 
     @property
     def target(self):

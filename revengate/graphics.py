@@ -47,7 +47,7 @@ from .maps import TileType, Connector
 from .commands import CommandMap
 from .loader import DATA_DIR
 from .events import (Events, is_action, is_move, iter_events, Conversation, Death, 
-                     Teleport, Injury, HealthEvent)
+                     Teleport, Injury, HealthEvent, Move, Rest)
 from . import events
 from .utils import Array
 from .tags import t
@@ -989,6 +989,16 @@ class RevengateApp(MDApp):
         popup = forms.ConversationPopup(dialogue, response_funct)
         popup.open()
 
+    async def show_message(self, text, mood=None):
+        """ Show a short text message in the message auto-fading floating container. """
+        # these can come while other screens are active, but we only show then when the 
+        # player comes back to the map_screen.
+        if self.root.current != "map_screen":
+            await ak.event(self.root, "current", 
+                           filter=lambda wid, val: val=="map_screen")
+        cont = self.root.messages_lbl_cont
+        await cont.append_message(text, mood=mood)
+
     async def start_new_game_coro(self):
         if not self.hero_name_form:
             self.hero_name_form = forms.HeroNameForm()
@@ -1078,17 +1088,20 @@ class RevengateApp(MDApp):
         for event in iter_events(events):
             if isinstance(event, Injury):
                 ak.start(self.map_wid.animate_health_event(event))
+                
             if isinstance(event, Conversation):
                 convo = tender.loader.invoke(event.tag)
                 self.show_conversation(convo)
             elif isinstance(event, Death) and event.actor_id == tender.hero.id:
-                print(event)
                 tender.commands["purge-game"]()
                 form = forms.GameOverPopup(self.show_main_screen)
                 form.open()
+            elif not isinstance(event, (Move, Rest)):
+                ak.start(self.show_message(str(event)))
+                print(f"msg pane: {event.details()}")
             else:
-                # TODO: put in a scrollable view on the MapWidget
-                print(event)
+                print(event.details())
+    
     
     def play_npcs_and_refresh(self, *args):
         events = tender.commands["npc-turn"]()

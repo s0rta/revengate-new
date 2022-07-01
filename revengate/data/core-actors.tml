@@ -364,9 +364,10 @@ armor = 0
 strength = 50
 agility = 50
 intelligence = 50
-# perception = 90
-weapon = "*sword"
+perception = 90
 faction = "#lumiere"
+inventory = ["*health_potion", "*health_potion", "*poison_potion", "*poison_potion"]
+weapon = "*sword"
 
 [templates.average-joe]
 _class = "Humanoid"
