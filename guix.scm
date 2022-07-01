@@ -39,7 +39,7 @@
       (native-inputs (list git python-flit python-pytest))
       (inputs
        (list python python-tomlkit python-click python-kivy python-kivymd
-             python-pillow libbsd mesa libx11))
+             python-asynckivy python-pillow libbsd mesa libx11))
       (synopsis "Victorian steampunk adventure game with political intrigue and sword fights.")
       (description "Revengate takes place in a steampunk parallel universe closely
 based on Earth in the Victorian era. Magic exists, human races are more spread
