@@ -35,11 +35,38 @@ _parent = "_potion"
 name = "health potion"
 h_delta = 10
 
+[templates.slow_heal_eff] 
+_class = "Effect"
+name = "healing"
+duration = 10
+h_delta = 1
+family = "#chemical"
+
+[templates.slow_health_potion]
+_parent = "_potion"
+name = "slow acting health potion"
+h_delta = 3
+effects = ["*slow_heal_eff"]
+
 [templates.poison_potion]
 _parent = "_potion"
 name = "vial of poison"
 h_delta = -10
 family = "#poison"
+
+[templates.slow_poison_eff] 
+_class = "Effect"
+name = "poison"
+duration = 10
+h_delta = -1
+family = "#poison"
+
+[templates.slow_poison_potion]
+_parent = "_potion"
+name = "vial of subtle poison"
+h_delta = -3
+family = "#poison"
+effects = ["*slow_poison_eff"]
 
 # Weapons
 [templates.blade]

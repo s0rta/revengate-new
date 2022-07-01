@@ -366,7 +366,7 @@ agility = 50
 intelligence = 50
 perception = 90
 faction = "#lumiere"
-inventory = ["*health_potion", "*health_potion", "*poison_potion", "*poison_potion"]
+inventory = ["*health_potion", "*health_potion", "*slow_health_potion", "*slow_health_potion", "*poison_potion", "*poison_potion", "*slow_poison_potion", "*slow_poison_potion"]
 weapon = "*sword"
 
 [templates.average-joe]

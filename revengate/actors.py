@@ -161,7 +161,8 @@ class Actor(object):
             raise RuntimeError("A global engine must be initialized before "
                                "performing turn updates.")
         events = Events()
-        for t in range(self._last_update or 0, tender.engine.current_turn + 1):
+        start = (self._last_update or 0) + 1
+        for t in range(start, tender.engine.current_turn + 1):
             events += self._update_one(t)
         if self.health <= 0:
             events.add(self.die())
@@ -173,6 +174,9 @@ class Actor(object):
         
         Return the summary of health changes.
         """
+        if self._last_update is not None and turn <= self._last_update:
+            raise RuntimeError(f"Attempt to double-update {self!r} on turn {turn}.")
+        
         events = Events()
         for cond in self.conditions:
             if cond.start <= turn <= cond.stop:
@@ -368,6 +372,7 @@ class Actor(object):
         if isinstance(item, EffectVector):
             delta, effect_res = self.apply_delta(item, item.h_delta)
             res += effect_res
+        self.set_played()
         return res
 
     def talk(self, other):
