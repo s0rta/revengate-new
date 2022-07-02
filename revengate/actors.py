@@ -49,7 +49,8 @@ class Actor(object):
     inventory = ItemsSlot()
     char = "X"  # How to render this actor on the text map
 
-    def __init__(self, health, armor, strength, agility, perception=50):
+    def __init__(self, health, armor, strength, agility, 
+                 perception=50, healing_factor=0.05):
         super().__init__()
         self.id = str(uuid4())
         self.health = health
@@ -65,6 +66,8 @@ class Actor(object):
         self.agility = agility
         self.perception = perception
         self._perception_cache = {}  # value -> perceived_text
+        # prob in 0..1 that you will heal 1HP at the start of a turn
+        self.healing_factor = healing_factor
 
         self.resistances = TagBag('Family')
         self._weapon = None
@@ -178,6 +181,10 @@ class Actor(object):
             raise RuntimeError(f"Attempt to double-update {self!r} on turn {turn}.")
         
         events = Events()
+        if rng.rstest(self.healing_factor) and self.health < self.full_health:
+            self.health += 1
+            events.add(HealthEvent(self, 1))
+        
         for cond in self.conditions:
             if cond.start <= turn <= cond.stop:
                 self.health += cond.h_delta
