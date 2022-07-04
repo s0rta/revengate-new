@@ -367,7 +367,7 @@ class FlightOrFight(Strategy):
         return False
 
 
-class Paralized(Strategy):
+class Paralyzed(Strategy):
     """ Can't do anything """
     priority = 0.85
 

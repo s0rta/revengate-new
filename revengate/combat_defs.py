@@ -1,0 +1,1 @@
+RES_FACTOR = 0.5  # 50% less damage if you have a resistance

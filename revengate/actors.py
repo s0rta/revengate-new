@@ -19,6 +19,7 @@
 monsters, characters, etc. 
 """
 
+from logging import PercentStyle
 from operator import attrgetter
 from uuid import uuid4
 
@@ -31,12 +32,12 @@ from .weapons import Weapon, Spell
 from .events import (Hit, Miss, Events, HealthEvent, Move, Rest, Death, is_action, 
                      Pickup, Conversation)
 from .items import Item, ItemsSlot
+from .combat_defs import RES_FACTOR
 from . import tender
 
 
 SIGMA = 12.5  # std. dev. for a normal distribution more or less contained in 0..100
 MU = 50  # average of the above distribution
-RES_FACTOR = 0.5  # 50% less damage if you have a resistance
 
 
 class Actor(object):
@@ -64,7 +65,7 @@ class Actor(object):
         # main attributes
         self.strength = strength
         self.agility = agility
-        self.perception = perception
+        self._perception = perception
         self._perception_cache = {}  # value -> perceived_text
         # prob in 0..1 that you will heal 1HP at the start of a turn
         self.healing_factor = healing_factor
@@ -112,6 +113,18 @@ class Actor(object):
             strat.assign(self)
         self._strategies = strategies
     strategies = property(_get_strategies, _set_strategies)
+
+    def _get_perception(self):
+        delta = 0
+        for cond in self.conditions:
+            if cd := cond.attribute_delta("perception"):
+                delta += cd
+        return self._perception + delta
+        
+    def _set_perception(self, perception):
+        """ Set permanent perception of the actor without taking conditions into account """
+        self._perception = perception
+    perception = property(_get_perception, _set_perception)
 
     def _get_weapon(self):
         return self._weapon
@@ -452,15 +465,13 @@ class Actor(object):
             if not rng.rstest(effect.prob):
                 continue
             cond_delta = effect.h_delta
-            if effect.family in self.resistances:
-                cond_delta *= RES_FACTOR
-            start = tender.engine.current_turn + 1
-            if isinstance(effect.duration, int):
-                stop = start + effect.duration
+            mat = effect.materialize(tender.engine.current_turn + 1, self.resistances)
+            if isinstance(mat, Condition):
+                self.conditions.append(mat)
             else:
-                stop = start + rng.randint(*effect.duration)
-            cond = Condition(effect, start, stop, cond_delta)
-            self.conditions.append(cond)
+                mat.assign(self)
+                self.strategies.append(mat)
+
         
         if self.health <= 0:
             events.add(self.die())

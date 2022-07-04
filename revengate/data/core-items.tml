@@ -68,6 +68,25 @@ h_delta = -3
 family = "#poison"
 effects = ["*slow_poison_eff"]
 
+[templates.analysis_eff] 
+_class = "Analysis"
+duration = 12
+h_delta = 0
+family = "#chemical"
+
+[templates.paralysis_eff]
+_class = "Paralysis"
+duration = 10
+h_delta = 0
+family = "#chemical"
+
+[templates.analysis_paralysis_potion]
+_parent = "_potion"
+name = "vial of analysis paralysis"
+h_delta = 0
+family = "#chemical"
+effects = ["*analysis_eff", "*paralysis_eff"]
+
 # Weapons
 [templates.blade]
 _class = "Weapon"

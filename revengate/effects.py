@@ -17,7 +17,11 @@
 
 """ Effects (immediate or over time) carried by items and weapons. """
 
+from tkinter import N
 from .tags import Tag, TagSlot
+from .combat_defs import RES_FACTOR
+from .randutils import rng
+from .strategies import Paralyzed
 
 
 class Family(Tag):
@@ -39,13 +43,14 @@ class Effect:
     """ A long term effect. """
     family = TagSlot(Family)
 
-    def __init__(self, name, duration, h_delta, family, verb=None):
+    def __init__(self, name, duration, h_delta, family, verb=None, attribute_deltas=None):
         self.name = name
         self.duration = duration  # either an int or a (min, max) tuple 
         self.h_delta = h_delta
         self.family = family
         self.verb = verb
         self.prob = 1.0  # probability that the effect will happen
+        self.attribute_deltas = attribute_deltas or {}  # attrname -> delta as int
 
     def _get_damage(self):
         """ For weapons, it's easier to think in terms of damage. """
@@ -56,6 +61,26 @@ class Effect:
         
     damage = property(_get_damage, _set_damage)
 
+    def materialize(self, start_turn, resistances):
+        cond_delta = self.h_delta
+        if self.family in resistances:
+            cond_delta *= RES_FACTOR
+        if isinstance(self.duration, int):
+            stop = start_turn + self.duration
+        else:
+            stop = start_turn + rng.randint(*self.duration)
+        return Condition(self, start_turn, stop, cond_delta, self.attribute_deltas)
+
+class Analysis(Effect):
+    def __init__(self, name, duration, h_delta, family, verb=None):
+        attribute_deltas = {"perception": 60}
+        super().__init__(name, duration, h_delta, family, verb, attribute_deltas)
+
+class Paralysis(Effect):
+    def materialize(self, start_turn, resistances):
+        strat = Paralyzed(self.name)
+        strat.ttl = self.duration # TODO: Check if it's +1 or not
+        return strat
 
 class Condition(object):
     """ The materialization of an effect. 
@@ -63,12 +88,18 @@ class Condition(object):
     If an effect is successfully applied to someone, they carry the condition. 
     """
 
-    def __init__(self, effect, start, stop, h_delta):
+    def __init__(self, effect, start, stop, h_delta, attribute_deltas=None):
         super(Condition, self).__init__()
         self.effect = effect
         self.start = start
         self.stop = stop
-        self.h_delta = h_delta  # per-turn health delta 
+        self.h_delta = h_delta  # per-turn health delta
+        self.attribute_deltas = attribute_deltas or {}  # attrname -> delta as int
+    
+    def attribute_delta(self, attr_name):
+        """ Return the attribute deltas for the given attribute name. """
+        return self.attribute_deltas.get(attr_name, None)
+        
 
 
 class EffectVector:

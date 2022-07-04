@@ -58,6 +58,9 @@ _class = "FlightOrFight"
 [templates.self-defense]
 _class = "SelfDefense"
 
+[templates.paralyzed]
+_class = "Paralyzed"
+
 # Inunus
 [templates.slime_slam]
 _class = "Injurious"
@@ -367,9 +370,9 @@ armor = 0
 strength = 50
 agility = 50
 intelligence = 50
-perception = 90
+perception = 30
 faction = "#lumiere"
-inventory = ["*health_potion", "*health_potion", "*slow_health_potion", "*slow_health_potion", "*poison_potion", "*poison_potion", "*slow_poison_potion", "*slow_poison_potion"]
+inventory = ["*health_potion", "*health_potion", "*slow_health_potion", "*slow_health_potion", "*poison_potion", "*poison_potion", "*slow_poison_potion", "*slow_poison_potion", "*analysis_paralysis_potion", "*analysis_paralysis_potion"]
 weapon = "*sword"
 
 [templates.average-joe]
