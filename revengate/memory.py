@@ -39,15 +39,33 @@ class Memory:
     def __init__(self, actor):
         self.actor = actor
         self.events = deque()
+        # TODO cache query answers in between the adding or subtracting of events
 
     def append(self, event):
         self.events.append(event)
 
     def last_attacker(self):
+        """ Return the last actor to attack self.actor. """
         for event in reversed(self.events):
             if hasattr(event, "attacker") and event.attacker_id != self.actor.id:
                 if attacker := event.attacker:
                     return attacker
+
+    def attackers(self, events_ago=None):
+        """ Return a set of actors who attacked self.actor since events_ago.
+        
+        If events_ago is None: search the whole memory. 
+        """
+        nb_events = len(self.events)
+        if events_ago is None:
+            events_ago = nb_events
+        attackers = set()
+        for i in range(nb_events-1, nb_events-1-events_ago, -1):
+            event = self.events[i]
+            if hasattr(event, "attacker") and event.attacker_id != self.actor.id:
+                if attacker := event.attacker:
+                    attackers.add(attacker)
+        return attackers
         
     def last_victim(self):
         for event in reversed(self.events):

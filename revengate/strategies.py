@@ -158,7 +158,7 @@ class AttackOriented(Strategy):
     """ Does nothing but looking for some to attack. """
 
     def is_enemy(self, other):
-        """ Return whether a other actor should be considered an enemy by me. """
+        """ Return whether an other actor should be considered an enemy by me. """
         raise NotImplementedError()
         
     def is_interesting(self, other):
@@ -288,13 +288,16 @@ class Panicking(Fleeing):
         return True
 
 
-class SelfDefence(AttackOriented):
+class SelfDefense(AttackOriented):
     """ Attack back if has been attacked. """
+    priority = 0.6
 
-    # FIXME this one relies on inspection of previous events
+    def is_valid(self):
+        return bool(self.me.memory.attackers())
+
     def is_enemy(self, other):
-        """ Return whether a other actor should be considered an enemy by me. """
-        raise NotImplementedError()
+        """ Return whether an other actor should be considered an enemy by me. """
+        return other in self.me.memory.attackers()
         
     def is_interesting(self, other):
         """ Return whether other should be considered as a potential selection. """
@@ -362,3 +365,4 @@ class FlightOrFight(Strategy):
             if self.me.memory.last_attacker():
                 return True
         return False
+

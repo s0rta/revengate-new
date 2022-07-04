@@ -55,6 +55,9 @@ _class = "Panicking"
 [templates.flight-or-fight]
 _class = "FlightOrFight"
 
+[templates.self-defense]
+_class = "SelfDefense"
+
 # Inunus
 [templates.slime_slam]
 _class = "Injurious"
@@ -302,7 +305,7 @@ agility = 40
 intelligence = 70
 weapon = "*saber"
 faction = "#neutrals"
-strategies = ["*wandering"]
+strategies = ["*wandering", "*self-defense"]
 char = "P"
 color = "986952"
 bestiary_img = "bestiary/pacherr.jpg"
@@ -334,7 +337,7 @@ agility = 46
 intelligence = 40
 weapon = "*dagger"
 faction = "#neutrals"
-strategies = ["*wandering"]
+strategies = ["*wandering", "*self-defense"]
 char = "é"
 color = "2e8d52"
 bestiary_img = "bestiary/éguis-bw.png"
@@ -353,7 +356,7 @@ agility = 35
 intelligence = 80
 weapon = "*dagger"
 faction = "#neutrals"
-strategies = ["*wandering"]
+strategies = ["*wandering", "*self-defense"]
 convo_topics = ["#peace", "#dungeon"]
 
 [templates.novice]

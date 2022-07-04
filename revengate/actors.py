@@ -173,7 +173,7 @@ class Actor(object):
     
     def _update_one(self, turn):
         """
-        Compute the effect of one over-time conditions for one turn.
+        Compute one the effect of turn worth of long term conditions.
         
         Return the summary of health changes.
         """
