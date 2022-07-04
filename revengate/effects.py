@@ -17,7 +17,6 @@
 
 """ Effects (immediate or over time) carried by items and weapons. """
 
-from tkinter import N
 from .tags import Tag, TagSlot
 from .combat_defs import RES_FACTOR
 from .randutils import rng

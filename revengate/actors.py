@@ -19,7 +19,6 @@
 monsters, characters, etc. 
 """
 
-from logging import PercentStyle
 from operator import attrgetter
 from uuid import uuid4
 
