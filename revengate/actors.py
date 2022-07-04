@@ -100,8 +100,9 @@ class Actor(object):
     def strategy(self):
         self._strategies = [strat for strat in self._strategies 
                             if not strat.is_expired()]
-        key=attrgetter("priority")
-        return best([strat for strat in self._strategies if strat.is_valid()], key)
+        if self._strategies:
+            key=attrgetter("priority")
+            return best([strat for strat in self._strategies if strat.is_valid()], key)
         
     def _get_strategies(self):
         return self._strategies

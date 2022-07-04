@@ -366,3 +366,18 @@ class FlightOrFight(Strategy):
                 return True
         return False
 
+
+class Paralized(Strategy):
+    """ Can't do anything """
+    priority = 0.85
+
+    def __init__(self, name):
+        super().__init__(name)
+        
+    def act(self):
+        if self.ttl is not None:
+            self.ttl -= 1
+            
+        # FIXME: should be a forced rest, slightly different
+        return self.me.rest()  
+        

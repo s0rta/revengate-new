@@ -262,7 +262,14 @@ class Governor:
             if actor.has_played or actor.is_dead:
                 continue
             if actor is tender.hero and not tender.hero.has_played:
-                return events
+                # hero's moves are automated if it has a strategy, player directed 
+                # otherwise
+                strat = actor.strategy
+                if strat:
+                    events += actor.act()
+                else:
+                    # early return forces the UI to prompt for action
+                    return events
             elif actor in tender.engine.map and not actor.has_played:
                 events += actor.act()
             if tender.hero.is_dead:

@@ -1101,7 +1101,8 @@ class RevengateApp(MDApp):
                 print(f"msg pane: {event.details()}")
             else:
                 print(event.details())
-    
+        if self.map_wid.hero_turn != tender.hero.last_action:
+            self.map_wid.finalize_turn()
     
     def play_npcs_and_refresh(self, *args):
         events = tender.commands["npc-turn"]()
