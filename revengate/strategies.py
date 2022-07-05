@@ -94,10 +94,7 @@ class Strategy:
         
         Sub-classes that implement an expiration logic should override this method.
         """
-        if self.ttl is not None and self.ttl <= 0:
-            return True
-        else:
-            return False
+        return self.ttl is not None and self.ttl <= 0
         
     def update(self):
         """ Inspect the state of the world and adjust internal parameters. 

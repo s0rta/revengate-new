@@ -17,32 +17,18 @@
 
 """ Effects (immediate or over time) carried by items and weapons. """
 
-from .tags import Tag, TagSlot
-from .combat_defs import RES_FACTOR
+from .tags import TagSlot
+from .combat_defs import RES_FACTOR, Family
 from .randutils import rng
 from .strategies import Paralyzed
-
-
-class Family(Tag):
-    pass 
-
-
-class Families:
-    IMPACT   = Family("impact")
-    SLICE    = Family("slice")
-    PIERCE   = Family("pierce")
-    ARCANE   = Family("arcane")
-    HEAT     = Family("heat")
-    ACID     = Family("acid")
-    POISON   = Family("poison")
-    CHEMICAL = Family("chemical")
 
 
 class Effect:
     """ A long term effect. """
     family = TagSlot(Family)
 
-    def __init__(self, name, duration, h_delta, family, verb=None, attribute_deltas=None):
+    def __init__(self, name, duration, h_delta, family, 
+                 verb=None, attribute_deltas=None):
         self.name = name
         self.duration = duration  # either an int or a (min, max) tuple 
         self.h_delta = h_delta
@@ -54,13 +40,18 @@ class Effect:
     def _get_damage(self):
         """ For weapons, it's easier to think in terms of damage. """
         return -self.h_delta
-
+    
     def _set_damage(self, dmg):
         self.h_delta = -dmg
-        
     damage = property(_get_damage, _set_damage)
 
     def materialize(self, start_turn, resistances):
+        """ Turn the effect into something concrete that changes the receiving actor: a 
+        Condition or a transient Strategy.
+        
+        The actor is responsible for integrating the materialization and to remove it 
+        once it's expired.
+        """
         cond_delta = self.h_delta
         if self.family in resistances:
             cond_delta *= RES_FACTOR
@@ -70,16 +61,19 @@ class Effect:
             stop = start_turn + rng.randint(*self.duration)
         return Condition(self, start_turn, stop, cond_delta, self.attribute_deltas)
 
+
 class Analysis(Effect):
     def __init__(self, name, duration, h_delta, family, verb=None):
         attribute_deltas = {"perception": 60}
         super().__init__(name, duration, h_delta, family, verb, attribute_deltas)
 
+
 class Paralysis(Effect):
     def materialize(self, start_turn, resistances):
         strat = Paralyzed(self.name)
-        strat.ttl = self.duration # TODO: Check if it's +1 or not
+        strat.ttl = self.duration  # TODO: Check if it's +1 or not
         return strat
+
 
 class Condition(object):
     """ The materialization of an effect. 
@@ -99,6 +93,11 @@ class Condition(object):
         """ Return the attribute deltas for the given attribute name. """
         return self.attribute_deltas.get(attr_name, None)
         
+    def is_expired(self, current_turn):
+        return current_turn > self.stop
+
+    def is_active(self, current_turn):
+        return self.start <= current_turn <= self.stop
 
 
 class EffectVector:

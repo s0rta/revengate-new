@@ -26,12 +26,12 @@ from .utils import best
 from .randutils import rng
 from .tags import TagBag, TagSlot, FactionTag
 from .memory import Memory
-from .effects import Condition, Injurious, Families, EffectVector
+from .combat_defs import RES_FACTOR, Families
+from .effects import Condition, Injurious, EffectVector
 from .weapons import Weapon, Spell
 from .events import (Hit, Miss, Events, HealthEvent, Move, Rest, Death, is_action, 
                      Pickup, Conversation)
 from .items import Item, ItemsSlot
-from .combat_defs import RES_FACTOR
 from . import tender
 
 
@@ -199,10 +199,10 @@ class Actor(object):
             events.add(HealthEvent(self, 1))
         
         for cond in self.conditions:
-            if cond.start <= turn <= cond.stop:
+            if cond.is_active(turn):
                 self.health += cond.h_delta
                 events.add(HealthEvent(self, cond.h_delta))
-        self.conditions = [c for c in self.conditions if c.stop > turn]
+        self.conditions = [c for c in self.conditions if not c.is_expired(turn)]
         self._last_update = turn
         return events
 
