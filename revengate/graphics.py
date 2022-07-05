@@ -816,11 +816,22 @@ class HeroStatusBox(BoxLayout):
 
 
 class MessagesBox(MDBoxLayout):
+    max_messages = 18
+    
     async def append_message(self, desc, mood=None):
         tender.messages.append(desc, mood=mood)
 
-        label = MDLabel(text=desc)
-        self.add_widget(label)
+        # make space on the screen if needed
+        nb_msg = len(self.children)
+        if nb_msg >= self.max_messages:
+            for i in range(nb_msg - self.max_messages):
+                wid = self.children[0]
+                wid.opacity = 0
+                self.remove_widget(wid)
+                
+        with self.canvas:
+            label = MDLabel(text=desc, adaptive_height=True)
+            self.add_widget(label)
         
         # make it decay
         await ak.sleep(5)
