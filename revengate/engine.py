@@ -20,6 +20,7 @@
 
 import itertools
 import operator
+from logging import debug
 
 from .events import Events, iter_events
 from . import tender
@@ -31,6 +32,7 @@ class Engine:
     def __init__(self):
         self._actors = {}  # actors who are not on the map but we still track
         self.current_turn = 0
+        self.turn_complete = False  # has everyone been given a chance to play?
         self._seen_events = set()  # events that were seen during the current turn
         self.map = None
 
@@ -40,7 +42,7 @@ class Engine:
         state = self.__dict__.copy()
         # Remove the unpicklable entries.
         for key in ["map"]:
-            del state[key]
+            state[key] = None
         return state
 
     def __setstate__(self, state):
@@ -94,7 +96,10 @@ class Engine:
         """ Update everything that needs to be updated at the start of a new
         turn. """
         self.current_turn += 1
+        self.turn_complete = False
         self._seen_events.clear()
+        debug(f"Turn {self.current_turn}: starting")
+        
         events = Events()
         for actor in self.all_actors():
             events += actor.update()

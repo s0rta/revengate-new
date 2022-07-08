@@ -19,6 +19,7 @@
 
 import os
 from pprint import pprint
+from logging import debug
 from math import sqrt
 from functools import wraps
 import asyncio
@@ -767,14 +768,6 @@ class MapWidget(FocusBehavior, ScatterPlane):
         if tender.hero and tender.hero.is_alive:
             self.hero_turn = tender.hero.last_action
 
-        if tender.engine:
-            events = tender.engine.advance_turn()
-            self.app.display_status_events(events)
-            
-        if tender.engine:
-            tender.commands["save-game"]()
-            self.engine_turn = tender.engine.current_turn
-
     def rest(self, *args):
         res = tender.hero.rest()
         self.finalize_turn(res)
@@ -1112,8 +1105,19 @@ class RevengateApp(MDApp):
                 print(f"msg pane: {event.details()}")
             else:
                 print(event.details())
-        if self.map_wid.hero_turn != tender.hero.last_action:
-            self.map_wid.finalize_turn()
+                
+        if tender.engine.turn_complete:
+            self.advance_turn()
+    
+    def advance_turn(self):
+        debug(f"Turn {tender.engine.current_turn}: done with display")
+        if tender.engine:
+            events = tender.engine.advance_turn()
+            self.display_status_events(events)
+            
+        if tender.engine:
+            tender.commands["save-game"]()
+            self.map_wid.engine_turn = tender.engine.current_turn
     
     def play_npcs_and_refresh(self, *args):
         events = tender.commands["npc-turn"]()

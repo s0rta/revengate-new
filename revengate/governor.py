@@ -19,8 +19,8 @@
 
 
 import os
-import glob
 import pickle
+from logging import debug
 
 from . import tender
 from .randutils import rng
@@ -257,6 +257,8 @@ class Governor:
         This function is no-op if actors have already played and the turn has not been 
         advanced on the engine.
         """
+        # TODO: this could easily be moved to the Engine if we generalize the concept of 
+        # hero. Currently, the engine does not give any actor a preferential treatment.
         events = Events()
         for actor in tender.engine.all_actors():
             if actor.has_played or actor.is_dead:
@@ -274,6 +276,9 @@ class Governor:
                 events += actor.act()
             if tender.hero.is_dead:
                 return events
+        # If we made it this far, everyone got a chance to act during this turn.
+        tender.engine.turn_complete = True
+        debug(f"Turn {tender.engine.current_turn}: done with combat")
         return events
 
     def hero_turn(self):

@@ -91,7 +91,7 @@ class Actor(object):
         self.initiative = rng.random()
         self._last_action = None  # last turn when self made an action
         self._last_update = None  # last time we computed conditions and regen
-        self.conditions = []  # mostly stuff that does damage over time
+        self.conditions = []      # mostly stuff that does damage over time
 
     def __hash__(self):
         return hash(self.id)
@@ -344,10 +344,9 @@ class Actor(object):
         strat = self.strategy
         if not strat:
             raise RuntimeError("Trying to perform an action without a valid strategy.")
+        
         result = strat.act()
-
-        if is_action(result):
-            self.set_played()
+        self.set_played()
         return result
     
     def rest(self):

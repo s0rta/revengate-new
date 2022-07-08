@@ -20,6 +20,7 @@
 
 import os
 import sys
+import logging
 from argparse import ArgumentParser
 
 os.environ["KIVY_NO_ARGS"] = "1"
@@ -36,11 +37,17 @@ def main():
                         help="Enable all cheat codes.")
     parser.add_argument("--new-game", action="store_true", 
                         help="Automatically generate and start a new game")
+    parser.add_argument("--debug", action="store_true", 
+                        help="Print debugging information.")
     args = parser.parse_args()
     
     if args.version:
         print(f"Revengate version {__version__}")
         sys.exit(0)
+
+    if args.debug:
+        logger = logging.getLogger()
+        logger.setLevel(logging.DEBUG)
 
     gov = Governor(**args.__dict__)
     gov.start()
