@@ -408,6 +408,8 @@ class MapWidget(FocusBehavior, ScatterPlane):
         map = tender.engine.map
         there = self.canvas_to_map(event)
         them = map.actor_at(there)
+        if not them:
+            return
         
         stats = tender.hero.perceived_stats(them)
         
