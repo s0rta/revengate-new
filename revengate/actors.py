@@ -514,7 +514,7 @@ class Actor(object):
             pos = tender.engine.map.find(self)
             for i in self.inventory:
                 tender.engine.map.place(i, pos)
-        self.inventory = []
+        self.inventory.clear()
         # TODO: keep 1g when money is implemented.  The passage into the 
         # underworld must be paid.
         

@@ -79,6 +79,10 @@ class ItemCollection:
     def remove(self, item):
         del self.items[self.items.index(item)]
         
+    def clear(self):
+        """ Remove all the items from the collection. """
+        self.items.clear()
+        
     def pop(self):
         """ Return the item at the top of the stack and stop tracking it. """
         return self.items.pop()

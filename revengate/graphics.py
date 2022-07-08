@@ -1106,7 +1106,7 @@ class RevengateApp(MDApp):
             else:
                 print(event.details())
                 
-        if tender.engine.turn_complete:
+        if tender.engine and tender.engine.turn_complete:
             self.advance_turn()
     
     def advance_turn(self):
