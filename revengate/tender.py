@@ -23,15 +23,15 @@ things in motion must also make sure that this the required globals are initiali
 # from .engine import Engine
 from .ui import UI
 # from .commands import CommandMap
-from .actors import Actor
-from .loader import TopLevelLoader
+# from .actors import Actor
+# from .loader import TopLevelLoader
 from .sentiment import SentimentChart
 
-loader: TopLevelLoader = None
+loader = None
 engine = None
 ui: UI = None
 commands = None
-hero: Actor = None
+hero = None
 sentiments: SentimentChart = None
 dungeon = None
 messages = None

@@ -32,7 +32,7 @@ from .weapons import Weapon, Spell
 from .events import (Hit, Miss, Events, HealthEvent, Move, Rest, Death, is_action, 
                      Pickup, Conversation)
 from .items import Item, ItemsSlot
-from . import tender
+from . import tender, strategies
 
 
 SIGMA = 12.5  # std. dev. for a normal distribution more or less contained in 0..100
@@ -102,7 +102,9 @@ class Actor(object):
                             if not strat.is_expired()]
         if self._strategies:
             key=attrgetter("priority")
-            return best([strat for strat in self._strategies if strat.is_valid()], key)
+            strats = [strat for strat in self._strategies if strat.is_valid()]
+            if strats:
+                return best(strats, key)
         
     def _get_strategies(self):
         return self._strategies
@@ -327,7 +329,17 @@ class Actor(object):
         """ Return whether self hates the other actor. """
         return self.sentiment(other) < -self.sentiment_threshold
 
-    def act(self):
+    def update_strategies(self):
+        """ Refresh the internal caches of all strategies to reflectly the current state 
+        of the world.
+        
+        act() calls this automatically, but it can also be called manually before 
+        introspecting strategies.
+        """
+        for strat in self._strategies:
+            strat.update()
+
+    def act(self, update_strats=True):
         """ Perform a action for this turn, return the Event summarizing 
         the action. 
         
@@ -338,9 +350,8 @@ class Actor(object):
         if self.health < 0:
             raise RuntimeError(f"{self} can't act because of being dead!")
         
-        for strat in self._strategies:
-            strat.update()
-
+        if update_strats:
+            self.update_strategies()
         strat = self.strategy
         if not strat:
             raise RuntimeError("Trying to perform an action without a valid strategy.")
@@ -363,7 +374,14 @@ class Actor(object):
                 map.move(self, new_pos)
                 self.set_played()
                 return [Move(self, old_pos, new_pos)]
-            
+    
+    def travel(self, dest):
+        """ Start the multi-turn travel to dest, return the result of the first move. 
+        """
+        strat = strategies.Traveling("traveling", dest, self)
+        self.strategies.append(strat)
+        return self.act()
+    
     def pickup(self, item=None):
         """ Pickup an item from the ground. 
         

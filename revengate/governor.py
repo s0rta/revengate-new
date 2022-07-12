@@ -266,9 +266,10 @@ class Governor:
             if actor is tender.hero and not tender.hero.has_played:
                 # hero's moves are automated if it has a strategy, player directed 
                 # otherwise
+                actor.update_strategies()
                 strat = actor.strategy
                 if strat:
-                    events += actor.act()
+                    events += actor.act(False)
                 else:
                     # early return forces the UI to prompt for action
                     return events

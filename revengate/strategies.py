@@ -107,10 +107,13 @@ class Strategy:
         """ Assign the strategy to the Actor `me`. """
         self.me = me
 
-    def act(self):
+    def tick_ttl(self):
+        """ Update the time to live (ttl) of the strategy if needed. """
         if self.ttl is not None:
             self.ttl -= 1
 
+    def act(self):
+        self.tick_ttl()
         map = tender.engine.map
         actors = map.all_actors()  # TODO: ignore the out of sight ones
         sel = self.select_other(actors)
@@ -190,8 +193,7 @@ class Wandering(Strategy):
         self.waypoint = None
     
     def act(self):
-        if self.ttl is not None:
-            self.ttl -= 1
+        self.tick_ttl()
         # A more interesting way to go about this would be to look at the recent forced 
         # rests events and to base the current rest bias on that.
         if rng.rstest(self.rest_bias):
@@ -235,6 +237,7 @@ class Fleeing(Strategy):
         return other.hates(self.me)
 
     def act(self):
+        self.tick_ttl()
         self.update()
         map = tender.engine.map
         others = map.all_actors()  # TODO: ignore the out of sight ones
@@ -259,8 +262,7 @@ class Panicking(Fleeing):
         self.last_yell = None
 
     def act(self):
-        if self.ttl is not None:
-            self.ttl -= 1
+        self.tick_ttl()
         cur_turn = tender.engine.current_turn
         if self.last_yell is None or self.last_yell < cur_turn - self.yell_frequency:
             self.last_yell = cur_turn
@@ -311,9 +313,7 @@ class FlightOrFight(Strategy):
         self.last_threatened = 0  # how many turns since we've seen our attacker?
         
     def act(self):
-        if self.ttl is not None:
-            self.ttl -= 1
-            
+        self.tick_ttl()
         map = tender.engine.map
         my_pos = map.find(self.me)
         foe = self.me.memory.last_attacker()
@@ -368,13 +368,45 @@ class Paralyzed(Strategy):
     """ Can't do anything """
     priority = 0.85
 
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, name, me=None):
+        super().__init__(name, me)
         
     def act(self):
-        if self.ttl is not None:
-            self.ttl -= 1
-            
+        self.tick_ttl()
         # FIXME: should be a forced rest, slightly different
         return self.me.rest()  
         
+
+class Traveling(Strategy):
+    """ Moving to a specific destination """
+
+    def __init__(self, name, dest, me=None):
+        self.dest = dest
+        self._failed = False
+        self._path = None
+        super().__init__(name, me)
+        print(f"Starting travel to {dest}")
+        
+    def _get_path(self):
+        map = tender.engine.map
+        here = map.find(self.me)
+        if here == self.dest:
+            return None
+        else:
+            return map.path(here, self.dest)
+        
+    def act(self):
+        self.tick_ttl()
+        res = self.me.move(self._path[1])
+        if len(self._path) == 2:
+            self._path = None
+        return res
+    
+    def update(self):
+        super().update()
+        self._path = self._get_path()
+        if not self._path:
+            self._failed = True
+    
+    def is_expired(self):
+        return self._failed or not self._path
