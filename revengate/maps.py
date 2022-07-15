@@ -170,7 +170,10 @@ class Queue:
     
     def __init__(self):
         self.elems = []
-        
+      
+    def __bool__(self):
+        return bool(self.elems)
+      
     def push(self, elem):
         heapq.heappush(self.elems, elem)
     
@@ -611,10 +614,9 @@ class Map:
         
         Return the path as a list of (x, y) tuples. """
         # Using the A* algorithm
-        came_from = {} # a back track map from one point to its predecessor
+        came_from = {}  # a back track map from one point to its predecessor
         open_q = Queue()
         open_set = {start}
-        prev = None
         
         g_scores = {start: 0}
         f_scores = {start: self.distance(start, goal)}
@@ -629,17 +631,51 @@ class Map:
             
             if current == goal:
                 return self._rebuild_path(start, goal, came_from)
-            for tile in self.adjacents(current):
-                if not self.is_free(tile) and tile != goal:
+            for pos in self.adjacents(current):
+                if not self.is_free(pos) and pos != goal:
                     continue
-                g_score = g_scores[current] + self.distance(current, tile)
-                if tile not in g_scores or g_score < g_scores[tile]:
-                    came_from[tile] = current
-                    g_scores[tile] = g_score
-                    f_scores[tile] = g_score + self.distance(tile, goal)
-                    open_q.push((f_scores[tile], tile))
-                    open_set.add(tile)
+                g_score = g_scores[current] + self.distance(current, pos)
+                if pos not in g_scores or g_score < g_scores[pos]:
+                    came_from[pos] = current
+                    g_scores[pos] = g_score
+                    f_scores[pos] = g_score + self.distance(pos, goal)
+                    open_q.push((f_scores[pos], pos))
+                    open_set.add(pos)
         return None
+    
+    def dist_metrics(self, start=None):
+        """ Return distance metrics or all positions accessible from start. """
+        # using the Dijkstra algo
+        # TODO: support a max search depth param
+        if not start:
+            start = self.random_pos(True)
+        
+        came_from = {start: None}  # a back track map from one point to its predecessor
+        dists = {start: 0}
+        open_q = Queue()
+        open_q.push((0, start))
+        done = set()
+
+        def is_not_done(pos):
+            return pos not in done
+
+        while open_q:
+            dist, current = open_q.pop()
+            if current in done:
+                continue
+            for pos in self.adjacents(current, free=True, filter_pred=is_not_done):
+                if pos not in dists or dists[pos] > dist+1:
+                    dists[pos] = dist+1
+                    came_from[pos] = current
+                open_q.push((dist+1, pos))
+            done.add(current)
+        return dists
+    
+    def add_metrics_overlay(self, metrics):
+        overlay = MapOverlay()
+        for pos, dist in metrics.items():
+            overlay.place(str(dist % 10), pos)
+        self.add_overlay(overlay)
     
     def line_of_sight(self, pos1, pos2):
         """ Return a list of tile in the line of sight between pos1 and pos2 
@@ -1485,7 +1521,7 @@ def main():
     rng.state_save(RSTATE)
     # rng.state_restore(RSTATE)
 
-    rect = None # ((10, 5), (110, 20))
+    rect = None  # ((0, 0), (70, 25))
     map = Map()
     builder = Builder(map)
     builder.init(120, 25)
@@ -1502,6 +1538,9 @@ def main():
     # algo = BinaryTree(builder, rect)
     builder.maze_fill(algo)  
     # builder.gen_level()
+    print(map.to_text(True))
+    metrics = map.dist_metrics((0, 0))
+    map.add_metrics_overlay(metrics)
     print(map.to_text(True))
     
 
