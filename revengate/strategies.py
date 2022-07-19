@@ -201,7 +201,8 @@ class Wandering(Strategy):
         
         map = tender.engine.map
         if not self.waypoint:
-            self.waypoint = map.random_pos(free=True)
+            scope = map.reachable_scope(self.me, radius=100)
+            self.waypoint = rng.choice(scope.coords)
             
         here = map.find(self.me)
         path = map.path(here, self.waypoint)
@@ -211,7 +212,9 @@ class Wandering(Strategy):
                 self.waypoint = None
             return res
         else:
-            # FIXME be more explicit
+            if rng.rstest(0.3):  # 30% chance to abandon a waypoint we can't reach
+                self.waypoint = None
+            # FIXME be more explicit that it's a forced rest
             return self.me.rest()
 
 

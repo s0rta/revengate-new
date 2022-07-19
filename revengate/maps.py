@@ -43,7 +43,8 @@ from .utils import Array
 
 class ScopeType(IntEnum):
     VISIBLE = auto()
-    TRAVERSABLE = auto()
+    TRAVERSABLE = auto()  # individual coords are free, but might not be connected 
+    REACHABLE = auto()    # a path exists between all coords of this scope
 
 
 class MapScope:
@@ -70,15 +71,18 @@ class MapScope:
 
     def _run_query(self):
         if self.include_at:
-            all_coords = []
-        else:
             all_coords = [self.at]
+        else:
+            all_coords = []
         if self.scope_type == ScopeType.VISIBLE:
             all_coords += [coord for coord in self._disc(self.at, self.radius) 
                            if self.map.line_of_sight(self.at, coord)]
         elif self.scope_type == ScopeType.TRAVERSABLE:
             all_coords += self._disc(self.at, self.radius,  
                                      filter_pred=self.map.is_walkable)
+        elif self.scope_type == ScopeType.REACHABLE:
+            metrics = self.map.dist_metrics(self.at, max_dist=self.radius)
+            all_coords += [c for c in metrics.coords() if c != self.at]
         if self.pred:
             return iter(self._filter_with_pred(all_coords))
         else:
@@ -99,7 +103,7 @@ class MapScope:
 
     @property
     def coords(self):
-        list(self.iter_coords)
+        return list(self.iter_coords())
         
     def iter_coords(self):
         return self._run_query()
@@ -324,6 +328,9 @@ class Map:
     
     def traversable_scope(self, at, radius, pred=None, include_at=False):
         return MapScope(self, ScopeType.TRAVERSABLE, at, radius, pred, include_at)
+
+    def reachable_scope(self, at, radius, pred=None, include_at=False):
+        return MapScope(self, ScopeType.REACHABLE, at, radius, pred, include_at)
 
     def add_overlay(self, overlay):
         self.overlays.append(overlay)
@@ -643,15 +650,17 @@ class Map:
                     open_set.add(pos)
         return None
     
-    def dist_metrics(self, start=None):
-        """ Return distance metrics or all positions accessible from start. """
+    def dist_metrics(self, start=None, dest=None, max_dist=None):
+        """ Return distance metrics or all positions accessible from start. 
+        
+        Stop exploring after reaching `dest` if provided.
+        Do not explore further than `max_dist` if provided. 
+        """
         # using the Dijkstra algo
-        # TODO: support a max search depth param
         if not start:
             start = self.random_pos(True)
         
-        came_from = {start: None}  # a back track map from one point to its predecessor
-        dists = {start: 0}
+        metrics = MapMetrics(self, start)
         open_q = Queue()
         open_q.push((0, start))
         done = set()
@@ -661,20 +670,26 @@ class Map:
 
         while open_q:
             dist, current = open_q.pop()
-            if current in done:
+            if current == dest:
+                break
+            if current in done or dist == max_dist:
                 continue
             for pos in self.adjacents(current, free=True, filter_pred=is_not_done):
-                if pos not in dists or dists[pos] > dist+1:
-                    dists[pos] = dist+1
-                    came_from[pos] = current
+                if pos not in metrics or metrics[pos] > dist+1:
+                    metrics[pos] = dist+1
+                    metrics.add_edge(current, pos)
                 open_q.push((dist+1, pos))
             done.add(current)
-        return dists
+        return metrics
     
     def add_metrics_overlay(self, metrics):
+        """ Add distance numbers as an overlay on top of the map.
+        
+        For legibility and density, only the least significant digit of the distance is 
+        included."""
         overlay = MapOverlay()
         for pos, dist in metrics.items():
-            overlay.place(str(dist % 10), pos)
+            overlay[pos] = str(dist % 10)
         self.add_overlay(overlay)
     
     def line_of_sight(self, pos1, pos2):
@@ -822,9 +837,17 @@ class Map:
 
 class MapOverlay:
     """ A sparse overlay to be rendered on top of a map. """
+
     def __init__(self):
-        super(MapOverlay, self).__init__()
-        self.tiles = defaultdict(lambda: {}) # keep the same addressing at Map
+        self.tiles = defaultdict(lambda: {})  # keep the same addressing as Map
+
+    def __getitem__(self, pos):
+        x, y = pos
+        return self.tiles[x][y]
+
+    def __setitem__(self, pos, tile):
+        x, y = pos
+        self.tiles[x][y] = tile
 
     def _as_char(self, obj):
         # We do not take a single char prefix since some Emojis have multi-char 
@@ -861,6 +884,63 @@ class MapOverlay:
         for x in self.tiles:
             for y in self.tiles[x]:
                 yield ((x, y), self._as_char(self.tiles[x][y]))
+
+
+class MapMetrics:
+    """ Distance metrics and path finding from a given starting point. """
+
+    def __init__(self, map, start):
+        self.map = map
+        self.start = start
+        self.dists = {start: 0}
+        self.furthest_pos = start
+        self.furthest_dist = 0
+        self.prevs = {start: None}  # previous node for a pos, used to rebuild a path
+
+    def __getitem__(self, pos):
+        return self.dists[pos]
+
+    def __setitem__(self, pos, value):
+        if value > self.furthest_dist:
+            self.furthest_dist = value
+            self.furthest_pos = pos
+        self.dists[pos] = value
+
+    def __contains__(self, pos):
+        return pos in self.dists
+
+    def items(self):
+        """ Return an iterator of (pos, distance) tuples in no particular order. """
+        return self.dists.items()
+    
+    def coords(self):
+        """ Return an iterator for reachable coorditates in no particular order. """
+        return self.dists.keys()
+
+    def add_edge(self, here, there):
+        """ record that `here` is the optimal previous location to reach `there`.
+        
+        The caller is responsible for knowing that the edge is indeed optimal. 
+        """
+        self.prevs[there] = here
+
+    def path(self, pos):
+        """ Return a list of postions from self.start to pos. 
+        Return None if there are no known paths to reach pos.
+        
+        Endpoints are included. 
+        If pos==start, [pos] is returned.
+        """
+        path = [pos]
+        current = pos
+        while current != self.start:
+            if current in self.prevs:
+                current = self.prevs[current]
+                path.append(current)
+            else:
+                return None
+        return list(reversed(path))
+
 
 # Alternate ideas to explore for maze generation:
 # - https://github.com/mxgmn/WaveFunctionCollapse
@@ -1521,7 +1601,7 @@ def main():
     rng.state_save(RSTATE)
     # rng.state_restore(RSTATE)
 
-    rect = None  # ((0, 0), (70, 25))
+    rect = ((0, 0), (60, 25))
     map = Map()
     builder = Builder(map)
     builder.init(120, 25)
@@ -1539,9 +1619,12 @@ def main():
     builder.maze_fill(algo)  
     # builder.gen_level()
     print(map.to_text(True))
+    dest = map.random_pos(free=True)
     metrics = map.dist_metrics((0, 0))
     map.add_metrics_overlay(metrics)
     print(map.to_text(True))
+    print(f"{dest=} {metrics[dest]=}")
+    print(f"{metrics.furthest_pos=} {metrics.furthest_dist=}")
     
 
 if __name__ == "__main__":
