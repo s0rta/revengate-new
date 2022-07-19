@@ -1091,7 +1091,8 @@ class RevengateApp(MDApp):
 
         self.root.current = "main_screen"
     
-    def display_status_events(self, events):
+    @syncify
+    async def display_status_events(self, events):
         self.root.hero_status.update_status()
         
         tender.engine.remember(events)
@@ -1111,7 +1112,10 @@ class RevengateApp(MDApp):
                 print(f"msg pane: {event.details()}")
             else:
                 print(event.details())
-                
+        
+        if events:
+            await ak.sleep(0.3)
+            
         if tender.engine and tender.engine.turn_complete:
             self.advance_turn()
     
