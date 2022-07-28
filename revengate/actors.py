@@ -123,7 +123,8 @@ class Actor(object):
         return self._perception + delta
         
     def _set_perception(self, perception):
-        """ Set permanent perception of the actor without taking conditions into account """
+        """ Set permanent perception of the actor without taking conditions into 
+        account. """
         self._perception = perception
     perception = property(_get_perception, _set_perception)
 
