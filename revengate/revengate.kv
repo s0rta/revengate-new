@@ -149,7 +149,16 @@ ScreenManager:
                 size_hint_y: 0.9
                 pos_hint_x: None
                 pos_hint_y: None
-            
+
+            BoxLayout:
+                size_hint_y: 0.2
+                spacing: "16dp"
+                padding: "16dp"
+
+                MDLabel:
+                    id: select_mode_lbl
+                    text: ""
+
             BoxLayout:
                 size_hint_y: 0.1
                 spacing: "16dp"
@@ -183,12 +192,6 @@ ScreenManager:
                     icon: "bag-checked"
                     on_release: app.show_inventory_screen(self)
                     
-                MDLabel:
-                    id: select_mode_lbl
-                    text: ""
-                    size_hint_x: 0.6
-                    adaptive_width: True
-
                 HeroStatusBox:
                     id: hero_status
                     

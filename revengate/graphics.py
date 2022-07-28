@@ -829,7 +829,7 @@ class MessagesBox(MDBoxLayout):
                 self.remove_widget(wid)
                 
         with self.canvas:
-            label = MDLabel(text=desc, adaptive_height=True)
+            label = MDLabel(text=desc, adaptive_height=True, opacity=0.5)
             self.add_widget(label)
         
         # make it decay
