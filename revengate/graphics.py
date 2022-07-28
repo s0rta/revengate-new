@@ -694,57 +694,70 @@ class MapWidget(FocusBehavior, ScatterPlane):
         #   - red for injury, green for healing
         # [x] create HP labels
         # [x] animate HP labels
-        # [ ] animation follows the actors
+        # [x] animation follows the actors
+        # [ ] create waviness in HPs
         # [ ] tune the transition function (linear vs sine, log, ...)
+        if not tender.hero or not tender.hero.is_alive:
+            return
+
         red = "#DD1010"
         green = "#10DD10"
+        if isinstance(event, Injury or event.h_delta < 0):
+            annot_col = red
+        else:
+            annot_col = green
 
-        if event.victim in self._elems:
+        if hasattr(event, "victim") and event.victim in self._elems:
             # TODO: conditions are HealthEvents, which do not have a victim, so we 
             # forget to animate them. :-(
-            v_elem = self._elems[event.victim]
+            actor_elem = self._elems[event.victim]
         else:
-            return
+            actor_elem = self._elems[event.actor]
         
         if isinstance(event, events.Hit) and event.weapon.hit_sound:
             sound = self.app.audio_cache[event.weapon.hit_sound]
             sound.play()
 
         if hasattr(event, "attacker") and event.attacker in self._elems:
-            a_elem = self._elems[event.attacker]
+            attacker_elem = self._elems[event.attacker]
             # calling tuple() because we need a copy or the value will change under our 
             # feet
-            old_pos = tuple(a_elem.pos)  
-            mid_point = geom.mid_point(a_elem.pos, v_elem.pos)
-            await ak.animate(a_elem, pos=mid_point, d=0.1)
-            retreat = ak.animate(a_elem, pos=old_pos, d=0.2)
+            old_pos = tuple(attacker_elem.pos)  
+            mid_point = geom.mid_point(attacker_elem.pos, actor_elem.pos)
+            await ak.animate(attacker_elem, pos=mid_point, d=0.1)
+            retreat = ak.animate(attacker_elem, pos=old_pos, d=0.2)
         else:
             retreat = ak.sleep(0)
 
         if tender.hero and tender.hero.is_hyper_perceptive:
-            text = str(event.damage)
-            with self.canvas:
-                ann = ElemAnnotation(v_elem, text=text, opacity=0.4,
-                                     font_size="20sp", color=red)
-                w, h = v_elem.size
+            text = str(abs(event.h_delta))
+            w, h = actor_elem.size
+            
+            if event.h_delta < 0:
                 # random x offset to avoid stacking simultaneous attacks
                 x = rng.randrange(w//2, w)
-                slightly_above = [x, h]
-                way_above = [x, h+h//2]
+                positions = [[0, 0], [x, h], [x, h+h//2]]
+            else:
+                x = rng.randrange(-w//2, TILE_SIZE//2)
+                positions = [[x, h+h//2], [x, h], [w//2, h//2]]
 
-                fade_in = ak.animate(ann, offset=slightly_above, opacity=.7, d=0.3)
+            with self.canvas:
+                ann = ElemAnnotation(actor_elem, text=text, offset=positions[0], opacity=0.4,
+                                     font_size="20sp", color=annot_col)
+
+                fade_in = ak.animate(ann, offset=positions[1], opacity=.7, d=0.3)
                 await ak.and_(retreat, fade_in)
-                await ak.animate(ann, offset=way_above, opacity=0, d=0.3)
+                await ak.animate(ann, offset=positions[2], opacity=0, d=0.3)
                 await ann.clear()
         else:
             with self.canvas:
                 # we keep the outline centered by shifting it down and left as it grows
                 growth = 1.3
                 offset = Vector(-3, -6)
-                ann = ElemAnnotation(v_elem, offset=offset,
+                ann = ElemAnnotation(actor_elem, offset=offset,
                                      text="◯", opacity=0.3,
-                                     font_size=v_elem.font_size, 
-                                     color=red, outline_color=red, outline_width=0)
+                                     font_size=actor_elem.font_size, 
+                                     color=annot_col, outline_color=annot_col, outline_width=0)
                 fade_in = ak.animate(ann, font_size=ann.font_size*growth, 
                                      outline_width=3, opacity=.7, d=0.3,
                                      offset=offset*1.3)
@@ -1097,7 +1110,7 @@ class RevengateApp(MDApp):
         
         tender.engine.remember(events)
         for event in iter_events(events):
-            if isinstance(event, Injury):
+            if isinstance(event, (Injury, HealthEvent)):
                 ak.start(self.map_wid.animate_health_event(event))
                 
             if isinstance(event, Conversation):
