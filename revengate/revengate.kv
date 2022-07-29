@@ -3,6 +3,7 @@
 #:include revengate/stats_screen.kv
 #:import tender revengate.tender
 #:import uidefs revengate.uidefs
+#:import revengate revengate
 
 <MapWidget>
     app: app
@@ -73,8 +74,8 @@
     resume_game_bt: resume_game_bt
     
     MDBoxLayout:
-        spacing: "32dp"
-        padding: "32dp"
+        spacing: "24dp"
+        padding: "24dp"
         orientation: "vertical"
         halign: "center"
         width: self.parent.width
@@ -84,6 +85,7 @@
             text: "Welcome to Revengate!"
             font_size: "45sp"
             font_weight: "bold"
+            size_hint_y: 0.25
             
         MainScreenButton:
             id: new_game_bt
@@ -101,23 +103,36 @@
             anchor_x: "right"
             anchor_y: "bottom"
             size_hint_y: 0.1
-            
+
             MDBoxLayout:
-                orientation: "horizontal"
+                orientation: "vertical"
                 adaptive_size: True
                 spacing: "16dp"
-                
-                MinorButton:
-                    text: "Credits"
-                    on_release: app.show_credits_screen(self)
-                    
-                MinorButton:
-                    text: "License"
-                    on_release: app.show_license_screen(self)
 
-                MinorButton:
-                    text: "Privacy"
-                    on_release: app.show_privacy_screen(self)
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_size: True
+                    spacing: "16dp"
+                    
+                    MinorButton:
+                        text: "Credits"
+                        on_release: app.show_credits_screen(self)
+                        
+                    MinorButton:
+                        text: "License"
+                        on_release: app.show_license_screen(self)
+
+                    MinorButton:
+                        text: "Privacy"
+                        on_release: app.show_privacy_screen(self)
+                            
+                MDLabel:
+                    adaptive_height: True
+                    halign: "right"
+                    theme_text_color: "Secondary"
+                    text: f"version: {revengate.__version__}"
+                    font_size: "12sp"
+
 
 ScreenManager:
     app: app
