@@ -24,14 +24,18 @@
     orientation: "horizontal"
     name_lbl: name_lbl
     health_lbl: health_lbl
+    padding: "16dp"
+    spacing: "16dp"
     
     MDLabel:
         id: name_lbl
-        adaptive_width: True
+        size_hint_x: 0.2
+        halign: "right"
+        font_style: "H5"
 
     MDLabel:
         id: health_lbl
-        adaptive_width: True
+        size_hint_x: 0.3
 
 <MessagesBox>:
     orientation: "vertical"
@@ -176,8 +180,8 @@ ScreenManager:
 
             BoxLayout:
                 size_hint_y: 0.1
-                spacing: "16dp"
-                padding: "16dp"
+                spacing: "8dp"
+                padding: "8dp"
 
                 MapIconButton:
                     icon: "home-circle"
