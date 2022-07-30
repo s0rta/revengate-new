@@ -171,13 +171,49 @@ def best_font(text):
 
 class MapElement(Label):
     def __init__(self, *args, **kwargs):
+        self._anim_locks = []
         text = kwargs.pop("text")
         size = (TILE_SIZE, TILE_SIZE)
         super().__init__(*args, text=text, 
                          font_size="28px", size=size, bold=True, 
                          font_name=best_font(text), 
                          **kwargs)
-
+    
+    async def _do_animation(self, anim, lock):
+        """ Wait for the animation to complete then unlock the ak.Event. """
+        await anim
+        lock.set()
+    
+    async def move(self, pos, concurent=False, early_ret_ratio=None, 
+                   duration=0.2, t="in_out_sine", **kwargs):
+        """ Animate the displacement to `pos` in canvas coordinates on the MapWidget. 
+        concurent: whether we should wait for other animations on this MapElement to
+                   complete before starting the new move animation.
+        early_ret_ratio: how soon to return before the completion of the animation as a 
+                         fraction of `duration` in 0..1. None or 1 means that we return 
+                         only once the animation is complete, 0 means that we return 
+                         immediately.
+        all other args: like ak.animate()
+        """
+        if not concurent:
+            self.finish_moves()
+        anim = ak.animate(self, pos=pos, d=duration, t=t, **kwargs)
+        lock = ak.Event()
+        self._anim_locks.append(lock)
+        anim_coro = self._do_animation(anim, lock)
+        if early_ret_ratio is None:
+            await anim_coro
+        else:
+            delay = duration * early_ret_ratio
+            ak.start(anim_coro)
+            await ak.sleep(delay)
+            
+    async def finish_moves(self):
+        """ Wait until all the pending move animations for this MapElement are finished 
+        executing. """
+        while self._anim_locks:
+            await self._anim_locks.pop().wait()
+        
 
 class ElemAnnotation(Label):
     """ A label that follows its parent. 
@@ -479,12 +515,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
     def _update_elem(self, mpos, thing):
         cpos = self.map_to_canvas(mpos)
 
-        if thing in self._elems:
-            elem = self._elems[thing]
-            if cpos != tuple(elem.pos):
-                anim = Animation(pos=cpos, duration=0.2, t="in_out_sine")
-                anim.start(elem)
-        else:
+        if thing not in self._elems:
             if isinstance(thing, Actor):
                 self.app.audio_cache.pre_load(thing)
             with self.canvas:
@@ -685,13 +716,20 @@ class MapWidget(FocusBehavior, ScatterPlane):
         if not Vector.in_bbox(ppos, cutoff, top_right):
             self.center_on_hero(anim)
         
+    async def animate_move_event(self, event):
+        if not event.actor:
+            return
+        elem: MapElement = self._elems[event.actor]
+        cpos = self.map_to_canvas(event.new_pos)
+        await elem.move(cpos, early_ret_ratio=0.3)
+
     async def animate_health_event(self, event):
         """ Animate a health event, which is typically the result of an attack. """
-        # TODO: make HPs fly off
-        # [x] inspect perception, (in actors.py)
+        # Beatiful animations for HPs:
         # - decide on animation style: 
         #   - based on the type of event and sign of event.h_delta
         #   - red for injury, green for healing
+        # [x] inspect perception, (in actors.py)
         # [x] create HP labels
         # [x] animate HP labels
         # [x] animation follows the actors
@@ -707,12 +745,16 @@ class MapWidget(FocusBehavior, ScatterPlane):
         else:
             annot_col = green
 
-        if hasattr(event, "victim") and event.victim in self._elems:
-            # TODO: conditions are HealthEvents, which do not have a victim, so we 
-            # forget to animate them. :-(
-            actor_elem = self._elems[event.victim]
+        if hasattr(event, "victim"):
+            actor = event.victim
         else:
-            actor_elem = self._elems[event.actor]
+            actor = event.actor
+        
+        if not actor or actor not in self._elems:
+            # actor seems to be dead, nothing to animate
+            return
+        
+        actor_elem = self._elems[actor]
         
         if isinstance(event, events.Hit) and event.weapon.hit_sound:
             sound = self.app.audio_cache[event.weapon.hit_sound]
@@ -724,10 +766,8 @@ class MapWidget(FocusBehavior, ScatterPlane):
             # feet
             old_pos = tuple(attacker_elem.pos)  
             mid_point = geom.mid_point(attacker_elem.pos, actor_elem.pos)
-            await ak.animate(attacker_elem, pos=mid_point, d=0.1)
-            retreat = ak.animate(attacker_elem, pos=old_pos, d=0.2)
-        else:
-            retreat = ak.sleep(0)
+            await attacker_elem.move(mid_point, duration=0.1)
+            await attacker_elem.move(old_pos, early_ret_ratio=0, duration=0.2)
 
         if tender.hero and tender.hero.is_hyper_perceptive:
             text = str(abs(event.h_delta))
@@ -742,11 +782,10 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 positions = [[x, h+h//2], [x, h], [w//2, h//2]]
 
             with self.canvas:
-                ann = ElemAnnotation(actor_elem, text=text, offset=positions[0], opacity=0.4,
-                                     font_size="20sp", color=annot_col)
+                ann = ElemAnnotation(actor_elem, text=text, offset=positions[0],
+                                     opacity=0.4, font_size="20sp", color=annot_col)
 
-                fade_in = ak.animate(ann, offset=positions[1], opacity=.7, d=0.3)
-                await ak.and_(retreat, fade_in)
+                await ak.animate(ann, offset=positions[1], opacity=.7, d=0.3)
                 await ak.animate(ann, offset=positions[2], opacity=0, d=0.3)
                 await ann.clear()
         else:
@@ -757,11 +796,11 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 ann = ElemAnnotation(actor_elem, offset=offset,
                                      text="◯", opacity=0.3,
                                      font_size=actor_elem.font_size, 
-                                     color=annot_col, outline_color=annot_col, outline_width=0)
-                fade_in = ak.animate(ann, font_size=ann.font_size*growth, 
-                                     outline_width=3, opacity=.7, d=0.3,
-                                     offset=offset*1.3)
-                await ak.and_(retreat, fade_in)
+                                     color=annot_col, outline_color=annot_col,
+                                     outline_width=0)
+                await ak.animate(ann, font_size=ann.font_size*growth, 
+                                 outline_width=3, opacity=.7, d=0.3,
+                                 offset=offset*1.3)
                 await ak.animate(ann, font_size=ann.font_size*growth, outline_width=0,
                                  opacity=0, d=0.3, 
                                  offset=offset*growth**2)
@@ -1120,15 +1159,15 @@ class RevengateApp(MDApp):
                 tender.commands["purge-game"]()
                 form = forms.GameOverPopup(self.show_main_screen)
                 form.open()
-            elif not isinstance(event, (Move, Rest)):
+            elif isinstance(event, Move):
+                await self.map_wid.animate_move_event(event)
+                print(event.details())
+            elif not isinstance(event, Rest):
                 ak.start(self.show_message(str(event)))
                 print(f"msg pane: {event.details()}")
             else:
                 print(event.details())
         
-        if events:
-            await ak.sleep(0.3)
-            
         if tender.engine and tender.engine.turn_complete:
             self.advance_turn()
     
