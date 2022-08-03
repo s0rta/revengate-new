@@ -456,7 +456,7 @@ class MapWidget(FocusBehavior, ScatterPlane):
         screen.stats_name_lbl.text = f"Name: {stats['name']}"
         screen.stats_str_lbl.text = f"Strength: {stats['strength']}"
         screen.stats_ag_lbl.text = f"Agility: {stats['agility']}"
-        screen.stats_desc_lbl.text = them.desc
+        screen.stats_desc_scroller.lbl.text = them.desc
 
         # show the stats page
         self.app.root.current = "stats_screen"
@@ -1083,10 +1083,6 @@ class RevengateApp(MDApp):
     def focus_map(self):
         if self.map_wid.is_focusable:
             self.map_wid.focus = True    
-
-    def show_stats_screen(self, button=None):
-        self.root.transition.center_on_button(button)
-        self.root.current = "stats_screen"
 
     def show_inventory_screen(self, button=None):
         self.root.transition.center_on_button(button)

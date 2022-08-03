@@ -3,7 +3,7 @@
     stats_name_lbl: stats_name_lbl
     stats_str_lbl: stats_str_lbl
     stats_ag_lbl: stats_ag_lbl
-    stats_desc_lbl: stats_desc_lbl
+    stats_desc_scroller: stats_desc_scroller
     
     MDBoxLayout:
         orientation: "horizontal"
@@ -44,11 +44,8 @@
                 valign: "top"
                 text_size: self.size
 
-            MDLabel:
-                id: stats_desc_lbl
-                size_hint_y: 1
-                valign: "top"
-                text_size: self.size
+            RevScrollView:
+                id: stats_desc_scroller
 
             MDRectangleFlatButton:
                 pos_hint: {'right': 1}

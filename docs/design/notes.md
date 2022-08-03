@@ -158,3 +158,24 @@ https://azgaar.github.io/Fantasy-Map-Generator/?maplink=https://dl.dropbox.com/s
 
 
 Ref.: https://www.reddit.com/r/coolguides/comments/k34rl0/the_12_archetypes_by_carl_jung/
+
+
+## Classification of Game Aesthetics
+By Hunicke, LeBlanc, and Zubek
+
+1. Sensation
+Game as sense-pleasure
+2. Fantasy
+Game as make-believe
+3. Narrative
+Game as drama
+4. Challenge
+Game as obstacle course
+5. Fellowship
+Game as social framework
+6. Discovery
+Game as uncharted territory
+7. Expression
+Game as self-discovery
+8. Submission
+Game as pastime
