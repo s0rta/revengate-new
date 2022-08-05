@@ -49,6 +49,18 @@ She has light blue-grey eyes and light brown hair that she keeps short. She wear
 
 Her favourite drink is Champagne with a splash of cassis syrup, but she will readily settle for an Absinthe. She drinks several cups of coffee every day, always with cream and one sugar cube. Sitting by herself in a cafe, she is usually seen reading a book, typically about philosophy. 
 
+When her father sent her to Lyon, it was with the goal of studying engineering, specifically, the making of programmable machines like the Jacquard loom. Ideally, she would have found an apprenticeship there after learning all the fundamentals, but she never went that far. She knows how to repair most simple looms and given enough time, she can decypher coded punch tape, but she is far from proficient in that domain. She often uses jargon and metaphores from the textile industry in her everyday speech.
+
+Nadège is skilled in the making of small complicated gadgets, such as spying and assassin's tools.
+
+She is patient with her craft, but less so with people. She expects fast results when she asks for something. She prefers tactical retreat over complete defeat, but the can't stand people who make excuses rather than owning their failures.
+
+She values creativity and will readily praise it.  Nadège is very energetic and her emotions and state of mind are usually very obvious.
+
+She is always very interested by foreign combat techniques, less so by foreign culture. She has a fascination for subtle assassination techniques, more on an academic level since she usually favors solutions that keep all involved parties alive.
+
+How she spends her presumably generous earning from La Compagnie is a frequent topic of speculation amongst other field agents.
+
 
 ## Henry Bessemer
 Henry Bessemer is an inventor living in Saxonia. Now 34 years old, he is very well of financially thanks to the commercial success of earlier inventions in his late twenties and early thirties. This gives him the freedom to pursue capital intensive discoveries around heavy industries.
