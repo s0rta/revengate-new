@@ -96,3 +96,19 @@ Beaudelaire is a self-described "dandy" who likes to dress in fancy cloths. Most
 From previous trips to India and Morocco, Beaudelaire has kept some connections and does small time private imports of exotic goods. Notably, he is a member of the hashish society and has sponsored a few drug runs.
 
 He is a very occasional hashish user, preferring wine on most days and shunning absinthe as well as most hard liquors. He loves to hang out in cafés, drink a lot, and then let the alcohol infused inspiration move his poetry projects forward. 
+
+
+## Michel Boilou
+Michel Boilou is a barber in Lyon. He also is the doorman for some of the Lux Co. secret compounds. Notably, an out-out-sight door at the back of a broom closet in this barber lounge leads to an absinthe café.
+
+Boilou is tall and skinny with dark hair and impeccably shaped handlebar mustache. He typically wears a vest of black satin and flamboyant silk patterns. Flowers usually decorates his shop and he is found of using botanical metaphors to describe things.
+
+He radiates the impression of a very peaceful man, but if needs be, he can masterfully defend himself with a straight razor. He is also trained with the rapier and he maintains and uncommonly sharp edge on his discrete sword cane.
+
+Boilou has been a field agent for Lux Co. for some years, but four years ago he decided to start a family and thereby settled for less adventurous duties. He relay messages to select individuals who pretend to visit him for grooming, but he also happens to deliver the closest shaves in town.
+
+He is very skilled at getting unsuspecting patrons to open up about private details of their life and work, information that Boilou promptly relays to Lux Co. 
+
+His shop is located next to a very active newspaper. The noisy steam powered printing press next door easily drowns the conversations and the occasional light music in the absinthe café. 
+
+Boilou is now 38 with a three year old son and his wife is pregnant with another child.
