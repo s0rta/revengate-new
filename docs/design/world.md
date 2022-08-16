@@ -33,9 +33,9 @@ The Franc has the same purchasing power as $5 USD of our era, roughly one basic 
 
 ## Organizations 
 
-### La Compagnie de Lumières
+### Lux Co.
 
-The game starts with the hero being recruited by the Compagnie des Lumières, an underground organization that hires field agents to further its pro-science agenda. The elitist organization is not in favour a democracy, preferring an autocratic rule by an educated few. The Compagnie is very well financed and can provide advanced equipment and training to the hero after he or she succeeds in a handful of missions.
+The game starts with the hero being recruited by the Compagnie des Lumières, usually referred to as Lux Co. This is an underground organization that hires field agents to further its pro-science agenda. The elitist organization is not in favour of democracy, preferring an autocratic rule by an educated few. Lux Co. is very well financed and can provide advanced equipment and training to the hero after he or she succeeds in a handful of missions.
 
 ## Major Events
 ### Great Plague of 1347

@@ -18,13 +18,13 @@ ffpyplayer==4.3.5
     # via -r requirements.in
 idna==3.3
     # via requests
-kivy==2.0.0
+kivy==2.1.0
     # via
     #   -r requirements.in
     #   kivymd
 kivy-garden==0.1.5
     # via kivy
-kivymd==0.104.2
+kivymd==1.0.2
     # via -r requirements.in
 pillow==9.1.0
     # via

@@ -65,7 +65,7 @@ ipython==8.2.0
     # via ipdb
 jedi==0.18.1
     # via ipython
-kivy==2.0.0
+kivy==2.1.0
     # via
     #   -r requirements.txt
     #   kivymd
@@ -73,7 +73,7 @@ kivy-garden==0.1.5
     # via
     #   -r requirements.txt
     #   kivy
-kivymd==0.104.2
+kivymd==1.0.2
     # via -r requirements.txt
 matplotlib-inline==0.1.3
     # via ipython

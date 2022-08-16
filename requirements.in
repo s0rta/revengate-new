@@ -1,6 +1,6 @@
 tomlkit
-kivy >= 2.0.0, < 2.1.0
-kivymd >= 0.104.2
+kivy >= 2.1.0
+kivymd >= 1.0.2
 pillow
 asynckivy
 ffpyplayer
