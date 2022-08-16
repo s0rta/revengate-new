@@ -28,6 +28,7 @@ from kivymd.uix.dialog import MDDialog
 from .dialogue import Action
 from . import tender
 
+
 class RevPopup(MDDialog):
     """ A popup notification. 
     
@@ -44,7 +45,7 @@ class RevPopup(MDDialog):
                          buttons=[self.ok_btn])
         
     def dismiss(self, *args):
-        super().dismiss(*args)
+        super().dismiss(*args, force=True)
         if self.response_funct:
             self.response_funct()
         self.app.focus_map()

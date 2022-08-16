@@ -196,7 +196,7 @@ class MapElement(Label):
         all other args: like ak.animate()
         """
         if not concurent:
-            self.finish_moves()
+            await self.finish_moves()
         anim = ak.animate(self, pos=pos, d=duration, t=t, **kwargs)
         lock = ak.Event()
         self._anim_locks.append(lock)
@@ -1027,6 +1027,7 @@ class RevengateApp(MDApp):
     has_hero = BooleanProperty(False)
     hero_name = StringProperty(None)
     hero_name_form = ObjectProperty(None)
+    game_over_form = ObjectProperty(None)
     
     def __init__(self, cheats=False, *args):
         self.cheats = cheats
@@ -1136,7 +1137,6 @@ class RevengateApp(MDApp):
         if tender.hero and tender.hero.is_alive:
             tender.commands["save-game"]()
         self.root.resume_game_bt.disabled = not tender.commands["has-saved-game"]()
-
         self.root.current = "main_screen"
     
     @syncify
@@ -1153,8 +1153,9 @@ class RevengateApp(MDApp):
                 self.show_conversation(convo)
             elif isinstance(event, Death) and event.actor_id == tender.hero.id:
                 tender.commands["purge-game"]()
-                form = forms.GameOverPopup(self.show_main_screen)
-                form.open()
+                if not self.game_over_form:
+                    self.game_over_form = forms.GameOverPopup(self.show_main_screen)
+                self.game_over_form.open()
             elif isinstance(event, Move):
                 await self.map_wid.animate_move_event(event)
                 print(event.details())

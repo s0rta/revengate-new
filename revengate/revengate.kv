@@ -191,10 +191,6 @@ ScreenManager:
                     icon: "timer-sand"
                     on_release: map_wid.rest()
 
-                MDRectangleFlatButton:
-                    text: "Loot"
-                    on_release: map_wid.loot()
-
                 MapIconButton:
                     icon: "stairs-box"
                     on_release: map_wid.follow_stairs()
@@ -210,7 +206,11 @@ ScreenManager:
                 MapIconButton:
                     icon: "bag-checked"
                     on_release: app.show_inventory_screen(self)
-                    
+
+                MDRectangleFlatButton:
+                    text: "Loot"
+                    on_release: map_wid.loot()
+
                 HeroStatusBox:
                     id: hero_status
                     
