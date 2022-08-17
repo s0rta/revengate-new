@@ -1027,7 +1027,6 @@ class RevengateApp(MDApp):
     has_hero = BooleanProperty(False)
     hero_name = StringProperty(None)
     hero_name_form = ObjectProperty(None)
-    game_over_form = ObjectProperty(None)
     
     def __init__(self, cheats=False, *args):
         self.cheats = cheats
@@ -1096,6 +1095,10 @@ class RevengateApp(MDApp):
             cont.add_widget(InventoryRow(cont, item))
         self.root.current = "inventory_screen"
 
+    def show_game_over_screen(self, *args):
+        self.root.transition.center_on_button(None)
+        self.root.current = "game_over_screen"
+
     def show_credits_screen(self, button=None):
         self.root.transition.center_on_button(button)
         
@@ -1153,9 +1156,8 @@ class RevengateApp(MDApp):
                 self.show_conversation(convo)
             elif isinstance(event, Death) and event.actor_id == tender.hero.id:
                 tender.commands["purge-game"]()
-                if not self.game_over_form:
-                    self.game_over_form = forms.GameOverPopup(self.show_main_screen)
-                self.game_over_form.open()
+                self.show_game_over_screen()
+                return
             elif isinstance(event, Move):
                 await self.map_wid.animate_move_event(event)
                 print(event.details())

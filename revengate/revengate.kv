@@ -223,6 +223,10 @@ ScreenManager:
             MessagesBox:
                 id: messages_lbl_cont
 
+    GameOverScreen:
+        name: "game_over_screen"
+        id: game_over_screen
+
     StatsScreen:
         name: "stats_screen"
         id: stats_screen
@@ -348,6 +352,26 @@ ScreenManager:
         RevScrollView:
             id: scroller
                 
+        MDRectangleFlatButton:
+            pos_hint: {'right': 1}
+            text: "Back"
+            on_release: app.show_main_screen(self)
+
+<GameOverScreen@MDScreen>:
+    MDBoxLayout:
+        spacing: "24dp"
+        padding: "24dp"
+        orientation: "vertical"
+        halign: "center"
+        width: self.parent.width
+
+        MDLabel:
+            halign: "center"
+            text: "Game Over!"
+            font_size: "45sp"
+            font_weight: "bold"
+            size_hint_y: 0.25
+
         MDRectangleFlatButton:
             pos_hint: {'right': 1}
             text: "Back"

@@ -214,12 +214,6 @@ class ConversationPopupContent(BoxLayout):
     convo_label = ObjectProperty(None)
 
 
-class GameOverPopup(RevPopup):
-    def __init__(self, response_funct, *args, **kwargs):
-        super().__init__(response_funct, content_cls=None)
-        self.ok_btn.bind(on_press=self.app.root.transition.center_on_button)
-
-
 class ShowValuePopup(RevPopup):
     def __init__(self, value, response_funct=None, *args, **kwargs):
         content = ShowValuePopupContent()
