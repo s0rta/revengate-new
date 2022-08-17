@@ -641,10 +641,11 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 if mpos in self.map.adjacents(hero_pos, free=False):
                     direction = Vector(mpos) - Vector(hero_pos)
                     res = tender.commands["move-or-act"](direction)
-                elif self.map.path(hero_pos, mpos):
+                elif path := self.map.path(hero_pos, mpos):
                     # TODO re-using the path that we just computed would make a lot of 
                     # sense
-                    res = tender.hero.travel(mpos)
+                    if len(path) > 1:
+                        res = tender.hero.travel(mpos)
             if is_action(res):
                 self.finalize_turn(res)
                 return True
