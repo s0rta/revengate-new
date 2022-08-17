@@ -870,7 +870,8 @@ class MessagesBox(MDBoxLayout):
     max_messages = 18
     
     async def append_message(self, desc, mood=None):
-        tender.messages.append(desc, mood=mood)
+        if tender.messages:
+            tender.messages.append(desc, mood=mood)
 
         # make space on the screen if needed
         nb_msg = len(self.children)
