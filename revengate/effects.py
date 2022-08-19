@@ -27,8 +27,11 @@ class Effect:
     """ A long term effect. """
     family = TagSlot(Family)
 
-    def __init__(self, name, duration, h_delta, family, 
-                 verb=None, attribute_deltas=None):
+    def __init__(self, name, h_delta=0, family=None, duration=None,
+                 verb=None, attribute_deltas=None, 
+                 permanent=False):
+        if duration is not None and permanent:
+            raise ValueError("Permanent effects can't have a duration.")
         self.name = name
         self.duration = duration  # either an int or a (min, max) tuple 
         self.h_delta = h_delta
@@ -36,6 +39,7 @@ class Effect:
         self.verb = verb
         self.prob = 1.0  # probability that the effect will happen
         self.attribute_deltas = attribute_deltas or {}  # attrname -> delta as int
+        self.permanent = permanent
 
     def _get_damage(self):
         """ For weapons, it's easier to think in terms of damage. """
@@ -45,6 +49,12 @@ class Effect:
         self.h_delta = -dmg
     damage = property(_get_damage, _set_damage)
 
+    def apply(self, actor, start_turn):
+        if self.permanent:
+            for attr, delta in self.attribute_deltas.items():
+                val = getattr(actor, f"_{attr}") + delta
+                setattr(actor, attr, val)
+                
     def materialize(self, start_turn, resistances):
         """ Turn the effect into something concrete that changes the receiving actor: a 
         Condition or a transient Strategy.
@@ -63,9 +73,9 @@ class Effect:
 
 
 class Analysis(Effect):
-    def __init__(self, name, duration, h_delta, family, verb=None):
+    def __init__(self, name, h_delta=0, family=None, duration=None, verb=None):
         attribute_deltas = {"perception": 60}
-        super().__init__(name, duration, h_delta, family, verb, attribute_deltas)
+        super().__init__(name, h_delta, family, duration, verb, attribute_deltas)
 
 
 class Paralysis(Effect):
@@ -81,7 +91,7 @@ class Condition(object):
     If an effect is successfully applied to someone, they carry the condition. 
     """
 
-    def __init__(self, effect, start, stop, h_delta, attribute_deltas=None):
+    def __init__(self, effect, start, stop, h_delta=0, attribute_deltas=None):
         super(Condition, self).__init__()
         self.effect = effect
         self.start = start
@@ -104,7 +114,7 @@ class EffectVector:
     """ Something that changes health and that is directed at an actor. """
     family = TagSlot(Family)
     
-    def __init__(self, name, h_delta, family, verb=None):
+    def __init__(self, name, h_delta=0, family=None, verb=None):
         super().__init__()
         self.name = name
         self.h_delta = h_delta
@@ -129,5 +139,5 @@ class Injurious(EffectVector):
     """ Something that can hurt someone or something.  This could be a tool,
     a body part, a spell, or a toxin. """
 
-    def __init__(self, name, damage, family, verb=None):
+    def __init__(self, name, damage=0, family=None, verb=None):
         super().__init__(name, -damage, family, verb)

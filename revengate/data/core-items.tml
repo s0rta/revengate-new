@@ -35,6 +35,13 @@ _parent = "_potion"
 name = "health potion"
 h_delta = 10
 
+[templates.perm_gain_str_eff] 
+_class = "Effect"
+name = "gain strength"
+permanent = true
+attribute_deltas = {"strength" = 1}
+family = "#chemical"
+
 [templates.slow_heal_eff] 
 _class = "Effect"
 name = "healing"
@@ -53,6 +60,12 @@ _parent = "_potion"
 name = "vial of poison"
 h_delta = -10
 family = "#poison"
+
+[templates.strength_potion]
+_parent = "_potion"
+name = "horn of strength elixir"
+family = "#chemical"
+effects = ["*perm_gain_str_eff"]
 
 [templates.slow_poison_eff] 
 _class = "Effect"

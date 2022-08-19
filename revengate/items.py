@@ -47,7 +47,7 @@ class Item:
 class PotentItem(Item, EffectVector):
     """ An Item that can carry effects when used. """
     
-    def __init__(self, name, h_delta, family, weight):
+    def __init__(self, name, h_delta=0, family=None, weight=1):
         Item.__init__(self, name, weight)
         EffectVector.__init__(self, name, h_delta, family)
 

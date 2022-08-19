@@ -62,8 +62,8 @@ class Actor(object):
         self.memory = Memory(self)
 
         # main attributes
-        self.strength = strength
-        self.agility = agility
+        self._strength = strength
+        self._agility = agility
         self._perception = perception
         self._perception_cache = {}  # value -> perceived_text
         # prob in 0..1 that you will heal 1HP at the start of a turn
@@ -114,6 +114,32 @@ class Actor(object):
             strat.assign(self)
         self._strategies = strategies
     strategies = property(_get_strategies, _set_strategies)
+
+    def _get_strength(self):
+        delta = 0
+        for cond in self.conditions:
+            if cd := cond.attribute_delta("strength"):
+                delta += cd
+        return self._strength + delta
+        
+    def _set_strength(self, strength):
+        """ Set permanent strength of the actor without taking conditions into 
+        account. """
+        self._strength = strength
+    strength = property(_get_strength, _set_strength)
+
+    def _get_agility(self):
+        delta = 0
+        for cond in self.conditions:
+            if cd := cond.attribute_delta("agility"):
+                delta += cd
+        return self._agility + delta
+        
+    def _set_agility(self, agility):
+        """ Set permanent agility of the actor without taking conditions into 
+        account. """
+        self._agility = agility
+    agility = property(_get_agility, _set_agility)
 
     def _get_perception(self):
         delta = 0
@@ -482,12 +508,19 @@ class Actor(object):
             if not rng.rstest(effect.prob):
                 continue
             cond_delta = effect.h_delta
-            mat = effect.materialize(tender.engine.current_turn + 1, self.resistances)
-            if isinstance(mat, Condition):
-                self.conditions.append(mat)
+            # TODO: eff.apply() should be the API to use regardless of permanence
+            if effect.permanent:
+                effect.apply(self, tender.engine.current_turn + 1)
             else:
-                mat.assign(self)
-                self.strategies.append(mat)
+                # TODO: expose a more abstract API to let the effect materialize itself on the actor
+                # materialization is for long term influence of the effect
+                mat = effect.materialize(tender.engine.current_turn + 1, 
+                                         self.resistances)
+                if isinstance(mat, Condition):
+                    self.conditions.append(mat)
+                else:
+                    mat.assign(self)
+                    self.strategies.append(mat)
 
         
         if self.health <= 0:

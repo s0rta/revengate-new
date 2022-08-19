@@ -36,7 +36,7 @@ import json
 import inspect
 from pprint import pprint
 from itertools import chain
-
+from logging import debug
 import tomlkit
 
 # classes loaders can instantiate; this could be factored out
@@ -559,6 +559,7 @@ class TemplatizedObjectsLoader(SubLoader):
             if record_name:
                 init_args["name"] = record_name
         
+        debug(f"instantiating {cls_name} with {init_args}")
         obj = cls(**init_args)
         # set the other fields after creation
         for attr in fields:
@@ -660,6 +661,7 @@ class TemplatizedObjectsLoader(SubLoader):
             if template not in self._templates:
                 return None
             template = self._templates[template]
+        debug(f"invoking {template.name}")
         
         # resolution is two steps: 
         # 1) find all the parents
