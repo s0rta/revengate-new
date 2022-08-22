@@ -35,6 +35,7 @@ I have taken some handwritten notes, to be typed or converted into code at a lat
 * 2021-10-31 – 11-09: A Dye to Die For
 * 2021-11-27 – ...: Vitriolic Connections
 * 2021-12-01: phantruch
+* 2022-07-18: generalized challenges
 
 ## External tools
 Pathfinder background generator (OGL):

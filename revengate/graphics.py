@@ -185,7 +185,8 @@ class MapElement(Label):
         lock.set()
     
     async def move(self, pos, concurent=False, early_ret_ratio=None, 
-                   duration=0.2, t="in_out_sine", **kwargs):
+                   duration=uidefs.MOVE_ANIM_DUR, 
+                   t="in_out_sine", **kwargs):
         """ Animate the displacement to `pos` in canvas coordinates on the MapWidget. 
         concurent: whether we should wait for other animations on this MapElement to
                    complete before starting the new move animation.
@@ -767,8 +768,9 @@ class MapWidget(FocusBehavior, ScatterPlane):
             # feet
             old_pos = tuple(attacker_elem.pos)  
             mid_point = geom.mid_point(attacker_elem.pos, actor_elem.pos)
-            await attacker_elem.move(mid_point, duration=0.1)
-            await attacker_elem.move(old_pos, early_ret_ratio=0, duration=0.2)
+            await attacker_elem.move(mid_point, duration=uidefs.ATTACK_ANIM_DUR*.4)
+            await attacker_elem.move(old_pos, early_ret_ratio=0,
+                                     duration=uidefs.ATTACK_ANIM_DUR*.6)
 
         if tender.hero and tender.hero.is_hyper_perceptive:
             text = str(abs(event.h_delta))
@@ -786,8 +788,10 @@ class MapWidget(FocusBehavior, ScatterPlane):
                 ann = ElemAnnotation(actor_elem, text=text, offset=positions[0],
                                      opacity=0.4, font_size="20sp", color=annot_col)
 
-                await ak.animate(ann, offset=positions[1], opacity=.7, d=0.3)
-                await ak.animate(ann, offset=positions[2], opacity=0, d=0.3)
+                await ak.animate(ann, offset=positions[1], opacity=.7, 
+                                 d=uidefs.HEALTH_ANIM_DUR/2)
+                await ak.animate(ann, offset=positions[2], opacity=0, 
+                                 d=uidefs.HEALTH_ANIM_DUR/2)
                 await ann.clear()
         else:
             with self.canvas:
@@ -800,10 +804,12 @@ class MapWidget(FocusBehavior, ScatterPlane):
                                      color=annot_col, outline_color=annot_col,
                                      outline_width=0)
                 await ak.animate(ann, font_size=ann.font_size*growth, 
-                                 outline_width=3, opacity=.7, d=0.3,
+                                 outline_width=3, opacity=.7, 
+                                 d=uidefs.HEALTH_ANIM_DUR/2,
                                  offset=offset*1.3)
                 await ak.animate(ann, font_size=ann.font_size*growth, outline_width=0,
-                                 opacity=0, d=0.3, 
+                                 opacity=0, 
+                                 d=uidefs.HEALTH_ANIM_DUR/2, 
                                  offset=offset*growth**2)
                 await ann.clear()
 
@@ -868,9 +874,9 @@ class HeroStatusBox(BoxLayout):
 
 
 class MessagesBox(MDBoxLayout):
-    max_messages = 18
+    max_messages = 15
     
-    async def append_message(self, desc, mood=None):
+    async def append_message(self, desc, mood=None, warning=False, critical=False):
         if tender.messages:
             tender.messages.append(desc, mood=mood)
 
@@ -884,6 +890,12 @@ class MessagesBox(MDBoxLayout):
                 
         with self.canvas:
             label = MDLabel(text=desc, adaptive_height=True, opacity=0.5)
+            if critical:
+                label.opacity = 1
+                label.theme_text_color = "Error"
+            elif warning:
+                label.opacity = 0.7
+                label.theme_text_color = "Hint"
             self.add_widget(label)
         
         # make it decay
@@ -1053,7 +1065,7 @@ class RevengateApp(MDApp):
         popup = forms.ConversationPopup(dialogue, response_funct)
         popup.open()
 
-    async def show_message(self, text, mood=None):
+    async def show_message(self, text, mood=None, warning=False, critical=False):
         """ Show a short text message in the message auto-fading floating container. """
         # these can come while other screens are active, but we only show then when the 
         # player comes back to the map_screen.
@@ -1061,7 +1073,7 @@ class RevengateApp(MDApp):
             await ak.event(self.root, "current", 
                            filter=lambda wid, val: val=="map_screen")
         cont = self.root.messages_lbl_cont
-        await cont.append_message(text, mood=mood)
+        await cont.append_message(text, mood=mood, warning=warning, critical=critical)
 
     async def start_new_game_coro(self):
         if not self.hero_name_form:
@@ -1158,6 +1170,8 @@ class RevengateApp(MDApp):
                 self.show_conversation(convo)
             elif isinstance(event, Death) and event.actor_id == tender.hero.id:
                 tender.commands["purge-game"]()
+                await self.show_message("You died!", critical=True)
+                await self.complete_all_anims()
                 self.show_game_over_screen()
                 return
             elif isinstance(event, Move):
@@ -1171,6 +1185,15 @@ class RevengateApp(MDApp):
         
         if tender.engine and tender.engine.turn_complete:
             self.advance_turn()
+    
+    async def complete_all_anims(self):
+        """ Wait for the pending animations to complete. """
+        # This is mostly about monsters movings about, but there might be HPs flying 
+        # around as well, so we sleep around just to be sure.
+        for elem in self.map_wid._elems.values():
+            await elem.finish_moves()
+        anim_time = max(uidefs.ATTACK_ANIM_DUR, uidefs.HEALTH_ANIM_DUR)
+        await ak.sleep(anim_time)    
     
     def advance_turn(self):
         debug(f"Turn {tender.engine.current_turn}: done with display")
@@ -1205,6 +1228,7 @@ class RevengateApp(MDApp):
         self.map_wid = self.root.map_wid
         self.map_wid.bind(engine_turn=self.play_npcs_and_refresh)
         self.map_wid.bind(hero_turn=self.play_npcs_and_refresh)
+        
         return self.root
 
     def on_start(self):

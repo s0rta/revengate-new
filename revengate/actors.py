@@ -115,6 +115,7 @@ class Actor(object):
         self._strategies = strategies
     strategies = property(_get_strategies, _set_strategies)
 
+    # TODO: notes from 2022-07-18 have a better way to generalize those
     def _get_strength(self):
         delta = 0
         for cond in self.conditions:
