@@ -742,10 +742,13 @@ class MapWidget(FocusBehavior, ScatterPlane):
 
         red = "#DD1010"
         green = "#10DD10"
-        if isinstance(event, Injury or event.h_delta < 0):
+        if isinstance(event, Injury) or event.h_delta < 0:
             annot_col = red
-        else:
+        elif event.h_delta > 0:
             annot_col = green
+        else:
+            # h_delta is 0: too boring to animate
+            return 
 
         if hasattr(event, "victim"):
             actor = event.victim
