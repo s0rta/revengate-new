@@ -235,8 +235,8 @@ class Governor:
             rat = tender.loader.invoke("rat")
             map.place(rat)
 
-        rob = tender.loader.invoke("rob", rank="landlord")
-        map.place(rob)
+        #rob = tender.loader.invoke("rob", rank="landlord")
+        #map.place(rob)
 
         tender.engine.change_map(map)
         if tender.hero:

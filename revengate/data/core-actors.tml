@@ -350,7 +350,7 @@ desc = """Éguis are what you get if a cobra had limbs. They stand like a kangar
 
 # humans
 [templates.observer]
-_class = "Character"
+_class = "Humanoid"
 role = "observer"
 health = 40
 armor = 0

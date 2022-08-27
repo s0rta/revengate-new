@@ -6,9 +6,7 @@ actions = ["ui-show-value"]
 
 [dialogues.intro]
 script="""
-#narrator: After years of training as an architect, you are now an inspector for a secretive organization called La Compagnie des Lumières. What a strange turn of events.
-
-Your first job is to find out why the warehouse no.5 is scaring the hell out of all the sailors.
+#narrator: After years of training as an architect, you are now an inspector for a secretive organization called La Compagnie des Lumières. What a strange turn of events. Your first job is to go down to the bottom of this dungeon and come back up.
 """
 
 [dialogues.deepest_level]
@@ -21,5 +19,4 @@ Your job now is to go back up.
 [dialogues.first_level]
 script="""
 #responder: This is the first level, keep exploring!
-#ui-show-value: It worked!
 """
