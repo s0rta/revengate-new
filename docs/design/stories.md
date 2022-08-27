@@ -56,7 +56,7 @@ De Lévi retrieved a notebook, a fountain pen, and a glass rod from his satchel.
 
 "Remember the color of the fire," he continued, "remember the smell, and its heat on your face. Bring the fire in front of you and hold it between your hands."
 
-XXX Without opening their eyes, the students slowly moved their arms. Some held their arms wide apart, some had their hand cupped in a tight ball, some hand a few centimeters apart.
+Without opening their eyes, the students slowly moved their arms. Some held their arms wide apart, some had their hand cupped in a tight ball, and there was everything in between.
 
 "Breath deeper now," de Lévi called, "and fan those flames. Make them grow brighter... hotter... stronger..."
 
