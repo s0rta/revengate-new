@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Actor.gd"
 }, {
+"base": "Reference",
+"class": "PriorityQueue",
+"language": "GDScript",
+"path": "res://addons/GodotPriorityQueue/priority_queue.gd"
+}, {
 "base": "Object",
 "class": "Rand",
 "language": "GDScript",
@@ -31,6 +36,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Actor": "",
+"PriorityQueue": "",
 "Rand": "",
 "Strategy": "",
 "Tracking": ""

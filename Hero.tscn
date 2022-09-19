@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Hero.gd" type="Script" id=1]
 [ext_resource path="res://assets/godot.png" type="Texture" id=2]
@@ -10,6 +10,9 @@ use_filter = true
 extra_spacing_top = -10
 extra_spacing_bottom = -6
 font_data = ExtResource( 3 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 16, 16 )
 
 [node name="Hero" type="Area2D"]
 script = ExtResource( 1 )
@@ -32,3 +35,6 @@ custom_fonts/font = SubResource( 1 )
 text = "@"
 align = 1
 valign = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )

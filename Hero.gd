@@ -23,6 +23,13 @@ func _unhandled_input(event):
 		move = Vector2(0, 1)
 		
 	if move:
+		print_tree_pretty()
+		ray.enabled = true
+		ray.cast_to = move * TILE_SIZE
+		ray.force_raycast_update()
+		if ray.is_colliding():
+			print("collision towards %s" % move)
+			return
 		state = States.ACTING
 		get_tree().set_input_as_handled()
 		var anim = self.move_by(move)
