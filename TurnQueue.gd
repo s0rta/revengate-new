@@ -10,10 +10,10 @@ var turn = 0
 func _input(_event):
 	if Input.is_action_just_pressed("run_loop"):
 		get_tree().set_input_as_handled()
-		yield(run(), "completed")
+		await run()
 
 func _ready():
-	yield(run(), "completed")
+	await run()
 
 func find_actors():
 	var actors = []
@@ -38,7 +38,7 @@ func run():
 		for actor in actors:
 			if actor.state != Actor.States.IDLE:
 				print("waiting for %s..." % actor)
-				yield(actor, "turn_done")
+				await actor.turn_done
 				print("done with %s!" % actor)
 		turn += 1
 	

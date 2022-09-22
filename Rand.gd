@@ -1,7 +1,6 @@
 extends Object
+##  Utilities for random number generation
 class_name Rand
-
-""" Utilities for random number generation """
 
 static func rstest(success_rate:float):
 	"""	Randon Success Test: return `true` success_rate fraction of the times 
@@ -19,7 +18,7 @@ static func rftest(failure_rate:float):
 	
 static func choice(seq:Array):
 	""" Return a random element of seq. """
-	var idx = int(rand_range(0, seq.size()))
+	var idx = randi_range(0, seq.size()-1)
 	return seq[idx]
 
 static func biased_choice(seq:Array, bias, biased_elem=null):
@@ -51,6 +50,6 @@ static func biased_choice(seq:Array, bias, biased_elem=null):
 		cum_weights.append(tot)
 			
 	# weighted indexing with a random val
-	var val = rand_range(0, tot)
+	var val = randf_range(0, tot)
 	return seq[cum_weights.bsearch(val) - 1]
 	

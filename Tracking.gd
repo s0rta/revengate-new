@@ -1,7 +1,6 @@
 extends Strategy
+## Track the hero at every move.
 class_name Tracking
-
-""" Track the hero at every move. """
 
 func act(actor: Actor):
 	var hero = $"/root/Main/Hero"

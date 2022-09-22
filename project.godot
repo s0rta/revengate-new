@@ -6,38 +6,44 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
+config_version=5
 
-_global_script_classes=[ {
+_global_script_classes=[{
 "base": "Area2D",
-"class": "Actor",
-"language": "GDScript",
+"class": &"Actor",
+"language": &"GDScript",
 "path": "res://Actor.gd"
 }, {
-"base": "Reference",
-"class": "PriorityQueue",
-"language": "GDScript",
+"base": "RefCounted",
+"class": &"PriorityQueue",
+"language": &"GDScript",
 "path": "res://addons/GodotPriorityQueue/priority_queue.gd"
 }, {
 "base": "Object",
-"class": "Rand",
-"language": "GDScript",
+"class": &"Rand",
+"language": &"GDScript",
 "path": "res://Rand.gd"
 }, {
+"base": "TileMap",
+"class": &"RevBoard",
+"language": &"GDScript",
+"path": "res://RevBoard.gd"
+}, {
 "base": "Node",
-"class": "Strategy",
-"language": "GDScript",
+"class": &"Strategy",
+"language": &"GDScript",
 "path": "res://Strategy.gd"
 }, {
 "base": "Strategy",
-"class": "Tracking",
-"language": "GDScript",
+"class": &"Tracking",
+"language": &"GDScript",
 "path": "res://Tracking.gd"
-} ]
+}]
 _global_script_class_icons={
 "Actor": "",
 "PriorityQueue": "",
 "Rand": "",
+"RevBoard": "",
 "Strategy": "",
 "Tracking": ""
 }
@@ -46,6 +52,7 @@ _global_script_class_icons={
 
 config/name="Godot RPG Proof of Concept"
 run/main_scene="res://Main.tscn"
+config/features=PackedStringArray("4.0")
 config/icon="res://assets/godot.png"
 
 [gui]
@@ -56,33 +63,31 @@ common/drop_mouse_on_gui_input_disabled=true
 
 up={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777232,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194320,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
 }
 down={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777234,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194322,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
 }
 left={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777231,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194319,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
 }
 right={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777233,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194321,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
 }
 monster_turn={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":77,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": []
 }
 run_loop={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":82,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": []
 }
 
 [physics]

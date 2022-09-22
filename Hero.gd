@@ -1,14 +1,14 @@
 extends Actor
 
 func _ready():
+	super()
 	state = States.LISTENING
 
 func _input(event):
 	pass
 
 func _unhandled_input(event):
-	# TODO: see if event is the actual action, mark as handled
-	# TODO: lock input while anims are in progress
+	# TODO: mark as handled
 	var move = null
 	if state != States.LISTENING:
 		return
@@ -23,17 +23,17 @@ func _unhandled_input(event):
 		move = Vector2(0, 1)
 		
 	if move:
-		print_tree_pretty()
 		ray.enabled = true
-		ray.cast_to = move * TILE_SIZE
+		ray.target_position = move * RevBoard.TILE_SIZE
 		ray.force_raycast_update()
 		if ray.is_colliding():
 			print("collision towards %s" % move)
 			return
+		else:
+			print("no colision at %s" % ray.target_position)
 		state = States.ACTING
-		get_tree().set_input_as_handled()
 		var anim = self.move_by(move)
-		yield(anim, "finished")
+		await anim.finished
 		print("anim finished")
 		finalize_turn()
 
@@ -41,5 +41,5 @@ func _unhandled_input(event):
 func act():
 	state = States.LISTENING
 	print("hero acting...")
-	yield(self, "turn_done")
+	await self.turn_done
 		
