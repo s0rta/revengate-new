@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 class_name PriorityQueue
 
 const VALUE_FIELD = 0
@@ -97,4 +97,4 @@ func dequeue():
 
 # Returns true if the queue is empty, false otherwise.
 func empty():
-	return heap.empty()
+	return heap.is_empty()

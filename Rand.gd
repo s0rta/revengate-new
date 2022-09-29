@@ -53,3 +53,7 @@ static func biased_choice(seq:Array, bias, biased_elem=null):
 	var val = randf_range(0, tot)
 	return seq[cum_weights.bsearch(val) - 1]
 	
+static func pos_in_rect(rect:Rect2i):
+	return Vector2i(randi_range(0, rect.size.x-1), 
+					randi_range(0, rect.size.y-1))
+					
