@@ -7,11 +7,6 @@ var state = States.STOPPED
 
 var turn = 0
 
-func _input(_event):
-	if Input.is_action_just_pressed("run_loop"):
-		get_tree().set_input_as_handled()
-		await run()
-
 func _ready():
 	await run()
 
