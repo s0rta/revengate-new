@@ -38,6 +38,11 @@ _global_script_classes=[{
 "class": &"Tracking",
 "language": &"GDScript",
 "path": "res://Tracking.gd"
+}, {
+"base": "Object",
+"class": &"V",
+"language": &"GDScript",
+"path": "res://V.gd"
 }]
 _global_script_class_icons={
 "Actor": "",
@@ -45,7 +50,8 @@ _global_script_class_icons={
 "Rand": "",
 "RevBoard": "",
 "Strategy": "",
-"Tracking": ""
+"Tracking": "",
+"V": ""
 }
 
 [application]
