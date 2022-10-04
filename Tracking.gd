@@ -4,6 +4,13 @@ class_name Tracking
 
 func act(actor: Actor):
 	var hero = $"/root/Main/Hero"
-	var dir = hero.position - actor.position
-	dir = Vector2(dir.x, 0).normalized() + Vector2(0, dir.y).normalized()
-	return actor.move_by(dir)
+	var board = $"/root/Main/Board"
+	if hero == null or board == null:
+		# we're are not in a complete scene
+		return null
+
+	var here = RevBoard.canvas_to_board(actor.position)
+	var there = RevBoard.canvas_to_board(hero.position)
+	var path = board.path(here, there)
+	if path != null and path.size() > 1:
+		return actor.move_to(path[1])

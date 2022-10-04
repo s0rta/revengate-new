@@ -105,15 +105,17 @@ class Matrix:
 		
 class BoardMetrics:
 	var start: Vector2i
+	var dest
 	var dists: Matrix
 	var furthest_pos = start
 	var furthest_dist = 0
 	var prevs = {}
 	
-	func _init(size:Vector2i, start:Vector2i):
+	func _init(size:Vector2i, start:Vector2i, dest=null):
 		dists = Matrix.new(size)
 		dists.setv(start, 0)
 		self.start = start
+		self.dest = dest
 		self.furthest_pos = start
 		self.prevs[start] = null
 
@@ -134,14 +136,17 @@ class BoardMetrics:
 		## The caller is responsible for knowing that the edge is indeed optimal.
 		prevs[there] = here
 
-	func path(dest=null):
-		## Return an Array of coordinates going from `self.start` to `dest`.
-		## Use `self.dest` if `dest` is not provided.
-		## `start` and `dest` are included in the array.
-		if dest == null:
+	func path(to=null):
+		## Return an Array of coordinates going from `self.start` to `to`.
+		## Use `self.dest` if `to` is not provided.
+		## `start` and `to` are included in the array.
+		var dest
+		if to == null:
 			assert(self.dest != null, \
 					"Make sure we were originally passed a destination.")
 			dest = self.dest
+		else:
+			dest = to
 		var path = []
 		var current = dest
 		while current != null:
@@ -155,7 +160,7 @@ class BoardMetrics:
 
 static func canvas_to_board(coord):
 	## Return a coordinate in number of tiles from coord in pixels.
-	return Vector2(int(coord.x) / TILE_SIZE,
+	return Vector2i(int(coord.x) / TILE_SIZE,
 					int(coord.y) / TILE_SIZE)
 
 static func board_to_canvas(coord):
@@ -227,7 +232,7 @@ func astar_metrics(start, dest, max_dist=null):
 		# TODO: pick only walkable starting points
 		start = Rand.pos_in_rect(bbox)
 	
-	var metrics = BoardMetrics.new(bbox.size, start)
+	var metrics = BoardMetrics.new(bbox.size, start, dest)
 	var queue = DistQueue.new()
 	var done = {}
 	var estimate = dist(start, dest)
@@ -303,6 +308,5 @@ func dist_metrics(start=null, dest=null, max_dist=null):
 func path(start, dest, max_dist=null):
 	## Return an Array of coordinates from `start` to `dest`.
 	## See BoardMetrics.path() for more details.
-	var metrics = dist_metrics(start, dest, max_dist)
+	var metrics = astar_metrics(start, dest, max_dist)
 	return metrics.path()
-	

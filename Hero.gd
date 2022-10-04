@@ -14,13 +14,13 @@ func _unhandled_input(event):
 		return
 	
 	if Input.is_action_just_pressed("right"):
-		move = Vector2(1, 0)
+		move = V.i(1, 0)
 	if Input.is_action_just_pressed("left"):
-		move = Vector2(-1, 0)
+		move = V.i(-1, 0)
 	if Input.is_action_just_pressed("up"):
-		move = Vector2(0, -1)
+		move = V.i(0, -1)
 	if Input.is_action_just_pressed("down"):
-		move = Vector2(0, 1)
+		move = V.i(0, 1)
 		
 	if move:
 		ray.enabled = true
