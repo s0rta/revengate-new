@@ -1,6 +1,5 @@
-[gd_scene load_steps=8 format=3 uid="uid://bogqim6ve8tbc"]
+[gd_scene load_steps=7 format=3 uid="uid://bogqim6ve8tbc"]
 
-[ext_resource type="Texture2D" uid="uid://dfgtqh88pv10d" path="res://assets/background.png" id="1"]
 [ext_resource type="PackedScene" uid="uid://dsv80ox01tett" path="res://Hero.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://jeeswxa3y27j" path="res://Monster.tscn" id="3"]
 [ext_resource type="Script" path="res://Main.gd" id="4"]
@@ -10,11 +9,6 @@
 
 [node name="Main" type="Node2D"]
 script = ExtResource("4")
-
-[node name="Background" type="Sprite2D" parent="."]
-visible = false
-texture = ExtResource("1")
-centered = false
 
 [node name="Board" parent="." instance=ExtResource("6")]
 script = ExtResource("4_4g0be")
