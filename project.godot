@@ -15,6 +15,11 @@ _global_script_classes=[{
 "path": "res://Actor.gd"
 }, {
 "base": "RefCounted",
+"class": &"BoardBuilder",
+"language": &"GDScript",
+"path": "res://BoardBuilder.gd"
+}, {
+"base": "RefCounted",
 "class": &"PriorityQueue",
 "language": &"GDScript",
 "path": "res://addons/GodotPriorityQueue/priority_queue.gd"
@@ -46,6 +51,7 @@ _global_script_classes=[{
 }]
 _global_script_class_icons={
 "Actor": "",
+"BoardBuilder": "",
 "PriorityQueue": "",
 "Rand": "",
 "RevBoard": "",
@@ -59,7 +65,6 @@ _global_script_class_icons={
 config/name="Godot RPG Proof of Concept"
 run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.0")
-config/icon="res://assets/godot.png"
 
 [gui]
 
