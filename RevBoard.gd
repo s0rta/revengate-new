@@ -158,6 +158,68 @@ class BoardMetrics:
 			path.reverse()
 			return path
 
+
+class TileSpiral extends RefCounted:
+	var board: RevBoard
+	var center: Vector2i
+	var free: bool
+	var in_board: bool
+	var bbox
+	var index
+	var coords
+	var radius
+	var max_radius
+	
+	static func get_max_radius(center: Vector2i, bbox: Rect2i):
+		## Return the largest radius that a spiral can grow to before only 
+		## producing coords outside the bounding box.
+		var v1 = center - bbox.position
+		var v2 = bbox.end - center - Vector2i.ONE
+		return max(v1.x, v1.y, v2.x, v2.y)
+
+	func _init(board, center, max_radius=null, free:bool=true, in_board:bool=true, bbox=null):
+		## max_radius: how far from center to consider coordiates, infered from 
+		##  the bounding box if not provided.
+		## all other params: like RevBoard.ring()
+		self.board = board
+		self.center = center
+		self.free = free
+		self.in_board = in_board
+		if bbox != null:
+			self.bbox = bbox
+		else:
+			self.bbox = board.get_used_rect()
+		if max_radius == null:
+			self.max_radius = get_max_radius(center, self.bbox)
+		else:
+			self.max_radius = max_radius
+		
+	func _iter_init(_arg):
+		radius = 0
+		return grow_radius()
+		
+	func _iter_next(_arg):
+		index += 1
+		if index < coords.size():
+			return true
+		else:
+			return grow_radius()
+		
+	func _iter_get(_arg):
+		return coords[index]
+
+	func grow_radius():
+		## Increase the spiral to the next size up if possible.
+		## Return whether there are still coodinates to generate.
+		radius += 1
+		index = 0
+		if radius > max_radius:
+			coords = []
+			return false
+		else:
+			coords = board.ring(center, radius, free, in_board, bbox)
+			return true
+
 static func canvas_to_board(coord):
 	## Return a coordinate in number of tiles from coord in pixels.
 	return Vector2i(int(coord.x) / TILE_SIZE,
@@ -178,30 +240,62 @@ func is_walkable(tile_pos:Vector2i):
 	var poly = tdata.get_collision_polygons_count(0)
 	return poly == 0
 
+func ring(center:Vector2i, radius:int, free:bool=true, in_board:bool=true, bbox=null):
+	## Return an Array of coords that define a Chebyshev-ring around `center`.
+	## In other words, the coords are arranged like a square on the game board 
+	## and they all have the same board.dist() metric to `center`.
+	# TODO: support `filter_pred`
+	var coords = []
+	var r = radius
+	# FIXME: use the same sequence as adjacents()
+	for i in range(-r, r+1):
+		coords.append(center + V.i(i, -r))
+	for j in range(-r+1, r+1, 1):
+		coords.append(center + V.i(r, j))
+	for i in range(r-1, -r-1, -1):
+		coords.append(center + V.i(i, r))
+	for j in range(r-1, -r, -1):
+		coords.append(center + V.i(-r, j))
+	return filter_coords(coords, free, in_board, bbox)
+	
+func spiral(center:Vector2i, max_radius=null, free:bool=true, in_board:bool=true, bbox=null):
+	## Return an iterator of coordiates describing progressively larger rings around `center`.
+	## max_radius: how far from center to consider coordiates, infered from 
+	##  the bounding box if not provided.
+	## all other params: like RevBoard.ring()
+	return RevBoard.TileSpiral.new(self, center, max_radius, free, in_board, bbox)
+
 func adjacents(pos:Vector2i, free:bool=true, in_board:bool=true, bbox=null):
-	## Return an Array of tiles immediately next to pos. 
+	## Return an Array of coords immediately next to pos. 
 	## free: only include tiles that are walkable and unoccupied
 	## in_board: only include tiles that are inside the board (edges included)
-	if bbox == null and in_board:
-		bbox = get_used_rect()
-	var tiles = []
-	for i in range(-1, 2):
-		tiles.append(pos + Vector2i(i, -1))
-	for j in range(0, 2):
-		tiles.append(pos + Vector2i(1, j))
-	for i in range(0, -2, -1):
-		tiles.append(pos + Vector2i(i, 1))
-	for j in range(0, -1, -1):
-		tiles.append(pos + Vector2i(-1, j))
+	# This is a special case of ring()
+	var coords = []
+	for i in [-1, 0, 1]:
+		coords.append(pos + Vector2i(i, -1))
+	for j in [0, 1]:
+		coords.append(pos + Vector2i(1, j))
+	for i in [0, -1]:
+		coords.append(pos + Vector2i(i, 1))
+	for j in [0]:
+		coords.append(pos + Vector2i(-1, j))
 		
-	if in_board:
-		# TODO: might need adjustment for the bottom and right edges
-		tiles = tiles.filter(func(tile): return bbox.has_point(tile))
+	return filter_coords(coords, free, in_board, bbox)
 
+func filter_coords(coords, free, in_board, bbox):
+	## Return a sub-selection of coords that match criteria for being walkable 
+	## and contained within the bounding box `bbox`.
+	if in_board:
+		if bbox == null:
+			bbox = get_used_rect()
+		# The doc says that the right and bottom edges are excluded, but this 
+		# actally works just fine because they assume a different semantic for 
+		# bottom-right (rect.end()) that is [1, 1] away from our tile-based 
+		# definition. 
+		coords = coords.filter(func (coord): return bbox.has_point(coord))
 	if free:
-		tiles = tiles.filter(is_walkable)
-		
-	return tiles
+		coords = coords.filter(is_walkable)
+	return coords
 
 func get_used_rect() -> Rect2i:
 	var bbox:Rect2i = super.get_used_rect()

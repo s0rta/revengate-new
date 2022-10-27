@@ -61,12 +61,12 @@ func gen_level(nb_rooms=4):
 	while partitions.size() < nb_rooms and nb_iter < 10:
 		areas = []
 		indices = []
-		for i in range(partitions.size()):
+		for i in partitions.size():
 			size = partitions[i].size
 			if max(size.x, size.y) < MIN_PART_SIZE:
 				continue  # ignore tiny partitions
-			areas.append(partitions[i].get_area())
 			indices.append(i)
+			areas.append(partitions[i].get_area())
 			
 		# favor splitting the big partitions first
 		var index = Rand.weighted_choice(indices, areas)
@@ -77,9 +77,10 @@ func gen_level(nb_rooms=4):
 		if sub_parts != null:
 			partitions[index] = sub_parts[1]
 			partitions.insert(index, sub_parts[0])
+		nb_iter += 1
 	for rect in partitions:
 		add_room(Rand.sub_rect(rect, MIN_ROOM_SIDE))
-	for i in range(rooms.size()-1):
+	for i in rooms.size()-1:
 		connect_rooms(rooms[i], rooms[i+1])
 	
 func connect_rooms(room1, room2):

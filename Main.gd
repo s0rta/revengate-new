@@ -1,20 +1,25 @@
 extends Node2D
 
+func test_change_board():
+	var new_board = $Board.duplicate()
+	var builder = BoardBuilder.new(new_board)
+	builder.test()
+
+	var old_board = $Board
+	old_board.replace_by(new_board)
+	old_board.queue_free()
+
 func _input(_event):
 	if Input.is_action_just_pressed("test"):
-		var new_board = $Board.duplicate()
-		var builder = BoardBuilder.new(new_board)
-		builder.test()
-
-		var old_board = $Board
-		old_board.replace_by(new_board)
-		old_board.queue_free()
-#		var rects = [Rect2i(0, 0, 10, 10), 
-#				Rect2i(1, 1, 10, 10), 
-#				Rect2i(0, 0, 20, 6), 
-#				Rect2i(1, 1, 6, 20), 
-#		]
-#		for rect in rects:
-#			var split = Rand.split_rect(rect, Rand.Orientation.RANDOM, 1, 2)
-#			print("Split of %s (end:%s) is %s" % [rect, rect.end, split])
-#
+		# test_change_board()
+		
+		var bbox = Rect2i(0, 0, 4, 4)
+		var center = V.i(1, 1)
+		print("Adjacents: %s" % [$Board.adjacents(center, false, true, bbox)])
+		print("Ring:      %s" % [$Board.ring(center, 1, false, true, bbox)])
+		var spiral = $Board.spiral(center, 1, false, true, bbox)
+		var coords = []
+		for c in spiral:
+			coords.append(c)
+		print("Spiral:    %s" % [coords])
+		
