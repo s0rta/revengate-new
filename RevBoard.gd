@@ -169,6 +169,7 @@ class TileSpiral extends RefCounted:
 	var coords
 	var radius
 	var max_radius
+	var is_init: bool = false
 	
 	static func get_max_radius(center: Vector2i, bbox: Rect2i):
 		## Return the largest radius that a spiral can grow to before only 
@@ -196,6 +197,7 @@ class TileSpiral extends RefCounted:
 		
 	func _iter_init(_arg):
 		radius = 0
+		is_init = true
 		return grow_radius()
 		
 	func _iter_next(_arg):
@@ -207,6 +209,16 @@ class TileSpiral extends RefCounted:
 		
 	func _iter_get(_arg):
 		return coords[index]
+
+	func next():
+		## Advance the iterator and return the next element.
+		## Return null if the iteration is over.
+		if not is_init:
+			if not _iter_init(null):
+				return null
+		elif not _iter_next(null):
+			return null
+		return _iter_get(null)
 
 	func grow_radius():
 		## Increase the spiral to the next size up if possible.
