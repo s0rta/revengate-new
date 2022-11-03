@@ -75,8 +75,9 @@ static func biased_choice(seq:Array, bias, biased_elem=null):
 	return seq[cum_weights.bsearch(val) - 1]
 	
 static func pos_in_rect(rect:Rect2i):
-	return Vector2i(randi_range(0, rect.size.x-1), 
-					randi_range(0, rect.size.y-1))
+	var offset = Vector2i(randi_range(0, rect.size.x-1), 
+						randi_range(0, rect.size.y-1))
+	return rect.position + offset
 
 static func sub_rect(rect:Rect2i, min_side=1):
 	## Return a rectangle that is contained inside rect, likely smaller, 

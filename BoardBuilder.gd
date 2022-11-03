@@ -107,7 +107,23 @@ func connect_rooms(room1, room2):
 	# TODO: replaced walls should become doors
 	paint_path(cells, "floor")
 
-func test():
-	print("Terrain names: %s" % var_to_str(terrain_names))
-	# add_room(Rect2i(0, 0, 4, 6))
-	gen_level()
+func place(thing, in_room=true, pos=null, free:bool=true, bbox=null):
+	## Put `thing` on the on a board cell, fallback to nearby cells if needed.
+	## If pos is not provided, a random position is selected.
+	## This does not do any animation.
+	
+	# FIXME: free must take into account other monsters
+	var coord: Vector2i
+	if pos is Vector2i:
+		coord = Vector2i(pos.x, pos.y)
+	elif in_room:
+		coord = Rand.pos_in_rect(Rand.choice(rooms))
+	else:
+		if bbox == null:
+			bbox = rect
+		coord = Rand.pos_in_rect(bbox)
+
+	if not board.is_walkable(coord):
+		coord = board.spiral(coord, null, true).next()
+	thing.place(coord)
+	return coord

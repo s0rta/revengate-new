@@ -228,9 +228,29 @@ class TileSpiral extends RefCounted:
 		if radius > max_radius:
 			coords = []
 			return false
-		else:
-			coords = board.ring(center, radius, free, in_board, bbox)
+		
+		coords = board.ring(center, radius, free, in_board, bbox)
+		if coords.size():
 			return true
+		else:
+			return grow_radius()
+
+class BoardIndex extends RefCounted:
+	## A lookup helper for game items that are on the board
+	var board: RevBoard
+	var actors := []
+
+	func _init(board):
+		self.board = board
+
+	func is_free(coord):
+		if not board.is_walkable(coord):
+			return false
+			
+		for actor in actors:
+			if coord == actor.get_board_pos():
+				return false
+		return true
 
 static func canvas_to_board(coord):
 	## Return a coordinate in number of tiles from coord in pixels.
@@ -243,12 +263,18 @@ static func board_to_canvas(coord):
 	return Vector2(coord.x * TILE_SIZE + half_tile, 
 					coord.y * TILE_SIZE + half_tile)
 
+func make_index():
+	var index = BoardIndex.new(self)
+	# TODO: we should limit the indexing to shelf once monsters are properly 
+	# placed on the board rather than the main scene.
+	index.actors = get_node("/root/Main").find_children("", "Actor")
+	return index
+
 func is_walkable(tile_pos:Vector2i):
 	## Return whether a tile is walkable for normal actors
 	# collision is only specified on phys layer 0
 	var tdata = get_cell_tile_data(0, tile_pos)
-	if tdata == null:
-		print("no data for tile_pos=%s!!!" % tile_pos)
+	assert(tdata != null, "no data for tile_pos=%s" % tile_pos)
 	var poly = tdata.get_collision_polygons_count(0)
 	return poly == 0
 
@@ -256,7 +282,7 @@ func ring(center:Vector2i, radius:int, free:bool=true, in_board:bool=true, bbox=
 	## Return an Array of coords that define a Chebyshev-ring around `center`.
 	## In other words, the coords are arranged like a square on the game board 
 	## and they all have the same board.dist() metric to `center`.
-	# TODO: support `filter_pred`
+	## see filter_coords() for the description of the other params	
 	var coords = []
 	var r = radius
 	# FIXME: use the same sequence as adjacents()
@@ -274,13 +300,13 @@ func spiral(center:Vector2i, max_radius=null, free:bool=true, in_board:bool=true
 	## Return an iterator of coordiates describing progressively larger rings around `center`.
 	## max_radius: how far from center to consider coordiates, infered from 
 	##  the bounding box if not provided.
-	## all other params: like RevBoard.ring()
+	## all other params: like RevBoard.filter_coords()
 	return RevBoard.TileSpiral.new(self, center, max_radius, free, in_board, bbox)
 
-func adjacents(pos:Vector2i, free:bool=true, in_board:bool=true, bbox=null):
-	## Return an Array of coords immediately next to pos. 
-	## free: only include tiles that are walkable and unoccupied
-	## in_board: only include tiles that are inside the board (edges included)
+func adjacents(pos:Vector2i, free:bool=true, in_board:bool=true, 
+				bbox=null, index=null):
+	## Return an Array of coords immediately next to `pos`. 
+	## see filter_coords() for the description of the other params
 	# This is a special case of ring()
 	var coords = []
 	for i in [-1, 0, 1]:
@@ -292,11 +318,15 @@ func adjacents(pos:Vector2i, free:bool=true, in_board:bool=true, bbox=null):
 	for j in [0]:
 		coords.append(pos + Vector2i(-1, j))
 		
-	return filter_coords(coords, free, in_board, bbox)
+	return filter_coords(coords, free, in_board, bbox, index)
 
-func filter_coords(coords, free, in_board, bbox):
+func filter_coords(coords, free, in_board, bbox, index=null):
 	## Return a sub-selection of coords that match criteria for being walkable 
 	## and contained within the bounding box `bbox`.
+	## free: only include tiles that are walkable and unoccupied
+	## in_board: only include tiles that are inside the board (edges included)
+	## index: optionnal BoardIndex with extra information on walkability
+	# TODO: support `filter_pred`
 	if in_board:
 		if bbox == null:
 			bbox = get_used_rect()
@@ -306,7 +336,11 @@ func filter_coords(coords, free, in_board, bbox):
 		# definition. 
 		coords = coords.filter(func (coord): return bbox.has_point(coord))
 	if free:
-		coords = coords.filter(is_walkable)
+		if index != null:
+			assert(index is BoardIndex)
+			coords = coords.filter(index.is_free)
+		else:
+			coords = coords.filter(is_walkable)
 	return coords
 
 func get_used_rect() -> Rect2i:
@@ -332,6 +366,7 @@ func astar_metrics(start, dest, max_dist=null):
 	## and return partial metrics.
 	# find our size
 	var bbox:Rect2i = get_used_rect()
+	var index = make_index()
 			
 	# find the start: randomize if not provided
 	if start == null:
@@ -342,11 +377,12 @@ func astar_metrics(start, dest, max_dist=null):
 	var queue = DistQueue.new()
 	var done = {}
 	var estimate = dist(start, dest)
-	# dist is a [f(n), g(n), man(p, n)] pair: estimate and real dists
-	# Manhattan distance with the previous node as the tie breaker to favor 
+	# dist is a [f(n), g(n), man(p, n)] triplets: estimate and real dists
+	# with Manhattan distance with the previous node as the tie breaker to favor 
 	# straigth lines over diagonals.
 	var dist = [estimate, 0, 0]  
-	var next_dist = null
+	var pre_dist = null   # dist from start to a coord
+	var post_dist = null  # dist from a coord to dest
 	queue.enqueue(start, dist)
 	var current = null
 	while not queue.empty():
@@ -354,17 +390,23 @@ func astar_metrics(start, dest, max_dist=null):
 		current = queue.dequeue()
 		if current == dest:
 			break  # Done!
+		elif dist(current, dest) == 1:
+			# got next to dest, no need to look at adjacents()
+			metrics.setv(dest, dist[1]+1)
+			metrics.add_edge(current, dest)
+			break
 		if done.has(current) or dist[1] == max_dist:
 			continue  # this position is finalized already
 
-		for pos in adjacents(current, true, true, bbox):
+		for pos in adjacents(current, true, true, bbox, index):
 			if done.has(pos):
 				continue
-			next_dist = metrics.getv(pos)
-			if next_dist == null or next_dist > dist[1]+1:
+			pre_dist = metrics.getv(pos)
+			if pre_dist == null or pre_dist > dist[1]+1:
 				metrics.setv(pos, dist[1]+1)
 				metrics.add_edge(current, pos)
-			estimate = dist(pos, dest) + dist[1] + 1
+			post_dist = dist(pos, dest)
+			estimate = post_dist + dist[1] + 1
 			queue.enqueue(pos, [estimate, dist[1]+1, man_dist(pos, current)])
 		done[current] = true
 	return metrics
@@ -379,17 +421,18 @@ func dist_metrics(start=null, dest=null, max_dist=null):
 	
 	# find our size
 	var bbox:Rect2i = get_used_rect()
+	var index = make_index()
 			
 	# find the start: randomize if not provided
 	if start == null:
 		# TODO: pick only walkable starting points
 		start = Rand.pos_in_rect(bbox)
 	
-	var metrics = BoardMetrics.new(bbox.size, start)
+	var metrics = BoardMetrics.new(bbox.size, start, dest)
 	var queue = DistQueue.new()
 	var done = {}
 	var dist = 0
-	var next_dist = null
+	var pre_dist = null  # dist from start to a coord
 	queue.enqueue(start, dist)
 	var current = null
 	while not queue.empty():
@@ -397,14 +440,19 @@ func dist_metrics(start=null, dest=null, max_dist=null):
 		current = queue.dequeue()
 		if current == dest:
 			break  # Done!
+		elif dest != null and dist(current, dest) == 1:
+			# got next to dest, no need to look at adjacents()
+			metrics.setv(V.i(dest.x, dest.y), dist+1)
+			metrics.add_edge(current, dest)
+			break
 		if done.has(current) or dist == max_dist:
 			continue  # this position is finalized already
 
-		for pos in adjacents(current, true, true, bbox):
+		for pos in adjacents(current, true, true, bbox, index):
 			if done.has(pos):
 				continue
-			next_dist = metrics.getv(pos)
-			if next_dist == null or next_dist > dist+1:
+			pre_dist = metrics.getv(pos)
+			if pre_dist == null or pre_dist > dist+1:
 				metrics.setv(pos, dist+1)
 				metrics.add_edge(current, pos)
 			queue.enqueue(pos, dist+1)
