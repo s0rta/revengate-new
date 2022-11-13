@@ -83,6 +83,16 @@ func gen_level(nb_rooms=4):
 	for i in rooms.size()-1:
 		connect_rooms(rooms[i], rooms[i+1])
 	
+	# place stairs as far appart as possible
+	# FIXME: stairs should always be in a room
+	var metrics = board.dist_metrics(Rand.pos_in_rect(Rand.choice(rooms)))
+	metrics = board.dist_metrics(metrics.furthest_pos)
+	var poles = [metrics.start, metrics.furthest_pos]
+	poles.shuffle()
+	paint_cells([poles[0]], "stairs-up")
+	paint_cells([poles[1]], "stairs-down")
+	
+	
 func connect_rooms(room1, room2):
 	# topologicaly sort the rooms so room1 is up and left
 	# TODO: this might not be needed

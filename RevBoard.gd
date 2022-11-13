@@ -129,6 +129,9 @@ class BoardMetrics:
 		return dists.getv(pos)
 	
 	func setv(pos:Vector2i, val):
+		if val > furthest_dist:
+			furthest_pos = pos
+			furthest_dist = val
 		dists.setv(pos, val)
 	
 	func add_edge(here, there):
@@ -265,9 +268,12 @@ static func board_to_canvas(coord):
 
 func make_index():
 	var index = BoardIndex.new(self)
-	# TODO: we should limit the indexing to shelf once monsters are properly 
+	# TODO: we should limit the indexing to self once monsters are properly 
 	# placed on the board rather than the main scene.
-	index.actors = get_node("/root/Main").find_children("", "Actor")
+	var root = $Main
+	if root == null:
+		root = self
+	index.actors = root.find_children("", "Actor")
 	return index
 
 func is_walkable(tile_pos:Vector2i):
@@ -285,7 +291,7 @@ func ring(center:Vector2i, radius:int, free:bool=true, in_board:bool=true, bbox=
 	## see filter_coords() for the description of the other params	
 	var coords = []
 	var r = radius
-	# FIXME: use the same sequence as adjacents()
+
 	for i in range(-r, r+1):
 		coords.append(center + V.i(i, -r))
 	for j in range(-r+1, r+1, 1):

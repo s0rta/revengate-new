@@ -6,9 +6,13 @@
 texture = ExtResource("3_ers31")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/0/terrain = 4
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0
 1:0/0 = 0
+1:0/0/terrain_set = 0
+1:0/0/terrain = 3
 1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 1:0/0/physics_layer_0/angular_velocity = 0.0
 0:1/0 = 0
@@ -136,6 +140,10 @@ terrain_set_0/terrain_1/name = "wall"
 terrain_set_0/terrain_1/color = Color(0.592157, 0.396078, 0.105882, 1)
 terrain_set_0/terrain_2/name = "rock"
 terrain_set_0/terrain_2/color = Color(0.403922, 0.168627, 0.00784314, 1)
+terrain_set_0/terrain_3/name = "stairs-up"
+terrain_set_0/terrain_3/color = Color(0.329412, 0.462745, 0.623529, 1)
+terrain_set_0/terrain_4/name = "stairs-down"
+terrain_set_0/terrain_4/color = Color(0.329412, 0.462745, 0.623529, 1)
 sources/0 = SubResource("TileSetAtlasSource_x5cyv")
 
 [node name="TileMap" type="TileMap"]
