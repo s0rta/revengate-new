@@ -270,9 +270,7 @@ func make_index():
 	var index = BoardIndex.new(self)
 	# TODO: we should limit the indexing to self once monsters are properly 
 	# placed on the board rather than the main scene.
-	var root = $Main
-	if root == null:
-		root = self
+	var root = $Main if $Main != null else self
 	index.actors = root.find_children("", "Actor")
 	return index
 

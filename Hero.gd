@@ -1,3 +1,4 @@
+@tool
 extends Actor
 
 func _ready():

@@ -1,3 +1,4 @@
+@tool
 extends Area2D
 class_name Actor
 signal turn_done
@@ -16,6 +17,13 @@ func _ready():
 	ray.name = "Ray"
 	add_child(ray)
 	ray.collide_with_areas = true
+
+func _get_configuration_warnings():
+	var warnings = []
+	if name != "Hero" and find_children("", "Strategy").is_empty():
+		update_configuration_warnings()
+		warnings.append("Actor's can't act without a strategy.")
+	return warnings
 
 func reset_dest():
 	dest = null

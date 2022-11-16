@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bogqim6ve8tbc"]
+[gd_scene load_steps=7 format=3 uid="uid://cxaxatxrd3nu"]
 
-[ext_resource type="PackedScene" uid="uid://dsv80ox01tett" path="res://Hero.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://jeeswxa3y27j" path="res://Monster.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://bm52nljlxjqmt" path="res://Hero.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://11w7rd371ri7" path="res://Monster.tscn" id="3"]
 [ext_resource type="Script" path="res://Main.gd" id="4"]
 [ext_resource type="Script" path="res://RevBoard.gd" id="4_4g0be"]
 [ext_resource type="PackedScene" path="res://TurnQueue.tscn" id="5"]
@@ -16,10 +16,10 @@ script = ExtResource("4_4g0be")
 [node name="Hero" parent="." instance=ExtResource("2")]
 position = Vector2(656, 304)
 
+[node name="TurnQueue" parent="." instance=ExtResource("5")]
+
 [node name="Monster" parent="." instance=ExtResource("3")]
-position = Vector2(462, 112)
+position = Vector2(208, 176)
 
 [node name="Monster2" parent="." instance=ExtResource("3")]
-position = Vector2(208, 304)
-
-[node name="TurnQueue" parent="." instance=ExtResource("5")]
+position = Vector2(432, 112)
