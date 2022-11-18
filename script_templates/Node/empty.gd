@@ -15,15 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-@tool
-extends Actor
-
-func act():
-	state = States.ACTING
-	var action = $MainStrat.act(self)
-	if action != null:
-		action.connect("finished", self.finalize_turn, CONNECT_ONE_SHOT)
-	else:
-		finalize_turn()
-	return action
-	
+# meta-description: Empty file with the GPLv3 headers
+# meta-default: true
+extends _BASE_

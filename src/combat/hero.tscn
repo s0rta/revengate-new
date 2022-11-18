@@ -5,7 +5,6 @@
 
 [node name="Hero" instance=ExtResource("1_bgbko")]
 script = ExtResource("2_jrjv3")
-health = 50
 strength = 55
 agility = 55
 intelligence = 60

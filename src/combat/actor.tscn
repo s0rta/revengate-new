@@ -8,11 +8,6 @@ size = Vector2(32, 32)
 
 [node name="Actor" type="Area2D"]
 script = ExtResource("1_8kibw")
-health = 50
-strength = 50
-agility = 50
-intelligence = 50
-perception = 50
 
 [node name="Label" type="Label" parent="."]
 anchors_preset = 15
