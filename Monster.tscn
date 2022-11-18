@@ -6,6 +6,8 @@
 
 [node name="Monster" instance=ExtResource("1_o5siu")]
 script = ExtResource("2")
+strength = 40
+agility = 40
 
 [node name="Label" parent="." index="0"]
 text = "k"

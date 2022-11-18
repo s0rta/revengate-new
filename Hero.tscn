@@ -5,6 +5,10 @@
 
 [node name="Hero" instance=ExtResource("1_084jk")]
 script = ExtResource("2_8xkdo")
+strength = 55
+agility = 55
+intelligence = 60
+perception = 40
 
 [node name="Label" parent="." index="0"]
 text = "@"

@@ -42,6 +42,7 @@ Builder:
 - [ ] dialogues
 - [ ] merge git repo with Revengate v0.1
 - [ ] bestiary
+- [ ] release on F-Droid
 
 ## v1.0
 - [ ] saved games

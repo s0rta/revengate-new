@@ -9,6 +9,24 @@ enum States {
 	ACTING,
 }
 
+# std. dev. for a normal distribution more or less contained in 0..100
+const SIGMA := 12.5  
+# average of the above distribution
+const MU := 50  
+
+# 50% less damage if you have a resistance
+const RESIST_MULT := 0.5
+
+# 35% more damage on a critical hit
+const CRITICAL_MULT := 0.35
+
+# core combat attributes
+@export var health := 50
+@export var strength := 50
+@export var agility := 50
+@export var intelligence := 50
+@export var perception := 50
+
 var state = States.IDLE
 var ray := RayCast2D.new()
 var dest  # keep track of where we are going while animations are running 
@@ -63,14 +81,5 @@ func move_to(board_coord):
 	return anim
 	
 func finalize_turn():
-	inspect_tile()
 	state = States.IDLE
 	emit_signal("turn_done")
-	
-func inspect_tile():
-	## Return information about the tile where the actor currently is.
-	var board : RevBoard = $"/root/Main/Board"
-	if board != null:
-		var tpos = RevBoard.canvas_to_board(position)
-		var walkable = board.is_walkable(tpos)
-		print("cell info at %s: %s" % [tpos, walkable])
