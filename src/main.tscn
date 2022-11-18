@@ -1,25 +1,23 @@
-[gd_scene load_steps=7 format=3 uid="uid://cxaxatxrd3nu"]
+[gd_scene load_steps=6 format=3 uid="uid://d0vu1u4sr0gbr"]
 
-[ext_resource type="PackedScene" uid="uid://bm52nljlxjqmt" path="res://Hero.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://11w7rd371ri7" path="res://Monster.tscn" id="3"]
-[ext_resource type="Script" path="res://Main.gd" id="4"]
-[ext_resource type="Script" path="res://RevBoard.gd" id="4_4g0be"]
-[ext_resource type="PackedScene" path="res://TurnQueue.tscn" id="5"]
-[ext_resource type="PackedScene" uid="uid://cfc3ttsrd52r" path="res://RevBoard.tscn" id="6"]
+[ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
+[ext_resource type="PackedScene" uid="uid://cfc3ttsrd52r" path="res://src/rev_board.tscn" id="3_vl15m"]
+[ext_resource type="PackedScene" uid="uid://bd2qlsrbf4sgo" path="res://src/combat/hero.tscn" id="4_lrsod"]
+[ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="5_odllu"]
+[ext_resource type="PackedScene" uid="uid://cx7p7hc5dxgio" path="res://src/combat/monster.tscn" id="5_ottqo"]
 
 [node name="Main" type="Node2D"]
-script = ExtResource("4")
+script = ExtResource("1_58o83")
 
-[node name="Board" parent="." instance=ExtResource("6")]
-script = ExtResource("4_4g0be")
+[node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]
 
-[node name="Hero" parent="." instance=ExtResource("2")]
+[node name="Board" parent="." instance=ExtResource("3_vl15m")]
+
+[node name="Hero" parent="." instance=ExtResource("4_lrsod")]
 position = Vector2(656, 304)
 
-[node name="TurnQueue" parent="." instance=ExtResource("5")]
+[node name="Monster" parent="." instance=ExtResource("5_ottqo")]
+position = Vector2(208, 368)
 
-[node name="Monster" parent="." instance=ExtResource("3")]
-position = Vector2(208, 176)
-
-[node name="Monster2" parent="." instance=ExtResource("3")]
-position = Vector2(432, 112)
+[node name="Monster2" parent="." instance=ExtResource("5_ottqo")]
+position = Vector2(400, 144)

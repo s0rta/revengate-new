@@ -1,10 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://bm52nljlxjqmt"]
+[gd_scene load_steps=3 format=3 uid="uid://bd2qlsrbf4sgo"]
 
-[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://Actor.tscn" id="1_084jk"]
-[ext_resource type="Script" path="res://Hero.gd" id="2_8xkdo"]
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_bgbko"]
+[ext_resource type="Script" path="res://src/combat/hero.gd" id="2_jrjv3"]
 
-[node name="Hero" instance=ExtResource("1_084jk")]
-script = ExtResource("2_8xkdo")
+[node name="Hero" instance=ExtResource("1_bgbko")]
+script = ExtResource("2_jrjv3")
+health = 50
 strength = 55
 agility = 55
 intelligence = 60

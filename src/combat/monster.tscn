@@ -1,11 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://11w7rd371ri7"]
+[gd_scene load_steps=4 format=3 uid="uid://cx7p7hc5dxgio"]
 
-[ext_resource type="Script" path="res://Tracking.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://Actor.tscn" id="1_o5siu"]
-[ext_resource type="Script" path="res://Monster.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_la2eu"]
+[ext_resource type="Script" path="res://src/combat/monster.gd" id="2_14ncx"]
+[ext_resource type="Script" path="res://src/combat/tracking.gd" id="3_np8n2"]
 
-[node name="Monster" instance=ExtResource("1_o5siu")]
-script = ExtResource("2")
+[node name="Monster" instance=ExtResource("1_la2eu")]
+script = ExtResource("2_14ncx")
 strength = 40
 agility = 40
 
@@ -13,4 +13,4 @@ agility = 40
 text = "k"
 
 [node name="MainStrat" type="Node" parent="." index="2"]
-script = ExtResource("1")
+script = ExtResource("3_np8n2")
