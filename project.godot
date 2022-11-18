@@ -12,12 +12,12 @@ _global_script_classes=[{
 "base": "Area2D",
 "class": &"Actor",
 "language": &"GDScript",
-"path": "res://Actor.gd"
+"path": "res://src/combat/actor.gd"
 }, {
 "base": "RefCounted",
 "class": &"BoardBuilder",
 "language": &"GDScript",
-"path": "res://BoardBuilder.gd"
+"path": "res://src/board_builder.gd"
 }, {
 "base": "RefCounted",
 "class": &"PriorityQueue",
@@ -27,27 +27,27 @@ _global_script_classes=[{
 "base": "Object",
 "class": &"Rand",
 "language": &"GDScript",
-"path": "res://Rand.gd"
+"path": "res://src/rand.gd"
 }, {
 "base": "TileMap",
 "class": &"RevBoard",
 "language": &"GDScript",
-"path": "res://RevBoard.gd"
+"path": "res://src/rev_board.gd"
 }, {
 "base": "Node",
 "class": &"Strategy",
 "language": &"GDScript",
-"path": "res://Strategy.gd"
+"path": "res://src/combat/strategy.gd"
 }, {
 "base": "Strategy",
 "class": &"Tracking",
 "language": &"GDScript",
-"path": "res://Tracking.gd"
+"path": "res://src/combat/tracking.gd"
 }, {
 "base": "Object",
 "class": &"V",
 "language": &"GDScript",
-"path": "res://V.gd"
+"path": "res://src/v.gd"
 }]
 _global_script_class_icons={
 "Actor": "",
@@ -63,7 +63,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Revengate GD"
-run/main_scene="res://Main.tscn"
+run/main_scene="res://src/main.tscn"
 config/features=PackedStringArray("4.0")
 
 [gui]
