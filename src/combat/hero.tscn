@@ -1,14 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://bd2qlsrbf4sgo"]
+[gd_scene load_steps=4 format=3 uid="uid://bd2qlsrbf4sgo"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_bgbko"]
 [ext_resource type="Script" path="res://src/combat/hero.gd" id="2_jrjv3"]
+[ext_resource type="PackedScene" uid="uid://b5asdjtwlv8vy" path="res://src/combat/weapon.tscn" id="3_4dlru"]
 
 [node name="Hero" instance=ExtResource("1_bgbko")]
 script = ExtResource("2_jrjv3")
-strength = 55
-agility = 55
-intelligence = 60
-perception = 40
 
 [node name="Label" parent="." index="0"]
 text = "@"
+
+[node name="sword" parent="." index="2" instance=ExtResource("3_4dlru")]
+damage = 10
+damage_family = 1

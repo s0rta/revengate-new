@@ -103,8 +103,8 @@ func gen_level(nb_rooms=4):
 	# place stairs as far appart as possible
 	# FIXME: stairs should always be in a room
 	var metrics = board.dist_metrics(Rand.pos_in_rect(Rand.choice(rooms)))
-	metrics = board.dist_metrics(metrics.furthest_pos)
-	var poles = [metrics.start, metrics.furthest_pos]
+	metrics = board.dist_metrics(metrics.furthest_coord)
+	var poles = [metrics.start, metrics.furthest_coord]
 	poles.shuffle()
 	paint_cells([poles[0]], "stairs-up")
 	paint_cells([poles[1]], "stairs-down")
@@ -134,23 +134,23 @@ func connect_rooms(room1, room2):
 	# TODO: replaced walls should become doors
 	paint_path(cells, "floor")
 
-func place(thing, in_room=true, pos=null, free:bool=true, bbox=null):
+func place(thing, in_room=true, coord=null, free:bool=true, bbox=null):
 	## Put `thing` on the on a board cell, fallback to nearby cells if needed.
-	## If pos is not provided, a random position is selected.
-	## This does not do any animation.
+	## If coord is not provided, a random position is selected.
+	## No animations are performed.
 	
 	# FIXME: free must take into account other monsters
-	var coord: Vector2i
-	if pos is Vector2i:
-		coord = Vector2i(pos.x, pos.y)
+	var cell: Vector2i  # wrestling the type system into allowing null
+	if coord is Vector2i:
+		cell = Vector2i(coord.x, coord.y)
 	elif in_room:
-		coord = Rand.pos_in_rect(Rand.choice(rooms))
+		cell = Rand.pos_in_rect(Rand.choice(rooms))
 	else:
 		if bbox == null:
 			bbox = rect
-		coord = Rand.pos_in_rect(bbox)
+		cell = Rand.pos_in_rect(bbox)
 
-	if not board.is_walkable(coord):
-		coord = board.spiral(coord, null, true).next()
-	thing.place(coord)
-	return coord
+	if not board.is_walkable(cell):
+		cell = board.spiral(cell, null, true).next()
+	thing.place(cell)
+	return cell

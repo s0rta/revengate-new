@@ -124,7 +124,7 @@ class BoardMetrics:
 	var start: Vector2i
 	var dest
 	var dists: Matrix
-	var furthest_pos = start
+	var furthest_coord = start
 	var furthest_dist = 0
 	var prevs = {}
 	
@@ -133,7 +133,7 @@ class BoardMetrics:
 		dists.setv(start, 0)
 		self.start = start
 		self.dest = dest
-		self.furthest_pos = start
+		self.furthest_coord = start
 		self.prevs[start] = null
 
 	func _to_string():
@@ -142,14 +142,14 @@ class BoardMetrics:
 		mat.pad()
 		return mat.to_string()
 
-	func getv(pos:Vector2i):
-		return dists.getv(pos)
+	func getv(coord:Vector2i):
+		return dists.getv(coord)
 	
-	func setv(pos:Vector2i, val):
+	func setv(coord:Vector2i, val):
 		if val > furthest_dist:
-			furthest_pos = pos
+			furthest_coord = coord
 			furthest_dist = val
-		dists.setv(pos, val)
+		dists.setv(coord, val)
 	
 	func add_edge(here, there):
 		## record that `here` is the optimal previous location to reach `there`.
@@ -268,14 +268,14 @@ class BoardIndex extends RefCounted:
 			return false
 			
 		for actor in actors:
-			if coord == actor.get_board_pos():
+			if coord == actor.get_cell_coord():
 				return false
 		return true
 
-static func canvas_to_board(coord):
+static func canvas_to_board(cpos):
 	## Return a coordinate in number of tiles from coord in pixels.
-	return Vector2i(int(coord.x) / TILE_SIZE,
-					int(coord.y) / TILE_SIZE)
+	return Vector2i(int(cpos.x) / TILE_SIZE,
+					int(cpos.y) / TILE_SIZE)
 
 static func board_to_canvas(coord):
 	## Return a coordinate in pixels to the center of the tile at coord. 
@@ -291,11 +291,11 @@ func make_index():
 	index.actors = root.find_children("", "Actor")
 	return index
 
-func is_walkable(tile_pos:Vector2i):
-	## Return whether a tile is walkable for normal actors
-	# collision is only specified on phys layer 0
-	var tdata = get_cell_tile_data(0, tile_pos)
-	assert(tdata != null, "no data for tile_pos=%s" % tile_pos)
+func is_walkable(coord:Vector2i):
+	## Return whether a cell is walkable for normal actors
+	# collision is only specified on physics layer 0
+	var tdata = get_cell_tile_data(0, coord)
+	assert(tdata != null, "no data for coord=%s" % coord)
 	var poly = tdata.get_collision_polygons_count(0)
 	return poly == 0
 

@@ -46,7 +46,6 @@ func run():
 		print(actors)
 		for actor in actors:
 			actor.act()
-			#yield(get_tree().create_timer(0.05), "timeout")
 		for actor in actors:
 			if actor.state != Actor.States.IDLE:
 				print("waiting for %s..." % actor)
