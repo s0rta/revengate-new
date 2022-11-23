@@ -43,6 +43,7 @@ const CRITICAL_MULT := 0.35
 @export var agility := 50
 @export var intelligence := 50
 @export var perception := 50
+@export var resistance: Weapon.DamageFamily  # at most one!
 
 var state = States.IDLE
 var ray := RayCast2D.new()
@@ -60,10 +61,14 @@ func _get_configuration_warnings():
 		warnings.append("Actor's can't act without a strategy.")
 	return warnings
 
+func finalize_turn():
+	state = States.IDLE
+	emit_signal("turn_done")
+
 func reset_dest():
 	dest = null
 
-func get_board_pos():
+func get_cell_coord():
 	## Return the board position occupied by the actor.
 	## If the actor is currently moving, return where it's expected to be at the
 	## end of the turn.
@@ -79,10 +84,10 @@ func place(board_coord):
 		await self.turn_done
 	position = RevBoard.board_to_canvas(board_coord)
 
-func move_by(tile_vect):
+func move_by(cell_vect: Vector2i):
 	## Move by the specified number of tiles from the current position. 
 	## The move is animated, return the animation.
-	var new_pos = RevBoard.canvas_to_board(position) + tile_vect
+	var new_pos = RevBoard.canvas_to_board(position) + cell_vect
 	return move_to(new_pos)
 	
 func move_to(board_coord):
@@ -96,7 +101,101 @@ func move_to(board_coord):
 	dest = board_coord
 	anim.finished.connect(reset_dest, CONNECT_ONE_SHOT)
 	return anim
+
+func _get_lunge_anim_cpos(foe):
+	## Return the canvas coord where an attack animation should reach before starting the 
+	## retreat animation.
+	# going roughtly half a cell towards foe, no matter how far foe is
+	var my_coord = get_cell_coord()
+	var foe_coord = foe.get_cell_coord()
+	var attack_vec = Vector2(foe_coord - my_coord)
+	attack_vec = attack_vec.normalized()
+	var anim_vec = 0.45 * attack_vec
+	return position + anim_vec * RevBoard.TILE_SIZE
 	
-func finalize_turn():
-	state = States.IDLE
-	emit_signal("turn_done")
+func _anim_lunge(foe):
+	## Return the animation of lunging forward towards `foe` then retreaing.
+	var anim_dest = _get_lunge_anim_cpos(foe)
+	var old_cpos = position
+	var scene = get_tree()
+	var anim := scene.create_tween()
+	anim.set_trans(anim.TRANS_SINE)
+	anim.tween_property(self, "position", anim_dest, .15)
+	anim.tween_property(self, "position", old_cpos, .2)
+	return anim
+	
+func anim_miss(foe, weapon):
+	## Animate a missed strike towards `foe`, return the animation object.
+#	if foe.state == States.ACTING:
+#		await foe.turn_done
+	var sound = weapon.get_node("MissSound")
+	if not sound:
+		sound = $MissSound
+	sound.play()
+
+	var anim = _anim_lunge(foe)
+	return anim
+
+func anim_hit(foe, damage):
+	## Animate a success strike on `foe`, return the animation object.
+#	if foe.state == States.ACTING:
+#		await foe.turn_done
+	print("hit %s for %s dmg" % [foe, damage])
+
+func is_alive():
+	return health > 0
+	
+func is_dead():
+	return not is_alive()
+
+func get_weapons():
+	## Return all the active weapons for the current turn.
+	## All active weapons are eligible for a strike during the turn.
+	## Ex: a fast feline would return a bite and two claw weapons.
+	return find_children("", "Weapon")
+	
+func get_evasion(weapon):
+	## Return the evasion stat against a particular weapon. 
+	return agility
+	
+func get_resist_mult(weapon):
+	## Return a multiplier to attenuate `weapon`'s damage based on our resistances.
+	## The multiplier is in [0..1], with 1 being full damage
+	if resistance == null:
+		return 1.0
+	elif weapon.damage_family == resistance:
+		return RESIST_MULT
+	else:
+		return 1.0
+	
+func attack(foe):
+	## A full multi-strike attack on foe.
+	## Sentiment and range are not checked, the caller is responsible for 
+	## performing those tests.
+	for weapon in get_weapons():
+		if foe.is_alive():
+			strike(foe, weapon)
+		
+func strike(foe, weapon):
+	## Strike foe with weapon. The strike could result in a miss. 
+	## The result is immediately visible in the world.
+	# combats works with two random rolls: to-hit then damage.
+	
+	var crit = false
+	# to-hit	
+	var roll = randfn(MU, SIGMA)
+	if roll < foe.get_evasion(weapon):
+		# Miss!
+		return anim_miss(foe, weapon)
+	
+	if roll > MU + 2*SIGMA:
+		crit = true
+
+	# damage roll		
+	var stat = strength  # TODO: will be intelligence for spells
+	var damage = (1 + (stat - MU) / 100.0) * weapon.damage * randf()
+	if crit:
+		damage *= CRITICAL_MULT
+	damage *= foe.get_resist_mult(weapon)
+	# FIXME: apply damage
+	return anim_hit(foe, damage)	

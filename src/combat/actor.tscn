@@ -1,13 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://dl5etg1cv5hbt"]
+[gd_scene load_steps=5 format=3 uid="uid://dl5etg1cv5hbt"]
 
 [ext_resource type="Script" path="res://src/combat/actor.gd" id="1_8kibw"]
 [ext_resource type="FontFile" uid="uid://dnkyou1p4t7yl" path="res://assets/fonts/kalimati.ttf" id="2_f285x"]
+[ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="3_pvm2f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_00etm"]
 size = Vector2(32, 32)
 
 [node name="Actor" type="Area2D"]
 script = ExtResource("1_8kibw")
+resistance = 0
 
 [node name="Label" type="Label" parent="."]
 anchors_preset = 15
@@ -29,3 +31,6 @@ vertical_alignment = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_00etm")
+
+[node name="MissSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_pvm2f")

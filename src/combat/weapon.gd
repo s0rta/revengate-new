@@ -15,24 +15,21 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Node2D
+extends Node
+class_name Weapon
+@icon("res://assets/opencliparts/sword_01.svg")
 
-func test_change_board():
-	var new_board = $Board.duplicate()
-	var builder = BoardBuilder.new(new_board)
-	builder.gen_level()
+enum DamageFamily {
+	IMPACT, 
+	SLICE, 
+	PIERCE, 
+	ARCANE, 
+	HEAT, 
+	ACID, 
+	POISON, 
+	CHEMICAL
+}
 
-	var bbox = null
-	for thing in [$Hero, $Monster, $Monster2]:
-		print("moving %s somewhere else" % [thing])
-		builder.place(thing, false, null, false, bbox)
 
-	var old_board = $Board
-	old_board.replace_by(new_board)
-	old_board.queue_free()
-
-func _input(_event):
-	if Input.is_action_just_pressed("test"):
-		# test_change_board()
-		$Hero.attack($Monster2)
-		
+@export var damage := 1
+@export var damage_family: DamageFamily
