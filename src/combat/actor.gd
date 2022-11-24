@@ -117,8 +117,7 @@ func _anim_lunge(foe):
 	## Return the animation of lunging forward towards `foe` then retreaing.
 	var anim_dest = _get_lunge_anim_cpos(foe)
 	var old_cpos = position
-	var scene = get_tree()
-	var anim := scene.create_tween()
+	var anim := get_tree().create_tween()
 	anim.set_trans(anim.TRANS_SINE)
 	anim.tween_property(self, "position", anim_dest, .15)
 	anim.tween_property(self, "position", old_cpos, .2)
@@ -128,19 +127,50 @@ func anim_miss(foe, weapon):
 	## Animate a missed strike towards `foe`, return the animation object.
 #	if foe.state == States.ACTING:
 #		await foe.turn_done
-	var sound = weapon.get_node("MissSound")
-	if not sound:
-		sound = $MissSound
-	sound.play()
+	play_sound("MissSound", weapon)
 
 	var anim = _anim_lunge(foe)
 	return anim
 
-func anim_hit(foe, damage):
+func anim_hit(foe, weapon, damage):
 	## Animate a success strike on `foe`, return the animation object.
 #	if foe.state == States.ACTING:
 #		await foe.turn_done
 	print("hit %s for %s dmg" % [foe, damage])
+	play_sound("HitSound", weapon)
+	
+	foe.update_health(-damage)
+	var anim = _anim_lunge(foe)
+	return anim
+
+func play_sound(node_name, weapon):
+	## Play the most specific sound for "node_name": either from the weapon or from the actor node.
+	## Do nothing if we can't the requested sound
+	var sound
+	for node in [weapon, self]:
+		sound = node.get_node(node_name)
+		if sound:
+			sound.play()
+
+func update_health(hp_delta: int):
+	## Update our health and animate the event.
+	## Return the animation.
+	health += hp_delta
+	var label = $DamageLabel.duplicate()
+	add_child(label)
+	label.text = "%d" % -hp_delta
+	label.visible = true
+	var anim := get_tree().create_tween()
+	var offset = Vector2(RevBoard.TILE_SIZE/4, -RevBoard.TILE_SIZE/2)
+	anim.tween_property(label, "position", label.position+offset, .5)
+	var anim2 := get_tree().create_tween()
+	anim2.pause()
+	# start the fadeout about half way through
+	anim2.tween_property(label, "modulate", Color(0, 0, 0, 0), .25)
+	var timer := get_tree().create_timer(.25)
+	timer.timeout.connect(anim2.play)
+	anim.finished.connect(label.queue_free, CONNECT_ONE_SHOT)
+	return anim
 
 func is_alive():
 	return health > 0
@@ -198,4 +228,4 @@ func strike(foe, weapon):
 		damage *= CRITICAL_MULT
 	damage *= foe.get_resist_mult(weapon)
 	# FIXME: apply damage
-	return anim_hit(foe, damage)	
+	return anim_hit(foe, weapon, damage)	

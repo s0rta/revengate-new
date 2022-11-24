@@ -30,7 +30,17 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_00etm")
 
 [node name="MissSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_pvm2f")
+
+[node name="DamageLabel" type="Label" parent="."]
+visible = false
+offset_top = -9.0
+offset_right = 7.0
+offset_bottom = 14.0
+theme_override_colors/font_color = Color(0.784314, 0.227451, 0.172549, 1)
+theme_override_font_sizes/font_size = 14
+text = "?"
