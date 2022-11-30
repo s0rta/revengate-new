@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dl5etg1cv5hbt"]
+[gd_scene load_steps=6 format=3 uid="uid://dl5etg1cv5hbt"]
 
 [ext_resource type="Script" path="res://src/combat/actor.gd" id="1_8kibw"]
 [ext_resource type="FontFile" uid="uid://dnkyou1p4t7yl" path="res://assets/fonts/kalimati.ttf" id="2_f285x"]
 [ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="3_pvm2f"]
+[ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="4_6yvk8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_00etm"]
 size = Vector2(32, 32)
@@ -35,6 +36,9 @@ shape = SubResource("RectangleShape2D_00etm")
 
 [node name="MissSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_pvm2f")
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_6yvk8")
 
 [node name="DamageLabel" type="Label" parent="."]
 visible = false

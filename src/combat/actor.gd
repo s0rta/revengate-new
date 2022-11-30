@@ -143,12 +143,13 @@ func anim_hit(foe, weapon, damage):
 	var anim = _anim_lunge(foe)
 	return anim
 
-func play_sound(node_name, weapon):
+func play_sound(node_name, weapon=null):
 	## Play the most specific sound for "node_name": either from the weapon or from the actor node.
 	## Do nothing if we can't the requested sound
 	var sound
 	for node in [weapon, self]:
-		sound = node.get_node(node_name)
+		if node:
+			sound = node.get_node(node_name)
 		if sound:
 			sound.play()
 
@@ -161,6 +162,7 @@ func update_health(hp_delta: int):
 	label.text = "%d" % -hp_delta
 	label.visible = true
 	var anim := get_tree().create_tween()
+	anim.finished.connect(label.queue_free, CONNECT_ONE_SHOT)
 	var offset = Vector2(RevBoard.TILE_SIZE/4, -RevBoard.TILE_SIZE/2)
 	anim.tween_property(label, "position", label.position+offset, .5)
 	var anim2 := get_tree().create_tween()
@@ -169,7 +171,12 @@ func update_health(hp_delta: int):
 	anim2.tween_property(label, "modulate", Color(0, 0, 0, 0), .25)
 	var timer := get_tree().create_timer(.25)
 	timer.timeout.connect(anim2.play)
-	anim.finished.connect(label.queue_free, CONNECT_ONE_SHOT)
+	if health <= 0:
+		play_sound("DeathSound")
+		var anim3 = anim.parallel()
+		anim3.tween_property($Label, "modulate", Color(.8, 0, 0, .7), .1)
+		anim3.tween_property($Label, "modulate", Color(0, 0, 0, 0), .4)
+		anim3.finished.connect(self.queue_free, CONNECT_ONE_SHOT)
 	return anim
 
 func is_alive():
@@ -227,5 +234,5 @@ func strike(foe, weapon):
 	if crit:
 		damage *= CRITICAL_MULT
 	damage *= foe.get_resist_mult(weapon)
-	# FIXME: apply damage
+	damage = max(1, round(damage))
 	return anim_hit(foe, weapon, damage)	
