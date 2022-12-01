@@ -36,6 +36,11 @@ I have taken some handwritten notes, to be typed or converted into code at a lat
 * 2021-11-27 – ...: Vitriolic Connections
 * 2021-12-01: phantruch
 * 2022-07-18: generalized challenges
+* 2022-07-31: Nadège Cyrat
+* 2022-08-14: Michel Boilou
+* 2022-08-23: Intro to Magic
+* 2022-10-06: Baw vs Cherub
+* 2022-10-06 – 11-28: ghosts of the cemetary
 
 ## External tools
 Pathfinder background generator (OGL):

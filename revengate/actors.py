@@ -545,7 +545,7 @@ class Actor(object):
         elif isinstance(vector, Spell):
             stat = self.intelligence
         else:
-            stat = MU # everyone is perfectly average with improvised vectors
+            stat = MU  # everyone is perfectly average with improvised vectors
 
         if critical:
             h_delta = vector.h_delta * self.critical_mult

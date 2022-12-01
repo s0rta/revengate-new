@@ -18,6 +18,7 @@ def deps_png(c):
     if not is_newer(pngf, dotf):
         c.run(f"dot -Tpng -o {pngf} {dotf}")
 
+
 @task
 def requirements(c):
     inf = "requirements.in"
