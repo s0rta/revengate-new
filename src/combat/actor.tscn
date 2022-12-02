@@ -10,7 +10,6 @@ size = Vector2(32, 32)
 
 [node name="Actor" type="Area2D"]
 script = ExtResource("1_8kibw")
-resistance = 0
 
 [node name="Label" type="Label" parent="."]
 anchors_preset = 15

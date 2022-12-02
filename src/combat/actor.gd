@@ -26,6 +26,12 @@ enum States {
 	ACTING,
 }
 
+enum Factions {
+	NONE,
+	LUX_CO,
+	BEASTS
+}
+
 # std. dev. for a normal distribution more or less contained in 0..100
 const SIGMA := 12.5  
 # average of the above distribution
@@ -43,7 +49,9 @@ const CRITICAL_MULT := 0.35
 @export var agility := 50
 @export var intelligence := 50
 @export var perception := 50
-@export var resistance: Weapon.DamageFamily  # at most one!
+@export var resistance: Weapon.DamageFamily = 0  # at most one!
+
+@export var faction := Factions.NONE
 
 var state = States.IDLE
 var ray := RayCast2D.new()
@@ -149,9 +157,10 @@ func play_sound(node_name, weapon=null):
 	var sound
 	for node in [weapon, self]:
 		if node:
-			sound = node.get_node(node_name)
+			sound = node.get_node_or_null(node_name)
 		if sound:
 			sound.play()
+			return
 
 func update_health(hp_delta: int):
 	## Update our health and animate the event.
@@ -185,6 +194,18 @@ func is_alive():
 func is_dead():
 	return not is_alive()
 
+func is_friend(other: Actor):
+	## Return whether `self` has positive sentiment towards `other`
+	return faction != Factions.NONE and faction == other.faction
+	
+func is_foe(other: Actor):
+	## Return whether `self` has negative sentiment towards `other`
+	return faction != Factions.LUX_CO and other.faction == Factions.LUX_CO
+	
+func is_impartial(other: Actor):
+	## Return whether `self` has neutral sentiment towards `other`
+	return !is_friend(other) and !is_foe(other)
+
 func get_weapons():
 	## Return all the active weapons for the current turn.
 	## All active weapons are eligible for a strike during the turn.
@@ -198,7 +219,7 @@ func get_evasion(weapon):
 func get_resist_mult(weapon):
 	## Return a multiplier to attenuate `weapon`'s damage based on our resistances.
 	## The multiplier is in [0..1], with 1 being full damage
-	if resistance == null:
+	if !resistance:
 		return 1.0
 	elif weapon.damage_family == resistance:
 		return RESIST_MULT

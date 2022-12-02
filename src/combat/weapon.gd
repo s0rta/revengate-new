@@ -20,6 +20,7 @@ class_name Weapon
 @icon("res://assets/opencliparts/sword_01.svg")
 
 enum DamageFamily {
+	NONE,
 	IMPACT, 
 	SLICE, 
 	PIERCE, 

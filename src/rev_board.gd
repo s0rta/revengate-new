@@ -272,6 +272,20 @@ class BoardIndex extends RefCounted:
 				return false
 		return true
 
+	func actor_foes(me: Actor, max_dist=null):
+		## Return an array of actors for whom `me` has negative sentiment.
+		## max_dist: in board board tiles
+		var foes = []
+		var my_coord = me.get_cell_coord()
+		var foe_coord = null
+		for actor in actors:
+			foe_coord = actor.get_cell_coord()
+			if max_dist and board.dist(my_coord, foe_coord) > max_dist:
+				break
+			if me.is_foe(actor):
+				foes.append(actor)
+		return foes
+
 static func canvas_to_board(cpos):
 	## Return a coordinate in number of tiles from coord in pixels.
 	return Vector2i(int(cpos.x) / TILE_SIZE,
@@ -287,7 +301,9 @@ func make_index():
 	var index = BoardIndex.new(self)
 	# TODO: we should limit the indexing to self once monsters are properly 
 	# placed on the board rather than the main scene.
-	var root = $Main if $Main != null else self
+	var root = $"/root/Main"
+	if not root:
+		root = self
 	index.actors = root.find_children("", "Actor")
 	return index
 

@@ -7,7 +7,9 @@
 [ext_resource type="AudioStream" uid="uid://bajy1gsb550i5" path="res://src/combat/hero_miss.wav" id="4_y2iie"]
 
 [node name="Hero" instance=ExtResource("1_bgbko")]
+position = Vector2(-1, 0)
 script = ExtResource("2_jrjv3")
+faction = 1
 
 [node name="Label" parent="." index="0"]
 text = "@"

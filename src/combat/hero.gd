@@ -18,6 +18,8 @@
 @tool
 extends Actor
 
+const ENEMY_FACTIONS = [Factions.BEASTS]
+
 func _ready():
 	super()
 	state = States.LISTENING
@@ -55,6 +57,8 @@ func _unhandled_input(event):
 		print("anim finished")
 		finalize_turn()
 
+func is_foe(other: Actor):
+	return ENEMY_FACTIONS.has(other.faction)
 
 func act():
 	state = States.LISTENING
