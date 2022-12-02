@@ -47,14 +47,18 @@ func _unhandled_input(event):
 		ray.target_position = move * RevBoard.TILE_SIZE
 		ray.force_raycast_update()
 		if ray.is_colliding():
-			print("collision towards %s" % move)
-			return
+			var collider = ray.get_collider()
+			print("collision towards %s: %s" % [move, collider])
+			if not (collider is Actor and is_foe(collider)):
+				return
+			state = States.ACTING
+			attack(collider)
 		else:
 			print("no colision at %s" % ray.target_position)
-		state = States.ACTING
-		var anim = self.move_by(move)
-		await anim.finished
-		print("anim finished")
+			state = States.ACTING
+			var anim = self.move_by(move)
+			await anim.finished
+			print("anim finished")
 		finalize_turn()
 
 func is_foe(other: Actor):

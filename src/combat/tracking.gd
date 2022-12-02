@@ -19,6 +19,19 @@ extends Strategy
 ## Track the hero at every move.
 class_name Tracking
 
+var last_foe
+
+func select_foe(actor, board):
+	## Return a foe to attack from the current location of null if there are no suitable targets.
+	var index = board.make_index()
+	var foes = index.actor_foes(actor, 1)
+	if not foes.is_empty():
+		if last_foe not in foes:
+			last_foe = Rand.choice(foes)
+		return last_foe
+	else:
+		return null
+		
 func act(actor: Actor):
 	var hero = $"/root/Main/Hero"
 	var board = $"/root/Main/Board" 
@@ -26,10 +39,10 @@ func act(actor: Actor):
 		# we're are not in a complete scene
 		return null
 
-	var index = board.make_index()
-	var foes = index.actor_foes(actor, 1)
-	if not foes.is_empty():
-		actor.attack(foes[0])
+	# attack if we can, move towards the hero otherwise
+	var foe = select_foe(actor, board)
+	if foe:
+		return actor.attack(foe)
 	else:
 		var here = RevBoard.canvas_to_board(actor.position)
 		var there = RevBoard.canvas_to_board(hero.position)

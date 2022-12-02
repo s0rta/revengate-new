@@ -32,8 +32,8 @@ func find_actors():
 	var scene = get_parent()
 	if scene == null:
 		return []
-	for node in scene.get_children():
-		if node is Actor:
+	for node in scene.find_children("", "Actor"):
+		if node.is_alive():
 			actors.append(node)
 	return actors
 	

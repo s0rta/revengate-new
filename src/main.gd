@@ -33,6 +33,5 @@ func test_change_board():
 
 func _input(_event):
 	if Input.is_action_just_pressed("test"):
-		# test_change_board()
-		$Hero.attack($Monster)
-		
+		test_change_board()
+
