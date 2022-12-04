@@ -230,9 +230,12 @@ func attack(foe):
 	## A full multi-strike attack on foe.
 	## Sentiment and range are not checked, the caller is responsible for 
 	## performing those tests.
+	
+	# FIXME: if more than one strike, we need to wait to the first one to finish before 
+	# we start the next one
 	for weapon in get_weapons():
 		if foe.is_alive():
-			strike(foe, weapon)
+			return strike(foe, weapon)
 		
 func strike(foe, weapon):
 	## Strike foe with weapon. The strike could result in a miss. 

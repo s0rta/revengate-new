@@ -17,8 +17,7 @@
 
 extends Node
 
-# TODO: discover the children
-
+const ACTING_DELAY = 0.1  # in seconds
 enum States {STOPPED, PROCESSING}
 var state = States.STOPPED
 
@@ -46,6 +45,8 @@ func run():
 		print(actors)
 		for actor in actors:
 			actor.act()
+			if actor.state == Actor.States.ACTING:
+				await get_tree().create_timer(ACTING_DELAY).timeout
 		for actor in actors:
 			if actor.state != Actor.States.IDLE:
 				print("waiting for %s..." % actor)
