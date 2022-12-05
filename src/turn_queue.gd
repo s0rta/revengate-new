@@ -40,14 +40,18 @@ func run():
 	var actors: Array
 	state = States.PROCESSING
 	while state == States.PROCESSING:
-		print("Starting turn %d" % turn)
+		print("=== Start of turn %d ===" % turn)
 		actors = find_actors()
 		print(actors)
 		for actor in actors:
 			actor.act()
-			if actor.state == Actor.States.ACTING:
+			if actor.is_animating():
 				await get_tree().create_timer(ACTING_DELAY).timeout
 		for actor in actors:
+			if actor.is_animating():
+				print("Anims are active for %s..." % actor)
+				await actor.anims_done
+				print("Anims done for %s!" % actor)
 			if actor.state != Actor.States.IDLE:
 				print("waiting for %s..." % actor)
 				await actor.turn_done

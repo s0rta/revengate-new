@@ -18,7 +18,11 @@
 @tool
 extends Area2D
 class_name Actor
-signal turn_done
+
+# the actor won't play again until the turn counter is incremented
+signal turn_done  
+# the actor is done moving, but it could move again during the current turn
+signal anims_done  
 
 enum States {
 	IDLE,
@@ -54,6 +58,7 @@ const CRITICAL_MULT := 0.35
 @export var faction := Factions.NONE
 
 var state = States.IDLE
+var nb_active_anims := 0
 var ray := RayCast2D.new()
 var dest  # keep track of where we are going while animations are running 
 
@@ -68,6 +73,22 @@ func _get_configuration_warnings():
 		update_configuration_warnings()
 		warnings.append("Actor's can't act without a strategy.")
 	return warnings
+
+func _dec_active_anims():
+	nb_active_anims = max(0, nb_active_anims - 1)
+	if nb_active_anims == 0:
+		emit_signal("anims_done")
+
+func create_anim() -> Tween:
+	## Return a Tween animation for this actor, register the anim as active.
+	var anim = create_tween()
+	nb_active_anims += 1
+	anim.finished.connect(_dec_active_anims, CONNECT_ONE_SHOT)
+	return anim
+
+func is_animating():
+	## Return whether the actor is currently performing an animation.
+	return nb_active_anims > 0
 
 func finalize_turn():
 	state = States.IDLE
@@ -102,8 +123,7 @@ func move_to(board_coord):
 	## Move to the specified board coordinate in number of tiles from the 
 	## origin. 
 	## The move is animated, return the animation.
-	var scene = get_tree()
-	var anim := scene.create_tween()
+	var anim := create_anim()
 	var cpos = RevBoard.board_to_canvas(board_coord)
 	anim.tween_property(self, "position", cpos, .2)
 	dest = board_coord
@@ -125,7 +145,7 @@ func _anim_lunge(foe):
 	## Return the animation of lunging forward towards `foe` then retreaing.
 	var anim_dest = _get_lunge_anim_cpos(foe)
 	var old_cpos = position
-	var anim := get_tree().create_tween()
+	var anim := create_anim()
 	anim.set_trans(anim.TRANS_SINE)
 	anim.tween_property(self, "position", anim_dest, .15)
 	anim.tween_property(self, "position", old_cpos, .2)
@@ -170,11 +190,11 @@ func update_health(hp_delta: int):
 	add_child(label)
 	label.text = "%d" % -hp_delta
 	label.visible = true
-	var anim := get_tree().create_tween()
+	var anim := create_anim()
 	anim.finished.connect(label.queue_free, CONNECT_ONE_SHOT)
 	var offset = Vector2(RevBoard.TILE_SIZE/4, -RevBoard.TILE_SIZE/2)
 	anim.tween_property(label, "position", label.position+offset, .5)
-	var anim2 := get_tree().create_tween()
+	var anim2 := create_anim()
 	anim2.pause()
 	# start the fadeout about half way through
 	anim2.tween_property(label, "modulate", Color(0, 0, 0, 0), .25)
@@ -182,7 +202,8 @@ func update_health(hp_delta: int):
 	timer.timeout.connect(anim2.play)
 	if health <= 0:
 		play_sound("DeathSound")
-		var anim3 = anim.parallel()
+		# no need to add this one to anims since sub-tweens have the same signal as the root tween
+		var anim3 = anim.parallel()  
 		anim3.tween_property($Label, "modulate", Color(.8, 0, 0, .7), .1)
 		anim3.tween_property($Label, "modulate", Color(0, 0, 0, 0), .4)
 		anim3.finished.connect(self.queue_free, CONNECT_ONE_SHOT)
