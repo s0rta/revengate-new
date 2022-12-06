@@ -9,8 +9,6 @@
 [node name="Main" type="Node2D"]
 script = ExtResource("1_58o83")
 
-[node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]
-
 [node name="Board" parent="." instance=ExtResource("3_vl15m")]
 
 [node name="Hero" parent="." instance=ExtResource("4_lrsod")]
@@ -21,3 +19,5 @@ position = Vector2(208, 368)
 
 [node name="Monster2" parent="." instance=ExtResource("5_ottqo")]
 position = Vector2(400, 144)
+
+[node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]

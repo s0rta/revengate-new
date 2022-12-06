@@ -32,7 +32,7 @@ func select_foe(actor, board):
 	else:
 		return null
 		
-func act(actor: Actor):
+func act():
 	var hero = $"/root/Main/Hero"
 	var board = $"/root/Main/Board" 
 	if hero == null or board == null:
@@ -40,12 +40,12 @@ func act(actor: Actor):
 		return null
 
 	# attack if we can, move towards the hero otherwise
-	var foe = select_foe(actor, board)
+	var foe = select_foe(me, board)
 	if foe:
-		return actor.attack(foe)
+		return me.attack(foe)
 	else:
-		var here = RevBoard.canvas_to_board(actor.position)
+		var here = RevBoard.canvas_to_board(me.position)
 		var there = RevBoard.canvas_to_board(hero.position)
 		var path = board.path(here, there)
 		if path != null and path.size() > 1:
-			return actor.move_to(path[1])
+			return me.move_to(path[1])

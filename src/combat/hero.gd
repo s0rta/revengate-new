@@ -34,7 +34,6 @@ func _unhandled_input(event):
 	var move = null
 	state = States.ACTING
 	
-	# FIXME: factor out the turn flipping logic
 	if Input.is_action_just_pressed("act-on-cell"):
 		var coord = RevBoard.canvas_to_board(event.position)
 		if RevBoard.dist(get_cell_coord(), coord) == 1:
@@ -76,7 +75,14 @@ func is_foe(other: Actor):
 	return ENEMY_FACTIONS.has(other.faction)
 
 func act():
-	state = States.LISTENING
-	print("hero acting...")
-	await self.turn_done
+	var strat = get_strategy()
+	if strat:
+		state = States.ACTING
+		var result = strat.act()
+		finalize_turn()
+		return result
+	else:
+		state = States.LISTENING
+		print("hero acting...")
+		await self.turn_done
 		

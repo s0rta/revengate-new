@@ -15,18 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-@tool
-extends Actor
-
+extends Strategy
+## Do nothing.
+class_name Paralized
+		
 func act():
-	state = States.ACTING
-	var strat = get_strategy()
-	if not strat:
-		return
-	var action = strat.act()
-	if action != null:
-		action.connect("finished", finalize_turn, CONNECT_ONE_SHOT)
-	else:
-		finalize_turn()
-	return action
-	
+	print("%s is paralized and can't move!" % me)
+	return

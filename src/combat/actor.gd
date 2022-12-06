@@ -130,6 +130,17 @@ func move_to(board_coord):
 	anim.finished.connect(reset_dest, CONNECT_ONE_SHOT)
 	return anim
 
+func get_strategy():
+	## Return the best strategy for this turn or `null` if no strategy is currently valid.
+	var pri_desc = func(a, b):
+		return a.priority >= b.priority
+	var strats = find_children("", "Strategy")
+	if strats.size(): 
+		strats.sort_custom(pri_desc)
+		return strats[0]
+	else:
+		return null
+
 func _get_lunge_anim_cpos(foe):
 	## Return the canvas coord where an attack animation should reach before starting the 
 	## retreat animation.

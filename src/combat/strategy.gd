@@ -19,5 +19,40 @@ extends Node
 ## Base class for strategies to automate the actions of an actor.
 class_name Strategy
 
-func act(_actor):
-	pass  # not implemented
+@export var priority := 0.0  # in 0..1
+@export var ttl := -1  # turns till expiration of the strategy if >=0, infinite if negative
+
+var me: Actor
+
+func _init(actor=null):
+	if actor and actor is Actor:
+		me = actor
+
+func _ready():
+	# try to auto detect the actor that this strategy is attached to
+	if not me:
+		var parent = get_parent()
+		if parent is Actor:
+			me = parent
+	if ttl >= 0 and me:
+		me.turn_done.connect(_update_expiration)
+		
+func _update_expiration():
+	## check is this strategy has expired, do the cleanup if so
+	if ttl != null:
+		ttl -= 1
+		if ttl == 0 and me:
+			me.turn_done.disconnect(_update_expiration)
+			me.turn_done.connect(queue_free, CONNECT_ONE_SHOT)
+
+func is_valid() -> bool:
+	## return is the strategy is valid for the current turn
+	return true
+	
+func is_expired() -> bool:
+	## Return whether the strategy has expired. 
+	## An expired stratedy can't become valid again and will eventually be deleted.
+	return ttl is int and ttl <= 0
+
+func act():
+	assert(false, "act() must be re-implemented by subclasses")
