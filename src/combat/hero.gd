@@ -28,10 +28,11 @@ func _input(_event):
 	pass
 
 func _unhandled_input(event):
-	# TODO: mark as handled
-	var move = null
 	if state != States.LISTENING:
 		return
+	var acted = false
+	var move = null
+	state = States.ACTING
 	
 	# FIXME: factor out the turn flipping logic
 	if Input.is_action_just_pressed("act-on-cell"):
@@ -41,20 +42,17 @@ func _unhandled_input(event):
 			var other = index.actor_at(coord)
 			if other and is_foe(other):
 				attack(other)
-				finalize_turn()
-				return
+				acted = true
 			elif index.is_free(coord):
 				move_to(coord)
-				finalize_turn()
-				return
-		
-	if Input.is_action_just_pressed("right"):
+				acted = true
+	elif Input.is_action_just_pressed("right"):
 		move = V.i(1, 0)
-	if Input.is_action_just_pressed("left"):
+	elif Input.is_action_just_pressed("left"):
 		move = V.i(-1, 0)
-	if Input.is_action_just_pressed("up"):
+	elif Input.is_action_just_pressed("up"):
 		move = V.i(0, -1)
-	if Input.is_action_just_pressed("down"):
+	elif Input.is_action_just_pressed("down"):
 		move = V.i(0, 1)
 		
 	if move:
@@ -63,18 +61,16 @@ func _unhandled_input(event):
 		ray.force_raycast_update()
 		if ray.is_colliding():
 			var collider = ray.get_collider()
-			print("collision towards %s: %s" % [move, collider])
-			if not (collider is Actor and is_foe(collider)):
-				return
-			state = States.ACTING
-			attack(collider)
+			if collider is Actor and is_foe(collider):
+				attack(collider)
+				acted = true
 		else:
-			print("no colision at %s" % ray.target_position)
-			state = States.ACTING
-			var anim = self.move_by(move)
-			await anim.finished
-			print("anim finished")
+			self.move_by(move)
+			acted = true
+	if acted:
 		finalize_turn()
+	else:
+		state = States.LISTENING
 
 func is_foe(other: Actor):
 	return ENEMY_FACTIONS.has(other.faction)
