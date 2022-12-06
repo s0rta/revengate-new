@@ -259,26 +259,28 @@ class BoardIndex extends RefCounted:
 	## A lookup helper for game items that are on the board
 	var board: RevBoard
 	var actors := []
+	var _actors_by_coord := {}
 
-	func _init(board):
-		self.board = board
+	func _init(the_board, all_actors):
+		board = the_board
+		actors = all_actors
+		for actor in all_actors:
+			_actors_by_coord[actor.get_cell_coord()] = actor
 
 	func is_free(coord):
+		## Return whether a cell is both walkable and unoccuppied.
 		if not board.is_walkable(coord):
 			return false
-			
-		for actor in actors:
-			if coord == actor.get_cell_coord():
-				return false
+		if _actors_by_coord.has(coord):
+			return false
 		return true
 
 	func actor_at(coord:Vector2i):
 		## Return the actor occupying `coord` or null if there is no one there.
-		# FIXME: we should really index the actor coords
-		for actor in actors:
-			if coord == actor.get_cell_coord():
-				return actor
-		return null
+		if _actors_by_coord.has(coord):
+			return _actors_by_coord[coord]
+		else:
+			return null
 
 	func actor_foes(me: Actor, max_dist=null):
 		## Return an array of actors for whom `me` has negative sentiment.
@@ -306,14 +308,13 @@ static func board_to_canvas(coord):
 					coord.y * TILE_SIZE + half_tile)
 
 func make_index():
-	var index = BoardIndex.new(self)
 	# TODO: we should limit the indexing to self once monsters are properly 
 	# placed on the board rather than the main scene.
 	var root = $"/root/Main"
 	if not root:
 		root = self
-	index.actors = root.find_children("", "Actor")
-	return index
+	var actors = root.find_children("", "Actor")
+	return BoardIndex.new(self, actors)
 
 func is_walkable(coord:Vector2i):
 	## Return whether a cell is walkable for normal actors
