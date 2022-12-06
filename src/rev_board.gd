@@ -272,6 +272,14 @@ class BoardIndex extends RefCounted:
 				return false
 		return true
 
+	func actor_at(coord:Vector2i):
+		## Return the actor occupying `coord` or null if there is no one there.
+		# FIXME: we should really index the actor coords
+		for actor in actors:
+			if coord == actor.get_cell_coord():
+				return actor
+		return null
+
 	func actor_foes(me: Actor, max_dist=null):
 		## Return an array of actors for whom `me` has negative sentiment.
 		## max_dist: in board board tiles
@@ -387,13 +395,13 @@ func get_used_rect() -> Rect2i:
 	return bbox
 
 
-func dist(from, to):
+static func dist(from, to):
 	## Return the distance between two tiles in number of moves.
 	## Obstacles are not taken into account, use path() for that.
 	## This is also known at the Chebyshev distance.
 	return max(abs(from.x - to.x), abs(from.y - to.y))
 
-func man_dist(from, to):
+static func man_dist(from, to):
 	## Return the Manhattan distance between to and from.
 	return abs(from.x - to.x) + abs(from.y - to.y)
 

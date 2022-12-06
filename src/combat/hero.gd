@@ -33,6 +33,21 @@ func _unhandled_input(event):
 	if state != States.LISTENING:
 		return
 	
+	# FIXME: factor out the turn flipping logic
+	if Input.is_action_just_pressed("act-on-cell"):
+		var coord = RevBoard.canvas_to_board(event.position)
+		if RevBoard.dist(get_cell_coord(), coord) == 1:
+			var index = $"/root/Main/Board".make_index()
+			var other = index.actor_at(coord)
+			if other and is_foe(other):
+				attack(other)
+				finalize_turn()
+				return
+			elif index.is_free(coord):
+				move_to(coord)
+				finalize_turn()
+				return
+		
 	if Input.is_action_just_pressed("right"):
 		move = V.i(1, 0)
 	if Input.is_action_just_pressed("left"):
