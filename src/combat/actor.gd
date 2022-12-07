@@ -74,6 +74,19 @@ func _get_configuration_warnings():
 		warnings.append("Actor's can't act without a strategy.")
 	return warnings
 
+func is_idle() -> bool:
+	return state == States.IDLE
+
+func is_acting() -> bool:
+	return state == States.ACTING
+
+func is_listening() -> bool:
+	return state == States.LISTENING
+	
+func stop_listening():
+	assert(is_listening())
+	state = States.IDLE
+
 func _dec_active_anims():
 	nb_active_anims = max(0, nb_active_anims - 1)
 	if nb_active_anims == 0:
@@ -134,7 +147,11 @@ func get_strategy():
 	## Return the best strategy for this turn or `null` if no strategy is currently valid.
 	var pri_desc = func(a, b):
 		return a.priority >= b.priority
-	var strats = find_children("", "Strategy")
+	var strats = []
+	# find_children() does not find dynamically created strategies for some reason
+	for node in get_children():
+		if node is Strategy and node.is_valid():
+			strats.append(node)
 	if strats.size(): 
 		strats.sort_custom(pri_desc)
 		return strats[0]

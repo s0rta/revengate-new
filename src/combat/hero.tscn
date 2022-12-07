@@ -27,4 +27,5 @@ stream = ExtResource("4_y2iie")
 
 [node name="MainStrat" type="Node" parent="." index="6"]
 script = ExtResource("6_pwn1t")
+priority = 0.5
 ttl = 3

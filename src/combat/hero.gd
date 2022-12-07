@@ -77,6 +77,7 @@ func is_foe(other: Actor):
 func act():
 	var strat = get_strategy()
 	if strat:
+		print("Hero turn automated by %s" % [strat])
 		state = States.ACTING
 		var result = strat.act()
 		finalize_turn()

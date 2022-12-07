@@ -33,5 +33,8 @@ func test_change_board():
 
 func _input(_event):
 	if Input.is_action_just_pressed("test"):
-		test_change_board()
-
+		# test_change_board()
+		var strat = Paralized.new($Hero, 1, 2)
+		$Hero.add_child(strat)
+		$Hero.stop_listening()
+		$Hero.act()

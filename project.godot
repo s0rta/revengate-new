@@ -72,7 +72,7 @@ _global_script_class_icons={
 "PriorityQueue": "",
 "Rand": "",
 "RevBoard": "",
-"Strategy": "",
+"Strategy": "res://src/combat/strat.svg",
 "Tracking": "",
 "V": "",
 "Weapon": "res://assets/opencliparts/sword_01.svg"

@@ -52,7 +52,7 @@ func run():
 				print("Anims are active for %s..." % actor)
 				await actor.anims_done
 				print("Anims done for %s!" % actor)
-			if actor.state != Actor.States.IDLE:
+			if not actor.is_idle():
 				print("waiting for %s..." % actor)
 				await actor.turn_done
 				print("done with %s!" % actor)

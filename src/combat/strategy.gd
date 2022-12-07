@@ -18,15 +18,21 @@
 extends Node
 ## Base class for strategies to automate the actions of an actor.
 class_name Strategy
+@icon("res://src/combat/strat.svg")
 
-@export var priority := 0.0  # in 0..1
+
+@export_range(0, 1) var priority := 0.0  # in 0..1
 @export var ttl := -1  # turns till expiration of the strategy if >=0, infinite if negative
 
-var me: Actor
+var me: Actor  # the actor being controlled by this strategy
 
-func _init(actor=null):
+func _init(actor=null, pri=null, ttl_turns=null):
 	if actor and actor is Actor:
 		me = actor
+	if pri != null:
+		priority = pri
+	if ttl_turns != null: 
+		ttl = ttl_turns
 
 func _ready():
 	# try to auto detect the actor that this strategy is attached to
@@ -47,7 +53,7 @@ func _update_expiration():
 
 func is_valid() -> bool:
 	## return is the strategy is valid for the current turn
-	return true
+	return ttl != 0
 	
 func is_expired() -> bool:
 	## Return whether the strategy has expired. 
