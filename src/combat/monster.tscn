@@ -1,8 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cx7p7hc5dxgio"]
+[gd_scene load_steps=6 format=3 uid="uid://c7ftd4dk0u84f"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_la2eu"]
 [ext_resource type="Script" path="res://src/combat/monster.gd" id="2_14ncx"]
-[ext_resource type="Script" path="res://src/combat/tracking.gd" id="3_np8n2"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="3_vfvny"]
 [ext_resource type="PackedScene" uid="uid://g5xddmsru7m2" path="res://src/combat/weapon.tscn" id="4_svcu1"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="5_0jj8y"]
 
@@ -14,7 +14,7 @@ faction = 2
 text = "k"
 
 [node name="MainStrat" type="Node" parent="." index="2"]
-script = ExtResource("3_np8n2")
+script = ExtResource("3_vfvny")
 
 [node name="Claw" parent="." index="6" instance=ExtResource("4_svcu1")]
 damage = 4
