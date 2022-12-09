@@ -36,6 +36,8 @@ func _unhandled_input(event):
 	
 	if Input.is_action_just_pressed("act-on-cell"):
 		var coord = RevBoard.canvas_to_board(event.position)
+		print("Click at %s" % coord)
+		
 		if RevBoard.dist(get_cell_coord(), coord) == 1:
 			var index = $"/root/Main/Board".make_index()
 			var other = index.actor_at(coord)
@@ -45,6 +47,10 @@ func _unhandled_input(event):
 			elif index.is_free(coord):
 				move_to(coord)
 				acted = true
+		else:
+			travel_to(coord)
+			return await act()
+
 	elif Input.is_action_just_pressed("right"):
 		move = V.i(1, 0)
 	elif Input.is_action_just_pressed("left"):

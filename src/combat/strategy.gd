@@ -26,13 +26,13 @@ class_name Strategy
 
 var me: Actor  # the actor being controlled by this strategy
 
-func _init(actor=null, pri=null, ttl_turns=null):
+func _init(actor=null, priority_=null, ttl_=null):
 	if actor and actor is Actor:
 		me = actor
-	if pri != null:
-		priority = pri
-	if ttl_turns != null: 
-		ttl = ttl_turns
+	if priority_ != null:
+		priority = priority_
+	if ttl_ != null: 
+		ttl = ttl_
 
 func _ready():
 	# try to auto detect the actor that this strategy is attached to
@@ -40,16 +40,15 @@ func _ready():
 		var parent = get_parent()
 		if parent is Actor:
 			me = parent
-	if ttl >= 0 and me:
-		me.turn_done.connect(_update_expiration)
+	me.turn_done.connect(_update_expiration)
 		
 func _update_expiration():
 	## check is this strategy has expired, do the cleanup if so
-	if ttl != null:
+	if ttl > 0:
 		ttl -= 1
-		if ttl == 0 and me:
-			me.turn_done.disconnect(_update_expiration)
-			me.turn_done.connect(queue_free, CONNECT_ONE_SHOT)
+	if is_expired() and me:
+		me.turn_done.disconnect(_update_expiration)
+		me.turn_done.connect(queue_free, CONNECT_ONE_SHOT)
 
 func is_valid() -> bool:
 	## return is the strategy is valid for the current turn
@@ -58,7 +57,7 @@ func is_valid() -> bool:
 func is_expired() -> bool:
 	## Return whether the strategy has expired. 
 	## An expired stratedy can't become valid again and will eventually be deleted.
-	return ttl is int and ttl <= 0
+	return ttl is int and ttl == 0
 
 func act():
 	assert(false, "act() must be re-implemented by subclasses")

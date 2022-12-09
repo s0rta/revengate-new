@@ -54,6 +54,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/combat/tracking.gd"
 }, {
+"base": "Strategy",
+"class": &"Traveling",
+"language": &"GDScript",
+"path": "res://src/combat/traveling.gd"
+}, {
 "base": "Object",
 "class": &"V",
 "language": &"GDScript",
@@ -74,6 +79,7 @@ _global_script_class_icons={
 "RevBoard": "",
 "Strategy": "res://src/combat/strat.svg",
 "Tracking": "",
+"Traveling": "",
 "V": "",
 "Weapon": "res://assets/opencliparts/sword_01.svg"
 }

@@ -21,9 +21,8 @@ class_name Tracking
 
 var last_foe
 
-func select_foe(actor, board):
+func select_foe(actor, index):
 	## Return a foe to attack from the current location of null if there are no suitable targets.
-	var index = board.make_index()
 	var foes = index.actor_foes(actor, 1)
 	if not foes.is_empty():
 		if last_foe not in foes:
@@ -34,18 +33,20 @@ func select_foe(actor, board):
 		
 func act():
 	var hero = $"/root/Main/Hero"
-	var board = $"/root/Main/Board" 
+	var board = me.get_board()
 	if hero == null or board == null:
 		# we're are not in a complete scene
-		return null
-
+		return null	
+		
+	var index = board.make_index()
 	# attack if we can, move towards the hero otherwise
-	var foe = select_foe(me, board)
+	var foe = select_foe(me, index)
 	if foe:
 		return me.attack(foe)
 	else:
-		var here = RevBoard.canvas_to_board(me.position)
-		var there = RevBoard.canvas_to_board(hero.position)
+		var here = me.get_cell_coord()
+		var there = hero.get_cell_coord()
 		var path = board.path(here, there)
+		
 		if path != null and path.size() > 1:
 			return me.move_to(path[1])

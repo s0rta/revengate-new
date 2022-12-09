@@ -17,6 +17,10 @@
 
 extends Node2D
 
+func get_board():
+	## Return the current active board
+	return $"Board"
+
 func test_change_board():
 	var new_board = $Board.duplicate()
 	var builder = BoardBuilder.new(new_board)
@@ -33,8 +37,4 @@ func test_change_board():
 
 func _input(_event):
 	if Input.is_action_just_pressed("test"):
-		# test_change_board()
-		var strat = Paralized.new($Hero, 1, 2)
-		$Hero.add_child(strat)
-		$Hero.stop_listening()
-		$Hero.act()
+		test_change_board()

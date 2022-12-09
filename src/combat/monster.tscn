@@ -8,8 +8,6 @@
 
 [node name="Monster" instance=ExtResource("1_la2eu")]
 script = ExtResource("2_14ncx")
-strength = 40
-agility = 40
 faction = 2
 
 [node name="Label" parent="." index="0"]

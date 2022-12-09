@@ -45,6 +45,10 @@ func run():
 		print(actors)
 		for actor in actors:
 			actor.act()
+			if not actor.is_idle():
+				print("waiting for %s..." % actor)
+				await actor.turn_done
+				print("done with %s!" % actor)
 			if actor.is_animating():
 				await get_tree().create_timer(ACTING_DELAY).timeout
 		for actor in actors:
@@ -52,9 +56,5 @@ func run():
 				print("Anims are active for %s..." % actor)
 				await actor.anims_done
 				print("Anims done for %s!" % actor)
-			if not actor.is_idle():
-				print("waiting for %s..." % actor)
-				await actor.turn_done
-				print("done with %s!" % actor)
 		turn += 1
 	

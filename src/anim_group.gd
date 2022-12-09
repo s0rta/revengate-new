@@ -33,10 +33,10 @@ static func dump_anim(anim:Tween):
 					"elapsed_time": anim.get_total_elapsed_time()}
 	print("Details for anim %s: %s" % [anim, details])
 
-func _init(parent_node:Node, animations:Array=[]):
-	parent = parent_node
+func _init(parent_:Node, anims_:Array=[]):
+	parent = parent_
 	parent.add_child(self)
-	for anim in animations:
+	for anim in anims_:
 		add(anim)
 
 func add(anim:Tween):

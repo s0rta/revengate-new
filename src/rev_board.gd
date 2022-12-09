@@ -128,13 +128,13 @@ class BoardMetrics:
 	var furthest_dist = 0
 	var prevs = {}
 	
-	func _init(size:Vector2i, start:Vector2i, dest=null):
+	func _init(size:Vector2i, start_:Vector2i, dest_=null):
 		dists = Matrix.new(size)
 		dists.setv(start, 0)
-		self.start = start
-		self.dest = dest
-		self.furthest_coord = start
-		self.prevs[start] = null
+		start = start_
+		dest = dest_
+		furthest_coord = start
+		prevs[start] = null
 
 	func _to_string():
 		var mat = dists.duplicate()
@@ -198,22 +198,22 @@ class TileSpiral extends RefCounted:
 		var v2 = bbox.end - center - Vector2i.ONE
 		return max(v1.x, v1.y, v2.x, v2.y)
 
-	func _init(board, center, max_radius=null, free:bool=true, in_board:bool=true, bbox=null):
+	func _init(board_, center_, max_radius_=null, free_:bool=true, in_board_:bool=true, bbox_=null):
 		## max_radius: how far from center to consider coordiates, infered from 
 		##  the bounding box if not provided.
 		## all other params: like RevBoard.ring()
-		self.board = board
-		self.center = center
-		self.free = free
-		self.in_board = in_board
-		if bbox != null:
-			self.bbox = bbox
+		board = board_
+		center = center_
+		free = free_
+		in_board = in_board_
+		if bbox_ != null:
+			bbox = bbox
 		else:
-			self.bbox = board.get_used_rect()
-		if max_radius == null:
-			self.max_radius = get_max_radius(center, self.bbox)
+			bbox = board.get_used_rect()
+		if max_radius_ != null:
+			max_radius = max_radius_
 		else:
-			self.max_radius = max_radius
+			max_radius = get_max_radius(center, bbox)
 		
 	func _iter_init(_arg):
 		radius = 0
@@ -261,19 +261,20 @@ class BoardIndex extends RefCounted:
 	var actors := []
 	var _actors_by_coord := {}
 
-	func _init(the_board, all_actors):
-		board = the_board
-		actors = all_actors
-		for actor in all_actors:
+	func _init(board_, actors_):
+		board = board_
+		actors = actors_
+		for actor in actors:
 			_actors_by_coord[actor.get_cell_coord()] = actor
+
+	func is_occupied(coord):
+		if _actors_by_coord.has(coord):
+			return true
+		return false
 
 	func is_free(coord):
 		## Return whether a cell is both walkable and unoccuppied.
-		if not board.is_walkable(coord):
-			return false
-		if _actors_by_coord.has(coord):
-			return false
-		return true
+		return board.is_walkable(coord) and not is_occupied(coord)
 
 	func actor_at(coord:Vector2i):
 		## Return the actor occupying `coord` or null if there is no one there.
@@ -413,7 +414,9 @@ func astar_metrics(start, dest, max_dist=null):
 	# find our size
 	var bbox:Rect2i = get_used_rect()
 	var index = make_index()
-			
+	if dest:
+		assert(is_walkable(Vector2i(dest.x, dest.y)))
+
 	# find the start: randomize if not provided
 	if start == null:
 		# TODO: pick only walkable starting points
@@ -468,6 +471,8 @@ func dist_metrics(start=null, dest=null, max_dist=null):
 	# find our size
 	var bbox:Rect2i = get_used_rect()
 	var index = make_index()
+	if dest:
+		assert(is_walkable(Vector2i(dest.x, dest.y)))
 			
 	# find the start: randomize if not provided
 	if start == null:

@@ -87,6 +87,18 @@ func stop_listening():
 	assert(is_listening())
 	state = States.IDLE
 
+func get_board():
+	## Return the RevBoard this actor is playing on, return `null` is no board is currently active.
+	# board is either the parent or the global board
+	var parent = get_parent()
+	if parent is RevBoard:
+		return parent
+	else:
+		var main = $"/root/Main"
+		if main:
+			return main.get_board()
+	return null
+
 func _dec_active_anims():
 	nb_active_anims = max(0, nb_active_anims - 1)
 	if nb_active_anims == 0:
@@ -142,6 +154,14 @@ func move_to(board_coord):
 	dest = board_coord
 	anim.finished.connect(reset_dest, CONNECT_ONE_SHOT)
 	return anim
+
+func travel_to(there):
+	## Strat the multi-turn journey that takes us to `there`
+	## Depending on where we are in the turn logic, the caller might need to call `stop_listening()` 
+	## for the travelling strategy to kick in, otherwise, it will only be active on the next turn.
+	var path = $"/root/Main/Board".path(get_cell_coord(), there)
+	var strat = Traveling.new(there, path, self, 0.9)
+	add_child(strat)
 
 func get_strategy():
 	## Return the best strategy for this turn or `null` if no strategy is currently valid.
