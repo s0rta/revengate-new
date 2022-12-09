@@ -23,6 +23,8 @@ class_name Actor
 signal turn_done  
 # the actor is done moving, but it could move again during the current turn
 signal anims_done  
+# the actor was the victim of an attack
+signal was_attacked(attacker)
 
 enum States {
 	IDLE,
@@ -234,6 +236,9 @@ func update_health(hp_delta: int):
 	## Update our health and animate the event.
 	## Return the animation.
 	health += hp_delta
+	if hp_delta < 0:
+		emit_signal("was_attacked", null)
+		
 	var label = $DamageLabel.duplicate()
 	add_child(label)
 	label.text = "%d" % -hp_delta

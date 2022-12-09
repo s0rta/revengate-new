@@ -35,6 +35,10 @@ func _init(dest_: Vector2i, path_=null, actor=null, priority_=null, ttl_=null):
 	# We have to get a new path at the start of each turn since things might have move around 
 	# quite a bit.
 	me.turn_done.connect(_expire_path)
+	me.was_attacked.connect(_invalidate, CONNECT_ONE_SHOT)
+
+func _invalidate(_arg):
+	unreachable = true
 			
 func _set_path(path_):
 	if path_:
