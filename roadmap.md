@@ -11,14 +11,14 @@ Builder:
 - [ ] dijkstra metrics to find the best spot for stairs
 
 Combat:
-- [ ] rng.normal_dist()
-- [ ] 3 core stats, exported in the Godot UI
-- [ ] 2 rolls attack: to-hit, damage
-- [ ] attack result is immediately visible
+- [x] rng.normal_dist(): built-in
+- [x] 3 core stats, exported in the Godot UI
+- [x] 2 rolls attack: to-hit, damage
+- [x] attack result is immediately visible
 
 Actor:
 - [x] keep track of distination while moving
-- [ ] feed dest into Board.index
+- [x] feed dest into Board.index
 
 Dungeon:
 - [ ] link existing levels to newly created ones
