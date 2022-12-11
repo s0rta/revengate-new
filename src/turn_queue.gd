@@ -52,6 +52,9 @@ func run():
 			if actor.is_animating():
 				await get_tree().create_timer(ACTING_DELAY).timeout
 		for actor in actors:
+			if actor == null:
+				# this actor dissapeared before the end of the turn
+				continue
 			if actor.is_animating():
 				print("Anims are active for %s..." % actor)
 				await actor.anims_done

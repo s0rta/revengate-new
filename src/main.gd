@@ -29,6 +29,7 @@ func test_change_board():
 	var bbox = null
 	for thing in [$Hero, $Monster, $Monster2]:
 		print("moving %s somewhere else" % [thing])
+		# FIXME: place should check for free cells only, but that means building a new index for each placement
 		builder.place(thing, false, null, false, bbox)
 
 	var old_board = $Board

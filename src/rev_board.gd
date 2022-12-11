@@ -129,10 +129,10 @@ class BoardMetrics:
 	var prevs = {}
 	
 	func _init(size:Vector2i, start_:Vector2i, dest_=null):
-		dists = Matrix.new(size)
-		dists.setv(start, 0)
 		start = start_
 		dest = dest_
+		dists = Matrix.new(size)
+		dists.setv(start, 0)
 		furthest_coord = start
 		prevs[start] = null
 

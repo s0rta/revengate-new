@@ -8,7 +8,7 @@ Major parts required to make the Godot implementation of Revengate a playable ga
 Builder:
 - [x] spiral.next()
 - [x] place monsters
-- [ ] dijkstra metrics to find the best spot for stairs
+- [x] dijkstra metrics to find the best spot for stairs
 
 Combat:
 - [x] rng.normal_dist(): built-in

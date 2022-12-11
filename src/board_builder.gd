@@ -101,7 +101,7 @@ func gen_level(nb_rooms=4):
 		connect_rooms(rooms[i], rooms[i+1])
 	
 	# place stairs as far appart as possible
-	# FIXME: stairs should always be in a room
+	# TODO: stairs should always be in a room
 	var metrics = board.dist_metrics(Rand.pos_in_rect(Rand.choice(rooms)))
 	metrics = board.dist_metrics(metrics.furthest_coord)
 	var poles = [metrics.start, metrics.furthest_coord]
