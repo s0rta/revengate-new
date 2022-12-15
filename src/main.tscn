@@ -10,6 +10,7 @@
 script = ExtResource("1_58o83")
 
 [node name="Board" parent="." instance=ExtResource("3_vl15m")]
+layer_0/name = "ground"
 
 [node name="Hero" parent="." instance=ExtResource("4_lrsod")]
 position = Vector2(656, 304)

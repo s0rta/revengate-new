@@ -147,7 +147,7 @@ terrain_set_0/terrain_4/name = "stairs-down"
 terrain_set_0/terrain_4/color = Color(0.329412, 0.462745, 0.623529, 1)
 sources/0 = SubResource("TileSetAtlasSource_x5cyv")
 
-[node name="TileMap" type="TileMap"]
+[node name="Board" type="TileMap"]
 tile_set = SubResource("1")
 cell_quadrant_size = 32
 format = 2

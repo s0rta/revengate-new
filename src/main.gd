@@ -19,22 +19,31 @@ extends Node2D
 
 func get_board():
 	## Return the current active board
-	return $"Board"
+	var current = null
+	for node in get_children():
+		if node is RevBoard and node.visible:
+			current = node
+	if current:
+		return current
+	else:
+		return $"Board"
 
 func test_change_board():
-	var new_board = $Board.duplicate()
+	var tree = load("res://src/rev_board.tscn") as PackedScene
+	var new_board = tree.instantiate() as RevBoard
 	var builder = BoardBuilder.new(new_board)
 	builder.gen_level()
-
+	
+	var index = new_board.make_index()
 	var bbox = null
 	for thing in [$Hero, $Monster, $Monster2]:
-		print("moving %s somewhere else" % [thing])
-		# FIXME: place should check for free cells only, but that means building a new index for each placement
-		builder.place(thing, false, null, false, bbox)
+		var old_coord = thing.get_cell_coord()
+		var new_coord = builder.place(thing, false, null, true, bbox, index)
+		index.add_actor(thing)
 
-	var old_board = $Board
-	old_board.replace_by(new_board)
-	old_board.queue_free()
+	var old_board = get_board()
+	old_board.add_sibling(new_board)
+	old_board.visible = false
 
 func _input(_event):
 	if Input.is_action_just_pressed("test"):

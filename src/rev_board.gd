@@ -185,10 +185,11 @@ class TileSpiral extends RefCounted:
 	var free: bool
 	var in_board: bool
 	var bbox
-	var index
+	var coords_index
 	var coords
 	var radius
 	var max_radius
+	var board_index
 	var is_init: bool = false
 	
 	static func get_max_radius(center: Vector2i, bbox: Rect2i):
@@ -198,7 +199,8 @@ class TileSpiral extends RefCounted:
 		var v2 = bbox.end - center - Vector2i.ONE
 		return max(v1.x, v1.y, v2.x, v2.y)
 
-	func _init(board_, center_, max_radius_=null, free_:bool=true, in_board_:bool=true, bbox_=null):
+	func _init(board_, center_, max_radius_=null, free_:bool=true, in_board_:bool=true, 
+				bbox_=null, board_index_=null):
 		## max_radius: how far from center to consider coordiates, infered from 
 		##  the bounding box if not provided.
 		## all other params: like RevBoard.ring()
@@ -206,6 +208,9 @@ class TileSpiral extends RefCounted:
 		center = center_
 		free = free_
 		in_board = in_board_
+		board_index = board_index_
+		if free and not board_index:
+			board_index = board.make_index()
 		if bbox_ != null:
 			bbox = bbox
 		else:
@@ -221,14 +226,14 @@ class TileSpiral extends RefCounted:
 		return grow_radius()
 		
 	func _iter_next(_arg):
-		index += 1
-		if index < coords.size():
+		coords_index += 1
+		if coords_index < coords.size():
 			return true
 		else:
 			return grow_radius()
 		
 	func _iter_get(_arg):
-		return coords[index]
+		return coords[coords_index]
 
 	func next():
 		## Advance the iterator and return the next element.
@@ -244,31 +249,57 @@ class TileSpiral extends RefCounted:
 		## Increase the spiral to the next size up if possible.
 		## Return whether there are still coodinates to generate.
 		radius += 1
-		index = 0
+		coords_index = 0
 		if radius > max_radius:
 			coords = []
 			return false
 		
-		coords = board.ring(center, radius, free, in_board, bbox)
+		coords = board.ring(center, radius, free, in_board, bbox, board_index)
 		if coords.size():
 			return true
 		else:
 			return grow_radius()
+			
+	func _to_string():
+		var cells = []
+		for c in self:
+			cells.append(c)
+		_iter_init(null)
+		return "%s" % [cells]
 
 class BoardIndex extends RefCounted:
 	## A lookup helper for game items that are on the board
 	var board: RevBoard
 	var actors := []
-	var _actors_by_coord := {}
+
+	var _coord_to_actor := {}
+	var _actor_to_coord := {}
 
 	func _init(board_, actors_):
 		board = board_
 		actors = actors_
 		for actor in actors:
-			_actors_by_coord[actor.get_cell_coord()] = actor
+			add_actor(actor)
+
+	func add_actor(actor:Actor):
+		var coord = actor.get_cell_coord()
+		_coord_to_actor[coord] = actor
+		_actor_to_coord[actor] = coord
+		
+	func remove_actor(actor:Actor):
+		var coord = _actor_to_coord[actor]
+		_actor_to_coord.erase(actor)
+		_coord_to_actor.erase(coord)
+
+	func refesh_actor(actor:Actor):
+		var old_coord = _actor_to_coord[actor]
+		var new_coord = actor.get_cell_coord()
+		_coord_to_actor.erase(old_coord)
+		_coord_to_actor[new_coord] = actor
+		_actor_to_coord[actor] = new_coord
 
 	func is_occupied(coord):
-		if _actors_by_coord.has(coord):
+		if _coord_to_actor.has(coord):
 			return true
 		return false
 
@@ -278,8 +309,8 @@ class BoardIndex extends RefCounted:
 
 	func actor_at(coord:Vector2i):
 		## Return the actor occupying `coord` or null if there is no one there.
-		if _actors_by_coord.has(coord):
-			return _actors_by_coord[coord]
+		if _coord_to_actor.has(coord):
+			return _coord_to_actor[coord]
 		else:
 			return null
 
@@ -325,7 +356,7 @@ func is_walkable(coord:Vector2i):
 	var poly = tdata.get_collision_polygons_count(0)
 	return poly == 0
 
-func ring(center:Vector2i, radius:int, free:bool=true, in_board:bool=true, bbox=null):
+func ring(center:Vector2i, radius:int, free:bool=true, in_board:bool=true, bbox=null, index=null):
 	## Return an Array of coords that define a Chebyshev-ring around `center`.
 	## In other words, the coords are arranged like a square on the game board 
 	## and they all have the same board.dist() metric to `center`.
@@ -341,14 +372,15 @@ func ring(center:Vector2i, radius:int, free:bool=true, in_board:bool=true, bbox=
 		coords.append(center + V.i(i, r))
 	for j in range(r-1, -r, -1):
 		coords.append(center + V.i(-r, j))
-	return filter_coords(coords, free, in_board, bbox)
+	return filter_coords(coords, free, in_board, bbox, index)
 	
-func spiral(center:Vector2i, max_radius=null, free:bool=true, in_board:bool=true, bbox=null):
+func spiral(center:Vector2i, max_radius=null, free:bool=true, in_board:bool=true, 
+			bbox=null, index=null):
 	## Return an iterator of coordiates describing progressively larger rings around `center`.
 	## max_radius: how far from center to consider coordiates, infered from 
 	##  the bounding box if not provided.
 	## all other params: like RevBoard.filter_coords()
-	return RevBoard.TileSpiral.new(self, center, max_radius, free, in_board, bbox)
+	return RevBoard.TileSpiral.new(self, center, max_radius, free, in_board, bbox, index)
 
 func adjacents(pos:Vector2i, free:bool=true, in_board:bool=true, 
 				bbox=null, index=null):

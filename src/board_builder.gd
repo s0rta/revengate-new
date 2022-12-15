@@ -108,7 +108,7 @@ func gen_level(nb_rooms=4):
 	poles.shuffle()
 	paint_cells([poles[0]], "stairs-up")
 	paint_cells([poles[1]], "stairs-down")
-	
+
 	
 func connect_rooms(room1, room2):
 	# topologicaly sort the rooms so room1 is up and left
@@ -134,12 +134,12 @@ func connect_rooms(room1, room2):
 	# TODO: replaced walls should become doors
 	paint_path(cells, "floor")
 
-func place(thing, in_room=true, coord=null, free:bool=true, bbox=null):
-	## Put `thing` on the on a board cell, fallback to nearby cells if needed.
+func place(thing, in_room=true, coord=null, free:bool=true, bbox=null, index=null):
+	## Put `thing` on the on a board cell, return where it was placed.
+	## Fallback to nearby cells if needed.
 	## If coord is not provided, a random position is selected.
 	## No animations are performed.
 	
-	# FIXME: free must take into account other monsters
 	var cell: Vector2i  # wrestling the type system into allowing null
 	if coord is Vector2i:
 		cell = Vector2i(coord.x, coord.y)
@@ -150,7 +150,18 @@ func place(thing, in_room=true, coord=null, free:bool=true, bbox=null):
 			bbox = rect
 		cell = Rand.pos_in_rect(bbox)
 
-	if not board.is_walkable(cell):
-		cell = board.spiral(cell, null, true).next()
+	var available = true
+	if free:
+		if index:
+			available = index.is_free(cell)
+		else:
+			available = board.is_walkable(cell)
+	if not available:
+		var old_cell = cell
+		# We ignore the bounding box at this point since we already failed an optimal 
+		# placement and we're just trying to find a fallback.
+		bbox = null  
+		cell = board.spiral(cell, null, true, true, bbox, index).next()
+
 	thing.place(cell)
 	return cell
