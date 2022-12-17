@@ -19,6 +19,7 @@ extends TileMap
 class_name RevBoard
 
 const TILE_SIZE = 32
+var connector_by_coord := {}  # (x, y) -> {far_board:_, far_coord:_}
 
 ## PriorityQueue based on distance: dequeing is always with the 
 ## smallest value.
@@ -270,16 +271,20 @@ class TileSpiral extends RefCounted:
 class BoardIndex extends RefCounted:
 	## A lookup helper for game items that are on the board
 	var board: RevBoard
-	var actors := []
 
 	var _coord_to_actor := {}
 	var _actor_to_coord := {}
 
-	func _init(board_, actors_):
+	func _init(board_, actors):
 		board = board_
-		actors = actors_
 		for actor in actors:
 			add_actor(actor)
+
+	func has_actor(actor:Actor):
+		return _actor_to_coord.has(actor)
+
+	func get_actors():
+		return _actor_to_coord.keys()
 
 	func add_actor(actor:Actor):
 		var coord = actor.get_cell_coord()
@@ -291,7 +296,14 @@ class BoardIndex extends RefCounted:
 		_actor_to_coord.erase(actor)
 		_coord_to_actor.erase(coord)
 
-	func refesh_actor(actor:Actor):
+	func refresh_actor(actor:Actor, strict:=true):
+		## Refresh the coordiates of `actor` in the index.
+		## strict: fail if `actor` is not already in the index.
+		if not has_actor(actor):
+			if strict:
+				assert(false, "Can't refresh actor that is not already part of the index")
+			else:
+				return add_actor(actor)
 		var old_coord = _actor_to_coord[actor]
 		var new_coord = actor.get_cell_coord()
 		_coord_to_actor.erase(old_coord)
@@ -320,7 +332,7 @@ class BoardIndex extends RefCounted:
 		var foes = []
 		var my_coord = me.get_cell_coord()
 		var foe_coord = null
-		for actor in actors:
+		for actor in _actor_to_coord:
 			foe_coord = actor.get_cell_coord()
 			if max_dist and board.dist(my_coord, foe_coord) > max_dist:
 				break
@@ -340,13 +352,28 @@ static func board_to_canvas(coord):
 					coord.y * TILE_SIZE + half_tile)
 
 func make_index():
-	# TODO: we should limit the indexing to self once monsters are properly 
-	# placed on the board rather than the main scene.
-	var root = $"/root/Main"
-	if not root:
-		root = self
-	var actors = root.find_children("", "Actor")
+	var actors = find_children("", "Actor")
 	return BoardIndex.new(self, actors)
+
+func add_connection(near_coord, far_board, far_coord):
+	## Connect this board with another one.
+	## Connections has a near (self) and a far side (far_board). This method makes the
+	## connection bi-directional.
+	# TODO: connect the path, not the board, since that will serialize better
+	connector_by_coord[near_coord] = {"far_board": far_board, "far_coord": far_coord}
+	far_board.connector_by_coord[far_coord] = {"far_board": self, "far_coord": near_coord}
+
+func get_connection(coord:Vector2i):
+	## Return the far-side data of a cross-board connection
+	if connector_by_coord.has(coord):
+		return connector_by_coord[coord]
+	else:
+		return null
+
+func is_connector(coord:Vector2i):
+	## Return whether `coord` is a tile that can connect to a different board.
+	var data = get_cell_tile_data(0, coord)
+	return 	data.get_custom_data("is_connector")
 
 func is_walkable(coord:Vector2i):
 	## Return whether a cell is walkable for normal actors
@@ -547,3 +574,11 @@ func path(start, dest, max_dist=null):
 	## See BoardMetrics.path() for more details.
 	var metrics = astar_metrics(start, dest, max_dist)
 	return metrics.path()
+
+func get_actors():
+	## Return an array of actors presently on this board.
+	var actors = []
+	for node in get_children():
+		if node is Actor:
+			actors.append(node)
+	return actors

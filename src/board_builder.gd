@@ -139,7 +139,6 @@ func place(thing, in_room=true, coord=null, free:bool=true, bbox=null, index=nul
 	## Fallback to nearby cells if needed.
 	## If coord is not provided, a random position is selected.
 	## No animations are performed.
-	
 	var cell: Vector2i  # wrestling the type system into allowing null
 	if coord is Vector2i:
 		cell = Vector2i(coord.x, coord.y)
@@ -164,4 +163,15 @@ func place(thing, in_room=true, coord=null, free:bool=true, bbox=null, index=nul
 		cell = board.spiral(cell, null, true, true, bbox, index).next()
 
 	thing.place(cell)
+	if index:
+		index.refresh_actor(thing, false)
+		
+	# reparent if needed
+	if thing is Node:
+		var parent = thing.get_parent()
+		if parent and parent != board:
+			parent.remove_child(thing)
+		if not parent or parent != board:
+			board.add_child(thing)
+					
 	return cell

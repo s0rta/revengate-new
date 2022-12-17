@@ -61,3 +61,18 @@ func is_expired() -> bool:
 
 func act():
 	assert(false, "act() must be re-implemented by subclasses")
+
+func find_hero():
+	## Return a reference to the Hero if it can be found.
+	## There can't be a reference to the Hero if it just died or if we are running 
+	## a simulation without any Hero.
+	# TODO: it would make sense to store a ref to the Hero somewhere to speed this up.
+	var node = me.get_parent()
+	var hero = null
+	while not hero and node and node.name != "root":
+		for sub_node in node.get_children():
+			if sub_node is Hero:
+				hero = sub_node
+				break
+		node = node.get_parent()
+	return hero

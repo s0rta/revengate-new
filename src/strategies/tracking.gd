@@ -32,7 +32,7 @@ func select_foe(actor, index):
 		return null
 		
 func act():
-	var hero = $"/root/Main/Hero"
+	var hero = find_hero()
 	var board = me.get_board()
 	if hero == null or board == null:
 		# we're are not in a complete scene

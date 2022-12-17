@@ -17,6 +17,7 @@
 
 @tool
 extends Actor
+class_name Hero
 
 const ENEMY_FACTIONS = [Factions.BEASTS]
 

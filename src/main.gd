@@ -17,6 +17,14 @@
 
 extends Node2D
 
+# The hero moved to a different level, the UI and turn logic are affected and must be notified
+signal board_changed  
+
+var hero: Actor
+
+func _ready():
+	hero = $Board/Hero
+
 func get_board():
 	## Return the current active board
 	var current = null
@@ -26,25 +34,61 @@ func get_board():
 	if current:
 		return current
 	else:
-		return $"Board"
+		return $Board
 
 func test_change_board():
 	var tree = load("res://src/rev_board.tscn") as PackedScene
+	var old_board = get_board()
 	var new_board = tree.instantiate() as RevBoard
 	var builder = BoardBuilder.new(new_board)
 	builder.gen_level()
 	
 	var index = new_board.make_index()
-	var bbox = null
-	for thing in [$Hero, $Monster, $Monster2]:
-		var old_coord = thing.get_cell_coord()
-		var new_coord = builder.place(thing, false, null, true, bbox, index)
-		index.add_actor(thing)
+	for thing in [hero]:
+		builder.place(thing, false, null, true, null, index)
+		
+	for char in "rkc":
+		var monster = make_monster(new_board, char)
+		builder.place(monster, false, null, true, null, index)
 
-	var old_board = get_board()
+	print("after placing everything, the index knows about: %s" % [index.get_actors()])
+
+	# connect the stairs together
+	# FIXME: where are the stairs??
+	#  - the builder can easily recall where it puts the stairs
+	#  - when we don't have the builder, Hero.coord is good enough
+	#  - if we can ever fall downstairs, then we need to be able to enumerate all 
+	#    tiles until we find the stairs
+	# old_board.add_connection()
+
+	# swap the boards
 	old_board.add_sibling(new_board)
 	old_board.visible = false
 
+	assert(get_board() == new_board, "make sure the new board is active")
+	# DEBUG are the new actors available?
+	var actors = new_board.get_actors()
+	assert(not actors.is_empty())
+	# /DEBUG
+
+	emit_signal("board_changed")
+	hero.finalize_turn()
+	
+func inspect_tile():
+	var coord = $Hero.get_cell_coord()
+	var data = (get_board() as RevBoard).get_cell_tile_data(0, coord)
+	print("Data here is %s" % [[var_to_str(data), data.get_custom_data
+("is_connector")]])
+
+func make_monster(parent, char: String):
+	var tree = load("res://src/combat/monster.tscn") as PackedScene
+	var monster = tree.instantiate()
+	monster.get_node("Label").text = char
+	parent.add_child(monster)
+	return monster
+
 func _input(_event):
-	if Input.is_action_just_pressed("test"):
+	if Input.is_action_just_pressed("test-2"):
+		inspect_tile()
+	elif Input.is_action_just_pressed("test"):
 		test_change_board()

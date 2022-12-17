@@ -12,13 +12,16 @@ script = ExtResource("1_58o83")
 [node name="Board" parent="." instance=ExtResource("3_vl15m")]
 layer_0/name = "ground"
 
-[node name="Hero" parent="." instance=ExtResource("4_lrsod")]
-position = Vector2(656, 304)
+[node name="Pad" type="Node" parent="Board"]
+editor_description = "The first child of the board is not visible. This make sure we can see all the monsters."
 
-[node name="Monster" parent="." instance=ExtResource("5_ottqo")]
+[node name="Monster2" parent="Board" instance=ExtResource("5_ottqo")]
+position = Vector2(400, 144)
+
+[node name="Monster" parent="Board" instance=ExtResource("5_ottqo")]
 position = Vector2(208, 368)
 
-[node name="Monster2" parent="." instance=ExtResource("5_ottqo")]
-position = Vector2(400, 144)
+[node name="Hero" parent="Board" instance=ExtResource("4_lrsod")]
+position = Vector2(656, 304)
 
 [node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]
