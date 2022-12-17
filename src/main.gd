@@ -23,6 +23,8 @@ signal board_changed
 var hero: Actor
 
 func _ready():
+	# FIXME: the original board should be able to re-index it's content
+	$Board._append_terrain_cells([V.i(23, 2)], "stairs-down")
 	hero = $Board/Hero
 
 func get_board():
@@ -54,12 +56,9 @@ func test_change_board():
 	print("after placing everything, the index knows about: %s" % [index.get_actors()])
 
 	# connect the stairs together
-	# FIXME: where are the stairs??
-	#  - the builder can easily recall where it puts the stairs
-	#  - when we don't have the builder, Hero.coord is good enough
-	#  - if we can ever fall downstairs, then we need to be able to enumerate all 
-	#    tiles until we find the stairs
-	# old_board.add_connection()
+	var near = old_board.get_cell_by_terrain("stairs-down")
+	var far = new_board.get_cell_by_terrain("stairs-up")
+	old_board.add_connection(near, new_board, far)
 
 	# swap the boards
 	old_board.add_sibling(new_board)

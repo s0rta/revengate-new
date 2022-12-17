@@ -19,7 +19,12 @@ extends TileMap
 class_name RevBoard
 
 const TILE_SIZE = 32
+
+# which terrains do we index for later retrieval?
+const INDEXED_TERRAINS = ["stairs-down", "stairs-up"]
+
 var connector_by_coord := {}  # (x, y) -> {far_board:_, far_coord:_}
+var _cells_by_terrain := {}  # terrain_name -> array of coords
 
 ## PriorityQueue based on distance: dequeing is always with the 
 ## smallest value.
@@ -359,6 +364,29 @@ func set_active(active:=true):
 func make_index():
 	var actors = get_actors()
 	return BoardIndex.new(self, actors)
+
+func _append_terrain_cells(cells, terrain_name):
+	assert(terrain_name in INDEXED_TERRAINS)
+	if terrain_name not in _cells_by_terrain:
+		_cells_by_terrain[terrain_name] = []
+	_cells_by_terrain[terrain_name] += cells
+
+func get_cells_by_terrain(terrain_name):
+	## Return all known cells of terrain_name.
+	## Cells matching the terrain will be unknown if they have been painted 
+	## outside the Builder or if they are not of a terrain in INDEXED_TERRAINS.
+	if terrain_name in _cells_by_terrain:
+		return _cells_by_terrain[terrain_name]
+	else:
+		return []
+
+func get_cell_by_terrain(terrain_name):
+	## return an arbitrary cell of terrain_name or null if none is known
+	var cells = get_cells_by_terrain(terrain_name)
+	if not cells.is_empty():
+		return cells[0]
+	else:
+		return null
 
 func add_connection(near_coord, far_board, far_coord):
 	## Connect this board with another one.

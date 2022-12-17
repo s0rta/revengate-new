@@ -53,20 +53,24 @@ func add_room(rect: Rect2i, walls=true):
 		board.set_cells_terrain_path(0, path, wall[0], wall[1])
 		
 func paint_cells(cells, terrain_name):
+	if terrain_name in RevBoard.INDEXED_TERRAINS:
+		board._append_terrain_cells(cells, terrain_name)
 	var tkey = terrain_names[terrain_name]
 	board.set_cells_terrain_connect(0, cells, tkey[0], tkey[1])
 	
 func paint_path(path, terrain_name):
+	assert(terrain_name not in RevBoard.INDEXED_TERRAINS, "indexing path terrain is not implemented")
 	var tkey = terrain_names[terrain_name]
 	board.set_cells_terrain_path(0, path, tkey[0], tkey[1])
 
 func paint_rect(rect, terrain_name):
+	assert(terrain_name not in RevBoard.INDEXED_TERRAINS, "indexing rect terrain is not implemented")
 	var cells = []
 	for i in range(rect.size.x):
 		for j in range(rect.size.y):
 			cells.append(rect.position + V.i(i, j))
 	paint_cells(cells, terrain_name)
-		
+	
 func gen_level(nb_rooms=4):
 	var bbox = board.get_used_rect()
 	paint_rect(bbox, "rock")
@@ -175,3 +179,4 @@ func place(thing, in_room=true, coord=null, free:bool=true, bbox=null, index=nul
 			board.add_child(thing)
 					
 	return cell
+
