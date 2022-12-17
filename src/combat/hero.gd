@@ -70,6 +70,8 @@ func _unhandled_input(event):
 			if collider is Actor and is_foe(collider):
 				attack(collider)
 				acted = true
+			else:
+				print("Can't act in this direction: %s is in the way!" % collider)
 		else:
 			self.move_by(move)
 			acted = true

@@ -37,7 +37,7 @@ func act():
 	if hero == null or board == null:
 		# we're are not in a complete scene
 		return null	
-		
+			
 	var index = board.make_index()
 	# attack if we can, move towards the hero otherwise
 	var foe = select_foe(me, index)

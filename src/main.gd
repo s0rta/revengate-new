@@ -63,7 +63,7 @@ func test_change_board():
 
 	# swap the boards
 	old_board.add_sibling(new_board)
-	old_board.visible = false
+	old_board.set_active(false)
 
 	assert(get_board() == new_board, "make sure the new board is active")
 	# DEBUG are the new actors available?

@@ -351,8 +351,13 @@ static func board_to_canvas(coord):
 	return Vector2(coord.x * TILE_SIZE + half_tile, 
 					coord.y * TILE_SIZE + half_tile)
 
+func set_active(active:=true):
+	## Make the board active: visible and collidable)
+	visible = active
+	set_layer_enabled(0, active)
+
 func make_index():
-	var actors = find_children("", "Actor")
+	var actors = get_actors()
 	return BoardIndex.new(self, actors)
 
 func add_connection(near_coord, far_board, far_coord):
