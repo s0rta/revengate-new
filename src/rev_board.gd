@@ -23,6 +23,8 @@ const TILE_SIZE = 32
 # which terrains do we index for later retrieval?
 const INDEXED_TERRAINS = ["stairs-down", "stairs-up"]
 
+# approximate topological distance to the starting board, used for spawning difficulty
+var depth := 0  
 var connector_by_coord := {}  # (x, y) -> {far_board:_, far_coord:_}
 var _cells_by_terrain := {}  # terrain_name -> array of coords
 

@@ -49,12 +49,11 @@ func switch_board_at(coord):
 	if conn:
 		new_board = conn.far_board
 	else:
-		new_board = make_board()
+		new_board = make_board(old_board.depth + 1)
 		# connect the stairs together
 		var far = new_board.get_cell_by_terrain("stairs-up")
 		# TODO: add should return the new record
-		old_board.add_connection(coord, new_board, far)
-		
+		old_board.add_connection(coord, new_board, far)		
 		conn = old_board.get_connection(coord)
 		
 	old_board.set_active(false)
@@ -71,17 +70,20 @@ func switch_board_at(coord):
 	print("switched board by following connector at %s, dest is %s:%s" % [coord, new_board.name, conn.far_coord])
 
 
-func make_board():
+func make_board(depth):
 	## Return a brand new fully initiallized unconnected RevBoard
 	var scene = load("res://src/rev_board.tscn") as PackedScene
 	var new_board = scene.instantiate() as RevBoard
+	new_board.depth = depth
 	add_child(new_board)
 	var builder = BoardBuilder.new(new_board)
 	builder.gen_level()
 	
 	var index = new_board.make_index()
-	# TODO: monsters on a new board should be parametrized		
-	for char in "rkc":
+	
+	var nb_monsters = max(0, depth-2)
+	for i in range(nb_monsters):
+		var char = Rand.choice("rkc".split())
 		var monster = make_monster(new_board, char)
 		builder.place(monster, false, null, true, null, index)
 	
