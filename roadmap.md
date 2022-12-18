@@ -21,20 +21,26 @@ Actor:
 - [x] feed dest into Board.index
 
 Dungeon:
-- [ ] link existing levels to newly created ones
+- [x] link existing levels to newly created ones
 
 UI:
 - [ ] start screen
 - [ ] pinch to zoom
-
+- [ ] hero health points
+- [ ] game over screen
 
 ## v0.4
 - [ ] items for progression
 - [ ] damage over time
 - [ ] victory conditions
+- [ ] release to Google Play
 
 Builder:
 - [ ] mazes can fill arbitrary areas of a board
+
+UI:
+- [ ] credits screen
+- [ ] privacy screen
 
 
 ## v0.5
