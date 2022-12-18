@@ -75,6 +75,12 @@ func _get_configuration_warnings():
 		update_configuration_warnings()
 		warnings.append("Actor's can't act without a strategy.")
 	return warnings
+	
+func _to_string():
+	var parent = get_parent()
+	if parent:
+		parent = parent.name
+	return "<Actor %s on %s at %s>" % [name, parent, get_cell_coord()]
 
 func is_idle() -> bool:
 	return state == States.IDLE
@@ -133,11 +139,17 @@ func get_cell_coord():
 	else:
 		return RevBoard.canvas_to_board(position)
 
-func place(board_coord):
+func place(board_coord, immediate:=false):
 	## Place the actor at the specific coordinate without animations.
 	## No tests are done to see if board_coord is a suitable location.
-	if state == States.ACTING:
-		await self.turn_done
+	## immediate: don't wait for the Actor to finish their turn, some interference 
+	##   with animations is possible.
+	if not immediate:
+		if state == States.ACTING:
+			await self.turn_done
+		if is_animating():
+			await anims_done
+	reset_dest()
 	position = RevBoard.board_to_canvas(board_coord)
 
 func move_by(cell_vect: Vector2i):

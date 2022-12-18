@@ -44,7 +44,6 @@ func switch_board_at(coord):
 	## If the destination does not exist yet, create and link it with the current board.
 	var old_board = get_board()
 	assert(old_board.is_connector(coord), "can only switch board at a connector cell")
-	print("switching board by following connector at %s" % coord)
 	var new_board = null
 	var conn = old_board.get_connection(coord)
 	if conn:
@@ -57,65 +56,37 @@ func switch_board_at(coord):
 		old_board.add_connection(coord, new_board, far)
 		
 		conn = old_board.get_connection(coord)
-		old_board.add_sibling(new_board)
 		
 	old_board.set_active(false)
 	new_board.set_active(true)
 	var builder = BoardBuilder.new(new_board)
-	builder.place(hero, true, conn.far_coord)
+	var index = new_board.make_index()
+	builder.place(hero, true, conn.far_coord, true, null, index)
+	
+	# TODO: this is not always true, a fall back might kick in if the 
+	# stairs are occupied
+	assert(hero.get_cell_coord() == conn.far_coord)
+	
 	emit_signal("board_changed")
+	print("switched board by following connector at %s, dest is %s:%s" % [coord, new_board.name, conn.far_coord])
+
 
 func make_board():
 	## Return a brand new fully initiallized unconnected RevBoard
 	var scene = load("res://src/rev_board.tscn") as PackedScene
 	var new_board = scene.instantiate() as RevBoard
+	add_child(new_board)
 	var builder = BoardBuilder.new(new_board)
 	builder.gen_level()
 	
 	var index = new_board.make_index()
-
 	# TODO: monsters on a new board should be parametrized		
-	for char in "":  # was "rkc"
+	for char in "rkc":
 		var monster = make_monster(new_board, char)
 		builder.place(monster, false, null, true, null, index)
 	
 	return new_board
-	
-func test_change_board():
-	var tree = load("res://src/rev_board.tscn") as PackedScene
-	var old_board = get_board()
-	var new_board = tree.instantiate() as RevBoard
-	var builder = BoardBuilder.new(new_board)
-	builder.gen_level()
-	
-	var index = new_board.make_index()
-	for thing in [hero]:
-		builder.place(thing, false, null, true, null, index)
 		
-	for char in "rkc":
-		var monster = make_monster(new_board, char)
-		builder.place(monster, false, null, true, null, index)
-
-	print("after placing everything, the index knows about: %s" % [index.get_actors()])
-
-	# connect the stairs together
-	var near = old_board.get_cell_by_terrain("stairs-down")
-	var far = new_board.get_cell_by_terrain("stairs-up")
-	old_board.add_connection(near, new_board, far)
-
-	# swap the boards
-	old_board.add_sibling(new_board)
-	old_board.set_active(false)
-
-	assert(get_board() == new_board, "make sure the new board is active")
-	# DEBUG are the new actors available?
-	var actors = new_board.get_actors()
-	assert(not actors.is_empty())
-	# /DEBUG
-
-	emit_signal("board_changed")
-	hero.finalize_turn()
-	
 func inspect_tile():
 	var coord = $Hero.get_cell_coord()
 	var data = (get_board() as RevBoard).get_cell_tile_data(0, coord)
@@ -133,4 +104,4 @@ func _input(_event):
 	if Input.is_action_just_pressed("test-2"):
 		inspect_tile()
 	elif Input.is_action_just_pressed("test"):
-		test_change_board()
+		print("Testing...")

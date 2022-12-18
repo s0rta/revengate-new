@@ -338,9 +338,11 @@ class BoardIndex extends RefCounted:
 		var my_coord = me.get_cell_coord()
 		var foe_coord = null
 		for actor in _actor_to_coord:
+			if actor == me:
+				continue
 			foe_coord = actor.get_cell_coord()
 			if max_dist and board.dist(my_coord, foe_coord) > max_dist:
-				break
+				continue
 			if me.is_foe(actor):
 				foes.append(actor)
 		return foes

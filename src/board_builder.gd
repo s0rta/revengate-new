@@ -143,6 +143,7 @@ func place(thing, in_room=true, coord=null, free:bool=true, bbox=null, index=nul
 	## Fallback to nearby cells if needed.
 	## If coord is not provided, a random position is selected.
 	## No animations are performed.
+	# TODO: exposing `immediate` would be a good idea
 	var cell: Vector2i  # wrestling the type system into allowing null
 	if coord is Vector2i:
 		cell = Vector2i(coord.x, coord.y)
@@ -166,7 +167,7 @@ func place(thing, in_room=true, coord=null, free:bool=true, bbox=null, index=nul
 		bbox = null  
 		cell = board.spiral(cell, null, true, true, bbox, index).next()
 
-	thing.place(cell)
+	thing.place(cell, true)
 	if index:
 		index.refresh_actor(thing, false)
 		

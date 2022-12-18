@@ -21,7 +21,7 @@ class_name Tracking
 
 var last_foe
 
-func select_foe(actor, index):
+func select_foe(actor, index:RevBoard.BoardIndex):
 	## Return a foe to attack from the current location of null if there are no suitable targets.
 	var foes = index.actor_foes(actor, 1)
 	if not foes.is_empty():
@@ -31,9 +31,10 @@ func select_foe(actor, index):
 	else:
 		return null
 		
-func act():
+func act():	
 	var hero = find_hero()
 	var board = me.get_board()
+		
 	if hero == null or board == null:
 		# we're are not in a complete scene
 		return null	
