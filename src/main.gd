@@ -38,6 +38,49 @@ func get_board():
 	else:
 		return $Board
 
+func switch_board_at(coord):
+	## Flip the active board with the far side of the connector at `coord`, 
+	## move the Hero to the new active board.
+	## If the destination does not exist yet, create and link it with the current board.
+	var old_board = get_board()
+	assert(old_board.is_connector(coord), "can only switch board at a connector cell")
+	print("switching board by following connector at %s" % coord)
+	var new_board = null
+	var conn = old_board.get_connection(coord)
+	if conn:
+		new_board = conn.far_board
+	else:
+		new_board = make_board()
+		# connect the stairs together
+		var far = new_board.get_cell_by_terrain("stairs-up")
+		# TODO: add should return the new record
+		old_board.add_connection(coord, new_board, far)
+		
+		conn = old_board.get_connection(coord)
+		old_board.add_sibling(new_board)
+		
+	old_board.set_active(false)
+	new_board.set_active(true)
+	var builder = BoardBuilder.new(new_board)
+	builder.place(hero, true, conn.far_coord)
+	emit_signal("board_changed")
+
+func make_board():
+	## Return a brand new fully initiallized unconnected RevBoard
+	var scene = load("res://src/rev_board.tscn") as PackedScene
+	var new_board = scene.instantiate() as RevBoard
+	var builder = BoardBuilder.new(new_board)
+	builder.gen_level()
+	
+	var index = new_board.make_index()
+
+	# TODO: monsters on a new board should be parametrized		
+	for char in "":  # was "rkc"
+		var monster = make_monster(new_board, char)
+		builder.place(monster, false, null, true, null, index)
+	
+	return new_board
+	
 func test_change_board():
 	var tree = load("res://src/rev_board.tscn") as PackedScene
 	var old_board = get_board()

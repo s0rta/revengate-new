@@ -51,7 +51,14 @@ func _unhandled_input(event):
 		else:
 			travel_to(coord)
 			return await act()
-
+	elif Input.is_action_just_pressed("follow-stairs"):
+		var board = get_board()
+		var coord = get_cell_coord()
+		if board.is_connector(coord):
+			$"/root/Main".switch_board_at(coord)
+			acted = true
+		else:
+			print("No stair to follow here")
 	elif Input.is_action_just_pressed("right"):
 		move = V.i(1, 0)
 	elif Input.is_action_just_pressed("left"):
