@@ -1,0 +1,77 @@
+[gd_scene load_steps=4 format=3 uid="uid://b5qxw3oadwpfx"]
+
+[ext_resource type="Theme" uid="uid://3araln1iald0" path="res://src/theme.tres" id="1_0ieh5"]
+[ext_resource type="Script" path="res://src/secondary_info_screen.gd" id="2_y6u1y"]
+[ext_resource type="Theme" uid="uid://c34l1k8jvrjx6" path="res://src/titles-theme.tres" id="3_er4nf"]
+
+[node name="PrivacyScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_0ieh5")
+script = ExtResource("2_y6u1y")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0431373, 0.027451, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -439.5
+offset_right = 439.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+offset_left = 45.0
+offset_right = 833.0
+offset_bottom = 83.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme = ExtResource("3_er4nf")
+theme_type_variation = &"HeaderLarge"
+text = "Revengate is Free Software"
+horizontal_alignment = 1
+
+[node name="GPLLabel" type="Label" parent="VBoxContainer"]
+offset_left = 173.0
+offset_top = 87.0
+offset_right = 706.0
+offset_bottom = 409.0
+size_flags_horizontal = 4
+text = "
+Revengate is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Revengate is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You can find the full text of the GPL licence on the GNU website:
+https://www.gnu.org/licenses/ .
+
+"
+
+[node name="BackButton" type="Button" parent="VBoxContainer"]
+offset_left = 417.0
+offset_top = 413.0
+offset_right = 462.0
+offset_bottom = 444.0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Back"
+
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

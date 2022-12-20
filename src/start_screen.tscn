@@ -21,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0431373, 0.027451, 0, 1)
 
-[node name="Label" type="Label" parent="."]
+[node name="Title" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -50,6 +50,32 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "New Game!"
 
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -256.0
+offset_top = -120.0
+offset_right = -55.0
+offset_bottom = -80.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="CreditsButton" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+text = "Credits"
+
+[node name="LicenseButton" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+text = "License"
+
+[node name="PrivacyButton" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+text = "Privacy"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 12
@@ -71,3 +97,6 @@ layout_mode = 2
 text = "???"
 
 [connection signal="pressed" from="NewGameButton" to="." method="start_new_game"]
+[connection signal="pressed" from="HBoxContainer2/CreditsButton" to="." method="_on_credits_button_pressed"]
+[connection signal="pressed" from="HBoxContainer2/LicenseButton" to="." method="_on_license_button_pressed"]
+[connection signal="pressed" from="HBoxContainer2/PrivacyButton" to="." method="_on_privacy_button_pressed"]

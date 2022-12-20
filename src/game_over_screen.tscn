@@ -1,7 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cqohg5owtfcfn"]
+[gd_scene load_steps=4 format=3 uid="uid://cmn6nds2qvk6j"]
 
 [ext_resource type="Theme" uid="uid://3araln1iald0" path="res://src/theme.tres" id="1_vnybl"]
-[ext_resource type="Script" path="res://src/game_over_screen.gd" id="2_8jkf6"]
+[ext_resource type="Script" path="res://src/secondary_info_screen.gd" id="2_tuwnq"]
 [ext_resource type="Theme" uid="uid://c34l1k8jvrjx6" path="res://src/titles-theme.tres" id="3_if2ux"]
 
 [node name="GameOverScreen" type="Control"]
@@ -12,7 +12,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_vnybl")
-script = ExtResource("2_8jkf6")
+script = ExtResource("2_tuwnq")
 
 [node name="Background" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -22,7 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0431373, 0.027451, 0, 1)
 
-[node name="Label" type="Label" parent="."]
+[node name="Title" type="Label" parent="."]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5

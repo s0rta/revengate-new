@@ -1,0 +1,68 @@
+[gd_scene load_steps=4 format=3 uid="uid://docixuu2rvmc1"]
+
+[ext_resource type="Theme" uid="uid://3araln1iald0" path="res://src/theme.tres" id="1_q6f0m"]
+[ext_resource type="Script" path="res://src/secondary_info_screen.gd" id="2_aqun8"]
+[ext_resource type="Theme" uid="uid://c34l1k8jvrjx6" path="res://src/titles-theme.tres" id="3_k16sm"]
+
+[node name="PrivacyScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_q6f0m")
+script = ExtResource("2_aqun8")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0431373, 0.027451, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -439.5
+offset_right = 439.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+offset_right = 879.0
+offset_bottom = 83.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme = ExtResource("3_k16sm")
+theme_type_variation = &"HeaderLarge"
+text = "Revengate does not track you!"
+horizontal_alignment = 1
+
+[node name="PolicyLabel" type="Label" parent="VBoxContainer"]
+offset_left = 140.0
+offset_top = 87.0
+offset_right = 739.0
+offset_bottom = 225.0
+size_flags_horizontal = 4
+text = "
+This game does not collect or store any information about you or your device.
+
+Learn more at:
+http://revengate.org/privacy
+
+"
+
+[node name="BackButton" type="Button" parent="VBoxContainer"]
+offset_left = 417.0
+offset_top = 229.0
+offset_right = 462.0
+offset_bottom = 260.0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Back"
+
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
+## Common script used by all the trivial info screens accessed from the 
+## start screen.
 extends Control
 
 func _on_back_button_pressed():
