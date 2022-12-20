@@ -15,13 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Control
+## Various game constants that are used across scenes.
+## This script is autoloaded at `Consts`
+extends Node
 
-func _ready():
-	find_child("VersionLabel").text = Consts.VERSION
-
-func start_new_game():
-	print("starting a new game!")
-	var tree = get_tree() as SceneTree
-	tree.change_scene_to_file("res://src/main.tscn")
-	
+const VERSION := "0.1.9"
