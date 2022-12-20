@@ -15,3 +15,19 @@ Revengate Style Guide
 * terrain: a group of tiles with common properties, like being walkable.
 * hero: the player character, regardless of its gender
 * actor: any character, includes monsters and hero
+
+## colors
+The UI color scheme is based on Material Design v2 with the primary colors from the splash screen. This too make is easy to get the sub colors:
+https://m2.material.io/resources/color/
+
+* primary: a13100
+* primary-light: d9602f
+* primary-dark: 6c0000
+* secondary: d0943b
+* secondary-light: ffc46a
+* secondary-dark: 9b6605
+* background: 231a00
+* outline: 85736e
+
+This tool derives beautiful MD3 color schemes, but it's still fairly buggy:
+https://m3.material.io/theme-builder

@@ -50,6 +50,9 @@ UI:
 - [ ] bestiary
 - [ ] release on F-Droid
 
+## v0.6
+- [ ] style UI with Godot theme
+
 ## v1.0
 - [ ] saved games
 - [ ] Lyon overworld
