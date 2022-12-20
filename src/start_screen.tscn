@@ -9,11 +9,12 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("1_2wuyl")
 script = ExtResource("1_j53cj")
 
 [node name="Background" type="ColorRect" parent="."]
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -22,7 +23,6 @@ grow_vertical = 2
 color = Color(0.0431373, 0.027451, 0, 1)
 
 [node name="Title" type="Label" parent="."]
-layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -36,7 +36,6 @@ theme_type_variation = &"HeaderLarge"
 text = "Welcome to Revengate!"
 
 [node name="NewGameButton" type="Button" parent="."]
-layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -51,7 +50,6 @@ grow_vertical = 2
 text = "New Game!"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
-layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -65,19 +63,23 @@ grow_horizontal = 0
 grow_vertical = 0
 
 [node name="CreditsButton" type="Button" parent="HBoxContainer2"]
-layout_mode = 2
+offset_right = 63.0
+offset_bottom = 40.0
 text = "Credits"
 
 [node name="LicenseButton" type="Button" parent="HBoxContainer2"]
-layout_mode = 2
+offset_left = 67.0
+offset_right = 133.0
+offset_bottom = 40.0
 text = "License"
 
 [node name="PrivacyButton" type="Button" parent="HBoxContainer2"]
-layout_mode = 2
+offset_left = 137.0
+offset_right = 201.0
+offset_bottom = 40.0
 text = "Privacy"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
@@ -88,12 +90,15 @@ grow_horizontal = 2
 grow_vertical = 0
 
 [node name="Label" type="Label" parent="HBoxContainer"]
-layout_mode = 2
+offset_right = 62.0
+offset_bottom = 23.0
 text = "version "
 
 [node name="VersionLabel" type="Label" parent="HBoxContainer"]
 unique_name_in_owner = true
-layout_mode = 2
+offset_left = 66.0
+offset_right = 88.0
+offset_bottom = 23.0
 text = "???"
 
 [connection signal="pressed" from="NewGameButton" to="." method="start_new_game"]

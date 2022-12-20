@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cmn6nds2qvk6j"]
+[gd_scene load_steps=5 format=3 uid="uid://cmn6nds2qvk6j"]
 
 [ext_resource type="Theme" uid="uid://3araln1iald0" path="res://src/theme.tres" id="1_vnybl"]
-[ext_resource type="Script" path="res://src/secondary_info_screen.gd" id="2_tuwnq"]
+[ext_resource type="Script" path="res://src/game_over_screen.gd" id="2_8jkf6"]
 [ext_resource type="Theme" uid="uid://c34l1k8jvrjx6" path="res://src/titles-theme.tres" id="3_if2ux"]
+[ext_resource type="AudioStream" uid="uid://blug0xhroe52t" path="res://src/ui/game-over.mp3" id="4_10xko"]
 
 [node name="GameOverScreen" type="Control"]
 layout_mode = 3
@@ -12,7 +13,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_vnybl")
-script = ExtResource("2_tuwnq")
+script = ExtResource("2_8jkf6")
 
 [node name="Background" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -49,5 +50,9 @@ offset_bottom = 14.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "Back"
+
+[node name="Player" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_10xko")
+autoplay = true
 
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

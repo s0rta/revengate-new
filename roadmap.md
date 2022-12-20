@@ -32,6 +32,7 @@ UI:
 ## v0.4
 - [ ] items for progression
 - [ ] damage over time
+- [ ] extra stat for evasion
 - [ ] victory conditions
 - [ ] release to Google Play
 
@@ -40,7 +41,7 @@ Builder:
 
 UI:
 - [ ] credits screen
-- [ ] privacy screen
+- [x] privacy screen
 
 
 ## v0.5
@@ -48,6 +49,7 @@ UI:
 - [ ] dialogues
 - [ ] merge git repo with Revengate v0.1
 - [ ] bestiary
+- [ ] finely tuned animation over laps
 - [ ] release on F-Droid
 
 ## v0.6
