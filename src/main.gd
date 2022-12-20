@@ -26,6 +26,7 @@ func _ready():
 	# FIXME: the original board should be able to re-index it's content
 	$Board._append_terrain_cells([V.i(23, 2)], "stairs-down")
 	hero = $Board/Hero
+	hero.died.connect(conclude_game)
 
 func get_board():
 	## Return the current active board
@@ -89,18 +90,27 @@ func make_board(depth):
 	
 	return new_board
 		
-func inspect_tile():
-	var coord = $Hero.get_cell_coord()
-	var data = (get_board() as RevBoard).get_cell_tile_data(0, coord)
-	print("Data here is %s" % [[var_to_str(data), data.get_custom_data
-("is_connector")]])
-
 func make_monster(parent, char: String):
 	var tree = load("res://src/combat/monster.tscn") as PackedScene
 	var monster = tree.instantiate()
 	monster.get_node("Label").text = char
 	parent.add_child(monster)
 	return monster
+
+func inspect_tile():
+	var coord = hero.get_cell_coord()
+	var data = (get_board() as RevBoard).get_cell_tile_data(0, coord)
+	print("Data here is %s" % [[var_to_str(data), data.get_custom_data
+("is_connector")]])
+
+func conclude_game():
+	## do a final bit of cleanup then show the Game Over screen
+	$TurnQueue.invalidate_turn()
+	if hero.is_animating():
+		# nothing else to do: Actors free themselves after they die
+		await hero.anims_done
+	var tree = get_tree() as SceneTree
+	tree.change_scene_to_file("res://src/game_over_screen.tscn")
 
 func _input(_event):
 	if Input.is_action_just_pressed("test-2"):

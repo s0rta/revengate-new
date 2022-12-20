@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3 uid="uid://cqohg5owtfcfn"]
+
+[ext_resource type="Theme" uid="uid://3araln1iald0" path="res://src/theme.tres" id="1_vnybl"]
+[ext_resource type="Script" path="res://src/game_over_screen.gd" id="2_8jkf6"]
+[ext_resource type="Theme" uid="uid://c34l1k8jvrjx6" path="res://src/titles-theme.tres" id="3_if2ux"]
+
+[node name="GameOverScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_vnybl")
+script = ExtResource("2_8jkf6")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0431373, 0.027451, 0, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -238.0
+offset_top = 130.0
+offset_right = 238.0
+offset_bottom = 191.0
+grow_horizontal = 2
+theme = ExtResource("3_if2ux")
+theme_type_variation = &"HeaderLarge"
+text = "Game Over!"
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.5
+offset_top = -16.5
+offset_right = 48.5
+offset_bottom = 14.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Back"
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

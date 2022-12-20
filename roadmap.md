@@ -24,10 +24,10 @@ Dungeon:
 - [x] link existing levels to newly created ones
 
 UI:
-- [ ] start screen
+- [x] start screen
 - [ ] pinch to zoom
 - [ ] hero health points
-- [ ] game over screen
+- [x] game over screen
 
 ## v0.4
 - [ ] items for progression

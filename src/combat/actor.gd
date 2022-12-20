@@ -25,6 +25,8 @@ signal turn_done
 signal anims_done  
 # the actor was the victim of an attack
 signal was_attacked(attacker)
+# the actor met their ultimate demise
+signal died
 
 enum States {
 	IDLE,
@@ -267,7 +269,8 @@ func update_health(hp_delta: int):
 	timer.timeout.connect(anim2.play)
 	if health <= 0:
 		play_sound("DeathSound")
-		# no need to add this one to anims since sub-tweens have the same signal as the root tween
+		emit_signal("died")
+		# we do not need create_anim() since sub-tweens have the same signal as the root tween
 		var anim3 = anim.parallel()  
 		anim3.tween_property($Label, "modulate", Color(.8, 0, 0, .7), .1)
 		anim3.tween_property($Label, "modulate", Color(0, 0, 0, 0), .4)
