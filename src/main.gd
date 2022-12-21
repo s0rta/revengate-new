@@ -20,12 +20,13 @@ extends Node2D
 # The hero moved to a different level, the UI and turn logic are affected and must be notified
 signal board_changed  
 
-var hero: Actor
+@onready var hero:Actor = $Board/Hero
+@onready var hud = $HUD
 
 func _ready():
 	# FIXME: the original board should be able to re-index it's content
 	$Board._append_terrain_cells([V.i(23, 2)], "stairs-down")
-	hero = $Board/Hero
+	hud.set_hero(hero)
 	hero.died.connect(conclude_game)
 
 func get_board():

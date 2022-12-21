@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://d0vu1u4sr0gbr"]
+[gd_scene load_steps=8 format=3 uid="uid://d0vu1u4sr0gbr"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="PackedScene" uid="uid://cfc3ttsrd52r" path="res://src/rev_board.tscn" id="3_vl15m"]
 [ext_resource type="PackedScene" uid="uid://bd2qlsrbf4sgo" path="res://src/combat/hero.tscn" id="4_lrsod"]
 [ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="5_odllu"]
 [ext_resource type="PackedScene" uid="uid://c7ftd4dk0u84f" path="res://src/combat/monster.tscn" id="5_ottqo"]
+[ext_resource type="Theme" uid="uid://3araln1iald0" path="res://src/theme.tres" id="6_6aqeq"]
+[ext_resource type="Script" path="res://src/hud.gd" id="7_4dw6n"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_58o83")
@@ -20,5 +22,38 @@ position = Vector2(208, 368)
 
 [node name="Hero" parent="Board" instance=ExtResource("4_lrsod")]
 position = Vector2(656, 304)
+health = 10
 
 [node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("6_6aqeq")
+script = ExtResource("7_4dw6n")
+
+[node name="StatusBar" type="HBoxContainer" parent="HUD"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1080.0
+offset_top = 640.0
+offset_right = 1166.0
+offset_bottom = 663.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="HealthLabel" type="Label" parent="HUD/StatusBar"]
+layout_mode = 2
+text = "Health: "
+
+[node name="HPLabel" type="Label" parent="HUD/StatusBar"]
+layout_mode = 2
+text = "???"
