@@ -70,6 +70,11 @@ corner_radius_bottom_left = 3
 corner_detail = 5
 
 [resource]
+BigMarging/base_type = &"MarginContainer"
+BigMarging/constants/margin_bottom = 50
+BigMarging/constants/margin_left = 50
+BigMarging/constants/margin_right = 50
+BigMarging/constants/margin_top = 50
 Button/colors/font_color = Color(0.513726, 0.333333, 0, 1)
 Button/colors/font_focus_color = Color(0.513726, 0.333333, 0, 1)
 Button/colors/font_hover_color = Color(0.670588, 0.207843, 0.0313726, 1)
@@ -92,3 +97,7 @@ Label/constants/shadow_outline_size = 0
 Label/font_sizes/font_size = 16
 Label/fonts/font = null
 Label/styles/normal = null
+MarginContainer/constants/margin_bottom = 40
+MarginContainer/constants/margin_left = 40
+MarginContainer/constants/margin_right = 40
+MarginContainer/constants/margin_top = 40

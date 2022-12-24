@@ -26,7 +26,7 @@ Dungeon:
 UI:
 - [x] start screen
 - [ ] pinch to zoom
-- [ ] hero health points
+- [x] hero health points
 - [x] game over screen
 
 ## v0.4

@@ -4,14 +4,7 @@
 [ext_resource type="Script" path="res://src/start_screen.gd" id="1_j53cj"]
 [ext_resource type="Theme" uid="uid://c34l1k8jvrjx6" path="res://src/titles-theme.tres" id="3_7dseq"]
 
-[node name="StartScreen" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("1_2wuyl")
+[node name="StartScreen" type="Node"]
 script = ExtResource("1_j53cj")
 
 [node name="Background" type="ColorRect" parent="."]
@@ -21,19 +14,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0431373, 0.027451, 0, 1)
-
-[node name="Title" type="Label" parent="."]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -238.0
-offset_top = 130.0
-offset_right = 238.0
-offset_bottom = 191.0
-grow_horizontal = 2
-theme = ExtResource("3_7dseq")
-theme_type_variation = &"HeaderLarge"
-text = "Welcome to Revengate!"
 
 [node name="NewGameButton" type="Button" parent="."]
 anchors_preset = 8
@@ -63,20 +43,15 @@ grow_horizontal = 0
 grow_vertical = 0
 
 [node name="CreditsButton" type="Button" parent="HBoxContainer2"]
-offset_right = 63.0
-offset_bottom = 40.0
+layout_mode = 2
 text = "Credits"
 
 [node name="LicenseButton" type="Button" parent="HBoxContainer2"]
-offset_left = 67.0
-offset_right = 133.0
-offset_bottom = 40.0
+layout_mode = 2
 text = "License"
 
 [node name="PrivacyButton" type="Button" parent="HBoxContainer2"]
-offset_left = 137.0
-offset_right = 201.0
-offset_bottom = 40.0
+layout_mode = 2
 text = "Privacy"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -90,16 +65,30 @@ grow_horizontal = 2
 grow_vertical = 0
 
 [node name="Label" type="Label" parent="HBoxContainer"]
-offset_right = 62.0
-offset_bottom = 23.0
+layout_mode = 2
 text = "version "
 
 [node name="VersionLabel" type="Label" parent="HBoxContainer"]
 unique_name_in_owner = true
-offset_left = 66.0
-offset_right = 88.0
-offset_bottom = 23.0
+layout_mode = 2
 text = "???"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -341.5
+offset_right = 341.5
+offset_bottom = 86.0
+grow_horizontal = 2
+theme = ExtResource("1_2wuyl")
+theme_type_variation = &"BigMarging"
+
+[node name="Title" type="Label" parent="MarginContainer"]
+layout_mode = 2
+theme = ExtResource("3_7dseq")
+theme_type_variation = &"HeaderLarge"
+text = "Welcome to Revengate!"
 
 [connection signal="pressed" from="NewGameButton" to="." method="start_new_game"]
 [connection signal="pressed" from="HBoxContainer2/CreditsButton" to="." method="_on_credits_button_pressed"]
