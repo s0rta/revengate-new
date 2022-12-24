@@ -17,7 +17,7 @@
 
 ## Common script used by all the trivial info screens accessed from the 
 ## start screen.
-extends Control
+extends Node
 
 func _on_back_button_pressed():
 	var tree = get_tree() as SceneTree

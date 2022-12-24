@@ -1,18 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://docixuu2rvmc1"]
+[gd_scene load_steps=2 format=3 uid="uid://cfs2knjgpvba"]
 
-[ext_resource type="Theme" uid="uid://3araln1iald0" path="res://src/theme.tres" id="1_q6f0m"]
-[ext_resource type="Script" path="res://src/secondary_info_screen.gd" id="2_aqun8"]
-[ext_resource type="Theme" uid="uid://c34l1k8jvrjx6" path="res://src/titles-theme.tres" id="3_k16sm"]
+[ext_resource type="Script" path="res://src/ui/secondary_info_screen.gd" id="1_ouwig"]
 
-[node name="PrivacyScreen" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("1_q6f0m")
-script = ExtResource("2_aqun8")
+[node name="PrivacyScreen" type="Node"]
+script = ExtResource("1_ouwig")
 
 [node name="Background" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -32,21 +23,28 @@ offset_right = 439.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="Label" parent="VBoxContainer"]
-offset_right = 879.0
-offset_bottom = 83.0
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+offset_right = 979.0
+offset_bottom = 183.0
+grow_horizontal = 2
+theme_type_variation = &"BigMarging"
+
+[node name="Title" type="Label" parent="VBoxContainer/MarginContainer"]
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 929.0
+offset_bottom = 133.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
-theme = ExtResource("3_k16sm")
-theme_type_variation = &"HeaderLarge"
+theme_type_variation = &"TitleLabel"
 text = "Revengate does not track you!"
 horizontal_alignment = 1
 
 [node name="PolicyLabel" type="Label" parent="VBoxContainer"]
-offset_left = 140.0
-offset_top = 87.0
-offset_right = 739.0
-offset_bottom = 225.0
+offset_left = 190.0
+offset_top = 187.0
+offset_right = 789.0
+offset_bottom = 325.0
 size_flags_horizontal = 4
 text = "
 This game does not collect or store any information about you or your device.
@@ -57,10 +55,10 @@ http://revengate.org/privacy
 "
 
 [node name="BackButton" type="Button" parent="VBoxContainer"]
-offset_left = 417.0
-offset_top = 229.0
-offset_right = 462.0
-offset_bottom = 260.0
+offset_left = 467.0
+offset_top = 329.0
+offset_right = 512.0
+offset_bottom = 360.0
 size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Back"

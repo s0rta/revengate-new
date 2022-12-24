@@ -94,7 +94,7 @@ _global_script_class_icons={
 
 config/name="Revengate GD"
 config/description="A steampunk roguelike for Android."
-run/main_scene="res://src/start_screen.tscn"
+run/main_scene="res://src/ui/start_screen.tscn"
 config/features=PackedStringArray("4.0")
 
 [autoload]
@@ -109,7 +109,7 @@ window/stretch/mode="viewport"
 
 [gui]
 
-theme/custom="res://src/theme.tres"
+theme/custom="res://src/ui/theme.tres"
 common/drop_mouse_on_gui_input_disabled=true
 
 [input]

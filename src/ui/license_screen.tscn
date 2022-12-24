@@ -1,20 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://b5qxw3oadwpfx"]
+[gd_scene load_steps=2 format=3 uid="uid://bo0sde31jbarc"]
 
-[ext_resource type="Theme" uid="uid://3araln1iald0" path="res://src/theme.tres" id="1_0ieh5"]
-[ext_resource type="Script" path="res://src/secondary_info_screen.gd" id="2_y6u1y"]
-[ext_resource type="Theme" uid="uid://c34l1k8jvrjx6" path="res://src/titles-theme.tres" id="3_er4nf"]
+[ext_resource type="Script" path="res://src/ui/secondary_info_screen.gd" id="1_bu1h8"]
 
-[node name="PrivacyScreen" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -1.0
-offset_bottom = -1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("1_0ieh5")
-script = ExtResource("2_y6u1y")
+[node name="LicenseScreen" type="Node"]
+script = ExtResource("1_bu1h8")
 
 [node name="Background" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -34,22 +23,27 @@ offset_right = 439.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="Label" parent="VBoxContainer"]
-offset_left = 45.0
-offset_right = 833.0
-offset_bottom = 83.0
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+offset_right = 888.0
+offset_bottom = 183.0
+theme_type_variation = &"BigMarging"
+
+[node name="Title" type="Label" parent="VBoxContainer/MarginContainer"]
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 838.0
+offset_bottom = 133.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
-theme = ExtResource("3_er4nf")
-theme_type_variation = &"HeaderLarge"
+theme_type_variation = &"TitleLabel"
 text = "Revengate is Free Software"
 horizontal_alignment = 1
 
 [node name="GPLLabel" type="Label" parent="VBoxContainer"]
-offset_left = 173.0
-offset_top = 87.0
-offset_right = 706.0
-offset_bottom = 409.0
+offset_left = 177.0
+offset_top = 187.0
+offset_right = 710.0
+offset_bottom = 509.0
 size_flags_horizontal = 4
 text = "
 Revengate is free software: you can redistribute it and/or modify
@@ -68,10 +62,10 @@ https://www.gnu.org/licenses/ .
 "
 
 [node name="BackButton" type="Button" parent="VBoxContainer"]
-offset_left = 417.0
-offset_top = 413.0
-offset_right = 462.0
-offset_bottom = 444.0
+offset_left = 421.0
+offset_top = 513.0
+offset_right = 466.0
+offset_bottom = 544.0
 size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Back"
