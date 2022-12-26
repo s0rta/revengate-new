@@ -26,10 +26,10 @@ func start_new_game():
 	tree.change_scene_to_file("res://src/main.tscn")
 	
 func _on_credits_button_pressed():
-	get_tree().change_scene_to_file("res://src/credits_screen.tscn")
+	get_tree().change_scene_to_file("res://src/ui/credits_screen.tscn")
 
 func _on_license_button_pressed():
-	get_tree().change_scene_to_file("res://src/license_screen.tscn")
+	get_tree().change_scene_to_file("res://src/ui/license_screen.tscn")
 
 func _on_privacy_button_pressed():
-	get_tree().change_scene_to_file("res://src/privacy_screen.tscn")
+	get_tree().change_scene_to_file("res://src/ui/privacy_screen.tscn")

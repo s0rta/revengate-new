@@ -106,12 +106,14 @@ func inspect_tile():
 
 func conclude_game():
 	## do a final bit of cleanup then show the Game Over screen
-	$TurnQueue.invalidate_turn()
+	$TurnQueue.shutdown()
 	if hero.is_animating():
+		print("can't shutdown quite yet, hero animating...")
 		# nothing else to do: Actors free themselves after they die
 		await hero.anims_done
+		print("hero done animating!")
 	var tree = get_tree() as SceneTree
-	tree.change_scene_to_file("res://src/game_over_screen.tscn")
+	tree.change_scene_to_file("res://src/ui/game_over_screen.tscn")
 
 func _input(_event):
 	if Input.is_action_just_pressed("test-2"):

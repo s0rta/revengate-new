@@ -21,7 +21,6 @@ position = Vector2(208, 368)
 
 [node name="Hero" parent="Board" instance=ExtResource("4_lrsod")]
 position = Vector2(656, 304)
-health = 10
 
 [node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]
 
@@ -42,12 +41,9 @@ grow_horizontal = 0
 grow_vertical = 0
 
 [node name="HealthLabel" type="Label" parent="HUD/StatusBar"]
-offset_right = 60.0
-offset_bottom = 26.0
+layout_mode = 2
 text = "Health: "
 
 [node name="HPLabel" type="Label" parent="HUD/StatusBar"]
-offset_left = 64.0
-offset_right = 86.0
-offset_bottom = 26.0
+layout_mode = 2
 text = "???"

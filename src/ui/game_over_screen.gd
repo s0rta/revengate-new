@@ -15,4 +15,4 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends "res://src/secondary_info_screen.gd"
+extends "res://src/ui/secondary_info_screen.gd"

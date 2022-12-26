@@ -21,4 +21,5 @@ extends Node
 
 func _on_back_button_pressed():
 	var tree = get_tree() as SceneTree
-	tree.change_scene_to_file("res://src/start_screen.tscn")
+	tree.change_scene_to_file("res://src/ui/start_screen.tscn")
+	

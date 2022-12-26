@@ -18,10 +18,11 @@
 extends Node
 
 const ACTING_DELAY = 0.1  # in seconds
-enum States {STOPPED, PROCESSING}
+enum States {STOPPED, PROCESSING, SHUTTING_DOWN}
 var state = States.STOPPED
 
 var turn := 0
+# var loop_is_active := false
 var turn_is_valid := true
 
 func _ready():
@@ -45,6 +46,12 @@ func invalidate_turn():
 	## a whole cast of actors, it does not make sense to finish the old turn with only actors from 
 	## the previous level.
 	turn_is_valid = false
+
+func shutdown():
+	## Stop processing turns as soon as possible. 
+	## Typically the current actor will finish their turn before the shutdown begins.
+	state = States.SHUTTING_DOWN
+	invalidate_turn()
 	
 func run():
 	var actors: Array
@@ -76,3 +83,5 @@ func run():
 				print("Anims done for %s!" % actor)
 		turn += 1
 		turn_is_valid = true
+	state = States.STOPPED
+	
