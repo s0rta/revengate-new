@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://dl5etg1cv5hbt"]
+
+[ext_resource type="Script" path="res://src/combat/actor.gd" id="1_8kibw"]
+[ext_resource type="FontFile" uid="uid://dnkyou1p4t7yl" path="res://assets/fonts/kalimati.ttf" id="2_f285x"]
+[ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="3_pvm2f"]
+[ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="4_6yvk8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_00etm"]
+size = Vector2(32, 32)
+
+[node name="Actor" type="Area2D"]
+script = ExtResource("1_8kibw")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -7.5
+offset_top = -13.0
+offset_right = 7.5
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+auto_translate = false
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_f285x")
+theme_override_font_sizes/font_size = 28
+text = "x"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("RectangleShape2D_00etm")
+
+[node name="MissSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_pvm2f")
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_6yvk8")
+
+[node name="DamageLabel" type="Label" parent="."]
+visible = false
+offset_top = -9.0
+offset_right = 7.0
+offset_bottom = 14.0
+theme_override_colors/font_color = Color(0.784314, 0.227451, 0.172549, 1)
+theme_override_font_sizes/font_size = 14
+text = "?"

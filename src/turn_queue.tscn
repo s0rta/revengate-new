@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b426swtcuck2d"]
+
+[ext_resource type="Script" path="res://src/turn_queue.gd" id="1"]
+
+[node name="TurnQueue" type="Node"]
+script = ExtResource("1")

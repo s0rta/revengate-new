@@ -1,0 +1,184 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+_global_script_classes=[{
+"base": "Area2D",
+"class": &"Actor",
+"language": &"GDScript",
+"path": "res://src/combat/actor.gd"
+}, {
+"base": "Node",
+"class": &"AnimGroup",
+"language": &"GDScript",
+"path": "res://src/anim_group.gd"
+}, {
+"base": "RefCounted",
+"class": &"BoardBuilder",
+"language": &"GDScript",
+"path": "res://src/board_builder.gd"
+}, {
+"base": "Actor",
+"class": &"Hero",
+"language": &"GDScript",
+"path": "res://src/combat/hero.gd"
+}, {
+"base": "Strategy",
+"class": &"Paralized",
+"language": &"GDScript",
+"path": "res://src/strategies/paralized.gd"
+}, {
+"base": "RefCounted",
+"class": &"PriorityQueue",
+"language": &"GDScript",
+"path": "res://addons/GodotPriorityQueue/priority_queue.gd"
+}, {
+"base": "Object",
+"class": &"Rand",
+"language": &"GDScript",
+"path": "res://src/rand.gd"
+}, {
+"base": "TileMap",
+"class": &"RevBoard",
+"language": &"GDScript",
+"path": "res://src/rev_board.gd"
+}, {
+"base": "Node",
+"class": &"Strategy",
+"language": &"GDScript",
+"path": "res://src/strategies/strategy.gd"
+}, {
+"base": "Strategy",
+"class": &"Tracking",
+"language": &"GDScript",
+"path": "res://src/strategies/tracking.gd"
+}, {
+"base": "Strategy",
+"class": &"Traveling",
+"language": &"GDScript",
+"path": "res://src/strategies/traveling.gd"
+}, {
+"base": "Object",
+"class": &"V",
+"language": &"GDScript",
+"path": "res://src/v.gd"
+}, {
+"base": "Node",
+"class": &"Weapon",
+"language": &"GDScript",
+"path": "res://src/combat/weapon.gd"
+}]
+_global_script_class_icons={
+"Actor": "",
+"AnimGroup": "",
+"BoardBuilder": "",
+"Hero": "",
+"Paralized": "",
+"PriorityQueue": "",
+"Rand": "",
+"RevBoard": "",
+"Strategy": "res://src/strategies/strat.svg",
+"Tracking": "",
+"Traveling": "",
+"V": "",
+"Weapon": "res://assets/opencliparts/sword_01.svg"
+}
+
+[application]
+
+config/name="Revengate GD"
+config/description="A steampunk roguelike for Android."
+run/main_scene="res://src/ui/start_screen.tscn"
+config/features=PackedStringArray("4.0")
+
+[autoload]
+
+Consts="*res://src/constants.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="viewport"
+
+[gui]
+
+theme/custom="res://src/ui/theme.tres"
+common/drop_mouse_on_gui_input_disabled=true
+
+[input]
+
+up={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194320,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
+}
+down={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194322,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
+}
+left={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194319,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
+}
+right={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194321,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
+}
+test={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":84,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
+}
+test-2={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":true,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":84,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
+}
+act-on-cell={
+"deadzone": 0.5,
+"events": [null, Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":1,"pressed":false,"double_click":false,"script":null)
+]
+}
+follow-stairs={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":70,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
+}
+zoom-in={
+"deadzone": 0.5,
+"events": [null, Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":5,"pressed":false,"double_click":false,"script":null)
+]
+}
+zoom-out={
+"deadzone": 0.5,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":4,"pressed":false,"double_click":false,"script":null)
+]
+}
+pan={
+"deadzone": 0.5,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":true,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":1,"pressed":false,"double_click":false,"script":null)
+]
+}
+
+[input_devices]
+
+pointing/emulate_mouse_from_touch=false
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)
+environment/default_environment="res://default_env.tres"

@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://bd2qlsrbf4sgo"]
+
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_bgbko"]
+[ext_resource type="Script" path="res://src/combat/hero.gd" id="2_jrjv3"]
+[ext_resource type="PackedScene" uid="uid://g5xddmsru7m2" path="res://src/combat/weapon.tscn" id="3_4dlru"]
+[ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/combat/sword-hit.wav" id="4_u757e"]
+[ext_resource type="AudioStream" uid="uid://bajy1gsb550i5" path="res://src/combat/hero_miss.wav" id="4_y2iie"]
+
+[node name="Hero" instance=ExtResource("1_bgbko")]
+position = Vector2(-1, 0)
+script = ExtResource("2_jrjv3")
+faction = 1
+
+[node name="Label" parent="." index="0"]
+text = "@"
+
+[node name="sword" parent="." index="2" instance=ExtResource("3_4dlru")]
+damage = 10
+damage_family = 1
+
+[node name="HitSound" type="AudioStreamPlayer2D" parent="sword" index="0"]
+stream = ExtResource("4_u757e")
+
+[node name="MissSound" parent="." index="3"]
+stream = ExtResource("4_y2iie")

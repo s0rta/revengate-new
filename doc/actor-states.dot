@@ -1,0 +1,9 @@
+
+digraph {
+  node [shape=box]
+  IDLE -> ACTING [label = "Strategy.act()"]
+  IDLE -> LISTENING [label = "Hero.act()"]
+  LISTENING -> IDLE [label = "stop_listening()"]
+  LISTENING -> ACTING [label = "_unhandled_input()"]
+  ACTING -> IDLE [label = "emit: turn_done"]
+}

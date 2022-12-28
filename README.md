@@ -4,6 +4,10 @@ Revengate
 This is Revengate, a role playing game set in a steampunk world where magic and
 heavy machines coexist.
 
+More about Revengate:
+* [Website](http://revengate.org)
+* [Git repo](https://gitlab.com/ygingras/revengate/)
+* Google Play ([here](https://play.google.com/store/apps/details?id=org.revengate.revengate) or [here](https://play.google.com/apps/testing/org.revengate.revengate))
 
 ## Copying
 

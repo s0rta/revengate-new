@@ -1,0 +1,6 @@
+
+digraph {
+  node [shape=box]
+  "is_animating()=false" -> "is_animating()=true" [label = "Actor.create_anim()"]
+  "is_animating()=true" -> "is_animating()=false" [label = "emit: anims_done"]
+}

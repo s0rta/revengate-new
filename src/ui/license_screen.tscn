@@ -1,0 +1,73 @@
+[gd_scene load_steps=2 format=3 uid="uid://bo0sde31jbarc"]
+
+[ext_resource type="Script" path="res://src/ui/secondary_info_screen.gd" id="1_bu1h8"]
+
+[node name="LicenseScreen" type="Node"]
+script = ExtResource("1_bu1h8")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0431373, 0.027451, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -439.5
+offset_right = 439.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+offset_right = 888.0
+offset_bottom = 183.0
+theme_type_variation = &"BigMarging"
+
+[node name="Title" type="Label" parent="VBoxContainer/MarginContainer"]
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 838.0
+offset_bottom = 133.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_type_variation = &"TitleLabel"
+text = "Revengate is Free Software"
+horizontal_alignment = 1
+
+[node name="GPLLabel" type="Label" parent="VBoxContainer"]
+offset_left = 177.0
+offset_top = 187.0
+offset_right = 710.0
+offset_bottom = 509.0
+size_flags_horizontal = 4
+text = "
+Revengate is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Revengate is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You can find the full text of the GPL licence on the GNU website:
+https://www.gnu.org/licenses/ .
+
+"
+
+[node name="BackButton" type="Button" parent="VBoxContainer"]
+offset_left = 421.0
+offset_top = 513.0
+offset_right = 466.0
+offset_bottom = 544.0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Back"
+
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
