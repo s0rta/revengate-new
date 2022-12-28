@@ -25,9 +25,6 @@ func _ready():
 	super()
 	state = States.LISTENING
 
-func _input(_event):
-	pass
-
 func _unhandled_input(event):
 	if state != States.LISTENING:
 		return
@@ -40,7 +37,7 @@ func _unhandled_input(event):
 		print("Click at %s" % coord)
 		
 		if RevBoard.dist(get_cell_coord(), coord) == 1:
-			var index = $"/root/Main/Board".make_index()
+			var index = get_board().make_index()
 			var other = index.actor_at(coord)
 			if other and is_foe(other):
 				attack(other)

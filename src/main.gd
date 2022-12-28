@@ -20,25 +20,29 @@ extends Node2D
 # The hero moved to a different level, the UI and turn logic are affected and must be notified
 signal board_changed  
 
-@onready var hero:Actor = $Board/Hero
+@onready var hero:Actor = find_child("Hero")
 @onready var hud = $HUD
 
 func _ready():
 	# FIXME: the original board should be able to re-index it's content
-	$Board._append_terrain_cells([V.i(23, 2)], "stairs-down")
+	var board = find_child("Board")
+	assert(board, "Can't find the first game board")
+	board._append_terrain_cells([V.i(23, 2)], "stairs-down")
 	hud.set_hero(hero)
 	hero.died.connect(conclude_game)
 
 func get_board():
 	## Return the current active board
 	var current = null
-	for node in get_children():
+	var viewport = find_child("Viewport")
+	assert(viewport)
+	for node in viewport.get_children():
 		if node is RevBoard and node.visible:
 			current = node
 	if current:
 		return current
 	else:
-		return $Board
+		return find_child("Board")
 
 func switch_board_at(coord):
 	## Flip the active board with the far side of the connector at `coord`, 

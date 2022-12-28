@@ -25,7 +25,6 @@ grow_horizontal = 2
 theme_type_variation = &"BigMarging"
 
 [node name="Title" type="Label" parent="MarginContainer"]
-layout_mode = 2
 theme_type_variation = &"TitleLabel"
 text = "Game Over!"
 horizontal_alignment = 1

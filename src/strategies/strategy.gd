@@ -40,6 +40,7 @@ func _ready():
 		var parent = get_parent()
 		if parent is Actor:
 			me = parent
+	assert(me, "Strategy is not connected to an Actor")
 	me.turn_done.connect(_update_expiration)
 		
 func _update_expiration():
