@@ -92,10 +92,11 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Revengate GD"
+config/name="Revengate"
 config/description="A steampunk roguelike for Android."
 run/main_scene="res://src/ui/start_screen.tscn"
 config/features=PackedStringArray("4.0")
+boot_splash/image="res://assets/splash-screen.png"
 
 [autoload]
 
