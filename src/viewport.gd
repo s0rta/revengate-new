@@ -35,8 +35,9 @@ func _input(event):
 			var camera = get_camera_2d()
 			camera.offset -= event.relative
 		set_input_as_handled()
-	else:
-		# pass everything else to the game-nodes
+	elif not event is InputEventKey:
+		# Pass all other pointer events to the sub-nodes, keys already propagate so we 
+		# don't need to copy those.
 		var new_event = event.duplicate()
 		if new_event is InputEventMouseButton:
 			new_event.position += get_camera_2d().offset

@@ -1,4 +1,4 @@
- # Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -22,6 +22,7 @@ signal board_changed
 
 @onready var hero:Actor = find_child("Hero")
 @onready var hud = $HUD
+@onready var boards_cont: Node = find_child("Board").get_parent()
 
 func _ready():
 	# FIXME: the original board should be able to re-index it's content
@@ -30,13 +31,15 @@ func _ready():
 	board._append_terrain_cells([V.i(23, 2)], "stairs-down")
 	hud.set_hero(hero)
 	hero.died.connect(conclude_game)
+	board_changed.connect($TurnQueue.invalidate_turn)
+	await $TurnQueue.run()
+
 
 func get_board():
 	## Return the current active board
 	var current = null
-	var viewport = find_child("Viewport")
-	assert(viewport)
-	for node in viewport.get_children():
+	assert(boards_cont, "Board container must be initialized")
+	for node in boards_cont.get_children():
 		if node is RevBoard and node.visible:
 			current = node
 	if current:
@@ -58,12 +61,13 @@ func switch_board_at(coord):
 		new_board = make_board(old_board.depth + 1)
 		# connect the stairs together
 		var far = new_board.get_cell_by_terrain("stairs-up")
-		# TODO: add should return the new record
+		# TODO: add_connection() should return the new record
 		old_board.add_connection(coord, new_board, far)		
 		conn = old_board.get_connection(coord)
 		
 	old_board.set_active(false)
 	new_board.set_active(true)
+	
 	var builder = BoardBuilder.new(new_board)
 	var index = new_board.make_index()
 	builder.place(hero, true, conn.far_coord, true, null, index)
@@ -81,7 +85,7 @@ func make_board(depth):
 	var scene = load("res://src/rev_board.tscn") as PackedScene
 	var new_board = scene.instantiate() as RevBoard
 	new_board.depth = depth
-	add_child(new_board)
+	boards_cont.add_child(new_board)
 	var builder = BoardBuilder.new(new_board)
 	builder.gen_level()
 	

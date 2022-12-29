@@ -25,10 +25,6 @@ var turn := 0
 # var loop_is_active := false
 var turn_is_valid := true
 
-func _ready():
-	get_parent().board_changed.connect(invalidate_turn)
-	await run()
-
 func get_actors():
 	var actors = []
 	var main = get_parent()
