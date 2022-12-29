@@ -42,20 +42,15 @@ grow_horizontal = 0
 grow_vertical = 0
 
 [node name="CreditsButton" type="Button" parent="HBoxContainer2"]
-offset_right = 63.0
-offset_bottom = 40.0
+layout_mode = 2
 text = "Credits"
 
 [node name="LicenseButton" type="Button" parent="HBoxContainer2"]
-offset_left = 67.0
-offset_right = 133.0
-offset_bottom = 40.0
+layout_mode = 2
 text = "License"
 
 [node name="PrivacyButton" type="Button" parent="HBoxContainer2"]
-offset_left = 137.0
-offset_right = 201.0
-offset_bottom = 40.0
+layout_mode = 2
 text = "Privacy"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -69,15 +64,12 @@ grow_horizontal = 2
 grow_vertical = 0
 
 [node name="Label" type="Label" parent="HBoxContainer"]
-offset_right = 62.0
-offset_bottom = 23.0
+layout_mode = 2
 text = "version "
 
 [node name="VersionLabel" type="Label" parent="HBoxContainer"]
 unique_name_in_owner = true
-offset_left = 66.0
-offset_right = 88.0
-offset_bottom = 23.0
+layout_mode = 2
 text = "???"
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -92,10 +84,7 @@ theme = ExtResource("2_ct6s0")
 theme_type_variation = &"BigMarging"
 
 [node name="Title" type="Label" parent="MarginContainer"]
-offset_left = 50.0
-offset_top = 50.0
-offset_right = 733.0
-offset_bottom = 133.0
+layout_mode = 2
 theme_type_variation = &"TitleLabel"
 text = "Welcome to Revengate!"
 

@@ -31,3 +31,13 @@ Symbola_hint.ttf:
 Shield outline on the launch icon: 
 Public Domain by OpenClipart
 https://freesvg.org/vector-drawing-of-blank-silver-shield
+
+Icons in assets/opencliparts: 
+- CC0 by the Open Cliparts project. More info at http://www.openclipart.org
+
+Combat Sound Effects:
+CC0 by Ben (artisticdude)
+https://opengameart.org/content/rpg-sound-pack
+
+Game Over Sound Effect:
+- CC-BY-SA Yannick Gingras
