@@ -1,5 +1,8 @@
-Developing Revengate
-====================
+Developing on the Kivy Revengate Codebase
+=========================================
+
+This document describes how to get started developing for the legacy Kivy implementation of Revengate. For the most up to date development documents, see [Godot Development](godot-dev.md).
+
 
 ## Dependencies
 The pure Python dependencies are specified in `requirements-dev.txt`. 
@@ -88,7 +91,7 @@ $ echo $PWD >> $HOME/.config/guix/shell-authorized-directories
 * hero: the player character, never referrer to as PC
 * dialog: a popup window, when possible, use "form" or "popup" instead 
 * dialogue: a conversation between actors or a speech by the narrator 
-* when in doubt, name things after steam engine parts or concepts at the core of the industrial revolution
+* when in doubt, name things after steam engine parts or concepts at the core of the  industrial revolution
 
 
 ## UI paradigms

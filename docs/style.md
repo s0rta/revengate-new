@@ -1,11 +1,16 @@
 Revengate Style Guide
 =====================
 
+## coding conventions
+* follow the GDScript style guidelines published by Godot
+* max line length is 88
+
 ## common prefixes
 * gen: generate, for things with a random component
 * make: produce something that is going to be idempotent
 
 ## terminology
+* when in doubt, name things after steam engine parts or concepts at the core of the industrial revolution
 * board: a game level composed of multiple cells
 * cell: one playable square on the game board
 * coord: unless specified, the (x, y) coordinate of a cell, also `bpos` (for board pos)
