@@ -10,6 +10,7 @@ Revengate uses Godot 4. All you need is a recent build of v4.0. The Godot engine
 
 ## Coding style and conventions
 See the [style guide](style.md).
+Use the [GDScript style guide](https://docs.godotengine.org/en/latest/tutorials/scripting/gdscript/gdscript_styleguide.html) when applicable.
 
 ## Code structure
 Almost everything is in `src`. Non-code assets are near their scene code, usually in the same directory. Assets that do not belong  with any scenes or that are heavily used across scenes are in `assets`.

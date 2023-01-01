@@ -19,7 +19,10 @@ extends Node
 
 func _ready():
 	find_child("VersionLabel").text = Consts.VERSION
-
+	if not $Tabulator.getv("early-stage-disclaimer"):
+		$DisclaimerDia.popup_centered()
+		$Tabulator.setv("early-stage-disclaimer", true)
+	
 func start_new_game():
 	print("starting a new game!")
 	var tree = get_tree() as SceneTree

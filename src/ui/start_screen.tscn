@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://vn14y14c4kr5"]
+[gd_scene load_steps=4 format=3 uid="uid://vn14y14c4kr5"]
 
 [ext_resource type="Script" path="res://src/ui/start_screen.gd" id="1_krfjq"]
 [ext_resource type="Theme" uid="uid://3araln1iald0" path="res://src/ui/theme.tres" id="2_ct6s0"]
+[ext_resource type="Script" path="res://src/tabulator.gd" id="3_jig7u"]
 
 [node name="StartScreen" type="Node"]
 script = ExtResource("1_krfjq")
@@ -87,6 +88,24 @@ theme_type_variation = &"BigMarging"
 layout_mode = 2
 theme_type_variation = &"TitleLabel"
 text = "Welcome to Revengate!"
+
+[node name="DisclaimerDia" type="AcceptDialog" parent="."]
+title = ""
+size = Vector2i(1507, 241)
+borderless = true
+always_on_top = true
+dialog_text = "Hi, I'm Yannick!
+
+This is an early proof of concept of a game that I'm developing with a few friends.
+
+You will probably encounter a few bugs and you won't enjoy the level of polish of big studio games. 
+I'm glad that you are taking the time to try my game and I hope that you will have fun playing.
+
+Enjoy!
+"
+
+[node name="Tabulator" type="Node" parent="."]
+script = ExtResource("3_jig7u")
 
 [connection signal="pressed" from="NewGameButton" to="." method="start_new_game"]
 [connection signal="pressed" from="HBoxContainer2/CreditsButton" to="." method="_on_credits_button_pressed"]

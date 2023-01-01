@@ -127,4 +127,4 @@ func _input(_event):
 	if Input.is_action_just_pressed("test-2"):
 		inspect_tile()
 	elif Input.is_action_just_pressed("test"):
-		print("Testing: this is Revengate %s" % Consts.VERSION)
+		print("Testing: 1, 2... 1, 2!")		
