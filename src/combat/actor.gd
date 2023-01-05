@@ -255,6 +255,7 @@ func play_sound(node_name, weapon=null):
 		if sound:
 			sound.play()
 			return
+	assert(false, "Could not play any sound for %s!" % node_name)
 
 func update_health(hp_delta: int):
 	## Update our health and animate the event.

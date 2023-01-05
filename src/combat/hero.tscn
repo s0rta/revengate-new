@@ -18,7 +18,7 @@ text = "@"
 damage = 10
 damage_family = 1
 
-[node name="HitSound" type="AudioStreamPlayer2D" parent="sword" index="0"]
+[node name="HitSound" type="AudioStreamPlayer" parent="sword" index="0"]
 stream = ExtResource("4_u757e")
 
 [node name="MissSound" parent="." index="3"]

@@ -34,10 +34,10 @@ vertical_alignment = 1
 visible = false
 shape = SubResource("RectangleShape2D_00etm")
 
-[node name="MissSound" type="AudioStreamPlayer2D" parent="."]
+[node name="MissSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_pvm2f")
 
-[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+[node name="DeathSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_6yvk8")
 
 [node name="DamageLabel" type="Label" parent="."]
