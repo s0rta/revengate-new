@@ -29,8 +29,6 @@ signal was_attacked(attacker)
 signal died
 # the actor moved to a new location on the current board
 signal moved(coord)
-# the actor moved to a new board
-signal changed_board(arrival_coord)
 
 enum States {
 	IDLE,

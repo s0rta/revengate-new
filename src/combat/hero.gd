@@ -31,11 +31,8 @@ func _unhandled_input(event):
 	var acted = false
 	var move = null
 	state = States.ACTING
-	
-	if event.is_action_released("test"):
-		print("Test event: %s" % event.ddump())
 		
-	elif event.is_action("act-on-cell"):
+	if event.is_action("act-on-cell"):
 		var coord = RevBoard.canvas_to_board(event.position)
 		print("Click at pos=%s, coord=%s" % [event.position, RevBoard.coord_str(coord)])
 		

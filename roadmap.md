@@ -23,7 +23,7 @@ Dungeon:
 - [x] link existing levels to newly created ones
 
 UI:
-- [ ] button to follow stairs
+- [x] button to follow stairs
 - [x] start screen
 - [x] screen widget to zoom
 - [x] hero health points
@@ -45,6 +45,7 @@ Builder:
 
 UI:
 - [ ] all contributors on credits screen
+- [ ] visual feedback for when inputs are accepted
 - [ ] inventory screen
 - [ ] gesture to access non-default actions, like following stairs
 - [ ] pinch to zoom

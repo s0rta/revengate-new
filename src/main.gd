@@ -32,6 +32,7 @@ func _ready():
 	hud.set_hero(hero)
 	hero.died.connect(conclude_game)
 	board_changed.connect($TurnQueue.invalidate_turn)
+	board_changed.connect(center_on_hero)
 	await $TurnQueue.run()
 
 
@@ -123,8 +124,11 @@ func conclude_game():
 	var tree = get_tree() as SceneTree
 	tree.change_scene_to_file("res://src/ui/game_over_screen.tscn")
 
+func center_on_hero():
+	find_child("Viewport").center_on_coord(hero.get_cell_coord())
+
 func _input(_event):
 	if Input.is_action_just_pressed("test-2"):
 		inspect_tile()
 	elif Input.is_action_just_pressed("test"):
-		print("Testing: 1, 2... 1, 2!")		
+		print("Testing: 1, 2... 1, 2!")

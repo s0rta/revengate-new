@@ -54,7 +54,6 @@ position = Vector2(48, 80)
 anchor_mode = 0
 current = true
 position_smoothing_enabled = true
-position_smoothing_speed = 50.0
 
 [node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]
 

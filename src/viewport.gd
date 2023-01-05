@@ -39,3 +39,11 @@ func inject_event(event, manual_xform=true):
 func _on_zoom_slider_value_changed(value):
 	size_2d_override = size * value
 
+func center_on_coord(coord):
+	## move the camera to be directly above `coord`
+	var pos = RevBoard.board_to_canvas(coord)
+	var transform = get_final_transform().affine_inverse()
+	var camera = get_camera_2d()
+	
+	camera.offset = pos - size/2.0*transform
+	
