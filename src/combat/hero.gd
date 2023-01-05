@@ -36,8 +36,8 @@ func _unhandled_input(event):
 		var coord = RevBoard.canvas_to_board(event.position)
 		print("Click at pos=%s, coord=%s" % [event.position, RevBoard.coord_str(coord)])
 		
+		var index = get_board().make_index()
 		if RevBoard.dist(get_cell_coord(), coord) == 1:
-			var index = get_board().make_index()
 			var other = index.actor_at(coord)
 			if other and is_foe(other):
 				attack(other)
@@ -45,8 +45,7 @@ func _unhandled_input(event):
 			elif index.is_free(coord):
 				move_to(coord)
 				acted = true
-		else:
-			travel_to(coord)
+		elif index.is_free(coord) and travel_to(coord):
 			return await act()
 	elif event.is_action_pressed("follow-stairs"):
 		var board = get_board()

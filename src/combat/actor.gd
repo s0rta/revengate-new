@@ -177,12 +177,17 @@ func move_to(board_coord):
 	return anim
 
 func travel_to(there):
-	## Strat the multi-turn journey that takes us to `there`
+	## Start the multi-turn journey that takes us to `there`, 
+	##   return `false` if the journey is not possible.
 	## Depending on where we are in the turn logic, the caller might need to call `stop_listening()` 
 	## for the travelling strategy to kick in, otherwise, it will only be active on the next turn.
 	var path = get_board().path(get_cell_coord(), there)
-	var strat = Traveling.new(there, path, self, 0.9)
-	add_child(strat)
+	if path == null or path.size() == 0:
+		return false
+	else:
+		var strat = Traveling.new(there, path, self, 0.9)
+		add_child(strat)
+		return true
 
 func get_strategy():
 	## Return the best strategy for this turn or `null` if no strategy is currently valid.
