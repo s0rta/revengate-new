@@ -22,11 +22,16 @@ var hero: Actor
 func set_hero(hero_):
 	hero = hero_
 	hero.was_attacked.connect(refresh_hps)
+	hero.moved.connect(_refresh_stair_button_enabled)
 	refresh_hps()
 
 func refresh_hps(_arg=null):
 	# TODO: bold animation when dead
 	$StatusBar/HPLabel.text = "%2d" % hero.health
+
+func _refresh_stair_button_enabled(hero_coord):
+	var board = find_parent("Main").get_board()
+	$ButtonBar/StairsButton.disabled = not board.is_connector(hero_coord)
 
 func _on_stairs_button_pressed():
 	var event = InputEventAction.new()

@@ -27,6 +27,10 @@ signal anims_done
 signal was_attacked(attacker)
 # the actor met their ultimate demise
 signal died
+# the actor moved to a new location on the current board
+signal moved(coord)
+# the actor moved to a new board
+signal changed_board(arrival_coord)
 
 enum States {
 	IDLE,
@@ -170,6 +174,8 @@ func move_to(board_coord):
 	anim.tween_property(self, "position", cpos, .2)
 	dest = board_coord
 	anim.finished.connect(reset_dest, CONNECT_ONE_SHOT)
+	# TODO: it might be better to emit at the end of the animation
+	emit_signal("moved", board_coord)
 	return anim
 
 func travel_to(there):

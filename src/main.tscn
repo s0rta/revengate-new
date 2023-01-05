@@ -108,6 +108,7 @@ size_flags_vertical = 8
 [node name="StairsButton" type="Button" parent="HUD/ButtonBar"]
 layout_mode = 2
 focus_mode = 0
+disabled = true
 text = "Follow Stairs"
 
 [connection signal="value_changed" from="HUD/ZoomSlider" to="BoardArea/GestureRecognizer/Viewport" method="_on_zoom_slider_value_changed"]
