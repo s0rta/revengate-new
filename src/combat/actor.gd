@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -82,7 +82,8 @@ func _to_string():
 	var parent = get_parent()
 	if parent:
 		parent = parent.name
-	return "<Actor %s on %s at %s>" % [name, parent, get_cell_coord()]
+	var coord_str = RevBoard.coord_str(get_cell_coord())
+	return "<Actor %s on %s at %s>" % [name, parent, coord_str]
 
 func is_idle() -> bool:
 	return state == States.IDLE

@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -17,28 +17,26 @@
 
 extends SubViewport
 
-func _input(event):
-	if Input.is_action_just_pressed("zoom-in"):
-		size_2d_override_stretch = true
-		if size_2d_override == Vector2i.ZERO:
-			size_2d_override = size
-		size_2d_override /= 1.05
-		set_input_as_handled()
-	elif Input.is_action_just_pressed("zoom-out"):
-		size_2d_override_stretch = true
-		if size_2d_override == Vector2i.ZERO:
-			size_2d_override = size
-		size_2d_override *= 1.05
-		set_input_as_handled()
-	elif Input.is_action_pressed("pan"):
-		if event is InputEventMouseMotion:
-			var camera = get_camera_2d()
-			camera.offset -= event.relative
-		set_input_as_handled()
-	elif not event is InputEventKey:
-		# Pass all other pointer events to the sub-nodes, keys already propagate so we 
-		# don't need to copy those.
-		var new_event = event.duplicate()
-		if new_event is InputEventMouseButton:
-			new_event.position += get_camera_2d().offset
-		push_unhandled_input(new_event, true)
+func _ready():
+	# we set those here because the parent container tends to override them in the scene editor
+	if size_2d_override == Vector2i.ZERO:
+		size_2d_override = size
+	size_2d_override_stretch = true
+
+func inject_event(event, manual_xform=true):
+	## Send an input even to our descendent nodes.
+	## manual_xform: compute reposition manually, useful for custom event types that 
+	##   Viewport.push_event() doen't know how to tranform.
+	var offset = get_camera_2d().offset
+	if manual_xform and event.get("position"):
+		var transform = get_final_transform().affine_inverse()
+		event.position = event.position * transform + offset
+		push_unhandled_input(event, true)
+	elif event is InputEventMouseButton:
+		event.position -= offset
+
+	push_unhandled_input(event, not manual_xform)
+
+func _on_zoom_slider_value_changed(value):
+	size_2d_override = size * value
+

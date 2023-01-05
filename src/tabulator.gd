@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -44,6 +44,10 @@ func get_content():
 func save_content(values):
 	var store = FileAccess.open(fpath, FileAccess.WRITE)
 	store.store_string(var_to_str(values))
+
+func clear():
+	## Remove all records from the Tabulator data store.
+	DirAccess.remove_absolute(get_abs_path())
 
 func get_abs_path():
 	return ProjectSettings.globalize_path(fpath)

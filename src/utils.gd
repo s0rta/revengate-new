@@ -15,6 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-# meta-description: Empty file with the GPLv3 headers
-# meta-default: true
-extends _BASE_
+extends Object
+
+## Various utility functions that don't fit anywhere else.
+class_name Utils
+
+static func ddump_event(event, node, meth_name):
+	## Print a trace that event was received by node.meth_name(). 
+	## Note all events are printed, only those with high debug-value.
+	if not event is InputEventMouseMotion:
+		print("%s.%s(%s)" % [node.name, meth_name, event])

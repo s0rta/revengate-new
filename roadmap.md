@@ -25,10 +25,10 @@ Dungeon:
 UI:
 - [ ] button to follow stairs
 - [x] start screen
-- [ ] screen widget to zoom
+- [x] screen widget to zoom
 - [x] hero health points
 - [x] game over screen
-- [ ] welcome message on first game startup
+- [x] welcome message on first game startup
 
 ## v0.4
 - [ ] victory conditions

@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -70,7 +70,7 @@ func is_valid():
 	return super.is_valid() and path and not arrived and not unreachable
 
 func act():
-	print("traveling towards %s" % dest)
+	print("traveling towards %s" % RevBoard.coord_str(dest))
 	if path.size():
 		var there = path[0]
 		if there == dest:

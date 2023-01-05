@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -32,9 +32,12 @@ func _unhandled_input(event):
 	var move = null
 	state = States.ACTING
 	
-	if Input.is_action_just_pressed("act-on-cell"):
+	if event.is_action_released("test"):
+		print("Test event: %s" % event.ddump())
+		
+	elif event.is_action("act-on-cell"):
 		var coord = RevBoard.canvas_to_board(event.position)
-		print("Click at %s" % coord)
+		print("Click at pos=%s, coord=%s" % [event.position, RevBoard.coord_str(coord)])
 		
 		if RevBoard.dist(get_cell_coord(), coord) == 1:
 			var index = get_board().make_index()

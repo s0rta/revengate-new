@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -359,6 +359,13 @@ static func board_to_canvas(coord):
 	var half_tile = TILE_SIZE / 2
 	return Vector2(coord.x * TILE_SIZE + half_tile, 
 					coord.y * TILE_SIZE + half_tile)
+
+static func coord_str(coord):
+	## Return a short hand notation of coord that is different from Vector2i.to_string()
+	return "[%d:%d]" % [coord.x, coord.y]	
+
+static func canvas_to_board_str(cpos):
+	return coord_str(canvas_to_board(cpos))
 
 func set_active(active:=true):
 	## Make the board active: visible and collidable)

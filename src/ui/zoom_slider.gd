@@ -15,6 +15,22 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-# meta-description: Empty file with the GPLv3 headers
-# meta-default: true
-extends _BASE_
+extends VSlider
+
+
+func _gui_input(event):
+	if event is InputEventMouseButton and event.button_index == 1 and not event.pressed:
+		# hack: sometimes the signal implicitely emited on-press does not result in a 
+		#   viewport resize, so we re-emit on release.
+		#   This wil go away when we replace the zoom slider with pinch gestures.
+		emit_signal("value_changed", value)
+
+func _unhandled_input(event):
+	if event.is_action_pressed("zoom-in"):
+		value /= 1.05
+	elif event.is_action_pressed("zoom-out"):
+		value *= 1.05
+
+	# consume both press and release
+	if event.is_action("zoom-in") or event.is_action("zoom-out"):
+		accept_event()
