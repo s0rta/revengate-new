@@ -28,3 +28,8 @@ func refresh_hps(_arg=null):
 	# TODO: bold animation when dead
 	$StatusBar/HPLabel.text = "%2d" % hero.health
 
+func _on_stairs_button_pressed():
+	var event = InputEventAction.new()
+	event.action = "follow-stairs"
+	event.pressed = true
+	Input.parse_input_event(event)

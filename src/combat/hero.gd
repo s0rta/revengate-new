@@ -51,7 +51,7 @@ func _unhandled_input(event):
 		else:
 			travel_to(coord)
 			return await act()
-	elif Input.is_action_just_pressed("follow-stairs"):
+	elif event.is_action_pressed("follow-stairs"):
 		var board = get_board()
 		var coord = get_cell_coord()
 		if board.is_connector(coord):

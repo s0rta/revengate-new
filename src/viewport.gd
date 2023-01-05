@@ -29,12 +29,11 @@ func inject_event(event, manual_xform=true):
 	##   Viewport.push_event() doen't know how to tranform.
 	var offset = get_camera_2d().offset
 	if manual_xform and event.get("position"):
+		# TODO: we might be able to use InputEvent.xformed_by()
 		var transform = get_final_transform().affine_inverse()
 		event.position = event.position * transform + offset
-		push_unhandled_input(event, true)
 	elif event is InputEventMouseButton:
 		event.position -= offset
-
 	push_unhandled_input(event, not manual_xform)
 
 func _on_zoom_slider_value_changed(value):

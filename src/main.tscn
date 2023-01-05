@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://d4bar2tk5xswl"]
+[gd_scene load_steps=10 format=3 uid="uid://d4bar2tk5xswl"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -8,7 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="5_odllu"]
 [ext_resource type="PackedScene" uid="uid://c7ftd4dk0u84f" path="res://src/combat/monster.tscn" id="5_ottqo"]
 [ext_resource type="Script" path="res://src/hud.gd" id="7_4dw6n"]
-[ext_resource type="Script" path="res://src/event_dumper.gd" id="8_6hjy0"]
 [ext_resource type="Script" path="res://src/ui/zoom_slider.gd" id="8_7qyjt"]
 
 [node name="Main" type="Node2D"]
@@ -98,33 +97,18 @@ tick_count = 15
 script = ExtResource("8_7qyjt")
 
 [node name="ButtonBar" type="VBoxContainer" parent="HUD"]
-visible = false
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -140.0
-offset_right = 158.0
+offset_top = -50.0
+offset_right = 227.0
 grow_vertical = 0
-size_flags_horizontal = 3
-script = ExtResource("8_6hjy0")
+size_flags_vertical = 8
 
-[node name="Button" type="Button" parent="HUD/ButtonBar"]
+[node name="StairsButton" type="Button" parent="HUD/ButtonBar"]
 layout_mode = 2
 focus_mode = 0
-text = "Test 1"
-script = ExtResource("8_6hjy0")
-
-[node name="Button2" type="Button" parent="HUD/ButtonBar"]
-layout_mode = 2
-focus_mode = 0
-disabled = true
-text = "Test 2"
-script = ExtResource("8_6hjy0")
-
-[node name="Button3" type="Button" parent="HUD/ButtonBar"]
-layout_mode = 2
-focus_mode = 0
-text = "Test 3"
-script = ExtResource("8_6hjy0")
+text = "Follow Stairs"
 
 [connection signal="value_changed" from="HUD/ZoomSlider" to="BoardArea/GestureRecognizer/Viewport" method="_on_zoom_slider_value_changed"]
+[connection signal="pressed" from="HUD/ButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
