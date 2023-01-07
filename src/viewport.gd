@@ -37,7 +37,7 @@ func inject_event(event, manual_xform=true):
 	push_unhandled_input(event, not manual_xform)
 
 func _on_zoom_slider_value_changed(value):
-	size_2d_override = size * value
+	size_2d_override = size / value
 
 func center_on_coord(coord):
 	## move the camera to be directly above `coord`

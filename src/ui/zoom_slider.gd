@@ -27,9 +27,9 @@ func _gui_input(event):
 
 func _unhandled_input(event):
 	if event.is_action_pressed("zoom-in"):
-		value /= 1.05
-	elif event.is_action_pressed("zoom-out"):
 		value *= 1.05
+	elif event.is_action_pressed("zoom-out"):
+		value /= 1.05
 
 	# consume both press and release
 	if event.is_action("zoom-in") or event.is_action("zoom-out"):
