@@ -32,7 +32,7 @@ UI:
 
 ## v0.4
 - [ ] victory conditions
-- [ ] release to Google Play
+- [x] release to Google Play
 - [ ] cheat codes
 
 Combat:
@@ -47,7 +47,7 @@ UI:
 - [ ] all contributors on credits screen
 - [ ] visual feedback for when inputs are accepted
 - [ ] inventory screen
-- [ ] gesture to access non-default actions, like following stairs
+- [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
 - [ ] pinch to zoom
 - [x] privacy screen
 
@@ -68,6 +68,7 @@ UI:
 - [ ] style UI with Godot theme
   - [ ] non actions are easily distinguished from turn-ending action 
 - [ ] help screen with contextual content
+- [ ] splash image as start screen background
 
 ## v1.0
 - [ ] saved games
