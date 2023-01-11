@@ -92,12 +92,21 @@ func make_board(depth):
 	
 	var index = new_board.make_index()
 	
+	# items
+	var prev_coord = null
+	for char in "🍹🥃🏖️🪔🛡️".split():
+		var tree = load("res://src/item.tscn") as PackedScene
+		var item = tree.instantiate()
+		item.char = char
+		prev_coord = builder.place(item, false, prev_coord, true, null, index)
+	
+	# monsters
 	var nb_monsters = max(0, depth-2)
 	for i in range(nb_monsters):
 		var char = Rand.choice("rkc".split())
 		var monster = make_monster(new_board, char)
 		builder.place(monster, false, null, true, null, index)
-	
+		
 	return new_board
 		
 func make_monster(parent, char: String):

@@ -8,7 +8,6 @@
 script = ExtResource("1_krfjq")
 
 [node name="Background" type="ColorRect" parent="."]
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -16,7 +15,6 @@ grow_vertical = 2
 color = Color(0.0431373, 0.027451, 0, 1)
 
 [node name="NewGameButton" type="Button" parent="."]
-anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -30,7 +28,6 @@ grow_vertical = 2
 text = "New Game!"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
-anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -43,24 +40,18 @@ grow_horizontal = 0
 grow_vertical = 0
 
 [node name="CreditsButton" type="Button" parent="HBoxContainer2"]
-offset_right = 96.0
-offset_bottom = 44.0
+layout_mode = 2
 text = "Credits"
 
 [node name="LicenseButton" type="Button" parent="HBoxContainer2"]
-offset_left = 100.0
-offset_right = 202.0
-offset_bottom = 44.0
+layout_mode = 2
 text = "License"
 
 [node name="PrivacyButton" type="Button" parent="HBoxContainer2"]
-offset_left = 206.0
-offset_right = 304.0
-offset_bottom = 44.0
+layout_mode = 2
 text = "Privacy"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -70,19 +61,15 @@ grow_horizontal = 2
 grow_vertical = 0
 
 [node name="Label" type="Label" parent="HBoxContainer"]
-offset_right = 69.0
-offset_bottom = 26.0
+layout_mode = 2
 text = "version "
 
 [node name="VersionLabel" type="Label" parent="HBoxContainer"]
 unique_name_in_owner = true
-offset_left = 73.0
-offset_right = 98.0
-offset_bottom = 26.0
+layout_mode = 2
 text = "???"
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -341.5
@@ -93,10 +80,7 @@ theme = ExtResource("2_ct6s0")
 theme_type_variation = &"BigMarging"
 
 [node name="Title" type="Label" parent="MarginContainer"]
-offset_left = 50.0
-offset_top = 50.0
-offset_right = 733.0
-offset_bottom = 133.0
+layout_mode = 2
 theme_type_variation = &"TitleLabel"
 text = "Welcome to Revengate!"
 

@@ -28,7 +28,7 @@ signal was_attacked(attacker)
 # the actor met their ultimate demise
 signal died
 # the actor moved to a new location on the current board
-signal moved(coord)
+signal moved(from, to)
 
 enum States {
 	IDLE,
@@ -167,13 +167,14 @@ func move_to(board_coord):
 	## Move to the specified board coordinate in number of tiles from the 
 	## origin. 
 	## The move is animated, return the animation.
+	var old_coord = get_cell_coord()
 	var anim := create_anim()
 	var cpos = RevBoard.board_to_canvas(board_coord)
 	anim.tween_property(self, "position", cpos, .2)
 	dest = board_coord
 	anim.finished.connect(reset_dest, CONNECT_ONE_SHOT)
 	# TODO: it might be better to emit at the end of the animation
-	emit_signal("moved", board_coord)
+	emit_signal("moved", old_coord, board_coord)
 	return anim
 
 func travel_to(there):

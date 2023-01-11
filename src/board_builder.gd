@@ -169,15 +169,22 @@ func place(thing, in_room=true, coord=null, free:bool=true, bbox=null, index=nul
 
 	thing.place(cell, true)
 	if index:
-		index.refresh_actor(thing, false)
+		if thing is Actor:
+			index.refresh_actor(thing, false)
+		else:
+			index.refresh_item(thing, false)
 		
 	# reparent if needed
 	if thing is Node:
 		var parent = thing.get_parent()
 		if parent and parent != board:
 			parent.remove_child(thing)
+			if thing is Actor and parent is RevBoard:
+				parent.deregister_actor(thing)
 		if not parent or parent != board:
 			board.add_child(thing)
-					
+			if thing is Actor:
+				board.register_actor(thing)
+	
 	return cell
 

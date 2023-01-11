@@ -34,6 +34,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/combat/hero.gd"
 }, {
+"base": "Node2D",
+"class": &"Item",
+"language": &"GDScript",
+"path": "res://src/item.gd"
+}, {
 "base": "Strategy",
 "class": &"Paralized",
 "language": &"GDScript",
@@ -95,6 +100,7 @@ _global_script_class_icons={
 "BoardBuilder": "",
 "GestureRecognizer": "",
 "Hero": "",
+"Item": "",
 "Paralized": "",
 "PriorityQueue": "",
 "Rand": "",

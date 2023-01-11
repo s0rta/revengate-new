@@ -45,6 +45,7 @@ Builder:
 
 UI:
 - [ ] all contributors on credits screen
+- [ ] bug: cliking on dark area crashes the game
 - [ ] visual feedback for when inputs are accepted
 - [ ] inventory screen
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]

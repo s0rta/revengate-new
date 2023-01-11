@@ -281,11 +281,18 @@ class BoardIndex extends RefCounted:
 
 	var _coord_to_actor := {}
 	var _actor_to_coord := {}
+	
+	# items can be stacked, so we store them in an array
+	# the top of the stack it at the end (inder=-1)
+	var _coord_to_items := {}  # [x:y] -> Array
+	var _item_to_coord := {}
 
-	func _init(board_, actors):
+	func _init(board_, actors, items=[]):
 		board = board_
 		for actor in actors:
 			add_actor(actor)
+		for item in items:
+			add_item(item)
 
 	func has_actor(actor:Actor):
 		return _actor_to_coord.has(actor)
@@ -297,6 +304,17 @@ class BoardIndex extends RefCounted:
 		var coord = actor.get_cell_coord()
 		_coord_to_actor[coord] = actor
 		_actor_to_coord[actor] = coord
+
+	func has_item(item):
+		return _item_to_coord.has(item)
+
+	func add_item(item):
+		var coord = item.get_cell_coord()  # will be null for items inside an acton's inventory
+		assert(coord, "trying to index an item that is not on the board")
+		if not _coord_to_items.has(coord):
+			_coord_to_items[coord] = []
+		_coord_to_items[coord].append(item)
+		_item_to_coord[item] = coord
 		
 	func remove_actor(actor:Actor):
 		var coord = _actor_to_coord[actor]
@@ -317,6 +335,22 @@ class BoardIndex extends RefCounted:
 		_coord_to_actor[new_coord] = actor
 		_actor_to_coord[actor] = new_coord
 
+	func refresh_item(item:Item, strict:=true):
+		## Refresh the coordiates of `item` in the index.
+		## strict: fail if `item` is not already in the index.
+		if not has_item(item):
+			if strict:
+				assert(false, "Can't refresh item that is not already part of the index")
+			else:
+				return add_item(item)
+		var old_coord = _item_to_coord[item]
+		var new_coord = item.get_cell_coord()
+		_coord_to_items[old_coord].erase(item)
+		if not _coord_to_items.has(new_coord):
+			_coord_to_items[new_coord] = []
+		_coord_to_items[new_coord].append(item)
+		_item_to_coord[item] = new_coord
+
 	func is_occupied(coord):
 		if _coord_to_actor.has(coord):
 			return true
@@ -332,7 +366,13 @@ class BoardIndex extends RefCounted:
 			return _coord_to_actor[coord]
 		else:
 			return null
-
+	
+	func top_item_at(coord:Vector2i):
+		## return item at the top of the stack at `coord` or null if there are no items there.
+		if not _coord_to_items.has(coord) or not _coord_to_items[coord].size():
+			return null
+		return _coord_to_items[coord][-1]
+		
 	func actor_foes(me: Actor, max_dist=null):
 		## Return an array of actors for whom `me` has negative sentiment.
 		## max_dist: in board board tiles
@@ -348,6 +388,20 @@ class BoardIndex extends RefCounted:
 			if me.is_foe(actor):
 				foes.append(actor)
 		return foes
+
+	func ddump():
+		## Print a summary of the index's content.
+		print("Indexed element for %s" % self)
+		if not _actor_to_coord.size():
+			print("  no actors")
+		for actor in _actor_to_coord:
+			var coord = _actor_to_coord[actor]
+			print("  actor %s recorded at %s" % [actor, RevBoard.coord_str(coord)])
+		if not _item_to_coord.size():
+			print("  no items")
+		for coord in _coord_to_items:
+			print("  items at %s: %s" % [RevBoard.coord_str(coord), _coord_to_items[coord]])
+
 
 static func canvas_to_board(cpos):
 	## Return a coordinate in number of tiles from coord in pixels.
@@ -367,14 +421,44 @@ static func coord_str(coord):
 static func canvas_to_board_str(cpos):
 	return coord_str(canvas_to_board(cpos))
 
+func _ready():
+	detect_actors()
+	reset_items_visibility()
+
 func set_active(active:=true):
 	## Make the board active: visible and collidable)
 	visible = active
 	set_layer_enabled(0, active)
+	if active:
+		detect_actors()
+		reset_items_visibility()
+
+func detect_actors():
+	## Register all actors currently on the board.
+	for actor in get_actors():
+		register_actor(actor)
+
+func purge_registrations():
+	## Remove all actor registrations
+	for actor in get_actors():
+		deregister_actor(actor)
+	
+func register_actor(actor:Actor):
+	## connect the relevant signals from `actor` so we can keep track of them
+	if not actor.moved.is_connected(_on_actor_moved):
+		actor.moved.connect(_on_actor_moved)
+		var dereg = deregister_actor.bind(actor)
+		actor.died.connect(dereg, CONNECT_ONE_SHOT)
+	
+func deregister_actor(actor):
+	## disconnect our connections with `actor`
+	if actor.moved.is_connected(_on_actor_moved):
+		actor.moved.disconnect(_on_actor_moved)
 
 func make_index():
 	var actors = get_actors()
-	return BoardIndex.new(self, actors)
+	var items = get_items()
+	return BoardIndex.new(self, actors, items)
 
 func _append_terrain_cells(cells, terrain_name):
 	assert(terrain_name in INDEXED_TERRAINS)
@@ -626,3 +710,34 @@ func get_actors():
 		if node is Actor:
 			actors.append(node)
 	return actors
+
+func get_items():
+	## Return an array of items presently on this board, excluding items in actors' inventory.
+	## For stacked items they are returned bottom of the stack first. 
+	var items = []
+	for node in get_children():
+		if node is Item:
+			items.append(node)
+	return items
+
+func reset_items_visibility():
+	## Show or hide items depending on this stacking order. No animations performed.
+	# FIXME: check actors too
+	var index = make_index()
+	for item in get_items():
+		var coord = item.get_cell_coord()
+		if item == index.top_item_at(coord) and not index.actor_at(coord):
+			item.flash_in()
+		else:
+			item.hide()
+
+func _on_actor_moved(from, to):
+	## fade in and out the visibility of items being stepped on/off.
+	var index = make_index()
+	var item = index.top_item_at(from)
+	if item:
+		item.fade_in()
+	item = index.top_item_at(to)
+	if item:
+		item.fade_out()
+	

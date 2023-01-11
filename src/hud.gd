@@ -29,7 +29,7 @@ func refresh_hps(_arg=null):
 	# TODO: bold animation when dead
 	$StatusBar/HPLabel.text = "%2d" % hero.health
 
-func _refresh_stair_button_enabled(hero_coord):
+func _refresh_stair_button_enabled(_old_coord, hero_coord):
 	var board = find_parent("Main").get_board()
 	$ButtonBar/StairsButton.disabled = not board.is_connector(hero_coord)
 

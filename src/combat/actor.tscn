@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://dl5etg1cv5hbt"]
+[gd_scene load_steps=5 format=3 uid="uid://dl5etg1cv5hbt"]
 
 [ext_resource type="Script" path="res://src/combat/actor.gd" id="1_8kibw"]
-[ext_resource type="FontFile" uid="uid://dnkyou1p4t7yl" path="res://assets/fonts/kalimati.ttf" id="2_f285x"]
 [ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="3_pvm2f"]
 [ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="4_6yvk8"]
 
@@ -12,7 +11,6 @@ size = Vector2(32, 32)
 script = ExtResource("1_8kibw")
 
 [node name="Label" type="Label" parent="."]
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -7.5
@@ -23,9 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 auto_translate = false
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("2_f285x")
-theme_override_font_sizes/font_size = 28
+theme_type_variation = &"AsciiGraphics"
 text = "x"
 horizontal_alignment = 1
 vertical_alignment = 1

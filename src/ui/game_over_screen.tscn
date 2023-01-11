@@ -7,7 +7,6 @@
 script = ExtResource("1_mynd1")
 
 [node name="Background" type="ColorRect" parent="."]
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -15,7 +14,6 @@ grow_vertical = 2
 color = Color(0.0431373, 0.027451, 0, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -222.0
@@ -25,16 +23,12 @@ grow_horizontal = 2
 theme_type_variation = &"BigMarging"
 
 [node name="Title" type="Label" parent="MarginContainer"]
-offset_left = 50.0
-offset_top = 50.0
-offset_right = 394.0
-offset_bottom = 133.0
+layout_mode = 2
 theme_type_variation = &"TitleLabel"
 text = "Game Over!"
 horizontal_alignment = 1
 
 [node name="BackButton" type="Button" parent="."]
-anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -47,7 +41,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Back"
 
-[node name="Player" type="AudioStreamPlayer" parent="."]
+[node name="SadSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_mw3q7")
 autoplay = true
 
