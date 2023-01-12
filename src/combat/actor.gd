@@ -312,7 +312,14 @@ func get_weapons():
 	## All active weapons are eligible for a strike during the turn.
 	## Ex: a fast feline would return a bite and two claw weapons.
 	return find_children("", "Weapon")
-	
+
+func get_items():
+	var items = []
+	for node in get_children():
+		if node is Item:
+			items.append(node)
+	return items
+
 func get_evasion(weapon):
 	## Return the evasion stat against a particular weapon. 
 	return agility
@@ -360,4 +367,17 @@ func strike(foe, weapon):
 		damage *= CRITICAL_MULT
 	damage *= foe.get_resist_mult(weapon)
 	damage = max(1, round(damage))
-	return anim_hit(foe, weapon, damage)	
+	return anim_hit(foe, weapon, damage)
+
+func drop_item(item):
+	assert(item.get_parent() == self, "must possess an item before dropping it")
+	var board = get_board()
+	var builder = BoardBuilder.new(board)
+	builder.place(item, false, get_cell_coord(), false)
+	
+func pick_item(item):
+	# TODO: dist() == 1 would also work nicely
+	assert(item.get_cell_coord() == get_cell_coord(), "can only pick items that are under us")
+	item.visible = false
+	item.reparent(self)
+	
