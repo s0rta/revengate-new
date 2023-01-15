@@ -139,5 +139,10 @@ func center_on_hero():
 func _input(_event):
 	if Input.is_action_just_pressed("test-2"):
 		inspect_tile()
+		$HUD/InventoryScreen.fill_actor_items(hero)
+		$HUD/InventoryScreen.show()
 	elif Input.is_action_just_pressed("test"):
 		print("Testing: 1, 2... 1, 2!")
+		var item = Rand.choice(hero.get_items())
+		hero.drop_item(item)
+		print("%s dropped a %s" % [hero, item])
