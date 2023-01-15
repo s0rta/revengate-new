@@ -18,20 +18,30 @@
 extends Node
 
 var hero: Actor
+@onready var loot_button = find_child("LootButton")
+@onready var stairs_button = find_child("StairsButton")
 
 func set_hero(hero_):
 	hero = hero_
 	hero.was_attacked.connect(refresh_hps)
-	hero.moved.connect(_refresh_stair_button_enabled)
+	hero.moved.connect(refresh_buttons_vis)
 	refresh_hps()
+	refresh_buttons_vis(null, hero.get_cell_coord())
 
 func refresh_hps(_arg=null):
 	# TODO: bold animation when dead
 	$StatusBar/HPLabel.text = "%2d" % hero.health
 
-func _refresh_stair_button_enabled(_old_coord, hero_coord):
-	var board = find_parent("Main").get_board()
-	$ButtonBar/StairsButton.disabled = not board.is_connector(hero_coord)
+func update_states_at(hero_coord):
+	## Refresh internal states by taking into account a recent change at `hero_coord`
+	var board = hero.get_board()
+	stairs_button.visible = board.is_connector(hero_coord)
+	var index = board.make_index()
+	loot_button.visible = null != index.top_item_at(hero_coord)
+
+func refresh_buttons_vis(_old_coord, hero_coord):
+	## update the visibility of some action button depending on where the hero is standing
+	update_states_at(hero_coord)
 
 func _on_stairs_button_pressed():
 	var event = InputEventAction.new()

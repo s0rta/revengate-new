@@ -32,11 +32,11 @@ func _unhandled_input(event):
 	var move = null
 	state = States.ACTING
 		
+	var index = get_board().make_index()
 	if event.is_action("act-on-cell"):
 		var coord = RevBoard.canvas_to_board(event.position)
 		print("Click at pos=%s, coord=%s" % [event.position, RevBoard.coord_str(coord)])
 		
-		var index = get_board().make_index()
 		if RevBoard.dist(get_cell_coord(), coord) == 1:
 			var other = index.actor_at(coord)
 			if other and is_foe(other):
@@ -47,6 +47,11 @@ func _unhandled_input(event):
 				acted = true
 		elif index.is_free(coord) and travel_to(coord):
 			return await act()
+	elif event.is_action_pressed("loot-here"):
+		var item = index.top_item_at(get_cell_coord())
+		if item:
+			pick_item(item)
+			acted = true
 	elif event.is_action_pressed("follow-stairs"):
 		var board = get_board()
 		var coord = get_cell_coord()

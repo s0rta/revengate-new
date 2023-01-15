@@ -29,6 +29,8 @@ signal was_attacked(attacker)
 signal died
 # the actor moved to a new location on the current board
 signal moved(from, to)
+# the actor picked an item that used to be at `old_coord`
+signal picked_item(old_coord)
 
 enum States {
 	IDLE,
@@ -377,7 +379,8 @@ func drop_item(item):
 	
 func pick_item(item):
 	# TODO: dist() == 1 would also work nicely
-	assert(item.get_cell_coord() == get_cell_coord(), "can only pick items that are under us")
+	var item_coord = item.get_cell_coord()
+	assert(item_coord == get_cell_coord(), "can only pick items that are under us")
 	item.visible = false
 	item.reparent(self)
-	
+	emit_signal("picked_item", item_coord)

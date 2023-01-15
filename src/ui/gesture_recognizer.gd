@@ -33,9 +33,18 @@ class ActEvent extends InputEventAction:
 		pressed = pressed_
 
 	func ddump():
-		return "MyEvent: action=%s, pressed=%s, pos=%s, coord=%s" % [action, pressed, position, RevBoard.canvas_to_board_str(position)]
+		return "ActEvent: action=%s, pressed=%s, pos=%s, coord=%s" % [action, pressed, position, RevBoard.canvas_to_board_str(position)]
 
-	
+## Loot exactly where the hero is currently standing
+class LootEvent extends InputEventAction:
+	func _init(pressed_=true):
+		action = "loot-here"
+		pressed = pressed_
+
+	func ddump():
+		return "LootEvent: action=%s, pressed=%s" % [action, pressed]
+
+
 func _gui_input(event):
 	if event.is_action_pressed("pan"):
 		has_panned = false
@@ -56,6 +65,12 @@ func _gui_input(event):
 			var camera = viewport.get_camera_2d()
 			camera.offset -= event.relative
 		accept_event()
+
+func start_loot():
+	## Start the loot action, pass the control to Hero
+	var event = LootEvent.new()
+	viewport.inject_event(event)
+	
 
 func ddump():
 	var transform = viewport.get_final_transform()

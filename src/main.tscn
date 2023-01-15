@@ -118,25 +118,38 @@ value = 1.0
 tick_count = 15
 script = ExtResource("8_7qyjt")
 
-[node name="ButtonBar" type="VBoxContainer" parent="HUD"]
+[node name="MarginContainer" type="MarginContainer" parent="HUD"]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 65.0
-offset_top = 78.0
-offset_right = 292.0
-offset_bottom = 128.0
+offset_top = -188.0
+offset_right = 265.0
 grow_vertical = 0
+size_flags_vertical = 0
+
+[node name="ButtonBar" type="VBoxContainer" parent="HUD/MarginContainer"]
+layout_mode = 2
 size_flags_vertical = 8
 
-[node name="StairsButton" type="Button" parent="HUD/ButtonBar"]
+[node name="StairsButton" type="Button" parent="HUD/MarginContainer/ButtonBar"]
 layout_mode = 2
 focus_mode = 0
-disabled = true
 text = "Follow Stairs"
+
+[node name="LootButton" type="Button" parent="HUD/MarginContainer/ButtonBar"]
+layout_mode = 2
+focus_mode = 0
+text = "Loot"
+
+[node name="InventoryButton" type="Button" parent="HUD/MarginContainer/ButtonBar"]
+layout_mode = 2
+focus_mode = 0
+text = "Inventory"
 
 [node name="InventoryScreen" parent="HUD" instance=ExtResource("11_mrt21")]
 visible = false
 
+[connection signal="picked_item" from="BoardArea/GestureRecognizer/Viewport/Board/Hero" to="HUD" method="update_states_at"]
 [connection signal="value_changed" from="HUD/ZoomSlider" to="BoardArea/GestureRecognizer/Viewport" method="_on_zoom_slider_value_changed"]
-[connection signal="pressed" from="HUD/ButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
+[connection signal="pressed" from="HUD/MarginContainer/ButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
+[connection signal="pressed" from="HUD/MarginContainer/ButtonBar/LootButton" to="BoardArea/GestureRecognizer" method="start_loot"]
