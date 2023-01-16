@@ -44,7 +44,7 @@ Builder:
 - [ ] mazes can fill arbitrary areas of a board
 
 UI:
-- [ ] all contributors on credits screen
+- [x] all contributors on credits screen
 - [ ] bug: cliking on dark area crashes the game
 - [x] flying HPs are bigger
 - [ ] visual feedback for when inputs are accepted
