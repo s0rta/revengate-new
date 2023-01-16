@@ -52,6 +52,8 @@ func _unhandled_input(event):
 		if item:
 			pick_item(item)
 			acted = true
+	elif event.is_action_pressed("show-inventory"):
+		acted = await $"/root/Main".show_inventory_screen()
 	elif event.is_action_pressed("follow-stairs"):
 		var board = get_board()
 		var coord = get_cell_coord()

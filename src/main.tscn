@@ -153,3 +153,4 @@ visible = false
 [connection signal="value_changed" from="HUD/ZoomSlider" to="BoardArea/GestureRecognizer/Viewport" method="_on_zoom_slider_value_changed"]
 [connection signal="pressed" from="HUD/MarginContainer/ButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
 [connection signal="pressed" from="HUD/MarginContainer/ButtonBar/LootButton" to="BoardArea/GestureRecognizer" method="start_loot"]
+[connection signal="pressed" from="HUD/MarginContainer/ButtonBar/InventoryButton" to="BoardArea/GestureRecognizer" method="show_inventory"]

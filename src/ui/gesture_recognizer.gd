@@ -44,6 +44,14 @@ class LootEvent extends InputEventAction:
 	func ddump():
 		return "LootEvent: action=%s, pressed=%s" % [action, pressed]
 
+## Loot exactly where the hero is currently standing
+class InventoryEvent extends InputEventAction:
+	func _init(pressed_=true):
+		action = "show-inventory"
+		pressed = pressed_
+
+	func ddump():
+		return "InventoryEvent: action=%s, pressed=%s" % [action, pressed]
 
 func _gui_input(event):
 	if event.is_action_pressed("pan"):
@@ -70,7 +78,11 @@ func start_loot():
 	## Start the loot action, pass the control to Hero
 	var event = LootEvent.new()
 	viewport.inject_event(event)
-	
+
+func show_inventory():
+	## Start the loot action, pass the control to Hero
+	var event = InventoryEvent.new()
+	viewport.inject_event(event)
 
 func ddump():
 	var transform = viewport.get_final_transform()

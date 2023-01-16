@@ -20,10 +20,13 @@ extends Control
 class_name InventoryScreen
 
 signal inventory_changed
+signal closed(acted:bool)
 
 @onready var tree_view:Tree = find_child("Tree")
 var button_img = load("res://src/ui/drop_btn.png")
 var actor = null
+# Did the player did something that counts as a turn action while the screen was open?
+var acted := false  
 
 func _ready():
 	inventory_changed.connect(reset_empty_label_vis)
@@ -35,6 +38,14 @@ func _input(event):
 		accept_event()
 	tree_view.set_column_title(0, "description")
 	tree_view.set_column_title(1, "action")
+
+func popup():
+	acted = false
+	show()
+
+func close():
+	hide()
+	emit_signal("closed", acted) 
 
 func fill_actor_items(actor_:Actor):
 	actor = actor_
@@ -56,12 +67,12 @@ func reset_empty_label_vis():
 		$EmptyLabel.visible = not items.size()
 
 func _on_back_button_pressed():
-	# FIXME: turn handling when we come back from that screen
-	hide()
+	close()
 	
 func _on_tree_button_clicked(row, column, id, mouse_button_index):
 	var item = row.get_metadata(0)
 	row.set_button_disabled(column, id, true)
 	row.free()
 	actor.drop_item(item)
+	acted = true
 	emit_signal("inventory_changed")

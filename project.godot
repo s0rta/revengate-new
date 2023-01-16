@@ -204,6 +204,10 @@ loot-here={
 "deadzone": 0.5,
 "events": []
 }
+show-inventory={
+"deadzone": 0.5,
+"events": []
+}
 
 [physics]
 

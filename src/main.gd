@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -47,6 +47,12 @@ func get_board():
 		return current
 	else:
 		return find_child("Board")
+
+func show_inventory_screen() -> bool:
+	$HUD/InventoryScreen.fill_actor_items(hero)
+	$HUD/InventoryScreen.popup()
+	var acted = await $HUD/InventoryScreen.closed
+	return acted
 
 func switch_board_at(coord):
 	## Flip the active board with the far side of the connector at `coord`, 
@@ -139,8 +145,6 @@ func center_on_hero():
 func _input(_event):
 	if Input.is_action_just_pressed("test-2"):
 		inspect_tile()
-		$HUD/InventoryScreen.fill_actor_items(hero)
-		$HUD/InventoryScreen.show()
 	elif Input.is_action_just_pressed("test"):
 		print("Testing: 1, 2... 1, 2!")
 		var item = Rand.choice(hero.get_items())
