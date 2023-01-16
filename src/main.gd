@@ -147,6 +147,3 @@ func _input(_event):
 		inspect_tile()
 	elif Input.is_action_just_pressed("test"):
 		print("Testing: 1, 2... 1, 2!")
-		var item = Rand.choice(hero.get_items())
-		hero.drop_item(item)
-		print("%s dropped a %s" % [hero, item])
