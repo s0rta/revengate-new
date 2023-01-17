@@ -149,4 +149,6 @@ func _input(_event):
 		print("Testing: 1, 2... 1, 2!")
 		
 		print("Hero modifiers: %s" % [hero.get_modifiers()])
-		
+		for i in range(10):
+			print("Strenght roll: %s" % hero.stat_roll("strength"))		
+			print("To-hit trial: %s" % hero.stat_trial(50, "agility"))		

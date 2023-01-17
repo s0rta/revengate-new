@@ -131,7 +131,22 @@ func get_stat(stat_name, challenge=null):
 	assert(stat_name in CORE_STATS, "%s is not a core stat" % stat_name)
 	var mods = get_modifiers()
 	return get(stat_name) + mods.get(stat_name, 0) + mods.get(challenge, 0)
-	
+
+func stat_roll(stat_name, challenge=null):
+	## Return a random number in [0..1] weighted by the given stat. 
+	## The distribution is uniform.
+	## 0 is terrible, 1 is glorious
+	var stat = get_stat(stat_name, challenge)
+	# 1% better stat than MU gives 1% higher return on average 
+	return (1 + (stat - MU) / 100.0) * randf()
+
+func stat_trial(difficulty, stat_name, challenge=null):
+	## Return true if a random stat_roll is >= than difficulty
+	## Typical difficulties should be from 0 (trivial) to 100 (extremely hard), 
+	## but the scale is unbounded.
+	var stat = get_stat(stat_name, challenge)
+	return difficulty <= randfn(stat, SIGMA)
+
 func get_board():
 	## Return the RevBoard this actor is playing on, return `null` is no board is currently active.
 	# board is either the parent or the global board
@@ -384,18 +399,18 @@ func strike(foe, weapon):
 	
 	var crit = false
 	# to-hit	
-	var roll = randfn(MU, SIGMA)
-	# FIXME: high agility should increase to-hit
-	if roll < foe.get_evasion(weapon):
+	if stat_trial(foe.get_evasion(weapon), "agility"):
 		# Miss!
 		return anim_miss(foe, weapon)
-	
+
+	# TODO: agility should influence the chance of a critical hit	
+	var roll = randfn(MU, SIGMA)
 	if roll > MU + 2*SIGMA:
 		crit = true
 
 	# damage roll		
-	var stat = get_stat("strength")  # TODO: will be intelligence for spells
-	var damage = (1 + (stat - MU) / 100.0) * weapon.damage * randf()
+	# TODO: use intelligence for spells
+	var damage = stat_roll("strength") * weapon.damage
 	if crit:
 		damage *= CRITICAL_MULT
 	damage *= foe.get_resist_mult(weapon)

@@ -69,7 +69,7 @@ position = Vector2(2, 2)
 
 [node name="StatsModifiers" type="Node" parent="BoardArea/GestureRecognizer/Viewport/Board/Hero/AmuletOfStrength"]
 script = ExtResource("8_o84sl")
-strength = 3
+strength = 30
 
 [node name="Wrench" parent="BoardArea/GestureRecognizer/Viewport/Board" instance=ExtResource("7_7lgrm")]
 position = Vector2(176, 176)
