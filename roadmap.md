@@ -37,7 +37,7 @@ UI:
 
 Combat:
 - [ ] new evasion stat to increase all to-hit rolls
-- [ ] items for progression
+- [x] items for progression
 - [ ] damage over time
 
 Builder:

@@ -147,3 +147,6 @@ func _input(_event):
 		inspect_tile()
 	elif Input.is_action_just_pressed("test"):
 		print("Testing: 1, 2... 1, 2!")
+		
+		print("Hero modifiers: %s" % [hero.get_modifiers()])
+		

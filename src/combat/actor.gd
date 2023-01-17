@@ -44,6 +44,9 @@ enum Factions {
 	BEASTS
 }
 
+const CORE_STATS := ["agility", "strength"] 
+const CHALLENGES := ["fencing"]
+
 # std. dev. for a normal distribution more or less contained in 0..100
 const SIGMA := 12.5  
 # average of the above distribution
@@ -102,6 +105,33 @@ func stop_listening():
 	assert(is_listening())
 	state = States.IDLE
 
+func _combine_modifiers(main_mods, sub_mods):
+	## Combine all the values of `sub_mods` into `main_mods. Changes are done in-place.
+	if sub_mods == null:
+		return
+	for key in CORE_STATS + CHALLENGES:
+		var val = sub_mods.get(key)
+		if val:
+			main_mods[key] += val
+			
+func get_modifiers():
+	## return a dict of all the modifiers from items and conditions combined together
+	var all_mods = {}
+	for key in CORE_STATS + CHALLENGES:
+		all_mods[key] = 0
+	var mods = null
+	for item in get_children():
+		# modifier can be on a sub-node on in a dict attribute
+		_combine_modifiers(all_mods, item.find_child("StatsModifiers"))
+		_combine_modifiers(all_mods, item.get("stats_modifiers"))
+	return all_mods
+
+func get_stat(stat_name, challenge=null):
+	## Return the effective stat with all the active modifiers included
+	assert(stat_name in CORE_STATS, "%s is not a core stat" % stat_name)
+	var mods = get_modifiers()
+	return get(stat_name) + mods.get(stat_name, 0) + mods.get(challenge, 0)
+	
 func get_board():
 	## Return the RevBoard this actor is playing on, return `null` is no board is currently active.
 	# board is either the parent or the global board
@@ -324,7 +354,7 @@ func get_items():
 
 func get_evasion(weapon):
 	## Return the evasion stat against a particular weapon. 
-	return agility
+	return get_stat("agility")
 	
 func get_resist_mult(weapon):
 	## Return a multiplier to attenuate `weapon`'s damage based on our resistances.
@@ -355,6 +385,7 @@ func strike(foe, weapon):
 	var crit = false
 	# to-hit	
 	var roll = randfn(MU, SIGMA)
+	# FIXME: high agility should increase to-hit
 	if roll < foe.get_evasion(weapon):
 		# Miss!
 		return anim_miss(foe, weapon)
@@ -363,7 +394,7 @@ func strike(foe, weapon):
 		crit = true
 
 	# damage roll		
-	var stat = strength  # TODO: will be intelligence for spells
+	var stat = get_stat("strength")  # TODO: will be intelligence for spells
 	var damage = (1 + (stat - MU) / 100.0) * weapon.damage * randf()
 	if crit:
 		damage *= CRITICAL_MULT

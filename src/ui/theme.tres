@@ -1,7 +1,8 @@
-[gd_resource type="Theme" load_steps=9 format=3 uid="uid://3araln1iald0"]
+[gd_resource type="Theme" load_steps=10 format=3 uid="uid://3araln1iald0"]
 
 [ext_resource type="FontFile" uid="uid://dgoumyria673g" path="res://assets/fonts/kalimati.ttf" id="1_1u55p"]
 [ext_resource type="FontFile" uid="uid://dxmp7favkxwsh" path="res://assets/fonts/Symbola_hint.ttf" id="2_dl3k4"]
+[ext_resource type="FontVariation" uid="uid://crtqckgwsuhhq" path="res://assets/fonts/system_with_emojis.tres" id="3_sym2b"]
 
 [sub_resource type="FontVariation" id="FontVariation_ifbsj"]
 base_font = ExtResource("1_1u55p")
@@ -95,6 +96,7 @@ Button/colors/font_pressed_color = Color(0.670588, 0.207843, 0.0313726, 1)
 Button/constants/h_separation = 0
 Button/constants/outline_size = 0
 Button/font_sizes/font_size = 26
+Button/fonts/font = ExtResource("3_sym2b")
 Button/styles/disabled = SubResource("StyleBoxFlat_mjio8")
 Button/styles/focus = SubResource("StyleBoxFlat_k4os5")
 Button/styles/hover = SubResource("StyleBoxFlat_lqhqx")
@@ -107,7 +109,7 @@ Label/constants/shadow_offset_x = 0
 Label/constants/shadow_offset_y = 0
 Label/constants/shadow_outline_size = 0
 Label/font_sizes/font_size = 18
-Label/fonts/font = null
+Label/fonts/font = ExtResource("3_sym2b")
 Label/styles/normal = null
 MarginContainer/constants/margin_bottom = 24
 MarginContainer/constants/margin_left = 24
@@ -119,3 +121,4 @@ TitleLabel/colors/font_outline_color = Color(1, 0.768627, 0.415686, 1)
 TitleLabel/colors/font_shadow_color = Color(1, 0.768627, 0.415686, 1)
 TitleLabel/constants/outline_size = 1
 TitleLabel/font_sizes/font_size = 60
+Tree/fonts/font = ExtResource("3_sym2b")

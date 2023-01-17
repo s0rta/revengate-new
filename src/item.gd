@@ -29,16 +29,15 @@ const VIS_MODULATE := Color.WHITE
 func _ready():
 	$Label.text = char
 
-#func _init(char_:String):
-#	char = char_
-#	$Label.text = char
-
 func get_cell_coord():
 	## Return the board position of the item or null if the item is not on a board.
 	## This can happen for example if the item is in an actor's inventory.
 
 	# FIXME: detect when we are not on a board
 	return RevBoard.canvas_to_board(position)
+
+func get_short_desc():
+	return "%s %s" % [$Label.text, name]
 
 func place(coord, _immediate=null):
 	## Place the item at the specific coordinate without animations.

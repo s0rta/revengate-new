@@ -15,12 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends "res://src/ui/secondary_info_screen.gd"
+extends Node
 
-@onready var credits_label = find_child("CreditsLabel")
+## Container for stats modification ability of items and conditions.
+## Add this as a sub-node of an item or condition to give it the make is change 
+## the stats of the carrier.
+class_name StatsModifiers
 
-func _ready():
-	var file = FileAccess.open("res://CREDITS.md", FileAccess.READ)
-	if file:
-		credits_label.text = file.get_as_text()
-
+@export var agility := 0
+@export var strength := 0

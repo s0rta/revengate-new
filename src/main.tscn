@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://d4bar2tk5xswl"]
+[gd_scene load_steps=13 format=3 uid="uid://d4bar2tk5xswl"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://src/hud.gd" id="7_4dw6n"]
 [ext_resource type="PackedScene" uid="uid://cxf4glg0aasio" path="res://src/item.tscn" id="7_7lgrm"]
 [ext_resource type="Script" path="res://src/ui/zoom_slider.gd" id="8_7qyjt"]
+[ext_resource type="Script" path="res://src/combat/stats_modifiers.gd" id="8_o84sl"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/inventory_screen.tscn" id="11_mrt21"]
 
 [node name="Main" type="Node2D"]
@@ -62,10 +63,13 @@ visible = false
 position = Vector2(2, 2)
 char = "🍸"
 
-[node name="Potion4" parent="BoardArea/GestureRecognizer/Viewport/Board/Hero" instance=ExtResource("7_7lgrm")]
+[node name="AmuletOfStrength" parent="BoardArea/GestureRecognizer/Viewport/Board/Hero" instance=ExtResource("7_7lgrm")]
 visible = false
 position = Vector2(2, 2)
-char = "🍸"
+
+[node name="StatsModifiers" type="Node" parent="BoardArea/GestureRecognizer/Viewport/Board/Hero/AmuletOfStrength"]
+script = ExtResource("8_o84sl")
+strength = 3
 
 [node name="Wrench" parent="BoardArea/GestureRecognizer/Viewport/Board" instance=ExtResource("7_7lgrm")]
 position = Vector2(176, 176)
