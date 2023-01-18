@@ -1,4 +1,4 @@
-# Copyright © 2022–2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -15,23 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-## Various game constants that are used across scenes.
-## This script is autoloaded at `Consts`
-extends Node
+class_name CombatUtils extends Object
 
-const VERSION := "0.2.9"
-
-enum DamageFamily {
-	NONE,
-	IMPACT, 
-	SLICE, 
-	PIERCE, 
-	ARCANE, 
-	HEAT, 
-	ACID, 
-	POISON, 
-	CHEMICAL
-}
-
-const CORE_STATS := ["agility", "strength"] 
-const CHALLENGES := ["fencing"]
+static func node_core_stats(node):
+	## Return the node core combat stats as a dict.
+	## This only works for nodes that store core stats as direct attributes, 
+	##   like Actor and Effect.
+	if node == null:
+		return {}
+	var mods = {}
+	for key in Consts.CORE_STATS + Consts.CHALLENGES:
+		var val = node.get(key)
+		if val:
+			mods[key] = val
+	return mods

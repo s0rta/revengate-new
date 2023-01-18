@@ -16,8 +16,7 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 @tool
-extends Actor
-class_name Hero
+class_name Hero extends Actor
 
 const ENEMY_FACTIONS = [Factions.BEASTS]
 

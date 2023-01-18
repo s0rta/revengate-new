@@ -16,7 +16,7 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 @tool
-extends Actor
+class_name Monster extends Actor
 
 func act():
 	state = States.ACTING

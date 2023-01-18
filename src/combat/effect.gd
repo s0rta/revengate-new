@@ -25,6 +25,8 @@ class_name Effect
 # healing could also be expressed as a negative damage, but positive numbers are more intuitive
 @export var healing := 0
 @export var damage_family := Consts.DamageFamily.NONE
+@export var strength := 0
+@export var agility := 0
 @export var nb_turns := 1
 
 class Condition extends Node:
@@ -32,6 +34,7 @@ class Condition extends Node:
 	var damage: int
 	var damage_family: Consts.DamageFamily
 	var nb_turns: int
+	var stats_modifiers: Dictionary
 
 	func _init(damage_, damage_family_, nb_turns_):
 		damage = damage_
@@ -58,6 +61,7 @@ func apply(actor, immediate=false):
 	##   at the beginning of the next turn.
 	assert(healing == 0, "healing is not implemented")
 	var cond = Condition.new(damage, damage_family, nb_turns)
+	cond.stats_modifiers = CombatUtils.node_core_stats(self)
 	actor.add_child(cond)
 	if immediate:
 		cond.erupt()

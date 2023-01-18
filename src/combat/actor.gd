@@ -44,9 +44,6 @@ enum Factions {
 	BEASTS
 }
 
-const CORE_STATS := ["agility", "strength"] 
-const CHALLENGES := ["fencing"]
-
 # std. dev. for a normal distribution more or less contained in 0..100
 const SIGMA := 12.5  
 # average of the above distribution
@@ -109,7 +106,7 @@ func _combine_modifiers(main_mods, sub_mods):
 	## Combine all the values of `sub_mods` into `main_mods. Changes are done in-place.
 	if sub_mods == null:
 		return
-	for key in CORE_STATS + CHALLENGES:
+	for key in Consts.CORE_STATS + Consts.CHALLENGES:
 		var val = sub_mods.get(key)
 		if val:
 			main_mods[key] += val
@@ -117,7 +114,7 @@ func _combine_modifiers(main_mods, sub_mods):
 func get_modifiers():
 	## return a dict of all the modifiers from items and conditions combined together
 	var all_mods = {}
-	for key in CORE_STATS + CHALLENGES:
+	for key in Consts.CORE_STATS + Consts.CHALLENGES:
 		all_mods[key] = 0
 	var mods = null
 	for item in get_children():
@@ -128,7 +125,7 @@ func get_modifiers():
 
 func get_stat(stat_name, challenge=null):
 	## Return the effective stat with all the active modifiers included
-	assert(stat_name in CORE_STATS, "%s is not a core stat" % stat_name)
+	assert(stat_name in Consts.CORE_STATS, "%s is not a core stat" % stat_name)
 	var mods = get_modifiers()
 	return get(stat_name) + mods.get(stat_name, 0) + mods.get(challenge, 0)
 
