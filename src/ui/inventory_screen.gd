@@ -55,7 +55,7 @@ func fill_actor_items(actor_:Actor):
 		var row = tree_view.create_item(root)
 		row.set_metadata (0, item)
 		row.set_text(0, item.get_short_desc())
-		row.add_button(0, button_img)
+		row.add_button(1, button_img)
 
 func reset_empty_label_vis():
 	if not actor:
