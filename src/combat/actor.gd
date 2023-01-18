@@ -64,7 +64,7 @@ const CRITICAL_MULT := 0.35
 @export var agility := 50
 @export var intelligence := 50
 @export var perception := 50
-@export var resistance: Weapon.DamageFamily = 0  # at most one!
+@export var resistance := Consts.DamageFamily.NONE  # at most one!
 
 @export var faction := Factions.NONE
 
@@ -354,6 +354,13 @@ func is_impartial(other: Actor):
 	## Return whether `self` has neutral sentiment towards `other`
 	return !is_friend(other) and !is_foe(other)
 
+func get_conditions():
+	var conds = []
+	for node in get_children():
+		if node is Effect.Condition:
+			conds.append(node)
+	return conds
+
 func get_weapons():
 	## Return all the active weapons for the current turn.
 	## All active weapons are eligible for a strike during the turn.
@@ -413,9 +420,21 @@ func strike(foe, weapon):
 	var damage = stat_roll("strength") * weapon.damage
 	if crit:
 		damage *= CRITICAL_MULT
-	damage *= foe.get_resist_mult(weapon)
-	damage = max(1, round(damage))
+	damage = foe.normalize_damage(weapon, damage)
+	weapon.apply_all_effects(foe)
 	return anim_hit(foe, weapon, damage)
+
+func normalize_damage(weapon, damage):
+	## Return the number of hit points after applying resistances and minimums with `self` as 
+	## the receiver of `damage`.
+	damage *= get_resist_mult(weapon)
+	return max(1, round(damage))
+
+func activate_conditions():
+	## give all conditions a chance to heal us or make us suffer
+	for cond in get_conditions():
+		if is_alive():  # there is a chance that we won't make it through all the conditions
+			cond.erupt()
 
 func drop_item(item):
 	assert(item.get_parent() == self, "must possess an item before dropping it")

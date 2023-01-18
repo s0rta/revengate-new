@@ -133,7 +133,7 @@ func conclude_game():
 	$TurnQueue.shutdown()
 	if hero.is_animating():
 		print("can't shutdown quite yet, hero animating...")
-		# nothing else to do: Actors free themselves after they die
+		# nothing else to do: Actors free() themselves after they die
 		await hero.anims_done
 		print("hero done animating!")
 	var tree = get_tree() as SceneTree

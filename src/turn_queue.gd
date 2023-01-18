@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022–2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -57,9 +57,15 @@ func run():
 		print("=== Start of turn %d ===" % turn)
 		actors = get_actors()
 		print("playing actors: %s " % [actors])
+		# 1st pass: conditions
+		for actor in actors:
+			actor.activate_conditions()
+		# 2nd pass: actions
 		for actor in actors:
 			if not turn_is_valid:
 				break
+			if actor == null or not actor.is_alive():  # died from conditions
+				continue
 			actor.act()
 			if not actor.is_idle():
 				print("waiting for %s..." % actor)
@@ -67,6 +73,7 @@ func run():
 				print("done with %s!" % actor)
 			if turn_is_valid and actor.is_animating():
 				await get_tree().create_timer(ACTING_DELAY).timeout
+		# 3rd pass: finalize animations
 		for actor in actors:
 			if not turn_is_valid:
 				break
@@ -80,4 +87,3 @@ func run():
 		turn += 1
 		turn_is_valid = true
 	state = States.STOPPED
-	

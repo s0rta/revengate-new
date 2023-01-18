@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022–2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -19,18 +19,10 @@ extends Node
 class_name Weapon
 @icon("res://assets/opencliparts/sword_01.svg")
 
-enum DamageFamily {
-	NONE,
-	IMPACT, 
-	SLICE, 
-	PIERCE, 
-	ARCANE, 
-	HEAT, 
-	ACID, 
-	POISON, 
-	CHEMICAL
-}
-
-
 @export var damage := 1
-@export var damage_family: DamageFamily
+@export var damage_family: Consts.DamageFamily
+
+func apply_all_effects(victim):
+	for node in get_children():
+		if node is Effect:
+			node.apply(victim)

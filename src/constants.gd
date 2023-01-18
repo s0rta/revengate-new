@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022–2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -20,3 +20,15 @@
 extends Node
 
 const VERSION := "0.2.0"
+
+enum DamageFamily {
+	NONE,
+	IMPACT, 
+	SLICE, 
+	PIERCE, 
+	ARCANE, 
+	HEAT, 
+	ACID, 
+	POISON, 
+	CHEMICAL
+}
