@@ -15,10 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Node2D
-
 ## something that can fit in someone's inventory
-class_name Item
+class_name Item extends Node2D
 
 const FADE_DURATION := .3
 const FADE_MODULATE := Color(.7, .7, .7, 0.0)

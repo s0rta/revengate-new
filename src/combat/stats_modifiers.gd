@@ -15,12 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Node
-
 ## Container for stats modification ability of items and conditions.
 ## Add this as a sub-node of an item or condition to give it the make is change 
 ## the stats of the carrier.
-class_name StatsModifiers
+class_name StatsModifiers extends Node
 
 @export var agility := 0
 @export var strength := 0

@@ -15,8 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends TileMap
-class_name RevBoard
+class_name RevBoard extends TileMap
 
 const TILE_SIZE = 32
 

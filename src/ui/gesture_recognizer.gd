@@ -15,10 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends SubViewportContainer
-
 ## Recognize some basic gestures and pass selectively them to the Game Area Viewport.
-class_name GestureRecognizer
+class_name GestureRecognizer extends SubViewportContainer
 
 @onready var viewport: SubViewport = find_child("Viewport")
 var has_panned := false

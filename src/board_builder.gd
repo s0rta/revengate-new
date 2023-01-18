@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022–2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends RefCounted
 ## A factory class to generate game boards
-class_name BoardBuilder
+class_name BoardBuilder extends RefCounted
 
 const MIN_ROOM_SIDE = 4  # 2 floor and 2 walls
 const ROOM_PAD = 1  # one stone in between the walls of adjacent rooms

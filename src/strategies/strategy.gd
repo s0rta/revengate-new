@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -16,10 +16,10 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 @icon("res://src/strategies/strat.svg")
-extends Node
 
 ## Base class for strategies to automate the actions of an actor.
-class_name Strategy
+class_name Strategy extends Node
+
 
 
 @export_range(0, 1) var priority := 0.0  # in 0..1

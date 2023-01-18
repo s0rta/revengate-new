@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022–2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -15,38 +15,33 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Object
 ##  Utilities for random number generation
-class_name Rand
+class_name Rand extends Object
 
 enum Orientation {HORIZONTAL, VERTICAL, RANDOM, LONG_SIDE}
 
 static func rstest(success_rate:float):
-	"""	Randon Success Test: return `true` success_rate fraction of the times 
-	
-	success_rate: in 0..1
-	"""
+	## Randon Success Test: return `true` success_rate fraction of the times 
+	## success_rate: in 0..1
 	return randf() <= success_rate
 
 static func rftest(failure_rate:float):
-	""" Randon Failure Test: return `true` failure_rate fraction of the times 
-	
-	failure_rate: in 0..1
-	"""
+	## Randon Failure Test: return `true` failure_rate fraction of the times 
+	## failure_rate: in 0..1
 	return randf() > failure_rate
 	
 static func choice(seq:Array):
-	""" Return a random element of seq. """
+	## Return a random element of seq.
 	var idx = randi_range(0, seq.size()-1)
 	return seq[idx]
 
 static func weighted_choice(seq:Array, weights:Array):
-	""" Select an element from seq with a bias specified by weights. 
+	## Select an element from seq with a bias specified by weights. 
+	##
+	## weights: relative bias of each element of seq, must have the same number of 
+	## elements as seq. For example, to make the first item 3 times as likely to be selected and the 
+	## second one half as likely, you would pass weights = [3, 0.5, 1, 1 ..., 1].
 	
-	weights: relative bias of each element of seq, must have the same number of 
-	elements as seq. For example, to make the first item 3 times as likely to be selected and the 
-	second one half as likely, you would pass weights = [3, 0.5, 1, 1 ..., 1].
-	"""
 	# inspired by the Python implementation of random.choices()
 	var cum_weights = [0]
 	var tot = 0
@@ -60,16 +55,15 @@ static func weighted_choice(seq:Array, weights:Array):
 	return seq[cum_weights.bsearch(val) - 1]
 
 static func biased_choice(seq:Array, bias, biased_elem=null):
-	""" Select an element from seq with a bias for one of the element. 
-	
-	bias: how many times is the biased element more likely to be select 
-	ex.: 0.5 for half as likely, 2 for twice as likely 
-	
-	If biased_elem elem is provided and is present in the sequence, it's 
-	first occurence will be biased; if it's not in the sequence, no item 
-	will receive bias. If biased_elem is not provided, the first element 
-	receives the bias. 
-	"""
+	## Select an element from seq with a bias for one of the element. 
+	## 
+	## bias: how many times is the biased element more likely to be select 
+	## ex.: 0.5 for half as likely, 2 for twice as likely 
+	## 
+	## If biased_elem elem is provided and is present in the sequence, it's 
+	## first occurence will be biased; if it's not in the sequence, no item 
+	## will receive bias. If biased_elem is not provided, the first element 
+	## receives the bias.
 	# inspired by the Python implementation of random.choices()
 	
 	# find the biased element

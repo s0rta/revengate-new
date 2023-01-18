@@ -16,8 +16,7 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 @tool
-extends Area2D
-class_name Actor
+class_name Actor extends Area2D
 
 # the actor won't play again until the turn counter is incremented
 signal turn_done  

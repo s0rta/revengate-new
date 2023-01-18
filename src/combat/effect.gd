@@ -16,10 +16,8 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 @icon("res://assets/opencliparts/flame_warning.svg")
-extends Node
-
 ## An effect that can result in a damage-over-time condition
-class_name Effect
+class_name Effect extends Node
 
 @export var damage := 0
 # healing could also be expressed as a negative damage, but positive numbers are more intuitive

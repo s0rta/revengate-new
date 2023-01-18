@@ -16,8 +16,7 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 @icon("res://assets/opencliparts/sword_01.svg")
-extends Node
-class_name Weapon
+class_name Weapon extends Node
 
 @export var damage := 1
 @export var damage_family: Consts.DamageFamily

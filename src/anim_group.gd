@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022–2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -15,11 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Node
-
 ## A group of tween animations.
 ## This class privides aggregate synchronisation primitives for all the animations in the group.
-class_name AnimGroup
+class_name AnimGroup extends Node
 
 signal finished
 

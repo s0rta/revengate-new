@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Strategy
 ## Go to a specific destination, abort if the destination becomes unreachable.
-class_name Traveling
+class_name Traveling extends Strategy
 
 var dest: Vector2i
 var path

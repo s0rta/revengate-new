@@ -15,10 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Object
-
 ## Various utility functions that don't fit anywhere else.
-class_name Utils
+class_name Utils extends Object
 
 static func ddump_event(event, node, meth_name):
 	## Print a trace that event was received by node.meth_name(). 

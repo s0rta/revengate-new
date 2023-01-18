@@ -15,9 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Control
-
-class_name InventoryScreen
+class_name InventoryScreen extends Control
 
 signal inventory_changed
 signal closed(acted:bool)

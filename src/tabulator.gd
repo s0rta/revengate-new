@@ -15,14 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Node
-
 ## A registry of world events, inluding things that happened across multiple games.
 
 ## A tabulator was a machine to sort and organize punch cards. The first one was developped in the 
 ## late 19th century by Herman Hollerith before he founded the company that would later become IBM 
 ## to manufacture such machines.
-class_name Tabulator
+class_name Tabulator extends Node
 const fpath = "user://world_events.data"
 
 func getv(key, default=null):
