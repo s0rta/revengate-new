@@ -38,7 +38,7 @@ UI:
 Combat:
 - [ ] new evasion stat to increase all to-hit rolls
 - [x] items for progression
-- [ ] damage over time
+- [x] damage over time
 
 Builder:
 - [ ] mazes can fill arbitrary areas of a board

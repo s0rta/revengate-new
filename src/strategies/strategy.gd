@@ -15,10 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
+@icon("res://src/strategies/strat.svg")
 extends Node
+
 ## Base class for strategies to automate the actions of an actor.
 class_name Strategy
-@icon("res://src/strategies/strat.svg")
 
 
 @export_range(0, 1) var priority := 0.0  # in 0..1

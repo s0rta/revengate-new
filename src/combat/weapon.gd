@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
+@icon("res://assets/opencliparts/sword_01.svg")
 extends Node
 class_name Weapon
-@icon("res://assets/opencliparts/sword_01.svg")
 
 @export var damage := 1
 @export var damage_family: Consts.DamageFamily

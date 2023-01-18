@@ -8,130 +8,6 @@
 
 config_version=5
 
-_global_script_classes=[{
-"base": "Area2D",
-"class": &"Actor",
-"language": &"GDScript",
-"path": "res://src/combat/actor.gd"
-}, {
-"base": "Node",
-"class": &"AnimGroup",
-"language": &"GDScript",
-"path": "res://src/anim_group.gd"
-}, {
-"base": "RefCounted",
-"class": &"BoardBuilder",
-"language": &"GDScript",
-"path": "res://src/board_builder.gd"
-}, {
-"base": "Node",
-"class": &"Effect",
-"language": &"GDScript",
-"path": "res://src/combat/effect.gd"
-}, {
-"base": "SubViewportContainer",
-"class": &"GestureRecognizer",
-"language": &"GDScript",
-"path": "res://src/ui/gesture_recognizer.gd"
-}, {
-"base": "Actor",
-"class": &"Hero",
-"language": &"GDScript",
-"path": "res://src/combat/hero.gd"
-}, {
-"base": "Control",
-"class": &"InventoryScreen",
-"language": &"GDScript",
-"path": "res://src/ui/inventory_screen.gd"
-}, {
-"base": "Node2D",
-"class": &"Item",
-"language": &"GDScript",
-"path": "res://src/item.gd"
-}, {
-"base": "Strategy",
-"class": &"Paralized",
-"language": &"GDScript",
-"path": "res://src/strategies/paralized.gd"
-}, {
-"base": "RefCounted",
-"class": &"PriorityQueue",
-"language": &"GDScript",
-"path": "res://addons/GodotPriorityQueue/priority_queue.gd"
-}, {
-"base": "Object",
-"class": &"Rand",
-"language": &"GDScript",
-"path": "res://src/rand.gd"
-}, {
-"base": "TileMap",
-"class": &"RevBoard",
-"language": &"GDScript",
-"path": "res://src/rev_board.gd"
-}, {
-"base": "Node",
-"class": &"StatsModifiers",
-"language": &"GDScript",
-"path": "res://src/combat/stats_modifiers.gd"
-}, {
-"base": "Node",
-"class": &"Strategy",
-"language": &"GDScript",
-"path": "res://src/strategies/strategy.gd"
-}, {
-"base": "Node",
-"class": &"Tabulator",
-"language": &"GDScript",
-"path": "res://src/tabulator.gd"
-}, {
-"base": "Strategy",
-"class": &"Tracking",
-"language": &"GDScript",
-"path": "res://src/strategies/tracking.gd"
-}, {
-"base": "Strategy",
-"class": &"Traveling",
-"language": &"GDScript",
-"path": "res://src/strategies/traveling.gd"
-}, {
-"base": "Object",
-"class": &"Utils",
-"language": &"GDScript",
-"path": "res://src/utils.gd"
-}, {
-"base": "Object",
-"class": &"V",
-"language": &"GDScript",
-"path": "res://src/v.gd"
-}, {
-"base": "Node",
-"class": &"Weapon",
-"language": &"GDScript",
-"path": "res://src/combat/weapon.gd"
-}]
-_global_script_class_icons={
-"Actor": "",
-"AnimGroup": "",
-"BoardBuilder": "",
-"Effect": "res://assets/opencliparts/flame_warning.svg",
-"GestureRecognizer": "",
-"Hero": "",
-"InventoryScreen": "",
-"Item": "",
-"Paralized": "",
-"PriorityQueue": "",
-"Rand": "",
-"RevBoard": "",
-"StatsModifiers": "",
-"Strategy": "res://src/strategies/strat.svg",
-"Tabulator": "",
-"Tracking": "",
-"Traveling": "",
-"Utils": "",
-"V": "",
-"Weapon": "res://assets/opencliparts/sword_01.svg"
-}
-
 [application]
 
 config/name="Revengate"
@@ -150,6 +26,10 @@ Consts="*res://src/constants.gd"
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="viewport"
+
+[editor]
+
+export/convert_text_resources_to_binary=true
 
 [gui]
 
