@@ -23,6 +23,11 @@ func _ready():
 		size_2d_override = size
 	size_2d_override_stretch = true
 
+func pos_to_local(pos):
+	var offset = get_camera_2d().offset
+	var transform = get_final_transform().affine_inverse()
+	return pos * transform + offset
+
 func inject_event(event, manual_xform=true):
 	## Send an input even to our descendent nodes.
 	## manual_xform: compute reposition manually, useful for custom event types that 
@@ -30,6 +35,7 @@ func inject_event(event, manual_xform=true):
 	var offset = get_camera_2d().offset
 	if manual_xform and event.get("position"):
 		# TODO: we might be able to use InputEvent.xformed_by()
+		#   - use pos_to_local()
 		var transform = get_final_transform().affine_inverse()
 		event.position = event.position * transform + offset
 	elif event is InputEventMouseButton:

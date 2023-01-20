@@ -122,12 +122,6 @@ func make_monster(parent, char: String):
 	parent.add_child(monster)
 	return monster
 
-func inspect_tile():
-	var coord = hero.get_cell_coord()
-	var data = (get_board() as RevBoard).get_cell_tile_data(0, coord)
-	print("Data here is %s" % [[var_to_str(data), data.get_custom_data
-("is_connector")]])
-
 func conclude_game():
 	## do a final bit of cleanup then show the Game Over screen
 	$TurnQueue.shutdown()
@@ -144,11 +138,14 @@ func center_on_hero():
 
 func _input(_event):
 	if Input.is_action_just_pressed("test-2"):
-		inspect_tile()
+		test2()
+		$/root.set_input_as_handled()
 	elif Input.is_action_just_pressed("test"):
-		print("Testing: 1, 2... 1, 2!")
-		
-		print("Hero modifiers: %s" % [hero.get_modifiers()])
-		for i in range(10):
-			print("Strenght roll: %s" % hero.stat_roll("strength"))		
-			print("To-hit trial: %s" % hero.stat_trial(50, "agility"))		
+		test()
+		$/root.set_input_as_handled()
+
+func test():
+	print("Testing: 1, 2... 1, 2!")
+	
+func test2():
+	print("Testing: 2, 1... 2, 1!")

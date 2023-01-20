@@ -30,7 +30,7 @@ func _unhandled_input(event):
 	var acted = false
 	var move = null
 	state = States.ACTING
-		
+	
 	var index = get_board().make_index()
 	if event.is_action("act-on-cell"):
 		var coord = RevBoard.canvas_to_board(event.position)

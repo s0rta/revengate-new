@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -18,8 +18,18 @@
 extends Node
 
 var hero: Actor
+# TODO: use unique %name to simplify some of those
 @onready var loot_button = find_child("LootButton")
 @onready var stairs_button = find_child("StairsButton")
+@onready var hplabel = find_child("HPLabel")
+@onready var cheats_bar = find_child("CheatsBar")
+
+func _ready():
+	# only show the testing UI on debug builds
+	var rbar = find_child("RButtonBar")
+	for node in rbar.get_children():
+		if node is Button:
+			node.visible = OS.is_debug_build()
 
 func set_hero(hero_):
 	hero = hero_
@@ -30,7 +40,7 @@ func set_hero(hero_):
 
 func refresh_hps(_arg=null):
 	# TODO: bold animation when dead
-	$StatusBar/HPLabel.text = "%2d" % hero.health
+	hplabel.text = "%2d" % hero.health
 
 func update_states_at(hero_coord):
 	## Refresh internal states by taking into account a recent change at `hero_coord`
@@ -48,3 +58,14 @@ func _on_stairs_button_pressed():
 	event.action = "follow-stairs"
 	event.pressed = true
 	Input.parse_input_event(event)
+
+func toggle_cheats_bar():
+	cheats_bar.visible = not cheats_bar.visible
+
+func show_action_label(text):
+	$ActionLabel.text = text
+	$ActionLabel.show()
+	
+func hide_action_label():
+	$ActionLabel.hide()
+

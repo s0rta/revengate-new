@@ -9,6 +9,7 @@ This is a list of loose ends, code optimization, and small tasks for the Godot i
 ## Strategies
 - [ ] Tracking asserts that the target is on the same board
 - [ ] Hero will sometimes move into an enemy while travelling
+- [ ] Travelling ignores conditions
 
 ## Board
 - [ ] inspect_tile() includes coord, pos, terrain, destination board for connectors

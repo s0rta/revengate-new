@@ -33,7 +33,7 @@ UI:
 ## v0.4
 - [ ] victory conditions
 - [x] release to Google Play
-- [ ] cheat codes
+- [x] cheat codes
 
 Combat:
 - [ ] new evasion stat to increase all to-hit rolls

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://d4bar2tk5xswl"]
+[gd_scene load_steps=14 format=3 uid="uid://d4bar2tk5xswl"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://src/ui/zoom_slider.gd" id="8_7qyjt"]
 [ext_resource type="Script" path="res://src/combat/stats_modifiers.gd" id="8_o84sl"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/inventory_screen.tscn" id="11_mrt21"]
+[ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_58o83")
@@ -25,7 +26,7 @@ color = Color(0.890196, 0.67451, 0.113725, 1)
 
 [node name="BoardArea" type="Node" parent="."]
 
-[node name="GestureRecognizer" type="SubViewportContainer" parent="BoardArea"]
+[node name="GestureSurveyor" type="SubViewportContainer" parent="BoardArea"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -34,51 +35,51 @@ grow_vertical = 2
 stretch = true
 script = ExtResource("2_dy763")
 
-[node name="Viewport" type="SubViewport" parent="BoardArea/GestureRecognizer"]
+[node name="Viewport" type="SubViewport" parent="BoardArea/GestureSurveyor"]
 handle_input_locally = false
 size = Vector2i(1280, 720)
 render_target_update_mode = 4
 script = ExtResource("2_5k2x3")
 
-[node name="Board" parent="BoardArea/GestureRecognizer/Viewport" instance=ExtResource("3_vl15m")]
+[node name="Board" parent="BoardArea/GestureSurveyor/Viewport" instance=ExtResource("3_vl15m")]
 layer_0/name = "ground"
 layer_0/tile_data = PackedInt32Array(0, 0, 3, 1, 65536, 3, 2, 131072, 3, 3, 196608, 3, 4, 0, 4, 5, 131072, 4, 6, 131072, 4, 7, 65536, 4, 8, 196608, 4, 9, 65536, 4, 10, 131072, 4, 11, 0, 4, 12, 196608, 4, 13, 65536, 4, 14, 65536, 4, 15, 65536, 4, 16, 131072, 4, 17, 131072, 4, 18, 0, 4, 19, 65536, 4, 20, 65536, 4, 21, 65536, 4, 22, 196608, 4, 23, 65536, 4, 24, 65536, 4, 25, 65536, 4, 26, 0, 4, 27, 0, 4, 65536, 0, 3, 65537, 0, 2, 65538, 65536, 2, 65539, 0, 3, 65540, 0, 4, 65541, 196608, 4, 65542, 196608, 4, 65543, 131072, 4, 65544, 0, 4, 65545, 65536, 4, 65546, 131072, 4, 65547, 196608, 4, 65548, 65536, 4, 65549, 0, 4, 65550, 131072, 4, 65551, 196608, 4, 65552, 0, 4, 65553, 65536, 4, 65554, 196608, 4, 65555, 327680, 3, 65556, 131072, 3, 65557, 65536, 3, 65558, 458752, 3, 65559, 131072, 3, 65560, 196608, 3, 65561, 196608, 3, 65562, 65536, 3, 65563, 196608, 4, 131072, 0, 3, 131073, 0, 2, 131074, 65536, 2, 131075, 0, 3, 131080, 196608, 3, 131081, 131072, 3, 131082, 196608, 3, 131083, 393216, 3, 131084, 0, 3, 131085, 196608, 3, 131086, 262144, 3, 131087, 327680, 3, 131088, 0, 3, 131089, 65536, 3, 131090, 196608, 3, 131091, 262144, 3, 131092, 0, 2, 131093, 196608, 2, 131094, 0, 2, 131095, 0, 0, 131096, 0, 3, 131097, 393216, 3, 131098, 458752, 3, 131099, 65536, 4, 196608, 0, 3, 196609, 0, 2, 196610, 65536, 2, 196611, 0, 3, 196613, 65536, 2, 196617, 65536, 2, 196618, 131072, 2, 196619, 196608, 2, 196620, 65536, 2, 196621, 196608, 2, 196622, 65536, 2, 196623, 65536, 2, 196624, 131072, 2, 196625, 0, 2, 196626, 458752, 3, 196627, 458752, 3, 196628, 131072, 2, 196629, 65536, 2, 196630, 131072, 2, 196631, 65536, 2, 196632, 131072, 3, 196633, 65536, 3, 196634, 0, 3, 196635, 65536, 4, 262144, 0, 3, 262145, 0, 2, 262146, 65536, 2, 262147, 0, 2, 262155, 65536, 2, 262156, 0, 2, 262157, 196608, 2, 262158, 0, 2, 262159, 0, 3, 262160, 131072, 3, 262161, 196608, 2, 262162, 458752, 3, 262163, 131072, 3, 262164, 196608, 2, 262165, 65536, 2, 262166, 0, 2, 262168, 0, 3, 262169, 0, 4, 262170, 65536, 4, 262171, 0, 4, 327680, 0, 3, 327681, 0, 2, 327682, 65536, 2, 327683, 0, 3, 327684, 0, 3, 327693, 131072, 2, 327694, 196608, 2, 327695, 131072, 3, 327696, 131072, 3, 327697, 131072, 2, 327698, 393216, 3, 327699, 393216, 3, 327700, 0, 2, 327701, 196608, 2, 327702, 0, 2, 327704, 262144, 3, 327705, 196608, 4, 327706, 196608, 4, 327707, 131072, 4, 393216, 0, 3, 393217, 65536, 3, 393218, 131072, 3, 393219, 0, 3, 393220, 262144, 3, 393221, 196608, 2, 393229, 131072, 2, 393230, 65536, 2, 393231, 327680, 3, 393232, 458752, 3, 393233, 131072, 2, 393234, 393216, 3, 393235, 458752, 3, 393236, 131072, 2, 393237, 131072, 2, 393238, 65536, 2, 393240, 393216, 3, 393241, 0, 4, 393242, 196608, 4, 393243, 0, 4, 458752, 196608, 4, 458753, 0, 4, 458754, 0, 4, 458755, 0, 4, 458756, 65536, 3, 458757, 131072, 2, 458758, 65536, 2, 458759, 65536, 2, 458765, 65536, 2, 458766, 131072, 2, 458767, 458752, 3, 458768, 65536, 3, 458769, 65536, 2, 458770, 65536, 3, 458771, 262144, 3, 458772, 0, 2, 458773, 0, 2, 458774, 131072, 2, 458776, 458752, 3, 458777, 131072, 4, 458778, 0, 4, 458779, 131072, 4, 524288, 196608, 4, 524289, 131072, 4, 524290, 196608, 4, 524291, 131072, 4, 524292, 262144, 3, 524293, 65536, 2, 524294, 0, 2, 524295, 0, 2, 524296, 196608, 2, 524297, 65536, 2, 524301, 65536, 2, 524302, 65536, 2, 524303, 65536, 3, 524304, 131072, 3, 524305, 65536, 2, 524306, 131072, 3, 524307, 327680, 3, 524308, 0, 2, 524309, 196608, 2, 524310, 65536, 2, 524312, 327680, 3, 524313, 0, 4, 524314, 196608, 4, 524315, 0, 4, 589824, 131072, 4, 589825, 196608, 4, 589826, 196608, 4, 589827, 131072, 4, 589828, 196608, 3, 589829, 262144, 3, 589830, 458752, 3, 589831, 131072, 2, 589832, 393216, 3, 589833, 458752, 3, 589834, 327680, 3, 589835, 131072, 3, 589836, 0, 3, 589837, 327680, 3, 589838, 458752, 3, 589839, 262144, 3, 589840, 0, 3, 589841, 0, 2, 589842, 262144, 3, 589843, 458752, 3, 589844, 0, 2, 589845, 0, 2, 589846, 0, 2, 589848, 327680, 3, 589849, 196608, 4, 589850, 131072, 4, 589851, 131072, 4, 655360, 131072, 4, 655361, 131072, 4, 655362, 0, 4, 655363, 131072, 4, 655364, 131072, 4, 655365, 0, 3, 655366, 262144, 3, 655367, 65536, 2, 655368, 196608, 3, 655369, 131072, 3, 655370, 262144, 3, 655371, 131072, 3, 655372, 131072, 3, 655373, 0, 3, 655374, 65536, 3, 655375, 0, 2, 655376, 196608, 2, 655377, 65536, 2, 655378, 196608, 2, 655379, 196608, 2, 655380, 0, 2, 655381, 131072, 2, 655382, 0, 2, 655384, 131072, 3, 655385, 196608, 4, 655386, 65536, 4, 655387, 0, 4, 720896, 0, 4, 720897, 0, 4, 720898, 65536, 4, 720899, 0, 4, 720900, 131072, 4, 720901, 0, 3, 720902, 0, 2, 720903, 131072, 2, 720904, 65536, 2, 720905, 131072, 2, 720906, 131072, 2, 720907, 65536, 2, 720908, 196608, 2, 720909, 196608, 2, 720910, 0, 2, 720911, 196608, 2, 720912, 262144, 3, 720913, 131072, 3, 720914, 393216, 3, 720915, 65536, 3, 720916, 196608, 2, 720917, 196608, 2, 720918, 131072, 2, 720920, 0, 3, 720921, 65536, 4, 720922, 0, 4, 720923, 0, 4, 786432, 196608, 4, 786433, 131072, 4, 786434, 131072, 4, 786435, 131072, 4, 786436, 0, 4, 786437, 0, 3, 786438, 65536, 2, 786439, 65536, 2, 786440, 65536, 2, 786441, 131072, 2, 786442, 131072, 2, 786443, 131072, 2, 786444, 196608, 2, 786445, 458752, 3, 786446, 65536, 3, 786447, 196608, 3, 786448, 327680, 3, 786449, 196608, 4, 786450, 0, 4, 786451, 262144, 3, 786452, 196608, 2, 786453, 196608, 2, 786454, 131072, 2, 786456, 65536, 3, 786457, 65536, 4, 786458, 196608, 4, 786459, 131072, 4, 851968, 65536, 4, 851969, 0, 4, 851970, 196608, 4, 851971, 131072, 4, 851972, 131072, 4, 851973, 327680, 3, 851974, 65536, 2, 851975, 0, 2, 851976, 196608, 2, 851977, 65536, 2, 851978, 196608, 2, 851979, 196608, 2, 851980, 0, 2, 851981, 458752, 3, 851982, 0, 4, 851983, 65536, 4, 851984, 196608, 4, 851985, 196608, 4, 851986, 65536, 4, 851987, 65536, 3, 851988, 196608, 2, 851989, 65536, 2, 851990, 131072, 2, 851992, 131072, 3, 851993, 0, 4, 851994, 65536, 4, 851995, 196608, 4, 917504, 196608, 4, 917505, 196608, 4, 917506, 0, 4, 917507, 131072, 4, 917508, 131072, 4, 917509, 262144, 3, 917510, 131072, 2, 917511, 0, 2, 917512, 0, 2, 917513, 65536, 2, 917514, 65536, 2, 917515, 65536, 2, 917516, 196608, 2, 917517, 262144, 3, 917518, 65536, 3, 917519, 196608, 3, 917520, 327680, 3, 917521, 327680, 3, 917522, 131072, 3, 917523, 196608, 3, 917524, 0, 2, 917525, 196608, 2, 917526, 0, 2, 917528, 327680, 3, 917529, 131072, 4, 917530, 196608, 4, 917531, 65536, 4, 983040, 65536, 4, 983041, 65536, 4, 983042, 65536, 4, 983043, 131072, 4, 983044, 131072, 4, 983045, 131072, 3, 983046, 0, 2, 983047, 65536, 2, 983048, 65536, 2, 983049, 0, 2, 983050, 0, 2, 983051, 0, 2, 983052, 196608, 2, 983053, 131072, 2, 983054, 196608, 2, 983055, 131072, 2, 983056, 196608, 2, 983057, 196608, 2, 983058, 65536, 2, 983059, 196608, 2, 983060, 131072, 2, 983061, 0, 2, 983062, 131072, 2, 983064, 327680, 3, 983065, 65536, 4, 983066, 0, 4, 983067, 0, 4, 1048576, 131072, 4, 1048577, 131072, 4, 1048578, 196608, 4, 1048579, 0, 4, 1048580, 131072, 4, 1048581, 393216, 3, 1048582, 262144, 3, 1048583, 65536, 3, 1048584, 0, 3, 1048585, 458752, 3, 1048586, 65536, 3, 1048587, 458752, 3, 1048588, 65536, 3, 1048589, 65536, 3, 1048590, 65536, 3, 1048591, 393216, 3, 1048592, 393216, 3, 1048593, 65536, 3, 1048594, 131072, 3, 1048595, 393216, 3, 1048596, 458752, 3, 1048597, 65536, 3, 1048598, 393216, 3, 1048600, 131072, 3, 1048601, 196608, 4, 1048602, 131072, 4, 1048603, 131072, 4, 1114112, 131072, 4, 1114113, 131072, 4, 1114114, 131072, 4, 1114115, 65536, 4, 1114116, 65536, 4, 1114117, 196608, 4, 1114118, 196608, 4, 1114119, 196608, 4, 1114120, 65536, 4, 1114121, 65536, 4, 1114122, 0, 4, 1114123, 131072, 4, 1114124, 0, 4, 1114125, 65536, 4, 1114126, 196608, 4, 1114127, 196608, 4, 1114128, 65536, 4, 1114129, 196608, 4, 1114130, 0, 4, 1114131, 0, 4, 1114132, 131072, 4, 1114133, 196608, 4, 1114134, 131072, 4, 1114135, 196608, 4, 1114136, 0, 4, 1114137, 196608, 4, 1114138, 131072, 4, 1114139, 0, 4, 262167, 65536, 2, 327703, 196608, 2, 393239, 196608, 2, 458775, 196608, 2, 524311, 131072, 2, 589847, 131072, 2, 655383, 0, 2, 720919, 0, 2, 786455, 131072, 2, 851991, 196608, 2, 917527, 196608, 2, 983063, 65536, 2, 1048599, 393216, 3, 196614, 196608, 2, 262150, 0, 2, 262151, 65536, 2, 327687, 131072, 2, 327688, 65536, 2, 327689, 196608, 2, 393225, 131072, 2, 393226, 196608, 2, 393227, 196608, 2, 458763, 131072, 2, 262149, 196608, 2, 262148, 65536, 2, 196612, 327680, 3, 131076, 393216, 3, 131077, 458752, 3, 131078, 131072, 3, 196615, 131072, 2, 131079, 196608, 3, 327686, 0, 2, 327685, 196608, 2, 262152, 196608, 2, 196616, 65536, 2, 393224, 0, 2, 393223, 196608, 2, 393222, 65536, 2, 262153, 196608, 2, 327690, 196608, 2, 262154, 196608, 2, 458762, 0, 2, 458761, 65536, 2, 458760, 0, 2, 327691, 131072, 2, 393228, 0, 2, 458764, 131072, 2, 327692, 131072, 2, 524300, 65536, 2, 524299, 196608, 2, 524298, 131072, 2)
 
-[node name="Pad" type="Node" parent="BoardArea/GestureRecognizer/Viewport/Board"]
+[node name="Pad" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Board"]
 editor_description = "The first child of the board is not visible. This make sure we can see all the monsters."
 
-[node name="Monster" parent="BoardArea/GestureRecognizer/Viewport/Board" instance=ExtResource("5_ottqo")]
+[node name="Monster" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("5_ottqo")]
 position = Vector2(208, 368)
 
-[node name="Hero" parent="BoardArea/GestureRecognizer/Viewport/Board" instance=ExtResource("4_lrsod")]
+[node name="Hero" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("4_lrsod")]
 position = Vector2(48, 80)
 
-[node name="Potion2" parent="BoardArea/GestureRecognizer/Viewport/Board/Hero" instance=ExtResource("7_7lgrm")]
+[node name="Potion2" parent="BoardArea/GestureSurveyor/Viewport/Board/Hero" instance=ExtResource("7_7lgrm")]
 visible = false
 position = Vector2(2, 2)
 char = "🍸"
 
-[node name="Potion3" parent="BoardArea/GestureRecognizer/Viewport/Board/Hero" instance=ExtResource("7_7lgrm")]
+[node name="Potion3" parent="BoardArea/GestureSurveyor/Viewport/Board/Hero" instance=ExtResource("7_7lgrm")]
 visible = false
 position = Vector2(2, 2)
 char = "🍸"
 
-[node name="AmuletOfStrength" parent="BoardArea/GestureRecognizer/Viewport/Board/Hero" instance=ExtResource("7_7lgrm")]
+[node name="AmuletOfStrength" parent="BoardArea/GestureSurveyor/Viewport/Board/Hero" instance=ExtResource("7_7lgrm")]
 visible = false
 position = Vector2(2, 2)
 
-[node name="StatsModifiers" type="Node" parent="BoardArea/GestureRecognizer/Viewport/Board/Hero/AmuletOfStrength"]
+[node name="StatsModifiers" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Board/Hero/AmuletOfStrength"]
 script = ExtResource("8_o84sl")
 strength = 30
 
-[node name="Wrench" parent="BoardArea/GestureRecognizer/Viewport/Board" instance=ExtResource("7_7lgrm")]
+[node name="Wrench" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("7_7lgrm")]
 position = Vector2(176, 176)
 
-[node name="Potion" parent="BoardArea/GestureRecognizer/Viewport/Board" instance=ExtResource("7_7lgrm")]
+[node name="Potion" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("7_7lgrm")]
 position = Vector2(176, 176)
 char = "🍸"
 
-[node name="Camera" type="Camera2D" parent="BoardArea/GestureRecognizer/Viewport"]
+[node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]
 anchor_mode = 0
 current = true
 position_smoothing_enabled = true
@@ -87,27 +88,6 @@ position_smoothing_enabled = true
 
 [node name="HUD" type="Node" parent="."]
 script = ExtResource("7_4dw6n")
-
-[node name="StatusBar" type="HBoxContainer" parent="HUD"]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -112.0
-offset_top = -56.0
-offset_right = -26.0
-offset_bottom = -30.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="HealthLabel" type="Label" parent="HUD/StatusBar"]
-layout_mode = 2
-text = "Health: "
-
-[node name="HPLabel" type="Label" parent="HUD/StatusBar"]
-layout_mode = 2
-text = "???"
 
 [node name="ZoomSlider" type="VSlider" parent="HUD"]
 anchors_preset = 9
@@ -122,7 +102,7 @@ value = 1.0
 tick_count = 15
 script = ExtResource("8_7qyjt")
 
-[node name="MarginContainer" type="MarginContainer" parent="HUD"]
+[node name="LMargin" type="MarginContainer" parent="HUD"]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -131,30 +111,128 @@ offset_right = 265.0
 grow_vertical = 0
 size_flags_vertical = 0
 
-[node name="ButtonBar" type="VBoxContainer" parent="HUD/MarginContainer"]
+[node name="LButtonBar" type="VBoxContainer" parent="HUD/LMargin"]
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="StairsButton" type="Button" parent="HUD/MarginContainer/ButtonBar"]
+[node name="StairsButton" type="Button" parent="HUD/LMargin/LButtonBar"]
 layout_mode = 2
 focus_mode = 0
 text = "Follow Stairs"
 
-[node name="LootButton" type="Button" parent="HUD/MarginContainer/ButtonBar"]
+[node name="LootButton" type="Button" parent="HUD/LMargin/LButtonBar"]
 layout_mode = 2
 focus_mode = 0
 text = "Loot"
 
-[node name="InventoryButton" type="Button" parent="HUD/MarginContainer/ButtonBar"]
+[node name="InventoryButton" type="Button" parent="HUD/LMargin/LButtonBar"]
 layout_mode = 2
 focus_mode = 0
 text = "Inventory"
 
+[node name="RGroup" type="HBoxContainer" parent="HUD"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -310.0
+offset_top = -170.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 2
+
+[node name="CheatsMargin" type="MarginContainer" parent="HUD/RGroup"]
+layout_mode = 2
+
+[node name="CheatsBar" type="VBoxContainer" parent="HUD/RGroup/CheatsMargin"]
+visible = false
+layout_mode = 2
+
+[node name="TeleportButton" type="Button" parent="HUD/RGroup/CheatsMargin/CheatsBar"]
+modulate = Color(1, 1, 1, 0.5)
+layout_mode = 2
+focus_mode = 0
+text = "Teleport"
+
+[node name="InspectButton" type="Button" parent="HUD/RGroup/CheatsMargin/CheatsBar"]
+modulate = Color(1, 1, 1, 0.5)
+layout_mode = 2
+focus_mode = 0
+text = "Inspect"
+
+[node name="RMargin" type="MarginContainer" parent="HUD/RGroup"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 8
+
+[node name="RButtonBar" type="VBoxContainer" parent="HUD/RGroup/RMargin"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="TestButton" type="Button" parent="HUD/RGroup/RMargin/RButtonBar"]
+modulate = Color(1, 1, 1, 0.501961)
+layout_mode = 2
+focus_mode = 0
+text = "Test 1"
+
+[node name="TestButton2" type="Button" parent="HUD/RGroup/RMargin/RButtonBar"]
+modulate = Color(1, 1, 1, 0.5)
+layout_mode = 2
+focus_mode = 0
+text = "Test 2"
+
+[node name="ShowCheatsButton" type="Button" parent="HUD/RGroup/RMargin/RButtonBar"]
+modulate = Color(1, 1, 1, 0.5)
+layout_mode = 2
+focus_mode = 0
+text = "Cheats"
+
+[node name="StatusBar" type="HBoxContainer" parent="HUD/RGroup/RMargin/RButtonBar"]
+layout_mode = 2
+
+[node name="HealthLabel" type="Label" parent="HUD/RGroup/RMargin/RButtonBar/StatusBar"]
+layout_mode = 2
+text = "Health: "
+
+[node name="HPLabel" type="Label" parent="HUD/RGroup/RMargin/RButtonBar/StatusBar"]
+layout_mode = 2
+text = "???"
+
+[node name="ActionLabel" type="Label" parent="HUD"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -108.5
+offset_top = -13.0
+offset_right = 108.5
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Action needs more info..."
+
+[node name="CheatsSurveyor" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("12_yvfct")
+
 [node name="InventoryScreen" parent="HUD" instance=ExtResource("11_mrt21")]
 visible = false
 
-[connection signal="picked_item" from="BoardArea/GestureRecognizer/Viewport/Board/Hero" to="HUD" method="update_states_at"]
-[connection signal="value_changed" from="HUD/ZoomSlider" to="BoardArea/GestureRecognizer/Viewport" method="_on_zoom_slider_value_changed"]
-[connection signal="pressed" from="HUD/MarginContainer/ButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
-[connection signal="pressed" from="HUD/MarginContainer/ButtonBar/LootButton" to="BoardArea/GestureRecognizer" method="start_loot"]
-[connection signal="pressed" from="HUD/MarginContainer/ButtonBar/InventoryButton" to="BoardArea/GestureRecognizer" method="show_inventory"]
+[connection signal="picked_item" from="BoardArea/GestureSurveyor/Viewport/Board/Hero" to="HUD" method="update_states_at"]
+[connection signal="value_changed" from="HUD/ZoomSlider" to="BoardArea/GestureSurveyor/Viewport" method="_on_zoom_slider_value_changed"]
+[connection signal="pressed" from="HUD/LMargin/LButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
+[connection signal="pressed" from="HUD/LMargin/LButtonBar/LootButton" to="BoardArea/GestureSurveyor" method="start_loot"]
+[connection signal="pressed" from="HUD/LMargin/LButtonBar/InventoryButton" to="BoardArea/GestureSurveyor" method="show_inventory"]
+[connection signal="pressed" from="HUD/RGroup/CheatsMargin/CheatsBar/TeleportButton" to="HUD/CheatsSurveyor" method="start_teleport_to"]
+[connection signal="pressed" from="HUD/RGroup/CheatsMargin/CheatsBar/InspectButton" to="HUD/CheatsSurveyor" method="start_inspect_at"]
+[connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/TestButton" to="." method="test"]
+[connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/TestButton2" to="." method="test2"]
+[connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/ShowCheatsButton" to="HUD" method="toggle_cheats_bar"]
+[connection signal="action_complete" from="HUD/CheatsSurveyor" to="HUD" method="hide_action_label"]
+[connection signal="action_started" from="HUD/CheatsSurveyor" to="HUD" method="show_action_label"]
