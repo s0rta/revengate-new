@@ -24,9 +24,7 @@ func _ready():
 		$Tabulator.setv("early-stage-disclaimer", true)
 	
 func start_new_game():
-	print("starting a new game!")
-	var tree = get_tree() as SceneTree
-	tree.change_scene_to_file("res://src/main.tscn")
+	get_tree().change_scene_to_file("res://src/ui/intro_screen.tscn")
 	
 func _on_credits_button_pressed():
 	get_tree().change_scene_to_file("res://src/ui/credits_screen.tscn")

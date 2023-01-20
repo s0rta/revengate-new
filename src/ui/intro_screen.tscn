@@ -1,0 +1,57 @@
+[gd_scene load_steps=2 format=3 uid="uid://ctbpjqqsxdbx2"]
+
+[ext_resource type="Script" path="res://src/ui/intro_screen.gd" id="1_dt8m3"]
+
+[node name="IntroScreen" type="Node"]
+script = ExtResource("1_dt8m3")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0431373, 0.027451, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -439.5
+offset_right = 439.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"BigMarging"
+
+[node name="Title" type="Label" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_type_variation = &"TitleLabel"
+text = "Quest Objectives"
+horizontal_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="IntroLabel" type="Label" parent="VBoxContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "After years of training as an architect, you ended up becoming a field agent for the mysterious Lux Co. What a turn of events!
+
+Your mission today is to go down the dungeon, find the missing pocket watch (⌚), then come back up.
+
+Good luck!
+"
+
+[node name="OKButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Let's do this!"
+
+[connection signal="pressed" from="VBoxContainer/OKButton" to="." method="start_new_game"]

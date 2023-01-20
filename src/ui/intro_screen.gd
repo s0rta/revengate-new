@@ -15,11 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-## Common script used by all the trivial info screens accessed from the 
-## start screen.
 extends Node
 
-func _on_back_button_pressed():
-	var tree = get_tree() as SceneTree
-	tree.change_scene_to_file("res://src/ui/start_screen.tscn")
-	
+func start_new_game():
+	get_tree().change_scene_to_file("res://src/main.tscn")
