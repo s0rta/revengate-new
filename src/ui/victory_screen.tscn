@@ -1,9 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://ctbpjqqsxdbx2"]
+[gd_scene load_steps=2 format=3 uid="uid://cqxv2e1rn7uqx"]
 
-[ext_resource type="Script" path="res://src/ui/secondary_info_screen.gd" id="1_qoofk"]
+[ext_resource type="Script" path="res://src/ui/secondary_info_screen.gd" id="1_c7743"]
 
-[node name="IntroScreen" type="Node"]
-script = ExtResource("1_qoofk")
+[node name="VictoryScreen" type="Node"]
+script = ExtResource("1_c7743")
 
 [node name="Background" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -32,7 +32,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_type_variation = &"TitleLabel"
-text = "Quest Objectives"
+text = "Victory!"
 horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
@@ -45,15 +45,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="IntroLabel" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer2"]
+[node name="SummaryLabel" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer2"]
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 1
-text = "After years of training as an architect, you ended up becoming a field agent for the mysterious Lux Co. What a turn of events!
+text = "You have made it!
 
-Your mission today is to go down the dungeon, find the missing pocket watch (⌚), then come back up.
-
-Good luck!"
+You have faced many monsters , found the quest item, and came back alive. A future version of this game will probably summarize your achiements on this screen, but for now, suffice to say that you are awesome!"
+autowrap_mode = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -62,6 +60,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
-text = "Let's do this!"
+text = "Nice!"
 
-[connection signal="pressed" from="VBoxContainer/MarginContainer2/OKButton" to="." method="start_new_game"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer2/OKButton" to="." method="show_main_screen"]

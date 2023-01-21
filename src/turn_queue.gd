@@ -36,7 +36,7 @@ func get_actors():
 			actors.append(node)
 	return actors
 	
-func invalidate_turn():
+func invalidate_turn(_arg=null):
 	## Mark the current turn as impossible to complete, skip to the next turn as soon as possible.
 	## Turns can become invalid for many reasons. For example if the Hero gets on a new level with 
 	## a whole cast of actors, it does not make sense to finish the old turn with only actors from 

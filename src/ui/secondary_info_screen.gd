@@ -20,6 +20,10 @@
 extends Node
 
 func _on_back_button_pressed():
-	var tree = get_tree() as SceneTree
-	tree.change_scene_to_file("res://src/ui/start_screen.tscn")
+	show_main_screen()
+
+func show_main_screen():
+	get_tree().change_scene_to_file("res://src/ui/start_screen.tscn")
 	
+func start_new_game():
+	get_tree().change_scene_to_file("res://src/main.tscn")

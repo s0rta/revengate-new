@@ -18,7 +18,7 @@
 ## something that can fit in someone's inventory
 class_name Item extends Node2D
 
-const FADE_DURATION := .3
+const FADE_DURATION := .15
 const FADE_MODULATE := Color(.7, .7, .7, 0.0)
 const VIS_MODULATE := Color.WHITE
 

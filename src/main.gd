@@ -18,7 +18,7 @@
 extends Node2D
 
 # The hero moved to a different level, the UI and turn logic are affected and must be notified
-signal board_changed  
+signal board_changed(new_board)
 
 @onready var hero:Actor = find_child("Hero")
 @onready var hud = $HUD
@@ -30,6 +30,7 @@ func _ready():
 	assert(board, "Can't find the first game board")
 	board._append_terrain_cells([V.i(23, 2)], "stairs-down")
 	hud.set_hero(hero)
+	$VictoryProbe.hero = hero
 	hero.died.connect(conclude_game)
 	board_changed.connect($TurnQueue.invalidate_turn)
 	board_changed.connect(center_on_hero)
@@ -82,10 +83,7 @@ func switch_board_at(coord):
 	# TODO: this is not always true, a fall back might kick in if the 
 	# stairs are occupied
 	assert(hero.get_cell_coord() == conn.far_coord)
-	
-	emit_signal("board_changed")
-	print("switched board by following connector at %s, dest is %s:%s" % [coord, new_board.name, conn.far_coord])
-
+	emit_signal("board_changed", new_board)
 
 func make_board(depth):
 	## Return a brand new fully initiallized unconnected RevBoard
@@ -98,13 +96,18 @@ func make_board(depth):
 	
 	var index = new_board.make_index()
 	
-	# items
-	var prev_coord = null
-	for char in "🍹🥃🏖️🪔🛡️".split():
-		var tree = load("res://src/item.tscn") as PackedScene
-		var item = tree.instantiate()
-		item.char = char
-		prev_coord = builder.place(item, false, prev_coord, true, null, index)
+	# regular items
+	var all_chars = "⛾✄➴🌡🌷🍺🔨🔮🖋🗡🚬🥊🌂⚙⚗☕🏹🎖🖂".split()
+	for i in range(3):
+		var item = make_item(Rand.choice(all_chars))
+		builder.place(item, false, null, true, null, index)
+
+	# quest item!
+	if depth >= 1:
+		# TODO: deeper with random prob
+		var item = make_item("⌚")
+		item.name = "MissingWatch"
+		builder.place(item, false, null, true, null, index)
 	
 	# monsters
 	var nb_monsters = max(0, depth-2)
@@ -122,7 +125,13 @@ func make_monster(parent, char: String):
 	parent.add_child(monster)
 	return monster
 
-func conclude_game():
+func make_item(char):
+	var tree = load("res://src/item.tscn") as PackedScene
+	var item = tree.instantiate()
+	item.char = char
+	return item
+
+func conclude_game(victory:=false):
 	## do a final bit of cleanup then show the Game Over screen
 	$TurnQueue.shutdown()
 	if hero.is_animating():
@@ -131,9 +140,12 @@ func conclude_game():
 		await hero.anims_done
 		print("hero done animating!")
 	var tree = get_tree() as SceneTree
-	tree.change_scene_to_file("res://src/ui/game_over_screen.tscn")
+	if victory:
+		tree.change_scene_to_file("res://src/ui/victory_screen.tscn")
+	else:
+		tree.change_scene_to_file("res://src/ui/game_over_screen.tscn")
 
-func center_on_hero():
+func center_on_hero(_arg=null):
 	find_child("Viewport").center_on_coord(hero.get_cell_coord())
 
 func _input(_event):

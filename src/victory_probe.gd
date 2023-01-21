@@ -15,7 +15,21 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Node
+## Monitor the progress of the game against quest objectives
+class_name VictoryProbe extends Node
 
-func start_new_game():
-	get_tree().change_scene_to_file("res://src/main.tscn")
+signal victory
+var hero: Actor
+
+func has_quest_item(actor:Actor):
+	for item in actor.get_items():
+		if item.char == "⌚" and item.name == "MissingWatch":
+			return true
+	return false
+	
+func reached_top_level(current_board:RevBoard):
+	return current_board.depth == 0
+
+func assay_victory(current_board:RevBoard):
+	if reached_top_level(current_board) and has_quest_item(hero):
+		emit_signal("victory")
