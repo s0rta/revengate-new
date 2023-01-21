@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cqxv2e1rn7uqx"]
+[gd_scene load_steps=3 format=3 uid="uid://cqxv2e1rn7uqx"]
 
 [ext_resource type="Script" path="res://src/ui/secondary_info_screen.gd" id="1_c7743"]
+[ext_resource type="AudioStream" uid="uid://bukb5uav51053" path="res://assets/sounds/oh-yeah.mp3" id="2_a2cly"]
 
 [node name="VictoryScreen" type="Node"]
 script = ExtResource("1_c7743")
@@ -61,5 +62,9 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Nice!"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_a2cly")
+autoplay = true
 
 [connection signal="pressed" from="VBoxContainer/MarginContainer2/OKButton" to="." method="show_main_screen"]
