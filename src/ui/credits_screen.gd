@@ -17,10 +17,18 @@
 
 extends "res://src/ui/secondary_info_screen.gd"
 
-@onready var credits_label = find_child("CreditsLabel")
+@onready var credits_label: Label = find_child("CreditsLabel")
 
 func _ready():
 	var file = FileAccess.open("res://CREDITS.md", FileAccess.READ)
 	if file:
-		credits_label.text = file.get_as_text()
+		var text = file.get_as_text()
+		var nb_lines = text.count("\n")
+		credits_label.text = text
+		var nb_vis_lines = credits_label.get_visible_line_count()
+		if nb_vis_lines < nb_lines:
+			var line_height = credits_label.get_line_height()
+			var size = credits_label.get_size()
+			var new_height = round(1.1 * nb_lines * line_height)
+			credits_label.custom_minimum_size = V.i(size.x, new_height)
 
