@@ -45,7 +45,9 @@ func start_inspect_at():
 		var viewport = $/root/Main.find_child("Viewport")
 		var pos = viewport.pos_to_local(vals[1])
 		var coord = RevBoard.canvas_to_board(pos)
-		var data = $/root/Main.get_board().get_cell_tile_data(0, coord)
+		var board = $/root/Main.get_board()
+		print("Board.is_in_rect(%s): %s" % [board.coord_str(coord), board.is_on_board(coord)])
+		var data = board.get_cell_tile_data(0, coord)
 		print("Data here is %s" % [[var_to_str(data), data.get_custom_data
 	("is_connector")]])
 	is_capturing = false

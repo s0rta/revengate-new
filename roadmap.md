@@ -38,18 +38,21 @@ UI:
 - [x] cheat codes
 
 Combat:
-- [ ] no poison on default monsters nor hero
+- [x] no poison on default monsters nor hero
 - [x] items for progression
 - [x] damage over time
 
 Builder:
-- [ ] quest items is deeper on a random level and unique
+- [ ] quest item is deeper on a random level and unique
 
 UI:
 - [x] all contributors on credits screen
 - [x] flying HPs are bigger
 - [x] inventory screen
 - [x] privacy screen
+
+UI:
+- [x] bug: cliking on dark area crashes the game
 
 ## v0.4
 - [ ] healing?
@@ -62,7 +65,6 @@ Builder:
 - [ ] mazes can fill arbitrary areas of a board
 
 UI:
-- [ ] bug: cliking on dark area crashes the game
 - [ ] visual feedback for when inputs are accepted
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
 - [ ] pinch to zoom

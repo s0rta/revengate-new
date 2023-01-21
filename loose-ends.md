@@ -9,7 +9,7 @@ This is a list of loose ends, code optimization, and small tasks for the Godot i
 ## Strategies
 - [ ] Tracking asserts that the target is on the same board
 - [ ] Hero will sometimes move into an enemy while travelling
-- [ ] Travelling ignores conditions
+- [ ] Travelling should ignore conditions
 
 ## Board
 - [ ] inspect_tile() includes coord, pos, terrain, destination board for connectors
@@ -18,3 +18,6 @@ This is a list of loose ends, code optimization, and small tasks for the Godot i
 
 ## Main
 - [ ] Main sets the board on the turn queue, starts the turns in Main._ready()
+
+## UI
+- [ ] damage over time should have a different animation than attack damage

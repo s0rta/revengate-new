@@ -482,6 +482,11 @@ func get_cell_by_terrain(terrain_name):
 	else:
 		return null
 
+func is_on_board(coord):
+	## Return whether the coord is strictly contained inside the game board
+	var bbox = get_used_rect()
+	return bbox.has_point(coord)
+
 func add_connection(near_coord, far_board, far_coord):
 	## Connect this board with another one.
 	## Connections has a near (self) and a far side (far_board). This method makes the

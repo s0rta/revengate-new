@@ -1,11 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://c7ftd4dk0u84f"]
+[gd_scene load_steps=6 format=3 uid="uid://c7ftd4dk0u84f"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_la2eu"]
 [ext_resource type="Script" path="res://src/combat/monster.gd" id="2_14ncx"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="3_vfvny"]
 [ext_resource type="PackedScene" uid="uid://g5xddmsru7m2" path="res://src/combat/weapon.tscn" id="4_svcu1"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="5_0jj8y"]
-[ext_resource type="Script" path="res://src/combat/effect.gd" id="6_ayyf6"]
 
 [node name="Monster" instance=ExtResource("1_la2eu")]
 script = ExtResource("2_14ncx")
@@ -25,10 +24,3 @@ damage_family = 2
 stream = ExtResource("5_0jj8y")
 volume_db = -3.0
 pitch_scale = 1.25
-
-[node name="Effect" type="Node" parent="Claw" index="1"]
-script = ExtResource("6_ayyf6")
-damage = 1
-damage_family = 7
-agility = -10
-nb_turns = 10

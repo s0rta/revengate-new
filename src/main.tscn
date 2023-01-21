@@ -75,6 +75,7 @@ strength = 30
 
 [node name="Wrench" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("7_7lgrm")]
 position = Vector2(176, 176)
+char = "🔧"
 
 [node name="Potion" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("7_7lgrm")]
 position = Vector2(176, 176)

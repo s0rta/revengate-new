@@ -31,7 +31,8 @@ func _unhandled_input(event):
 	var move = null
 	state = States.ACTING
 	
-	var index = get_board().make_index()
+	var board = get_board()
+	var index = board.make_index()
 	if event.is_action("act-on-cell"):
 		var coord = RevBoard.canvas_to_board(event.position)
 		print("Click at pos=%s, coord=%s" % [event.position, RevBoard.coord_str(coord)])
@@ -44,7 +45,7 @@ func _unhandled_input(event):
 			elif index.is_free(coord):
 				move_to(coord)
 				acted = true
-		elif index.is_free(coord) and travel_to(coord):
+		elif board.is_on_board(coord) and index.is_free(coord) and travel_to(coord):
 			return await act()
 	elif event.is_action_pressed("loot-here"):
 		var item = index.top_item_at(get_cell_coord())
@@ -54,7 +55,6 @@ func _unhandled_input(event):
 	elif event.is_action_pressed("show-inventory"):
 		acted = await $"/root/Main".show_inventory_screen()
 	elif event.is_action_pressed("follow-stairs"):
-		var board = get_board()
 		var coord = get_cell_coord()
 		if board.is_connector(coord):
 			$"/root/Main".switch_board_at(coord)
