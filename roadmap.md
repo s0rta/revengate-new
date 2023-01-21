@@ -4,6 +4,8 @@ Revengate Godot Roadmap
 Major parts required to make the Godot implementation of Revengate a playable game.
 
 ## Minimum Viable Game (v0.2)
+- [x] release to Google Play
+
 Builder:
 - [x] spiral.next()
 - [x] place monsters
@@ -30,29 +32,40 @@ UI:
 - [x] game over screen
 - [x] welcome message on first game startup
 
-## v0.4
-- [ ] victory conditions
-- [x] release to Google Play
+## v0.3
+- [x] victory conditions
+- [ ] release to Google Play
 - [x] cheat codes
 
 Combat:
-- [ ] new evasion stat to increase all to-hit rolls
+- [ ] no poison on default monsters nor hero
 - [x] items for progression
 - [x] damage over time
+
+Builder:
+- [ ] quest items is deeper on a random level and unique
+
+UI:
+- [x] all contributors on credits screen
+- [x] flying HPs are bigger
+- [x] inventory screen
+- [x] privacy screen
+
+## v0.4
+- [ ] healing?
+
+Combat:
+- [ ] new evasion stat to increase all to-hit rolls
+- [ ] no poison on the first few monsters
 
 Builder:
 - [ ] mazes can fill arbitrary areas of a board
 
 UI:
-- [x] all contributors on credits screen
 - [ ] bug: cliking on dark area crashes the game
-- [x] flying HPs are bigger
 - [ ] visual feedback for when inputs are accepted
-- [x] inventory screen
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
 - [ ] pinch to zoom
-- [x] privacy screen
-
 
 ## v0.5
 - [x] merge git repo with Revengate v0.1
