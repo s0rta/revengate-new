@@ -43,23 +43,22 @@ Combat:
 - [x] damage over time
 
 Builder:
-- [ ] quest item is deeper on a random level and unique
+- [x] quest item is deeper on a random level and unique
 
 UI:
 - [x] all contributors on credits screen
 - [x] flying HPs are bigger
 - [x] inventory screen
 - [x] privacy screen
-
-UI:
 - [x] bug: cliking on dark area crashes the game
+- [ ] bug: the cheats pannel captures click even when hidden
 
 ## v0.4
 - [ ] healing?
 
 Combat:
 - [ ] new evasion stat to increase all to-hit rolls
-- [ ] no poison on the first few monsters
+- [x] no poison on the first few monsters
 
 Builder:
 - [ ] mazes can fill arbitrary areas of a board

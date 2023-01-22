@@ -23,6 +23,7 @@ signal board_changed(new_board)
 @onready var hero:Actor = find_child("Hero")
 @onready var hud = $HUD
 @onready var boards_cont: Node = find_child("Board").get_parent()
+var quest_item_exists := false
 
 func _ready():
 	# FIXME: the original board should be able to re-index it's content
@@ -79,10 +80,6 @@ func switch_board_at(coord):
 	var builder = BoardBuilder.new(new_board)
 	var index = new_board.make_index()
 	builder.place(hero, true, conn.far_coord, true, null, index)
-	
-	# TODO: this is not always true, a fall back might kick in if the 
-	# stairs are occupied
-	assert(hero.get_cell_coord() == conn.far_coord)
 	emit_signal("board_changed", new_board)
 
 func make_board(depth):
@@ -103,11 +100,11 @@ func make_board(depth):
 		builder.place(item, false, null, true, null, index)
 
 	# quest item!
-	if depth >= 1:
-		# TODO: deeper with random prob
+	if not quest_item_exists and Rand.linear_prob_test(depth, 3, 9): # random level between 4 and 9
 		var item = make_item("⌚")
 		item.name = "MissingWatch"
 		builder.place(item, false, null, true, null, index)
+		quest_item_exists = true
 	
 	# monsters
 	var nb_monsters = max(0, depth-2)
@@ -158,6 +155,8 @@ func _input(_event):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
+	for i in range(15):
+		print("test for %s: %s" % [i, Rand.linear_prob_test(i, 3, 9)])
 	
 func test2():
 	print("Testing: 2, 1... 2, 1!")

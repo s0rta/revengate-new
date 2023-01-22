@@ -29,7 +29,16 @@ static func rftest(failure_rate:float):
 	## Randon Failure Test: return `true` failure_rate fraction of the times 
 	## failure_rate: in 0..1
 	return randf() > failure_rate
-	
+
+static func linear_prob_test(val, start, end) -> bool:
+	## Return return true/false weighted by how far val is in [start..end].
+	## val <= start is always false
+	## val >= end is always true
+	var slope:float = 1.0 / (end-start)
+	var weight = 1.0 * (val - start) * slope
+	weight = clampf(weight, 0.0, 1.0)
+	return rstest(weight)
+
 static func choice(seq:Array):
 	## Return a random element of seq.
 	var idx = randi_range(0, seq.size()-1)
