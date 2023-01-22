@@ -139,17 +139,22 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -310.0
-offset_top = -170.0
+offset_top = -218.0
 grow_horizontal = 0
 grow_vertical = 0
-size_flags_horizontal = 2
+size_flags_horizontal = 8
+mouse_filter = 2
 
 [node name="CheatsMargin" type="MarginContainer" parent="HUD/RGroup"]
-layout_mode = 2
-
-[node name="CheatsBar" type="VBoxContainer" parent="HUD/RGroup/CheatsMargin"]
 visible = false
 layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+
+[node name="CheatsBar" type="VBoxContainer" parent="HUD/RGroup/CheatsMargin"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="TeleportButton" type="Button" parent="HUD/RGroup/CheatsMargin/CheatsBar"]
 modulate = Color(1, 1, 1, 0.5)
@@ -239,7 +244,7 @@ script = ExtResource("14_ulj2m")
 [connection signal="pressed" from="HUD/RGroup/CheatsMargin/CheatsBar/InspectButton" to="HUD/CheatsSurveyor" method="start_inspect_at"]
 [connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/TestButton" to="." method="test"]
 [connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/TestButton2" to="." method="test2"]
-[connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/ShowCheatsButton" to="HUD" method="toggle_cheats_bar"]
+[connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/ShowCheatsButton" to="HUD" method="toggle_cheats_box"]
 [connection signal="action_complete" from="HUD/CheatsSurveyor" to="HUD" method="hide_action_label"]
 [connection signal="action_started" from="HUD/CheatsSurveyor" to="HUD" method="show_action_label"]
 [connection signal="victory" from="VictoryProbe" to="." method="conclude_game" binds= [true]]

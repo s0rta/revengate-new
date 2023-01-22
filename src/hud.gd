@@ -22,7 +22,7 @@ var hero: Actor
 @onready var loot_button = find_child("LootButton")
 @onready var stairs_button = find_child("StairsButton")
 @onready var hplabel = find_child("HPLabel")
-@onready var cheats_bar = find_child("CheatsBar")
+@onready var cheats_box = find_child("CheatsMargin")
 
 func _ready():
 	# only show the testing UI on debug builds
@@ -59,8 +59,8 @@ func _on_stairs_button_pressed():
 	event.pressed = true
 	Input.parse_input_event(event)
 
-func toggle_cheats_bar():
-	cheats_bar.visible = not cheats_bar.visible
+func toggle_cheats_box():
+	cheats_box.visible = not cheats_box.visible
 
 func show_action_label(text):
 	$ActionLabel.text = text

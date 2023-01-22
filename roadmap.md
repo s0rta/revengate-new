@@ -51,7 +51,7 @@ UI:
 - [x] inventory screen
 - [x] privacy screen
 - [x] bug: cliking on dark area crashes the game
-- [ ] bug: the cheats pannel captures click even when hidden
+- [x] bug: the cheats pannel captures click even when hidden
 
 ## v0.4
 - [ ] healing?
