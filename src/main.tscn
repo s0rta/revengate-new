@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://d4bar2tk5xswl"]
+[gd_scene load_steps=15 format=3 uid="uid://c56bcf8c26trc"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://cxf4glg0aasio" path="res://src/item.tscn" id="7_7lgrm"]
 [ext_resource type="Script" path="res://src/ui/zoom_slider.gd" id="8_7qyjt"]
 [ext_resource type="Script" path="res://src/combat/stats_modifiers.gd" id="8_o84sl"]
-[ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/inventory_screen.tscn" id="11_mrt21"]
+[ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
 [ext_resource type="Script" path="res://src/victory_probe.gd" id="14_ulj2m"]
 
@@ -206,6 +206,21 @@ text = "Health: "
 layout_mode = 2
 text = "???"
 
+[node name="TRMargin" type="MarginContainer" parent="HUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -83.0
+offset_bottom = 92.0
+grow_horizontal = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ShowMessagesButton" type="Button" parent="HUD/TRMargin"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "📖"
+
 [node name="ActionLabel" type="Label" parent="HUD"]
 visible = false
 anchors_preset = 8
@@ -245,6 +260,7 @@ script = ExtResource("14_ulj2m")
 [connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/TestButton" to="." method="test"]
 [connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/TestButton2" to="." method="test2"]
 [connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/ShowCheatsButton" to="HUD" method="toggle_cheats_box"]
+[connection signal="pressed" from="HUD/TRMargin/ShowMessagesButton" to="." method="test2"]
 [connection signal="action_complete" from="HUD/CheatsSurveyor" to="HUD" method="hide_action_label"]
 [connection signal="action_started" from="HUD/CheatsSurveyor" to="HUD" method="show_action_label"]
 [connection signal="victory" from="VictoryProbe" to="." method="conclude_game" binds= [true]]

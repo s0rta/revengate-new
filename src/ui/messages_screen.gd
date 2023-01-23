@@ -1,0 +1,50 @@
+# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+
+# This file is part of Revengate.
+
+# Revengate is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Revengate is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
+
+## A window to view the history of messages
+class_name MessagesList extends Control
+
+const MAX_MESSAGES:=200
+
+func _ready():
+	for i in range(10):
+		%ItemList.add_item("Message %d" % i)
+	trim_old_messages()
+
+func _input(event):
+	# We are not truly modal, so we prevent keys from sending action to the game board
+	# while visible.
+	if visible and event is InputEventKey:
+		accept_event()
+
+func popup():
+	$EmptyLabel.visible = (%ItemList.item_count != 0)
+	%ItemList.select(%ItemList.item_count-1)
+	%ItemList.ensure_current_is_visible()
+	show()
+
+func trim_old_messages():
+	var extra = max(0, %ItemList.item_count - MAX_MESSAGES)
+	for i in range(extra):
+		%ItemList.remove_item(0)
+	
+func add_message(message:String):
+	%ItemList.add_item(message)
+	trim_old_messages()
+
+func _on_back_button_pressed():
+	hide()

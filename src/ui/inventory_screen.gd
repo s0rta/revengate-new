@@ -28,14 +28,14 @@ var acted := false
 
 func _ready():
 	inventory_changed.connect(reset_empty_label_vis)
+	tree_view.set_column_title(0, "description")
+	tree_view.set_column_title(1, "action")
 
 func _input(event):
 	# We are not truly modal, so we prevent keys from sending action to the game board
 	# while visible.
 	if visible and event is InputEventKey:
 		accept_event()
-	tree_view.set_column_title(0, "description")
-	tree_view.set_column_title(1, "action")
 
 func popup():
 	acted = false

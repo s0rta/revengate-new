@@ -1,15 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://brwk3ae5bwevg"]
+[gd_scene load_steps=2 format=3 uid="uid://cv2ngsgh0xwnl"]
 
-[ext_resource type="Script" path="res://src/ui/inventory_screen.gd" id="1_i77qu"]
+[ext_resource type="Script" path="res://src/ui/messages_screen.gd" id="1_vdm16"]
 
-[node name="InventoryScreen" type="Control"]
+[node name="MessagesScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_i77qu")
+script = ExtResource("1_vdm16")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -31,17 +31,13 @@ grow_vertical = 2
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"TitleLabel"
-text = "Inventory"
+text = "Messages"
 horizontal_alignment = 1
 
-[node name="Tree" type="Tree" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 432)
+[node name="ItemList" type="ItemList" parent="VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.5
-columns = 2
-hide_root = true
-scroll_horizontal_enabled = false
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -52,6 +48,7 @@ layout_mode = 2
 text = "Back"
 
 [node name="EmptyLabel" type="Label" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -64,7 +61,6 @@ offset_right = 84.0
 offset_bottom = 13.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Inventory is empty!"
+text = "No messages!"
 
-[connection signal="button_clicked" from="VBoxContainer/Tree" to="." method="_on_tree_button_clicked"]
 [connection signal="pressed" from="VBoxContainer/MarginContainer/BackButton" to="." method="_on_back_button_pressed"]

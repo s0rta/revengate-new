@@ -39,5 +39,5 @@ Combat Sound Effects:
 CC0 by Ben (artisticdude)
 https://opengameart.org/content/rpg-sound-pack
 
-Game Over Sound Effect:
+End of Game Sound Effect:
 - CC-BY-SA Yannick Gingras
