@@ -9,6 +9,7 @@
 [node name="Hero" instance=ExtResource("1_bgbko")]
 position = Vector2(-1, 0)
 script = ExtResource("2_jrjv3")
+healing_prob = null
 faction = 1
 
 [node name="Label" parent="." index="0"]

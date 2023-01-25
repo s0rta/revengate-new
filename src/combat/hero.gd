@@ -23,6 +23,10 @@ const ENEMY_FACTIONS = [Factions.BEASTS]
 func _ready():
 	super()
 	state = States.LISTENING
+	was_attacked.connect(_add_attack_msg)
+
+func _add_attack_msg(attacker):
+	add_message("Hero was attacked by %s" % attacker.name)
 
 func _unhandled_input(event):
 	if state != States.LISTENING:

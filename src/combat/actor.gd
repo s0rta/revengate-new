@@ -24,6 +24,8 @@ signal turn_done
 signal anims_done  
 # the actor was the victim of an attack
 signal was_attacked(attacker)
+# health changed, either got better or worst
+signal health_changed(new_health)
 # the actor met their ultimate demise
 signal died
 # the actor moved to a new location on the current board
@@ -60,6 +62,7 @@ const CRITICAL_MULT := 0.35
 @export var agility := 50
 @export var intelligence := 50
 @export var perception := 50
+@export var healing_prob := 0.1  # %chance to heal at any given turn
 @export var resistance := Consts.DamageFamily.NONE  # at most one!
 
 @export var faction := Factions.NONE
@@ -213,7 +216,8 @@ func move_to(board_coord):
 	var old_coord = get_cell_coord()
 	var anim := create_anim()
 	var cpos = RevBoard.board_to_canvas(board_coord)
-	anim.tween_property(self, "position", cpos, .2)
+	anim.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
+	anim.tween_property(self, "position", cpos, .3)
 	dest = board_coord
 	anim.finished.connect(reset_dest, CONNECT_ONE_SHOT)
 	# TODO: it might be better to emit at the end of the animation
@@ -280,12 +284,11 @@ func anim_miss(foe, weapon):
 
 func anim_hit(foe, weapon, damage):
 	## Animate a success strike on `foe`, return the animation object.
-#	if foe.state == States.ACTING:
-#		await foe.turn_done
 	print("hit %s for %s dmg" % [foe, damage])
 	play_sound("HitSound", weapon)
 	
 	foe.update_health(-damage)
+	foe.emit_signal("was_attacked", self)
 	var anim = _anim_lunge(foe)
 	return anim
 
@@ -301,20 +304,14 @@ func play_sound(node_name, weapon=null):
 			return
 	assert(false, "Could not play any sound for %s!" % node_name)
 
-func update_health(hp_delta: int):
-	## Update our health and animate the event.
-	## Return the animation.
-	health += hp_delta
-	if hp_delta < 0:
-		emit_signal("was_attacked", null)
-		
-	var label = $DamageLabel.duplicate()
+func _anim_health_change(label_, number, direction:Vector2):
+	var label = label_.duplicate()
 	add_child(label)
-	label.text = "%d" % -hp_delta
+	label.text = "%d" % number
 	label.visible = true
 	var anim := create_anim()
 	anim.finished.connect(label.queue_free, CONNECT_ONE_SHOT)
-	var offset = Vector2(RevBoard.TILE_SIZE/4, -RevBoard.TILE_SIZE/2)
+	var offset = Vector2(RevBoard.TILE_SIZE, RevBoard.TILE_SIZE) * direction
 	anim.tween_property(label, "position", label.position+offset, .5)
 	var anim2 := create_anim()
 	anim2.pause()
@@ -322,6 +319,23 @@ func update_health(hp_delta: int):
 	anim2.tween_property(label, "modulate", Color(0, 0, 0, 0), .25)
 	var timer := get_tree().create_timer(.25)
 	timer.timeout.connect(anim2.play)
+	return anim
+
+func update_health(hp_delta: int):
+	## Update our health and animate the event.
+	## Return the animation.
+	if hp_delta == 0:
+		return  # don't animate 0 deltas
+		
+	health += hp_delta
+	emit_signal("health_changed", health)
+		
+	var anim = null
+	if hp_delta < 0:
+		anim = _anim_health_change($DamageLabel, -hp_delta, Vector2(.25, -.5))
+	else:
+		anim = _anim_health_change($HealingLabel, hp_delta, Vector2(.25, .5))
+		
 	if health <= 0:
 		play_sound("DeathSound")
 		emit_signal("died")
@@ -427,10 +441,17 @@ func normalize_damage(weapon, damage):
 	return max(1, round(damage))
 
 func activate_conditions():
-	## give all conditions a chance to heal us or make us suffer
+	## give all conditions and innate body repair a chance to heal us or make us suffer
+	if Rand.rstest(healing_prob):
+		regen()
 	for cond in get_conditions():
 		if is_alive():  # there is a chance that we won't make it through all the conditions
 			cond.erupt()
+
+func regen(delta:=1):
+	## Regain some health from natural healing
+	add_message("%s healed a little" % name)
+	update_health(delta)
 
 func drop_item(item):
 	assert(item.get_parent() == self, "must possess an item before dropping it")
@@ -445,3 +466,11 @@ func pick_item(item):
 	item.visible = false
 	item.reparent(self)
 	emit_signal("picked_item", item_coord)
+
+func add_message(message):
+	## Try to add a message to the message window. 
+	## The visibility of the message depends on us being visible to the Hero 
+	var board = get_board()
+	if board != null:
+		board.add_message(self, message)
+		
