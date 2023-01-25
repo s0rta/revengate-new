@@ -74,6 +74,7 @@ func switch_board_at(coord):
 		old_board.add_connection(coord, new_board, far)		
 		conn = old_board.get_connection(coord)
 		
+	new_board.new_message.connect($MessageScreen.add_message)
 	old_board.set_active(false)
 	new_board.set_active(true)
 	
@@ -160,3 +161,4 @@ func test():
 	
 func test2():
 	print("Testing: 2, 1... 2, 1!")
+	get_board().add_message(null, "This is a test")

@@ -1,8 +1,7 @@
 Revengate
 =========
 
-This is Revengate, a role playing game set in a steampunk world where magic and
-heavy machines coexist.
+This is Revengate, a roguelike dungeon crawler for Android set in a Steampunk universe.
 
 More about Revengate:
 * [Website](http://revengate.org)

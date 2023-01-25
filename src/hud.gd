@@ -33,12 +33,12 @@ func _ready():
 
 func set_hero(hero_):
 	hero = hero_
-	hero.was_attacked.connect(refresh_hps)
+	hero.health_changed.connect(refresh_hps)
 	hero.moved.connect(refresh_buttons_vis)
 	refresh_hps()
 	refresh_buttons_vis(null, hero.get_cell_coord())
 
-func refresh_hps(_arg=null):
+func refresh_hps(_new_health=null):
 	# TODO: bold animation when dead
 	hplabel.text = "%2d" % hero.health
 

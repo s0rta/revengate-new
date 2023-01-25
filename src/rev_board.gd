@@ -22,6 +22,8 @@ const TILE_SIZE = 32
 # which terrains do we index for later retrieval?
 const INDEXED_TERRAINS = ["stairs-down", "stairs-up"]
 
+signal new_message(message)
+
 # approximate topological distance to the starting board, used for spawning difficulty
 var depth := 0  
 var connector_by_coord := {}  # (x, y) -> {far_board:_, far_coord:_}
@@ -744,4 +746,8 @@ func _on_actor_moved(from, to):
 	item = index.top_item_at(to)
 	if item:
 		item.fade_out()
+	
+func add_message(actor, message):
+	# TODO check for visibility before propagating up
+	emit_signal("new_message", message)
 	

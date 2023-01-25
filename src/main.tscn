@@ -51,6 +51,7 @@ editor_description = "The first child of the board is not visible. This make sur
 
 [node name="Monster" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("5_ottqo")]
 position = Vector2(208, 368)
+healing_prob = 0.3
 
 [node name="Hero" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("4_lrsod")]
 position = Vector2(48, 80)
@@ -112,10 +113,12 @@ offset_top = -188.0
 offset_right = 265.0
 grow_vertical = 0
 size_flags_vertical = 0
+mouse_filter = 2
 
 [node name="LButtonBar" type="VBoxContainer" parent="HUD/LMargin"]
 layout_mode = 2
 size_flags_vertical = 8
+mouse_filter = 2
 
 [node name="StairsButton" type="Button" parent="HUD/LMargin/LButtonBar"]
 layout_mode = 2
@@ -246,10 +249,14 @@ script = ExtResource("12_yvfct")
 [node name="InventoryScreen" parent="HUD" instance=ExtResource("11_mrt21")]
 visible = false
 
+[node name="MessagesScreen" parent="HUD" instance=ExtResource("11_mrt21")]
+visible = false
+
 [node name="VictoryProbe" type="Node" parent="."]
 script = ExtResource("14_ulj2m")
 
 [connection signal="board_changed" from="." to="VictoryProbe" method="assay_victory"]
+[connection signal="new_message" from="BoardArea/GestureSurveyor/Viewport/Board" to="HUD/MessagesScreen" method="add_message"]
 [connection signal="picked_item" from="BoardArea/GestureSurveyor/Viewport/Board/Hero" to="HUD" method="update_states_at"]
 [connection signal="value_changed" from="HUD/ZoomSlider" to="BoardArea/GestureSurveyor/Viewport" method="_on_zoom_slider_value_changed"]
 [connection signal="pressed" from="HUD/LMargin/LButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
@@ -260,7 +267,7 @@ script = ExtResource("14_ulj2m")
 [connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/TestButton" to="." method="test"]
 [connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/TestButton2" to="." method="test2"]
 [connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/ShowCheatsButton" to="HUD" method="toggle_cheats_box"]
-[connection signal="pressed" from="HUD/TRMargin/ShowMessagesButton" to="." method="test2"]
+[connection signal="pressed" from="HUD/TRMargin/ShowMessagesButton" to="HUD/MessagesScreen" method="popup"]
 [connection signal="action_complete" from="HUD/CheatsSurveyor" to="HUD" method="hide_action_label"]
 [connection signal="action_started" from="HUD/CheatsSurveyor" to="HUD" method="show_action_label"]
 [connection signal="victory" from="VictoryProbe" to="." method="conclude_game" binds= [true]]

@@ -16,14 +16,9 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 ## A window to view the history of messages
-class_name MessagesList extends Control
+class_name MessagesScreen extends Control
 
-const MAX_MESSAGES:=200
-
-func _ready():
-	for i in range(10):
-		%ItemList.add_item("Message %d" % i)
-	trim_old_messages()
+const MAX_MESSAGES:=500
 
 func _input(event):
 	# We are not truly modal, so we prevent keys from sending action to the game board
@@ -32,18 +27,19 @@ func _input(event):
 		accept_event()
 
 func popup():
-	$EmptyLabel.visible = (%ItemList.item_count != 0)
-	%ItemList.select(%ItemList.item_count-1)
-	%ItemList.ensure_current_is_visible()
+	$EmptyLabel.visible = (%ListView.item_count == 0)
+	%ListView.select(%ListView.item_count-1)
+	%ListView.ensure_current_is_visible()
 	show()
 
 func trim_old_messages():
-	var extra = max(0, %ItemList.item_count - MAX_MESSAGES)
+	var nb_msg = %ListView.item_count
+	var extra = max(0, nb_msg - MAX_MESSAGES)
 	for i in range(extra):
-		%ItemList.remove_item(0)
+		%ListView.remove_item(0)
 	
 func add_message(message:String):
-	%ItemList.add_item(message)
+	%ListView.add_item(message)
 	trim_old_messages()
 
 func _on_back_button_pressed():
