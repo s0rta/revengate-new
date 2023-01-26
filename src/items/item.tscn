@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://cxf4glg0aasio"]
+[gd_scene load_steps=2 format=3 uid="uid://c6fe3irjwm5gv"]
 
-[ext_resource type="Script" path="res://src/item.gd" id="1_eccw0"]
+[ext_resource type="Script" path="res://src/items/item.gd" id="1_eccw0"]
 
 [node name="Item" type="Node2D"]
 script = ExtResource("1_eccw0")
@@ -21,6 +21,6 @@ grow_vertical = 2
 size_flags_horizontal = 4
 auto_translate = false
 theme_type_variation = &"AsciiGraphics"
-text = "🔧"
+text = "⚒"
 horizontal_alignment = 1
 vertical_alignment = 1

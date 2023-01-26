@@ -20,6 +20,7 @@ Revengate Style Guide
 * terrain: a group of tiles with common properties, like being walkable.
 * hero: the player character, regardless of its gender
 * actor: any character, includes monsters and hero
+* h_delta: a health delta, the generic version of damage (<0) or healing (>0)
 * ddump: debug dump – print a lot of info about an object to the termimal or to a file
 
 ## colors

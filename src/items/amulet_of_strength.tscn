@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://dj5x5c687ddyj"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_0v25p"]
+[ext_resource type="Script" path="res://src/combat/stats_modifiers.gd" id="2_tdwdk"]
+
+[node name="AmuletOfStrength" instance=ExtResource("1_0v25p")]
+
+[node name="Label" parent="." index="0"]
+text = "🉥"
+
+[node name="StatsModifiers" type="Node" parent="." index="1"]
+script = ExtResource("2_tdwdk")
+strength = 30

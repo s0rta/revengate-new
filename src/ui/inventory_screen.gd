@@ -20,16 +20,25 @@ class_name InventoryScreen extends Control
 signal inventory_changed
 signal closed(acted:bool)
 
-@onready var tree_view:Tree = find_child("Tree")
-var button_img = load("res://src/ui/drop_btn.png")
+enum Cols {
+	DESC,
+	USE,
+	DROP 
+}
+
+@onready var tree_view:Tree = find_child("Tree", true)
+var drop_button_img = load("res://src/ui/drop_btn.png")
+var use_button_img = load("res://src/ui/use_btn.png")
 var actor = null
 # Did the player did something that counts as a turn action while the screen was open?
 var acted := false  
 
 func _ready():
 	inventory_changed.connect(reset_empty_label_vis)
-	tree_view.set_column_title(0, "description")
-	tree_view.set_column_title(1, "action")
+	tree_view.set_column_expand_ratio(Cols.DESC, 4)
+	tree_view.set_column_expand(Cols.DESC, true)
+	for i in range(1, tree_view.columns):
+		tree_view.set_column_expand(i, false)
 
 func _input(event):
 	# We are not truly modal, so we prevent keys from sending action to the game board
@@ -53,9 +62,11 @@ func fill_actor_items(actor_:Actor):
 	$EmptyLabel.visible = not items.size()
 	for item in items:
 		var row = tree_view.create_item(root)
-		row.set_metadata (0, item)
-		row.set_text(0, item.get_short_desc())
-		row.add_button(1, button_img)
+		row.set_metadata(Cols.DESC, item)
+		row.set_text(Cols.DESC, item.get_short_desc())
+		if item.consumable:
+			row.add_button(Cols.USE, use_button_img)
+		row.add_button(Cols.DROP, drop_button_img)
 
 func reset_empty_label_vis():
 	if not actor:
@@ -71,6 +82,9 @@ func _on_tree_button_clicked(row, column, id, mouse_button_index):
 	var item = row.get_metadata(0)
 	row.set_button_disabled(column, id, true)
 	row.free()
-	actor.drop_item(item)
+	if column == Cols.DROP:
+		actor.drop_item(item)
+	elif column == Cols.USE:
+		actor.consume_item(item)
 	acted = true
 	emit_signal("inventory_changed")

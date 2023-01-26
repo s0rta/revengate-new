@@ -58,6 +58,7 @@ const CRITICAL_MULT := 0.35
 
 # core combat attributes
 @export var health := 50
+@onready var health_full = health  # health can only go above this level in exceptional cases
 @export var strength := 50
 @export var agility := 50
 @export var intelligence := 50
@@ -437,12 +438,23 @@ func strike(foe, weapon):
 func normalize_damage(weapon, damage):
 	## Return the number of hit points after applying resistances and minimums with `self` as 
 	## the receiver of `damage`.
+	# TODO: should probably replace all calls with normalize_health_delta()
 	damage *= get_resist_mult(weapon)
 	return max(1, round(damage))
 
+func normalize_health_delta(vector, h_delta):
+	## a more generic version of `normalize_damage()` that works for healing and non-weapons.
+	assert(h_delta != 0, "delta must be strictly positive (healing) or strictly negative (damage)")
+	h_delta = h_delta * get_resist_mult(vector) as int
+	if h_delta > 0:
+		return max(1, h_delta)
+	else:
+		return min(-1, h_delta)
+
 func activate_conditions():
 	## give all conditions and innate body repair a chance to heal us or make us suffer
-	if Rand.rstest(healing_prob):
+	assert(health_full != null)
+	if health < health_full and Rand.rstest(healing_prob):
 		regen()
 	for cond in get_conditions():
 		if is_alive():  # there is a chance that we won't make it through all the conditions
@@ -450,8 +462,12 @@ func activate_conditions():
 
 func regen(delta:=1):
 	## Regain some health from natural healing
-	add_message("%s healed a little" % name)
-	update_health(delta)
+	## Do nothing if health is already full
+	if health + delta > health_full:
+		delta = health_full - health
+	if delta:
+		add_message("%s healed a little" % name)
+		update_health(delta)
 
 func drop_item(item):
 	assert(item.get_parent() == self, "must possess an item before dropping it")
@@ -467,6 +483,15 @@ func pick_item(item):
 	item.reparent(self)
 	emit_signal("picked_item", item_coord)
 
+func consume_item(item: Item):
+	## activate the item and remove is from inventory
+	assert(item.consumable)
+	item.activate_on_actor(self)
+	# the item will free itself, but we have to remove it from inventory to prevent 
+	# reuse before the free happens
+	$/root.add_child(item)
+	add_message("%s used a %s" % [name, item.get_short_desc()])
+	
 func add_message(message):
 	## Try to add a message to the message window. 
 	## The visibility of the message depends on us being visible to the Hero 

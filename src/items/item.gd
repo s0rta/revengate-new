@@ -22,7 +22,8 @@ const FADE_DURATION := .15
 const FADE_MODULATE := Color(.7, .7, .7, 0.0)
 const VIS_MODULATE := Color.WHITE
 
-@export var char := "🔧"
+@export var char := "⚒"
+@export var consumable := false
 
 func _ready():
 	$Label.text = char
@@ -80,3 +81,13 @@ func is_on_board():
 	## an actor inventory or inaccessible for some other reason.
 	return get_parent() is RevBoard
 	
+func activate_on_actor(actor):
+	## activate the item on actor
+	for node in get_children():
+		if node is Effect:
+			node.apply(actor)
+	if consumable:
+		queue_free()
+
+func activate_on_coord(coord):
+	assert(false, "not implemented")

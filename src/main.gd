@@ -51,9 +51,11 @@ func get_board():
 		return find_child("Board")
 
 func show_inventory_screen() -> bool:
-	$HUD/InventoryScreen.fill_actor_items(hero)
-	$HUD/InventoryScreen.popup()
-	var acted = await $HUD/InventoryScreen.closed
+	## popup the inventory screen
+	## return if something considered a turn action happened while it was open
+	%InventoryScreen.fill_actor_items(hero)
+	%InventoryScreen.popup()
+	var acted = await %InventoryScreen.closed
 	return acted
 
 func switch_board_at(coord):
@@ -74,7 +76,7 @@ func switch_board_at(coord):
 		old_board.add_connection(coord, new_board, far)		
 		conn = old_board.get_connection(coord)
 		
-	new_board.new_message.connect($MessageScreen.add_message)
+	new_board.new_message.connect(%MessagesScreen.add_message)
 	old_board.set_active(false)
 	new_board.set_active(true)
 	
@@ -124,7 +126,7 @@ func make_monster(parent, char: String):
 	return monster
 
 func make_item(char):
-	var tree = load("res://src/item.tscn") as PackedScene
+	var tree = load("res://src/items/item.tscn") as PackedScene
 	var item = tree.instantiate()
 	item.char = char
 	return item
@@ -156,9 +158,13 @@ func _input(_event):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	for i in range(15):
-		print("test for %s: %s" % [i, Rand.linear_prob_test(i, 3, 9)])
+	
+	# consume the first thing we find that's consumable
+	for item in hero.get_items():
+		if item.consumable:
+			hero.consume_item(item)
+			break
 	
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-	get_board().add_message(null, "This is a test")
+	

@@ -21,6 +21,7 @@ extends Node
 
 const VERSION := "0.2.9"
 
+## The kind of damage, mostly used to compute resistances. Can apply to healing as well.
 enum DamageFamily {
 	NONE,
 	IMPACT, 

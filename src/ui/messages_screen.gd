@@ -39,6 +39,7 @@ func trim_old_messages():
 		%ListView.remove_item(0)
 	
 func add_message(message:String):
+	print(message)
 	%ListView.add_item(message)
 	trim_old_messages()
 

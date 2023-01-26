@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgdyufwncs77t"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_jyilg"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_tg0bb"]
+
+[node name="PotionOfHealing" instance=ExtResource("1_jyilg")]
+char = "🍸"
+consumable = true
+
+[node name="Effect" type="Node" parent="." index="1"]
+script = ExtResource("2_tg0bb")
+healing = 12
+immediate = true

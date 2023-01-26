@@ -25,17 +25,19 @@ class_name Effect extends Node
 @export var damage_family := Consts.DamageFamily.NONE
 @export var strength := 0
 @export var agility := 0
+@export var immediate := false
 @export var nb_turns := 1
 
 class Condition extends Node:
-#	@icon("res://assets/opencliparts/wheel_chair.svg")
 	var damage: int
+	var healing: int
 	var damage_family: Consts.DamageFamily
 	var nb_turns: int
 	var stats_modifiers: Dictionary
 
-	func _init(damage_, damage_family_, nb_turns_):
+	func _init(damage_, healing_, damage_family_, nb_turns_):
 		damage = damage_
+		healing = healing_
 		damage_family = damage_family_
 		nb_turns = nb_turns_
 		
@@ -44,8 +46,9 @@ class Condition extends Node:
 		var actor = get_parent()
 		assert(actor is Actor, "Conditions can only erupt after being attached to an actor")
 		# TODO: there could be a case for randomizing the damage from conditions
-		var dmg = actor.normalize_damage(self, damage)
-		actor.update_health(-dmg)
+		var h_delta = healing - damage
+		h_delta = actor.normalize_health_delta(self, h_delta)
+		actor.update_health(h_delta)
 		decay()
 		
 	func decay():
@@ -53,12 +56,11 @@ class Condition extends Node:
 		if nb_turns <= 0:
 			queue_free()
 	
-func apply(actor, immediate=false):
+func apply(actor):
 	## Apply the effect to `actor`. 
 	## If `immediate`, the effect starts this turn, otherwise, the effect start 
 	##   at the beginning of the next turn.
-	assert(healing == 0, "healing is not implemented")
-	var cond = Condition.new(damage, damage_family, nb_turns)
+	var cond = Condition.new(damage, healing, damage_family, nb_turns)
 	cond.stats_modifiers = CombatUtils.node_core_stats(self)
 	actor.add_child(cond)
 	if immediate:
