@@ -53,7 +53,6 @@ editor_description = "The first child of the board is not visible. This make sur
 
 [node name="Monster" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("5_ottqo")]
 position = Vector2(208, 368)
-healing_prob = 0.3
 
 [node name="Hero" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("4_lrsod")]
 position = Vector2(48, 80)

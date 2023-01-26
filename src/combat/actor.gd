@@ -63,7 +63,7 @@ const CRITICAL_MULT := 0.35
 @export var agility := 50
 @export var intelligence := 50
 @export var perception := 50
-@export var healing_prob := 0.1  # %chance to heal at any given turn
+@export var healing_prob := 0.05  # %chance to heal at any given turn
 @export var resistance := Consts.DamageFamily.NONE  # at most one!
 
 @export var faction := Factions.NONE
@@ -327,7 +327,7 @@ func update_health(hp_delta: int):
 	## Return the animation.
 	if hp_delta == 0:
 		return  # don't animate 0 deltas
-		
+	
 	health += hp_delta
 	emit_signal("health_changed", health)
 		
@@ -446,6 +446,12 @@ func normalize_health_delta(vector, h_delta):
 	## a more generic version of `normalize_damage()` that works for healing and non-weapons.
 	assert(h_delta != 0, "delta must be strictly positive (healing) or strictly negative (damage)")
 	h_delta = h_delta * get_resist_mult(vector) as int
+	
+	# check for overhealing
+	if health + h_delta > health_full:
+		# FIXME: check the vector for allowed over healing
+		return health_full - health
+	
 	if h_delta > 0:
 		return max(1, h_delta)
 	else:
@@ -463,6 +469,7 @@ func activate_conditions():
 func regen(delta:=1):
 	## Regain some health from natural healing
 	## Do nothing if health is already full
+	assert(delta<=0, "this is for healing, use something else for damage")
 	if health + delta > health_full:
 		delta = health_full - health
 	if delta:
@@ -489,7 +496,9 @@ func consume_item(item: Item):
 	item.activate_on_actor(self)
 	# the item will free itself, but we have to remove it from inventory to prevent 
 	# reuse before the free happens
-	$/root.add_child(item)
+	if item.get_parent():
+		item.get_parent().remove_child(item)
+		$/root.add_child(item)
 	add_message("%s used a %s" % [name, item.get_short_desc()])
 	
 func add_message(message):

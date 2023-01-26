@@ -6,6 +6,12 @@ This is a list of loose ends, code optimization, and small tasks for the Godot i
 ## Developer Efficiency
 - [ ] function to dump detailed status of all the actors on a board
 
+## Combat
+- over healing problem:
+-- desirable for spells, not for potions or "regular" healing items
+-- we can increase the pace of the game by letting the over HPs expire slowly
+--- we have to figure out how to give feedback to the player if we do that
+
 ## Strategies
 - [ ] Tracking asserts that the target is on the same board
 - [ ] Hero will sometimes move into an enemy while travelling

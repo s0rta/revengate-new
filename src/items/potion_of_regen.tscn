@@ -10,4 +10,4 @@ consumable = true
 [node name="Effect" type="Node" parent="." index="1"]
 script = ExtResource("2_63tlt")
 healing = 3
-nb_turns = 5
+nb_turns = 12

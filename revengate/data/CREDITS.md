@@ -8,6 +8,7 @@ Additionnal coding:
 - Victor Hunt
 - Chris J. Wallace
 - Angel Hudgins
+- JT Wright
 
 2D tiles: CC0, released by the Craw Stone Soup team
 https://opengameart.org/content/dungeon-crawl-32x32-tiles

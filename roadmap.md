@@ -41,6 +41,7 @@ Combat:
 - [x] no poison on default monsters nor hero
 - [x] items for progression
 - [x] damage over time
+- [x] healing
 
 Builder:
 - [x] quest item is deeper on a random level and unique
@@ -54,7 +55,6 @@ UI:
 - [x] bug: the cheats pannel captures click even when hidden
 
 ## v0.4
-- [ ] healing?
 
 Combat:
 - [ ] new evasion stat to increase all to-hit rolls
