@@ -448,8 +448,7 @@ func normalize_health_delta(vector, h_delta):
 	h_delta = h_delta * get_resist_mult(vector) as int
 	
 	# check for overhealing
-	if health + h_delta > health_full:
-		# FIXME: check the vector for allowed over healing
+	if not vector.magical and health + h_delta > health_full:
 		return health_full - health
 	
 	if h_delta > 0:

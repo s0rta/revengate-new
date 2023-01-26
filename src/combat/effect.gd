@@ -27,18 +27,21 @@ class_name Effect extends Node
 @export var agility := 0
 @export var immediate := false
 @export var nb_turns := 1
+@export var magical := false  # various effect are more powerful for magical items
 
 class Condition extends Node:
 	var damage: int
 	var healing: int
 	var damage_family: Consts.DamageFamily
+	var magical: bool
 	var nb_turns: int
 	var stats_modifiers: Dictionary
 
-	func _init(damage_, healing_, damage_family_, nb_turns_):
+	func _init(damage_, healing_, damage_family_, magical_, nb_turns_):
 		damage = damage_
 		healing = healing_
 		damage_family = damage_family_
+		magical = magical_
 		nb_turns = nb_turns_
 		
 	func erupt():
@@ -60,7 +63,7 @@ func apply(actor):
 	## Apply the effect to `actor`. 
 	## If `immediate`, the effect starts this turn, otherwise, the effect start 
 	##   at the beginning of the next turn.
-	var cond = Condition.new(damage, healing, damage_family, nb_turns)
+	var cond = Condition.new(damage, healing, damage_family, magical, nb_turns)
 	cond.stats_modifiers = CombatUtils.node_core_stats(self)
 	actor.add_child(cond)
 	if immediate:

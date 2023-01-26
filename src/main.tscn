@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bnpboopa78bjb"]
+[gd_scene load_steps=18 format=3 uid="uid://bnpboopa78bjb"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="7_h2f5m"]
 [ext_resource type="Script" path="res://src/ui/zoom_slider.gd" id="8_7qyjt"]
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="9_7u4fi"]
+[ext_resource type="PackedScene" uid="uid://c7fgdridawfb3" path="res://src/items/magic_capsule_of_regen.tscn" id="10_80jkh"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
@@ -64,6 +65,9 @@ visible = false
 visible = false
 
 [node name="PotionOfHealing" parent="BoardArea/GestureSurveyor/Viewport/Board/Hero" instance=ExtResource("9_7u4fi")]
+visible = false
+
+[node name="MagicCapsuleOfRegen" parent="BoardArea/GestureSurveyor/Viewport/Board/Hero" instance=ExtResource("10_80jkh")]
 visible = false
 
 [node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]

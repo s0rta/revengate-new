@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7fgdridawfb3"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_lbwot"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_qi62v"]
+
+[node name="MagicCapsuleOfRegen" instance=ExtResource("1_lbwot")]
+char = "🤀"
+consumable = true
+
+[node name="Effect" type="Node" parent="." index="1"]
+script = ExtResource("2_qi62v")
+healing = 3
+nb_turns = 5
+magical = true
