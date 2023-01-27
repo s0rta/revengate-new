@@ -70,13 +70,7 @@ const CRITICAL_MULT := 0.35
 
 var state = States.IDLE
 var nb_active_anims := 0
-var ray := RayCast2D.new()
 var dest  # keep track of where we are going while animations are running 
-
-func _ready():
-	ray.name = "Ray"
-	add_child(ray)
-	ray.collide_with_areas = true
 
 func _get_configuration_warnings():
 	var warnings = []

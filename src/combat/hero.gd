@@ -21,7 +21,6 @@ class_name Hero extends Actor
 const ENEMY_FACTIONS = [Factions.BEASTS]
 
 func _ready():
-	super()
 	state = States.LISTENING
 	was_attacked.connect(_add_attack_msg)
 
@@ -75,19 +74,20 @@ func _unhandled_input(event):
 		move = V.i(0, 1)
 		
 	if move:
-		ray.enabled = true
-		ray.target_position = move * RevBoard.TILE_SIZE
-		ray.force_raycast_update()
-		if ray.is_colliding():
-			var collider = ray.get_collider()
-			if collider is Actor and is_foe(collider):
-				attack(collider)
-				acted = true
-			else:
-				print("Can't act in this direction: %s is in the way!" % collider)
-		else:
+		var dest = get_cell_coord() + move
+		if index.is_free(dest):
 			self.move_by(move)
 			acted = true
+		else:
+			var actor = index.actor_at(dest)
+			if actor and is_foe(actor):
+				attack(actor)
+				acted = true
+			elif actor:
+				print("Can't act in this direction: %s is in the way!" % actor)
+			else:
+				print("Can't move to %s" % board.coord_str(dest))
+
 	if acted:
 		finalize_turn()
 	else:

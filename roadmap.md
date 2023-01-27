@@ -60,6 +60,7 @@ Combat:
 - [x] no poison on the first few monsters
 
 UI:
+- [ ] bug: items stay hidden after the actor standing over a stack then dies
 - [ ] dialogues
 - [ ] bestiary
 - [ ] visual feedback for when inputs are accepted
@@ -67,6 +68,9 @@ UI:
 
 ## v0.5
 - [x] merge git repo with Revengate v0.1
+
+Combat:
+- [ ] weapons are items, can be wielded
 
 UI: 
 - [ ] narrations
