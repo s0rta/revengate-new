@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b868r5vu2iiyh"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_uwbsw"]
+
+[node name="MissingWatch" instance=ExtResource("1_uwbsw")]
+char = "⌚"

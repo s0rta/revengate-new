@@ -468,7 +468,7 @@ func activate_conditions():
 func regen(delta:=1):
 	## Regain some health from natural healing
 	## Do nothing if health is already full
-	assert(delta<=0, "this is for healing, use something else for damage")
+	assert(delta>=0, "this is for healing, use something else for damage")
 	if health + delta > health_full:
 		delta = health_full - health
 	if delta:

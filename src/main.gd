@@ -23,9 +23,39 @@ signal board_changed(new_board)
 @onready var hero:Actor = find_child("Hero")
 @onready var hud = $HUD
 @onready var boards_cont: Node = find_child("Board").get_parent()
-var quest_item_exists := false
+var item_generators := []
+
+## Factory class to help us track which unique items have been generated.
+class UniqueItemGenerator extends RefCounted:
+	var done = false
+	var scene_path
+	var first_level
+	var last_level
+	var item = null
+	func _init(scene_path_, first_level_, last_level_):
+		scene_path = scene_path_
+		first_level = first_level_
+		last_level = last_level_
+		
+	func generate(depth):
+		if not done and Rand.linear_prob_test(depth, first_level-1, last_level):
+			done = true
+			return make_item()
+		else:
+			return null
+		
+	func make_item():
+		var tree = load(scene_path) as PackedScene
+		item = tree.instantiate()
+		return item
 
 func _ready():
+	for params in [["res://src/items/missing_watch.tscn", 4, 9], 
+					["res://src/items/potion_of_regen.tscn", 1, 3], 
+					["res://src/items/magic_capsule_of_regen.tscn", 4, 9], 
+					["res://src/items/amulet_of_strength.tscn", 2, 6]]:
+		item_generators.append(UniqueItemGenerator.new(params[0], params[1], params[2]))
+	
 	# FIXME: the original board should be able to re-index it's content
 	var board = find_child("Board")
 	assert(board, "Can't find the first game board")
@@ -97,17 +127,16 @@ func make_board(depth):
 	var index = new_board.make_index()
 	
 	# regular items
-	var all_chars = "⛾✄➴🌡🌷🍺🔨🔮🖋🗡🚬🥊🌂⚙⚗☕🏹🎖🖂".split()
-	for i in range(3):
+	var all_chars = "✄➴🌡🌷🔨🔮🖋🗡🚬🥊🌂⚙⚗☕🏹🎖🖂".split()
+	for i in range(1):
 		var item = make_item(Rand.choice(all_chars))
 		builder.place(item, false, null, true, null, index)
-
-	# quest item!
-	if not quest_item_exists and Rand.linear_prob_test(depth, 3, 9): # random level between 4 and 9
-		var item = make_item("⌚")
-		item.name = "MissingWatch"
-		builder.place(item, false, null, true, null, index)
-		quest_item_exists = true
+	
+	# unique and quest items
+	for gen in item_generators:
+		var item = gen.generate(depth)
+		if item:
+			builder.place(item, false, null, true, null, index)
 	
 	# monsters
 	var nb_monsters = max(0, depth-2)
