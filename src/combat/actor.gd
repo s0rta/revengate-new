@@ -92,6 +92,12 @@ func _to_string():
 	var coord_str = RevBoard.coord_str(get_cell_coord())
 	return "<Actor %s on %s at %s>" % [name, parent, coord_str]
 
+func ddump():
+	print(self)
+	print("  health: %s/%s" % [health, health_full])
+	print("  core stats: %s" % get_base_stats())
+	print("  modifiers:  %s" % get_modifiers())
+
 func is_idle() -> bool:
 	return state == States.IDLE
 
@@ -104,33 +110,23 @@ func is_listening() -> bool:
 func stop_listening():
 	assert(is_listening())
 	state = States.IDLE
-
-func _combine_modifiers(main_mods, sub_mods):
-	## Combine all the values of `sub_mods` into `main_mods. Changes are done in-place.
-	if sub_mods == null:
-		return
-	for key in Consts.CORE_STATS + Consts.CHALLENGES:
-		var val = sub_mods.get(key)
-		if val:
-			main_mods[key] += val
 			
 func get_modifiers():
 	## return a dict of all the modifiers from items and conditions combined together
-	var all_mods = {}
-	for key in Consts.CORE_STATS + Consts.CHALLENGES:
-		all_mods[key] = 0
-	var mods = null
-	for item in get_children():
-		# modifier can be on a sub-node on in a dict attribute
-		_combine_modifiers(all_mods, item.find_child("StatsModifiers"))
-		_combine_modifiers(all_mods, item.get("stats_modifiers"))
-	return all_mods
+	return Utils.get_node_modifiers(self)
 
 func get_stat(stat_name, challenge=null):
 	## Return the effective stat with all the active modifiers included
 	assert(stat_name in Consts.CORE_STATS, "%s is not a core stat" % stat_name)
 	var mods = get_modifiers()
 	return get(stat_name) + mods.get(stat_name, 0) + mods.get(challenge, 0)
+
+func get_base_stats():
+	## Return a dictionnary of the core stats without any modifiers applied
+	var stats = {}
+	for name in Consts.CORE_STATS:
+		stats[name] = get(name)
+	return stats
 
 func stat_roll(stat_name, challenge=null):
 	## Return a random number in [0..1] weighted by the given stat. 
@@ -196,6 +192,7 @@ func place(board_coord, immediate:=false):
 	## No tests are done to see if board_coord is a suitable location.
 	## immediate: don't wait for the Actor to finish their turn, some interference 
 	##   with animations is possible.
+	var old_coord = get_cell_coord()
 	if not immediate:
 		if state == States.ACTING:
 			await self.turn_done
@@ -203,7 +200,8 @@ func place(board_coord, immediate:=false):
 			await anims_done
 	reset_dest()
 	position = RevBoard.board_to_canvas(board_coord)
-
+	emit_signal("moved", old_coord, board_coord)
+	
 func move_by(cell_vect: Vector2i):
 	## Move by the specified number of tiles from the current position. 
 	## The move is animated, return the animation.

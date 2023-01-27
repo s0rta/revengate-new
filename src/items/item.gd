@@ -28,6 +28,13 @@ const VIS_MODULATE := Color.WHITE
 func _ready():
 	$Label.text = char
 
+func _to_string():
+	return "<Item %s>" % [name]
+
+func ddump():
+	print(self)
+	print("  modifiers: %s" % [Utils.get_node_modifiers(self)])
+
 func get_cell_coord():
 	## Return the board position of the item or null if the item is not on a board.
 	## This can happen for example if the item is in an actor's inventory.

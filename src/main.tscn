@@ -69,6 +69,7 @@ position_smoothing_enabled = true
 script = ExtResource("7_4dw6n")
 
 [node name="ZoomSlider" type="VSlider" parent="HUD"]
+custom_minimum_size = Vector2(32, 0)
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 16.0

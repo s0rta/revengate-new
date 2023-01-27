@@ -23,3 +23,28 @@ static func ddump_event(event, node, meth_name):
 	## Note all events are printed, only those with high debug-value.
 	if not event is InputEventMouseMotion:
 		print("%s.%s(%s)" % [node.name, meth_name, event])
+
+static func _combine_modifiers(main_mods, sub_mods):
+	## Combine all the values of `sub_mods` into `main_mods. Changes are done in-place.
+	if sub_mods == null:
+		return
+	for key in Consts.CORE_STATS + Consts.CHALLENGES:
+		var val = sub_mods.get(key)
+		if val:
+			main_mods[key] += val
+
+static func get_node_modifiers(node:Node):
+	## return a dict of all the modifiers for a node
+	var all_mods = {}
+	for key in Consts.CORE_STATS + Consts.CHALLENGES:
+		all_mods[key] = 0
+	for child in node.get_children():
+		# modifier can be on a `StatsModifiers` sub-node inside a `stats_modifiers` dict attribute
+		if child is StatsModifiers:
+			_combine_modifiers(all_mods, child)
+		else:
+			for sub_child in child.get_children():
+				if sub_child is StatsModifiers:
+					_combine_modifiers(all_mods, sub_child)
+		_combine_modifiers(all_mods, child.get("stats_modifiers"))
+	return all_mods
