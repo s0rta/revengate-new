@@ -78,7 +78,7 @@ UI:
 - [ ] bestiary
 - [ ] finely tuned animation overlaps
 - [ ] messages pane
-- [ ] messages history screen
+- [x] messages history screen
 
 ## v0.6
 - [ ] style UI with Godot theme
