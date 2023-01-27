@@ -34,7 +34,7 @@ UI:
 
 ## v0.3
 - [x] victory conditions
-- [ ] release to Google Play
+- [x] release to Google Play
 - [x] cheat codes
 
 Combat:
@@ -55,27 +55,21 @@ UI:
 - [x] bug: the cheats pannel captures click even when hidden
 
 ## v0.4
-
 Combat:
 - [ ] new evasion stat to increase all to-hit rolls
 - [x] no poison on the first few monsters
 
-Builder:
-- [ ] mazes can fill arbitrary areas of a board
-
 UI:
+- [ ] dialogues
+- [ ] bestiary
 - [ ] visual feedback for when inputs are accepted
-- [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
-- [ ] pinch to zoom
+- [ ] double tap for context menu
 
 ## v0.5
 - [x] merge git repo with Revengate v0.1
-- [ ] release on F-Droid
 
 UI: 
 - [ ] narrations
-- [ ] dialogues
-- [ ] bestiary
 - [ ] finely tuned animation overlaps
 - [ ] messages pane
 - [x] messages history screen
@@ -84,9 +78,17 @@ UI:
 - [ ] style UI with Godot theme
   - [ ] non actions are easily distinguished from turn-ending action 
 - [ ] help screen with contextual content
-- [ ] splash image as start screen background
+- [ ] splash image as the start screen background
+
+Builder:
+- [ ] mazes can fill arbitrary areas of a board
+
+## v??? – when Godot 4 enables the Android gestures recognition
+- [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
+- [ ] pinch to zoom
 
 ## v1.0
+- [ ] release on F-Droid
 - [ ] saved games
 - [ ] Lyon overworld
 - [ ] A Fight for Fumes campaign
