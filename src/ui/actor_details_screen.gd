@@ -41,7 +41,8 @@ func clear():
 func _make_img_text(img_path):
 	## Convert an image path to BBCode that will display reasonably well.
 	var size = %DrawingLabel.size
-	return "[img=%sx%s]%s[/img]" % [size.x, size.y, img_path]
+	# TODO: we probably have to look at the aspect ratio of the image rather than blindly passing 0
+	return "[img=%sx%s]%s[/img]" % [0, size.y, img_path]
 	
 func fill_with(actor:Actor):
 	## put the stats of actor all over the place
