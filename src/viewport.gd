@@ -24,9 +24,14 @@ func _ready():
 	size_2d_override_stretch = true
 
 func pos_to_local(pos):
+	## Convert a screen pixel `pos` into to a local pixel `pos`
 	var offset = get_camera_2d().offset
 	var transform = get_final_transform().affine_inverse()
 	return pos * transform + offset
+
+func global_pos_to_board_coord(pos):
+	## Convert a screen pixel `pos` into a Board tile `coord`.
+	return RevBoard.canvas_to_board(pos_to_local(pos))
 
 func inject_event(event, manual_xform=true):
 	## Send an input even to our descendent nodes.

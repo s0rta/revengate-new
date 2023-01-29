@@ -58,6 +58,7 @@ UI:
 Combat:
 - [ ] new evasion stat to increase all to-hit rolls
 - [x] no poison on the first few monsters
+- [ ] effects have a probability, should not trigger at every hit
 
 UI:
 - [ ] bug: items stay hidden after the actor standing over a stack then dies

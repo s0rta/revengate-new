@@ -67,6 +67,8 @@ const CRITICAL_MULT := 0.35
 @export var resistance := Consts.DamageFamily.NONE  # at most one!
 
 @export var faction := Factions.NONE
+@export_file("*.png", "*.jpg", "*.jpeg") var bestiary_img
+@export_multiline var description
 
 var state = States.IDLE
 var nb_active_anims := 0

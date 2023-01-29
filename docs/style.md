@@ -22,6 +22,8 @@ Revengate Style Guide
 * actor: any character, includes monsters and hero
 * h_delta: a health delta, the generic version of damage (<0) or healing (>0)
 * ddump: debug dump – print a lot of info about an object to the termimal or to a file
+* make_: prefix for deterministic generation
+* gen_: prefix for pseudo-random procedural generation
 
 ## colors
 The UI color scheme is based on Material Design v2 with the primary colors from the splash screen. This too make is easy to get the sub colors:

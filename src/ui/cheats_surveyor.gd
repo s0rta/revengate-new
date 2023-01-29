@@ -31,8 +31,7 @@ func start_teleport_to():
 	emit_signal("action_complete")
 	if vals[0]:
 		var viewport = $/root/Main.find_child("Viewport")
-		var pos = viewport.pos_to_local(vals[1])
-		var coord = RevBoard.canvas_to_board(pos)
+		var coord = viewport.global_pos_to_board_coord(vals[1])
 		get_parent().hero.place(coord, true)
 	is_capturing = false
 
@@ -43,8 +42,7 @@ func start_inspect_at():
 	emit_signal("action_complete")
 	if vals[0]:
 		var viewport = $/root/Main.find_child("Viewport")
-		var pos = viewport.pos_to_local(vals[1])
-		var coord = RevBoard.canvas_to_board(pos)
+		var coord = viewport.global_pos_to_board_coord(vals[1])
 		var coord_str = RevBoard.coord_str(coord)
 		print("Data at %s:" % coord_str)
 		var board: RevBoard = $/root/Main.get_board()

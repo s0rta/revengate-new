@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://7176cwrecm5i"]
+
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_c2kw3"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_5enhw"]
+[ext_resource type="Script" path="res://src/combat/monster.gd" id="2_grc43"]
+[ext_resource type="Script" path="res://src/combat/weapon.gd" id="3_o2kcy"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="4_csjey"]
+[ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="6_eyrho"]
+
+[node name="DesertCentipede" instance=ExtResource("1_c2kw3")]
+script = ExtResource("2_grc43")
+health = 18
+strength = 25
+agility = 40
+faction = 2
+bestiary_img = "res://src/monsters/desert-centipede.jpg"
+description = "The Tripolitan Desert Centipede is not the kind of bug that you can hope to crush under your boot. These distant cousins of the more common house centipede measure 1m on average and feature a very thick armored exoskeleton. 
+
+The creature often hides by burrowing under loose sand, which also protects it from the scorching heat of the desert sun. Desert centipedes are very good as sensing vibrations and they know when a prey is approaching even when burrowed. Their bite is said to be poisonous."
+
+[node name="Label" parent="." index="0"]
+text = "c"
+
+[node name="Tracking" type="Node" parent="." index="6"]
+script = ExtResource("2_5enhw")
+
+[node name="Bite" type="Node" parent="." index="7"]
+script = ExtResource("3_o2kcy")
+damage = 10
+
+[node name="Effect" type="Node" parent="Bite" index="0"]
+script = ExtResource("4_csjey")
+damage = 2
+damage_family = 7
+nb_turns = 4
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Bite" index="1"]
+stream = ExtResource("6_eyrho")

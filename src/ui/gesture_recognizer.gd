@@ -17,8 +17,12 @@
 
 ## Recognize some basic gestures and pass selectively them to the Game Area Viewport.
 class_name GestureRecognizer extends SubViewportContainer
+signal capture_stopped(success, position)
+signal action_started(message)
+signal action_complete
 
 @onready var viewport: SubViewport = find_child("Viewport")
+var is_capturing_clicks := false
 var has_panned := false
 
 ## Act on Cell: do the default action for a particular tile.
@@ -51,7 +55,17 @@ class InventoryEvent extends InputEventAction:
 	func ddump():
 		return "InventoryEvent: action=%s, pressed=%s" % [action, pressed]
 
+func _input(event):
+	if is_capturing_clicks and event is InputEventMouseButton:
+		accept_event()
+		if not event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			emit_signal("capture_stopped", true, event.position)
+
 func _gui_input(event):
+	if event is InputEventMouseButton and event.pressed and event.double_click:
+		assert(false, "wrong implementation")
+		%ActorDetailsScreen.popup()
+		accept_event()
 	if event.is_action_pressed("pan"):
 		has_panned = false
 		accept_event()
@@ -72,10 +86,31 @@ func _gui_input(event):
 			camera.offset -= event.relative
 		accept_event()
 
+func _unhandled_input(event):
+	if is_capturing_clicks and event.is_action_released("ui_cancel"):
+		emit_signal("capture_stopped", false, null)
+		accept_event()
+
 func start_loot():
 	## Start the loot action, pass the control to Hero
 	var event = LootEvent.new()
 	viewport.inject_event(event)
+
+func start_inspect_at():
+	is_capturing_clicks = true
+	emit_signal("action_started", "select position...")
+	var vals = await capture_stopped
+	emit_signal("action_complete")
+	if vals[0]:
+		var coord = viewport.global_pos_to_board_coord(vals[1])
+		# TODO: find something to inspect
+		var board = $/root/Main.get_board()
+		var index = board.make_index()
+		var actor = index.actor_at(coord)
+		if actor:
+			%ActorDetailsScreen.fill_with(actor)
+			%ActorDetailsScreen.popup()
+	is_capturing_clicks = false
 
 func show_inventory():
 	## Start the loot action, pass the control to Hero

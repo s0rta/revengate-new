@@ -187,13 +187,11 @@ func _input(_event):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	
-	# consume the first thing we find that's consumable
-	for item in hero.get_items():
-		if item.consumable:
-			hero.consume_item(item)
-			break
-	
+	%ActorDetailsScreen.clear()
+	%ActorDetailsScreen.popup()
+	var centipede = $BoardArea/GestureSurveyor/Viewport/Board/DesertCentipede
+	%ActorDetailsScreen.fill_with(centipede)
+
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-	
+
