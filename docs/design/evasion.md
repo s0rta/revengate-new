@@ -17,27 +17,27 @@ How many misses during the typical encounter is too many? It's a question that c
 ## Actors Modeling, desired behavior
 Here are a few examples of what some actors should feel like. We are note aiming for ultimate realism, we are aiming for a set of a handful of rules that will capture well the diversity of combat dynamics from a variety of encounters.
 
-Rat: fast, small, misses a lot, hard to hit
-Ghost: slow, medium size, misses more than average, hard to hit
-Golem: slow, big, misses more than average, easy to hit
-Tiger: fast, medium-small, hits most of the time, hard to hit
-Desert Centipede: fast, medium-small, hits most of the time
-Monk without armor: fast, hits most of the time, hard to hit
-Knight in full plate: slow, hits most of the time, easy to hit
-Guard with halberd: slow, hits most of the time, hard to hit
+* Rat: fast, small, misses a lot, hard to hit
+* Ghost: slow, medium size, misses more than average, hard to hit
+* Golem: slow, big, misses more than average, easy to hit
+* Tiger: fast, medium-small, hits most of the time, hard to hit
+* Desert Centipede: fast, medium-small, hits most of the time
+* Monk without armor: fast, hits most of the time, hard to hit
+* Knight in full plate: slow, hits most of the time, easy to hit
+* Guard with halberd: slow, hits most of the time, hard to hit
 
 
 ## Actors Modeling, current
 With `agility` on both sides of the to-hit roll, this is what we get.
 
-Rat: high agility, hits too often
-Ghost: high agility, hits too often
-Golem: low agility, feels about right
-Tiger: high agility, feels about right
-Desert Centipede: high agility, feels about right
-Monk without armor: high agility, feels about right
-Knight in full plate: low agility, misses too much
-Guard with halberd: high agility, feels about right
+* Rat: high agility, hits too often
+* Ghost: high agility, hits too often
+* Golem: low agility, feels about right
+* Tiger: high agility, feels about right
+* Desert Centipede: high agility, feels about right
+* Monk without armor: high agility, feels about right
+* Knight in full plate: low agility, misses too much
+* Guard with halberd: high agility, feels about right
 
 Some actors are very easy to model, some are almost impossible to fit in.
 
@@ -52,28 +52,28 @@ There are two obvious possible solutions:
 
 ## Actor Modeling, separate evasion core stat
 
-Rat: medium agility, high evasion, feels about right
-Ghost: medium-low agility, very high evasion, feels great!
-Golem: medium-low agility, low evasion, feels great!
-Tiger: high agility, high evasion, feels great!
-Desert Centipede: high agility, high evasion, feels about right
-Monk without armor: high agility, high evasion, feels great!
-Knight in full plate: high agility, low evasion, feels about right
-Guard with halberd: medium agility, high evasion, feels right, but we are obviously twisting the definition of the stats
+* Rat: medium agility, high evasion, feels about right
+* Ghost: medium-low agility, very high evasion, feels great!
+* Golem: medium-low agility, low evasion, feels great!
+* Tiger: high agility, high evasion, feels great!
+* Desert Centipede: high agility, high evasion, feels about right
+* Monk without armor: high agility, high evasion, feels great!
+* Knight in full plate: high agility, low evasion, feels about right
+* Guard with halberd: medium agility, high evasion, feels right, but we are obviously twisting the definition of the stats
 
 Things are definitely easier to model with this system and we only introduce a small amount of extra complexity.
 
 
 ## Actor Modeling, to-hit skill test
 
-Rat: high agility, small to-hit penalty on bite attacks, works, but we are definitely twisting the definition of the stats.
-Ghost: high agility, big to-hit bonus on touch attacks, feels about right.
-Golem: low agility, big to-hit bonus on fist attacks, feels about right.
-Tiger: high agility, small to-hit bonus on claw and bite attacks, feels about right.
-Desert Centipede: high agility, small to-hit bonus on poison bite attacks, feels about right.
-Monk without armor: high agility, small to-hit bonus on punch attacks, feels great!
+* Rat: high agility, small to-hit penalty on bite attacks, works, but we are definitely twisting the definition of the stats.
+* Ghost: high agility, big to-hit bonus on touch attacks, feels about right.
+* Golem: low agility, big to-hit bonus on fist attacks, feels about right.
+* Tiger: high agility, small to-hit bonus on claw and bite attacks, feels about right.
+* Desert Centipede: high agility, small to-hit bonus on poison bite attacks, feels about right.
+* Monk without armor: high agility, small to-hit bonus on punch attacks, feels great!
 Knight in full plate: low agility, high to-hit bonus with trained melee weapons, feels great!
-Guard with halberd: medium-high agility, high to-hit bonus with pole arms, feels great!
+* Guard with halberd: medium-high agility, high to-hit bonus with pole arms, feels great!
 
 This system does not quite capture all the cases, but it does model skills that should improve with usage very well. It also offers some feedback to the player in terms of character progression.
 
