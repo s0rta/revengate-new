@@ -25,7 +25,7 @@ func _ready():
 	was_attacked.connect(_add_attack_msg)
 
 func _add_attack_msg(attacker):
-	add_message("Hero was attacked by %s" % attacker.name)
+	add_message("%s was attacked by %s" % [get_caption(), attacker.get_caption()])
 
 func _unhandled_input(event):
 	if state != States.LISTENING:

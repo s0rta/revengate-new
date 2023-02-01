@@ -65,7 +65,8 @@ UI:
 - [ ] dialogues
 - [ ] bestiary
 - [ ] visual feedback for when inputs are accepted
-- [ ] double tap for context menu
+- [ ] messages pane
+- [x] messages history screen
 
 ## v0.5
 - [x] merge git repo with Revengate v0.1
@@ -76,8 +77,6 @@ Combat:
 UI: 
 - [ ] narrations
 - [ ] finely tuned animation overlaps
-- [ ] messages pane
-- [x] messages history screen
 
 ## v0.6
 - [ ] style UI with Godot theme
@@ -91,6 +90,8 @@ Builder:
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
 - [ ] pinch to zoom
+- [ ] double tap for context menu
+  - might not work since a single tap fires and fully propagates before we see the double tap
 
 ## v1.0
 - [ ] release on F-Droid

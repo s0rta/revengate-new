@@ -33,6 +33,7 @@ func _on_back_button_pressed():
 func clear():
 	## Remove traces of the previous actor
 	%DrawingLabel.text = "?"
+	%NameLabel.text = "Name:"
 	%StrengthLabel.text = "Strength:?"
 	%HealthLabel.text = "Health:?"
 	%AgilityLabel.text = "Agility:?"
@@ -48,6 +49,9 @@ func fill_with(actor:Actor):
 	## put the stats of actor all over the place
 	if actor.bestiary_img:
 		%DrawingLabel.text = _make_img_text(actor.bestiary_img)
+	else:
+		%DrawingLabel.text = ""
+	%NameLabel.text = "Name: %s" % actor.get_caption()
 	%HealthLabel.text = "Health (typical): %s" % actor.health_full
 	%StrengthLabel.text = "Strength: %s" % actor.strength
 	%AgilityLabel.text = "Agility: %s" % actor.agility

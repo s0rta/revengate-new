@@ -28,3 +28,4 @@ This is a list of loose ends, code optimization, and small tasks for the Godot i
 ## UI
 - [ ] damage over time should have a different animation than attack damage
 - [ ] message screen button should flash when new messages are added, rate limited to avoid the strobe effect
+- [ ] a `ViewPanner` might be a more gesture-aware way to move the camera around; ref.: https://github.com/godotengine/godot/pull/71685

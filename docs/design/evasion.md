@@ -1,11 +1,11 @@
 Evasion Revamped
 ================
 
-The current system (v0.3.0) uses Agility for both to-hit and evasion. This is an attempt to design a better way to model the actors's evasion. 
+The current system (v0.3.0) uses Agility for both to-hit and evasion. This document is an attempt to design a better way to model the actors' evasion. 
 
 ## Problem with Agility for Evasion
 
-Actors with high to-hit will always have high evasion, causing lots of misses which in turns makes the combat drag for too long.
+Actors with high to-hit will always have high evasion, causing lots of misses which in turns makes the combat drag for several turns long.
 
 Many games (tabletop and video) have a lot of misses during combat, but in the wise words of Ryan Prior, "missing too much feels like gambling". Picture yourself in a casino in Las Vegas. You loaded all your coins in that one blinking slot machine and you just pull the level, over and over again. Most of the times, the vast majority of the times in fact, nothing happens. You just repeat the action until you hit that one lucky roll and take home the the jackpot. Your strategic brain is completely disengaged and you just blindly replay the same strategy (swing my favourite sword) without considering the needs of the situation
 
@@ -15,7 +15,7 @@ How many misses during the typical encounter is too many? It's a question that c
 
 
 ## Actors Modeling, desired behavior
-Here are a few examples of what some actors should feel like. We are note aiming for ultimate realism, we are aiming for a set of a handful of rules that will capture well the diversity of combat dynamics from a variety of encounters.
+Here are a few examples of what some actors should feel like. We are not aiming for ultimate realism, we are aiming for a set of a handful of rules that will capture well the diversity of combat dynamics from a variety of encounters.
 
 * Rat: fast, small, misses a lot, hard to hit
 * Ghost: slow, medium size, misses more than average, hard to hit
@@ -47,7 +47,7 @@ There are two obvious possible solutions:
 
 1) a new evasion core stat: actors have a new evasion stat, to-hit becomes the attacker's Agility against the victim's Evasion;
 
-2) a new to-hit skill: to-hit becomes a roll with your weapon proficiency as bonus to your agility. You get better overtime. Beasts have high proficiency with their body parts (innate attacks). Skills can be open ended [0..inf) or in a small closed range (untrained, novice, expert). The latter translates much better into a skill tree (ex.: you can unlock rapiers *or* sabers after you become novice with blades).
+2) a new to-hit skill: to-hit becomes a roll with your weapon proficiency as bonus to your agility. You get better overtime. Beasts have high proficiency with their body parts (innate attacks). Skills can be open ended [0..inf) or in a small closed range (untrained, novice, expert). The latter translates much better into a skill tree (ex.: you can unlock rapiers *or* sabers only after you become novice with blades).
 
 
 ## Actor Modeling, separate evasion core stat
@@ -61,7 +61,7 @@ There are two obvious possible solutions:
 * Knight in full plate: high agility, low evasion, feels about right
 * Guard with halberd: medium agility, high evasion, feels right, but we are obviously twisting the definition of the stats
 
-Things are definitely easier to model with this system and we only introduce a small amount of extra complexity.
+Things are definitely easier to model with this system and we only introduce a small amount of new complexity.
 
 
 ## Actor Modeling, to-hit skill test

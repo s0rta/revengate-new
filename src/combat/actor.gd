@@ -56,7 +56,14 @@ const RESIST_MULT := 0.5
 # 35% more damage on a critical hit
 const CRITICAL_MULT := 0.35
 
+# main visuals
+@export_group("Visuals")
+@export var char := "x"
+@export var caption := ""
+@export var color := Color("#ebebeb")
+
 # core combat attributes
+@export_group("Combat")
 @export var health := 50
 @onready var health_full = health  # health can only go above this level in exceptional cases
 @export var strength := 50
@@ -67,6 +74,9 @@ const CRITICAL_MULT := 0.35
 @export var resistance := Consts.DamageFamily.NONE  # at most one!
 
 @export var faction := Factions.NONE
+
+# bestiary entry
+@export_group("Bestiary")
 @export_file("*.png", "*.jpg", "*.jpeg") var bestiary_img
 @export_multiline var description
 
@@ -80,7 +90,11 @@ func _get_configuration_warnings():
 		update_configuration_warnings()
 		warnings.append("Actor's can't act without a strategy.")
 	return warnings
-	
+
+func _ready():
+	$Label.text = char
+	$Label.add_theme_color_override("font_color", color)
+
 func _to_string():
 	var parent = get_parent()
 	if parent:
@@ -106,7 +120,13 @@ func is_listening() -> bool:
 func stop_listening():
 	assert(is_listening())
 	state = States.IDLE
-			
+
+func get_caption():
+	if caption:
+		return caption
+	else:
+		return name
+
 func get_modifiers():
 	## return a dict of all the modifiers from items and conditions combined together
 	return Utils.get_node_modifiers(self)
@@ -466,7 +486,7 @@ func regen(delta:=1):
 	if health + delta > health_full:
 		delta = health_full - health
 	if delta:
-		add_message("%s healed a little" % name)
+		add_message("%s healed a little" % get_caption())
 		update_health(delta)
 
 func drop_item(item):
@@ -492,7 +512,7 @@ func consume_item(item: Item):
 	if item.get_parent():
 		item.get_parent().remove_child(item)
 		$/root.add_child(item)
-	add_message("%s used a %s" % [name, item.get_short_desc()])
+	add_message("%s used a %s" % [get_caption(), item.get_short_desc()])
 	
 func add_message(message):
 	## Try to add a message to the message window. 

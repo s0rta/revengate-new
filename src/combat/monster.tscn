@@ -8,10 +8,8 @@
 
 [node name="Monster" instance=ExtResource("1_la2eu")]
 script = ExtResource("2_14ncx")
+char = "m"
 faction = 2
-
-[node name="Label" parent="." index="0"]
-text = "k"
 
 [node name="MainStrat" type="Node" parent="." index="2"]
 script = ExtResource("3_vfvny")
