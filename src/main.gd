@@ -21,6 +21,7 @@ extends Node2D
 signal board_changed(new_board)
 
 # [scene_name, min_level, max_level] tripplets
+# TODO: the ramp might work better as [occasional_depth, certain_depth, max_depth]
 const MONSTERS_PARAMS = [["rat", 0, 6], 
 						["labras", 4, 10], 
 						["ghost", 5, 15], 
