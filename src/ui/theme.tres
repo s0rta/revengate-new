@@ -78,6 +78,7 @@ corner_radius_bottom_left = 3
 corner_detail = 5
 
 [resource]
+default_font = ExtResource("1_1u55p")
 AsciiGraphics/base_type = &"Label"
 AsciiGraphics/colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
 AsciiGraphics/font_sizes/font_size = 28
@@ -116,6 +117,7 @@ MarginContainer/constants/margin_bottom = 24
 MarginContainer/constants/margin_left = 24
 MarginContainer/constants/margin_right = 24
 MarginContainer/constants/margin_top = 24
+RichTextLabel/fonts/normal_font = ExtResource("1_1u55p")
 TitleLabel/base_type = &"Label"
 TitleLabel/colors/font_color = Color(0.631373, 0.192157, 0, 1)
 TitleLabel/colors/font_outline_color = Color(1, 0.768627, 0.415686, 1)

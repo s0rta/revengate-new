@@ -17,6 +17,7 @@
 
 ## a screen to show the known stats about a NPC or a monster
 extends Control
+const EMPTY_IMG_TEXT = "\n[center]%s[/center]\n"
 
 func _input(event):
 	# We are not truly modal, so we prevent keys from sending action to the game board
@@ -42,15 +43,20 @@ func clear():
 func _make_img_text(img_path):
 	## Convert an image path to BBCode that will display reasonably well.
 	var size = %DrawingLabel.size
+	var background = %DrawingLabel.get_parent().find_child("Background")
+	print("img background: %s, %s" % [background.size, background.get_rect()])
+	background.reset_size()
+	print("reset img background: %s, %s" % [background.size, background.get_rect()])
+	print("img label size is %s" % [size])
 	# TODO: we probably have to look at the aspect ratio of the image rather than blindly passing 0
-	return "[img=%sx%s]%s[/img]" % [0, size.y, img_path]
+	return "[center][img=%sx%s]%s[/img][/center]" % [0, size.y, img_path]
 	
 func fill_with(actor:Actor):
 	## put the stats of actor all over the place
 	if actor.bestiary_img:
 		%DrawingLabel.text = _make_img_text(actor.bestiary_img)
 	else:
-		%DrawingLabel.text = ""
+		%DrawingLabel.text = EMPTY_IMG_TEXT % actor.char
 	%NameLabel.text = "Name: %s" % actor.get_caption()
 	%HealthLabel.text = "Health (typical): %s" % actor.health_full
 	%StrengthLabel.text = "Strength: %s" % actor.strength

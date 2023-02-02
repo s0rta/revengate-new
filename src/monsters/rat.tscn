@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://c1313jjkixsro"]
+
+[ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_h3xdc"]
+
+[node name="Rat" instance=ExtResource("1_h3xdc")]
+char = "r"
+caption = "rat"
+health = 3
+strength = 17
+agility = 57
+intelligence = 15
+description = "An annoying rodent, common in sewers and grannaries."
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)

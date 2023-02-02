@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://ons174xuqpcw"]
+
+[ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_53w7c"]
+
+[node name="SewerOtter" instance=ExtResource("1_53w7c")]
+char = "o"
+caption = "sewer otter"
+color = Color(0.329412, 0.4, 0.870588, 1)
+health = 23
+strength = 29
+agility = 52
+intelligence = 30
+description = "Sewer otters probably didn't evolve in sewers, but this is where most people are likely to encounter them. They look like a very large, very ferocious otter.
+
+They can be as long as 2m, but most specimens are 1.5m long. The head has a longer nose and and jaw than a river otter, almost as long as that of a fox, with very sharp teeth pointing up and down. Paws are webbed with very sharp claws, a bit like a mix between duck and wolverine paws. 
+
+Sewer otters are most commonly seen dripping with mud. Several diseased patches of skin are likely to be missing hair. 
+
+They are very good swimmers and can stay underwater for up to 10 minutes. They have been seen dragging preys with them to drown them."
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)

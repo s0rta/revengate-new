@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://gmrfpaf17847"]
+
+[ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_el0g3"]
+
+[node name="Labras" instance=ExtResource("1_el0g3")]
+char = "l"
+caption = "labras"
+color = Color(0.45098, 0.807843, 0, 1)
+health = 21
+strength = 35
+agility = 52
+intelligence = 30
+bestiary_img = "res://src/monsters/labras.jpg"
+description = "The labra is a gliding reptile. Its front claws are slightly curved, sharp and serrated, 20cm to 40cm long. 
+
+Connected to the first joints from the body on each limb is a membrane that also runs along the torso. The membrane is usually held retracted and in this position, it merely looks like a skin flap. When all limbs are extended, however, the membrane deploys like a sail and allows the labra to glide great distances. 
+
+The typical specimen measures 60cm to 1m tall from head to toes, 120cm to 2m from their nose to the end of their tail. Most specimens are plain green, but some display elaborate skin patterns similar to many snakes."
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)

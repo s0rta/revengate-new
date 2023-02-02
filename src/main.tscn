@@ -6,10 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://cfc3ttsrd52r" path="res://src/rev_board.tscn" id="3_vl15m"]
 [ext_resource type="PackedScene" uid="uid://bd2qlsrbf4sgo" path="res://src/combat/hero.tscn" id="4_lrsod"]
 [ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="5_odllu"]
-[ext_resource type="PackedScene" uid="uid://c7ftd4dk0u84f" path="res://src/combat/monster.tscn" id="5_ottqo"]
 [ext_resource type="Script" path="res://src/hud.gd" id="7_4dw6n"]
 [ext_resource type="Script" path="res://src/ui/zoom_slider.gd" id="8_7qyjt"]
-[ext_resource type="PackedScene" uid="uid://7176cwrecm5i" path="res://src/monsters/desert_centipede.tscn" id="8_v818c"]
+[ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="8_jy55a"]
+[ext_resource type="PackedScene" uid="uid://c1ken8fn4kyys" path="res://src/monsters/desert_centipede.tscn" id="8_v818c"]
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="9_7u4fi"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
@@ -51,11 +51,6 @@ layer_0/tile_data = PackedInt32Array(0, 0, 3, 1, 65536, 3, 2, 131072, 3, 3, 1966
 [node name="Pad" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Board"]
 editor_description = "The first child of the board is not visible. This make sure we can see all the monsters."
 
-[node name="Monster" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("5_ottqo")]
-position = Vector2(208, 368)
-char = "k"
-caption = "kobold"
-
 [node name="Hero" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("4_lrsod")]
 position = Vector2(48, 80)
 
@@ -63,7 +58,12 @@ position = Vector2(48, 80)
 visible = false
 
 [node name="DesertCentipede" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("8_v818c")]
-position = Vector2(272, 272)
+position = Vector2(272, 368)
+
+[node name="Monster" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("8_jy55a")]
+position = Vector2(208, 208)
+char = "k"
+caption = "kobold"
 
 [node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]
 anchor_mode = 0
@@ -209,11 +209,13 @@ layout_mode = 2
 [node name="InspectButton" type="Button" parent="HUD/TRMargin/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+focus_mode = 0
 text = "🔍"
 
 [node name="ShowMessagesButton" type="Button" parent="HUD/TRMargin/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+focus_mode = 0
 text = "📖"
 
 [node name="ActionLabel" type="Label" parent="HUD"]

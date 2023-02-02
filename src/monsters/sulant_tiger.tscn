@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://dae5sqhh0bd65"]
+
+[ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_ycuvh"]
+
+[node name="SulantTiger" instance=ExtResource("1_ycuvh")]
+char = "f"
+caption = "Sulant tiger"
+color = Color(0.341176, 0.686275, 0.215686, 1)
+health = 15
+strength = 39
+agility = 55
+intelligence = 30
+bestiary_img = "res://src/monsters/sulant-tiger.png"
+description = "Sulant tigers have the general shape and size of a Bengal tiger, but they are all light brown with light green stripes. Their backs have spines like those of porcupines and their tail is twice as long as that of a Bengal tiger.
+
+Sulant tigers use their tails as monkeys do to grab objects or the limbs of unsuspecting adventurers who venture too close."
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)

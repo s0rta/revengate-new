@@ -20,10 +20,22 @@ extends Node2D
 # The hero moved to a different level, the UI and turn logic are affected and must be notified
 signal board_changed(new_board)
 
+# [scene_name, min_level, max_level] tripplets
+const MONSTERS_PARAMS = [["rat", 0, 6], 
+						["labras", 4, 10], 
+						["ghost", 5, 15], 
+						["sulant_tiger", 6, 9], 
+						["desert_centipede", 7, 15], 
+						["sewer_otter", 7, 15], 
+						["pacherr", 9, 15], 
+						]
+const SCENE_PATH_FMT = "res://src/monsters/%s.tscn"
+
 @onready var hero:Actor = find_child("Hero")
 @onready var hud = $HUD
 @onready var boards_cont: Node = find_child("Board").get_parent()
 var item_generators := []
+var monster_generators := []
 
 ## Factory class to help us track which unique items have been generated.
 class UniqueItemGenerator extends RefCounted:
@@ -49,12 +61,34 @@ class UniqueItemGenerator extends RefCounted:
 		item = tree.instantiate()
 		return item
 
+class LinearGenerator extends RefCounted:
+	var scene_path
+	var first_level
+	var last_level
+	func _init(scene_name, first_level_, last_level_):
+		scene_path = SCENE_PATH_FMT % scene_name
+		first_level = first_level_
+		last_level = last_level_
+		
+	func generate(depth):
+		if Rand.linear_prob_test(depth, first_level-1, last_level):
+			return make_item()
+		else:
+			return null
+		
+	func make_item():
+		var tree = load(scene_path) as PackedScene
+		return tree.instantiate()
+
 func _ready():
 	for params in [["res://src/items/missing_watch.tscn", 4, 9], 
 					["res://src/items/potion_of_regen.tscn", 1, 3], 
 					["res://src/items/magic_capsule_of_regen.tscn", 4, 9], 
 					["res://src/items/amulet_of_strength.tscn", 2, 6]]:
 		item_generators.append(UniqueItemGenerator.new(params[0], params[1], params[2]))
+	
+	for params in MONSTERS_PARAMS:
+		monster_generators.append(LinearGenerator.new(params[0], params[1], params[2]))
 	
 	# FIXME: the original board should be able to re-index it's content
 	var board = find_child("Board")
@@ -141,10 +175,15 @@ func make_board(depth):
 	# monsters
 	var nb_monsters = max(0, depth-2)
 	for i in range(nb_monsters):
-		var char = Rand.choice("rkc".split())
-		var monster = make_monster(new_board, char)
-		builder.place(monster, false, null, true, null, index)
+		monster_generators.shuffle()
 		
+		# try all the generators until we get a hit, 
+		# which may lead us with fewer monsters than intended
+		for gen in monster_generators:
+			var monster = gen.generate(depth)
+			if monster:
+				builder.place(monster, false, null, true, null, index)
+				break
 	return new_board
 		
 func make_monster(parent, char: String):
