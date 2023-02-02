@@ -157,7 +157,7 @@ func stat_trial(difficulty, stat_name, challenge=null):
 	## Typical difficulties should be from 0 (trivial) to 100 (extremely hard), 
 	## but the scale is unbounded.
 	var stat = get_stat(stat_name, challenge)
-	return difficulty <= randfn(stat, SIGMA)
+	return difficulty >= randfn(stat, SIGMA)
 
 func get_board():
 	## Return the RevBoard this actor is playing on, return `null` is no board is currently active.

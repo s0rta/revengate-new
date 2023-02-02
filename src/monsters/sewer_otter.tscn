@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_53w7c"]
 
 [node name="SewerOtter" instance=ExtResource("1_53w7c")]
+spawn_cost = 5
 char = "o"
 caption = "sewer otter"
 color = Color(0.329412, 0.4, 0.870588, 1)
@@ -19,4 +20,5 @@ Sewer otters are most commonly seen dripping with mud. Several diseased patches 
 They are very good swimmers and can stay underwater for up to 10 minutes. They have been seen dragging preys with them to drown them."
 
 [node name="Label" parent="." index="0"]
-theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
+theme_override_colors/font_color = Color(0.329412, 0.4, 0.870588, 1)
+text = "o"

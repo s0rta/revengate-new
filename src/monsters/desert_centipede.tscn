@@ -9,9 +9,14 @@
 
 [node name="DesertCentipede" instance=ExtResource("1_c2kw3")]
 script = ExtResource("2_7sxyh")
+spawn_cost = 7
 char = "c"
 caption = "desert centipede"
 color = Color(0.917647, 0.615686, 0.101961, 1)
+health = 18
+strength = 25
+agility = 40
+intelligence = 10
 bestiary_img = "res://src/monsters/desert-centipede.jpg"
 description = "The Tripolitan Desert Centipede is not the kind of bug that you can hope to crush under your boot. These distant cousins of the more common house centipede measure 1m on average and feature a very thick armored exoskeleton. 
 

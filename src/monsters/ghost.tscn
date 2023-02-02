@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_buecm"]
 
 [node name="Ghost" instance=ExtResource("1_buecm")]
+spawn_cost = 6
 char = "𝔤"
 caption = "ghost"
 color = Color(0.411765, 0.411765, 0.411765, 0.701961)
@@ -14,4 +15,5 @@ perception = 30
 description = "The elusive nature of those entities makes them really hard to study."
 
 [node name="Label" parent="." index="0"]
-theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
+theme_override_colors/font_color = Color(0.411765, 0.411765, 0.411765, 0.701961)
+text = "𝔤"

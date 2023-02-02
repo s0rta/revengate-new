@@ -64,7 +64,7 @@ UI:
 - [ ] bug: items stay hidden after the actor standing over a stack then dies
 - [ ] inspect command appends messages for tile types and items
 - [ ] dialogues
-- [ ] bestiary
+- [x] bestiary
 - [ ] visual feedback for when inputs are accepted
 - [ ] messages pane
 - [x] messages history screen

@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_ycuvh"]
 
 [node name="SulantTiger" instance=ExtResource("1_ycuvh")]
+spawn_cost = 0
 char = "f"
 caption = "Sulant tiger"
 color = Color(0.341176, 0.686275, 0.215686, 1)
@@ -16,4 +17,5 @@ description = "Sulant tigers have the general shape and size of a Bengal tiger, 
 Sulant tigers use their tails as monkeys do to grab objects or the limbs of unsuspecting adventurers who venture too close."
 
 [node name="Label" parent="." index="0"]
-theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
+theme_override_colors/font_color = Color(0.341176, 0.686275, 0.215686, 1)
+text = "f"

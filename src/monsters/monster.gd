@@ -18,6 +18,9 @@
 @tool
 class_name Monster extends Actor
 
+@export_group("Procedural Generation")
+@export var spawn_cost:int   # in [0..100] for normal cases'
+
 func act():
 	state = States.ACTING
 	var strat = get_strategy()

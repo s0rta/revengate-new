@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://darwaf2kchvan"]
+
+[ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_20278"]
+
+[node name="Monster" instance=ExtResource("1_20278")]
+spawn_cost = 3
+char = "k"
+caption = "kobold"
+health = 30
+strength = 20
+agility = 40
+intelligence = 10
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
+text = "k"
