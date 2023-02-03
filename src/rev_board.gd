@@ -295,13 +295,13 @@ class BoardIndex extends RefCounted:
 		for item in items:
 			add_item(item)
 
-	func has_actor(actor:Actor):
+	func has_actor(actor):
 		return _actor_to_coord.has(actor)
 
 	func get_actors():
 		return _actor_to_coord.keys()
 
-	func add_actor(actor:Actor):
+	func add_actor(actor):
 		var coord = actor.get_cell_coord()
 		_coord_to_actor[coord] = actor
 		_actor_to_coord[actor] = coord
@@ -317,12 +317,12 @@ class BoardIndex extends RefCounted:
 		_coord_to_items[coord].append(item)
 		_item_to_coord[item] = coord
 		
-	func remove_actor(actor:Actor):
+	func remove_actor(actor):
 		var coord = _actor_to_coord[actor]
 		_actor_to_coord.erase(actor)
 		_coord_to_actor.erase(coord)
 
-	func refresh_actor(actor:Actor, strict:=true):
+	func refresh_actor(actor, strict:=true):
 		## Refresh the coordiates of `actor` in the index.
 		## strict: fail if `actor` is not already in the index.
 		if not has_actor(actor):
@@ -444,7 +444,7 @@ func purge_registrations():
 	for actor in get_actors():
 		deregister_actor(actor)
 	
-func register_actor(actor:Actor):
+func register_actor(actor):
 	## connect the relevant signals from `actor` so we can keep track of them
 	if not actor.moved.is_connected(_on_actor_moved):
 		actor.moved.connect(_on_actor_moved)

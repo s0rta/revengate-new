@@ -1,6 +1,6 @@
 [gd_resource type="Theme" load_steps=10 format=3 uid="uid://3araln1iald0"]
 
-[ext_resource type="FontFile" uid="uid://dgoumyria673g" path="res://assets/fonts/kalimati.ttf" id="1_1u55p"]
+[ext_resource type="FontFile" uid="uid://7hp4d53156pw" path="res://assets/fonts/kalimati.ttf" id="1_1u55p"]
 [ext_resource type="FontFile" uid="uid://dxmp7favkxwsh" path="res://assets/fonts/Symbola_hint.ttf" id="2_dl3k4"]
 [ext_resource type="FontVariation" uid="uid://crtqckgwsuhhq" path="res://assets/fonts/system_with_emojis.tres" id="3_sym2b"]
 

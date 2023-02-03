@@ -73,7 +73,8 @@ func find_hero():
 	var hero = null
 	while not hero and node and node.name != "root":
 		for sub_node in node.get_children():
-			if sub_node is Hero:
+			# FIXME: do something more robust
+			if sub_node.name == "Hero":
 				hero = sub_node
 				break
 		node = node.get_parent()

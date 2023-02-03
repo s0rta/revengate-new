@@ -2,7 +2,7 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dgoumyria673g"
+uid="uid://7hp4d53156pw"
 path="res://.godot/imported/kalimati.ttf-c2ace04b0e1e58bd469a38d970849c33.fontdata"
 
 [deps]
@@ -24,15 +24,10 @@ hinting=1
 subpixel_positioning=1
 oversampling=0.0
 Fallbacks=null
-fallbacks=[Resource("res://assets/fonts/Symbola_hint.ttf")]
+fallbacks=[]
 Compress=null
 compress=true
-preload=[{
-"chars": [],
-"glyphs": [],
-"name": "New Configuration",
-"size": Vector2i(16, 0)
-}]
+preload=[]
 language_support={}
 script_support={}
 opentype_features={}

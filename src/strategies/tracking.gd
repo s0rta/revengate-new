@@ -20,7 +20,7 @@ class_name Tracking extends Strategy
 
 var last_foe
 
-func select_foe(actor, index:RevBoard.BoardIndex):
+func select_foe(actor, index):
 	## Return a foe to attack from the current location of null if there are no suitable targets.
 	var foes = index.actor_foes(actor, 1)
 	if not foes.is_empty():
