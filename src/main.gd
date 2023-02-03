@@ -22,15 +22,15 @@ signal board_changed(new_board)
 
 # [scene_name, min_level, max_level] tripplets
 # TODO: the ramp might work better as [occasional_depth, certain_depth, max_depth]
-const MONSTERS_PARAMS = [["rat", 0, 6], 
-						["labras", 4, 10], 
-						["ghost", 5, 15], 
-						["sulant_tiger", 6, 9], 
-						["desert_centipede", 7, 15], 
-						["sewer_otter", 7, 15], 
-						["pacherr", 9, 15], 
-						]
-const SCENE_PATH_FMT = "res://src/monsters/%s.tscn"
+const MONSTERS = ["monsters/rat", 
+						"monsters/labras", 
+						"monsters/ghost", 
+						"monsters/sulant_tiger",  
+						"monsters/desert_centipede",  
+						"monsters/sewer_otter",
+						"monsters/pacherr"]
+						
+const SCENE_PATH_FMT = "res://src/%s.tscn"
 
 @onready var hero:Actor = find_child("Hero")
 @onready var hud = $HUD
@@ -88,9 +88,6 @@ func _ready():
 					["res://src/items/amulet_of_strength.tscn", 2, 6]]:
 		item_generators.append(UniqueItemGenerator.new(params[0], params[1], params[2]))
 	
-	for params in MONSTERS_PARAMS:
-		monster_generators.append(LinearGenerator.new(params[0], params[1], params[2]))
-	
 	# FIXME: the original board should be able to re-index it's content
 	var board = find_child("Board")
 	assert(board, "Can't find the first game board")
@@ -101,6 +98,20 @@ func _ready():
 	board_changed.connect($TurnQueue.invalidate_turn)
 	board_changed.connect(center_on_hero)
 	await $TurnQueue.run()
+
+func gen_deck(budget, card_names):
+	var cards = []
+	
+	for name in card_names:
+		var card = instantiate_card(name)
+		if card.spawn_cost:
+			var copies = max(0, round(budget / card.spawn_cost))
+			for copy in range(copies):
+				cards.append(card)
+
+	cards.shuffle()	
+	return cards		
+		
 
 
 func get_board():
@@ -174,25 +185,24 @@ func make_board(depth):
 			builder.place(item, false, null, true, null, index)
 	
 	# monsters
-	var nb_monsters = max(0, depth-2)
-	for i in range(nb_monsters):
-		monster_generators.shuffle()
+	var budget = max(0, depth * 3)
+	var monster_deck = gen_deck(budget, MONSTERS)
+	
+	for card in monster_deck:
+		if budget >= card.spawn_cost:
+			builder.place(card.duplicate(), false, null, true, null, index)
+			budget -= card.spawn_cost
 		
-		# try all the generators until we get a hit, 
-		# which may lead us with fewer monsters than intended
-		for gen in monster_generators:
-			var monster = gen.generate(depth)
-			if monster:
-				builder.place(monster, false, null, true, null, index)
-				break
+		if budget == 0:
+			break
+		
 	return new_board
-		
-func make_monster(parent, char: String):
-	var tree = load("res://src/combat/monster.tscn") as PackedScene
-	var monster = tree.instantiate()
-	monster.get_node("Label").text = char
-	parent.add_child(monster)
-	return monster
+
+
+func instantiate_card(name):
+	var tree = load(SCENE_PATH_FMT % name) as PackedScene	
+	return tree.instantiate()	
+
 
 func make_item(char):
 	var tree = load("res://src/items/item.tscn") as PackedScene
