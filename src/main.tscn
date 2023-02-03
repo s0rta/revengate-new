@@ -61,11 +61,11 @@ visible = false
 [node name="DesertCentipede" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("8_v818c")]
 position = Vector2(272, 368)
 
-[node name="Ghost" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("9_22ipg")]
-position = Vector2(144, 144)
-
 [node name="Monster" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("9_cplml")]
 position = Vector2(208, 272)
+
+[node name="Ghost" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("9_22ipg")]
+position = Vector2(272, 144)
 
 [node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]
 anchor_mode = 0
