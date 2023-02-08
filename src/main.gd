@@ -237,11 +237,15 @@ func _input(_event):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	%ActorDetailsScreen.clear()
-	%ActorDetailsScreen.popup()
-	var centipede = $BoardArea/GestureSurveyor/Viewport/Board/DesertCentipede
-	%ActorDetailsScreen.fill_with(centipede)
+	var mem = Memory.new()
+	mem.learn("met-bob", 0)
+	mem.learn("like-pizza", 0)
+	print("have I met bob? %s" % mem.recall("met-bob"))
+	mem.forget("met-bob")
+	print("mem._facts: %s" % [mem._facts])
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-
+	var mem = hero.find_child("Mem")
+	print("Hero knows about: %s" % [mem._facts])
+	print("Last attack: %s" % [mem.recall("was_attacked")])

@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dl5etg1cv5hbt"]
+[gd_scene load_steps=6 format=3 uid="uid://dl5etg1cv5hbt"]
 
 [ext_resource type="Script" path="res://src/combat/actor.gd" id="1_8kibw"]
 [ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="3_pvm2f"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="4_1yihd"]
 [ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="4_6yvk8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_00etm"]
@@ -56,3 +57,8 @@ offset_bottom = 3.0
 theme_override_colors/font_color = Color(0.25098, 0.780392, 0.172549, 1)
 theme_override_font_sizes/font_size = 21
 text = "?"
+
+[node name="Mem" type="Node" parent="."]
+script = ExtResource("4_1yihd")
+
+[connection signal="was_attacked" from="." to="." method="_learn_attack"]

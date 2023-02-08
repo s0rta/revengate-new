@@ -17,6 +17,9 @@
 
 @icon("res://src/combat/memory.png")
 ## A store for events affecting the world and individual actors.
+## Termilogy:
+##   - event: a string key to reference something that happened
+##   - fact: a dict containing the `event` plus some extra data
 class_name Memory extends Node
 
 enum Importance {
@@ -52,6 +55,10 @@ func forget(event):
 		if fact.event != event:
 			new_facts.append(fact)
 	_facts = new_facts
+	
+func clear():
+	## Induce total amnesia
+	_facts = []
 
 func is_relevant(fact, current_turn):
 	## Return true if `fact` is still relevant.

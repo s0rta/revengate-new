@@ -71,7 +71,7 @@ const CRITICAL_MULT := 0.35
 @export var intelligence := 50
 @export var perception := 50
 @export var healing_prob := 0.05  # %chance to heal at any given turn
-@export var resistance := Consts.DamageFamily.NONE  # at most one!
+@export var resistance: Consts.DamageFamily = Consts.DamageFamily.NONE  # at most one!
 
 @export var faction := Factions.NONE
 
@@ -81,6 +81,13 @@ const CRITICAL_MULT := 0.35
 @export_multiline var description
 
 var state = States.IDLE
+
+# Turn logic: when possible, use `state`, await on `turn_done()` and ttl/decay rather than
+# relying on specific turn number values.
+var current_turn: int
+var conditions_turn: int
+var acted_turn: int
+
 var nb_active_anims := 0
 var dest  # keep track of where we are going while animations are running 
 
@@ -120,6 +127,21 @@ func is_listening() -> bool:
 func stop_listening():
 	assert(is_listening())
 	state = States.IDLE
+
+func act():
+	## Do the action for this turn (might include passing).
+	## The actor over loads this method to select the action based on player input.
+	state = States.ACTING
+	var strat = get_strategy()
+	if not strat:
+		finalize_turn()
+		return
+	var action = strat.act()
+	if action != null:
+		action.connect("finished", finalize_turn, CONNECT_ONE_SHOT)
+	else:
+		finalize_turn()
+	return action
 
 func get_caption():
 	if caption:
@@ -187,8 +209,13 @@ func is_animating():
 	## Return whether the actor is currently performing an animation.
 	return nb_active_anims > 0
 
+func start_turn(current_turn_:int):
+	## Mark the start a new game turn, but we do not play until act() is called.
+	current_turn = current_turn_
+
 func finalize_turn():
 	state = States.IDLE
+	acted_turn = current_turn
 	emit_signal("turn_done")
 
 func reset_dest():
@@ -362,6 +389,10 @@ func update_health(hp_delta: int):
 		anim3.finished.connect(self.queue_free, CONNECT_ONE_SHOT)
 	return anim
 
+func _learn_attack(attacker):
+	## Remember who just hit us.
+	$Mem.learn("was_attacked", current_turn, Memory.Importance.NOTABLE, {"attacker": attacker})
+
 func is_alive():
 	return health > 0
 	
@@ -479,6 +510,7 @@ func activate_conditions():
 	for cond in get_conditions():
 		if is_alive():  # there is a chance that we won't make it through all the conditions
 			cond.erupt()
+	conditions_turn = current_turn
 
 func regen(delta:=1):
 	## Regain some health from natural healing

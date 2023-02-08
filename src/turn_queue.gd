@@ -57,10 +57,13 @@ func run():
 		print("=== Start of turn %d ===" % turn)
 		actors = get_actors()
 		print("playing actors: %s " % [actors])
-		# 1st pass: conditions
+		# 1st pass: tell everyone about the start of the turn
+		for actor in actors:
+			actor.start_turn(turn)
+		# 2nd pass: conditions
 		for actor in actors:
 			actor.activate_conditions()
-		# 2nd pass: actions
+		# 3rd pass: actions
 		for actor in actors:
 			if not turn_is_valid:
 				break
@@ -73,7 +76,7 @@ func run():
 				print("done with %s!" % actor)
 			if turn_is_valid and actor.is_animating():
 				await get_tree().create_timer(ACTING_DELAY).timeout
-		# 3rd pass: finalize animations
+		# 4th pass: finalize animations
 		for actor in actors:
 			if not turn_is_valid:
 				break

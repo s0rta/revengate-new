@@ -19,17 +19,4 @@
 class_name Monster extends Actor
 
 @export_group("Procedural Generation")
-@export var spawn_cost:int   # in [0..100] for normal cases'
-
-func act():
-	state = States.ACTING
-	var strat = get_strategy()
-	if not strat:
-		return
-	var action = strat.act()
-	if action != null:
-		action.connect("finished", finalize_turn, CONNECT_ONE_SHOT)
-	else:
-		finalize_turn()
-	return action
-	
+@export var spawn_cost:int   # in [0..100] for normal cases
