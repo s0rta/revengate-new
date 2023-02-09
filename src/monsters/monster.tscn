@@ -9,6 +9,7 @@
 [node name="Monster" instance=ExtResource("1_dnoca")]
 script = ExtResource("2_lu1qt")
 char = "m"
+spawn_cost = 0
 faction = 2
 
 [node name="Label" parent="." index="0"]

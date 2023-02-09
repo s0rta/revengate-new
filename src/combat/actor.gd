@@ -62,6 +62,9 @@ const CRITICAL_MULT := 0.35
 @export var caption := ""
 @export var color := Color("#ebebeb")
 
+@export_group("Procedural Generation")
+@export var spawn_cost:int   # in [0..100] for normal cases
+
 # core combat attributes
 @export_group("Combat")
 @export var health := 50

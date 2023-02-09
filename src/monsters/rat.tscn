@@ -12,14 +12,15 @@ spawn_cost = 1
 health = 3
 strength = 17
 agility = 57
+intelligence = 15
 
 [node name="Label" parent="." index="0"]
 text = "r"
 
-[node name="Weapon" type="Node" parent="." index="7"]
+[node name="Claw" type="Node" parent="." index="7"]
 script = ExtResource("2_82jmh")
 
-[node name="HitSound" type="AudioStreamPlayer" parent="Weapon" index="0"]
+[node name="HitSound" type="AudioStreamPlayer" parent="Claw" index="0"]
 stream = ExtResource("3_nx5af")
 
 [node name="Exploring" type="Node" parent="." index="8"]

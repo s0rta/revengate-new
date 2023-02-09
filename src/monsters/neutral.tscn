@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_6g60k"]
 
 [node name="Neutral" instance=ExtResource("1_6g60k")]
-spawn_cost = 0
 char = "N"
 faction = 0
 

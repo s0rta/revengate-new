@@ -3,10 +3,10 @@
 [ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_el0g3"]
 
 [node name="Labras" instance=ExtResource("1_el0g3")]
-spawn_cost = 4
 char = "l"
 caption = "labras"
 color = Color(0.45098, 0.807843, 0, 1)
+spawn_cost = 4
 health = 21
 strength = 35
 agility = 52

@@ -17,7 +17,7 @@
 
 extends Strategy
 
-const MAX_TRAVEL_ATTEMPTS = 3
+const MAX_TRAVEL_ATTEMPTS = 5
 
 
 var waypoint = null   # Vector2i
@@ -25,7 +25,6 @@ var nb_travel_attempts = 0
 
 func find_suitable_waypoint():
 	var board: RevBoard = me.get_board()
-	var index = board.make_index()
 	var metrics = board.dist_metrics(me.get_cell_coord())
 	return Rand.weighted_choice(metrics.all_coords(), metrics.all_dists())
 	
