@@ -1,17 +1,27 @@
-[gd_scene load_steps=2 format=3 uid="uid://c1313jjkixsro"]
+[gd_scene load_steps=5 format=3 uid="uid://cdkyw6ip3rs4x"]
 
-[ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_h3xdc"]
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_amoub"]
+[ext_resource type="Script" path="res://src/combat/weapon.gd" id="2_82jmh"]
+[ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_nx5af"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="4_m70cc"]
 
-[node name="Rat" instance=ExtResource("1_h3xdc")]
-spawn_cost = 1
+[node name="Rat" instance=ExtResource("1_amoub")]
 char = "r"
 caption = "rat"
+spawn_cost = 1
 health = 3
 strength = 17
 agility = 57
-intelligence = 15
-description = "An annoying rodent, common in sewers and grannaries."
 
 [node name="Label" parent="." index="0"]
-theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
 text = "r"
+
+[node name="Weapon" type="Node" parent="." index="7"]
+script = ExtResource("2_82jmh")
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Weapon" index="0"]
+stream = ExtResource("3_nx5af")
+
+[node name="Exploring" type="Node" parent="." index="8"]
+script = ExtResource("4_m70cc")
+priority = 0.2

@@ -160,6 +160,28 @@ class BoardMetrics:
 			furthest_dist = val
 		dists.setv(coord, val)
 	
+	func all_coords():
+		## Return an array of all non-null-weight coordinates
+		## 0-dist(s) is included
+		var coords = []
+		for i in range(dists.size.x):
+			for j in range(dists.size.y):
+				var coord = V.i(i, j)
+				if dists.getv(coord) != null:
+					coords.append(coord)
+		return coords
+
+	func all_dists():
+		## Return an array of all non-null distances in the same order as all_coords()
+		var used_dists = []
+		for i in range(dists.size.x):
+			for j in range(dists.size.y):
+				var coord = V.i(i, j)
+				var dist = dists.getv(coord)
+				if dist != null:
+					used_dists.append(dist)
+		return used_dists
+
 	func add_edge(here, there):
 		## record that `here` is the optimal previous location to reach `there`.
 		## The caller is responsible for knowing that the edge is indeed optimal.
