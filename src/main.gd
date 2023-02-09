@@ -237,12 +237,8 @@ func _input(_event):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	var mem = Memory.new()
-	mem.learn("met-bob", 0)
-	mem.learn("like-pizza", 0)
-	print("have I met bob? %s" % mem.recall("met-bob"))
-	mem.forget("met-bob")
-	print("mem._facts: %s" % [mem._facts])
+	var res = load("res://src/story/intro.dialogue")
+	DialogueManager.show_example_dialogue_balloon(res)
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
