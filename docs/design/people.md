@@ -99,7 +99,7 @@ He is a very occasional hashish user, preferring wine on most days and shunning 
 
 
 ## Michel Boilou
-Michel Boilou is a barber in Lyon. He also is the doorman for some of the Lux Co. secret compounds. Notably, an out-out-sight door at the back of a broom closet in this barber lounge leads to an absinthe café.
+Michel Boilou is a barber at the Steamy Towels in Lyon. He also is the doorman for some of the Lux Co. secret compounds. Notably, an out-out-sight door at the back of a broom closet in this barber lounge leads to an absinthe café.
 
 Boilou is tall and skinny with dark hair and impeccably shaped handlebar mustache. He typically wears a vest of black satin and flamboyant silk patterns. Flowers usually decorates his shop and he is found of using botanical metaphors to describe things.
 
