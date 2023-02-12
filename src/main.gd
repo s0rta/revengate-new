@@ -134,6 +134,15 @@ func show_inventory_screen() -> bool:
 	var acted = await %InventoryScreen.closed
 	return acted
 
+func talk_to(actor, conversation=null):
+	## Show the speech pane for `conversation` with `actor`. 
+	## conversation: if not provided, try `actor.get_conversation()`
+	if conversation == null:
+		conversation = actor.get_conversation()
+	if conversation == null:
+		get_board().add_message(hero, "%s has nothing to say." % actor.caption)
+	%DialoguePane.start(conversation.res, conversation.sect)
+
 func switch_board_at(coord):
 	## Flip the active board with the far side of the connector at `coord`, 
 	## move the Hero to the new active board.
@@ -237,8 +246,10 @@ func _input(_event):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	var res = load("res://src/story/intro.dialogue")
-	DialogueManager.show_example_dialogue_balloon(res)
+	var mike = find_child("Michel")
+	var convo = mike.get_conversation()
+	assert(convo)
+	%DialoguePane.start(convo.res, convo.sect)
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")

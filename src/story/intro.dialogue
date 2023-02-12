@@ -1,0 +1,17 @@
+~ meet_michel
+
+Michel: Hi! I'm Michel. I run the Steamy Towels barbershop near the port. Drop by for a shave sometime.
+
+Michel: I brought too many potions and they are getting annoyingly heavy. Would you like one?
+- Sure!
+- No, thank you.
+
+Michel: OK. I'll be right here. Chat with me again if you want to learn more about the dungeon.
+
+#=> END
+
+~ dungeon_intro
+
+Michel: Monsters are represented by letters. You beat them up by tapping on then. You look like a tough person, but you are not invincible. Keep an eye on your Health at the bottom right. 
+
+Michel: You can get more info about monsters by using the magnifying glass (top right). Items are white icons scattered throught the dungeon. You need to be standing over them to loot (pick) them.

@@ -45,6 +45,13 @@ func _unhandled_input(event):
 			if other and is_foe(other):
 				attack(other)
 				acted = true
+			elif other:
+				var convo = other.get_conversation()
+				if convo != null:
+					await $"/root/Main".talk_to(other, convo)
+				else:
+					get_board().add_message(self, "%s has nothing to tell you." % other.caption)
+				acted = true
 			elif index.is_free(coord):
 				move_to(coord)
 				acted = true

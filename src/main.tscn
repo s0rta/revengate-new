@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bnpboopa78bjb"]
+[gd_scene load_steps=20 format=3 uid="uid://bnpboopa78bjb"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -12,13 +12,13 @@
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="9_7u4fi"]
 [ext_resource type="PackedScene" uid="uid://c3ts4jux4wf7" path="res://src/monsters/ghost.tscn" id="9_22ipg"]
 [ext_resource type="PackedScene" uid="uid://darwaf2kchvan" path="res://src/monsters/kobold.tscn" id="9_cplml"]
-[ext_resource type="PackedScene" uid="uid://cdkyw6ip3rs4x" path="res://src/monsters/rat.tscn" id="9_dlgl3"]
 [ext_resource type="PackedScene" uid="uid://cdd2i0fqe6u6d" path="res://src/monsters/neutral.tscn" id="10_ru273"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
 [ext_resource type="Script" path="res://src/victory_probe.gd" id="14_ulj2m"]
 [ext_resource type="PackedScene" uid="uid://cgdqkl167nhyj" path="res://src/ui/actor_details_screen.tscn" id="14_yna85"]
+[ext_resource type="PackedScene" uid="uid://cd6ngrhhgito0" path="res://src/ui/dialogue_pane.tscn" id="18_vtucs"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_58o83")
@@ -68,6 +68,16 @@ position = Vector2(208, 272)
 
 [node name="Ghost" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("9_22ipg")]
 position = Vector2(272, 144)
+
+[node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("10_ru273")]
+position = Vector2(688, 208)
+char = "@"
+caption = "Michel Boilou"
+color = Color(0.160784, 0.698039, 0.552941, 1)
+conversation_file = "res://src/story/intro.dialogue"
+conversation_sect = "meet_michel"
+health = 90
+agility = 90
 
 [node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]
 anchor_mode = 0
@@ -253,6 +263,10 @@ unique_name_in_owner = true
 visible = false
 
 [node name="MessagesScreen" parent="HUD" instance=ExtResource("11_mrt21")]
+unique_name_in_owner = true
+visible = false
+
+[node name="DialoguePane" parent="HUD" instance=ExtResource("18_vtucs")]
 unique_name_in_owner = true
 visible = false
 

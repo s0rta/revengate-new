@@ -1,0 +1,93 @@
+[gd_scene load_steps=5 format=3 uid="uid://cd6ngrhhgito0"]
+
+[ext_resource type="Script" path="res://src/ui/dialogue_pane.gd" id="1_7isbc"]
+[ext_resource type="Script" path="res://addons/dialogue_manager/dialogue_label.gd" id="2_m6frq"]
+[ext_resource type="Script" path="res://src/event_dumper.gd" id="2_w8jr6"]
+[ext_resource type="FontVariation" uid="uid://crtqckgwsuhhq" path="res://assets/fonts/system_with_emojis.tres" id="2_wjq4l"]
+
+[node name="DialoguePane" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7isbc")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.701961)
+script = ExtResource("2_w8jr6")
+
+[node name="SpeechBackgroud" type="ColorRect" parent="Background"]
+custom_minimum_size = Vector2(0, 263)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 3
+color = Color(0, 0, 0, 0.701961)
+
+[node name="Margin" type="MarginContainer" parent="Background/SpeechBackgroud"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -263.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="VBox" type="VBoxContainer" parent="Background/SpeechBackgroud/Margin"]
+layout_mode = 2
+
+[node name="SpeakerLabel" type="RichTextLabel" parent="Background/SpeechBackgroud/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 2
+text = "Bob Morane"
+fit_content = true
+
+[node name="DialogueLabel" type="RichTextLabel" parent="Background/SpeechBackgroud/Margin/VBox"]
+unique_name_in_owner = true
+clip_contents = false
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_fonts/normal_font = ExtResource("2_wjq4l")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "This is a test."
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+meta_underlined = false
+hint_underlined = false
+deselect_on_focus_loss_enabled = false
+visible_characters_behavior = 2
+script = ExtResource("2_m6frq")
+
+[node name="ResponsesBox" type="VBoxContainer" parent="Background/SpeechBackgroud/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ResponseTemplate" type="RichTextLabel" parent="Background/SpeechBackgroud/Margin/VBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.87451, 0.615686, 0.160784, 1)
+theme_override_font_sizes/normal_font_size = 20
+text = "This is a test"
+
+[connection signal="spoke" from="Background/SpeechBackgroud/Margin/VBox/DialogueLabel" to="." method="_on_dialogue_label_spoke"]

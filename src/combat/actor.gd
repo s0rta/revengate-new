@@ -62,6 +62,10 @@ const CRITICAL_MULT := 0.35
 @export var caption := ""
 @export var color := Color("#ebebeb")
 
+@export_group("Story")
+@export_file("*.dialogue") var conversation_file
+@export var conversation_sect: String
+
 @export_group("Procedural Generation")
 @export var spawn_cost:int   # in [0..100] for normal cases
 
@@ -413,6 +417,20 @@ func is_foe(other: Actor):
 func is_impartial(other: Actor):
 	## Return whether `self` has neutral sentiment towards `other`
 	return !is_friend(other) and !is_foe(other)
+
+func get_conversation():
+	## Return a {res:..., sect:...} dict or null if the actor has nothing to say
+	## Actors with eloborate conversation logic should overload this method without 
+	##   even calling the parent implementation.
+	if conversation_file == null or len(conversation_file) == 0:
+		return null
+	var res = load(conversation_file)
+	var sect = null
+	if conversation_sect:
+		sect = conversation_sect
+	elif res.get_titles():
+		sect = res.get_titles()[-1]
+	return {"res": res, "sect": sect}
 
 func get_conditions():
 	var conds = []
