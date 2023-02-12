@@ -6,7 +6,7 @@
 
 [sub_resource type="FontVariation" id="FontVariation_ifbsj"]
 base_font = ExtResource("1_1u55p")
-fallbacks = [ExtResource("2_dl3k4")]
+fallbacks = Array[Font]([ExtResource("2_dl3k4")])
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mjio8"]
 content_margin_left = 4.0

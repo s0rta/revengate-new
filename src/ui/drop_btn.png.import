@@ -16,9 +16,9 @@ dest_files=["res://.godot/imported/drop_btn.png-9c879df7d075876a1743b1eb96d4cee3
 [params]
 
 compress/mode=0
+compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=false

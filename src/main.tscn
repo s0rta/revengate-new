@@ -81,7 +81,6 @@ agility = 90
 
 [node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]
 anchor_mode = 0
-current = true
 position_smoothing_enabled = true
 
 [node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]

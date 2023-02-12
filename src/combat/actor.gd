@@ -282,9 +282,9 @@ func travel_to(there):
 	if path == null or path.size() == 0:
 		return false
 	else:
-		assert(false, "broken for now, circular imports???")
-#		var strat = Traveling.new(there, path, self, 0.9)
-#		add_child(strat)
+#		assert(false, "broken for now, circular imports???")
+		var strat = Traveling.new(there, path, self, 0.9)
+		add_child(strat)
 		return true
 
 func get_strategy():

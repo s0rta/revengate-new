@@ -605,13 +605,6 @@ func filter_coords(coords, free, in_board, bbox, index=null):
 			coords = coords.filter(is_walkable)
 	return coords
 
-func get_used_rect() -> Rect2i:
-	var bbox:Rect2i = super.get_used_rect()
-	assert(bbox.position == Vector2i.ZERO, \
-			"make sure the board starts at the origin")
-	return bbox
-
-
 static func dist(from, to):
 	## Return the distance between two tiles in number of moves.
 	## Obstacles are not taken into account, use path() for that.
