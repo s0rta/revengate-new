@@ -56,7 +56,7 @@ UI:
 
 ## v0.4
 Strategies: 
-- [ ] bug: TravelTo stopped working with Godot 4b16
+- [x] bug: TravelTo stopped working with Godot 4b16
 
 Combat:
 - [ ] new evasion stat to increase all to-hit rolls

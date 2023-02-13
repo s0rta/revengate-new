@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bnpboopa78bjb"]
+[gd_scene load_steps=21 format=3 uid="uid://bnpboopa78bjb"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="9_7u4fi"]
 [ext_resource type="PackedScene" uid="uid://c3ts4jux4wf7" path="res://src/monsters/ghost.tscn" id="9_22ipg"]
 [ext_resource type="PackedScene" uid="uid://darwaf2kchvan" path="res://src/monsters/kobold.tscn" id="9_cplml"]
+[ext_resource type="Script" path="res://src/combat/core_skills.gd" id="10_niqw3"]
 [ext_resource type="PackedScene" uid="uid://cdd2i0fqe6u6d" path="res://src/monsters/neutral.tscn" id="10_ru273"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
@@ -68,6 +69,10 @@ position = Vector2(208, 272)
 
 [node name="Ghost" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("9_22ipg")]
 position = Vector2(272, 144)
+
+[node name="SkillLevels" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Board/Ghost"]
+script = ExtResource("10_niqw3")
+evasion = 2
 
 [node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("10_ru273")]
 position = Vector2(688, 208)

@@ -15,20 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-class_name CombatUtils extends Object
+## Modifies the skills of an actor
+class_name SkillLevels extends Node
 
-static func node_core_stats(node):
-	## Return the node core combat stats as a dict.
-	## This only works for nodes that store core stats as direct attributes, 
-	##   like Actor and Effect.
-	if node == null:
-		return {}
-	var mods = {}
-	for key in Consts.CORE_STATS + Consts.CHALLENGES:
-		var val = node.get(key)
-		if val:
-			mods[key] = val
-	return mods
-
-static func skill_modifier(level:Consts.SkillLevel):
-	return 7 * level
+@export var evasion: Consts.SkillLevel = Consts.SkillLevel.NEOPHYTE

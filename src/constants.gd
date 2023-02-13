@@ -34,5 +34,15 @@ enum DamageFamily {
 	CHEMICAL
 }
 
+enum SkillLevel {
+	NEOPHYTE,  # no skills at all
+	INITIATE, 
+	PROFICIENT, 
+	EXPERT, 
+	MYTHICAL,  # beyon the realm of mortals
+}
+
 const CORE_STATS := ["agility", "strength"] 
-const CHALLENGES := ["fencing"]
+const SKILLS := ["evasion"]
+# TODO: should be a const, but the parser has issue with the `+` expression
+var CHALLENGES := ["fencing"] + SKILLS

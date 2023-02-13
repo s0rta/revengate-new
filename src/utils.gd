@@ -48,3 +48,27 @@ static func get_node_modifiers(node:Node):
 					_combine_modifiers(all_mods, sub_child)
 		_combine_modifiers(all_mods, child.get("stats_modifiers"))
 	return all_mods
+
+static func _combine_skills(main_skills, sub_skills):
+	## Combine all the values of `sub_skills` into `main_skills. Changes are done in-place.
+	if sub_skills == null:
+		return
+	for key in Consts.SKILLS:
+		var val = sub_skills.get(key)
+		if val:
+			var old_val = main_skills.get(key, Consts.SkillLevel.NEOPHYTE)
+			main_skills[key] = max(old_val, val) 
+
+static func get_node_skills(node:Node):
+	## return a dict of all the skill values for a node
+	var all_skills = {}
+	for child in node.get_children():
+		# modifier can be on a `SkillLevels` sub-node inside a `skills_modifiers` dict attribute
+		if child is SkillLevels:
+			_combine_skills(all_skills, child)
+		else:
+			for sub_child in child.get_children():
+				if sub_child is SkillLevels:
+					_combine_skills(all_skills, sub_child)
+		_combine_skills(all_skills, child.get("skills_modifiers"))
+	return all_skills

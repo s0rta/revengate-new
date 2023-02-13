@@ -121,6 +121,7 @@ func ddump():
 	print("  health: %s/%s" % [health, health_full])
 	print("  core stats: %s" % get_base_stats())
 	print("  modifiers:  %s" % get_modifiers())
+	print("  skills:  %s" % get_skills())
 
 func is_idle() -> bool:
 	return state == States.IDLE
@@ -160,11 +161,21 @@ func get_modifiers():
 	## return a dict of all the modifiers from items and conditions combined together
 	return Utils.get_node_modifiers(self)
 
+func get_skills():
+	return Utils.get_node_skills(self)
+
 func get_stat(stat_name, challenge=null):
-	## Return the effective stat with all the active modifiers included
+	## Return the effective stat with all the active modifiers and skills included
 	assert(stat_name in Consts.CORE_STATS, "%s is not a core stat" % stat_name)
+	
+	# are we trained to perform that specific challenge?
+	var skill_mod = 0
+	if challenge in Consts.SKILLS:
+		var level = get_skills().get(challenge, Consts.SkillLevel.NEOPHYTE)
+		skill_mod = CombatUtils.skill_modifier(level)
+
 	var mods = get_modifiers()
-	return get(stat_name) + mods.get(stat_name, 0) + mods.get(challenge, 0)
+	return get(stat_name) + mods.get(stat_name, 0) + mods.get(challenge, 0) + skill_mod
 
 func get_base_stats():
 	## Return a dictionnary of the core stats without any modifiers applied
@@ -452,9 +463,9 @@ func get_items():
 			items.append(node)
 	return items
 
-func get_evasion(weapon):
+func get_evasion(_weapon):
 	## Return the evasion stat against a particular weapon. 
-	return get_stat("agility")
+	return get_stat("agility", "evasion")
 	
 func get_resist_mult(weapon):
 	## Return a multiplier to attenuate `weapon`'s damage based on our resistances.
