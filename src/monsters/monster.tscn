@@ -1,9 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://creaepcsp74ry"]
+[gd_scene load_steps=6 format=3 uid="uid://bptwaye2uijtm"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_dnoca"]
 [ext_resource type="Script" path="res://src/monsters/monster.gd" id="2_lu1qt"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="3_4l0qx"]
-[ext_resource type="Script" path="res://src/combat/innate_weapon.gd" id="4_0lc0c"]
+[ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="4_sc4dv"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="5_2or48"]
 
 [node name="Monster" instance=ExtResource("1_dnoca")]
@@ -19,7 +19,7 @@ text = "m"
 script = ExtResource("3_4l0qx")
 
 [node name="Claw" type="Node" parent="." index="8"]
-script = ExtResource("4_0lc0c")
+script = ExtResource("4_sc4dv")
 damage = 4
 damage_family = 2
 

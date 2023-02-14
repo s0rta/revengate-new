@@ -1,11 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://c1ken8fn4kyys"]
+[gd_scene load_steps=8 format=3 uid="uid://b26vqfk7j6un7"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_c2kw3"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_5enhw"]
 [ext_resource type="Script" path="res://src/monsters/monster.gd" id="2_7sxyh"]
 [ext_resource type="Script" path="res://src/combat/effect.gd" id="4_csjey"]
-[ext_resource type="Script" path="res://src/combat/innate_weapon.gd" id="4_s2rcw"]
-[ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="6_eyrho"]
+[ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="4_s2rcw"]
+[ext_resource type="AudioStream" uid="uid://da0cslkk526yk" path="res://src/monsters/bite-small.wav" id="5_dmajw"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="7_g05vb"]
 
 [node name="DesertCentipede" instance=ExtResource("1_c2kw3")]
@@ -37,7 +37,7 @@ damage = 8
 damage_family = 3
 
 [node name="HitSound" type="AudioStreamPlayer" parent="PoisonBite" index="0"]
-stream = ExtResource("6_eyrho")
+stream = ExtResource("5_dmajw")
 
 [node name="Poison" type="Node" parent="PoisonBite" index="1"]
 script = ExtResource("4_csjey")

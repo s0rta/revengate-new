@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://d8ovanvojd5g"]
+
+[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_44kv4"]
+[ext_resource type="AudioStream" uid="uid://khahrhqgm3fu" path="res://src/weapons/sword-hit-02.wav" id="2_mgq1s"]
+
+[node name="Knife" instance=ExtResource("1_44kv4")]
+damage = 4
+damage_family = 2
+skill = "fencing"
+char = "🔪"
+caption = "knife"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="1"]
+stream = ExtResource("2_mgq1s")

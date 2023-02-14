@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://c3ts4jux4wf7"]
+[gd_scene load_steps=4 format=3 uid="uid://c3ts4jux4wf7"]
 
-[ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_buecm"]
+[ext_resource type="PackedScene" uid="uid://bptwaye2uijtm" path="res://src/monsters/monster.tscn" id="1_buecm"]
+[ext_resource type="AudioStream" uid="uid://bgsqxexnr7idh" path="res://src/monsters/ethereal-02.mp3" id="2_806a1"]
+[ext_resource type="AudioStream" uid="uid://bik2r02brd3m7" path="res://src/monsters/ethereal-01.mp3" id="3_x3sxx"]
 
 [node name="Ghost" instance=ExtResource("1_buecm")]
 char = "𝔤"
@@ -16,3 +18,9 @@ description = "The elusive nature of those entities makes them really hard to st
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.411765, 0.411765, 0.411765, 0.701961)
 text = "𝔤"
+
+[node name="DeathSound" parent="." index="4"]
+stream = ExtResource("2_806a1")
+
+[node name="HitSound" parent="Claw" index="0"]
+stream = ExtResource("3_x3sxx")

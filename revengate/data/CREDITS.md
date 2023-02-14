@@ -42,5 +42,7 @@ Combat Sound Effects:
 CC0 by Ben (artisticdude)
 https://opengameart.org/content/rpg-sound-pack
 
-End of Game Sound Effects:
-- CC-BY-SA Yannick Gingras
+Additionnal sound effects CC-BY-SA Yannick Gingras:
+- end screens sound effects
+- hammer-01
+- ethereal-01, 02

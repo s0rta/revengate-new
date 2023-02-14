@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://diwm5gi6utoab"]
+
+[ext_resource type="PackedScene" uid="uid://dqwibklex0xo2" path="res://src/weapons/weapon.tscn" id="1_mi0cl"]
+[ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/weapons/sword-hit.wav" id="2_m3aw4"]
+
+[node name="Rapier" instance=ExtResource("1_mi0cl")]
+damage = 7
+damage_family = 3
+skill = "fencing"
+char = "🗡"
+caption = "rapier"
+
+[node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
+stream = ExtResource("2_m3aw4")

@@ -23,13 +23,18 @@ const FADE_MODULATE := Color(.7, .7, .7, 0.0)
 const VIS_MODULATE := Color.WHITE
 
 @export var char := "⚒"
+@export var caption := ""
 @export var consumable := false
+
 
 func _ready():
 	$Label.text = char
 
 func _to_string():
-	return "<Item %s>" % [name]
+	var str = caption
+	if len(str) == 0:
+		str = name
+	return "<Item %s>" % [str]
 
 func ddump():
 	print(self)
@@ -43,7 +48,10 @@ func get_cell_coord():
 	return RevBoard.canvas_to_board(position)
 
 func get_short_desc():
-	return "%s %s" % [$Label.text, name]
+	var desc = caption
+	if len(desc) == 0:
+		desc = name
+	return "%s %s" % [$Label.text, desc]
 
 func place(coord, _immediate=null):
 	## Place the item at the specific coordinate without animations.

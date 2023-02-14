@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://dnbg7u15s0nry"]
+
+[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_va6oo"]
+[ext_resource type="AudioStream" uid="uid://evhtpi4fygok" path="res://src/weapons/hammer-01.mp3" id="2_gttei"]
+
+[node name="Hammer" instance=ExtResource("1_va6oo")]
+damage = 5
+damage_family = 1
+char = "🔨"
+caption = "hammer"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="1"]
+stream = ExtResource("2_gttei")

@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cdkyw6ip3rs4x"]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_amoub"]
-[ext_resource type="Script" path="res://src/combat/innate_weapon.gd" id="3_6ex08"]
+[ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="3_6ex08"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_nx5af"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="4_m70cc"]
 

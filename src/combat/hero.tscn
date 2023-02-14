@@ -1,9 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://bd2qlsrbf4sgo"]
+[gd_scene load_steps=7 format=3 uid="uid://bxjfh12dtkof6"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_bgbko"]
 [ext_resource type="Script" path="res://src/combat/hero.gd" id="2_jrjv3"]
-[ext_resource type="PackedScene" uid="uid://dqwibklex0xo2" path="res://src/combat/weapon.tscn" id="3_4dlru"]
-[ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/combat/sword-hit.wav" id="4_u757e"]
+[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="3_4dlru"]
+[ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/weapons/sword-hit-01.wav" id="4_u757e"]
 [ext_resource type="AudioStream" uid="uid://bajy1gsb550i5" path="res://src/combat/hero_miss.wav" id="4_y2iie"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="6_6imm7"]
 
