@@ -64,18 +64,18 @@ var dialogue_line: DialogueLine:
 		is_waiting_for_input = true
 
 func _input(event):
-	Utils.ddump_event(event, self, "_input")
+#	Utils.ddump_event(event, self, "_input")
 	if visible:
 		if is_waiting_for_input:
 			accept_event()
 		if _is_left_released(event):
 			advance()
 
-func _gui_input(event):
-	Utils.ddump_event(event, self, "_gui_input")
+#func _gui_input(event):
+#	Utils.ddump_event(event, self, "_gui_input")
 
 func _unhandled_input(event):
-	Utils.ddump_event(event, self, "_unhandled_input")
+#	Utils.ddump_event(event, self, "_unhandled_input")
 	# Consume all input while the balloon is visible
 	if is_waiting_for_input and visible:
 		accept_event()

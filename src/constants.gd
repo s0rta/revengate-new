@@ -43,6 +43,6 @@ enum SkillLevel {
 }
 
 const CORE_STATS := ["agility", "strength"] 
-const SKILLS := ["evasion"]
+const SKILLS := ["evasion", "innate_attack", "fencing"]
 # TODO: should be a const, but the parser has issue with the `+` expression
-var CHALLENGES := ["fencing"] + SKILLS
+var CHALLENGES := [] + SKILLS

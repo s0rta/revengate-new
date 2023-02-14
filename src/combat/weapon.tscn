@@ -1,6 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://g5xddmsru7m2"]
+[gd_scene load_steps=3 format=3 uid="uid://dqwibklex0xo2"]
 
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_etf0n"]
 [ext_resource type="Script" path="res://src/combat/weapon.gd" id="1_nhkai"]
 
-[node name="Weapon" type="Node"]
+[node name="Weapon" instance=ExtResource("1_etf0n")]
 script = ExtResource("1_nhkai")
+damage = 1
+damage_family = null
+is_equipped = false
+skill = ""
+char = "⚔"
+
+[node name="Label" parent="." index="0"]
+text = "⚔"

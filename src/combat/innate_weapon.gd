@@ -15,25 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-class_name CombatUtils extends Object
+## Like a Weapon as far as attacking goes, but not part of the inventory mechanics.
+## A typical example is a body part.
+@icon("res://assets/opencliparts/cayenne.svg")
+class_name InnateWeapon extends Node
 
-static func node_core_stats(node):
-	## Return the node core combat stats as a dict.
-	## This only works for nodes that store core stats as direct attributes, 
-	##   like Actor and Effect.
-	if node == null:
-		return {}
-	var mods = {}
-	for key in Consts.CORE_STATS + Consts.CHALLENGES:
-		var val = node.get(key)
-		if val:
-			mods[key] = val
-	return mods
+@export var damage := 1
+@export var damage_family: Consts.DamageFamily
 
-static func skill_modifier(level:Consts.SkillLevel):
-	return 7 * level
-
-static func apply_all_effects(weapon, victim):
-	for node in weapon.get_children():
-		if node is Effect:
-			node.apply(victim)
+# You can't change which skill is checked, but that skill can be trained. To improve it, 
+# add a SkillLevels sub-node on the actor.
+const skill := "innate_attack"

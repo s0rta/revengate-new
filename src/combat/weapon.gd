@@ -16,12 +16,9 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 @icon("res://assets/opencliparts/sword_01.svg")
-class_name Weapon extends Node
+class_name Weapon extends Item
 
 @export var damage := 1
 @export var damage_family: Consts.DamageFamily
-
-func apply_all_effects(victim):
-	for node in get_children():
-		if node is Effect:
-			node.apply(victim)
+@export var is_equipped := false
+@export var skill := ""  # which proficiency can boost our to-hit with this weapon

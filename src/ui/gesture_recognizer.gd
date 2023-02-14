@@ -63,7 +63,9 @@ func _input(event):
 
 func _gui_input(event):
 	if event is InputEventMouseButton and event.pressed and event.double_click:
-		assert(false, "wrong implementation")
+		# BUG: Our current implementation of doubletap actions is wrong because single tap
+		# actions have already been done by the time this handler is called. 
+		assert(false, "wrong implementation")  
 		%ActorDetailsScreen.popup()
 		accept_event()
 	if event.is_action_pressed("pan"):

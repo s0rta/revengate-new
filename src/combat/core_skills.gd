@@ -19,3 +19,5 @@
 class_name SkillLevels extends Node
 
 @export var evasion: Consts.SkillLevel = Consts.SkillLevel.NEOPHYTE
+@export var fencing: Consts.SkillLevel = Consts.SkillLevel.NEOPHYTE
+@export var innate_attack: Consts.SkillLevel = Consts.SkillLevel.NEOPHYTE

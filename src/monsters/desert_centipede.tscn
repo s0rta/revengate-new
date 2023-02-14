@@ -1,22 +1,24 @@
-[gd_scene load_steps=7 format=3 uid="uid://c1ken8fn4kyys"]
+[gd_scene load_steps=8 format=3 uid="uid://c1ken8fn4kyys"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_c2kw3"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_5enhw"]
 [ext_resource type="Script" path="res://src/monsters/monster.gd" id="2_7sxyh"]
-[ext_resource type="Script" path="res://src/combat/weapon.gd" id="3_o2kcy"]
 [ext_resource type="Script" path="res://src/combat/effect.gd" id="4_csjey"]
+[ext_resource type="Script" path="res://src/combat/innate_weapon.gd" id="4_s2rcw"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="6_eyrho"]
+[ext_resource type="Script" path="res://src/combat/core_skills.gd" id="7_g05vb"]
 
 [node name="DesertCentipede" instance=ExtResource("1_c2kw3")]
 script = ExtResource("2_7sxyh")
-spawn_cost = 7
 char = "c"
 caption = "desert centipede"
 color = Color(0.917647, 0.615686, 0.101961, 1)
+spawn_cost = 7
 health = 18
 strength = 25
 agility = 40
 intelligence = 10
+faction = 2
 bestiary_img = "res://src/monsters/desert-centipede.jpg"
 description = "The Tripolitan Desert Centipede is not the kind of bug that you can hope to crush under your boot. These distant cousins of the more common house centipede measure 1m on average and feature a very thick armored exoskeleton. 
 
@@ -29,15 +31,20 @@ text = "c"
 [node name="Tracking" type="Node" parent="." index="6"]
 script = ExtResource("2_5enhw")
 
-[node name="Bite" type="Node" parent="." index="7"]
-script = ExtResource("3_o2kcy")
-damage = 10
+[node name="PoisonBite" type="Node" parent="." index="8"]
+script = ExtResource("4_s2rcw")
+damage = 8
+damage_family = 3
 
-[node name="Effect" type="Node" parent="Bite" index="0"]
+[node name="HitSound" type="AudioStreamPlayer" parent="PoisonBite" index="0"]
+stream = ExtResource("6_eyrho")
+
+[node name="Poison" type="Node" parent="PoisonBite" index="1"]
 script = ExtResource("4_csjey")
 damage = 2
 damage_family = 7
 nb_turns = 4
 
-[node name="HitSound" type="AudioStreamPlayer" parent="Bite" index="1"]
-stream = ExtResource("6_eyrho")
+[node name="SkillLevels" type="Node" parent="." index="9"]
+script = ExtResource("7_g05vb")
+innate_attack = 2

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cdkyw6ip3rs4x"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_amoub"]
-[ext_resource type="Script" path="res://src/combat/weapon.gd" id="2_82jmh"]
+[ext_resource type="Script" path="res://src/combat/innate_weapon.gd" id="3_6ex08"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_nx5af"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="4_m70cc"]
 
@@ -15,14 +15,17 @@ agility = 57
 intelligence = 15
 
 [node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
 text = "r"
 
-[node name="Claw" type="Node" parent="." index="7"]
-script = ExtResource("2_82jmh")
-
-[node name="HitSound" type="AudioStreamPlayer" parent="Claw" index="0"]
-stream = ExtResource("3_nx5af")
-
-[node name="Exploring" type="Node" parent="." index="8"]
+[node name="Exploring" type="Node" parent="." index="7"]
 script = ExtResource("4_m70cc")
 priority = 0.2
+
+[node name="Bite" type="Node" parent="." index="8"]
+script = ExtResource("3_6ex08")
+damage = 2
+damage_family = 3
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Bite" index="0"]
+stream = ExtResource("3_nx5af")

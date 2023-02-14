@@ -64,7 +64,7 @@ visible = false
 [node name="DesertCentipede" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("8_v818c")]
 position = Vector2(272, 368)
 
-[node name="Monster" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("9_cplml")]
+[node name="Kobold" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("9_cplml")]
 position = Vector2(208, 272)
 
 [node name="Ghost" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("9_22ipg")]

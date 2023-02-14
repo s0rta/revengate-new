@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bd2qlsrbf4sgo"]
+[gd_scene load_steps=7 format=3 uid="uid://bd2qlsrbf4sgo"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_bgbko"]
 [ext_resource type="Script" path="res://src/combat/hero.gd" id="2_jrjv3"]
-[ext_resource type="PackedScene" uid="uid://g5xddmsru7m2" path="res://src/combat/weapon.tscn" id="3_4dlru"]
+[ext_resource type="PackedScene" uid="uid://dqwibklex0xo2" path="res://src/combat/weapon.tscn" id="3_4dlru"]
 [ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/combat/sword-hit.wav" id="4_u757e"]
 [ext_resource type="AudioStream" uid="uid://bajy1gsb550i5" path="res://src/combat/hero_miss.wav" id="4_y2iie"]
+[ext_resource type="Script" path="res://src/combat/core_skills.gd" id="6_6imm7"]
 
 [node name="Hero" instance=ExtResource("1_bgbko")]
 position = Vector2(-1, 0)
@@ -22,12 +23,19 @@ offset_bottom = 0.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "@"
 
-[node name="sword" parent="." index="2" instance=ExtResource("3_4dlru")]
-damage = 10
-damage_family = 1
+[node name="MissSound" parent="." index="2"]
+stream = ExtResource("4_y2iie")
 
-[node name="HitSound" type="AudioStreamPlayer" parent="sword" index="0"]
+[node name="Sword" parent="." index="7" instance=ExtResource("3_4dlru")]
+visible = false
+damage = 7
+damage_family = 2
+is_equipped = true
+skill = "fencing"
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Sword" index="1"]
 stream = ExtResource("4_u757e")
 
-[node name="MissSound" parent="." index="3"]
-stream = ExtResource("4_y2iie")
+[node name="SkillLevels" type="Node" parent="." index="8"]
+script = ExtResource("6_6imm7")
+fencing = 1

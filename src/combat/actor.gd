@@ -175,7 +175,11 @@ func get_stat(stat_name, challenge=null):
 		skill_mod = CombatUtils.skill_modifier(level)
 
 	var mods = get_modifiers()
-	return get(stat_name) + mods.get(stat_name, 0) + mods.get(challenge, 0) + skill_mod
+	var eff_stat = get(stat_name) + mods.get(stat_name, 0)
+	var challenge_mod = mods.get(challenge, 0)
+	#print("get_stat(%s, %s): %s, %s, %s" % [stat_name, challenge, eff_stat, 
+	#										challenge_mod, skill_mod])
+	return eff_stat + challenge_mod + skill_mod
 
 func get_base_stats():
 	## Return a dictionnary of the core stats without any modifiers applied
@@ -454,7 +458,13 @@ func get_weapons():
 	## Return all the active weapons for the current turn.
 	## All active weapons are eligible for a strike during the turn.
 	## Ex: a fast feline would return a bite and two claw weapons.
-	return find_children("", "Weapon")
+	var weapons = []
+	for node in get_children():
+		if node is InnateWeapon:
+			weapons.append(node)
+		elif node is Weapon and node.is_equipped:
+			weapons.append(node)
+	return weapons
 
 func get_items():
 	var items = []
@@ -495,7 +505,7 @@ func strike(foe, weapon):
 	
 	var crit = false
 	# to-hit	
-	if stat_trial(foe.get_evasion(weapon), "agility"):
+	if stat_trial(foe.get_evasion(weapon), "agility", weapon.skill):
 		# Miss!
 		return anim_miss(foe, weapon)
 
@@ -510,7 +520,7 @@ func strike(foe, weapon):
 	if crit:
 		damage *= CRITICAL_MULT
 	damage = foe.normalize_damage(weapon, damage)
-	weapon.apply_all_effects(foe)
+	CombatUtils.apply_all_effects(weapon, foe)
 	return anim_hit(foe, weapon, damage)
 
 func normalize_damage(weapon, damage):
