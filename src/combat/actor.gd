@@ -566,6 +566,8 @@ func regen(delta:=1):
 
 func drop_item(item):
 	assert(item.get_parent() == self, "must possess an item before dropping it")
+	if item.get("is_equipped") != null:
+		item.is_equipped = false
 	var board = get_board()
 	var builder = BoardBuilder.new(board)
 	builder.place(item, false, get_cell_coord(), false)
@@ -575,6 +577,8 @@ func pick_item(item):
 	var item_coord = item.get_cell_coord()
 	assert(item_coord == get_cell_coord(), "can only pick items that are under us")
 	item.visible = false
+	if item.get("is_equipped") != null:
+		item.is_equipped = false
 	item.reparent(self)
 	emit_signal("picked_item", item_coord)
 
@@ -582,11 +586,11 @@ func consume_item(item: Item):
 	## activate the item and remove is from inventory
 	assert(item.consumable)
 	item.activate_on_actor(self)
+	item.hide()
 	# the item will free itself, but we have to remove it from inventory to prevent 
 	# reuse before the free happens
 	if item.get_parent():
-		item.get_parent().remove_child(item)
-		$/root.add_child(item)
+		item.reparent($/root)
 	add_message("%s used a %s" % [get_caption(), item.get_short_desc()])
 	
 func add_message(message):

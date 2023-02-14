@@ -22,11 +22,13 @@ signal closed(acted:bool)
 
 enum Cols {
 	DESC,
+	EQUIP,
 	USE,
 	DROP 
 }
 
 @onready var tree_view:Tree = find_child("Tree", true)
+var equip_button_img = load("res://src/ui/equip_btn.png")
 var drop_button_img = load("res://src/ui/drop_btn.png")
 var use_button_img = load("res://src/ui/use_btn.png")
 var actor = null
@@ -64,6 +66,10 @@ func fill_actor_items(actor_:Actor):
 		var row = tree_view.create_item(root)
 		row.set_metadata(Cols.DESC, item)
 		row.set_text(Cols.DESC, item.get_short_desc())
+		if item.get("is_equipped") != null:
+			row.add_button(Cols.EQUIP, equip_button_img)
+			if item.is_equipped:
+				row.set_button_disabled(Cols.EQUIP, 0, true)
 		if item.consumable:
 			row.add_button(Cols.USE, use_button_img)
 		row.add_button(Cols.DROP, drop_button_img)
@@ -75,16 +81,33 @@ func reset_empty_label_vis():
 		var items = actor.get_items()
 		$EmptyLabel.visible = not items.size()
 
+func reset_buttons_vis():
+	for row in tree_view.get_root().get_children():
+		var item = row.get_metadata(0)
+		if item.get("is_equipped") != null:
+			row.set_button_disabled(Cols.EQUIP, 0, item.is_equipped)
+
+func unequip_all():
+	for row in tree_view.get_root().get_children():
+		var item = row.get_metadata(0)
+		if item.get("is_equipped") != null:
+			item.is_equipped = false	
+
 func _on_back_button_pressed():
 	close()
 	
 func _on_tree_button_clicked(row, column, id, mouse_button_index):
 	var item = row.get_metadata(0)
 	row.set_button_disabled(column, id, true)
-	row.free()
 	if column == Cols.DROP:
+		row.free()
 		actor.drop_item(item)
+	elif column == Cols.EQUIP:
+		unequip_all()
+		item.is_equipped = true
+		reset_buttons_vis()
 	elif column == Cols.USE:
+		row.free()
 		actor.consume_item(item)
 	acted = true
 	emit_signal("inventory_changed")
