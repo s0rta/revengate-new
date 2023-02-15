@@ -45,8 +45,8 @@ class UniqueItemGenerator extends RefCounted:
 	var first_level
 	var last_level
 	var item = null
-	func _init(scene_path_, first_level_, last_level_):
-		scene_path = scene_path_
+	func _init(scene_name, first_level_, last_level_):
+		scene_path = SCENE_PATH_FMT % scene_name
 		first_level = first_level_
 		last_level = last_level_
 		
@@ -82,10 +82,17 @@ class LinearGenerator extends RefCounted:
 		return tree.instantiate()
 
 func _ready():
-	for params in [["res://src/items/missing_watch.tscn", 4, 9], 
-					["res://src/items/potion_of_regen.tscn", 1, 3], 
-					["res://src/items/magic_capsule_of_regen.tscn", 4, 9], 
-					["res://src/items/amulet_of_strength.tscn", 2, 6]]:
+	for params in [["items/missing_watch", 4, 9], 
+					["items/potion_of_regen", 1, 3], 
+					["items/magic_capsule_of_regen", 4, 9], 
+					["items/amulet_of_strength", 2, 6],
+					# weapons
+					["weapons/hammer", 1, 5],
+					["weapons/razor", 1, 4],
+					["weapons/sword", 3, 8],
+					["weapons/rapier", 5, 10],
+					["weapons/saber", 5, 10],
+					]:
 		item_generators.append(UniqueItemGenerator.new(params[0], params[1], params[2]))
 	
 	# FIXME: the original board should be able to re-index it's content

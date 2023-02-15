@@ -1,10 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://bxjfh12dtkof6"]
+[gd_scene load_steps=6 format=3 uid="uid://bxjfh12dtkof6"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_bgbko"]
 [ext_resource type="Script" path="res://src/combat/hero.gd" id="2_jrjv3"]
-[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="3_4dlru"]
-[ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/weapons/sword-hit-01.wav" id="4_u757e"]
 [ext_resource type="AudioStream" uid="uid://bajy1gsb550i5" path="res://src/combat/hero_miss.wav" id="4_y2iie"]
+[ext_resource type="PackedScene" uid="uid://d8ovanvojd5g" path="res://src/weapons/knife.tscn" id="5_6f5ga"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="6_6imm7"]
 
 [node name="Hero" instance=ExtResource("1_bgbko")]
@@ -26,16 +25,10 @@ text = "@"
 [node name="MissSound" parent="." index="2"]
 stream = ExtResource("4_y2iie")
 
-[node name="Sword" parent="." index="7" instance=ExtResource("3_4dlru")]
-visible = false
-damage = 7
-damage_family = 2
-is_equipped = true
-skill = "fencing"
-
-[node name="HitSound" type="AudioStreamPlayer" parent="Sword" index="1"]
-stream = ExtResource("4_u757e")
-
-[node name="SkillLevels" type="Node" parent="." index="8"]
+[node name="SkillLevels" type="Node" parent="." index="7"]
 script = ExtResource("6_6imm7")
 fencing = 1
+
+[node name="Knife" parent="." index="8" instance=ExtResource("5_6f5ga")]
+visible = false
+is_equipped = true

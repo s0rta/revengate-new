@@ -1,9 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://g34gtwwtymtp"]
+[gd_scene load_steps=3 format=3 uid="uid://cfb7pinvs8cj1"]
 
-[ext_resource type="PackedScene" uid="uid://dqwibklex0xo2" path="res://src/combat/weapon.tscn" id="1_57dyr"]
+[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_xhhy5"]
+[ext_resource type="AudioStream" uid="uid://b26nbvo171rbs" path="res://src/weapons/razor.mp3" id="2_u84ut"]
 
-[node name="Razor" instance=ExtResource("1_57dyr")]
+[node name="Razor" instance=ExtResource("1_xhhy5")]
 damage = 3
 damage_family = 2
-skill = "straight razor"
 char = "⁊"
+caption = "straight razor"
+
+[node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
+stream = ExtResource("2_u84ut")

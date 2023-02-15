@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://c3hpwyam0ta63"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_amoub"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="3_6ex08"]
@@ -13,6 +13,7 @@ health = 3
 strength = 17
 agility = 57
 intelligence = 15
+faction = 2
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)

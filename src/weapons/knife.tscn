@@ -10,5 +10,5 @@ skill = "fencing"
 char = "🔪"
 caption = "knife"
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="1"]
+[node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
 stream = ExtResource("2_mgq1s")
