@@ -68,4 +68,3 @@ func show_action_label(text):
 	
 func hide_action_label():
 	$ActionLabel.hide()
-

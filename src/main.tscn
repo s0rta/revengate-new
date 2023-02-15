@@ -281,6 +281,8 @@ script = ExtResource("14_ulj2m")
 [connection signal="action_complete" from="BoardArea/GestureSurveyor" to="HUD" method="hide_action_label"]
 [connection signal="action_started" from="BoardArea/GestureSurveyor" to="HUD" method="show_action_label"]
 [connection signal="new_message" from="BoardArea/GestureSurveyor/Viewport/Board" to="HUD/MessagesScreen" method="add_message"]
+[connection signal="dropped_item" from="BoardArea/GestureSurveyor/Viewport/Board/Hero" to="HUD" method="update_states_at"]
+[connection signal="picked_item" from="BoardArea/GestureSurveyor/Viewport/Board/Hero" to="HUD" method="update_states_at"]
 [connection signal="value_changed" from="HUD/ZoomSlider" to="BoardArea/GestureSurveyor/Viewport" method="_on_zoom_slider_value_changed"]
 [connection signal="pressed" from="HUD/LMargin/LButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
 [connection signal="pressed" from="HUD/LMargin/LButtonBar/LootButton" to="BoardArea/GestureSurveyor" method="start_loot"]

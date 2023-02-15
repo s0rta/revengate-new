@@ -32,6 +32,9 @@ signal died
 signal moved(from, to)
 # the actor picked an item that used to be at `old_coord`
 signal picked_item(old_coord)
+# the actor removed an item from their inventory and left it at `coord`
+signal dropped_item(coord)
+
 
 enum States {
 	IDLE,
@@ -570,7 +573,8 @@ func drop_item(item):
 		item.is_equipped = false
 	var board = get_board()
 	var builder = BoardBuilder.new(board)
-	builder.place(item, false, get_cell_coord(), false)
+	var coord = builder.place(item, false, get_cell_coord(), false)
+	emit_signal("dropped_item", coord)
 	
 func pick_item(item):
 	# TODO: dist() == 1 would also work nicely
