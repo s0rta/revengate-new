@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Strategy
+class_name Exploring extends Strategy
 
 const MAX_TRAVEL_ATTEMPTS = 5
 

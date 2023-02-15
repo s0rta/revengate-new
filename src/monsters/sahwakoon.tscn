@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://c3uuk6yfc2thp"]
+
+[ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_rv07l"]
+[ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="2_ln6qo"]
+[ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_txcrc"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="4_1esse"]
+
+[node name="Sahwakoon" instance=ExtResource("1_rv07l")]
+char = "s"
+caption = "sahwakoon"
+color = Color(0.537255, 0.392157, 0.0901961, 1)
+spawn_cost = 2
+health = 20
+strength = 30
+agility = 40
+intelligence = 25
+bestiary_img = "res://src/monsters/sahwakoon.png"
+description = "Sahwakoons are basically large badgers with rigid scales on their head and back. Their scales often feature colourful intricate line patterns. More often then not, the line patterns are too flashy to serve as effective camouflage.
+
+They are very aggressive, jumping on anything that they perceive as either food or as a threat. They can stun a target who is within their grasp with an electrical shock. They can jump up to two meters high and they are perfectly immune from induced fear from intimidation, toxins, or magic."
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.4, 0.290196, 0.0588235, 1)
+text = "s"
+
+[node name="Claw" type="Node" parent="." index="8"]
+script = ExtResource("2_ln6qo")
+damage = 6
+damage_family = 2
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Claw" index="0"]
+stream = ExtResource("3_txcrc")
+
+[node name="Tracking" type="Node" parent="." index="9"]
+script = ExtResource("4_1esse")

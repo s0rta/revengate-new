@@ -20,15 +20,15 @@ extends Node2D
 # The hero moved to a different level, the UI and turn logic are affected and must be notified
 signal board_changed(new_board)
 
-# [scene_name, min_level, max_level] tripplets
-# TODO: the ramp might work better as [occasional_depth, certain_depth, max_depth]
 const MONSTERS = ["monsters/rat", 
 						"monsters/labras", 
 						"monsters/ghost", 
 						"monsters/sulant_tiger",  
+						"monsters/sahwakoon",  
 						"monsters/desert_centipede",  
 						"monsters/sewer_otter",
 						"monsters/pacherr"]
+const MAX_CARD_COPIES = 4
 						
 const SCENE_PATH_FMT = "res://src/%s.tscn"
 
@@ -112,14 +112,12 @@ func gen_deck(budget, card_names):
 	for name in card_names:
 		var card = instantiate_card(name)
 		if card.spawn_cost:
-			var copies = max(0, round(budget / card.spawn_cost))
+			var copies = clampi(round(budget / card.spawn_cost), 0, MAX_CARD_COPIES)
 			for copy in range(copies):
 				cards.append(card)
 
 	cards.shuffle()	
 	return cards		
-		
-
 
 func get_board():
 	## Return the current active board
@@ -189,7 +187,7 @@ func make_board(depth):
 	var index = new_board.make_index()
 	
 	# regular items
-	var all_chars = "✄➴🌡🌷🔨🔮🖋🗡🚬🥊🌂⚙⚗☕🏹🎖🖂".split()
+	var all_chars = "✄➴🌡🌷🔮🖋🚬🥊🌂⚙⚗☕🎖🖂".split()
 	for i in range(1):
 		var item = make_item(Rand.choice(all_chars))
 		builder.place(item, false, null, true, null, index)
@@ -202,8 +200,7 @@ func make_board(depth):
 	
 	# monsters
 	var budget = max(0, depth * 3)
-	var monster_deck = gen_deck(budget, MONSTERS)
-	
+	var monster_deck = gen_deck(budget, MONSTERS)	
 	for card in monster_deck:
 		if budget >= card.spawn_cost:
 			builder.place(card.duplicate(), false, null, true, null, index)

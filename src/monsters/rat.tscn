@@ -1,32 +1,33 @@
-[gd_scene load_steps=5 format=3 uid="uid://c3hpwyam0ta63"]
+[gd_scene load_steps=5 format=3 uid="uid://d32rti5y0shob"]
 
-[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_amoub"]
+[ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_cnguh"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="3_6ex08"]
-[ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_nx5af"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="4_m70cc"]
+[ext_resource type="AudioStream" uid="uid://da0cslkk526yk" path="res://src/monsters/bite-small.wav" id="4_suc3h"]
 
-[node name="Rat" instance=ExtResource("1_amoub")]
+[node name="Rat" instance=ExtResource("1_cnguh")]
 char = "r"
 caption = "rat"
 spawn_cost = 1
 health = 3
 strength = 17
-agility = 57
+agility = 45
 intelligence = 15
-faction = 2
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
-text = "r"
 
-[node name="Exploring" type="Node" parent="." index="7"]
+[node name="SkillLevels" parent="." index="7"]
+evasion = 1
+
+[node name="Exploring" type="Node" parent="." index="8"]
 script = ExtResource("4_m70cc")
 priority = 0.2
 
-[node name="Bite" type="Node" parent="." index="8"]
+[node name="Bite" type="Node" parent="." index="9"]
 script = ExtResource("3_6ex08")
 damage = 2
 damage_family = 3
 
 [node name="HitSound" type="AudioStreamPlayer" parent="Bite" index="0"]
-stream = ExtResource("3_nx5af")
+stream = ExtResource("4_suc3h")

@@ -59,14 +59,14 @@ Strategies:
 - [x] bug: TravelTo stopped working with Godot 4b16
 
 Combat:
-- [ ] new evasion stat to increase all to-hit rolls
+- [x] new evasion stat to increase all to-hit rolls
 - [x] no poison on the first few monsters
 - [ ] effects have a probability, should not trigger at every hit
 
 UI:
 - [ ] bug: items stay hidden after the actor standing over a stack then dies
 - [ ] inspect command appends messages for tile types and items
-- [ ] dialogues
+- [x] dialogues
 - [x] bestiary
 - [ ] visual feedback for when inputs are accepted
 - [ ] messages pane
@@ -76,9 +76,10 @@ UI:
 - [x] merge git repo with Revengate v0.1
 
 Combat:
-- [ ] weapons are items, can be wielded
+- [x] weapons are items, can be wielded
 
 UI: 
+- [ ] bug: beastiary description font color is sometimes black
 - [ ] narrations
 - [ ] finely tuned animation overlaps
 

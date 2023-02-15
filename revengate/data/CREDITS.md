@@ -46,3 +46,4 @@ Additionnal sound effects CC-BY-SA Yannick Gingras:
 - end screens sound effects
 - hammer-01
 - ethereal-01, 02
+- razor

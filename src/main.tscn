@@ -10,7 +10,7 @@
 [ext_resource type="Script" path="res://src/ui/zoom_slider.gd" id="8_7qyjt"]
 [ext_resource type="PackedScene" uid="uid://b26vqfk7j6un7" path="res://src/monsters/desert_centipede.tscn" id="8_v818c"]
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="9_7u4fi"]
-[ext_resource type="PackedScene" uid="uid://c3ts4jux4wf7" path="res://src/monsters/ghost.tscn" id="9_22ipg"]
+[ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="9_22ipg"]
 [ext_resource type="PackedScene" uid="uid://darwaf2kchvan" path="res://src/monsters/kobold.tscn" id="9_cplml"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="10_niqw3"]
 [ext_resource type="PackedScene" uid="uid://cdd2i0fqe6u6d" path="res://src/monsters/neutral.tscn" id="10_ru273"]

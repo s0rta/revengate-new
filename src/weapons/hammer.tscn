@@ -9,5 +9,5 @@ damage_family = 1
 char = "🔨"
 caption = "hammer"
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="1"]
+[node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
 stream = ExtResource("2_gttei")
