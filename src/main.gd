@@ -250,10 +250,10 @@ func _input(_event):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	var mike = find_child("Michel")
-	var convo = mike.get_conversation()
-	assert(convo)
-	%DialoguePane.start(convo.res, convo.sect)
+	var board = get_board()
+	var c2 = V.i(1, 4)
+	var c1 = V.i(8, 4)
+	print("LoS from %s to %s: %s" % [c1, c2, board.line_of_sight(c1, c2)])
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")

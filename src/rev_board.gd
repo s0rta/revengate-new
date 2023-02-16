@@ -724,6 +724,26 @@ func path(start, dest, max_dist=null):
 	var metrics = astar_metrics(start, dest, max_dist)
 	return metrics.path()
 
+func line_of_sight(coord1, coord2):
+	## Return an array of coords in the line of sight between coord1 and coord2 
+	## or null if the direct path is visibly obstructed.
+	## Both end point params are included in the returned array.
+	var steps = []
+	var nb_steps = dist(coord1, coord2) + 1
+	var mult = max(1, nb_steps - 1)
+	# move to continuous coords from the center of the tiles
+	var offset = Vector2(0.5, 0.5)
+	var c1 = Vector2(coord1) + offset
+	var c2 = Vector2(coord2) + offset
+	for i in range(nb_steps):
+		# weighted average between the two centers
+		var coord = Vector2i(((mult-i)*c1 + i*c2) / mult)
+		if is_walkable(coord):
+			steps.append(coord)
+		else:
+			return null
+	return steps
+
 func get_actors():
 	## Return an array of actors presently on this board.
 	var actors = []

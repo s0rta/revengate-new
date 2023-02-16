@@ -74,6 +74,7 @@ UI:
 
 ## v0.5
 - [x] merge git repo with Revengate v0.1
+- [ ] bug: rats will happily walk right into your tile
 
 Combat:
 - [x] weapons are items, can be wielded
