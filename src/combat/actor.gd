@@ -291,6 +291,16 @@ func move_to(board_coord):
 	emit_signal("moved", old_coord, board_coord)
 	return anim
 
+func move_toward_actor(actor):
+	## Try to take one step toward `actor`, return the animation if it worked.
+	var here = get_cell_coord()
+	var there = actor.get_cell_coord()
+	var path = get_board().path(here, there, false)
+	if path != null and len(path) >= 2:
+		return move_to(path[1])
+	else:
+		return null
+
 func travel_to(there):
 	## Start the multi-turn journey that takes us to `there`, 
 	##   return `false` if the journey is not possible.

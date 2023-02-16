@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://d32rti5y0shob"]
+[gd_scene load_steps=6 format=3 uid="uid://d32rti5y0shob"]
 
 [ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_cnguh"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="3_6ex08"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="3_v2yj7"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="4_m70cc"]
 [ext_resource type="AudioStream" uid="uid://da0cslkk526yk" path="res://src/monsters/bite-small.wav" id="4_suc3h"]
 
@@ -16,6 +17,7 @@ intelligence = 15
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
+text = "r"
 
 [node name="SkillLevels" parent="." index="7"]
 evasion = 1
@@ -24,7 +26,11 @@ evasion = 1
 script = ExtResource("4_m70cc")
 priority = 0.2
 
-[node name="Bite" type="Node" parent="." index="9"]
+[node name="SelfDefense" type="Node" parent="." index="9"]
+script = ExtResource("3_v2yj7")
+priority = 0.8
+
+[node name="Bite" type="Node" parent="." index="10"]
 script = ExtResource("3_6ex08")
 damage = 2
 damage_family = 3

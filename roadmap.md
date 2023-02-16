@@ -33,6 +33,7 @@ UI:
 - [x] welcome message on first game startup
 
 ## v0.3
+- [x] merge git repo with Revengate v0.1
 - [x] victory conditions
 - [x] release to Google Play
 - [x] cheat codes
@@ -59,31 +60,29 @@ Strategies:
 - [x] bug: TravelTo stopped working with Godot 4b16
 
 Combat:
+- [x] weapons are items, can be wielded
 - [x] new evasion stat to increase all to-hit rolls
 - [x] no poison on the first few monsters
 - [ ] effects have a probability, should not trigger at every hit
 
 UI:
-- [ ] bug: items stay hidden after the actor standing over a stack then dies
-- [ ] inspect command appends messages for tile types and items
 - [x] dialogues
 - [x] bestiary
-- [ ] visual feedback for when inputs are accepted
-- [ ] messages pane
 - [x] messages history screen
 
 ## v0.5
-- [x] merge git repo with Revengate v0.1
-- [ ] bug: rats will happily walk right into your tile
-
 Combat:
-- [x] weapons are items, can be wielded
 - [ ] deprecate the Monster class: too vague to be useful
 
 UI: 
+- [ ] bug: items stay hidden after the actor standing over a stack then dies
+- [ ] inspect command appends messages for tile types and items
 - [ ] bug: beastiary description font color is sometimes black
 - [ ] narrations
 - [ ] finely tuned animation overlaps
+  - [ ] `Actor.act()` does not wait for the end of animations before calling `finalize_turn()`
+- [ ] visual feedback for when inputs are accepted
+- [ ] messages pane
 
 ## v0.6
 - [ ] style UI with Godot theme

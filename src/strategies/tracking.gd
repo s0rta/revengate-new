@@ -44,9 +44,4 @@ func act():
 	if foe:
 		return me.attack(foe)
 	else:
-		var here = me.get_cell_coord()
-		var there = hero.get_cell_coord()
-		var path = board.path(here, there, false)
-		
-		if path != null and path.size() > 1:
-			return me.move_to(path[1])
+		return me.move_toward_actor(hero)
