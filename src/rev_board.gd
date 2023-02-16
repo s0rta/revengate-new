@@ -647,7 +647,7 @@ func astar_metrics(start, dest, max_dist=null):
 		current = queue.dequeue()
 		if current == dest:
 			break  # Done!
-		elif dist(current, dest) == 1:
+		elif dist(current, dest) == 1:  # FIXME: this bypasses is_free()!
 			# got next to dest, no need to look at adjacents()
 			metrics.setv(dest, dist[1]+1)
 			metrics.add_edge(current, dest)
@@ -718,9 +718,17 @@ func dist_metrics(start=null, dest=null, max_dist=null):
 		done[current] = true
 	return metrics
 	
-func path(start, dest, max_dist=null):
+func path(start, dest, free_dest=true, max_dist=null):
 	## Return an Array of coordinates from `start` to `dest`.
 	## See BoardMetrics.path() for more details.
+	## `free_dest`: does the destination have to be walkable?
+	##   true: ex.: you want to go there;
+	##   false: ex.: you want to get close and attack the actor standing there.
+	if free_dest:
+		# TODO: some of that logic should go inside astar_metrics()
+		var index = make_index()
+		if not index.is_free(dest):
+			return null
 	var metrics = astar_metrics(start, dest, max_dist)
 	return metrics.path()
 

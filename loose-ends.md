@@ -14,7 +14,7 @@ This is a list of loose ends, code optimization, and small tasks for the Godot i
   
 ## Strategies
 - [ ] Tracking asserts that the target is on the same board
-- [ ] Hero will sometimes move into an enemy while travelling
+- [x] Hero will sometimes move into an enemy while travelling
 - [ ] Travelling should ignore conditions
 
 ## Board

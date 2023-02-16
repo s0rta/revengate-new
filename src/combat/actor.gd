@@ -296,7 +296,7 @@ func travel_to(there):
 	##   return `false` if the journey is not possible.
 	## Depending on where we are in the turn logic, the caller might need to call `stop_listening()` 
 	## for the travelling strategy to kick in, otherwise, it will only be active on the next turn.
-	var path = get_board().path(get_cell_coord(), there)
+	var path = get_board().path(get_cell_coord(), there, true)
 	if path == null or path.size() == 0:
 		return false
 	else:

@@ -41,9 +41,9 @@ func act():
 		waypoint = find_suitable_waypoint()
 		if waypoint == null:
 			return
-			
+	
 	var board: RevBoard = me.get_board()
-	var path = board.path(my_coord, waypoint)
+	var path = board.path(my_coord, waypoint, true)
 	if path and len(path) >= 2:
 		me.move_to(path[1])
 	else:
