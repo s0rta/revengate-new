@@ -77,6 +77,7 @@ UI:
 
 Combat:
 - [x] weapons are items, can be wielded
+- [ ] deprecate the Monster class: too vague to be useful
 
 UI: 
 - [ ] bug: beastiary description font color is sometimes black
