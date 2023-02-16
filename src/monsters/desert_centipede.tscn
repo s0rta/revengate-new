@@ -43,6 +43,7 @@ stream = ExtResource("5_dmajw")
 script = ExtResource("4_csjey")
 damage = 2
 damage_family = 7
+probability = 0.5
 nb_turns = 4
 
 [node name="SkillLevels" type="Node" parent="." index="9"]

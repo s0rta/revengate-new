@@ -25,6 +25,7 @@ class_name Effect extends Node
 @export var damage_family := Consts.DamageFamily.NONE
 @export var strength := 0
 @export var agility := 0
+@export_range(0, 1) var probability := 1.0  # chance that the effect will be applied
 @export var immediate := false
 @export var nb_turns := 1
 @export var magical := false  # various effect are more powerful for magical items
@@ -61,8 +62,11 @@ class Condition extends Node:
 	
 func apply(actor):
 	## Apply the effect to `actor`. 
+	## If `probability` < 1, this could be a no-op.
 	## If `immediate`, the effect starts this turn, otherwise, the effect start 
 	##   at the beginning of the next turn.
+	if not Rand.rstest(probability):
+		return
 	var cond = Condition.new(damage, healing, damage_family, magical, nb_turns)
 	cond.stats_modifiers = CombatUtils.node_core_stats(self)
 	actor.add_child(cond)
