@@ -66,6 +66,7 @@ Combat:
 - [x] effects have a probability, should not trigger at every hit
 
 UI:
+- [x] bug: items stay hidden after the actor standing over a stack then dies
 - [x] dialogues
 - [x] bestiary
 - [x] messages history screen
@@ -75,7 +76,6 @@ Combat:
 - [ ] deprecate the Monster class: too vague to be useful
 
 UI: 
-- [ ] bug: items stay hidden after the actor standing over a stack then dies
 - [ ] inspect command appends messages for tile types and items
 - [ ] bug: beastiary description font color is sometimes black
 - [ ] narrations

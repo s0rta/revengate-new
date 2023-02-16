@@ -470,6 +470,7 @@ func register_actor(actor):
 	## connect the relevant signals from `actor` so we can keep track of them
 	if not actor.moved.is_connected(_on_actor_moved):
 		actor.moved.connect(_on_actor_moved)
+		actor.died.connect(_on_actor_died, CONNECT_ONE_SHOT)
 		var dereg = deregister_actor.bind(actor)
 		actor.died.connect(dereg, CONNECT_ONE_SHOT)
 	
@@ -477,6 +478,8 @@ func deregister_actor(actor):
 	## disconnect our connections with `actor`
 	if actor.moved.is_connected(_on_actor_moved):
 		actor.moved.disconnect(_on_actor_moved)
+	if actor.died.is_connected(_on_actor_died):
+		actor.died.disconnect(_on_actor_died)
 
 func make_index():
 	var actors = get_actors()
@@ -770,7 +773,7 @@ func get_items():
 	return items
 
 func reset_items_visibility():
-	## Show or hide items depending on this stacking order. No animations performed.
+	## Show or hide items depending on their stacking order. No animations performed.
 	# FIXME: check actors too
 	var index = make_index()
 	for item in get_items():
@@ -789,6 +792,13 @@ func _on_actor_moved(from, to):
 	item = index.top_item_at(to)
 	if item:
 		item.fade_out()
+
+func _on_actor_died(coord):
+	## fade in the visibility of items that were stepped on by the one who just passed
+	var index = make_index()
+	var item = index.top_item_at(coord)
+	if item:
+		item.fade_in()
 	
 func add_message(actor, message):
 	# TODO check for visibility before propagating up

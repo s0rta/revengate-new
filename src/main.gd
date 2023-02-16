@@ -101,7 +101,7 @@ func _ready():
 	board._append_terrain_cells([V.i(23, 2)], "stairs-down")
 	hud.set_hero(hero)
 	$VictoryProbe.hero = hero
-	hero.died.connect(conclude_game)
+	hero.died.connect(_on_hero_died)
 	board_changed.connect($TurnQueue.invalidate_turn)
 	board_changed.connect(center_on_hero)
 	await $TurnQueue.run()
@@ -222,7 +222,10 @@ func make_item(char):
 	var item = tree.instantiate()
 	item.char = char
 	return item
-
+	
+func _on_hero_died(_coord):
+	conclude_game(false)
+	
 func conclude_game(victory:=false):
 	## do a final bit of cleanup then show the Game Over screen
 	$TurnQueue.shutdown()

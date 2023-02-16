@@ -27,7 +27,7 @@ signal was_attacked(attacker)
 # health changed, either got better or worst
 signal health_changed(new_health)
 # the actor met their ultimate demise
-signal died
+signal died(old_coord)
 # the actor moved to a new location on the current board
 signal moved(from, to)
 # the actor picked an item that used to be at `old_coord`
@@ -416,7 +416,7 @@ func update_health(hp_delta: int):
 		
 	if health <= 0:
 		play_sound("DeathSound")
-		emit_signal("died")
+		emit_signal("died", get_cell_coord())
 		# we do not need create_anim() since sub-tweens have the same signal as the root tween
 		var anim3 = anim.parallel()  
 		anim3.tween_property($Label, "modulate", Color(.8, 0, 0, .7), .1)
