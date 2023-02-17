@@ -23,8 +23,7 @@ var attacker = null
 func is_valid():
 	if not super():
 		return false
-	var mem = me.find_child("Mem")
-	var fact = mem.recall("was_attacked")
+	var fact = me.mem.recall("was_attacked")
 	if fact == null:
 		attacker = null
 		return false
@@ -37,6 +36,7 @@ func act():
 	var my_coord = me.get_cell_coord()
 	var foe_coord = attacker.get_cell_coord()
 	if board.dist(my_coord, foe_coord) == 1:
-		return me.attack(attacker)
+		var anim = await me.attack(attacker)
+		return anim
 	else:
 		return me.move_toward_actor(attacker)

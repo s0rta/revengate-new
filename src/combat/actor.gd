@@ -90,6 +90,7 @@ const CRITICAL_MULT := 0.35
 @export_file("*.png", "*.jpg", "*.jpeg") var bestiary_img
 @export_multiline var description
 
+@onready var mem = $Mem
 var state = States.IDLE
 
 # Turn logic: when possible, use `state`, await on `turn_done()` and ttl/decay rather than
@@ -147,7 +148,7 @@ func act():
 	if not strat:
 		finalize_turn()
 		return
-	var action = strat.act()
+	var action = await strat.act()
 	if action != null:
 		action.connect("finished", finalize_turn, CONNECT_ONE_SHOT)
 	else:
@@ -507,9 +508,13 @@ func attack(foe):
 	
 	# FIXME: if more than one strike, we need to wait to the first one to finish before 
 	# we start the next one
+	var anim = null
 	for weapon in get_weapons():
 		if foe.is_alive():
-			return strike(foe, weapon)
+			if anim != null:
+				await anim.finished
+			anim = strike(foe, weapon)
+	return anim
 		
 func strike(foe, weapon):
 	## Strike foe with weapon. The strike could result in a miss. 

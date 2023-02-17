@@ -74,7 +74,7 @@ UI:
 ## v0.5
 Combat:
 - [ ] deprecate the Monster class: too vague to be useful
-- [ ] multi-attacks (ex.: claw + claw + bite)
+- [x] multi-attacks (ex.: claw + claw + bite)
 
 UI:
 - [ ] bug: "follow stairs" button hidden after changing board

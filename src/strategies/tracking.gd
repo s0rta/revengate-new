@@ -42,6 +42,7 @@ func act():
 	# attack if we can, move towards the hero otherwise
 	var foe = select_foe(me, index)
 	if foe:
-		return me.attack(foe)
+		var anim = await me.attack(foe)
+		return anim
 	else:
 		return me.move_toward_actor(hero)
