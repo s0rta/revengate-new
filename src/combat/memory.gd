@@ -43,6 +43,8 @@ var _facts = []
 
 func learn(event:String, turn, importance:=Importance.NOTABLE, data=null):
 	## Store a recollection of `event`.
+	if Rand.rstest(0.0005):
+		gc(turn)
 	var fact = {"event": event, "turn": turn, "importance": importance}
 	if data:
 		fact.merge(data)
