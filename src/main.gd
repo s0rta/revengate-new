@@ -107,17 +107,15 @@ func _ready():
 	await $TurnQueue.run()
 
 func gen_deck(budget, card_names):
-	var cards = []
+	var deck = Deck.new()
 	
 	for name in card_names:
 		var card = instantiate_card(name)
 		if card.spawn_cost:
-			var copies = clampi(round(budget / card.spawn_cost), 0, MAX_CARD_COPIES)
-			for copy in range(copies):
-				cards.append(card)
-
-	cards.shuffle()	
-	return cards		
+			# nb_copies could be a float, which is legal in the probabilistic deck
+			var nb_copies = clamp(budget / card.spawn_cost, 0, MAX_CARD_COPIES)
+			deck.add_card(card, nb_copies)
+	return deck
 
 func get_board():
 	## Return the current active board
@@ -200,15 +198,16 @@ func make_board(depth):
 	
 	# monsters
 	var budget = max(0, depth * 3)
-	var monster_deck = gen_deck(budget, MONSTERS)	
-	for card in monster_deck:
+	var monster_deck = gen_deck(budget, MONSTERS)
+	var card = monster_deck.draw()
+	while card != null:
 		if budget >= card.spawn_cost:
 			builder.place(card.duplicate(), false, null, true, null, index)
 			budget -= card.spawn_cost
-		
 		if budget == 0:
 			break
-		
+		card = monster_deck.draw()
+
 	return new_board
 
 
@@ -253,10 +252,9 @@ func _input(_event):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	var board = get_board()
-	var c2 = V.i(1, 4)
-	var c1 = V.i(8, 4)
-	print("LoS from %s to %s: %s" % [c1, c2, board.line_of_sight(c1, c2)])
+	var deck = Deck.new([["a", 5], ["b", 2.5]])
+	for i in range(10):
+		print("Drawing from deck: %s" % [deck.draw()])
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")

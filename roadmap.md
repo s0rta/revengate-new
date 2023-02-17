@@ -74,10 +74,12 @@ UI:
 ## v0.5
 Combat:
 - [ ] deprecate the Monster class: too vague to be useful
+- [ ] multi-attacks (ex.: claw + claw + bite)
 
-UI: 
-- [ ] inspect command appends messages for tile types and items
+UI:
+- [ ] bug: "follow stairs" button hidden after changing board
 - [ ] bug: beastiary description font color is sometimes black
+- [ ] inspect command appends messages for tile types and items
 - [ ] narrations
 - [ ] finely tuned animation overlaps
   - [ ] `Actor.act()` does not wait for the end of animations before calling `finalize_turn()`
@@ -92,6 +94,9 @@ UI:
 
 Builder:
 - [ ] mazes can fill arbitrary areas of a board
+
+UI: 
+- [ ] ability to cancel a multi-turn command
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
