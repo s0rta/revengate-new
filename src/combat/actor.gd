@@ -471,14 +471,29 @@ func get_conditions():
 func get_weapons():
 	## Return all the active weapons for the current turn.
 	## All active weapons are eligible for a strike during the turn.
-	## Ex: a fast feline would return a bite and two claw weapons.
-	var weapons = []
+	## Ex.: a fast feline would return a bite and two claw weapons.
+	var all_weapons = []
 	for node in get_children():
 		if node is InnateWeapon:
-			weapons.append(node)
+			all_weapons.append(node)
 		elif node is Weapon and node.is_equipped:
-			weapons.append(node)
-	return weapons
+			all_weapons.append(node)
+
+	# filter out innacives based on probability
+	var active_weapons = []
+	for weapon in all_weapons:
+		var prob = weapon.get("probability")
+		if prob == null or Rand.rstest(prob):
+			active_weapons.append(weapon)
+
+	# Pick a fallback weapon when all probabilistic selections failed
+	if active_weapons.is_empty() and not all_weapons.is_empty():
+		var weights = []
+		for weapon in all_weapons:
+			var prob = weapon.get("probability")
+			weights.append(prob if prob!= null else 1.0)
+		return [Rand.weighted_choice(all_weapons, weights)]
+	return active_weapons
 
 func get_items():
 	var items = []

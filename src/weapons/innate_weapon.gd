@@ -22,6 +22,7 @@ class_name InnateWeapon extends Node
 
 @export var damage := 1
 @export var damage_family: Consts.DamageFamily
+@export_range(0.0, 1.0) var probability := 1.0
 
 # You can't change which skill is checked, but that skill can be trained. To improve it, 
 # add a SkillLevels sub-node on the actor.

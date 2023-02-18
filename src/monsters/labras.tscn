@@ -9,7 +9,7 @@
 char = "l"
 caption = "labras"
 color = Color(0.45098, 0.807843, 0, 1)
-spawn_cost = 4
+spawn_cost = 1
 health = 21
 strength = 35
 agility = 52
@@ -39,6 +39,7 @@ pitch_scale = 1.25
 script = ExtResource("2_okq6u")
 damage = 4
 damage_family = 2
+probability = 0.3
 
 [node name="HitSound" type="AudioStreamPlayer" parent="Claw2" index="0"]
 stream = ExtResource("3_td7m5")
