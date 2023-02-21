@@ -82,6 +82,7 @@ class LinearGenerator extends RefCounted:
 		return tree.instantiate()
 
 func _ready():
+	Tender.hero = hero
 	for params in [["items/missing_watch", 4, 9], 
 					["items/potion_of_regen", 1, 3], 
 					["items/magic_capsule_of_regen", 4, 9], 
@@ -144,7 +145,8 @@ func talk_to(actor, conversation=null):
 		conversation = actor.get_conversation()
 	if conversation == null:
 		get_board().add_message(hero, "%s has nothing to say." % actor.caption)
-	%DialoguePane.start(conversation.res, conversation.sect)
+	%DialoguePane.start(conversation.res, conversation.sect, actor)
+	await %DialoguePane.closed
 
 func switch_board_at(coord):
 	## Flip the active board with the far side of the connector at `coord`, 

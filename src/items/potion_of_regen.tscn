@@ -5,6 +5,7 @@
 
 [node name="PotionOfRegen" instance=ExtResource("1_oiw5o")]
 char = "🍸"
+caption = "potion of regeneration"
 consumable = true
 
 [node name="Effect" type="Node" parent="." index="1"]

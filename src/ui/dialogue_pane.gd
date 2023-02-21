@@ -20,12 +20,12 @@
 ## A rudimentatry speech bubble
 class_name DialoguePane extends Control
 
-signal something_happened(msg)
+signal closed(acted:bool)
 
 var dia_res: DialogueResource
 var temp_game_states := []
 var is_waiting_for_input := false
-var seen_michel := false
+var speaker = null
 
 var dialogue_line: DialogueLine:
 	get:
@@ -33,7 +33,7 @@ var dialogue_line: DialogueLine:
 	set(next_dialogue_line):
 		is_waiting_for_input = false
 		if not next_dialogue_line:
-			hide()
+			close()
 			return
 		
 		# Remove any previous responses
@@ -67,11 +67,11 @@ var dialogue_line: DialogueLine:
 		# Wait for input
 		is_waiting_for_input = true
 
-func _gui_input(event):
-	Utils.ddump_event(event, self, "_gui_input")
+#func _gui_input(event):
+#	Utils.ddump_event(event, self, "_gui_input")
 
 func _unhandled_input(event):
-	Utils.ddump_event(event, self, "_unhandled_input")
+#	Utils.ddump_event(event, self, "_unhandled_input")
 	# Consume all keyboard input while the balloon is visible
 	# TODO: handle ui_cancel and ui_accept keys
 	if visible and event is InputEventKey:
@@ -83,36 +83,39 @@ func _is_left_released(event):
 			return true
 	return false
 	
-func start(dia_res_: DialogueResource, title: String, extra_game_states: Array = []):
+func start(dia_res_: DialogueResource, title: String, speaker_=null, extra_game_states: Array = []):
 	## Start a dialogue sequence
 	temp_game_states = extra_game_states + [self]
 	is_waiting_for_input = false
 	dia_res = dia_res_
+	speaker = speaker_
 	# TODO: blank out everything before showing
 	show()
 	self.dialogue_line = await dia_res.get_next_dialogue_line(title, temp_game_states)
 
+func close():
+	hide()
+	# talking to someone always counts as a turn action, event if you exit the conversation early.
+	emit_signal("closed", true)  
+
 func advance():
+	## Finish typing or go to the next message.
 	if %DialogueLabel.is_typing:
 		finish_typing()
 	elif not has_options():
 		next(dialogue_line.next_id)
-	else:
-		print("Not advancing: waiting for player selection...")
 
 func next(next_id: String):
+	## Go to the next message, or close the pane if we are done.
 	self.dialogue_line = await dia_res.get_next_dialogue_line(next_id, temp_game_states)
 
-func do_a_dance(text):
-	print("Dance to the tune of: %s" % text)
-
 func _on_response_gui_input(event, option_idx):
-	Utils.ddump_event(event, self, "_on_response_gui_input")
+#	Utils.ddump_event(event, self, "_on_response_gui_input")
 	if _is_left_released(event):
 		next(dialogue_line.responses[option_idx].next_id)
 
 func _on_background_gui_input(event):
-	Utils.ddump_event(event, self, "_on_background_gui_input")
+#	Utils.ddump_event(event, self, "_on_background_gui_input")
 	# Consume all input while the balloon is visible
 	if visible:
 		accept_event()
@@ -128,3 +131,23 @@ func finish_typing():
 	
 func has_options():
 	return len(dialogue_line.responses) != 0
+
+
+### dialogue action functions ###
+# We invoke the following with `do funct()` instructions in the dialogue text.
+
+func checkpoint(title):
+	## Remember a dialogue checkpoint and start there next time we talk to the current speaker
+	assert(title in dia_res.get_titles())
+	if speaker:
+		speaker.conversation_sect = title
+
+func speaker_has_items():
+	if speaker == null:
+		return false
+	return len(speaker.get_items()) > 0
+
+func speaker_give_item():
+	## pass an item from the speaker to the hero
+	var item = Rand.choice(speaker.get_items())
+	speaker.give_item(item, Tender.hero)

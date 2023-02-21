@@ -21,6 +21,7 @@ boot_splash/image="res://assets/splash-screen.png"
 
 Consts="*res://src/constants.gd"
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
+Tender="*res://src/tender.gd"
 
 [dialogue_manager]
 

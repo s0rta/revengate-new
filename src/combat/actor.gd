@@ -605,7 +605,12 @@ func drop_item(item):
 	var builder = BoardBuilder.new(board)
 	var coord = builder.place(item, false, get_cell_coord(), false)
 	emit_signal("dropped_item", coord)
-	
+
+func give_item(item, actor:Actor):
+	## Give `item` to `actor`
+	assert(item.get_parent() == self, "must possess an item before giving it away")
+	item.reparent(actor)
+
 func pick_item(item):
 	# TODO: dist() == 1 would also work nicely
 	var item_coord = item.get_cell_coord()

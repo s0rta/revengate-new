@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bnpboopa78bjb"]
+[gd_scene load_steps=22 format=3 uid="uid://bnpboopa78bjb"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="10_niqw3"]
 [ext_resource type="PackedScene" uid="uid://cdd2i0fqe6u6d" path="res://src/monsters/neutral.tscn" id="10_ru273"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
+[ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="12_c1kwk"]
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
 [ext_resource type="Script" path="res://src/victory_probe.gd" id="14_ulj2m"]
@@ -83,6 +84,9 @@ conversation_file = "res://src/story/intro.dialogue"
 conversation_sect = "meet_michel"
 health = 90
 agility = 90
+
+[node name="PotionOfRegen" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel" instance=ExtResource("12_c1kwk")]
+visible = false
 
 [node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]
 anchor_mode = 0

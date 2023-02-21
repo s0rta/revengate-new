@@ -1,12 +1,22 @@
 ~ meet_michel
-=> extra_potions
 
 Michel: Hi! I'm Michel. I run the Steamy Towels barbershop near the port. Drop by for a shave sometime. [do debug("end of first line")]
-do debug("about to start 2nd line")
-do do_a_dance("yep, really about to start any time soon...")
-set seen_michel = true
-# do emit("something_happened", "emitting a signal before line 2")
-Michel: By the way, this is Revengate v{{Consts.VERSION}}!
+
+~ extra_potions
+
+if speaker_has_items()
+	Michel: Despite that ghost chassing you, you happen to be in luck today.
+
+	Michel: I brought too many potions and they are getting annoyingly heavy. Would you like one?
+	- Sure! 
+		do speaker_give_item()
+		Michel: There you go!
+	- No, thank you.
+		Michel: That's a bold choice!
+
+Michel: I'll be right here. Chat with me again if you want to learn more about the dungeon.
+do checkpoint("dungeon_intro")
+=> END
 
 ~ dungeon_intro
 
@@ -15,17 +25,3 @@ Michel: Monsters are represented by letters. You beat them up by tapping on then
 Michel: You can get more info about monsters by using the magnifying glass (🔍, top right). You can also use it on yourself. Items are white icons scattered throught the dungeon. You need to be standing over them to loot (pick) them.
 
 Michel: Good luck!
-
-=> END
-
-~ extra_potions
-
-Michel: Despite that ghost chassing you, you happen to be in luck today.
-
-Michel: I brought too many potions and they are getting annoyingly heavy. Would you like one?
-- Sure! 
-	do debug("selected first")
-- No, thank you.
-	do debug("selected second")
-
-Michel: OK. I'll be right here. Chat with me again if you want to learn more about the dungeon.

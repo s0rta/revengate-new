@@ -97,6 +97,7 @@ Builder:
 
 UI: 
 - [ ] ability to cancel a multi-turn command
+- [ ] ability to completely skip dialogues
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
