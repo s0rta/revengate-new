@@ -43,7 +43,6 @@ func draw():
 	## Return `null` when the deck is empty.
 	if len(cards) == 0 or occurences.max() <= 0:
 		return null
-	# FIXME: check if the deck is empty
 	var index = Rand.weighted_choice(range(len(cards)), occurences)
 	occurences[index] -= 1
 	if occurences[index] < 1:  # a card needs at least one full occurence to be drawn

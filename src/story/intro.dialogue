@@ -1,6 +1,12 @@
 ~ meet_michel
+=> extra_potions
 
-Michel: Hi! I'm Michel. I run the Steamy Towels barbershop near the port. Drop by for a shave sometime.
+Michel: Hi! I'm Michel. I run the Steamy Towels barbershop near the port. Drop by for a shave sometime. [do debug("end of first line")]
+do debug("about to start 2nd line")
+do do_a_dance("yep, really about to start any time soon...")
+set seen_michel = true
+# do emit("something_happened", "emitting a signal before line 2")
+Michel: By the way, this is Revengate v{{Consts.VERSION}}!
 
 ~ dungeon_intro
 
@@ -14,8 +20,12 @@ Michel: Good luck!
 
 ~ extra_potions
 
+Michel: Despite that ghost chassing you, you happen to be in luck today.
+
 Michel: I brought too many potions and they are getting annoyingly heavy. Would you like one?
-- Sure!
+- Sure! 
+	do debug("selected first")
 - No, thank you.
+	do debug("selected second")
 
 Michel: OK. I'll be right here. Chat with me again if you want to learn more about the dungeon.

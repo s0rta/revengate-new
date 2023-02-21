@@ -9,7 +9,7 @@
 char = "l"
 caption = "labras"
 color = Color(0.45098, 0.807843, 0, 1)
-spawn_cost = 1
+spawn_cost = 4
 health = 21
 strength = 35
 agility = 52

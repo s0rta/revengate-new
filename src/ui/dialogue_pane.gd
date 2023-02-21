@@ -20,16 +20,18 @@
 ## A rudimentatry speech bubble
 class_name DialoguePane extends Control
 
+signal something_happened(msg)
+
 var dia_res: DialogueResource
 var temp_game_states := []
 var is_waiting_for_input := false
+var seen_michel := false
 
 var dialogue_line: DialogueLine:
 	get:
 		return dialogue_line
 	set(next_dialogue_line):
 		is_waiting_for_input = false
-		
 		if not next_dialogue_line:
 			hide()
 			return
@@ -44,14 +46,16 @@ var dialogue_line: DialogueLine:
 		%SpeakerLabel.text = dialogue_line.character
 		%DialogueLabel.dialogue_line = dialogue_line
 
-		# Show any responses we have
+		# Show response options
 		if len(dialogue_line.responses):
-			for response in dialogue_line.responses:
+			for i in len(dialogue_line.responses):
+				var response = dialogue_line.responses[i]
 				# Duplicate the template so we can grab the fonts, sizing, etc
-				var item: RichTextLabel = %ResponseTemplate.duplicate(0)
+				var item = %ResponseTemplate.duplicate()
+				var action = _on_response_gui_input.bind(i)
+				item.gui_input.connect(action)
 				if not response.is_allowed:
 					item.modulate.a = 0.7
-				print("adding response option: %s" % response.text)
 				item.text = response.text
 				item.show()
 				%ResponsesBox.add_child(item)
@@ -63,24 +67,15 @@ var dialogue_line: DialogueLine:
 		# Wait for input
 		is_waiting_for_input = true
 
-func _input(event):
-#	Utils.ddump_event(event, self, "_input")
-	if visible:
-		if is_waiting_for_input:
-			accept_event()
-		if _is_left_released(event):
-			advance()
-
-#func _gui_input(event):
-#	Utils.ddump_event(event, self, "_gui_input")
+func _gui_input(event):
+	Utils.ddump_event(event, self, "_gui_input")
 
 func _unhandled_input(event):
-#	Utils.ddump_event(event, self, "_unhandled_input")
-	# Consume all input while the balloon is visible
-	if is_waiting_for_input and visible:
+	Utils.ddump_event(event, self, "_unhandled_input")
+	# Consume all keyboard input while the balloon is visible
+	# TODO: handle ui_cancel and ui_accept keys
+	if visible and event is InputEventKey:
 		accept_event()
-		if _is_left_released(event):
-			advance()
 
 func _is_left_released(event):
 	if event is InputEventMouseButton and not event.is_pressed():
@@ -90,7 +85,7 @@ func _is_left_released(event):
 	
 func start(dia_res_: DialogueResource, title: String, extra_game_states: Array = []):
 	## Start a dialogue sequence
-	temp_game_states = extra_game_states
+	temp_game_states = extra_game_states + [self]
 	is_waiting_for_input = false
 	dia_res = dia_res_
 	# TODO: blank out everything before showing
@@ -99,17 +94,37 @@ func start(dia_res_: DialogueResource, title: String, extra_game_states: Array =
 
 func advance():
 	if %DialogueLabel.is_typing:
-		%DialogueLabel.visible_ratio = 1
-	else:
+		finish_typing()
+	elif not has_options():
 		next(dialogue_line.next_id)
+	else:
+		print("Not advancing: waiting for player selection...")
 
 func next(next_id: String):
 	self.dialogue_line = await dia_res.get_next_dialogue_line(next_id, temp_game_states)
 
-func _on_responses_gui_input(event: InputEvent, item: Control) -> void:
-	# FIXME: this must be connected
-	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
-		next(dialogue_line.responses[item.get_index()].next_id)
+func do_a_dance(text):
+	print("Dance to the tune of: %s" % text)
 
-func _on_dialogue_label_spoke(letter, letter_index, speed):
-	print("speaking: %s" % [[letter, %DialogueLabel.visible_characters, %DialogueLabel.visible_ratio]])
+func _on_response_gui_input(event, option_idx):
+	Utils.ddump_event(event, self, "_on_response_gui_input")
+	if _is_left_released(event):
+		next(dialogue_line.responses[option_idx].next_id)
+
+func _on_background_gui_input(event):
+	Utils.ddump_event(event, self, "_on_background_gui_input")
+	# Consume all input while the balloon is visible
+	if visible:
+		accept_event()
+		if _is_left_released(event):
+			advance()
+
+func finish_typing():
+	# TODO: also call the remaining in-line mutations.
+	%DialogueLabel.visible_ratio = 1.0
+	%DialogueLabel.has_finished = true
+	%DialogueLabel.is_typing = false
+	%DialogueLabel.emit_signal("finished_typing")
+	
+func has_options():
+	return len(dialogue_line.responses) != 0

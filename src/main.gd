@@ -258,6 +258,5 @@ func test():
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-	var mem = hero.find_child("Mem")
-	print("Hero knows about: %s" % [mem._facts])
-	print("Last attack: %s" % [mem.recall("was_attacked")])
+	for i in 5:
+		print("Looping! %d" % i)

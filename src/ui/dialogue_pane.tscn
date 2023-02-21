@@ -32,6 +32,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 3
+mouse_filter = 2
 color = Color(0, 0, 0, 0.701961)
 
 [node name="Margin" type="MarginContainer" parent="Background/SpeechBackgroud"]
@@ -43,14 +44,17 @@ anchor_bottom = 1.0
 offset_top = -263.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 
 [node name="VBox" type="VBoxContainer" parent="Background/SpeechBackgroud/Margin"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="SpeakerLabel" type="RichTextLabel" parent="Background/SpeechBackgroud/Margin/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 2
+mouse_filter = 2
 text = "Bob Morane"
 fit_content = true
 
@@ -60,6 +64,7 @@ clip_contents = false
 custom_minimum_size = Vector2(0, 180)
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 2
 theme_override_colors/default_color = Color(1, 1, 1, 1)
 theme_override_fonts/normal_font = ExtResource("2_wjq4l")
 theme_override_font_sizes/normal_font_size = 24
@@ -88,4 +93,5 @@ theme_override_colors/default_color = Color(0.87451, 0.615686, 0.160784, 1)
 theme_override_font_sizes/normal_font_size = 20
 text = "This is a test"
 
-[connection signal="spoke" from="Background/SpeechBackgroud/Margin/VBox/DialogueLabel" to="." method="_on_dialogue_label_spoke"]
+[connection signal="something_happened" from="." to="." method="do_a_dance"]
+[connection signal="gui_input" from="Background" to="." method="_on_background_gui_input"]
