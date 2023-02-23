@@ -756,9 +756,8 @@ func astar_metrics_custom(pump:MetricsPump, start, dest, max_dist=null):
 	var queue = DistQueue.new()
 	var done = {}
 	var estimate = pump.dist_estim(start, dest)
-	# dist is a [h(n), g(n), man(p, n)] triplets: estimate and real dists
-	# with Manhattan distance with the previous node as the tie breaker to favor 
-	# straigth lines over diagonals.
+	# dist is a [h(n), g(n), tiebreak(p, n)] triplets: estimate and real dists
+	# with tiebreaker from the previous node to finely tune biasess.
 	var dist = [estimate, 0, 0]
 	var pre_dist = null   # dist from start to a coord
 	var post_dist = null  # dist from a coord to dest

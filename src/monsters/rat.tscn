@@ -24,6 +24,7 @@ evasion = 1
 
 [node name="Exploring" type="Node" parent="." index="8"]
 script = ExtResource("4_m70cc")
+hug_walls = true
 priority = 0.2
 
 [node name="SelfDefense" type="Node" parent="." index="9"]

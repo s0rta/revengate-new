@@ -16,9 +16,9 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 class_name Exploring extends Strategy
+@export var hug_walls := false
 
 const MAX_TRAVEL_ATTEMPTS = 5
-
 
 var waypoint = null   # Vector2i
 var nb_travel_attempts = 0
@@ -28,9 +28,16 @@ func find_suitable_waypoint():
 	var metrics = board.dist_metrics(me.get_cell_coord())
 	return Rand.weighted_choice(metrics.all_coords(), metrics.all_dists())
 	
-# TODO:
-#  - stick close to the walls if possible
-	
+func _get_path(here, there):
+	# FIXME: check that waypoint is free (new param to board.path())
+	var board: RevBoard = me.get_board()
+	if hug_walls:
+		var pump = RevBoard.WallHugMetricsPump.new(board)
+		var metrics = board.astar_metrics_custom(pump, here, there)
+		return metrics.path()
+	else:
+		return board.path(here, there, true)
+
 func act():
 	var my_coord = me.get_cell_coord()
 	if my_coord == waypoint or nb_travel_attempts >= MAX_TRAVEL_ATTEMPTS:
@@ -42,10 +49,8 @@ func act():
 		if waypoint == null:
 			return
 	
-	var board: RevBoard = me.get_board()
-	var path = board.path(my_coord, waypoint, true)
+	var path = _get_path(my_coord, waypoint)
 	if path and len(path) >= 2:
 		me.move_to(path[1])
 	else:
 		nb_travel_attempts += 1
-			
