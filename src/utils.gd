@@ -72,3 +72,15 @@ static func get_node_skills(node:Node):
 					_combine_skills(all_skills, sub_child)
 		_combine_skills(all_skills, child.get("skills_modifiers"))
 	return all_skills
+
+static func colored(text):
+	## Return `text` surrouded by ANSI escape sequences to make it print in 
+	## color in a supported terminal.
+
+	# Those should be consts, but the compiler does not like String.chr()
+	var ESC_FMT = String.chr(27) + "[%dm"
+	var ESC_MAG = ESC_FMT % 35
+#	var ESC_CYAN = ESC_FMT % 36
+	var ESC_RESET = ESC_FMT % 0
+
+	return "%s%s%s" % [ESC_MAG, text, ESC_RESET]

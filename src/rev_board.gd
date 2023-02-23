@@ -209,6 +209,71 @@ class BoardMetrics:
 			path.reverse()
 			return path
 
+	func ddump_path(to=null):
+		var mat = dists.duplicate()
+		mat.replace(null, "")
+		mat.pad()
+		var path_steps = path(to)
+		for step in path_steps:
+			mat.setv(step, Utils.colored(mat.getv(step)))
+		print(mat.to_string())
+
+## Optionally used to produce the intermediate values of a BoardMetrics
+class MetricsPump:
+	var board
+	
+	func _init(board_):
+		board = board_
+	
+	func dist_real(here, there):
+		assert(false, "not implemented")
+
+	func dist_estim(here, there):
+		assert(false, "not implemented")
+
+	func dist_tiebreak(here, there):
+		assert(false, "not implemented")
+
+## Implement the metrics used for the movement of most actors
+class StandardMetricsPump extends MetricsPump:
+	func dist_real(here, there):
+		return board.dist(here, there)
+
+	func dist_estim(here, there):
+		return board.dist(here, there)
+		
+	func dist_tiebreak(here, there):
+		return board.man_dist(here, there)
+
+## Implement metrics that favor following the edge of walls
+class WallHugMetricsPump extends MetricsPump:
+	var wall_counts: Matrix  # number of walls are in man_dist()=1 for a given coord
+	
+	func _init(board_):
+		super(board_)
+		wall_counts = Matrix.new(board.get_used_rect().size)
+
+	func dist_real(here, there):
+		# Using Manhattan dist to discourage diagonals, they are still legal but cost +1.
+		# It's also more expensive to go where there are fewer walls, up to a certain point.
+		return board.man_dist(here, there) + max(0, 2-get_wall_counts(there))
+
+	func dist_estim(here, there):
+		return board.man_dist(here, there)
+		
+	func dist_tiebreak(here, there):
+		return 0
+
+	func get_wall_counts(coord) -> int:
+		## lazy compute the values when requested
+		var val = wall_counts.getv(coord)
+		if val == null:
+			val = 0
+			for offset in [V.i(-1, 0), V.i(0, -1), V.i(1, 0), V.i(0, 1)]:
+				if not board.is_walkable(coord+offset):
+					val += 1
+			wall_counts.setv(coord, val)
+		return val
 
 class TileSpiral extends RefCounted:
 	var board: RevBoard
@@ -637,7 +702,7 @@ func astar_metrics(start, dest, max_dist=null):
 	var queue = DistQueue.new()
 	var done = {}
 	var estimate = dist(start, dest)
-	# dist is a [f(n), g(n), man(p, n)] triplets: estimate and real dists
+	# dist is a [h(n), g(n), man(p, n)] triplets: estimate and real dists
 	# with Manhattan distance with the previous node as the tie breaker to favor 
 	# straigth lines over diagonals.
 	var dist = [estimate, 0, 0]  
@@ -671,6 +736,65 @@ func astar_metrics(start, dest, max_dist=null):
 		done[current] = true
 	return metrics
 	
+
+func astar_metrics_custom(pump:MetricsPump, start, dest, max_dist=null):
+	## Return sparse BoardMetrics using the A* algorithm. 
+	## pump: the fully initialized extractor for the intermediate values
+	## all other params like `astar_metrics()`
+	# find our size
+	var bbox:Rect2i = get_used_rect()
+	var index = make_index()
+	if dest:
+		assert(is_walkable(Vector2i(dest.x, dest.y)))
+
+	# find the start: randomize if not provided
+	if start == null:
+		# TODO: pick only walkable starting points
+		start = Rand.pos_in_rect(bbox)
+	
+	var metrics = BoardMetrics.new(bbox.size, start, dest)
+	var queue = DistQueue.new()
+	var done = {}
+	var estimate = pump.dist_estim(start, dest)
+	# dist is a [h(n), g(n), man(p, n)] triplets: estimate and real dists
+	# with Manhattan distance with the previous node as the tie breaker to favor 
+	# straigth lines over diagonals.
+	var dist = [estimate, 0, 0]
+	var pre_dist = null   # dist from start to a coord
+	var post_dist = null  # dist from a coord to dest
+	queue.enqueue(start, dist)
+	var current = null
+	while not queue.empty():
+		dist = queue.peek()
+		current = queue.dequeue()
+		if current == dest:
+			break  # Done!
+		elif dist(current, dest) == 1:  # FIXME: this bypasses is_free()!
+			# Not using pump.dist_real() in the test because we are looking to see if we are 
+			# one step away, no matter what value range the pump in using for the distances.
+
+			# Got next to dest, no need to look at adjacents()
+			metrics.setv(dest, dist[1]+pump.dist_real(current, dest))
+			metrics.add_edge(current, dest)
+			break
+		if done.has(current) or dist[1] == max_dist:
+			continue  # this position is finalized already
+
+		for pos in adjacents(current, true, true, bbox, index):
+			if done.has(pos):
+				continue
+			pre_dist = metrics.getv(pos)
+			var step_dist = pump.dist_real(current, pos)
+			if pre_dist == null or pre_dist > dist[1]+step_dist:
+				metrics.setv(pos, dist[1]+step_dist)
+				metrics.add_edge(current, pos)
+			post_dist = pump.dist_estim(pos, dest)
+			estimate = post_dist + dist[1]+step_dist
+			var tiebreak = pump.dist_tiebreak(pos, current)
+			queue.enqueue(pos, [estimate, dist[1]+step_dist, tiebreak])
+		done[current] = true
+	return metrics
+
 
 func dist_metrics(start=null, dest=null, max_dist=null):
 	## Return distance metrics or all positions accessible from start. 

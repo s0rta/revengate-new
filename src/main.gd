@@ -260,5 +260,16 @@ func test():
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-	for i in 5:
-		print("Looping! %d" % i)
+	
+	var here = V.i(2, 2)
+	var there = V.i(22, 3)
+	var board = get_board() as RevBoard
+	
+	print("Standard A*:")
+	var metrics = board.astar_metrics(here, there)
+	metrics.ddump_path()
+
+	print("Wall Hugging A*:")
+	var pump = RevBoard.WallHugMetricsPump.new(board)
+	metrics = board.astar_metrics_custom(pump, here, there)
+	metrics.ddump_path()
