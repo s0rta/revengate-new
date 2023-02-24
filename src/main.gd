@@ -254,9 +254,6 @@ func _input(_event):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	var deck = Deck.new([["a", 5], ["b", 2.5]])
-	for i in range(10):
-		print("Drawing from deck: %s" % [deck.draw()])
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")

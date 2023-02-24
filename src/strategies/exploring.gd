@@ -29,11 +29,10 @@ func find_suitable_waypoint():
 	return Rand.weighted_choice(metrics.all_coords(), metrics.all_dists())
 	
 func _get_path(here, there):
-	# FIXME: check that waypoint is free (new param to board.path())
 	var board: RevBoard = me.get_board()
 	if hug_walls:
 		var pump = RevBoard.WallHugMetricsPump.new(board)
-		var metrics = board.astar_metrics_custom(pump, here, there)
+		var metrics = board.astar_metrics_custom(pump, here, there, true)
 		return metrics.path()
 	else:
 		return board.path(here, there, true)

@@ -683,179 +683,164 @@ static func man_dist(from, to):
 	## Return the Manhattan distance between to and from.
 	return abs(from.x - to.x) + abs(from.y - to.y)
 
-func astar_metrics(start, dest, max_dist=null):
-	## Return sparse BoardMetrics using the A* algorithm. 
-	## If max_dist is provided, only explore until max_dist depth is reached 
-	## and return partial metrics.
-	# find our size
-	var bbox:Rect2i = get_used_rect()
-	var index = make_index()
+func _init_metric_context(start, dest, free_dest=false, max_dist=null):
+	## Initialize a few internal variables that we need for building a BoardMetrics, 
+	## no matter which algo is used.
+	## `free_dest`: does the destination have to be walkable?
+	##   true: ex.: you want to go there;
+	##   false: ex.: you want to get close and attack the actor standing there.
 	if dest:
 		assert(is_walkable(Vector2i(dest.x, dest.y)))
 
 	# find the start: randomize if not provided
+	var bbox:Rect2i = get_used_rect()
 	if start == null:
 		# TODO: pick only walkable starting points
 		start = Rand.pos_in_rect(bbox)
 	
 	var metrics = BoardMetrics.new(bbox.size, start, dest)
-	var queue = DistQueue.new()
-	var done = {}
+	var index = make_index()
+	var invalid_dest = false
+	if free_dest and dest!=null:
+		invalid_dest = not index.is_free(dest)
+
+	return {"index": index, "bbox": bbox,
+			"start": start, "dest": dest, "invalid_dest": invalid_dest,
+			"queue": DistQueue.new(), "done": {}, 
+			"pre_dist": null,   # dist from start to a coord
+			"post_dist": null,  # dist from a coord to dest
+			"metrics": metrics}
+
+func astar_metrics(start, dest, free_dest=false, max_dist=null):
+	## Return sparse BoardMetrics using the A* algorithm. 
+	## If max_dist is provided, only explore until max_dist depth is reached 
+	## and return partial metrics.
+	var ctx = _init_metric_context(start, dest, free_dest, max_dist)
+	if ctx.invalid_dest:
+		return ctx.metrics
 	var estimate = dist(start, dest)
-	# dist is a [h(n), g(n), man(p, n)] triplets: estimate and real dists
+	# dist is a [h(n), g(n), man(p, n)] triplet: estimate and real dists
 	# with Manhattan distance with the previous node as the tie breaker to favor 
 	# straigth lines over diagonals.
 	var dist = [estimate, 0, 0]  
-	var pre_dist = null   # dist from start to a coord
-	var post_dist = null  # dist from a coord to dest
-	queue.enqueue(start, dist)
+	ctx.queue.enqueue(start, dist)
 	var current = null
-	while not queue.empty():
-		dist = queue.peek()
-		current = queue.dequeue()
+	while not ctx.queue.empty():
+		dist = ctx.queue.peek()
+		current = ctx.queue.dequeue()
 		if current == dest:
 			break  # Done!
-		elif dist(current, dest) == 1:  # FIXME: this bypasses is_free()!
+		elif dist(current, dest) == 1:
 			# got next to dest, no need to look at adjacents()
-			metrics.setv(dest, dist[1]+1)
-			metrics.add_edge(current, dest)
+			ctx.metrics.setv(dest, dist[1]+1)
+			ctx.metrics.add_edge(current, dest)
 			break
-		if done.has(current) or dist[1] == max_dist:
+		if ctx.done.has(current) or dist[1] == max_dist:
 			continue  # this position is finalized already
 
-		for pos in adjacents(current, true, true, bbox, index):
-			if done.has(pos):
+		for pos in adjacents(current, true, true, ctx.bbox, ctx.index):
+			if ctx.done.has(pos):
 				continue
-			pre_dist = metrics.getv(pos)
-			if pre_dist == null or pre_dist > dist[1]+1:
-				metrics.setv(pos, dist[1]+1)
-				metrics.add_edge(current, pos)
-			post_dist = dist(pos, dest)
-			estimate = post_dist + dist[1] + 1
-			queue.enqueue(pos, [estimate, dist[1]+1, man_dist(pos, current)])
-		done[current] = true
-	return metrics
+			ctx.pre_dist = ctx.metrics.getv(pos)
+			if ctx.pre_dist == null or ctx.pre_dist > dist[1]+1:
+				ctx.metrics.setv(pos, dist[1]+1)
+				ctx.metrics.add_edge(current, pos)
+			ctx.post_dist = dist(pos, dest)
+			estimate = ctx.post_dist + dist[1] + 1
+			ctx.queue.enqueue(pos, [estimate, dist[1]+1, man_dist(pos, current)])
+		ctx.done[current] = true
+	return ctx.metrics
 	
 
-func astar_metrics_custom(pump:MetricsPump, start, dest, max_dist=null):
+func astar_metrics_custom(pump:MetricsPump, start, dest, free_dest=false, max_dist=null):
 	## Return sparse BoardMetrics using the A* algorithm. 
 	## pump: the fully initialized extractor for the intermediate values
 	## all other params like `astar_metrics()`
 	# find our size
-	var bbox:Rect2i = get_used_rect()
-	var index = make_index()
-	if dest:
-		assert(is_walkable(Vector2i(dest.x, dest.y)))
-
-	# find the start: randomize if not provided
-	if start == null:
-		# TODO: pick only walkable starting points
-		start = Rand.pos_in_rect(bbox)
-	
-	var metrics = BoardMetrics.new(bbox.size, start, dest)
-	var queue = DistQueue.new()
-	var done = {}
+	var ctx = _init_metric_context(start, dest, free_dest, max_dist)
+	if ctx.invalid_dest:
+		return ctx.metrics
 	var estimate = pump.dist_estim(start, dest)
 	# dist is a [h(n), g(n), tiebreak(p, n)] triplets: estimate and real dists
 	# with tiebreaker from the previous node to finely tune biasess.
 	var dist = [estimate, 0, 0]
-	var pre_dist = null   # dist from start to a coord
-	var post_dist = null  # dist from a coord to dest
-	queue.enqueue(start, dist)
+	ctx.queue.enqueue(start, dist)
 	var current = null
-	while not queue.empty():
-		dist = queue.peek()
-		current = queue.dequeue()
+	while not ctx.queue.empty():
+		dist = ctx.queue.peek()
+		current = ctx.queue.dequeue()
 		if current == dest:
 			break  # Done!
-		elif dist(current, dest) == 1:  # FIXME: this bypasses is_free()!
+		elif dist(current, dest) == 1:
 			# Not using pump.dist_real() in the test because we are looking to see if we are 
 			# one step away, no matter what value range the pump in using for the distances.
 
 			# Got next to dest, no need to look at adjacents()
-			metrics.setv(dest, dist[1]+pump.dist_real(current, dest))
-			metrics.add_edge(current, dest)
+			ctx.metrics.setv(dest, dist[1]+pump.dist_real(current, dest))
+			ctx.metrics.add_edge(current, dest)
 			break
-		if done.has(current) or dist[1] == max_dist:
+		if ctx.done.has(current) or dist[1] == max_dist:
 			continue  # this position is finalized already
 
-		for pos in adjacents(current, true, true, bbox, index):
-			if done.has(pos):
+		for pos in adjacents(current, true, true, ctx.bbox, ctx.index):
+			if ctx.done.has(pos):
 				continue
-			pre_dist = metrics.getv(pos)
+			ctx.pre_dist = ctx.metrics.getv(pos)
 			var step_dist = pump.dist_real(current, pos)
-			if pre_dist == null or pre_dist > dist[1]+step_dist:
-				metrics.setv(pos, dist[1]+step_dist)
-				metrics.add_edge(current, pos)
-			post_dist = pump.dist_estim(pos, dest)
-			estimate = post_dist + dist[1]+step_dist
+			if ctx.pre_dist == null or ctx.pre_dist > dist[1]+step_dist:
+				ctx.metrics.setv(pos, dist[1]+step_dist)
+				ctx.metrics.add_edge(current, pos)
+			ctx.post_dist = pump.dist_estim(pos, dest)
+			estimate = ctx.post_dist + dist[1]+step_dist
 			var tiebreak = pump.dist_tiebreak(pos, current)
-			queue.enqueue(pos, [estimate, dist[1]+step_dist, tiebreak])
-		done[current] = true
-	return metrics
+			ctx.queue.enqueue(pos, [estimate, dist[1]+step_dist, tiebreak])
+		ctx.done[current] = true
+	return ctx.metrics
 
 
-func dist_metrics(start=null, dest=null, max_dist=null):
+func dist_metrics(start=null, dest=null, free_dest=false, max_dist=null):
 	## Return distance metrics or all positions accessible from start. 
 	## Start is randomly selected if not provided.
 	## Stop exploring after reaching `dest` if provided.
 	## Do not explore further than `max_dist` if provided. 
 	# using the Dijkstra algo
-	
-	# find our size
-	var bbox:Rect2i = get_used_rect()
-	var index = make_index()
-	if dest:
-		assert(is_walkable(Vector2i(dest.x, dest.y)))
-			
-	# find the start: randomize if not provided
-	if start == null:
-		# TODO: pick only walkable starting points
-		start = Rand.pos_in_rect(bbox)
-	
-	var metrics = BoardMetrics.new(bbox.size, start, dest)
-	var queue = DistQueue.new()
-	var done = {}
+	var ctx = _init_metric_context(start, dest, free_dest, max_dist)
+	if ctx.invalid_dest:
+		return ctx.metrics
 	var dist = 0
-	var pre_dist = null  # dist from start to a coord
-	queue.enqueue(start, dist)
+	ctx.queue.enqueue(start, dist)
 	var current = null
-	while not queue.empty():
-		dist = queue.peek()
-		current = queue.dequeue()
+	while not ctx.queue.empty():
+		dist = ctx.queue.peek()
+		current = ctx.queue.dequeue()
 		if current == dest:
 			break  # Done!
 		elif dest != null and dist(current, dest) == 1:
 			# got next to dest, no need to look at adjacents()
-			metrics.setv(V.i(dest.x, dest.y), dist+1)
-			metrics.add_edge(current, dest)
+			ctx.metrics.setv(V.i(dest.x, dest.y), dist+1)
+			ctx.metrics.add_edge(current, dest)
 			break
-		if done.has(current) or dist == max_dist:
+		if ctx.done.has(current) or dist == max_dist:
 			continue  # this position is finalized already
 
-		for pos in adjacents(current, true, true, bbox, index):
-			if done.has(pos):
+		for pos in adjacents(current, true, true, ctx.bbox, ctx.index):
+			if ctx.done.has(pos):
 				continue
-			pre_dist = metrics.getv(pos)
-			if pre_dist == null or pre_dist > dist+1:
-				metrics.setv(pos, dist+1)
-				metrics.add_edge(current, pos)
-			queue.enqueue(pos, dist+1)
-		done[current] = true
-	return metrics
-	
+			ctx.pre_dist = ctx.metrics.getv(pos)
+			if ctx.pre_dist == null or ctx.pre_dist > dist+1:
+				ctx.metrics.setv(pos, dist+1)
+				ctx.metrics.add_edge(current, pos)
+			ctx.queue.enqueue(pos, dist+1)
+		ctx.done[current] = true
+	return ctx.metrics
+
 func path(start, dest, free_dest=true, max_dist=null):
 	## Return an Array of coordinates from `start` to `dest`.
 	## See BoardMetrics.path() for more details.
 	## `free_dest`: does the destination have to be walkable?
 	##   true: ex.: you want to go there;
 	##   false: ex.: you want to get close and attack the actor standing there.
-	if free_dest:
-		# TODO: some of that logic should go inside astar_metrics()
-		var index = make_index()
-		if not index.is_free(dest):
-			return null
-	var metrics = astar_metrics(start, dest, max_dist)
+	var metrics = astar_metrics(start, dest, free_dest, max_dist)
 	return metrics.path()
 
 func line_of_sight(coord1, coord2):
