@@ -69,6 +69,8 @@ func run():
 				break
 			if actor == null or not actor.is_alive():  # died from conditions
 				continue
+			if actor.is_animating():  # still moving from previous turn, let's wait a bit
+				await actor.anims_done
 			actor.act()
 			if not actor.is_idle():
 				print("waiting for %s..." % actor)
@@ -76,17 +78,6 @@ func run():
 				print("done with %s!" % actor)
 			if turn_is_valid and actor.is_animating():
 				await get_tree().create_timer(ACTING_DELAY).timeout
-		# 4th pass: finalize animations
-		for actor in actors:
-			if not turn_is_valid:
-				break
-			if actor == null:
-				# this actor dissapeared before the end of the turn
-				continue
-			if actor.is_animating():
-				print("Anims are active for %s..." % actor)
-				await actor.anims_done
-				print("Anims done for %s!" % actor)
 		turn += 1
 		turn_is_valid = true
 	state = States.STOPPED
