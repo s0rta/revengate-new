@@ -20,8 +20,8 @@ boot_splash/image="res://assets/splash-screen.png"
 [autoload]
 
 Consts="*res://src/constants.gd"
-DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
 Tender="*res://src/tender.gd"
+DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
 
 [dialogue_manager]
 
