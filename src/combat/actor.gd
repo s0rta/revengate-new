@@ -149,10 +149,7 @@ func act():
 		finalize_turn()
 		return
 	var action = await strat.act()
-	if action != null:
-		action.connect("finished", finalize_turn, CONNECT_ONE_SHOT)
-	else:
-		finalize_turn()
+	finalize_turn()
 	return action
 
 func get_caption():
@@ -520,17 +517,17 @@ func attack(foe):
 	## A full multi-strike attack on foe.
 	## Sentiment and range are not checked, the caller is responsible for 
 	## performing those tests.
+	var has_hit = false
+	var weapons = get_weapons()
 	
-	# FIXME: if more than one strike, we need to wait to the first one to finish before 
-	# we start the next one
-	var anim = null
-	for weapon in get_weapons():
+	for weapon in weapons:
+		var wait_time = 0
 		if foe.is_alive():
-			if anim != null:
-				await anim.finished
-			anim = strike(foe, weapon)
-	return anim
-		
+			if is_animating():
+				wait_time = await anims_done
+			has_hit = strike(foe, weapon) or has_hit
+	return has_hit
+
 func strike(foe, weapon):
 	## Strike foe with weapon. The strike could result in a miss. 
 	## The result is immediately visible in the world.
@@ -540,7 +537,8 @@ func strike(foe, weapon):
 	# to-hit	
 	if stat_trial(foe.get_evasion(weapon), "agility", weapon.skill):
 		# Miss!
-		return anim_miss(foe, weapon)
+		anim_miss(foe, weapon)
+		return false
 
 	# TODO: agility should influence the chance of a critical hit	
 	var roll = randfn(MU, SIGMA)
@@ -554,7 +552,8 @@ func strike(foe, weapon):
 		damage *= CRITICAL_MULT
 	damage = foe.normalize_damage(weapon, damage)
 	CombatUtils.apply_all_effects(weapon, foe)
-	return anim_hit(foe, weapon, damage)
+	anim_hit(foe, weapon, damage)
+	return true
 
 func normalize_damage(weapon, damage):
 	## Return the number of hit points after applying resistances and minimums with `self` as 

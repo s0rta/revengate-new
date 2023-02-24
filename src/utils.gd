@@ -84,3 +84,11 @@ static func colored(text):
 	var ESC_RESET = ESC_FMT % 0
 
 	return "%s%s%s" % [ESC_MAG, text, ESC_RESET]
+
+
+static func wait_for_signal(sig):
+	## Wait for a signal to be emited, return how long you waited in seconds
+	var start = Time.get_unix_time_from_system()
+	await sig
+	var stop = Time.get_unix_time_from_system()
+	return stop - start
