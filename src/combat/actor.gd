@@ -142,15 +142,17 @@ func stop_listening():
 
 func act():
 	## Do the action for this turn (might include passing).
-	## The actor over loads this method to select the action based on player input.
+	## Return if an action happened. This does not influence turn logic, but it migh
+	##   influence visuals.
+	## The Hero overloads this method to select the action based on player input.
 	state = States.ACTING
 	var strat = get_strategy()
 	if not strat:
 		finalize_turn()
-		return
-	var action = await strat.act()
+		return false
+	var acted = await strat.act()
 	finalize_turn()
-	return action
+	return acted
 
 func get_caption():
 	if caption:
@@ -277,7 +279,7 @@ func move_by(cell_vect: Vector2i):
 func move_to(board_coord):
 	## Move to the specified board coordinate in number of tiles from the 
 	## origin. 
-	## The move is animated, return the animation.
+	## The move is animated.
 	var old_coord = get_cell_coord()
 	var anim := create_anim()
 	var cpos = RevBoard.board_to_canvas(board_coord)
@@ -287,17 +289,17 @@ func move_to(board_coord):
 	anim.finished.connect(reset_dest, CONNECT_ONE_SHOT)
 	# TODO: it might be better to emit at the end of the animation
 	emit_signal("moved", old_coord, board_coord)
-	return anim
+	return true
 
 func move_toward_actor(actor):
-	## Try to take one step toward `actor`, return the animation if it worked.
+	## Try to take one step toward `actor`, return true if it worked.
 	var here = get_cell_coord()
 	var there = actor.get_cell_coord()
 	var path = get_board().path(here, there, false)
 	if path != null and len(path) >= 2:
 		return move_to(path[1])
 	else:
-		return null
+		return false
 
 func travel_to(there):
 	## Start the multi-turn journey that takes us to `there`, 

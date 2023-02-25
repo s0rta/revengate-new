@@ -37,7 +37,7 @@ func _get_path(here, there):
 	else:
 		return board.path(here, there, true)
 
-func act():
+func act() -> bool:
 	var my_coord = me.get_cell_coord()
 	if my_coord == waypoint or nb_travel_attempts >= MAX_TRAVEL_ATTEMPTS:
 		waypoint = null
@@ -46,10 +46,11 @@ func act():
 		nb_travel_attempts = 0
 		waypoint = find_suitable_waypoint()
 		if waypoint == null:
-			return
+			return false
 	
 	var path = _get_path(my_coord, waypoint)
 	if path and len(path) >= 2:
-		me.move_to(path[1])
+		return me.move_to(path[1])
 	else:
 		nb_travel_attempts += 1
+		return false

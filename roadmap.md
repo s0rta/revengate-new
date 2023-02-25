@@ -81,8 +81,8 @@ UI:
 - [ ] bug: beastiary description font color is sometimes black
 - [ ] inspect command appends messages for tile types and items
 - [ ] narrations
-- [ ] finely tuned animation overlaps
-  - [ ] `Actor.act()` does not wait for the end of animations before calling `finalize_turn()`
+- [x] finely tuned animation overlaps
+  - [x] `Actor.act()` does not wait for the end of animations before calling `finalize_turn()`
 - [ ] visual feedback for when inputs are accepted
 - [ ] messages pane
 

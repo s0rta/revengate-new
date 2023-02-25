@@ -30,19 +30,19 @@ func select_foe(actor, index):
 	else:
 		return null
 		
-func act():	
+func act() -> bool:	
 	var hero = find_hero()
 	var board = me.get_board()
 		
 	if hero == null or board == null:
 		# we're are not in a complete scene
-		return null	
+		return false
 			
 	var index = board.make_index()
 	# attack if we can, move towards the hero otherwise
 	var foe = select_foe(me, index)
 	if foe:
-		var anim = await me.attack(foe)
-		return anim
+		var acted = await me.attack(foe)
+		return acted
 	else:
 		return me.move_toward_actor(hero)

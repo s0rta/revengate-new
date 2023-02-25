@@ -38,7 +38,7 @@ func is_valid():
 		attacker = fact.attacker
 	return has_activated and attacker != null and attacker.is_alive()
 
-func act():
+func act() -> bool:
 	print("Flight or Fighting")
 	var my_coord = me.get_cell_coord()
 	var bully_coord = attacker.get_cell_coord()
@@ -58,8 +58,9 @@ func act():
 		return me.move_to(dest)
 	elif cur_dist == 1:  # TODO: use our attack range instead of 1
 		# Bully is within range
-		var anim = await me.attack(attacker)
-		return anim
+		var acted = await me.attack(attacker)
+		return acted
 	else:
 		# no good spot to move, bully is too far, just panic and attack anyone within reach
 		assert(false, "not implemented")
+		return false

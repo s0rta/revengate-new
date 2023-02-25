@@ -61,8 +61,12 @@ func is_expired() -> bool:
 	## An expired stratedy can't become valid again and will eventually be deleted.
 	return ttl is int and ttl == 0
 
-func act():
+func act() -> bool:
+	## Try to do the action for the turn. 
+	## Return if the action could be undertaken.
+	## This method must be overloaded by sub-classes.
 	assert(false, "act() must be re-implemented by subclasses")
+	return false
 
 func find_hero():
 	## Return a reference to the Hero if it can be found.

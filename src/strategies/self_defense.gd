@@ -31,13 +31,13 @@ func is_valid():
 	attacker = fact.attacker
 	return attacker.is_alive()
 
-func act():
+func act() -> bool:
 	print("SelfDefence!")
 	var board = me.get_board()
 	var my_coord = me.get_cell_coord()
 	var foe_coord = attacker.get_cell_coord()
 	if board.dist(my_coord, foe_coord) == 1:
-		var anim = await me.attack(attacker)
-		return anim
+		var acted = await me.attack(attacker)
+		return acted
 	else:
 		return me.move_toward_actor(attacker)

@@ -108,11 +108,13 @@ func act():
 	if strat:
 		print("Hero turn automated by %s" % [strat])
 		state = States.ACTING
-		var result = strat.act()
+		var acted = strat.act()
 		finalize_turn()
-		return result
+		return acted
 	else:
 		state = States.LISTENING
 		print("hero acting...")
 		await self.turn_done
-		
+		# TODO: it would make sense to let the input handlers tell us if something 
+		#   actually happened.
+		return true
