@@ -611,6 +611,7 @@ func give_item(item, actor:Actor):
 	## Give `item` to `actor`
 	assert(item.get_parent() == self, "must possess an item before giving it away")
 	item.reparent(actor)
+	add_message("%s gave a %s to %s" % [self.get_caption(), item.get_short_desc(), actor.get_caption()])
 
 func pick_item(item):
 	# TODO: dist() == 1 would also work nicely
