@@ -9,13 +9,14 @@ if speaker_has_items()
 
 	Michel: I brought too many potions and they are getting annoyingly heavy. Would you like one?
 	- Sure! 
+		do checkpoint("dungeon_intro")
 		do speaker_give_item()
 		Michel: There you go!
 	- No, thank you.
+		do checkpoint("dungeon_intro")
 		Michel: That's a bold choice!
 
 Michel: I'll be right here. Chat with me again if you want to learn more about the dungeon.
-do checkpoint("dungeon_intro")
 => END
 
 ~ dungeon_intro

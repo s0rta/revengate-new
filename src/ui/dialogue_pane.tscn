@@ -58,11 +58,17 @@ mouse_filter = 2
 text = "Bob Morane"
 fit_content = true
 
-[node name="DialogueLabel" type="RichTextLabel" parent="Background/SpeechBackgroud/Margin/VBox"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/SpeechBackgroud/Margin/VBox"]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="DialogueLabel" type="RichTextLabel" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer"]
 unique_name_in_owner = true
 clip_contents = false
-custom_minimum_size = Vector2(0, 180)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
 theme_override_colors/default_color = Color(1, 1, 1, 1)
@@ -78,6 +84,7 @@ hint_underlined = false
 deselect_on_focus_loss_enabled = false
 visible_characters_behavior = 2
 script = ExtResource("2_m6frq")
+pause_at_characters = ""
 
 [node name="ResponsesBox" type="VBoxContainer" parent="Background/SpeechBackgroud/Margin/VBox"]
 unique_name_in_owner = true
@@ -94,4 +101,13 @@ theme_override_font_sizes/normal_font_size = 20
 text = "This is a test"
 scroll_active = false
 
+[node name="CloseButton" type="Button" parent="Background/SpeechBackgroud/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+text = "Close"
+
 [connection signal="gui_input" from="Background" to="." method="_on_background_gui_input"]
+[connection signal="finished_typing" from="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/DialogueLabel" to="." method="_on_dialogue_label_finished_typing"]
+[connection signal="pressed" from="Background/SpeechBackgroud/Margin/VBox/CloseButton" to="." method="close"]

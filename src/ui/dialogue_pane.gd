@@ -42,7 +42,7 @@ var dialogue_line: DialogueLine:
 		
 		dialogue_line = next_dialogue_line
 		
-		%SpeakerLabel.visible = not dialogue_line.character.is_empty()
+#		%SpeakerLabel.visible = not dialogue_line.character.is_empty()
 		%SpeakerLabel.text = dialogue_line.character
 		%DialogueLabel.dialogue_line = dialogue_line
 
@@ -90,8 +90,8 @@ func start(dia_res_: DialogueResource, title: String, speaker_=null, extra_game_
 	dia_res = dia_res_
 	speaker = speaker_
 	# TODO: blank out everything before showing
-	show()
 	self.dialogue_line = await dia_res.get_next_dialogue_line(title, temp_game_states)
+	show()
 
 func close():
 	hide()

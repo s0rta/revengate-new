@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0n7osww35hyh"]
+
+[ext_resource type="PackedScene" uid="uid://cd6ngrhhgito0" path="res://src/ui/dialogue_pane.tscn" id="1_kkwax"]
+
+[node name="NarrationPane" instance=ExtResource("1_kkwax")]
+
+[node name="SpeechBackgroud" parent="Background" index="0"]
+custom_minimum_size = Vector2(0, 500)
+
+[node name="Margin" parent="Background/SpeechBackgroud" index="0"]
+anchors_preset = 15
+anchor_top = 0.0
+offset_top = 0.0
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_right = 64
+
+[node name="SpeakerLabel" parent="Background/SpeechBackgroud/Margin/VBox" index="0"]
+visible = false
+
+[node name="DialogueLabel" parent="Background/SpeechBackgroud/Margin/VBox" index="1"]
+seconds_per_step = 0.005
