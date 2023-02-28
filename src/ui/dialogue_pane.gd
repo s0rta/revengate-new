@@ -57,8 +57,8 @@ var dialogue_line: DialogueLine:
 				if not response.is_allowed:
 					item.modulate.a = 0.7
 				item.text = response.text
-				item.show()
 				%ResponsesBox.add_child(item)
+			%DialogueLabel.finished_typing.connect(_show_options, CONNECT_ONE_SHOT)
 		
 		if not dialogue_line.text.is_empty():
 			%DialogueLabel.type_out()
@@ -132,6 +132,9 @@ func finish_typing():
 func has_options():
 	return len(dialogue_line.responses) != 0
 
+func _show_options():
+	for child in %ResponsesBox.get_children():
+		child.show()
 
 ### dialogue action functions ###
 # We invoke the following with `do funct()` instructions in the dialogue text.

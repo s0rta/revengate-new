@@ -18,5 +18,5 @@ theme_override_constants/margin_right = 64
 [node name="SpeakerLabel" parent="Background/SpeechBackgroud/Margin/VBox" index="0"]
 visible = false
 
-[node name="DialogueLabel" parent="Background/SpeechBackgroud/Margin/VBox" index="1"]
+[node name="DialogueLabel" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer" index="0"]
 seconds_per_step = 0.005
