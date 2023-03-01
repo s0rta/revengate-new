@@ -52,6 +52,11 @@ func _update_expiration():
 		me.turn_done.disconnect(_update_expiration)
 		me.turn_done.connect(queue_free, CONNECT_ONE_SHOT)
 
+func refresh(turn):
+	## Update the internal states that would influence predicates like is_valid() and is_expired().
+	## This will only be called once per turn, before invoking any of the predicates.
+	pass  # nothing to do by default; sub-classes are most likely more interesting than that.
+
 func is_valid() -> bool:
 	## return is the strategy is valid for the current turn
 	return ttl != 0

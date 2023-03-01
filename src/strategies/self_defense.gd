@@ -20,16 +20,22 @@ class_name SelfDefense extends Strategy
 
 var attacker = null
 
+func refresh(turn):
+	var fact = me.mem.recall("was_attacked")
+	if fact != null:
+		# TODO: give up if foe is too far or long enough has passed since the attack
+		attacker = fact.attacker
+	else:
+		attacker = null
+
 func is_valid():
 	if not super():
 		return false
-	var fact = me.mem.recall("was_attacked")
-	if fact == null:
-		attacker = null
+
+	if not attacker:
 		return false
-	# TODO: give up if foe is too far or long enough has passed since the attack
-	attacker = fact.attacker
-	return attacker.is_alive()
+	else:
+		return attacker.is_alive()
 
 func act() -> bool:
 	print("SelfDefence!")

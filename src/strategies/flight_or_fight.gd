@@ -23,19 +23,19 @@ var tested_for_turn = null
 var has_activated = null
 var attacker = null
 
-func is_valid():
-	if not super():
-		return false
+func refresh(turn):
 	var fact = me.mem.recall("was_attacked")
 	if fact == null:
 		attacker = null
-		return false
-		
-	if fact.turn != tested_for_turn:
+	elif fact.turn != tested_for_turn:  # only refresh on new facts
 		tested_for_turn = fact.turn
 		has_activated = Rand.rstest(probability)
 		# TODO: give up if foe is too far or long enough has passed since the attack
 		attacker = fact.attacker
+
+func is_valid():
+	if not super():
+		return false
 	return has_activated and attacker != null and attacker.is_alive()
 
 func act() -> bool:

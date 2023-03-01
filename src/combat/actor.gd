@@ -146,6 +146,7 @@ func act():
 	##   influence visuals.
 	## The Hero overloads this method to select the action based on player input.
 	state = States.ACTING
+	refresh_strategies()
 	var strat = get_strategy()
 	if not strat:
 		finalize_turn()
@@ -315,6 +316,12 @@ func travel_to(there):
 		add_child(strat)
 		return true
 
+func refresh_strategies():
+	## Ask strategie to update their awareness of the world.
+	for node in get_children():
+		if node is Strategy:
+			node.refresh(current_turn)
+
 func get_strategy():
 	## Return the best strategy for this turn or `null` if no strategy is currently valid.
 	var pri_desc = func(a, b):
@@ -324,6 +331,7 @@ func get_strategy():
 	for node in get_children():
 		if node is Strategy and node.is_valid():
 			strats.append(node)
+
 	if strats.size(): 
 		strats.sort_custom(pri_desc)
 		return strats[0]
