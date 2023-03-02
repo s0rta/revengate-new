@@ -77,8 +77,8 @@ Combat:
 - [x] multi-attacks (ex.: claw + claw + bite)
 
 UI:
-- [ ] bug: "follow stairs" button hidden after changing board
-- [ ] bug: beastiary description font color is sometimes black
+- [x] bug: "follow stairs" button hidden after changing board
+- [x] bug: beastiary description font color is sometimes black
 - [ ] inspect command appends messages for tile types and items
 - [x] narrations
 - [x] finely tuned animation overlaps

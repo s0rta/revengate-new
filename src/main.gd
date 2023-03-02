@@ -172,7 +172,8 @@ func switch_board_at(coord):
 	
 	var builder = BoardBuilder.new(new_board)
 	var index = new_board.make_index()
-	builder.place(hero, true, conn.far_coord, true, null, index)
+	var new_pos = builder.place(hero, true, conn.far_coord, true, null, index)
+	$HUD.refresh_buttons_vis(null, new_pos)
 	emit_signal("board_changed", new_board)
 
 func make_board(depth):
