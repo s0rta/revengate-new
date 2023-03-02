@@ -540,18 +540,19 @@ func find_previous_response_id(line_number: int) -> String:
 	
 	# Look back up the list to find the previous response
 	var last_found_response_id: String = str(line_number)
+	
 	for i in range(line_number - 1, -1, -1):
 		line = raw_lines[i]
 		
 		if is_line_empty(line): continue
 		
 		# If its a response at the same indent level then its a match
-		if get_indent(line) == indent_size:
+		elif get_indent(line) == indent_size:
 			if line.strip_edges().begins_with("- "):
 				last_found_response_id = str(i)
 			else:
 				return last_found_response_id
-				
+		
 	# Return itself if nothing was found
 	return last_found_response_id
 
@@ -566,7 +567,7 @@ func apply_weighted_random(id: int, raw_line: String, indent_size: int, line: Di
 	var original_random_line: Dictionary = {}
 	for i in range(id, 0, -1):
 		if not raw_lines[i].strip_edges().begins_with("%") or get_indent(raw_lines[i]) != indent_size:
-			break
+			continue
 		elif parsed_lines.has(str(i)) and parsed_lines[str(i)].has("siblings"):
 			original_random_line = parsed_lines[str(i)]
 	
@@ -650,7 +651,9 @@ func find_next_line_after_conditions(line_number: int) -> String:
 			# We have to check the parent of this block
 			for p in range(line_number - 1, -1, -1):
 				line = raw_lines[p]
+				
 				if is_line_empty(line): continue
+				
 				line_indent = get_indent(line)
 				if line_indent < expected_indent:
 					return parsed_lines[str(p)].next_id_after
@@ -715,7 +718,9 @@ func find_next_line_after_responses(line_number: int) -> String:
 		elif line.begins_with("elif ") or line.begins_with("else"):
 			for p in range(line_number - 1, -1, -1):
 				line = raw_lines[p]
+				
 				if is_line_empty(line): continue
+				
 				var line_indent = get_indent(line)
 				if line_indent < expected_indent:
 					return parsed_lines[str(p)].next_id_after
@@ -810,7 +815,7 @@ func extract_translation(line: String) -> String:
 
 func extract_response_prompt(line: String) -> String:
 	# Find just the text prompt from a response, ignoring any conditions or gotos
-	line = line.replace("- ", "")
+	line = line.substr(2)
 	if " [if " in line:
 		line = line.substr(0, line.find(" [if "))
 	if " =>" in line:
