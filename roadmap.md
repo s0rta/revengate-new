@@ -73,7 +73,7 @@ UI:
 
 ## v0.5
 Combat:
-- [ ] deprecate the Monster class: too vague to be useful
+- [x] deprecate the Monster class: too vague to be useful
 - [x] multi-attacks (ex.: claw + claw + bite)
 
 UI:

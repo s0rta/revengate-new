@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://bnpboopa78bjb"]
+[gd_scene load_steps=25 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -12,10 +12,10 @@
 [ext_resource type="PackedScene" uid="uid://b26vqfk7j6un7" path="res://src/monsters/desert_centipede.tscn" id="8_v818c"]
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="9_7u4fi"]
 [ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="9_22ipg"]
-[ext_resource type="PackedScene" uid="uid://darwaf2kchvan" path="res://src/monsters/kobold.tscn" id="9_cplml"]
+[ext_resource type="PackedScene" uid="uid://cx7utj7hd3ne" path="res://src/monsters/kobold.tscn" id="9_cplml"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="10_niqw3"]
-[ext_resource type="PackedScene" uid="uid://cdd2i0fqe6u6d" path="res://src/monsters/neutral.tscn" id="10_ru273"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="12_53g87"]
 [ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="12_c1kwk"]
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
@@ -71,9 +71,6 @@ visible = false
 [node name="DesertCentipede" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("8_v818c")]
 position = Vector2(272, 368)
 
-[node name="Kobold" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("9_cplml")]
-position = Vector2(208, 272)
-
 [node name="Ghost" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("9_22ipg")]
 position = Vector2(272, 144)
 
@@ -81,11 +78,14 @@ position = Vector2(272, 144)
 script = ExtResource("10_niqw3")
 evasion = 2
 
-[node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("10_ru273")]
+[node name="Kobold" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("9_cplml")]
+position = Vector2(208, 272)
+
+[node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("12_53g87")]
 position = Vector2(688, 208)
 char = "@"
 caption = "Michel Boilou"
-color = Color(0.160784, 0.698039, 0.552941, 1)
+color = Color(0.160784, 0.701961, 0.54902, 1)
 conversation_file = "res://src/story/intro.dialogue"
 conversation_sect = "meet_michel"
 health = 90
@@ -97,6 +97,9 @@ visible = false
 [node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]
 anchor_mode = 0
 position_smoothing_enabled = true
+
+[node name="BoardArea@GestureSurveyor@Viewport@Board@Michel@PotionOfRegen" parent="." instance=ExtResource("12_c1kwk")]
+visible = false
 
 [node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]
 

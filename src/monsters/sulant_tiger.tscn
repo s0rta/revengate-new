@@ -1,12 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://dae5sqhh0bd65"]
+[gd_scene load_steps=5 format=3 uid="uid://dae5sqhh0bd65"]
 
-[ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_ycuvh"]
+[ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_ycuvh"]
+[ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="2_sdh8d"]
+[ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_17f46"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="4_ydegh"]
 
 [node name="SulantTiger" instance=ExtResource("1_ycuvh")]
-spawn_cost = 6
 char = "f"
 caption = "Sulant tiger"
 color = Color(0.341176, 0.686275, 0.215686, 1)
+spawn_cost = 6
 health = 15
 strength = 39
 agility = 55
@@ -19,3 +22,14 @@ Sulant tigers use their tails as monkeys do to grab objects or the limbs of unsu
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.341176, 0.686275, 0.215686, 1)
 text = "f"
+
+[node name="Claw" type="Node" parent="." index="7"]
+script = ExtResource("2_sdh8d")
+damage = 5
+damage_family = 2
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Claw" index="0"]
+stream = ExtResource("3_17f46")
+
+[node name="Tracking" type="Node" parent="." index="9"]
+script = ExtResource("4_ydegh")

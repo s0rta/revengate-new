@@ -1,12 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://cjhuo8ouk2mpa"]
+[gd_scene load_steps=5 format=3 uid="uid://cjhuo8ouk2mpa"]
 
-[ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_rs7wm"]
+[ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_rs7wm"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_1hkqn"]
+[ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="3_1e5ek"]
+[ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="4_ge1c0"]
 
 [node name="Pacherr" instance=ExtResource("1_rs7wm")]
-spawn_cost = 12
 char = "P"
 caption = "pacherr"
 color = Color(0.596078, 0.411765, 0.321569, 1)
+spawn_cost = 12
 health = 60
 strength = 63
 agility = 40
@@ -23,3 +26,14 @@ Among themselves, Pacherrs love music and dancing with both genders taking inter
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.596078, 0.411765, 0.321569, 1)
 text = "P"
+
+[node name="Tracking" type="Node" parent="." index="8"]
+script = ExtResource("2_1hkqn")
+
+[node name="Claw" type="Node" parent="." index="9"]
+script = ExtResource("3_1e5ek")
+damage = 5
+damage_family = 2
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Claw" index="0"]
+stream = ExtResource("4_ge1c0")

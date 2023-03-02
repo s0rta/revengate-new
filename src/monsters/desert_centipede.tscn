@@ -1,18 +1,16 @@
-[gd_scene load_steps=8 format=3 uid="uid://b26vqfk7j6un7"]
+[gd_scene load_steps=7 format=3 uid="uid://b26vqfk7j6un7"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_c2kw3"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_5enhw"]
-[ext_resource type="Script" path="res://src/monsters/monster.gd" id="2_7sxyh"]
 [ext_resource type="Script" path="res://src/combat/effect.gd" id="4_csjey"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="4_s2rcw"]
 [ext_resource type="AudioStream" uid="uid://da0cslkk526yk" path="res://src/monsters/bite-small.wav" id="5_dmajw"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="7_g05vb"]
 
 [node name="DesertCentipede" instance=ExtResource("1_c2kw3")]
-script = ExtResource("2_7sxyh")
 char = "c"
 caption = "desert centipede"
-color = Color(0.917647, 0.615686, 0.101961, 1)
+color = Color(0.92, 0.62, 0.1, 1)
 spawn_cost = 7
 health = 18
 strength = 25

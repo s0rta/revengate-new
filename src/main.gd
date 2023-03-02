@@ -215,7 +215,7 @@ func make_board(depth):
 
 func instantiate_card(name):
 	var tree = load(SCENE_PATH_FMT % name) as PackedScene	
-	return tree.instantiate()	
+	return tree.instantiate()
 
 
 func make_item(char):

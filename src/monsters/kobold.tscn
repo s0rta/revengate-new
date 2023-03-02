@@ -1,16 +1,26 @@
-[gd_scene load_steps=2 format=3 uid="uid://darwaf2kchvan"]
+[gd_scene load_steps=4 format=3 uid="uid://cx7utj7hd3ne"]
 
-[ext_resource type="PackedScene" uid="uid://creaepcsp74ry" path="res://src/monsters/monster.tscn" id="1_20278"]
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_khagu"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_l03ql"]
+[ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="3_8hon4"]
 
-[node name="Monster" instance=ExtResource("1_20278")]
+[node name="Kobold" instance=ExtResource("1_khagu")]
 char = "k"
 caption = "kobold"
-spawn_cost = 3
-health = 30
-strength = 20
+spawn_cost = 2
+health = 20
+strength = 30
 agility = 40
-intelligence = 10
+intelligence = 20
+faction = 2
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
-text = "k"
+
+[node name="Tracking" type="Node" parent="." index="7"]
+script = ExtResource("2_l03ql")
+
+[node name="Claw" type="Node" parent="." index="8"]
+script = ExtResource("3_8hon4")
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Claw" index="0"]

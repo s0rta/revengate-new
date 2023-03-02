@@ -109,5 +109,4 @@ focus_mode = 0
 text = "Close"
 
 [connection signal="gui_input" from="Background" to="." method="_on_background_gui_input"]
-[connection signal="finished_typing" from="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/DialogueLabel" to="." method="_on_dialogue_label_finished_typing"]
 [connection signal="pressed" from="Background/SpeechBackgroud/Margin/VBox/CloseButton" to="." method="close"]
