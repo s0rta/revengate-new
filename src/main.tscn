@@ -104,6 +104,7 @@ visible = false
 [node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]
 
 [node name="HUD" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("7_4dw6n")
 
 [node name="ZoomSlider" type="VSlider" parent="HUD"]

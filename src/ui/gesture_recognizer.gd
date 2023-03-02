@@ -105,13 +105,21 @@ func start_inspect_at():
 	emit_signal("action_complete")
 	if vals[0]:
 		var coord = viewport.global_pos_to_board_coord(vals[1])
-		# TODO: find something to inspect
 		var board = $/root/Main.get_board()
 		var index = board.make_index()
 		var actor = index.actor_at(coord)
 		if actor:
 			%ActorDetailsScreen.fill_with(actor)
 			%ActorDetailsScreen.popup()
+			
+		var item = index.top_item_at(coord)
+		if item != null:
+			%HUD.add_message("There is a %s here" % [item.get_short_desc()])
+		elif board.is_on_board(coord):
+			var terrain = board.get_cell_terrain(coord)
+			%HUD.add_message("This is a %s tile" % [terrain])
+		else:
+			%HUD.add_message("There is nothing here")
 	is_capturing_clicks = false
 
 func show_inventory():

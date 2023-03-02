@@ -79,7 +79,7 @@ Combat:
 UI:
 - [x] bug: "follow stairs" button hidden after changing board
 - [x] bug: beastiary description font color is sometimes black
-- [ ] inspect command appends messages for tile types and items
+- [x] inspect command appends messages for tile types and items
 - [x] narrations
 - [x] finely tuned animation overlaps
   - [x] `Actor.act()` does not wait for the end of animations before calling `finalize_turn()`
