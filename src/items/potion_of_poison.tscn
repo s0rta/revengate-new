@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://b80ulbklxp5at"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_eh6jl"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_la8ey"]
+
+[node name="PotionOfPoison" instance=ExtResource("1_eh6jl")]
+char = "🍸"
+caption = "potion of poison"
+consumable = true
+
+[node name="Effect" type="Node" parent="." index="1"]
+script = ExtResource("2_la8ey")
+damage = 2
+damage_family = 7
+nb_turns = 4

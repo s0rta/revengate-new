@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bnpboopa78bjb"]
+[gd_scene load_steps=25 format=3 uid="uid://bnpboopa78bjb"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bxjfh12dtkof6" path="res://src/combat/hero.tscn" id="4_lrsod"]
 [ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="5_odllu"]
 [ext_resource type="Script" path="res://src/hud.gd" id="7_4dw6n"]
+[ext_resource type="PackedScene" uid="uid://b80ulbklxp5at" path="res://src/items/potion_of_poison.tscn" id="7_mxaej"]
 [ext_resource type="Script" path="res://src/ui/zoom_slider.gd" id="8_7qyjt"]
 [ext_resource type="PackedScene" uid="uid://b26vqfk7j6un7" path="res://src/monsters/desert_centipede.tscn" id="8_v818c"]
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="9_7u4fi"]
@@ -62,6 +63,9 @@ editor_description = "The first child of the board is not visible. This make sur
 position = Vector2(48, 80)
 
 [node name="PotionOfHealing" parent="BoardArea/GestureSurveyor/Viewport/Board/Hero" instance=ExtResource("9_7u4fi")]
+visible = false
+
+[node name="PotionOfPoison" parent="BoardArea/GestureSurveyor/Viewport/Board/Hero" instance=ExtResource("7_mxaej")]
 visible = false
 
 [node name="DesertCentipede" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("8_v818c")]

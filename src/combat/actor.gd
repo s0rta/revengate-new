@@ -395,11 +395,12 @@ func _anim_health_change(label_, number, direction:Vector2):
 	add_child(label)
 	label.text = "%d" % number
 	label.visible = true
-	var anim := create_anim()
+	var tree = get_tree()
+	var anim := tree.create_tween()
 	anim.finished.connect(label.queue_free, CONNECT_ONE_SHOT)
 	var offset = Vector2(RevBoard.TILE_SIZE, RevBoard.TILE_SIZE) * direction
 	anim.tween_property(label, "position", label.position+offset, .5)
-	var anim2 := create_anim()
+	var anim2 := tree.create_tween()
 	anim2.pause()
 	# start the fadeout about half way through
 	anim2.tween_property(label, "modulate", Color(0, 0, 0, 0), .25)
