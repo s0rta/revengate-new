@@ -166,7 +166,7 @@ func switch_board_at(coord):
 		old_board.add_connection(coord, new_board, far)		
 		conn = old_board.get_connection(coord)
 		
-	new_board.new_message.connect(%MessagesScreen.add_message)
+	new_board.new_message.connect($HUD.add_message)
 	old_board.set_active(false)
 	new_board.set_active(true)
 	
@@ -261,15 +261,4 @@ func test():
 func test2():
 	print("Testing: 2, 1... 2, 1!")
 	
-	var here = V.i(2, 2)
-	var there = V.i(22, 3)
-	var board = get_board() as RevBoard
-	
-	print("Standard A*:")
-	var metrics = board.astar_metrics(here, there)
-	metrics.ddump_path()
-
-	print("Wall Hugging A*:")
-	var pump = RevBoard.WallHugMetricsPump.new(board)
-	metrics = board.astar_metrics_custom(pump, here, there)
-	metrics.ddump_path()
+	$HUD.add_message("this is a message...")

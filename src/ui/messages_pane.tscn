@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3 uid="uid://cl6ylq5q74oxy"]
+
+[ext_resource type="Script" path="res://src/ui/messages_pane.gd" id="1_xvvel"]
+
+[node name="MessagesPane" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_xvvel")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MessagesBox" type="VBoxContainer" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="MessageTemplate" type="Label" parent="MarginContainer/MessagesBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.77, 0.42, 0.9)
+text = "This is a test message..."

@@ -80,11 +80,11 @@ UI:
 - [ ] bug: "follow stairs" button hidden after changing board
 - [ ] bug: beastiary description font color is sometimes black
 - [ ] inspect command appends messages for tile types and items
-- [ ] narrations
+- [x] narrations
 - [x] finely tuned animation overlaps
   - [x] `Actor.act()` does not wait for the end of animations before calling `finalize_turn()`
 - [ ] visual feedback for when inputs are accepted
-- [ ] messages pane
+- [x] messages pane
 
 ## v0.6
 - [ ] style UI with Godot theme

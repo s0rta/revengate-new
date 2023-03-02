@@ -68,3 +68,7 @@ func show_action_label(text):
 	
 func hide_action_label():
 	$ActionLabel.hide()
+
+func add_message(text):
+	%MessagesPane.add_message(text)
+	%MessagesScreen.add_message(text)

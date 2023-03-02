@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bnpboopa78bjb"]
+[gd_scene load_steps=24 format=3 uid="uid://bnpboopa78bjb"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
 [ext_resource type="Script" path="res://src/victory_probe.gd" id="14_ulj2m"]
 [ext_resource type="PackedScene" uid="uid://cgdqkl167nhyj" path="res://src/ui/actor_details_screen.tscn" id="14_yna85"]
+[ext_resource type="PackedScene" uid="uid://cl6ylq5q74oxy" path="res://src/ui/messages_pane.tscn" id="17_n3emp"]
 [ext_resource type="PackedScene" uid="uid://cd6ngrhhgito0" path="res://src/ui/dialogue_pane.tscn" id="18_vtucs"]
 [ext_resource type="PackedScene" uid="uid://b0n7osww35hyh" path="res://src/ui/narration_pane.tscn" id="20_21sjb"]
 
@@ -263,6 +264,13 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("12_yvfct")
 
+[node name="DialoguePane" parent="HUD" instance=ExtResource("18_vtucs")]
+unique_name_in_owner = true
+visible = false
+
+[node name="MessagesPane" parent="HUD" instance=ExtResource("17_n3emp")]
+unique_name_in_owner = true
+
 [node name="InventoryScreen" parent="HUD" instance=ExtResource("12_yw3up")]
 unique_name_in_owner = true
 visible = false
@@ -279,17 +287,13 @@ visible = false
 unique_name_in_owner = true
 visible = false
 
-[node name="DialoguePane" parent="HUD" instance=ExtResource("18_vtucs")]
-unique_name_in_owner = true
-visible = false
-
 [node name="VictoryProbe" type="Node" parent="."]
 script = ExtResource("14_ulj2m")
 
 [connection signal="board_changed" from="." to="VictoryProbe" method="assay_victory"]
 [connection signal="action_complete" from="BoardArea/GestureSurveyor" to="HUD" method="hide_action_label"]
 [connection signal="action_started" from="BoardArea/GestureSurveyor" to="HUD" method="show_action_label"]
-[connection signal="new_message" from="BoardArea/GestureSurveyor/Viewport/Board" to="HUD/MessagesScreen" method="add_message"]
+[connection signal="new_message" from="BoardArea/GestureSurveyor/Viewport/Board" to="HUD" method="add_message"]
 [connection signal="dropped_item" from="BoardArea/GestureSurveyor/Viewport/Board/Hero" to="HUD" method="update_states_at"]
 [connection signal="picked_item" from="BoardArea/GestureSurveyor/Viewport/Board/Hero" to="HUD" method="update_states_at"]
 [connection signal="value_changed" from="HUD/ZoomSlider" to="BoardArea/GestureSurveyor/Viewport" method="_on_zoom_slider_value_changed"]
