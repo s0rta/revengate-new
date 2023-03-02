@@ -72,3 +72,12 @@ func hide_action_label():
 func add_message(text):
 	%MessagesPane.add_message(text)
 	%MessagesScreen.add_message(text)
+
+func refresh_input_enabled(enabled):
+	# FIXME: show a spinner widget
+	for child in %LButtonBar.get_children():
+		if child is Button:
+			child.disabled = not enabled
+
+func _on_hero_state_changed(new_state):
+	refresh_input_enabled(new_state == Actor.States.LISTENING)

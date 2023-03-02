@@ -132,6 +132,7 @@ size_flags_vertical = 0
 mouse_filter = 2
 
 [node name="LButtonBar" type="VBoxContainer" parent="HUD/LMargin"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
 mouse_filter = 2
@@ -251,6 +252,7 @@ focus_mode = 0
 text = "📖"
 
 [node name="ActionLabel" type="Label" parent="HUD"]
+unique_name_in_owner = true
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -304,6 +306,7 @@ script = ExtResource("14_ulj2m")
 [connection signal="new_message" from="BoardArea/GestureSurveyor/Viewport/Board" to="HUD" method="add_message"]
 [connection signal="dropped_item" from="BoardArea/GestureSurveyor/Viewport/Board/Hero" to="HUD" method="update_states_at"]
 [connection signal="picked_item" from="BoardArea/GestureSurveyor/Viewport/Board/Hero" to="HUD" method="update_states_at"]
+[connection signal="state_changed" from="BoardArea/GestureSurveyor/Viewport/Board/Hero" to="HUD" method="_on_hero_state_changed"]
 [connection signal="value_changed" from="HUD/ZoomSlider" to="BoardArea/GestureSurveyor/Viewport" method="_on_zoom_slider_value_changed"]
 [connection signal="pressed" from="HUD/LMargin/LButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
 [connection signal="pressed" from="HUD/LMargin/LButtonBar/LootButton" to="BoardArea/GestureSurveyor" method="start_loot"]

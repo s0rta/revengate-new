@@ -18,6 +18,8 @@
 @tool
 class_name Actor extends Area2D
 
+# the internal state changed
+signal state_changed(new_state)
 # the actor won't play again until the turn counter is incremented
 signal turn_done  
 # the actor is done moving, but it could move again during the current turn
@@ -91,7 +93,10 @@ const CRITICAL_MULT := 0.35
 @export_multiline var description
 
 @onready var mem = $Mem
-var state = States.IDLE
+var state = States.IDLE:
+	set(new_state):
+		state = new_state
+		emit_signal("state_changed", new_state)
 
 # Turn logic: when possible, use `state`, await on `turn_done()` and ttl/decay rather than
 # relying on specific turn number values.
