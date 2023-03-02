@@ -61,6 +61,7 @@ editor_description = "The first child of the board is not visible. This make sur
 
 [node name="Hero" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("4_lrsod")]
 position = Vector2(48, 80)
+spawn_cost = 0
 
 [node name="PotionOfHealing" parent="BoardArea/GestureSurveyor/Viewport/Board/Hero" instance=ExtResource("9_7u4fi")]
 visible = false
@@ -88,6 +89,7 @@ caption = "Michel Boilou"
 color = Color(0.160784, 0.701961, 0.54902, 1)
 conversation_file = "res://src/story/intro.dialogue"
 conversation_sect = "meet_michel"
+spawn_cost = 0
 health = 90
 agility = 90
 

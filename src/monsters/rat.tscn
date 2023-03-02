@@ -10,7 +10,7 @@
 [node name="Rat" instance=ExtResource("1_cnguh")]
 char = "r"
 caption = "rat"
-spawn_cost = 1
+spawn_cost = 1.0
 health = 3
 strength = 17
 agility = 45

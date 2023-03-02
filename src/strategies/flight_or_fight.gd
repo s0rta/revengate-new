@@ -43,17 +43,18 @@ func act() -> bool:
 	var my_coord = me.get_cell_coord()
 	var bully_coord = attacker.get_cell_coord()
 	var board = me.get_board() as RevBoard
-	var index = board.make_index()
+	var index = board.make_index() as RevBoard.BoardIndex
 	var cells = board.adjacents(my_coord, true, true, null, index)
 	
 	var cur_dist = board.dist(my_coord, bully_coord)
+	# Elements is a list of [dist, coord] of possible moves
 	var elems = []
 	for cell in cells:
 		var dist = board.dist(cell, bully_coord)
 		if dist >= cur_dist:
 			elems.append([dist, cell])
 	elems.sort()
-	if not elems.is_empty():
+	if not elems.is_empty() and elems[-1][0] > cur_dist:
 		var dest = elems[-1][-1]
 		return me.move_to(dest)
 	elif cur_dist == 1:  # TODO: use our attack range instead of 1
@@ -62,5 +63,10 @@ func act() -> bool:
 		return acted
 	else:
 		# no good spot to move, bully is too far, just panic and attack anyone within reach
-		assert(false, "not implemented")
+		var actors = index.get_actors_around(my_coord)
+		if not actors.is_empty():
+			var victim = Rand.choice(actors)
+			var acted = await me.attack(victim)
+			return acted
+			
 		return false

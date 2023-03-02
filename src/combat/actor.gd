@@ -72,7 +72,7 @@ const CRITICAL_MULT := 0.35
 @export var conversation_sect: String
 
 @export_group("Procedural Generation")
-@export var spawn_cost:int   # in [0..100] for normal cases
+@export var spawn_cost:float   # in [0..100] for normal cases
 
 # core combat attributes
 @export_group("Combat")
