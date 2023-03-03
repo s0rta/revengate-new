@@ -394,6 +394,14 @@ class BoardIndex extends RefCounted:
 			if board.dist(coord, actor.get_cell_coord()) <= radius:
 				actors.append(actor)
 		return actors
+
+	func get_actors_around_me(me:Actor, radius=1):
+		var my_coord = me.get_cell_coord()
+		var actors = []
+		for actor in get_actors():
+			if actor != me and board.dist(my_coord, actor.get_cell_coord()) <= radius:
+				actors.append(actor)
+		return actors
 	
 	func add_actor(actor):
 		var coord = actor.get_cell_coord()

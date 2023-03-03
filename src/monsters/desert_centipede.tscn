@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://b26vqfk7j6un7"]
 
-[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_c2kw3"]
+[ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_c2kw3"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_5enhw"]
 [ext_resource type="Script" path="res://src/combat/effect.gd" id="4_csjey"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="4_s2rcw"]

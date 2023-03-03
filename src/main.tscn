@@ -317,16 +317,13 @@ unique_name_in_owner = true
 script = ExtResource("25_mp2al")
 
 [node name="SewerOtter" parent="DeckBuilder" instance=ExtResource("27_551xb")]
-spawn_cost = 5.0
 
 [node name="Labras" parent="DeckBuilder" instance=ExtResource("27_qu54w")]
-spawn_cost = 4.0
 
 [node name="Ghost" parent="DeckBuilder" instance=ExtResource("9_22ipg")]
 spawn_cost = 8.0
 
 [node name="Sahwakoon" parent="DeckBuilder" instance=ExtResource("28_rykp2")]
-spawn_cost = 2.0
 
 [node name="DesertCentipede" parent="DeckBuilder" instance=ExtResource("8_v818c")]
 spawn_cost = 7.0
@@ -342,7 +339,6 @@ min_depth = 6
 [node name="MissingWatch" parent="DeckBuilder/OnlyAfter6" instance=ExtResource("30_68c1j")]
 
 [node name="Pacherr" parent="DeckBuilder/OnlyAfter6" instance=ExtResource("33_ugrak")]
-spawn_cost = 12.0
 
 [node name="UpTo4" type="Node" parent="DeckBuilder"]
 script = ExtResource("28_4pbpo")
@@ -351,7 +347,6 @@ max_depth = 4
 [node name="Kobold" parent="DeckBuilder/UpTo4" instance=ExtResource("9_cplml")]
 
 [node name="SulantTiger" parent="DeckBuilder/UpTo4" instance=ExtResource("31_0xqe1")]
-spawn_cost = 6.0
 
 [connection signal="board_changed" from="." to="VictoryProbe" method="assay_victory"]
 [connection signal="action_complete" from="BoardArea/GestureSurveyor" to="HUD" method="hide_action_label"]

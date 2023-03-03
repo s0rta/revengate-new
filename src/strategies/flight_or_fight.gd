@@ -62,8 +62,8 @@ func act() -> bool:
 		var acted = await me.attack(attacker)
 		return acted
 	else:
-		# no good spot to move, bully is too far, just panic and attack anyone within reach
-		var actors = index.get_actors_around(my_coord)
+		# no good spots to move, bully is too far, just panic and attack anyone within reach
+		var actors = index.get_actors_around_me(me)
 		if not actors.is_empty():
 			var victim = Rand.choice(actors)
 			var acted = await me.attack(victim)

@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://qeqrkp7uhv5v"]
+[gd_scene load_steps=4 format=3 uid="uid://qeqrkp7uhv5v"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_qcguu"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="2_clmdu"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="3_0u52l"]
 
 [node name="Beast" instance=ExtResource("1_qcguu")]
 faction = 2
@@ -12,3 +13,7 @@ theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
 [node name="SkillLevels" type="Node" parent="." index="7"]
 script = ExtResource("2_clmdu")
 innate_attack = 2
+
+[node name="SelfDefense" type="Node" parent="." index="8"]
+script = ExtResource("3_0u52l")
+priority = 0.8

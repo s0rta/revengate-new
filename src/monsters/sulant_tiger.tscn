@@ -9,7 +9,7 @@
 char = "f"
 caption = "Sulant tiger"
 color = Color(0.341176, 0.686275, 0.215686, 1)
-spawn_cost = 6
+spawn_cost = 6.0
 health = 15
 strength = 39
 agility = 55
@@ -33,3 +33,4 @@ stream = ExtResource("3_17f46")
 
 [node name="Tracking" type="Node" parent="." index="9"]
 script = ExtResource("4_ydegh")
+priority = 0.6

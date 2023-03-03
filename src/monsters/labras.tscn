@@ -9,7 +9,7 @@
 char = "l"
 caption = "labras"
 color = Color(0.45098, 0.807843, 0, 1)
-spawn_cost = 4
+spawn_cost = 4.0
 health = 21
 strength = 35
 agility = 52
@@ -46,6 +46,6 @@ stream = ExtResource("3_td7m5")
 volume_db = -3.0
 pitch_scale = 1.25
 
-[node name="Tracking" type="Node" parent="." index="10"]
+[node name="Tracking" type="Node" parent="." index="11"]
 script = ExtResource("4_6xr7i")
-priority = 1.0
+priority = 0.6
