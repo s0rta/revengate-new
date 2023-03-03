@@ -181,7 +181,9 @@ func make_board(depth):
 	var card = monster_deck.draw()
 	while card != null:
 		if budget >= card.spawn_cost:
-			builder.place(card.duplicate(), false, null, true, null, index)
+			var monster = card.duplicate()
+			monster.show()
+			builder.place(monster, false, null, true, null, index)
 			budget -= card.spawn_cost
 		if budget == 0:
 			break

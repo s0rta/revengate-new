@@ -117,6 +117,7 @@ func _get_configuration_warnings():
 func _ready():
 	$Label.text = char
 	$Label.add_theme_color_override("font_color", color)
+	Utils.hide_unplaced(self)
 
 func _to_string():
 	var parent = get_parent()

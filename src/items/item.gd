@@ -32,6 +32,7 @@ const VIS_MODULATE := Color.WHITE
 
 func _ready():
 	$Label.text = char
+	Utils.hide_unplaced(self)
 
 func _to_string():
 	var str = caption

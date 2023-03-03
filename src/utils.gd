@@ -85,10 +85,14 @@ static func colored(text):
 
 	return "%s%s%s" % [ESC_MAG, text, ESC_RESET]
 
-
 static func wait_for_signal(sig):
 	## Wait for a signal to be emited, return how long you waited in seconds
 	var start = Time.get_unix_time_from_system()
 	await sig
 	var stop = Time.get_unix_time_from_system()
 	return stop - start
+
+static func hide_unplaced(node:Node2D):
+	## Hide a node unless it's currently placed on a board.
+	if not node.get_parent() is RevBoard:
+		node.hide()
