@@ -84,7 +84,7 @@ UI:
 - [x] narrations
 - [x] finely tuned animation overlaps
   - [x] `Actor.act()` does not wait for the end of animations before calling `finalize_turn()`
-- [ ] visual feedback for when inputs are accepted
+- [x] visual feedback for when inputs are accepted
 - [x] messages pane
 
 ## v0.6

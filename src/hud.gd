@@ -74,7 +74,10 @@ func add_message(text):
 	%MessagesScreen.add_message(text)
 
 func refresh_input_enabled(enabled):
-	# FIXME: show a spinner widget
+	if enabled:
+		%WaitingLabel.hide()
+	else:
+		%WaitingLabel.show()
 	for child in %LButtonBar.get_children():
 		if child is Button:
 			child.disabled = not enabled
