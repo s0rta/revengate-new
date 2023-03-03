@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://jrho0vm5aihp"]
+
+[ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_ym0y4"]
+
+[node name="CheapSlime" instance=ExtResource("1_ym0y4")]
+char = "S"
+caption = "slime"
+color = Color(0.2, 1, 0, 1)
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)

@@ -7,7 +7,7 @@
 [node name="Kobold" instance=ExtResource("1_khagu")]
 char = "k"
 caption = "kobold"
-spawn_cost = 2
+spawn_cost = 2.0
 health = 20
 strength = 30
 agility = 40
@@ -16,6 +16,7 @@ faction = 2
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
+text = "k"
 
 [node name="Tracking" type="Node" parent="." index="7"]
 script = ExtResource("2_l03ql")

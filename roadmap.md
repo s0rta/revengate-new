@@ -75,6 +75,7 @@ UI:
 Combat:
 - [x] deprecate the Monster class: too vague to be useful
 - [x] multi-attacks (ex.: claw + claw + bite)
+- [ ] all monsters have self-defense
 
 UI:
 - [x] bug: "follow stairs" button hidden after changing board

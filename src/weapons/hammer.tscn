@@ -8,6 +8,7 @@ damage = 5
 damage_family = 1
 char = "🔨"
 caption = "hammer"
+spawn_cost = 1.0
 
 [node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
 stream = ExtResource("2_gttei")

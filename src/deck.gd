@@ -27,16 +27,39 @@ func _init(card_occs=null):
 		for item in card_occs:
 			add_card(item[0], item[1])
 
+func ddump(sparse=false):
+	## Print the content of the deck. 
+	## sparse: only print cards with non-zezo occurences
+	print("Cards in this deck:")
+	for i in len(cards):
+		if sparse and occurences[i] == 0:
+			continue
+		print("  %s: %s" % [cards[i], occurences[i]])
+
+func validate_nb_copies(nb_copies):
+	assert(nb_copies != INF and nb_copies != NAN, 
+		"I have no idea what you want me to do with that nb_copies...")
+	assert(nb_copies >= 0, "Negative occurences are not supported.")
+
 func add_card(card, nb_copies=1):
+	validate_nb_copies(nb_copies)
 	cards.append(card)
 	occurences.append(nb_copies)
 
 func add_copies(card, nb_copies):
+	validate_nb_copies(nb_copies)
 	var index = cards.find(card)
 	if index == -1:
 		add_card(card, nb_copies)
 	else:
 		occurences[index] += nb_copies
+
+func normalize():
+	## Adjust the content of the deck to be consistent with drawing rules. 
+	## Cads with less than one occurence are removed.
+	for i in len(occurences):
+		if occurences[i] < 1:
+			occurences[i] = 0
 
 func draw():
 	## Return a card after adjusting it's number of occurences. 

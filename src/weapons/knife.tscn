@@ -9,6 +9,7 @@ damage_family = 2
 skill = "fencing"
 char = "🔪"
 caption = "knife"
+spawn_cost = 1.0
 
 [node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
 stream = ExtResource("2_mgq1s")

@@ -26,6 +26,9 @@ const VIS_MODULATE := Color.WHITE
 @export var caption := ""
 @export var consumable := false
 
+# TODO: "spawn" sounds more like something that applies to living things...
+@export var spawn_cost := 0.0
+
 
 func _ready():
 	$Label.text = char

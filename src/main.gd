@@ -19,16 +19,6 @@ extends Node2D
 
 # The hero moved to a different level, the UI and turn logic are affected and must be notified
 signal board_changed(new_board)
-
-const MONSTERS = ["monsters/rat", 
-						"monsters/labras", 
-						"monsters/ghost", 
-						"monsters/sulant_tiger",  
-						"monsters/sahwakoon",  
-						"monsters/desert_centipede",  
-						"monsters/sewer_otter",
-						"monsters/pacherr"]
-const MAX_CARD_COPIES = 4
 						
 const SCENE_PATH_FMT = "res://src/%s.tscn"
 
@@ -107,17 +97,6 @@ func _ready():
 	board_changed.connect(center_on_hero)
 	await $TurnQueue.run()
 
-func gen_deck(budget, card_names):
-	var deck = Deck.new()
-	
-	for name in card_names:
-		var card = instantiate_card(name)
-		if card.spawn_cost:
-			# nb_copies could be a float, which is legal in the probabilistic deck
-			var nb_copies = clamp(budget / card.spawn_cost, 0, MAX_CARD_COPIES)
-			deck.add_card(card, nb_copies)
-	return deck
-
 func get_board():
 	## Return the current active board
 	var current = null
@@ -187,21 +166,18 @@ func make_board(depth):
 	
 	var index = new_board.make_index()
 	
-	# regular items
-	var all_chars = "✄➴🌡🌷🔮🖋🚬🥊🌂⚙⚗☕🎖🖂".split()
-	for i in range(1):
-		var item = make_item(Rand.choice(all_chars))
-		builder.place(item, false, null, true, null, index)
-	
+	# items – legacy deck
 	# unique and quest items
 	for gen in item_generators:
 		var item = gen.generate(depth)
 		if item:
 			builder.place(item, false, null, true, null, index)
 	
+	# TODO: items with DeckBuilder
+	
 	# monsters
 	var budget = max(0, depth * 3)
-	var monster_deck = gen_deck(budget, MONSTERS)
+	var monster_deck = %DeckBuilder.gen_monsters_deck(depth, budget)
 	var card = monster_deck.draw()
 	while card != null:
 		if budget >= card.spawn_cost:
@@ -262,4 +238,12 @@ func test():
 func test2():
 	print("Testing: 2, 1... 2, 1!")
 	
-	$HUD.add_message("this is a message...")
+	for floor in 10:
+		print("Drawing cards for floor #%s" % floor )
+		var deck = %DeckBuilder.gen_monsters_deck(floor, floor*3)
+		deck.ddump(true)
+		for i in 10:
+			var card = deck.draw()
+			if card == null:
+				break
+			print("drew: %s" % card)
