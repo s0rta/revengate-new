@@ -19,7 +19,8 @@
 ## This script is autoloaded at `Consts`
 extends Node
 
-const VERSION := "0.5.0"
+const VERSION := "0.5.1"
+const DEBUG = true
 
 ## The kind of damage, mostly used to compute resistances. Can apply to healing as well.
 enum DamageFamily {

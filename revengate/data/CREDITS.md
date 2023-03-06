@@ -47,3 +47,7 @@ Additionnal sound effects CC-BY-SA Yannick Gingras:
 - hammer-01
 - ethereal-01, 02
 - razor
+
+Particle sprites:
+CC0 by Kenney
+https://www.kenney.nl/

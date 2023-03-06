@@ -233,9 +233,7 @@ func _input(_event):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	
-	var diag = load("res://src/story/narrations.dialogue")
-	%NarrationPane.start(diag, "strange_level")
+	%Viewport.flash_coord_selection(hero.get_cell_coord())
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")

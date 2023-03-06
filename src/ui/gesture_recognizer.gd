@@ -111,15 +111,24 @@ func start_inspect_at():
 		if actor:
 			%ActorDetailsScreen.fill_with(actor)
 			%ActorDetailsScreen.popup()
+			# FIXME: we can flash the message after the popup() if the screen emits `closed()`
+			#await %ActorDetailsScreen.closed()
 			
+		%Viewport.flash_coord_selection(coord)
+		var here_str = "at %s" % board.coord_str(coord) if Utils.is_debug() else "here"
+		var msg: String
 		var item = index.top_item_at(coord)
 		if item != null:
-			%HUD.add_message("There is a %s here" % [item.get_short_desc()])
+			msg = "There is a %s %s" % [item.get_short_desc(), here_str]
 		elif board.is_on_board(coord):
 			var terrain = board.get_cell_terrain(coord)
-			%HUD.add_message("This is a %s tile" % [terrain])
+			if Utils.is_debug():
+				msg = "There is a %s tile %s" % [terrain, here_str]
+			else:
+				msg = "This is a %s tile" % [terrain]
 		else:
-			%HUD.add_message("There is nothing here")
+			msg = "There is nothing %s" % here_str
+		%HUD.add_message(msg)
 	is_capturing_clicks = false
 
 func show_inventory():

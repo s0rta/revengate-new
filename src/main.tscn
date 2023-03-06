@@ -57,6 +57,7 @@ stretch = true
 script = ExtResource("2_dy763")
 
 [node name="Viewport" type="SubViewport" parent="BoardArea/GestureSurveyor"]
+unique_name_in_owner = true
 handle_input_locally = false
 size = Vector2i(1280, 720)
 render_target_update_mode = 4
@@ -336,18 +337,24 @@ unique_name_in_owner = true
 script = ExtResource("25_mp2al")
 
 [node name="SewerOtter" parent="DeckBuilder" instance=ExtResource("27_551xb")]
+visible = false
 
 [node name="Labras" parent="DeckBuilder" instance=ExtResource("27_qu54w")]
+visible = false
 
 [node name="Ghost" parent="DeckBuilder" instance=ExtResource("9_22ipg")]
+visible = false
 spawn_cost = 8.0
 
 [node name="Sahwakoon" parent="DeckBuilder" instance=ExtResource("28_rykp2")]
+visible = false
 
 [node name="DesertCentipede" parent="DeckBuilder" instance=ExtResource("8_v818c")]
+visible = false
 spawn_cost = 7.0
 
 [node name="Rat" parent="DeckBuilder" instance=ExtResource("26_wvdb5")]
+visible = false
 
 [node name="OnlyAfter6" type="Node" parent="DeckBuilder"]
 script = ExtResource("28_4pbpo")
@@ -358,14 +365,17 @@ min_depth = 6
 [node name="MissingWatch" parent="DeckBuilder/OnlyAfter6" instance=ExtResource("30_68c1j")]
 
 [node name="Pacherr" parent="DeckBuilder/OnlyAfter6" instance=ExtResource("33_ugrak")]
+visible = false
 
 [node name="UpTo4" type="Node" parent="DeckBuilder"]
 script = ExtResource("28_4pbpo")
 max_depth = 4
 
 [node name="Kobold" parent="DeckBuilder/UpTo4" instance=ExtResource("9_cplml")]
+visible = false
 
 [node name="SulantTiger" parent="DeckBuilder/UpTo4" instance=ExtResource("31_0xqe1")]
+visible = false
 
 [connection signal="board_changed" from="." to="VictoryProbe" method="assay_victory"]
 [connection signal="action_complete" from="BoardArea/GestureSurveyor" to="HUD" method="hide_action_label"]

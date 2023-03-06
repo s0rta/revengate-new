@@ -18,6 +18,10 @@
 ## Various utility functions that don't fit anywhere else.
 class_name Utils extends Object
 
+static func is_debug() -> bool:
+	## Return whether we are in debug mode
+	return Consts.DEBUG and OS.is_debug_build()
+
 static func ddump_event(event, node, meth_name):
 	## Print a trace that event was received by node.meth_name(). 
 	## Note all events are printed, only those with high debug-value.
@@ -96,3 +100,17 @@ static func hide_unplaced(node:Node2D):
 	## Hide a node unless it's currently placed on a board.
 	if not node.get_parent() is RevBoard:
 		node.hide()
+
+static func fadeout_later(node:Node, nb_secs:float, free:=true):
+	## Do a fadeout animation on `node` after `nb_secs`.
+	## If `free`, the node is deleted after the fadeout.
+	var timer = node.get_tree().create_timer(nb_secs)
+	await timer.timeout
+	var col = Color(node.modulate)
+	col.a = 0.0
+	var anim = node.get_tree().create_tween()
+	anim.tween_property(node, "modulate", col, 0.5)
+	await anim.finished
+	node.hide()
+	if free:
+		node.queue_free()

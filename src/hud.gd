@@ -26,10 +26,11 @@ var hero: Actor
 
 func _ready():
 	# only show the testing UI on debug builds
+	var is_debug = Utils.is_debug()
 	var rbar = find_child("RButtonBar")
 	for node in rbar.get_children():
 		if node is Button:
-			node.visible = OS.is_debug_build()
+			node.visible = is_debug
 
 func set_hero(hero_):
 	hero = hero_

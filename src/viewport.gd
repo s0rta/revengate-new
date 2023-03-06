@@ -58,3 +58,8 @@ func center_on_coord(coord):
 	
 	camera.offset = pos - size/2.0*transform
 	
+func flash_coord_selection(coord:Vector2i):
+	var highlight = load("res://src/ui/cell_highlight.tscn").instantiate()
+	highlight.position = RevBoard.board_to_canvas(coord)
+	add_child(highlight)
+	Utils.fadeout_later(highlight, 5)
