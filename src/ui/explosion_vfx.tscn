@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://digge31pscsl"]
+
+[ext_resource type="Shader" path="res://src/ui/explosion_vfx.gdshader" id="1_hlm6u"]
+[ext_resource type="Script" path="res://src/ui/explosion_vfx.gd" id="2_jtoju"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b227l"]
+resource_local_to_scene = true
+shader = ExtResource("1_hlm6u")
+shader_parameter/time = null
+shader_parameter/start_time = null
+shader_parameter/fadout_delay = 0.2
+shader_parameter/fade_slope = 8.0
+shader_parameter/blast_radius = 0.5
+
+[node name="ExplosionVFX" type="Node2D"]
+material = SubResource("ShaderMaterial_b227l")
+script = ExtResource("2_jtoju")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+use_parent_material = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = -96.0
+offset_right = 96.0
+offset_bottom = 96.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DebugTimer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
+[connection signal="timeout" from="DebugTimer" to="." method="reset_start_time"]

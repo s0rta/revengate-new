@@ -233,7 +233,8 @@ func _input(_event):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	%Viewport.flash_coord_selection(hero.get_cell_coord())
+#	%Viewport.flash_coord_selection(hero.get_cell_coord())
+	%Viewport.effect_at_coord("explosion_vfx", hero.get_cell_coord())
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
