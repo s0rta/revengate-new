@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cfc3ttsrd52r"]
+[gd_scene load_steps=6 format=3 uid="uid://cfc3ttsrd52r"]
 
 [ext_resource type="Texture2D" uid="uid://kau2lr1cng82" path="res://assets/tile-atlas.png" id="1_j50me"]
+[ext_resource type="Material" uid="uid://v8da3elp8mal" path="res://src/ui/water_material.tres" id="1_ssjw7"]
 [ext_resource type="Script" path="res://src/rev_board.gd" id="2_dlal2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x5cyv"]
@@ -87,18 +88,30 @@ texture_region_size = Vector2i(32, 32)
 3:4/0/physics_layer_0/angular_velocity = 0.0
 3:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 4:4/0 = 0
+4:4/0/material = ExtResource("1_ssjw7")
+4:4/0/terrain_set = 0
+4:4/0/terrain = 5
 4:4/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 4:4/0/physics_layer_0/angular_velocity = 0.0
 4:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 5:4/0 = 0
+5:4/0/material = ExtResource("1_ssjw7")
+5:4/0/terrain_set = 0
+5:4/0/terrain = 5
 5:4/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 5:4/0/physics_layer_0/angular_velocity = 0.0
 5:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 6:4/0 = 0
+6:4/0/material = ExtResource("1_ssjw7")
+6:4/0/terrain_set = 0
+6:4/0/terrain = 5
 6:4/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 6:4/0/physics_layer_0/angular_velocity = 0.0
 6:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 7:4/0 = 0
+7:4/0/material = ExtResource("1_ssjw7")
+7:4/0/terrain_set = 0
+7:4/0/terrain = 5
 7:4/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 7:4/0/physics_layer_0/angular_velocity = 0.0
 7:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
@@ -147,11 +160,14 @@ terrain_set_0/terrain_3/name = "stairs-up"
 terrain_set_0/terrain_3/color = Color(0.329412, 0.462745, 0.623529, 1)
 terrain_set_0/terrain_4/name = "stairs-down"
 terrain_set_0/terrain_4/color = Color(0.329412, 0.462745, 0.623529, 1)
+terrain_set_0/terrain_5/name = "water"
+terrain_set_0/terrain_5/color = Color(0.027451, 0.027451, 0.85098, 1)
 custom_data_layer_0/name = "is_connector"
 custom_data_layer_0/type = 1
 sources/0 = SubResource("TileSetAtlasSource_x5cyv")
 
 [node name="Board" type="TileMap"]
+position = Vector2(0, 1)
 tile_set = SubResource("1")
 cell_quadrant_size = 32
 format = 2
