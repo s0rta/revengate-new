@@ -367,8 +367,6 @@ func _anim_lunge(foe):
 	
 func anim_miss(foe, weapon):
 	## Animate a missed strike towards `foe`, return the animation object.
-#	if foe.state == States.ACTING:
-#		await foe.turn_done
 	play_sound("MissSound", weapon)
 
 	var anim = _anim_lunge(foe)

@@ -25,66 +25,9 @@ const SCENE_PATH_FMT = "res://src/%s.tscn"
 @onready var hero:Actor = find_child("Hero")
 @onready var hud = $HUD
 @onready var boards_cont: Node = find_child("Board").get_parent()
-var item_generators := []
-var monster_generators := []
-
-## Factory class to help us track which unique items have been generated.
-class UniqueItemGenerator extends RefCounted:
-	var done = false
-	var scene_path
-	var first_level
-	var last_level
-	var item = null
-	func _init(scene_name, first_level_, last_level_):
-		scene_path = SCENE_PATH_FMT % scene_name
-		first_level = first_level_
-		last_level = last_level_
-		
-	func generate(depth):
-		if not done and Rand.linear_prob_test(depth, first_level-1, last_level):
-			done = true
-			return make_item()
-		else:
-			return null
-		
-	func make_item():
-		var tree = load(scene_path) as PackedScene
-		item = tree.instantiate()
-		return item
-
-class LinearGenerator extends RefCounted:
-	var scene_path
-	var first_level
-	var last_level
-	func _init(scene_name, first_level_, last_level_):
-		scene_path = SCENE_PATH_FMT % scene_name
-		first_level = first_level_
-		last_level = last_level_
-		
-	func generate(depth):
-		if Rand.linear_prob_test(depth, first_level-1, last_level):
-			return make_item()
-		else:
-			return null
-		
-	func make_item():
-		var tree = load(scene_path) as PackedScene
-		return tree.instantiate()
 
 func _ready():
 	Tender.hero = hero
-	for params in [["items/missing_watch", 4, 9], 
-					["items/potion_of_regen", 1, 3], 
-					["items/magic_capsule_of_regen", 4, 9], 
-					["items/amulet_of_strength", 2, 6],
-					# weapons
-					["weapons/hammer", 1, 5],
-					["weapons/razor", 1, 4],
-					["weapons/sword", 3, 8],
-					["weapons/rapier", 5, 10],
-					["weapons/saber", 5, 10],
-					]:
-		item_generators.append(UniqueItemGenerator.new(params[0], params[1], params[2]))
 	
 	# FIXME: the original board should be able to re-index it's content
 	var board = find_child("Board")
@@ -155,6 +98,14 @@ func switch_board_at(coord):
 	$HUD.refresh_buttons_vis(null, new_pos)
 	emit_signal("board_changed", new_board)
 
+func _place_card(card, builder, index=null):
+	## Instantiate a card and place in in a free spot on the board.
+	## Return the spawn_cost of the placed card.
+	var instance = card.duplicate()
+	instance.show()
+	builder.place(instance, false, null, true, null, index)
+	return card.spawn_cost
+
 func make_board(depth):
 	## Return a brand new fully initiallized unconnected RevBoard
 	var scene = load("res://src/rev_board.tscn") as PackedScene
@@ -166,36 +117,33 @@ func make_board(depth):
 	
 	var index = new_board.make_index()
 	
-	# items – legacy deck
-	# unique and quest items
-	for gen in item_generators:
-		var item = gen.generate(depth)
-		if item:
-			builder.place(item, false, null, true, null, index)
+	# Items
+	var budget = max(0, depth*1.2)
+
+	# mandatory items
+	var deck = %DeckBuilder.gen_mandatory_item_deck(depth)
+	while not deck.is_empty():
+		budget -= _place_card(deck.draw(), builder, index)
 	
-	# TODO: items with DeckBuilder
+	# optional monsters, if we have any spawning budget left
+	deck = %DeckBuilder.gen_item_deck(depth, budget)
+	while not deck.is_empty() and budget > 0:
+		budget -= _place_card(deck.draw(), builder, index)
+		
+	# Monsters
+	budget = max(0, depth * 3)
 	
-	# monsters
-	var budget = max(0, depth * 3)
-	var monster_deck = %DeckBuilder.gen_monsters_deck(depth, budget)
-	var card = monster_deck.draw()
-	while card != null:
-		if budget >= card.spawn_cost:
-			var monster = card.duplicate()
-			monster.show()
-			builder.place(monster, false, null, true, null, index)
-			budget -= card.spawn_cost
-		if budget == 0:
-			break
-		card = monster_deck.draw()
+	# mandatory monsters
+	deck = %DeckBuilder.gen_mandatory_monster_deck(depth)
+	while not deck.is_empty():
+		budget -= _place_card(deck.draw(), builder, index)
+
+	# optional monsters, if we have any spawning budget left
+	deck = %DeckBuilder.gen_monster_deck(depth, budget)
+	while not deck.is_empty() and budget > 0:
+		budget -= _place_card(deck.draw(), builder, index)
 
 	return new_board
-
-
-func instantiate_card(name):
-	var tree = load(SCENE_PATH_FMT % name) as PackedScene	
-	return tree.instantiate()
-
 
 func make_item(char):
 	var tree = load("res://src/items/item.tscn") as PackedScene
@@ -235,16 +183,24 @@ func test():
 	print("Testing: 1, 2... 1, 2!")
 #	%Viewport.flash_coord_selection(hero.get_cell_coord())
 	%Viewport.effect_at_coord("explosion_vfx", hero.get_cell_coord())
+	
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
 	
 	for floor in 10:
 		print("Drawing cards for floor #%s" % floor )
-		var deck = %DeckBuilder.gen_monsters_deck(floor, floor*3)
+		var mandatory_deck = %DeckBuilder.gen_mandatory_monster_deck(floor)
+		print("== Mandatory deck== ")
+		mandatory_deck.ddump(true)
+
+		print("== Regular deck== ")
+		var deck = %DeckBuilder.gen_monster_deck(floor, floor*3)
 		deck.ddump(true)
 		for i in 10:
 			var card = deck.draw()
 			if card == null:
 				break
 			print("drew: %s" % card)
+
+	print("Dungeon draw counts: %s" % [%DeckBuilder.draw_counts])

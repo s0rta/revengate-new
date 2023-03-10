@@ -20,12 +20,14 @@ class_name Deck extends RefCounted
 
 var cards := []
 var occurences := []  # how many of each cards do we have?
+var tally_func = null  # to be called with a card as it's drawn
 
-func _init(card_occs=null):
+func _init(card_occs=null, tally_func_=null):
 	## card_occs: an Array of [card, nb_copies] pairs
 	if card_occs != null:
 		for item in card_occs:
 			add_card(item[0], item[1])
+	tally_func = tally_func_
 
 func ddump(sparse=false):
 	## Print the content of the deck. 
@@ -40,6 +42,12 @@ func validate_nb_copies(nb_copies):
 	assert(nb_copies != INF and nb_copies != NAN, 
 		"I have no idea what you want me to do with that nb_copies...")
 	assert(nb_copies >= 0, "Negative occurences are not supported.")
+
+func is_empty():
+	for occ in occurences:
+		if occ >= 1:
+			return false
+	return true
 
 func add_card(card, nb_copies=1):
 	validate_nb_copies(nb_copies)
@@ -70,4 +78,7 @@ func draw():
 	occurences[index] -= 1
 	if occurences[index] < 1:  # a card needs at least one full occurence to be drawn
 		occurences[index] = 0
-	return cards[index]
+	var card = cards[index]
+	if tally_func:
+		tally_func.call(card)
+	return card

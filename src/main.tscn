@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=41 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -34,6 +34,12 @@
 [ext_resource type="PackedScene" uid="uid://b868r5vu2iiyh" path="res://src/items/missing_watch.tscn" id="30_68c1j"]
 [ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="31_0xqe1"]
 [ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="33_ugrak"]
+[ext_resource type="PackedScene" uid="uid://c7fgdridawfb3" path="res://src/items/magic_capsule_of_regen.tscn" id="34_mvq7m"]
+[ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="35_fqryl"]
+[ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="36_bonyf"]
+[ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="37_8mtuq"]
+[ext_resource type="PackedScene" uid="uid://6ml8upew405" path="res://src/weapons/saber.tscn" id="38_pnvrw"]
+[ext_resource type="PackedScene" path="res://src/weapons/sword.tscn" id="39_2vmul"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_58o83")
@@ -342,39 +348,81 @@ visible = false
 [node name="Labras" parent="DeckBuilder" instance=ExtResource("27_qu54w")]
 visible = false
 
-[node name="Ghost" parent="DeckBuilder" instance=ExtResource("9_22ipg")]
-visible = false
-spawn_cost = 8.0
-
-[node name="Sahwakoon" parent="DeckBuilder" instance=ExtResource("28_rykp2")]
-visible = false
-
 [node name="DesertCentipede" parent="DeckBuilder" instance=ExtResource("8_v818c")]
 visible = false
 spawn_cost = 7.0
 
-[node name="Rat" parent="DeckBuilder" instance=ExtResource("26_wvdb5")]
+[node name="Kobold" parent="DeckBuilder" instance=ExtResource("9_cplml")]
 visible = false
 
-[node name="OnlyAfter6" type="Node" parent="DeckBuilder"]
+[node name="SulantTiger" parent="DeckBuilder" instance=ExtResource("31_0xqe1")]
+visible = false
+
+[node name="Max3PerFloor" type="Node" parent="DeckBuilder"]
 script = ExtResource("28_4pbpo")
-min_depth = 6
+max_board_occ = 3
+min_board_occ = 1
 
-[node name="AmuletOfStrength" parent="DeckBuilder/OnlyAfter6" instance=ExtResource("29_lcgrj")]
-
-[node name="MissingWatch" parent="DeckBuilder/OnlyAfter6" instance=ExtResource("30_68c1j")]
-
-[node name="Pacherr" parent="DeckBuilder/OnlyAfter6" instance=ExtResource("33_ugrak")]
+[node name="Rat" parent="DeckBuilder/Max3PerFloor" instance=ExtResource("26_wvdb5")]
 visible = false
 
-[node name="UpTo4" type="Node" parent="DeckBuilder"]
+[node name="Sahwakoon" parent="DeckBuilder/Max3PerFloor" instance=ExtResource("28_rykp2")]
+visible = false
+
+[node name="Max2PerGame" type="Node" parent="DeckBuilder"]
 script = ExtResource("28_4pbpo")
-max_depth = 4
+max_dungeon_occ = 2
 
-[node name="Kobold" parent="DeckBuilder/UpTo4" instance=ExtResource("9_cplml")]
+[node name="Ghost" parent="DeckBuilder/Max2PerGame" instance=ExtResource("9_22ipg")]
 visible = false
+spawn_cost = 8.0
 
-[node name="SulantTiger" parent="DeckBuilder/UpTo4" instance=ExtResource("31_0xqe1")]
+[node name="QuestItem" type="Node" parent="DeckBuilder"]
+script = ExtResource("28_4pbpo")
+max_depth = 12
+max_dungeon_occ = 1
+min_dungeon_occ = 1
+
+[node name="MissingWatch" parent="DeckBuilder/QuestItem" instance=ExtResource("30_68c1j")]
+spawn_cost = 8.0
+
+[node name="Unique" type="Node" parent="DeckBuilder"]
+script = ExtResource("28_4pbpo")
+max_depth = 14
+max_dungeon_occ = 1
+min_dungeon_occ = 1
+
+[node name="PotionOfRegen" parent="DeckBuilder/Unique" instance=ExtResource("12_c1kwk")]
+spawn_cost = 1.5
+
+[node name="CapsuleOfRegen" parent="DeckBuilder/Unique" instance=ExtResource("34_mvq7m")]
+caption = "magic capsule of regen "
+spawn_cost = 4.0
+
+[node name="AmuletOfStrength" parent="DeckBuilder/Unique" instance=ExtResource("29_lcgrj")]
+caption = "amulet of strength"
+
+[node name="Rare" type="Node" parent="DeckBuilder"]
+script = ExtResource("28_4pbpo")
+max_dungeon_occ = 2
+
+[node name="Hammer" parent="DeckBuilder/Rare" instance=ExtResource("35_fqryl")]
+
+[node name="Rapier" parent="DeckBuilder/Rare" instance=ExtResource("36_bonyf")]
+
+[node name="Razor" parent="DeckBuilder/Rare" instance=ExtResource("37_8mtuq")]
+
+[node name="Saber" parent="DeckBuilder/Rare" instance=ExtResource("38_pnvrw")]
+
+[node name="Sword" parent="DeckBuilder/Rare" instance=ExtResource("39_2vmul")]
+spawn_cost = 5.0
+
+[node name="RareAndDeep" type="Node" parent="DeckBuilder"]
+script = ExtResource("28_4pbpo")
+min_depth = 7
+max_dungeon_occ = 2
+
+[node name="Pacherr" parent="DeckBuilder/RareAndDeep" instance=ExtResource("33_ugrak")]
 visible = false
 
 [connection signal="board_changed" from="." to="VictoryProbe" method="assay_victory"]
