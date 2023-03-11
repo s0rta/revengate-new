@@ -24,8 +24,10 @@ class_name Strategy extends Node
 
 @export_range(0, 1) var priority := 0.0  # in 0..1
 @export var ttl := -1  # turns till expiration of the strategy if >=0, infinite if negative
+@export var cancellable := false  
 
 var me: Actor  # the actor being controlled by this strategy
+var is_cancelled := false
 
 func _init(actor=null, priority_=null, ttl_=null):
 	if actor and actor is Actor:
@@ -44,13 +46,19 @@ func _ready():
 	assert(me, "Strategy is not connected to an Actor")
 	me.turn_done.connect(_update_expiration)
 		
+func _dissipate():
+	## do some cleanup, then disappear
+	if me:
+		me.emit_signal("strategy_expired")
+	queue_free()
+
 func _update_expiration():
-	## check is this strategy has expired, do the cleanup if so
+	## check if this strategy has expired, do the cleanup if so
 	if ttl > 0:
 		ttl -= 1
 	if is_expired() and me:
 		me.turn_done.disconnect(_update_expiration)
-		me.turn_done.connect(queue_free, CONNECT_ONE_SHOT)
+		me.turn_done.connect(_dissipate, CONNECT_ONE_SHOT)
 
 func refresh(turn):
 	## Update the internal states that would influence predicates like is_valid() and is_expired().
@@ -59,12 +67,18 @@ func refresh(turn):
 
 func is_valid() -> bool:
 	## return is the strategy is valid for the current turn
-	return ttl != 0
+	return not is_cancelled and ttl != 0
 	
 func is_expired() -> bool:
 	## Return whether the strategy has expired. 
 	## An expired stratedy can't become valid again and will eventually be deleted.
-	return ttl is int and ttl == 0
+	return is_cancelled or ttl is int and ttl == 0
+
+func cancel():
+	## Cancel this strategy: won't be valid moving forward, but the action for this 
+	## turn still goes on if it's already in progress.
+	assert(cancellable, "This strategy is not cancellable!")
+	is_cancelled = true
 
 func act() -> bool:
 	## Try to do the action for the turn. 

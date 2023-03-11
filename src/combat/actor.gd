@@ -36,7 +36,9 @@ signal moved(from, to)
 signal picked_item(old_coord)
 # the actor removed an item from their inventory and left it at `coord`
 signal dropped_item(coord)
-
+# the actor stopped automating its actions with a(some) strategy(ies),
+# might fire more than once per strategy
+signal strategy_expired
 
 enum States {
 	IDLE,
@@ -317,7 +319,6 @@ func travel_to(there):
 	if path == null or path.size() == 0:
 		return false
 	else:
-#		assert(false, "broken for now, circular imports???")
 		var strat = Traveling.new(there, path, self, 0.9)
 		add_child(strat)
 		return true
@@ -327,6 +328,16 @@ func refresh_strategies():
 	for node in get_children():
 		if node is Strategy:
 			node.refresh(current_turn)
+
+func cancel_strategies():
+	## Force the expiration of all strategies that can be expired.
+	var has_cancelled = false
+	for node in get_children():
+		if node is Strategy and node.cancellable:
+			node.cancel()
+			has_cancelled = true
+	if has_cancelled:
+		emit_signal("strategy_expired")
 
 func get_strategy():
 	## Return the best strategy for this turn or `null` if no strategy is currently valid.
@@ -343,6 +354,17 @@ func get_strategy():
 		return strats[0]
 	else:
 		return null
+
+func has_strategy(cancellable=false):
+	## Return `true` if the actor has any valid strategy.
+	## cancellable: the strategies must also be cancellable.
+	for node in get_children():
+		if node is Strategy and node.is_valid():
+			if cancellable:
+				return node.cancellable
+			else:
+				return true
+	return false
 
 func _get_lunge_anim_cpos(foe):
 	## Return the canvas coord where an attack animation should reach before starting the 

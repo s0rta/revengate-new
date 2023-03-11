@@ -125,7 +125,7 @@ func make_board(depth):
 	while not deck.is_empty():
 		budget -= _place_card(deck.draw(), builder, index)
 	
-	# optional monsters, if we have any spawning budget left
+	# optional items, if we have any spawning budget left
 	deck = %DeckBuilder.gen_item_deck(depth, budget)
 	while not deck.is_empty() and budget > 0:
 		budget -= _place_card(deck.draw(), builder, index)
@@ -183,7 +183,7 @@ func test():
 	print("Testing: 1, 2... 1, 2!")
 #	%Viewport.flash_coord_selection(hero.get_cell_coord())
 	%Viewport.effect_at_coord("explosion_vfx", hero.get_cell_coord())
-	
+	hero.cancel_strategies()	
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
@@ -204,3 +204,7 @@ func test2():
 			print("drew: %s" % card)
 
 	print("Dungeon draw counts: %s" % [%DeckBuilder.draw_counts])
+
+
+func _on_cancel_button_pressed():
+	hero.cancel_strategies()

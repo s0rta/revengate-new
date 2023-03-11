@@ -94,11 +94,13 @@ UI:
 - [ ] splash image as the start screen background
 
 Builder:
+- [x] items and monsters selected with parametric decks
 - [ ] mazes can fill arbitrary areas of a board
 
 UI: 
-- [ ] ability to cancel a multi-turn command
-- [ ] ability to completely skip dialogues
+- [x] ability to cancel a multi-turn command
+- [x] ability to completely skip dialogues
+- [ ] long press for context menu
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]

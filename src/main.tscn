@@ -258,6 +258,14 @@ size_flags_vertical = 4
 [node name="HBoxContainer" type="HBoxContainer" parent="HUD/TRMargin"]
 layout_mode = 2
 
+[node name="CancelButton" type="Button" parent="HUD/TRMargin/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+text = "⮿"
+
 [node name="InspectButton" type="Button" parent="HUD/TRMargin/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -432,6 +440,7 @@ visible = false
 [connection signal="dropped_item" from="BoardArea/GestureSurveyor/Viewport/Board/Hero" to="HUD" method="update_states_at"]
 [connection signal="picked_item" from="BoardArea/GestureSurveyor/Viewport/Board/Hero" to="HUD" method="update_states_at"]
 [connection signal="state_changed" from="BoardArea/GestureSurveyor/Viewport/Board/Hero" to="HUD" method="_on_hero_state_changed"]
+[connection signal="strategy_expired" from="BoardArea/GestureSurveyor/Viewport/Board/Hero" to="HUD" method="refresh_cancel_button_vis"]
 [connection signal="value_changed" from="HUD/ZoomSlider" to="BoardArea/GestureSurveyor/Viewport" method="_on_zoom_slider_value_changed"]
 [connection signal="pressed" from="HUD/LMargin/LButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
 [connection signal="pressed" from="HUD/LMargin/LButtonBar/LootButton" to="BoardArea/GestureSurveyor" method="start_loot"]
@@ -441,6 +450,7 @@ visible = false
 [connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/TestButton" to="." method="test"]
 [connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/TestButton2" to="." method="test2"]
 [connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/ShowCheatsButton" to="HUD" method="toggle_cheats_box"]
+[connection signal="pressed" from="HUD/TRMargin/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="HUD/TRMargin/HBoxContainer/InspectButton" to="BoardArea/GestureSurveyor" method="start_inspect_at"]
 [connection signal="pressed" from="HUD/TRMargin/HBoxContainer/ShowMessagesButton" to="HUD/MessagesScreen" method="popup"]
 [connection signal="action_complete" from="HUD/CheatsSurveyor" to="HUD" method="hide_action_label"]

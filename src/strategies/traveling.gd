@@ -27,6 +27,7 @@ var updated := false  # have we refreshed the internal data this turn?
 func _init(dest_: Vector2i, path_=null, actor=null, priority_=null, ttl_=null):
 	super(actor, priority_, ttl_)
 	dest = dest_
+	cancellable = true
 	if path_:
 		# not setting null paths; we try to generate a new one before deciding if the strategy
 		# is valid.
@@ -38,6 +39,8 @@ func _init(dest_: Vector2i, path_=null, actor=null, priority_=null, ttl_=null):
 
 func _invalidate(_arg):
 	unreachable = true
+	if me:
+		me.emit_signal("strategy_expired")
 			
 func _set_path(path_):
 	if path_:

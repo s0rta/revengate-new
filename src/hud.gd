@@ -49,10 +49,14 @@ func update_states_at(hero_coord):
 	stairs_button.visible = board.is_connector(hero_coord)
 	var index = board.make_index()
 	loot_button.visible = null != index.top_item_at(hero_coord)
+	refresh_cancel_button_vis()
 
 func refresh_buttons_vis(_old_coord, hero_coord):
 	## update the visibility of some action button depending on where the hero is standing
 	update_states_at(hero_coord)
+
+func refresh_cancel_button_vis():
+	%CancelButton.visible = hero.has_strategy(true)
 
 func _on_stairs_button_pressed():
 	var event = InputEventAction.new()
