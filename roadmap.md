@@ -120,3 +120,4 @@ UI:
 - [ ] Monte Carlo simulator
   - [ ] global flag to disable animations
 - [ ] non-walking movement and path finding (wading, swimming, phasing)
+- [ ] Deck.peek(): select the next card, but do not remove it from the deck

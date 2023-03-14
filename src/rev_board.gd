@@ -375,6 +375,8 @@ class BoardIndex extends RefCounted:
 	var _coord_to_items := {}  # [x:y] -> Array
 	var _item_to_coord := {}
 
+	var _los := {}  # [from, to] -> [[x1:y1], ..., [xn:yn]]
+
 	func _init(board_, actors, items=[]):
 		board = board_
 		for actor in actors:
@@ -491,6 +493,21 @@ class BoardIndex extends RefCounted:
 			if me.is_foe(actor):
 				foes.append(actor)
 		return foes
+
+	func line_of_sight(from, to):
+		## Like Board.line_of_sight(), but cached
+		if not _los.has([from, to]):
+			_los[[from, to]] = board.line_of_sight(from, to)
+		return _los[[from, to]]  # could be null
+
+	func has_los(from, to):
+		## Return whether there is a line of sight between `from` and `to`
+		if _los.has([from, to]):
+			return _los[[from, to]] != null
+		elif _los.has([to, from]):
+			return _los[[to, from]] != null
+		else:
+			return line_of_sight(from, to) != null
 
 	func ddump():
 		## Print a summary of the index's content.
