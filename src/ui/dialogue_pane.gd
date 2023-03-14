@@ -152,5 +152,9 @@ func speaker_has_items():
 
 func speaker_give_item():
 	## pass an item from the speaker to the hero
-	var item = Rand.choice(speaker.get_items())
+	var items = []
+	for item in speaker.get_items():
+		if not item.get("is_equipped"):
+			items.append(item)
+	var item = Rand.choice(items)
 	speaker.give_item(item, Tender.hero)

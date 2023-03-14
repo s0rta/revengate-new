@@ -116,7 +116,7 @@ conversation_file = "res://src/story/intro.dialogue"
 conversation_sect = "meet_michel"
 health = 90
 strength = 70
-agility = 70
+agility = 65
 
 [node name="SelfDefense" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel"]
 script = ExtResource("14_w2q2k")
@@ -125,8 +125,15 @@ priority = 0.9
 [node name="PotionOfRegen" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel" instance=ExtResource("12_c1kwk")]
 visible = false
 
+[node name="PotionOfRegen2" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel" instance=ExtResource("12_c1kwk")]
+visible = false
+
+[node name="PotionOfRegen3" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel" instance=ExtResource("12_c1kwk")]
+visible = false
+
 [node name="Saber" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel" instance=ExtResource("38_pnvrw")]
 visible = false
+is_equipped = true
 
 [node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]
 anchor_mode = 0
