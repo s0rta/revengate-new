@@ -24,6 +24,8 @@ const EMPTY_IMG_TEXT = "\n[bgcolor=#ffffff][center]%s[/center][/bgcolor]\n"
 #  so we'll have to come up with something cleaver to do our discovery.
 const IMG_HEIGHT = 537
 
+signal closed(acted:bool)
+
 func _input(event):
 	# We are not truly modal, so we prevent keys from sending action to the game board
 	# while visible.
@@ -33,8 +35,12 @@ func _input(event):
 func popup():
 	show()
 
-func _on_back_button_pressed():
+func close():
 	hide()
+	emit_signal("closed", false)
+
+func _on_back_button_pressed():
+	close()
 	
 func clear():
 	## Remove traces of the previous actor

@@ -46,17 +46,19 @@ func _unhandled_input(event):
 				attack(other)
 				acted = true
 			elif other:
-				var convo = other.get_conversation()
-				if convo != null:
-					await $"/root/Main".talk_to(other, convo)
+				if other.get_conversation():
+					acted = await $"/root/Main".commands.talk(coord)
 				else:
 					get_board().add_message(self, "%s has nothing to tell you." % other.caption)
-				acted = true
+					acted = true
 			elif index.is_free(coord):
 				move_to(coord)
 				acted = true
 		elif board.is_on_board(coord) and index.is_free(coord) and travel_to(coord):
 			return await act()
+	elif event.is_action_pressed("context-menu"):
+		var coord = RevBoard.canvas_to_board(event.position)
+		acted = await $"/root/Main".show_context_menu_for(coord)
 	elif event.is_action_pressed("loot-here"):
 		var item = index.top_item_at(get_cell_coord())
 		if item:

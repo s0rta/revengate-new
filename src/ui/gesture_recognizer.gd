@@ -24,6 +24,7 @@ signal action_complete
 @onready var viewport: SubViewport = find_child("Viewport")
 var is_capturing_clicks := false
 var has_panned := false
+var was_long_tap := false
 
 ## Act on Cell: do the default action for a particular tile.
 class ActEvent extends InputEventAction:
@@ -46,7 +47,7 @@ class LootEvent extends InputEventAction:
 	func ddump():
 		return "LootEvent: action=%s, pressed=%s" % [action, pressed]
 
-## Loot exactly where the hero is currently standing
+## Show the inventory screen
 class InventoryEvent extends InputEventAction:
 	func _init(pressed_=true):
 		action = "show-inventory"
@@ -55,6 +56,19 @@ class InventoryEvent extends InputEventAction:
 	func ddump():
 		return "InventoryEvent: action=%s, pressed=%s" % [action, pressed]
 
+## Show a context menu
+class ContextMenuEvent extends InputEventAction:
+	var position
+
+	func _init(position_, pressed_=true):
+		action = "context-menu"
+		position = position_
+		pressed = pressed_
+
+	func ddump():
+		return "ContextMenuEvent: action=%s, pressed=%s" % [action, pressed]
+
+
 func _input(event):
 	if is_capturing_clicks and event is InputEventMouseButton:
 		accept_event()
@@ -62,12 +76,25 @@ func _input(event):
 			emit_signal("capture_stopped", true, event.position)
 
 func _gui_input(event):
-	if event is InputEventMouseButton and event.pressed and event.double_click:
-		# BUG: Our current implementation of doubletap actions is wrong because single tap
-		# actions have already been done by the time this handler is called. 
-		assert(false, "wrong implementation")  
-		%ActorDetailsScreen.popup()
-		accept_event()
+	if event is InputEventMouseButton:
+		if event.pressed and event.double_click:
+			# BUG: Our current implementation of doubletap actions is wrong because single tap
+			# actions have already been done by the time this handler is called. 
+			assert(false, "wrong implementation")  
+			%ActorDetailsScreen.popup()
+			accept_event()
+		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			$LongTapTimer.stop()
+			$LongTapTimer.start()
+		elif not has_panned and event.button_index == MOUSE_BUTTON_LEFT:  # release
+			# FIXME: only fire if hero is accepting
+			if $LongTapTimer.time_left == 0:
+				var context_event = ContextMenuEvent.new(event.position)
+				viewport.inject_event(context_event)
+				accept_event()
+			else:
+				print("tap release: %s seconds left for a long tap" % $LongTapTimer.time_left)
+		
 	if event.is_action_pressed("pan"):
 		has_panned = false
 		accept_event()
@@ -105,30 +132,7 @@ func start_inspect_at():
 	emit_signal("action_complete")
 	if vals[0]:
 		var coord = viewport.global_pos_to_board_coord(vals[1])
-		var board = $/root/Main.get_board()
-		var index = board.make_index()
-		var actor = index.actor_at(coord)
-		if actor:
-			%ActorDetailsScreen.fill_with(actor)
-			%ActorDetailsScreen.popup()
-			# FIXME: we can flash the message after the popup() if the screen emits `closed()`
-			#await %ActorDetailsScreen.closed()
-			
-		%Viewport.flash_coord_selection(coord)
-		var here_str = "at %s" % board.coord_str(coord) if Utils.is_debug() else "here"
-		var msg: String
-		var item = index.top_item_at(coord)
-		if item != null:
-			msg = "There is a %s %s" % [item.get_short_desc(), here_str]
-		elif board.is_on_board(coord):
-			var terrain = board.get_cell_terrain(coord)
-			if Utils.is_debug():
-				msg = "There is a %s tile %s" % [terrain, here_str]
-			else:
-				msg = "This is a %s tile" % [terrain]
-		else:
-			msg = "There is nothing %s" % here_str
-		%HUD.add_message(msg)
+		$/root/Main.commands.inspect(coord)
 	is_capturing_clicks = false
 
 func show_inventory():

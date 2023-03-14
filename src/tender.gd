@@ -23,3 +23,5 @@
 extends Node
 
 var hero=null
+var hud=null
+var viewport=null

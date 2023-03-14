@@ -23,6 +23,8 @@ var hero: Actor
 @onready var stairs_button = find_child("StairsButton")
 @onready var hplabel = find_child("HPLabel")
 @onready var cheats_box = find_child("CheatsMargin")
+@onready var dialogue_pane = %DialoguePane
+@onready var actor_details_screen = %ActorDetailsScreen
 
 func _ready():
 	# only show the testing UI on debug builds

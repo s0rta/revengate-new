@@ -100,7 +100,7 @@ Builder:
 UI: 
 - [x] ability to cancel a multi-turn command
 - [x] ability to completely skip dialogues
-- [ ] long press for context menu
+- [x] long press for context menu (in GDScript)
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
@@ -114,3 +114,9 @@ UI:
 - [ ] Lyon overworld
 - [ ] A Fight for Fumes campaign
 - [ ] Rhymes with Remorse campaign
+
+
+## Ice Box: not yet scheduled for a release
+- [ ] Monte Carlo simulator
+  - [ ] global flag to disable animations
+- [ ] non-walking movement and path finding (wading, swimming, phasing)

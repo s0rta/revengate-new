@@ -25,9 +25,12 @@ const SCENE_PATH_FMT = "res://src/%s.tscn"
 @onready var hero:Actor = find_child("Hero")
 @onready var hud = $HUD
 @onready var boards_cont: Node = find_child("Board").get_parent()
+@onready var commands = $CommandPack
 
 func _ready():
 	Tender.hero = hero
+	Tender.hud = hud
+	Tender.viewport = %Viewport
 	
 	# FIXME: the original board should be able to re-index it's content
 	var board = find_child("Board")
@@ -59,16 +62,6 @@ func show_inventory_screen() -> bool:
 	%InventoryScreen.popup()
 	var acted = await %InventoryScreen.closed
 	return acted
-
-func talk_to(actor, conversation=null):
-	## Show the speech pane for `conversation` with `actor`. 
-	## conversation: if not provided, try `actor.get_conversation()`
-	if conversation == null:
-		conversation = actor.get_conversation()
-	if conversation == null:
-		get_board().add_message(hero, "%s has nothing to say." % actor.caption)
-	%DialoguePane.start(conversation.res, conversation.sect, actor)
-	await %DialoguePane.closed
 
 func switch_board_at(coord):
 	## Flip the active board with the far side of the connector at `coord`, 
@@ -179,11 +172,18 @@ func _input(_event):
 		test()
 		$/root.set_input_as_handled()
 
+func _on_cancel_button_pressed():
+	hero.cancel_strategies()
+
+func show_context_menu_for(coord):
+	var cmds = commands.commands_for(coord)
+	%ContextMenuPopup.show_commands(cmds, coord)
+	var acted = await %ContextMenuPopup.closed
+	return acted
+
 func test():
 	print("Testing: 1, 2... 1, 2!")
-#	%Viewport.flash_coord_selection(hero.get_cell_coord())
 	%Viewport.effect_at_coord("explosion_vfx", hero.get_cell_coord())
-	hero.cancel_strategies()	
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
@@ -205,6 +205,3 @@ func test2():
 
 	print("Dungeon draw counts: %s" % [%DeckBuilder.draw_counts])
 
-
-func _on_cancel_button_pressed():
-	hero.cancel_strategies()

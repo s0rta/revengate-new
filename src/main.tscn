@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=44 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -20,11 +20,13 @@
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
 [ext_resource type="Script" path="res://src/victory_probe.gd" id="14_ulj2m"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="14_w2q2k"]
 [ext_resource type="PackedScene" uid="uid://cgdqkl167nhyj" path="res://src/ui/actor_details_screen.tscn" id="14_yna85"]
 [ext_resource type="PackedScene" uid="uid://cl6ylq5q74oxy" path="res://src/ui/messages_pane.tscn" id="17_n3emp"]
 [ext_resource type="PackedScene" uid="uid://cd6ngrhhgito0" path="res://src/ui/dialogue_pane.tscn" id="18_vtucs"]
 [ext_resource type="PackedScene" uid="uid://b0n7osww35hyh" path="res://src/ui/narration_pane.tscn" id="20_21sjb"]
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="25_mp2al"]
+[ext_resource type="PackedScene" uid="uid://bb5upsioptfc4" path="res://src/ui/context_menu_popup.tscn" id="25_n5bfn"]
 [ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="26_wvdb5"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="27_551xb"]
 [ext_resource type="PackedScene" uid="uid://d4f1ul2rt43ys" path="res://src/monsters/labras.tscn" id="27_qu54w"]
@@ -40,6 +42,7 @@
 [ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="37_8mtuq"]
 [ext_resource type="PackedScene" uid="uid://6ml8upew405" path="res://src/weapons/saber.tscn" id="38_pnvrw"]
 [ext_resource type="PackedScene" path="res://src/weapons/sword.tscn" id="39_2vmul"]
+[ext_resource type="Script" path="res://src/command_pack.gd" id="41_hgs5k"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_58o83")
@@ -61,6 +64,10 @@ grow_horizontal = 2
 grow_vertical = 2
 stretch = true
 script = ExtResource("2_dy763")
+
+[node name="LongTapTimer" type="Timer" parent="BoardArea/GestureSurveyor"]
+wait_time = 0.5
+one_shot = true
 
 [node name="Viewport" type="SubViewport" parent="BoardArea/GestureSurveyor"]
 unique_name_in_owner = true
@@ -108,9 +115,17 @@ color = Color(0.160784, 0.701961, 0.54902, 1)
 conversation_file = "res://src/story/intro.dialogue"
 conversation_sect = "meet_michel"
 health = 90
-agility = 90
+strength = 70
+agility = 70
+
+[node name="SelfDefense" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel"]
+script = ExtResource("14_w2q2k")
+priority = 0.9
 
 [node name="PotionOfRegen" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel" instance=ExtResource("12_c1kwk")]
+visible = false
+
+[node name="Saber" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel" instance=ExtResource("38_pnvrw")]
 visible = false
 
 [node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]
@@ -343,6 +358,10 @@ visible = false
 unique_name_in_owner = true
 visible = false
 
+[node name="ContextMenuPopup" parent="HUD" instance=ExtResource("25_n5bfn")]
+unique_name_in_owner = true
+visible = false
+
 [node name="VictoryProbe" type="Node" parent="."]
 script = ExtResource("14_ulj2m")
 
@@ -432,6 +451,10 @@ max_dungeon_occ = 2
 
 [node name="Pacherr" parent="DeckBuilder/RareAndDeep" instance=ExtResource("33_ugrak")]
 visible = false
+
+[node name="CommandPack" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("41_hgs5k")
 
 [connection signal="board_changed" from="." to="VictoryProbe" method="assay_victory"]
 [connection signal="action_complete" from="BoardArea/GestureSurveyor" to="HUD" method="hide_action_label"]
