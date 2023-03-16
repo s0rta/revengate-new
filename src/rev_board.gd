@@ -28,6 +28,7 @@ signal new_message(message)
 var depth := 0  
 var connector_by_coord := {}  # (x, y) -> {far_board:_, far_coord:_}
 var _cells_by_terrain := {}  # terrain_name -> array of coords
+var current_turn := 0
 
 ## PriorityQueue based on distance: dequeing is always with the 
 ## smallest value.
@@ -414,7 +415,7 @@ class BoardIndex extends RefCounted:
 		return _item_to_coord.has(item)
 
 	func add_item(item):
-		var coord = item.get_cell_coord()  # will be null for items inside an acton's inventory
+		var coord = item.get_cell_coord()
 		assert(coord, "trying to index an item that is not on the board")
 		if not _coord_to_items.has(coord):
 			_coord_to_items[coord] = []
@@ -509,6 +510,18 @@ class BoardIndex extends RefCounted:
 		else:
 			return line_of_sight(from, to) != null
 
+	func get_actors_in_sight(from, max_radius, include_center=false):
+		## Return a list of actors that are visible from `from`
+		var actors = []
+		for coord in _coord_to_actor:
+			if board.dist(from, coord) > max_radius:
+				continue
+			if coord == from and not include_center:
+				continue
+			if has_los(from, coord):
+				actors.append(_coord_to_actor[coord])
+		return actors
+
 	func ddump():
 		## Print a summary of the index's content.
 		print("Indexed element for %s" % self)
@@ -577,6 +590,20 @@ func deregister_actor(actor):
 		actor.moved.disconnect(_on_actor_moved)
 	if actor.died.is_connected(_on_actor_died):
 		actor.died.disconnect(_on_actor_died)
+
+func start_turn(new_turn:int):
+	## Mark the start a new game turn	
+	# FIXME: handle sub_nodes dissipating while we do a multi-turn update
+	for node in get_children():
+		if node.get("start_turn"):
+			node.start_turn(new_turn)
+		elif node.get("start_new_turn"):
+			for i in new_turn - current_turn:
+				if node.is_expired():
+					break
+				node.start_new_turn()
+	current_turn = new_turn
+	reset_items_visibility()
 
 func make_index():
 	var actors = get_actors()
@@ -912,7 +939,7 @@ func get_items():
 	## For stacked items they are returned bottom of the stack first. 
 	var items = []
 	for node in get_children():
-		if node is Item:
+		if node is Item and not node.is_expired():
 			items.append(node)
 	return items
 

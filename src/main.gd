@@ -83,6 +83,7 @@ func switch_board_at(coord):
 		
 	new_board.new_message.connect($HUD.add_message)
 	old_board.set_active(false)
+	new_board.start_turn($TurnQueue.turn)  # catch up with conditions and decay
 	new_board.set_active(true)
 	
 	var builder = BoardBuilder.new(new_board)
@@ -104,6 +105,7 @@ func make_board(depth):
 	var scene = load("res://src/rev_board.tscn") as PackedScene
 	var new_board = scene.instantiate() as RevBoard
 	new_board.depth = depth
+	new_board.current_turn = $TurnQueue.turn
 	boards_cont.add_child(new_board)
 	var builder = BoardBuilder.new(new_board)
 	builder.gen_level()

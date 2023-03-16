@@ -25,17 +25,23 @@ var turn := 0
 # var loop_is_active := false
 var turn_is_valid := true
 
-func get_actors():
-	var actors = []
+# TODO: an explicit ref to Main would be cleaner
+func get_board():
 	var main = get_parent()
 	if main == null:
+		return null
+	return main.get_board()
+
+func get_actors():
+	var actors = []
+	var board = get_board()
+	if board == null:
 		return []
-	var board = main.get_board() as RevBoard
 	for node in board.get_actors():
 		if node.is_alive():
 			actors.append(node)
 	return actors
-	
+		
 func invalidate_turn(_arg=null):
 	## Mark the current turn as impossible to complete, skip to the next turn as soon as possible.
 	## Turns can become invalid for many reasons. For example if the Hero gets on a new level with 
@@ -57,13 +63,10 @@ func run():
 		print("=== Start of turn %d ===" % turn)
 		actors = get_actors()
 		print("playing actors: %s " % [actors])
-		# 1st pass: tell everyone about the start of the turn
-		for actor in actors:
-			actor.start_turn(turn)
-		# 2nd pass: conditions
-		for actor in actors:
-			actor.activate_conditions()
-		# 3rd pass: actions
+		# 1st pass: tell all in-play objects about the start of the turn
+		get_board().start_turn(turn)
+			
+		# 2rd pass: actions
 		for actor in actors:
 			if not turn_is_valid:
 				break

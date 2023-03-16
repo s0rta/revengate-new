@@ -70,7 +70,7 @@ func fill_actor_items(actor_:Actor):
 			row.add_button(Cols.EQUIP, equip_button_img)
 			if item.is_equipped:
 				row.set_button_disabled(Cols.EQUIP, 0, true)
-		if item.consumable:
+		if item.consumable or item.switchable:
 			row.add_button(Cols.USE, use_button_img)
 		row.add_button(Cols.DROP, drop_button_img)
 
@@ -95,6 +95,19 @@ func unequip_all():
 
 func _on_back_button_pressed():
 	close()
+
+func _refresh_row(row, item):
+	row.set_text(Cols.DESC, item.get_short_desc())
+	var btn_disabled = not (item.consumable or item.switchable)
+	row.set_button_disabled(Cols.USE, 0, btn_disabled)
+
+func _use_item(row, item):
+	if item.consumable:
+		row.free()
+		actor.consume_item(item)
+	elif item.switchable:
+		item.toggle()
+		_refresh_row(row, item)
 	
 func _on_tree_button_clicked(row, column, id, mouse_button_index):
 	var item = row.get_metadata(0)
@@ -107,7 +120,6 @@ func _on_tree_button_clicked(row, column, id, mouse_button_index):
 		item.is_equipped = true
 		reset_buttons_vis()
 	elif column == Cols.USE:
-		row.free()
-		actor.consume_item(item)
+		_use_item(row, item)
 	acted = true
 	emit_signal("inventory_changed")

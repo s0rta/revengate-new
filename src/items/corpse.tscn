@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c53orli8sl3yx"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_rp1nu"]
+
+[node name="corpse" instance=ExtResource("1_rp1nu")]
+char = "%"
+caption = "corpse"
+ttl = 5

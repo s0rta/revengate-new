@@ -11,7 +11,8 @@ This is a list of loose ends, code optimization, and small tasks for the Godot i
 - [ ] over healing should slowly revert back to normal max health
   - [ ] the UI feedback should make it clear that the reverting is not an injury
 - [ ] Effects can have dynamic `stats_modifiers` that change from turn to turn
-  
+- [ ] items expose `start_turn(turn)` rather than `start_new_turn()` in order to do early exits
+
 ## Strategies
 - [ ] Tracking asserts that the target is on the same board
 - [x] Hero will sometimes move into an enemy while travelling

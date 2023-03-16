@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://btvcwiysrm7i6"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_tmhdi"]
+[ext_resource type="Script" path="res://src/items/dynamite.gd" id="2_qtjb3"]
+
+[node name="Dynamite" instance=ExtResource("1_tmhdi")]
+script = ExtResource("2_qtjb3")
+char = "💣"
+caption = "dynamite"
+switchable = true
+spawn_cost = 4.0

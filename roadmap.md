@@ -92,6 +92,10 @@ UI:
   - [ ] non actions are easily distinguished from turn-ending action 
 - [ ] help screen with contextual content
 - [ ] splash image as the start screen background
+- [x] water ripples VFX
+
+Combat:
+- [x] Dynamite
 
 Builder:
 - [x] items and monsters selected with parametric decks
@@ -101,6 +105,7 @@ UI:
 - [x] ability to cancel a multi-turn command
 - [x] ability to completely skip dialogues
 - [x] long press for context menu (in GDScript)
+- [ ] use the Godot OpenGL renderer
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]

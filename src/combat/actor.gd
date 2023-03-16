@@ -243,9 +243,24 @@ func is_animating():
 	## Return whether the actor is currently performing an animation.
 	return nb_active_anims > 0
 
-func start_turn(current_turn_:int):
+func start_turn(new_turn:int):
 	## Mark the start a new game turn, but we do not play until act() is called.
-	current_turn = current_turn_
+	# If we have been out of play for a turn or more (ex.: on an innactive board), we push the 
+	# expiration of our sub-components and trigger conditions for once for each missed turn. 
+	# This might hurt!
+	
+	# FIXME: see if we have we died along the way?
+	var multi_step_nodes = []
+	for node in get_children():
+		if node.get("start_turn"):
+			node.start_turn(new_turn)
+		elif node.get("start_new_turn"):
+			multi_step_nodes.append(node)
+	for i in new_turn - current_turn:
+		activate_conditions()
+		for node in multi_step_nodes:
+			node.start_new_turn()
+	current_turn = new_turn
 
 func finalize_turn():
 	state = States.IDLE
@@ -442,6 +457,9 @@ func update_health(hp_delta: int):
 	
 	health += hp_delta
 	emit_signal("health_changed", health)
+	
+	if is_unexposed():
+		return  # don't animate off-board health changes
 		
 	var anim = null
 	if hp_delta < 0:
@@ -468,6 +486,14 @@ func is_alive():
 	
 func is_dead():
 	return not is_alive()
+
+func is_expired():
+	return is_dead()
+
+func is_unexposed():
+	## Return if this actor on a board other than the active one
+	var parent = get_parent()
+	return parent == null or not parent.visible
 
 func is_friend(other: Actor):
 	## Return whether `self` has positive sentiment towards `other`

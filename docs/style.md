@@ -25,6 +25,16 @@ Revengate Style Guide
 * make_: prefix for deterministic generation
 * gen_: prefix for pseudo-random procedural generation
 
+## peridic actions and expiration
+Mechanics that are invoked every turn should implement one of:
+- start_turn(turn): called by the game loop, can skip turns if the item was away for a while, should be idempotent if called twice in a row with the same turn number;
+- start_new_turn(): called by the game loop, once per turn.
+
+The above are great place to compute the expiration of a component. Alternatively, mechanics can implement:
+- decay(): called internally anytime during a turn.
+
+Mechanics that have expired should `queue_free()` themselves and have `is_expired()` return true until they are garbage collected.
+
 ## colors
 The UI color scheme is based on Material Design v2 with the primary colors from the splash screen. This too make is easy to get the sub colors:
 https://m2.material.io/resources/color/

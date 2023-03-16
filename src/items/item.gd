@@ -25,10 +25,12 @@ const VIS_MODULATE := Color.WHITE
 @export var char := "⚒"
 @export var caption := ""
 @export var consumable := false
+@export var switchable := false  # can you turn this item ON and OFF?
 
 # TODO: "spawn" sounds more like something that applies to living things...
 @export var spawn_cost := 0.0
-
+@export var ttl := -1
+var depleted := false
 
 func _ready():
 	$Label.text = char
@@ -40,16 +42,59 @@ func _to_string():
 		str = name
 	return "<Item %s>" % [str]
 
+func _dissipate():
+	## Do some cleanup, then vanish forever
+	depleted = true
+	if visible:
+		var coord = get_cell_coord()
+		await fade_out()
+	queue_free()
+
+func start_new_turn():
+	if depleted:
+		return
+	if ttl > 0:
+		ttl -= 1
+	if ttl == 0:
+		_dissipate()
+
 func ddump():
 	print(self)
 	print("  modifiers: %s" % [Utils.get_node_modifiers(self)])
 
-func get_cell_coord():
-	## Return the board position of the item or null if the item is not on a board.
-	## This can happen for example if the item is in an actor's inventory.
+func is_expired():
+	return ttl == 0 or depleted
 
-	# FIXME: detect when we are not on a board
-	return RevBoard.canvas_to_board(position)
+func is_unexposed():
+	## Return if this item being played on a board other than the active one
+	var parent = get_parent()
+	if parent == null:
+		return true
+	elif parent is RevBoard:
+		return not parent.visible
+	elif parent is Actor:
+		return parent.is_unexposed()
+
+func get_board():
+	var parent = get_parent()
+	if parent is Actor:
+		return parent.get_board()
+	elif parent is RevBoard:
+		return parent
+	else:
+		assert(false, "This item does not seem to be in play")
+
+func get_cell_coord():
+	## Return the board coord of the item or the coord of its owner if the item 
+	##   is in someone's inventory.
+	## Return null if the item is not yet in play.
+	var parent = get_parent()
+	if parent == null or parent is RevBoard:
+		return RevBoard.canvas_to_board(position)
+	elif parent is Actor:
+		return parent.get_cell_coord()
+	else:
+		assert(false, "This item does not seem to be in play")
 
 func get_short_desc():
 	var desc = caption
@@ -110,3 +155,7 @@ func activate_on_actor(actor):
 
 func activate_on_coord(coord):
 	assert(false, "not implemented")
+
+func toggle():
+	assert(switchable, "This item cannot be turned ON or OFF.")
+	pass  # sub-classes must override this behavior

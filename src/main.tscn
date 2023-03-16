@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=46 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -22,7 +22,9 @@
 [ext_resource type="Script" path="res://src/victory_probe.gd" id="14_ulj2m"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="14_w2q2k"]
 [ext_resource type="PackedScene" uid="uid://cgdqkl167nhyj" path="res://src/ui/actor_details_screen.tscn" id="14_yna85"]
+[ext_resource type="PackedScene" uid="uid://c53orli8sl3yx" path="res://src/items/corpse.tscn" id="16_vn1es"]
 [ext_resource type="PackedScene" uid="uid://cl6ylq5q74oxy" path="res://src/ui/messages_pane.tscn" id="17_n3emp"]
+[ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="17_ou76k"]
 [ext_resource type="PackedScene" uid="uid://cd6ngrhhgito0" path="res://src/ui/dialogue_pane.tscn" id="18_vtucs"]
 [ext_resource type="PackedScene" uid="uid://b0n7osww35hyh" path="res://src/ui/narration_pane.tscn" id="20_21sjb"]
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="25_mp2al"]
@@ -92,6 +94,10 @@ visible = false
 [node name="PotionOfPoison" parent="BoardArea/GestureSurveyor/Viewport/Board/Hero" instance=ExtResource("7_mxaej")]
 visible = false
 
+[node name="Dynamite" parent="BoardArea/GestureSurveyor/Viewport/Board/Hero" instance=ExtResource("17_ou76k")]
+visible = false
+position = Vector2(192, 256)
+
 [node name="DesertCentipede" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("8_v818c")]
 position = Vector2(272, 368)
 spawn_cost = 7.0
@@ -134,6 +140,13 @@ visible = false
 [node name="Saber" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel" instance=ExtResource("38_pnvrw")]
 visible = false
 is_equipped = true
+
+[node name="Hammer" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("35_fqryl")]
+visible = false
+position = Vector2(464, 272)
+
+[node name="corpse" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("16_vn1es")]
+position = Vector2(464, 272)
 
 [node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]
 anchor_mode = 0
@@ -450,6 +463,8 @@ max_dungeon_occ = 2
 
 [node name="Sword" parent="DeckBuilder/Rare" instance=ExtResource("39_2vmul")]
 spawn_cost = 5.0
+
+[node name="Dynamite" parent="DeckBuilder/Rare" instance=ExtResource("17_ou76k")]
 
 [node name="RareAndDeep" type="Node" parent="DeckBuilder"]
 script = ExtResource("28_4pbpo")
