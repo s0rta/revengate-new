@@ -19,9 +19,12 @@ extends Item
 
 func _dissipate():
 	if not is_unexposed():
+		$Sound.play()
 		$Label.text = "💥"
 		Tender.viewport.effect_at_coord("explosion_vfx", get_cell_coord())
 	splash_damage()
+	if $Sound.playing:
+		await $Sound.finished
 	super()
 
 func splash_damage():
