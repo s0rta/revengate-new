@@ -580,16 +580,13 @@ func register_actor(actor):
 	## connect the relevant signals from `actor` so we can keep track of them
 	if not actor.moved.is_connected(_on_actor_moved):
 		actor.moved.connect(_on_actor_moved)
-		actor.died.connect(_on_actor_died, CONNECT_ONE_SHOT)
-		var dereg = deregister_actor.bind(actor)
-		actor.died.connect(dereg, CONNECT_ONE_SHOT)
+		var death_handler = _on_actor_died.bind(actor)
+		actor.died.connect(death_handler, CONNECT_ONE_SHOT)
 	
 func deregister_actor(actor):
 	## disconnect our connections with `actor`
 	if actor.moved.is_connected(_on_actor_moved):
 		actor.moved.disconnect(_on_actor_moved)
-	if actor.died.is_connected(_on_actor_died):
-		actor.died.disconnect(_on_actor_died)
 
 func start_turn(new_turn:int):
 	## Mark the start a new game turn	
@@ -964,7 +961,9 @@ func _on_actor_moved(from, to):
 	if item:
 		item.fade_out()
 
-func _on_actor_died(coord):
+func _on_actor_died(coord, actor):
+	deregister_actor(actor)
+
 	## fade in the visibility of items that were stepped on by the one who just passed
 	var index = make_index()
 	var item = index.top_item_at(coord)

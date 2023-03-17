@@ -1,29 +1,28 @@
-[gd_scene load_steps=7 format=3 uid="uid://b26vqfk7j6un7"]
+[gd_scene load_steps=6 format=3 uid="uid://b26vqfk7j6un7"]
 
 [ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_c2kw3"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_5enhw"]
 [ext_resource type="Script" path="res://src/combat/effect.gd" id="4_csjey"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="4_s2rcw"]
 [ext_resource type="AudioStream" uid="uid://da0cslkk526yk" path="res://src/monsters/bite-small.wav" id="5_dmajw"]
-[ext_resource type="Script" path="res://src/combat/core_skills.gd" id="7_g05vb"]
 
 [node name="DesertCentipede" instance=ExtResource("1_c2kw3")]
+visible = false
 char = "c"
 caption = "desert centipede"
 color = Color(0.92, 0.62, 0.1, 1)
-spawn_cost = 7
+spawn_cost = 7.0
 health = 18
 strength = 25
 agility = 40
 intelligence = 10
-faction = 2
 bestiary_img = "res://src/monsters/desert-centipede.jpg"
 description = "The Tripolitan Desert Centipede is not the kind of bug that you can hope to crush under your boot. These distant cousins of the more common house centipede measure 1m on average and feature a very thick armored exoskeleton. 
 
 The creature often hides by burrowing under loose sand, which also protects it from the scorching heat of the desert sun. Desert centipedes are very good as sensing vibrations and they know when a prey is approaching even when burrowed. Their bite is said to be poisonous."
 
 [node name="Label" parent="." index="0"]
-theme_override_colors/font_color = Color(0.917647, 0.615686, 0.101961, 1)
+theme_override_colors/font_color = Color(0.92, 0.62, 0.1, 1)
 text = "c"
 
 [node name="Tracking" type="Node" parent="." index="6"]
@@ -43,7 +42,3 @@ damage = 2
 damage_family = 7
 probability = 0.5
 nb_turns = 4
-
-[node name="SkillLevels" type="Node" parent="." index="9"]
-script = ExtResource("7_g05vb")
-innate_attack = 2

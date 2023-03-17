@@ -43,8 +43,7 @@ func _ready():
 		var parent = get_parent()
 		if parent is Actor:
 			me = parent
-	assert(me, "Strategy is not connected to an Actor")
-	me.turn_done.connect(_update_expiration)
+	assert(me, "Strategy must be connected to an Actor")
 		
 func _dissipate():
 	## do some cleanup, then disappear
@@ -52,13 +51,12 @@ func _dissipate():
 		me.emit_signal("strategy_expired")
 	queue_free()
 
-func _update_expiration():
+func start_new_turn():
 	## check if this strategy has expired, do the cleanup if so
 	if ttl > 0:
 		ttl -= 1
 	if is_expired() and me:
-		me.turn_done.disconnect(_update_expiration)
-		me.turn_done.connect(_dissipate, CONNECT_ONE_SHOT)
+		_dissipate()
 
 func refresh(turn):
 	## Update the internal states that would influence predicates like is_valid() and is_expired().

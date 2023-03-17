@@ -259,6 +259,8 @@ func start_turn(new_turn:int):
 	for i in new_turn - current_turn:
 		activate_conditions()
 		for node in multi_step_nodes:
+			if node.is_expired():
+				break
 			node.start_new_turn()
 	current_turn = new_turn
 

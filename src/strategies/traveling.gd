@@ -66,10 +66,12 @@ func is_expired():
 	return arrived or unreachable or super.is_expired()
 
 func is_valid():
+	if not super():
+		return false
 	print("Checking if %s is still valid." % self)
 	if not arrived and not updated:
 		_set_path(_make_path())
-	return super.is_valid() and path and not arrived and not unreachable
+	return path and not arrived and not unreachable
 
 func act():
 	print("traveling towards %s" % RevBoard.coord_str(dest))
