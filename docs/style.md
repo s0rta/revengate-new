@@ -14,6 +14,7 @@ Revengate Style Guide
 * board: a game level composed of multiple cells
 * cell: one playable square on the game board
 * coord: unless specified, the (x, y) coordinate of a cell, also `bpos` (for board pos),  noted "[x:y]"
+* supercell: a 2x2 block of cells, used as the base unit of maze generation, noted "⟦x¦y⟧"
 * tile: one item of the TileSet, a cell has a tile, the same tile can be on multile cells.
 * canvas: the pixel matrix that is displayed to the player
 * position: unless specified, the (x, y), coordinate of a pixel or Node2D on the canvas, also `cpos` (for canvas pos). Godot consistently uses `position` for pixel and Node2D coordinates, noted "(x, y)"

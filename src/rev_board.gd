@@ -547,6 +547,10 @@ static func board_to_canvas(coord):
 	return Vector2(coord.x * TILE_SIZE + half_tile, 
 					coord.y * TILE_SIZE + half_tile)
 
+static func supercell_str(coord):
+	## Return a short hand notation of a supercell coord that is different from Vector2i.to_string()
+	return "⟦%d¦%d⟧" % [coord.x, coord.y]	
+
 static func coord_str(coord):
 	## Return a short hand notation of coord that is different from Vector2i.to_string()
 	return "[%d:%d]" % [coord.x, coord.y]	
