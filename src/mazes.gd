@@ -115,3 +115,60 @@ class RecursiveBacktracker extends MazeBuilder:
 		if coord == null:
 			coord = rand_supercell()
 		_fill(coord)		
+
+
+# https://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm
+class GrowingTree extends MazeBuilder:
+	var seen: Dictionary
+	var stack: Array[Vector2i]
+	var finalized: Dictionary
+	
+	func select_grow_point():
+		## Return a supercell already in the maze to be the grow point for the next extension.
+		## Return `null` if there are no suitable supercells to grow from.
+		while not stack.is_empty():
+			var supercell = stack[-1]
+			if finalized.get(supercell):
+				stack.pop_back()
+			else:
+				return supercell
+		return null
+	
+	func select_adj(supercell):
+		## Return a neighbors from `supercell`.
+		## Return null if there are no suitable neighbors.
+		var adjs = []
+		for adj in adj_supercells(supercell):
+			if not seen.get(adj):
+				adjs.append(adj)
+		if adjs.is_empty():
+			return null
+		else:
+			adjs.shuffle()
+			return adjs[0]
+	
+	func fill(start=null):
+		finalized = {}
+
+		if start == null:
+			start = rand_supercell()
+		stack = [start]
+		seen = {start:true}
+		builder.paint_cells([start], "floor")
+
+		var done = false
+		while not done:
+			var grow_point = select_grow_point()
+			if grow_point == null:
+				done = true
+				break
+			var adj = select_adj(grow_point)
+			if adj == null:
+				finalized[grow_point] = true
+			else:
+				stack.append(adj)
+				seen[adj] = true
+				var joint = (grow_point + adj) / 2
+				builder.paint_cells([adj, joint], "floor")
+												
+				

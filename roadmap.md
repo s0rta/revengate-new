@@ -126,3 +126,4 @@ UI:
   - [ ] global flag to disable animations
 - [ ] non-walking movement and path finding (wading, swimming, phasing)
 - [ ] Deck.peek(): select the next card, but do not remove it from the deck
+- [ ] smoke and shrapnel particles in the explosion VFX

@@ -190,20 +190,10 @@ func test():
 func test2():
 	print("Testing: 2, 1... 2, 1!")
 	
-	for floor in 10:
-		print("Drawing cards for floor #%s" % floor )
-		var mandatory_deck = %DeckBuilder.gen_mandatory_monster_deck(floor)
-		print("== Mandatory deck== ")
-		mandatory_deck.ddump(true)
+	var outer_rect = Rect2i(4, 4, 23, 13)
+	var inner_rect = Rect2i(5, 5, 22, 12)
 
-		print("== Regular deck== ")
-		var deck = %DeckBuilder.gen_monster_deck(floor, floor*3)
-		deck.ddump(true)
-		for i in 10:
-			var card = deck.draw()
-			if card == null:
-				break
-			print("drew: %s" % card)
-
-	print("Dungeon draw counts: %s" % [%DeckBuilder.draw_counts])
-
+	var builder = BoardBuilder.new(get_board())
+	builder.paint_rect(outer_rect, "wall")
+	var mazer = Mazes.GrowingTree.new(builder, inner_rect)
+	mazer.fill()
