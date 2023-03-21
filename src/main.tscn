@@ -98,18 +98,6 @@ visible = false
 visible = false
 position = Vector2(192, 256)
 
-[node name="Dynamite2" parent="BoardArea/GestureSurveyor/Viewport/Board/Hero" instance=ExtResource("17_ou76k")]
-visible = false
-position = Vector2(192, 256)
-
-[node name="Dynamite3" parent="BoardArea/GestureSurveyor/Viewport/Board/Hero" instance=ExtResource("17_ou76k")]
-visible = false
-position = Vector2(192, 256)
-
-[node name="Dynamite4" parent="BoardArea/GestureSurveyor/Viewport/Board/Hero" instance=ExtResource("17_ou76k")]
-visible = false
-position = Vector2(192, 256)
-
 [node name="DesertCentipede" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("8_v818c")]
 visible = true
 position = Vector2(272, 368)

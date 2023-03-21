@@ -121,15 +121,32 @@ class RecursiveBacktracker extends MazeBuilder:
 
 # https://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm
 class GrowingTree extends MazeBuilder:
-	const DEF_BIASES = {"branching"=0.0, "reconnect"=0.0}
+	const DEF_BIASES = {"branching"=0.0, "reconnect"=0.0, "twistiness"=0.5}
 	var seen: Dictionary
 	var stack: Array[Vector2i]
 	var finalized: Dictionary
 	var biases: Dictionary
 
-	func _init(builder_, biases_=DEF_BIASES, rect_=null, even_align=true):
+	func _init(builder_, biases_={}, rect_=null, even_align=true):
 		super(builder_, rect_, even_align)
+		
+		# make sure biases are sensible
+		for key in biases_.keys():
+			assert(DEF_BIASES.has(key), "%s is not a known bias key" % key)
+		if biases_.has("twistiness"):
+			assert(0<=biases_["twistiness"] and biases_["twistiness"]<=1, 
+				"Twistiness must be in [0.0 .. 1.0]")
 		biases = biases_
+	
+	func get_bias(key):
+		var val = biases.get(key)
+		if val == null:
+			val = DEF_BIASES[key]
+		return val
+		
+	func bias_test(key):
+		## Return if a bias is currently active.
+		return Rand.rstest(get_bias(key))
 	
 	func _trim_stack():
 		## Remove finalized nodes from the top of the stack
@@ -158,23 +175,44 @@ class GrowingTree extends MazeBuilder:
 	func select_grow_point():
 		## Return a supercell already in the maze to be the grow point for the next extension.
 		## Return `null` if there are no suitable supercells to grow from.
-		if Rand.rstest(biases.get("branching", 0)):
+		if bias_test("branching"):
 			return random_grow_point()
 		else:
 			return last_grow_point()
+	
+	func _is_turn(sc_coord, relative_to):
+		# Is sc_coord a turn if we are coming from sc_coord? 
+		# It has to be if the joint on the opposite side of relative_to is not walkable.
+		var offset = sc_coord - relative_to
+		if offset.length() > 1:
+			offset /= roundi(offset.length())
+		var opposite = relative_to - offset
+		if not rect.has_point(opposite):
+			return true
+		else:
+			return not builder.board.is_walkable(opposite)
 	
 	func select_adj(supercell):
 		## Return a neighbors from `supercell`.
 		## Return null if there are no suitable neighbors.
 		var adjs = []
+		var weights = []
+		
+		# weights should not be 0.0 or we'll incorrectly mark the supercell as done too early
+		var twist_weight = 0.001 + get_bias("twistiness")
+		var straight_weight = 1.001 - get_bias("twistiness")
+
 		for adj in adj_supercells(supercell):
 			if not seen.get(adj):
 				adjs.append(adj)
+				if _is_turn(adj, supercell):
+					weights.append(twist_weight)
+				else:
+					weights.append(straight_weight)
 		if adjs.is_empty():
 			return null
 		else:
-			adjs.shuffle()
-			return adjs[0]
+			return Rand.weighted_choice(adjs, weights)
 	
 	func fill(start=null):
 		finalized = {}
@@ -194,7 +232,7 @@ class GrowingTree extends MazeBuilder:
 			var adj = select_adj(grow_point)
 			if adj == null:
 				finalized[grow_point] = true
-				if is_mergeable(grow_point) and Rand.rstest(biases.get("reconnect", 0.0)):
+				if is_mergeable(grow_point) and bias_test("reconnect"):
 					merge_at(grow_point)
 			else:
 				stack.append(adj)

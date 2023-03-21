@@ -195,8 +195,8 @@ func test2():
 
 	var builder = BoardBuilder.new(get_board())
 	builder.paint_rect(outer_rect, "wall")
-	var biases = Mazes.GrowingTree.DEF_BIASES.duplicate()
-	biases["branching"] = 0.5
-	biases["reconnect"] = 0.5
+	var biases = {"branching" = 0.3, 
+				"reconnect" = 0.3, 
+				"twistiness" = 0.0}
 	var mazer = Mazes.GrowingTree.new(builder, biases, inner_rect)
 	mazer.fill()
