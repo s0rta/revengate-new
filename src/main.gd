@@ -190,10 +190,12 @@ func test():
 func test2():
 	print("Testing: 2, 1... 2, 1!")
 	
-	var outer_rect = Rect2i(4, 4, 23, 13)
-	var inner_rect = Rect2i(5, 5, 22, 12)
+	var outer_rect = Rect2i(1, 1, 27, 17)
+	var inner_rect = Rect2i(2, 2, 26, 16)
 
 	var builder = BoardBuilder.new(get_board())
 	builder.paint_rect(outer_rect, "wall")
-	var mazer = Mazes.GrowingTree.new(builder, inner_rect)
+	var biases = Mazes.GrowingTree.DEF_BIASES.duplicate()
+	biases["branching"] = 0.5
+	var mazer = Mazes.GrowingTree.new(builder, biases, inner_rect)
 	mazer.fill()

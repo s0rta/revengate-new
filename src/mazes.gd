@@ -119,20 +119,47 @@ class RecursiveBacktracker extends MazeBuilder:
 
 # https://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm
 class GrowingTree extends MazeBuilder:
+	const DEF_BIASES = {"branching"=0.0}
 	var seen: Dictionary
 	var stack: Array[Vector2i]
 	var finalized: Dictionary
+	var biases: Dictionary
+
+	func _init(builder_, biases_=DEF_BIASES, rect_=null, even_align=true):
+		super(builder_, rect_, even_align)
+		biases = biases_
+	
+	func _trim_stack():
+		## Remove finalized nodes from the top of the stack
+		while not stack.is_empty() and finalized.get(stack[-1]):
+			stack.pop_back()
+	
+	func last_grow_point():
+		_trim_stack()
+		if not stack.is_empty():
+			return stack[-1]
+		return null
+
+	func random_grow_point():
+		var pos = randi_range(0, stack.size()-1)
+		var dir = Rand.choice([-1, 1])
+		while not stack.is_empty():
+			if not finalized.get(stack[pos]):
+				return stack[pos]
+			elif pos == -1 or pos == stack.size()-1:
+				_trim_stack()
+				pos = stack.size()-1
+			else:
+				pos = (pos + dir) % stack.size()
+		return null
 	
 	func select_grow_point():
 		## Return a supercell already in the maze to be the grow point for the next extension.
 		## Return `null` if there are no suitable supercells to grow from.
-		while not stack.is_empty():
-			var supercell = stack[-1]
-			if finalized.get(supercell):
-				stack.pop_back()
-			else:
-				return supercell
-		return null
+		if Rand.rstest(biases.get("branching", 0)):
+			return random_grow_point()
+		else:
+			return last_grow_point()
 	
 	func select_adj(supercell):
 		## Return a neighbors from `supercell`.
