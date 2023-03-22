@@ -309,7 +309,7 @@ class TileSpiral extends RefCounted:
 		if free and not board_index:
 			board_index = board.make_index()
 		if bbox_ != null:
-			bbox = bbox
+			bbox = bbox_
 		else:
 			bbox = board.get_used_rect()
 		if max_radius_ != null:

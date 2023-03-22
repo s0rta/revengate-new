@@ -187,16 +187,37 @@ func test():
 	print("Testing: 1, 2... 1, 2!")
 	%Viewport.effect_at_coord("explosion_vfx", hero.get_cell_coord())
 
+var bias_step = -1
+var bias_demos = [{"branching" = 0.2, 
+				"reconnect" = 0.1, 
+				"twistiness" = 0.0}, 
+				{"branching" = 0.2, 
+				"reconnect" = 0.3, 
+				"twistiness" = 0.3}, 
+				{"branching" = 0.2, 
+				"reconnect" = 0.3, 
+				"twistiness" = 0.3}, 
+				{"branching" = 0.2, 
+				"reconnect" = 0.5, 
+				"twistiness" = 0.6}, 
+				{"branching" = 0.2, 
+				"reconnect" = 0.5, 
+				"twistiness" = 0.9}, 
+				]
 func test2():
 	print("Testing: 2, 1... 2, 1!")
 	
-	var outer_rect = Rect2i(1, 1, 27, 17)
-	var inner_rect = Rect2i(2, 2, 26, 16)
+	var outer_rect = Rect2i(0, 0, 29, 19)
+	var inner_rect = Rect2i(1, 1, 28, 18)
+
+	var mask = Mazes.RectMask.new(Rect2i(13, 3, 4, 8))
+	var mask2 = Mazes.RectMask.new(Rect2i(15, 7, 10, 2))
+	mask2.chain_with(mask)
 
 	var builder = BoardBuilder.new(get_board())
 	builder.paint_rect(outer_rect, "wall")
-	var biases = {"branching" = 0.3, 
-				"reconnect" = 0.3, 
-				"twistiness" = 0.0}
-	var mazer = Mazes.GrowingTree.new(builder, biases, inner_rect)
+	bias_step = (1 + bias_step) % bias_demos.size()
+	var biases = bias_demos[bias_step]
+	var mazer = Mazes.GrowingTree.new(builder, biases, inner_rect, false)
+	mazer.set_mask(mask2)
 	mazer.fill()

@@ -24,6 +24,7 @@ class MazeBuilder extends RefCounted:
 	## Base class for MazeBuilders, specific algorithem must be implemented in `fill()`
 	var builder: BoardBuilder
 	var rect: Rect2i
+	var mask = null
 
 	func _init(builder_, rect_=null, even_align=true):
 		## even_align: align the grid to make supercells have their coordinate on 
@@ -44,14 +45,19 @@ class MazeBuilder extends RefCounted:
 		var offset = rect.position % 2
 		rect.position += offset
 		rect.size -= offset
-		
+	
+	func set_mask(mask_):
+		mask = mask_
+	
 	func iter_sc_coords(visitor:Callable):
 		## Call visitor() with every super cell coordinate.
 		var start = rect.position
 		var end = rect.end
 		for i in range(start.x, end.x, 2):
 			for j in range(start.y, end.y, 2):
-				var sc_coord = V.i(i, j)
+				var sc_coord = Vector2i(i, j)
+				if mask and mask.has_supercell(sc_coord):
+					continue
 				visitor.call(sc_coord)
 
 	func get_supercells():
@@ -61,7 +67,10 @@ class MazeBuilder extends RefCounted:
 		var end = rect.end
 		for i in range(start.x, end.x, 2):
 			for j in range(start.y, end.y, 2):
-				sc_coords.append(Vector2i(i, j))
+				var sc_coord = Vector2i(i, j)
+				if mask and mask.has_supercell(sc_coord):
+					continue
+				sc_coords.append(sc_coord)
 		return sc_coords
 
 	func sc_coords_str(supercells):
@@ -73,16 +82,30 @@ class MazeBuilder extends RefCounted:
 
 	func rand_supercell():
 		## Return a random supercell inside our `rect`
+		## Return null if no suitable supercell can be found
 		var dx = randi() % rect.size.x / 2
 		var dy = randi() % rect.size.y / 2
-		return rect.position + Vector2i(dx*2, dy*2)
+		var grid_offset = rect.position % 2
+		var supercell = rect.position + Vector2i(dx*2, dy*2)
+		if mask and mask.has_supercell(supercell):
+			# if we clash with the mask, we try to find the closest cell that is 
+			# outside of the mask and match the supercell grid
+			var spiral = builder.board.spiral(supercell, null, false, true, rect)
+			var coord = spiral.next()
+			while coord and (coord%2 != grid_offset or mask.has_supercell(coord)):
+				coord = spiral.next()
+			return coord
+		return supercell
 
 	func adj_supercells(sc_coord):
 		var adjs = []
 		for dir in CROSS_DIRS:
 			var coord = sc_coord + dir*2
-			if rect.has_point(coord):
-				adjs.append(coord)
+			if not rect.has_point(coord):
+				continue
+			if mask and mask.has_supercell(coord):
+				continue
+			adjs.append(coord)
 		return adjs
 
 	func fill(coord=null):
@@ -274,3 +297,48 @@ class GrowingTree extends MazeBuilder:
 			return rect.has_point(other_side) and builder.board.is_walkable(other_side)
 		else:
 			return false
+
+class Mask extends RefCounted:
+	## A region that should not be filled with the maze. Anchors are relative to the board, 
+	## not to MazeCreator.rect.
+	var next: Mask
+	
+	func chain_with(mask:Mask):
+		## Combine a secondary mask with this one.
+		if next:
+			next.chain_with(mask)
+		else:
+			next = mask
+	
+	func has_point(coord:Vector2i):
+		if next:
+			return next.has_point(coord)
+		else:
+			return false
+		
+	func intersects(region:Rect2i):
+		if next:
+			return next.intersects(region)
+		else:
+			return false
+
+	func has_supercell(supercell:Vector2i):
+		return intersects(Rect2i(supercell, Vector2i(2, 2)))
+
+class RectMask extends Mask:
+	var rect: Rect2i
+	
+	func _init(rect_:Rect2i):
+		rect = rect_
+		
+	func has_point(coord:Vector2i):
+		if rect.has_point(coord):
+			return true
+		else:
+			return super(coord)
+		
+	func intersects(region:Rect2i):
+		if rect.intersects(region):
+			return true
+		else:
+			return super(region)
