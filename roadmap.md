@@ -90,7 +90,6 @@ UI:
 ## v0.6
 - [ ] style UI with Godot theme
   - [ ] non actions are easily distinguished from turn-ending action 
-- [ ] help screen with contextual content
 - [ ] splash image as the start screen background
 - [x] water ripples VFX
 
@@ -107,12 +106,18 @@ UI:
 - [x] long press for context menu (in GDScript)
 - [ ] use the Godot OpenGL renderer
 
+## v0.7
+Builder:
+- [ ] Allow mixing rooms and mazes in level generation
+
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
 - [ ] pinch to zoom
 - [ ] double tap for context menu
   - might not work since a single tap fires and fully propagates before we see the double tap
 
+
+  
 ## v1.0
 - [ ] release on F-Droid
 - [ ] saved games
@@ -127,3 +132,4 @@ UI:
 - [ ] non-walking movement and path finding (wading, swimming, phasing)
 - [ ] Deck.peek(): select the next card, but do not remove it from the deck
 - [ ] smoke and shrapnel particles in the explosion VFX
+- [ ] help screen with contextual content
