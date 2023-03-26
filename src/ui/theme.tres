@@ -1,6 +1,7 @@
-[gd_resource type="Theme" load_steps=10 format=3 uid="uid://3araln1iald0"]
+[gd_resource type="Theme" load_steps=12 format=3 uid="uid://3araln1iald0"]
 
 [ext_resource type="FontFile" uid="uid://7hp4d53156pw" path="res://assets/fonts/kalimati.ttf" id="1_1u55p"]
+[ext_resource type="FontVariation" uid="uid://tn2p0jg2fn65" path="res://assets/fonts/system_bold.tres" id="1_l6a2a"]
 [ext_resource type="FontFile" uid="uid://dxmp7favkxwsh" path="res://assets/fonts/Symbola_hint.ttf" id="2_dl3k4"]
 [ext_resource type="FontVariation" uid="uid://crtqckgwsuhhq" path="res://assets/fonts/system_with_emojis.tres" id="3_sym2b"]
 
@@ -58,7 +59,7 @@ content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0.1, 0.1, 0.1, 0.6)
+bg_color = Color(0.101961, 0.101961, 0.101961, 0.6)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
@@ -77,7 +78,21 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 corner_detail = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ih0t"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.8)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
 [resource]
+ActionBtn/base_type = &"Button"
+ActionBtn/fonts/font = ExtResource("1_l6a2a")
 AsciiGraphics/base_type = &"Label"
 AsciiGraphics/colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
 AsciiGraphics/font_sizes/font_size = 28
@@ -117,6 +132,8 @@ MarginContainer/constants/margin_left = 24
 MarginContainer/constants/margin_right = 24
 MarginContainer/constants/margin_top = 24
 RichTextLabel/fonts/normal_font = ExtResource("1_1u55p")
+StartScreenBtn/base_type = &"Button"
+StartScreenBtn/styles/normal = SubResource("StyleBoxFlat_1ih0t")
 TitleLabel/base_type = &"Label"
 TitleLabel/colors/font_color = Color(0.631373, 0.192157, 0, 1)
 TitleLabel/colors/font_outline_color = Color(1, 0.768627, 0.415686, 1)

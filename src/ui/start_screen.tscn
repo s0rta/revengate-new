@@ -7,7 +7,7 @@
 [node name="StartScreen" type="Node"]
 script = ExtResource("1_krfjq")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
+[node name="ImgBackgroud" type="RichTextLabel" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -16,13 +16,13 @@ grow_vertical = 2
 bbcode_enabled = true
 text = "[img]res://assets/splash-screen.png[/img]"
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="ShadedLayer" type="ColorRect" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.04, 0.03, 0, 0.5)
+color = Color(0.04, 0.03, 0, 0.3)
 
 [node name="NewGameButton" type="Button" parent="."]
 anchors_preset = 8
@@ -36,6 +36,7 @@ offset_right = 48.5
 offset_bottom = 14.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_type_variation = &"StartScreenBtn"
 text = "New Game!"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
@@ -53,14 +54,17 @@ grow_vertical = 0
 
 [node name="CreditsButton" type="Button" parent="HBoxContainer2"]
 layout_mode = 2
+theme_type_variation = &"StartScreenBtn"
 text = "Credits"
 
 [node name="LicenseButton" type="Button" parent="HBoxContainer2"]
 layout_mode = 2
+theme_type_variation = &"StartScreenBtn"
 text = "License"
 
 [node name="PrivacyButton" type="Button" parent="HBoxContainer2"]
 layout_mode = 2
+theme_type_variation = &"StartScreenBtn"
 text = "Privacy"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]

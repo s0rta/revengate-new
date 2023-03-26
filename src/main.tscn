@@ -194,11 +194,13 @@ mouse_filter = 2
 [node name="StairsButton" type="Button" parent="HUD/LMargin/LButtonBar"]
 layout_mode = 2
 focus_mode = 0
+theme_type_variation = &"ActionBtn"
 text = "Follow Stairs"
 
 [node name="LootButton" type="Button" parent="HUD/LMargin/LButtonBar"]
 layout_mode = 2
 focus_mode = 0
+theme_type_variation = &"ActionBtn"
 text = "Loot"
 
 [node name="InventoryButton" type="Button" parent="HUD/LMargin/LButtonBar"]

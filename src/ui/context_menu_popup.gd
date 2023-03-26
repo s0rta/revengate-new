@@ -41,6 +41,8 @@ func show_commands(commands, coord=null):
 	for cmd in commands:
 		var button = Button.new()
 		button.text = cmd.caption
+		if cmd.is_action:
+			button.theme_type_variation = "ActionBtn"
 		button.pressed.connect(run_command.bind(cmd, coord))
 		%VBox.add_child(button)
 	show()

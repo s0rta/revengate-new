@@ -89,8 +89,8 @@ UI:
 
 ## v0.6
 - [ ] bug: death does not make items under the victim reappear
-- [ ] style UI with Godot theme
-  - [ ] non actions are easily distinguished from turn-ending action 
+- [x] style UI with Godot theme
+  - [x] non actions are easily distinguished from turn-ending action 
 - [x] splash image as the start screen background
 - [x] water ripples VFX
 
@@ -105,7 +105,7 @@ UI:
 - [x] ability to cancel a multi-turn command
 - [x] ability to completely skip dialogues
 - [x] long press for context menu (in GDScript)
-- [ ] use the Godot OpenGL renderer
+- [x] use the Godot mobile renderer
 
 ## v0.7
 Builder:
