@@ -7,13 +7,22 @@
 [node name="StartScreen" type="Node"]
 script = ExtResource("1_krfjq")
 
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[img]res://assets/splash-screen.png[/img]"
+
 [node name="Background" type="ColorRect" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0431373, 0.027451, 0, 1)
+color = Color(0.04, 0.03, 0, 0.5)
 
 [node name="NewGameButton" type="Button" parent="."]
 anchors_preset = 8
@@ -85,6 +94,7 @@ theme = ExtResource("2_ct6s0")
 theme_type_variation = &"BigMarging"
 
 [node name="Title" type="Label" parent="MarginContainer"]
+visible = false
 layout_mode = 2
 theme_type_variation = &"TitleLabel"
 text = "Welcome to Revengate!"

@@ -91,7 +91,7 @@ UI:
 - [ ] bug: death does not make items under the victim reappear
 - [ ] style UI with Godot theme
   - [ ] non actions are easily distinguished from turn-ending action 
-- [ ] splash image as the start screen background
+- [x] splash image as the start screen background
 - [x] water ripples VFX
 
 Combat:
