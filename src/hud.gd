@@ -90,5 +90,4 @@ func refresh_input_enabled(enabled):
 			child.disabled = not enabled
 
 func _on_hero_state_changed(new_state):
-#	refresh_input_enabled(new_state == Actor.States.LISTENING)
-	pass
+	refresh_input_enabled(new_state == Actor.States.LISTENING)
