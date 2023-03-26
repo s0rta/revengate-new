@@ -21,6 +21,8 @@ extends Node2D
 signal board_changed(new_board)
 						
 const SCENE_PATH_FMT = "res://src/%s.tscn"
+const FIRST_MAZE = 6
+const ALL_MAZES = 13
 
 @onready var hero:Actor = find_child("Hero")
 @onready var hud = $HUD
@@ -74,7 +76,7 @@ func switch_board_at(coord):
 	if conn:
 		new_board = conn.far_board
 	else:
-		new_board = make_board(old_board.depth + 1)
+		new_board = build_board(old_board.depth + 1)
 		# connect the stairs together
 		var far = new_board.get_cell_by_terrain("stairs-up")
 		# TODO: add_connection() should return the new record
@@ -88,7 +90,7 @@ func switch_board_at(coord):
 	
 	var builder = BoardBuilder.new(new_board)
 	var index = new_board.make_index()
-	var new_pos = builder.place(hero, true, conn.far_coord, true, null, index)
+	var new_pos = builder.place(hero, builder.has_rooms(), conn.far_coord, true, null, index)
 	$HUD.refresh_buttons_vis(null, new_pos)
 	emit_signal("board_changed", new_board)
 
@@ -97,10 +99,10 @@ func _place_card(card, builder, index=null):
 	## Return the spawn_cost of the placed card.
 	var instance = card.duplicate()
 	instance.show()
-	builder.place(instance, false, null, true, null, index)
+	builder.place(instance, builder.has_rooms(), null, true, null, index)
 	return card.spawn_cost
 
-func make_board(depth):
+func build_board(depth):
 	## Return a brand new fully initiallized unconnected RevBoard
 	var scene = load("res://src/rev_board.tscn") as PackedScene
 	var new_board = scene.instantiate() as RevBoard
@@ -108,7 +110,19 @@ func make_board(depth):
 	new_board.current_turn = $TurnQueue.turn
 	boards_cont.add_child(new_board)
 	var builder = BoardBuilder.new(new_board)
-	builder.gen_level()
+	if _lvl_is_maze(depth):
+		# TODO: put most of this in the builder
+		var outer_rect = Rect2i(builder.rect.position, builder.rect.size+3*Vector2i.ONE)
+		var inner_rect = Rect2i(outer_rect.position+Vector2i.ONE, outer_rect.size-Vector2i.ONE)
+		builder.paint_rect(outer_rect, "wall")
+		var biases = _maze_biases(depth)
+		var mazer = Mazes.GrowingTree.new(builder, biases, inner_rect, false)
+		mazer.fill()
+		var poles = builder.find_poles()
+		builder.paint_cells([poles[0]], "stairs-up")
+		builder.paint_cells([poles[1]], "stairs-down")
+	else:
+		builder.gen_level()
 	
 	var index = new_board.make_index()
 	
@@ -126,7 +140,7 @@ func make_board(depth):
 		budget -= _place_card(deck.draw(), builder, index)
 		
 	# Monsters
-	budget = max(0, depth * 3)
+	budget = max(0, depth * 2.3)
 	
 	# mandatory monsters
 	deck = %DeckBuilder.gen_mandatory_monster_deck(depth)
@@ -139,12 +153,6 @@ func make_board(depth):
 		budget -= _place_card(deck.draw(), builder, index)
 
 	return new_board
-
-func make_item(char):
-	var tree = load("res://src/items/item.tscn") as PackedScene
-	var item = tree.instantiate()
-	item.char = char
-	return item
 	
 func _on_hero_died(_coord):
 	conclude_game(false)
@@ -183,41 +191,23 @@ func show_context_menu_for(coord):
 	var acted = await %ContextMenuPopup.closed
 	return acted
 
+func _lvl_is_maze(depth:int):
+	## Return whether the next board be a maze?
+	return Rand.linear_prob_test(depth, FIRST_MAZE-1, ALL_MAZES)
+
+func _maze_biases(depth:int):
+	## Return the bias params for a maze generated at a given depth
+	var easy_depth = FIRST_MAZE
+	var hard_depth = ALL_MAZES
+	var easy_reconnect = 0.7
+	var hard_reconnect = 0.3
+	var diff_slope = (hard_reconnect - easy_reconnect) / (hard_depth - easy_depth)
+	var diff_steps = (clamp(depth, easy_depth, hard_depth) - easy_depth)
+	var reconnect = diff_steps * diff_slope + easy_reconnect
+	return {"twistiness": 0.3, "branching": 0.3, "reconnect": reconnect}
+
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	%Viewport.effect_at_coord("explosion_vfx", hero.get_cell_coord())
-
-var bias_step = -1
-var bias_demos = [{"branching" = 0.2, 
-				"reconnect" = 0.1, 
-				"twistiness" = 0.0}, 
-				{"branching" = 0.2, 
-				"reconnect" = 0.3, 
-				"twistiness" = 0.3}, 
-				{"branching" = 0.2, 
-				"reconnect" = 0.3, 
-				"twistiness" = 0.3}, 
-				{"branching" = 0.2, 
-				"reconnect" = 0.5, 
-				"twistiness" = 0.6}, 
-				{"branching" = 0.2, 
-				"reconnect" = 0.5, 
-				"twistiness" = 0.9}, 
-				]
+	
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-	
-	var outer_rect = Rect2i(0, 0, 29, 19)
-	var inner_rect = Rect2i(1, 1, 28, 18)
-
-	var mask = Mazes.RectMask.new(Rect2i(13, 3, 4, 8))
-	var mask2 = Mazes.RectMask.new(Rect2i(15, 7, 10, 2))
-	mask2.chain_with(mask)
-
-	var builder = BoardBuilder.new(get_board())
-	builder.paint_rect(outer_rect, "wall")
-	bias_step = (1 + bias_step) % bias_demos.size()
-	var biases = bias_demos[bias_step]
-	var mazer = Mazes.GrowingTree.new(builder, biases, inner_rect, false)
-	mazer.set_mask(mask2)
-	mazer.fill()

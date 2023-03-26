@@ -88,6 +88,7 @@ UI:
 - [x] messages pane
 
 ## v0.6
+- [ ] bug: death does not make items under the victim reappear
 - [ ] style UI with Godot theme
   - [ ] non actions are easily distinguished from turn-ending action 
 - [ ] splash image as the start screen background
@@ -98,7 +99,7 @@ Combat:
 
 Builder:
 - [x] items and monsters selected with parametric decks
-- [ ] mazes can fill arbitrary areas of a board
+- [x] mazes can fill arbitrary areas of a board
 
 UI: 
 - [x] ability to cancel a multi-turn command

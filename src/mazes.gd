@@ -305,6 +305,7 @@ class Mask extends RefCounted:
 	
 	func chain_with(mask:Mask):
 		## Combine a secondary mask with this one.
+		assert(mask != self, "mask cannot be chainned with itself")
 		if next:
 			next.chain_with(mask)
 		else:
