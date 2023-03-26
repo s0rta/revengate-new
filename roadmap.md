@@ -108,15 +108,15 @@ UI:
 - [x] use the Godot mobile renderer
 
 ## v0.7
+- [ ] water ripples have highlights and edge-of-pool reflections 
+
 Builder:
 - [ ] Allow mixing rooms and mazes in level generation
+
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
 - [ ] pinch to zoom
-- [ ] double tap for context menu
-  - might not work since a single tap fires and fully propagates before we see the double tap
-
 
   
 ## v1.0
