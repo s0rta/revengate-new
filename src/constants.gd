@@ -19,7 +19,7 @@
 ## This script is autoloaded at `Consts`
 extends Node
 
-const VERSION := "0.5.3"
+const VERSION := "0.6.0"
 const DEBUG = true
 
 ## The kind of damage, mostly used to compute resistances. Can apply to healing as well.

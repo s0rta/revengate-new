@@ -953,8 +953,12 @@ func reset_items_visibility():
 	var index = make_index()
 	for item in get_items():
 		var coord = item.get_cell_coord()
-		if item == index.top_item_at(coord) and not index.actor_at(coord):
-			item.flash_in()
+		if item == index.top_item_at(coord):
+			var actor = index.actor_at(coord)
+			if not actor or actor.is_dead():
+				item.flash_in()
+			else:
+				item.hide()
 		else:
 			item.hide()
 
@@ -970,12 +974,6 @@ func _on_actor_moved(from, to):
 
 func _on_actor_died(coord, actor):
 	deregister_actor(actor)
-
-	## fade in the visibility of items that were stepped on by the one who just passed
-	var index = make_index()
-	var item = index.top_item_at(coord)
-	if item:
-		item.fade_in()
 	
 func add_message(actor, message):
 	# TODO check for visibility before propagating up

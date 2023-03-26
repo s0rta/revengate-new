@@ -88,7 +88,7 @@ UI:
 - [x] messages pane
 
 ## v0.6
-- [ ] bug: death does not make items under the victim reappear
+- [x] bug: death does not make items under the victim reappear
 - [x] style UI with Godot theme
   - [x] non actions are easily distinguished from turn-ending action 
 - [x] splash image as the start screen background
