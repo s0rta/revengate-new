@@ -309,7 +309,7 @@ class TileSpiral extends RefCounted:
 		if free and not board_index:
 			board_index = board.make_index()
 		if bbox_ != null:
-			bbox = bbox
+			bbox = bbox_
 		else:
 			bbox = board.get_used_rect()
 		if max_radius_ != null:
@@ -547,6 +547,10 @@ static func board_to_canvas(coord):
 	return Vector2(coord.x * TILE_SIZE + half_tile, 
 					coord.y * TILE_SIZE + half_tile)
 
+static func supercell_str(coord):
+	## Return a short hand notation of a supercell coord that is different from Vector2i.to_string()
+	return "⟦%d¦%d⟧" % [coord.x, coord.y]	
+
 static func coord_str(coord):
 	## Return a short hand notation of coord that is different from Vector2i.to_string()
 	return "[%d:%d]" % [coord.x, coord.y]	
@@ -657,7 +661,9 @@ func get_connection(coord:Vector2i):
 func is_connector(coord:Vector2i):
 	## Return whether `coord` is a tile that can connect to a different board.
 	var data = get_cell_tile_data(0, coord)
-	return 	data.get_custom_data("is_connector")
+	if data == null:
+		return false
+	return data.get_custom_data("is_connector")
 
 func is_walkable(coord:Vector2i):
 	## Return whether a cell is walkable for normal actors
@@ -754,12 +760,13 @@ func _init_metric_context(start, dest, free_dest=false, max_dist=null):
 
 	# find the start: randomize if not provided
 	var bbox:Rect2i = get_used_rect()
-	if start == null:
-		# TODO: pick only walkable starting points
-		start = Rand.pos_in_rect(bbox)
-	
-	var metrics = BoardMetrics.new(bbox.size, start, dest)
 	var index = make_index()
+	if start == null:
+		start = Rand.pos_in_rect(bbox)
+		if not is_walkable(start):
+			start = spiral(start, null, true, true, null, index).next()
+			
+	var metrics = BoardMetrics.new(bbox.size, start, dest)	
 	var invalid_dest = false
 	if free_dest and dest!=null:
 		invalid_dest = not index.is_free(dest)
@@ -771,29 +778,29 @@ func _init_metric_context(start, dest, free_dest=false, max_dist=null):
 			"post_dist": null,  # dist from a coord to dest
 			"metrics": metrics}
 
-func astar_metrics(start, dest, free_dest=false, max_dist=null):
+func astar_metrics(start_, dest_, free_dest_=false, max_dist=null):
 	## Return sparse BoardMetrics using the A* algorithm. 
 	## If max_dist is provided, only explore until max_dist depth is reached 
 	## and return partial metrics.
-	var ctx = _init_metric_context(start, dest, free_dest, max_dist)
+	var ctx = _init_metric_context(start_, dest_, free_dest_, max_dist)
 	if ctx.invalid_dest:
 		return ctx.metrics
-	var estimate = dist(start, dest)
+	var estimate = dist(ctx.start, ctx.dest)
 	# dist is a [h(n), g(n), man(p, n)] triplet: estimate and real dists
 	# with Manhattan distance with the previous node as the tie breaker to favor 
 	# straigth lines over diagonals.
 	var dist = [estimate, 0, 0]  
-	ctx.queue.enqueue(start, dist)
+	ctx.queue.enqueue(ctx.start, dist)
 	var current = null
 	while not ctx.queue.empty():
 		dist = ctx.queue.peek()
 		current = ctx.queue.dequeue()
-		if current == dest:
+		if current == ctx.dest:
 			break  # Done!
-		elif dist(current, dest) == 1:
+		elif dist(current, ctx.dest) == 1:
 			# got next to dest, no need to look at adjacents()
-			ctx.metrics.setv(dest, dist[1]+1)
-			ctx.metrics.add_edge(current, dest)
+			ctx.metrics.setv(ctx.dest, dist[1]+1)
+			ctx.metrics.add_edge(current, ctx.dest)
 			break
 		if ctx.done.has(current) or dist[1] == max_dist:
 			continue  # this position is finalized already
@@ -805,39 +812,39 @@ func astar_metrics(start, dest, free_dest=false, max_dist=null):
 			if ctx.pre_dist == null or ctx.pre_dist > dist[1]+1:
 				ctx.metrics.setv(pos, dist[1]+1)
 				ctx.metrics.add_edge(current, pos)
-			ctx.post_dist = dist(pos, dest)
+			ctx.post_dist = dist(pos, ctx.dest)
 			estimate = ctx.post_dist + dist[1] + 1
 			ctx.queue.enqueue(pos, [estimate, dist[1]+1, man_dist(pos, current)])
 		ctx.done[current] = true
 	return ctx.metrics
 	
 
-func astar_metrics_custom(pump:MetricsPump, start, dest, free_dest=false, max_dist=null):
+func astar_metrics_custom(pump:MetricsPump, start_, dest_, free_dest_=false, max_dist=null):
 	## Return sparse BoardMetrics using the A* algorithm. 
 	## pump: the fully initialized extractor for the intermediate values
 	## all other params like `astar_metrics()`
 	# find our size
-	var ctx = _init_metric_context(start, dest, free_dest, max_dist)
+	var ctx = _init_metric_context(start_, dest_, free_dest_, max_dist)
 	if ctx.invalid_dest:
 		return ctx.metrics
-	var estimate = pump.dist_estim(start, dest)
+	var estimate = pump.dist_estim(ctx.start, ctx.dest)
 	# dist is a [h(n), g(n), tiebreak(p, n)] triplets: estimate and real dists
 	# with tiebreaker from the previous node to finely tune biasess.
 	var dist = [estimate, 0, 0]
-	ctx.queue.enqueue(start, dist)
+	ctx.queue.enqueue(ctx.start, dist)
 	var current = null
 	while not ctx.queue.empty():
 		dist = ctx.queue.peek()
 		current = ctx.queue.dequeue()
-		if current == dest:
+		if current == ctx.dest:
 			break  # Done!
-		elif dist(current, dest) == 1:
+		elif dist(current, ctx.dest) == 1:
 			# Not using pump.dist_real() in the test because we are looking to see if we are 
 			# one step away, no matter what value range the pump in using for the distances.
 
 			# Got next to dest, no need to look at adjacents()
-			ctx.metrics.setv(dest, dist[1]+pump.dist_real(current, dest))
-			ctx.metrics.add_edge(current, dest)
+			ctx.metrics.setv(ctx.dest, dist[1]+pump.dist_real(current, ctx.dest))
+			ctx.metrics.add_edge(current, ctx.dest)
 			break
 		if ctx.done.has(current) or dist[1] == max_dist:
 			continue  # this position is finalized already
@@ -850,35 +857,35 @@ func astar_metrics_custom(pump:MetricsPump, start, dest, free_dest=false, max_di
 			if ctx.pre_dist == null or ctx.pre_dist > dist[1]+step_dist:
 				ctx.metrics.setv(pos, dist[1]+step_dist)
 				ctx.metrics.add_edge(current, pos)
-			ctx.post_dist = pump.dist_estim(pos, dest)
+			ctx.post_dist = pump.dist_estim(pos, ctx.dest)
 			estimate = ctx.post_dist + dist[1]+step_dist
 			var tiebreak = pump.dist_tiebreak(pos, current)
 			ctx.queue.enqueue(pos, [estimate, dist[1]+step_dist, tiebreak])
 		ctx.done[current] = true
 	return ctx.metrics
 
-
-func dist_metrics(start=null, dest=null, free_dest=false, max_dist=null):
+func dist_metrics(start_=null, dest_=null, free_dest_=false, max_dist=null):
 	## Return distance metrics or all positions accessible from start. 
 	## Start is randomly selected if not provided.
 	## Stop exploring after reaching `dest` if provided.
 	## Do not explore further than `max_dist` if provided. 
 	# using the Dijkstra algo
-	var ctx = _init_metric_context(start, dest, free_dest, max_dist)
+	var ctx = _init_metric_context(start_, dest_, free_dest_, max_dist)
 	if ctx.invalid_dest:
 		return ctx.metrics
 	var dist = 0
-	ctx.queue.enqueue(start, dist)
+	
+	ctx.queue.enqueue(ctx.start, dist)
 	var current = null
 	while not ctx.queue.empty():
 		dist = ctx.queue.peek()
 		current = ctx.queue.dequeue()
-		if current == dest:
+		if current == ctx.dest:
 			break  # Done!
-		elif dest != null and dist(current, dest) == 1:
+		elif ctx.dest != null and dist(current, ctx.dest) == 1:
 			# got next to dest, no need to look at adjacents()
-			ctx.metrics.setv(V.i(dest.x, dest.y), dist+1)
-			ctx.metrics.add_edge(current, dest)
+			ctx.metrics.setv(V.i(ctx.dest.x, ctx.dest.y), dist+1)
+			ctx.metrics.add_edge(current, ctx.dest)
 			break
 		if ctx.done.has(current) or dist == max_dist:
 			continue  # this position is finalized already
@@ -946,8 +953,12 @@ func reset_items_visibility():
 	var index = make_index()
 	for item in get_items():
 		var coord = item.get_cell_coord()
-		if item == index.top_item_at(coord) and not index.actor_at(coord):
-			item.flash_in()
+		if item == index.top_item_at(coord):
+			var actor = index.actor_at(coord)
+			if not actor or actor.is_dead():
+				item.flash_in()
+			else:
+				item.hide()
 		else:
 			item.hide()
 
@@ -963,12 +974,6 @@ func _on_actor_moved(from, to):
 
 func _on_actor_died(coord, actor):
 	deregister_actor(actor)
-
-	## fade in the visibility of items that were stepped on by the one who just passed
-	var index = make_index()
-	var item = index.top_item_at(coord)
-	if item:
-		item.fade_in()
 	
 func add_message(actor, message):
 	# TODO check for visibility before propagating up

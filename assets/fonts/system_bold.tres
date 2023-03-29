@@ -1,0 +1,10 @@
+[gd_resource type="FontVariation" load_steps=3 format=3 uid="uid://tn2p0jg2fn65"]
+
+[ext_resource type="FontFile" uid="uid://dxmp7favkxwsh" path="res://assets/fonts/Symbola_hint.ttf" id="1_deg5b"]
+
+[sub_resource type="SystemFont" id="SystemFont_ml4dc"]
+
+[resource]
+base_font = SubResource("SystemFont_ml4dc")
+fallbacks = Array[Font]([ExtResource("1_deg5b")])
+variation_embolden = 0.65

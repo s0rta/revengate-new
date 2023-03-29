@@ -65,7 +65,7 @@ func refresh(turn):
 
 func is_valid() -> bool:
 	## return is the strategy is valid for the current turn
-	return not is_cancelled and ttl != 0
+	return not is_expired() and not is_cancelled and ttl != 0
 	
 func is_expired() -> bool:
 	## Return whether the strategy has expired. 

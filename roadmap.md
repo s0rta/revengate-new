@@ -88,10 +88,10 @@ UI:
 - [x] messages pane
 
 ## v0.6
-- [ ] style UI with Godot theme
-  - [ ] non actions are easily distinguished from turn-ending action 
-- [ ] help screen with contextual content
-- [ ] splash image as the start screen background
+- [x] bug: death does not make items under the victim reappear
+- [x] style UI with Godot theme
+  - [x] non actions are easily distinguished from turn-ending action 
+- [x] splash image as the start screen background
 - [x] water ripples VFX
 
 Combat:
@@ -99,20 +99,26 @@ Combat:
 
 Builder:
 - [x] items and monsters selected with parametric decks
-- [ ] mazes can fill arbitrary areas of a board
+- [x] mazes can fill arbitrary areas of a board
 
 UI: 
 - [x] ability to cancel a multi-turn command
 - [x] ability to completely skip dialogues
 - [x] long press for context menu (in GDScript)
-- [ ] use the Godot OpenGL renderer
+- [x] use the Godot mobile renderer
+
+## v0.7
+- [ ] water ripples have highlights and edge-of-pool reflections 
+
+Builder:
+- [ ] Allow mixing rooms and mazes in level generation
+
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
 - [ ] pinch to zoom
-- [ ] double tap for context menu
-  - might not work since a single tap fires and fully propagates before we see the double tap
 
+  
 ## v1.0
 - [ ] release on F-Droid
 - [ ] saved games
@@ -126,3 +132,5 @@ UI:
   - [ ] global flag to disable animations
 - [ ] non-walking movement and path finding (wading, swimming, phasing)
 - [ ] Deck.peek(): select the next card, but do not remove it from the deck
+- [ ] smoke and shrapnel particles in the explosion VFX
+- [ ] help screen with contextual content

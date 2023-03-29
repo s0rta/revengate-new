@@ -42,7 +42,11 @@ func update_terrain_names():
 		for tid in range(board.tile_set.get_terrains_count(tset)):
 			name = board.tile_set.get_terrain_name(tset, tid)
 			terrain_names[name] = [tset, tid]
-	
+
+func has_rooms():
+	## Return whether this builder is aware of rooms.
+	return not rooms.is_empty()
+
 func add_room(rect: Rect2i, walls=true):
 	rooms.append(rect)
 	paint_rect(rect, "floor")
@@ -105,14 +109,23 @@ func gen_level(nb_rooms=4):
 	
 	# place stairs as far appart as possible
 	# TODO: stairs should always be in a room
-	var metrics = board.dist_metrics(Rand.pos_in_rect(Rand.choice(rooms)))
-	metrics = board.dist_metrics(metrics.furthest_coord)
-	var poles = [metrics.start, metrics.furthest_coord]
+	var poles = find_poles()
 	poles.shuffle()
 	paint_cells([poles[0]], "stairs-up")
 	paint_cells([poles[1]], "stairs-down")
-
 	
+func find_poles():
+	## Return an array with the two coordinates that are the furthest apart 
+	## by RevBoard.dist().
+	# We have to do two consecutive runs of Dijkstra. The first one finds one pole, 
+	# the second starting at the first pole will find the second one.
+	var start = null
+	if has_rooms():
+		start = Rand.pos_in_rect(Rand.choice(rooms))
+	var metrics:RevBoard.BoardMetrics = board.dist_metrics(start)
+	metrics = board.dist_metrics(metrics.furthest_coord)
+	return [metrics.start, metrics.furthest_coord]
+
 func connect_rooms(room1, room2):
 	# topologicaly sort the rooms so room1 is up and left
 	# TODO: this might not be needed

@@ -63,12 +63,11 @@ func _expire_path():
 	updated = false
 
 func is_expired():
-	return arrived or unreachable or super.is_expired()
+	return arrived or unreachable or super()
 
 func is_valid():
 	if not super():
 		return false
-	print("Checking if %s is still valid." % self)
 	if not arrived and not updated:
 		_set_path(_make_path())
 	return path and not arrived and not unreachable
