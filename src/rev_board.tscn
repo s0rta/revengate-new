@@ -12,13 +12,11 @@ texture_region_size = Vector2i(32, 32)
 0:0/0/terrain = 4
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0
-0:0/0/custom_data_0 = true
 1:0/0 = 0
 1:0/0/terrain_set = 0
 1:0/0/terrain = 3
 1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 1:0/0/physics_layer_0/angular_velocity = 0.0
-1:0/0/custom_data_0 = true
 0:1/0 = 0
 0:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:1/0/physics_layer_0/angular_velocity = 0.0
@@ -162,8 +160,6 @@ terrain_set_0/terrain_4/name = "stairs-down"
 terrain_set_0/terrain_4/color = Color(0.329412, 0.462745, 0.623529, 1)
 terrain_set_0/terrain_5/name = "water"
 terrain_set_0/terrain_5/color = Color(0.027451, 0.027451, 0.85098, 1)
-custom_data_layer_0/name = "is_connector"
-custom_data_layer_0/type = 1
 sources/0 = SubResource("TileSetAtlasSource_x5cyv")
 
 [node name="Board" type="TileMap"]

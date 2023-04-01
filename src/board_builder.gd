@@ -75,9 +75,8 @@ func paint_rect(rect, terrain_name):
 	paint_cells(cells, terrain_name)
 	
 func gen_level(nb_rooms=4):
-	var bbox = board.get_used_rect()
-	paint_rect(bbox, "rock")
-	var partitions = [bbox]
+	paint_rect(rect, "rock")
+	var partitions = [rect]
 	var nb_iter = 0
 	var areas = null
 	var size = null
@@ -106,14 +105,16 @@ func gen_level(nb_rooms=4):
 		add_room(Rand.sub_rect(rect, MIN_ROOM_SIDE))
 	for i in rooms.size()-1:
 		connect_rooms(rooms[i], rooms[i+1])
+	add_stairs()	
 	
-	# place stairs as far appart as possible
+func add_stairs():
+	## place stairs as far appart as possible
 	# TODO: stairs should always be in a room
+	# TODO: support other configurations, like (up, up, down)
 	var poles = find_poles()
-	poles.shuffle()
 	paint_cells([poles[0]], "stairs-up")
 	paint_cells([poles[1]], "stairs-down")
-	
+
 func find_poles():
 	## Return an array with the two coordinates that are the furthest apart 
 	## by RevBoard.dist().

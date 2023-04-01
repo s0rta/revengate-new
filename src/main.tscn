@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=32 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -26,23 +26,10 @@
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="17_ou76k"]
 [ext_resource type="PackedScene" uid="uid://cd6ngrhhgito0" path="res://src/ui/dialogue_pane.tscn" id="18_vtucs"]
 [ext_resource type="PackedScene" uid="uid://b0n7osww35hyh" path="res://src/ui/narration_pane.tscn" id="20_21sjb"]
-[ext_resource type="Script" path="res://src/deck_builder.gd" id="25_mp2al"]
 [ext_resource type="PackedScene" uid="uid://bb5upsioptfc4" path="res://src/ui/context_menu_popup.tscn" id="25_n5bfn"]
-[ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="26_wvdb5"]
-[ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="27_551xb"]
-[ext_resource type="PackedScene" uid="uid://d4f1ul2rt43ys" path="res://src/monsters/labras.tscn" id="27_qu54w"]
-[ext_resource type="Script" path="res://src/card_rule.gd" id="28_4pbpo"]
-[ext_resource type="PackedScene" uid="uid://c3uuk6yfc2thp" path="res://src/monsters/sahwakoon.tscn" id="28_rykp2"]
-[ext_resource type="PackedScene" uid="uid://dj5x5c687ddyj" path="res://src/items/amulet_of_strength.tscn" id="29_lcgrj"]
-[ext_resource type="PackedScene" uid="uid://b868r5vu2iiyh" path="res://src/items/missing_watch.tscn" id="30_68c1j"]
-[ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="31_0xqe1"]
-[ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="33_ugrak"]
-[ext_resource type="PackedScene" uid="uid://c7fgdridawfb3" path="res://src/items/magic_capsule_of_regen.tscn" id="34_mvq7m"]
+[ext_resource type="PackedScene" uid="uid://c185mr0bu3u3w" path="res://src/default_deck_builder.tscn" id="30_c7r3i"]
 [ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="35_fqryl"]
-[ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="36_bonyf"]
-[ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="37_8mtuq"]
 [ext_resource type="PackedScene" uid="uid://6ml8upew405" path="res://src/weapons/saber.tscn" id="38_pnvrw"]
-[ext_resource type="PackedScene" path="res://src/weapons/sword.tscn" id="39_2vmul"]
 [ext_resource type="Script" path="res://src/command_pack.gd" id="41_hgs5k"]
 
 [node name="Main" type="Node2D"]
@@ -383,92 +370,7 @@ visible = false
 [node name="VictoryProbe" type="Node" parent="."]
 script = ExtResource("14_ulj2m")
 
-[node name="DeckBuilder" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("25_mp2al")
-
-[node name="SewerOtter" parent="DeckBuilder" instance=ExtResource("27_551xb")]
-visible = false
-
-[node name="Labras" parent="DeckBuilder" instance=ExtResource("27_qu54w")]
-visible = false
-
-[node name="DesertCentipede" parent="DeckBuilder" instance=ExtResource("8_v818c")]
-
-[node name="Kobold" parent="DeckBuilder" instance=ExtResource("9_cplml")]
-visible = false
-
-[node name="SulantTiger" parent="DeckBuilder" instance=ExtResource("31_0xqe1")]
-visible = false
-
-[node name="Max3PerFloor" type="Node" parent="DeckBuilder"]
-script = ExtResource("28_4pbpo")
-max_board_occ = 3
-min_board_occ = 1
-
-[node name="Rat" parent="DeckBuilder/Max3PerFloor" instance=ExtResource("26_wvdb5")]
-visible = false
-
-[node name="Sahwakoon" parent="DeckBuilder/Max3PerFloor" instance=ExtResource("28_rykp2")]
-visible = false
-
-[node name="Max2PerGame" type="Node" parent="DeckBuilder"]
-script = ExtResource("28_4pbpo")
-max_dungeon_occ = 2
-
-[node name="Ghost" parent="DeckBuilder/Max2PerGame" instance=ExtResource("9_22ipg")]
-visible = false
-spawn_cost = 8.0
-
-[node name="QuestItem" type="Node" parent="DeckBuilder"]
-script = ExtResource("28_4pbpo")
-max_depth = 12
-max_dungeon_occ = 1
-min_dungeon_occ = 1
-
-[node name="MissingWatch" parent="DeckBuilder/QuestItem" instance=ExtResource("30_68c1j")]
-spawn_cost = 8.0
-
-[node name="Unique" type="Node" parent="DeckBuilder"]
-script = ExtResource("28_4pbpo")
-max_depth = 14
-max_dungeon_occ = 1
-min_dungeon_occ = 1
-
-[node name="PotionOfRegen" parent="DeckBuilder/Unique" instance=ExtResource("12_c1kwk")]
-spawn_cost = 1.5
-
-[node name="CapsuleOfRegen" parent="DeckBuilder/Unique" instance=ExtResource("34_mvq7m")]
-caption = "magic capsule of regen "
-spawn_cost = 4.0
-
-[node name="AmuletOfStrength" parent="DeckBuilder/Unique" instance=ExtResource("29_lcgrj")]
-caption = "amulet of strength"
-
-[node name="Rare" type="Node" parent="DeckBuilder"]
-script = ExtResource("28_4pbpo")
-max_dungeon_occ = 2
-
-[node name="Hammer" parent="DeckBuilder/Rare" instance=ExtResource("35_fqryl")]
-
-[node name="Rapier" parent="DeckBuilder/Rare" instance=ExtResource("36_bonyf")]
-
-[node name="Razor" parent="DeckBuilder/Rare" instance=ExtResource("37_8mtuq")]
-
-[node name="Saber" parent="DeckBuilder/Rare" instance=ExtResource("38_pnvrw")]
-
-[node name="Sword" parent="DeckBuilder/Rare" instance=ExtResource("39_2vmul")]
-spawn_cost = 5.0
-
-[node name="Dynamite" parent="DeckBuilder/Rare" instance=ExtResource("17_ou76k")]
-
-[node name="RareAndDeep" type="Node" parent="DeckBuilder"]
-script = ExtResource("28_4pbpo")
-min_depth = 7
-max_dungeon_occ = 2
-
-[node name="Pacherr" parent="DeckBuilder/RareAndDeep" instance=ExtResource("33_ugrak")]
-visible = false
+[node name="DeckBuilder" parent="." instance=ExtResource("30_c7r3i")]
 
 [node name="CommandPack" type="Node" parent="."]
 unique_name_in_owner = true

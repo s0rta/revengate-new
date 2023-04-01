@@ -19,8 +19,10 @@ class_name RevBoard extends TileMap
 
 const TILE_SIZE = 32
 
+# which terrains lead to other boards?
+const CONNECTOR_TERRAINS = ["stairs-down", "stairs-up"]
 # which terrains do we index for later retrieval?
-const INDEXED_TERRAINS = ["stairs-down", "stairs-up"]
+const INDEXED_TERRAINS = CONNECTOR_TERRAINS
 
 signal new_message(message)
 
@@ -570,6 +572,9 @@ func set_active(active:=true):
 		detect_actors()
 		reset_items_visibility()
 
+func is_active():
+	return visible and is_layer_enabled(0)
+
 func detect_actors():
 	## Register all actors currently on the board.
 	for actor in get_actors():
@@ -617,6 +622,16 @@ func _append_terrain_cells(cells, terrain_name):
 		_cells_by_terrain[terrain_name] = []
 	_cells_by_terrain[terrain_name] += cells
 
+func scan_terrain():
+	## Re-index the terrain of all non-empty cells. 
+	## This is only needed for board that are built manually. BoardBuilders do 
+	## the indexing automatically when painting cells.
+	_cells_by_terrain = {}
+	for coord in get_used_cells(0):
+		var terrain = get_cell_terrain(coord)
+		if terrain in INDEXED_TERRAINS:
+			_append_terrain_cells([coord], terrain)
+
 func get_cells_by_terrain(terrain_name):
 	## Return all known cells of terrain_name.
 	## Cells matching the terrain will be unknown if they have been painted 
@@ -658,12 +673,17 @@ func get_connection(coord:Vector2i):
 	else:
 		return null
 
+func get_connectors():
+	## Return the an array of coords for all the connectors on this board.
+	var coords = []
+	for terrain in CONNECTOR_TERRAINS:
+		coords += get_cells_by_terrain(terrain)
+	return coords
+
 func is_connector(coord:Vector2i):
 	## Return whether `coord` is a tile that can connect to a different board.
-	var data = get_cell_tile_data(0, coord)
-	if data == null:
-		return false
-	return data.get_custom_data("is_connector")
+	var terrain = get_cell_terrain(coord)
+	return CONNECTOR_TERRAINS.has(terrain) 
 
 func is_walkable(coord:Vector2i):
 	## Return whether a cell is walkable for normal actors
