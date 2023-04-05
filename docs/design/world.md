@@ -58,3 +58,18 @@ One major difficulty with tracing the disappearance of magic is the unreliabilit
 In the past 50 years or so, magic has seen a resurgence, but for the most part, spells are little more than party tricks and very few expect it to every play a significant part in an industrialized society. It's very possible that during the 450 years of discontinuity, important elements of magical teaching were lost forever, or perhaps well hidden from the public eye until the time is right. 
 
 One thing is certain: you can't walk into a book store and buy a spell book. If someone wants to learn magic, they must first find someone who already knows it and discover a way to gain their trust.
+
+
+### How Magic Works
+
+Some people and creatures have an innate affinity with magic. Those without it can sometimes be taught how to channel magic, but they will never achieve mastery of the magical arts. A certain level of intelligence is necessary to be trained in magic.
+
+Channeling magic, sometimes also called "casting spells", always has a cost: the magician's mana, some material, or even someone's vitality. To channel a spell, you  must both know it (instinctively or from training) and be able to pay its cost.
+
+A channeling device is usually an intricate clockwork mechanism moving potent crystals into their most effective configurations. If you have been trained to its usage, a channeling device can help you channel spells. Finding one that you are unfamiliar with won't help you in any way. Channeling devices can have a variety of effects: they can let you channel harder spells than your training alone would allow, they can lower the cost of a spell, or they can increase the power of a spell. Channeling devices have fragile mechanisms that are easily damaged in combat or by overloading while channeling. Some of them consume a power reserve and they will stop working after a certain number of uses.
+
+At its core, magical channeling manipulates aether. It either turns aether into matter or energy; or it turns matter and energy into aether. Some regions of the world are more rich in aether while others are completely devoid of it. This imposes strong geographical limitations on the effectiveness of magic. It's not simply that more aether makes magic more potent. For example, aether can be saturated, a situation that won't affect aether-using spells, but completely disable aether-producing spells. 
+
+No instrument is known to be able to measure the aether density of a place, but magic sensitive beings can usually perceive fluctuations in aether when they move from place to place. It's not uncommon for places of worship and spiritual landmarks to be built in aether-rich regions.
+
+Mana is not the measure of any particular substances, it's a number on an arbitrary scale of how much channeling someone could do based on their affinity and current state exhaustion.
