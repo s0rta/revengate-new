@@ -14,7 +14,7 @@ noise = SubResource("FastNoiseLite_f7y2p")
 
 [sub_resource type="Gradient" id="Gradient_iwg4o"]
 interpolation_mode = 2
-offsets = PackedFloat32Array(0.797203, 0.986014)
+offsets = PackedFloat32Array(0.775281, 0.986014)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_k4tut"]
 frequency = 0.032
