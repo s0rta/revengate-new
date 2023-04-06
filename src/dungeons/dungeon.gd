@@ -26,6 +26,7 @@ const ALL_MAZES = 13
 const EXTRA_UP_PROB = 0.3
 const EXTRA_DOWN_PROB = 0.3
 
+@export var start_depth := 0
 var deck_builder: DeckBuilder
 var starting_board: RevBoard
 
@@ -40,15 +41,13 @@ static func opposite_connector(terrain):
 		assert(false, "Not implemented")
 
 func _ready():
-	if $DeckBuilder:
-		deck_builder = $DeckBuilder
-	else:
+	deck_builder = find_child("DeckBuilder")
+	if deck_builder == null:
 		deck_builder = load("res://src/default_deck_builder.tscn").instantiate()
 		
-	if $StartingBoard:
-		starting_board = $StartingBoard
-	else:
-		starting_board = build_board(0)
+	starting_board = find_child("StartingBoard")
+	if starting_board == null:
+		starting_board = build_board(start_depth)
 
 func get_boards():
 	## Return all the boards that are part of this dungeon
