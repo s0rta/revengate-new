@@ -109,9 +109,14 @@ UI:
 
 ## v0.7
 - [ ] water ripples have highlights and edge-of-pool reflections 
+- [ ] Lyon overworld
+- [ ] locked doors
+- [ ] end of game stats
+- [ ] pinch to zoom
 
 Builder:
 - [ ] Allow mixing rooms and mazes in level generation
+- [ ] more than one way up or down on some levels
 
 
 ## v??? – when Godot 4 enables the Android gestures recognition
@@ -122,7 +127,6 @@ Builder:
 ## v1.0
 - [ ] release on F-Droid
 - [ ] saved games
-- [ ] Lyon overworld
 - [ ] A Fight for Fumes campaign
 - [ ] Rhymes with Remorse campaign
 

@@ -23,6 +23,8 @@ const TILE_SIZE = 32
 const CONNECTOR_TERRAINS = ["stairs-down", "stairs-up"]
 # which terrains do we index for later retrieval?
 const INDEXED_TERRAINS = CONNECTOR_TERRAINS
+# plain floor without other features
+const FLOOR_TERRAINS = ["floor"]
 
 signal new_message(message)
 
@@ -680,10 +682,22 @@ func get_connectors():
 		coords += get_cells_by_terrain(terrain)
 	return coords
 
+func get_connector_terrains():
+	## Return a list of all connector terrains on this board, duplicates included.
+	var terrains = []
+	for terrain in CONNECTOR_TERRAINS:
+		for i in len(_cells_by_terrain.get(terrain, [])):
+			terrains.append(terrain)
+	return terrains
+
 func is_connector(coord:Vector2i):
 	## Return whether `coord` is a tile that can connect to a different board.
 	var terrain = get_cell_terrain(coord)
 	return CONNECTOR_TERRAINS.has(terrain) 
+
+func is_floor(coord:Vector2i):
+	## Return whether a cell is a plain floor tile (no stairs or doors or anything fancy).
+	return get_cell_terrain(coord) in FLOOR_TERRAINS
 
 func is_walkable(coord:Vector2i):
 	## Return whether a cell is walkable for normal actors

@@ -42,16 +42,36 @@ func go_deeper():
 	## Go further into the dungeon vertically
 	var old_board = $Dungeon.get_board()
 	var stairs = old_board.get_cells_by_terrain("stairs-down")
-	assert(len(stairs) == 1, "Multi-stairs and dead ends are not supported yet.")
-	var coord = stairs[0]
+	if stairs.is_empty():
+		print("No stairs to go down!")
+	elif len(stairs) > 1:
+		_show_exit_selector(old_board, stairs)
+	else:
+		follow_connector_at(old_board, stairs[0])
+
+func go_higher():
+	## Go closer to the entrance, vertically
+	var old_board = $Dungeon.get_board()
+	var stairs = old_board.get_cells_by_terrain("stairs-up")
+	if stairs.is_empty():
+		print("No stairs to go up!")
+	elif len(stairs) > 1:
+		_show_exit_selector(old_board, stairs)
+	else:
+		follow_connector_at(old_board, stairs[0])
+
+func follow_connector_at(old_board:RevBoard, coord):
 	var new_board = null
 	var conn = old_board.get_connection(coord)
 	if conn:
 		new_board = conn.far_board
 	else:
+		# FIXME: the dungeon should do most of that
 		new_board = $Dungeon.build_board(old_board.depth + 1)
 		# connect the stairs together
-		var far = new_board.get_cell_by_terrain("stairs-up")
+		var near_terrain = old_board.get_cell_terrain(coord)
+		var far_terrain = $Dungeon.opposite_connector(near_terrain)
+		var far = new_board.get_cell_by_terrain(far_terrain)
 		# TODO: add_connection() should return the new record
 		old_board.add_connection(coord, new_board, far)		
 		conn = old_board.get_connection(coord)
@@ -59,12 +79,21 @@ func go_deeper():
 	old_board.set_active(false)
 	new_board.set_active(true)
 
-func go_higher():
-	## Go closer to the entrance, vertically
-	var old_board = $Dungeon.get_board()
-	var stairs = old_board.get_cells_by_terrain("stairs-up")
-	assert(len(stairs) == 1, "Multi-stairs and dead ends are not supported yet.")
-	var conn = old_board.get_connection(stairs[0])
-	if conn:
-		old_board.set_active(false)
-		conn.far_board.set_active(true)
+func _show_exit_selector(old_board, coords):
+	var vbox = %ExitSelector/VBox 
+	for child in vbox.get_children():
+		child.hide()
+		child.queue_free()
+	for coord in coords:
+		var btn = Button.new()
+		btn.text = "Stairs at %s" % RevBoard.coord_str(coord)
+		vbox.add_child(btn)
+
+		btn.pressed.connect(%ExitSelector.hide)
+		var switcher = follow_connector_at.bind(old_board, coord)
+		btn.pressed.connect(switcher)
+	%ExitSelector.show()
+
+func _on_exit_selector_gui_input(event):
+	if event is InputEventMouseButton:
+		%ExitSelector.hide()

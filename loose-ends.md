@@ -6,6 +6,8 @@ This is a list of loose ends, code optimization, and small tasks for the Godot i
 ## Developer Efficiency
 - [ ] function to dump detailed status of all the actors on a board
 - [ ] factor out the common boiler plate from cheats and gesture `start_` methods
+- [ ] panku console for interactive REPL
+- [ ] gdunit4 for unit tests
 
 ## Combat
 - [ ] over healing should slowly revert back to normal max health

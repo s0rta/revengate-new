@@ -22,8 +22,22 @@ const DEF_SIZE = Vector2i(24, 16)
 const FIRST_MAZE = 6
 const ALL_MAZES = 13
 
+# more than one set of stairs going up or down
+const EXTRA_UP_PROB = 0.3
+const EXTRA_DOWN_PROB = 0.3
+
 var deck_builder: DeckBuilder
 var starting_board: RevBoard
+
+static func opposite_connector(terrain):
+	## Return the terrain that should be on the far side of a connector
+	assert(terrain in RevBoard.CONNECTOR_TERRAINS)
+	if terrain == "stairs-up":
+		return "stairs-down"
+	elif terrain == "stairs-down":
+		return "stairs-up"
+	else:
+		assert(false, "Not implemented")
 
 func _ready():
 	if $DeckBuilder:
@@ -47,7 +61,7 @@ func get_board():
 			return board
 	return null
 
-func build_board(depth, size:Vector2i=DEF_SIZE):
+func build_board(depth, size:Vector2i=DEF_SIZE, stairs=null):
 	## Make a new board with fresh terrain, monsters, and items.
 	# FIXME: set the board turn
 	
@@ -58,18 +72,20 @@ func build_board(depth, size:Vector2i=DEF_SIZE):
 	new_board.clear()	
 	
 	var builder = BoardBuilder.new(new_board, Rect2i(Vector2i.ZERO, size))
+	var outer_rect = Rect2i(Vector2i.ZERO, size)
 	
 	if _lvl_is_maze(depth):
 		# TODO: put most of this in the builder
-		var outer_rect = Rect2i(builder.rect.position, builder.rect.size+3*Vector2i.ONE)
-		var inner_rect = Rect2i(outer_rect.position+Vector2i.ONE, outer_rect.size-Vector2i.ONE)
 		builder.paint_rect(outer_rect, "wall")
+		var inner_rect = Rect2i(outer_rect.position+Vector2i.ONE, outer_rect.size-Vector2i.ONE)
 		var biases = _maze_biases(depth)
-		var mazer = Mazes.GrowingTree.new(builder, biases, inner_rect, false)
-		mazer.fill()
-		builder.add_stairs()
+		builder.gen_maze(inner_rect, biases)
 	else:
-		builder.gen_level()
+		builder.paint_rect(outer_rect, "rock")
+		builder.gen_rooms(randi_range(3, 6))
+	if stairs == null:
+		stairs = _stair_for_level(depth)
+	builder.add_stairs(stairs)
 	
 	populate_board(builder, depth)
 	return new_board
@@ -88,6 +104,15 @@ func _maze_biases(depth:int):
 	var diff_steps = (clamp(depth, easy_depth, hard_depth) - easy_depth)
 	var reconnect = diff_steps * diff_slope + easy_reconnect
 	return {"twistiness": 0.3, "branching": 0.3, "reconnect": reconnect}
+
+func _stair_for_level(depth:int):
+	## Return an array of stairs tiles that should be places on a new level.
+	var stairs = ["stairs-up", "stairs-down"]
+	if Rand.rstest(EXTRA_UP_PROB):
+		stairs.append("stairs-up")
+	if Rand.rstest(EXTRA_DOWN_PROB):
+		stairs.append("stairs-down")
+	return stairs
 
 func populate_board(builder, depth):
 	var index = builder.board.make_index()
@@ -128,7 +153,9 @@ func _place_card(card, builder, index=null):
 
 func regen(board:RevBoard):
 	## Replace board with a freshly generater one
-	var new_board = build_board(board.depth)
+	var stairs = board.get_connector_terrains()
+	var size = board.get_used_rect().size
+	var new_board = build_board(board.depth, size, stairs)
 	
 	for terrain in RevBoard.CONNECTOR_TERRAINS:
 		var old_coords = board.get_cells_by_terrain(terrain)

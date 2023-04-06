@@ -74,8 +74,29 @@ func paint_rect(rect, terrain_name):
 			cells.append(rect.position + V.i(i, j))
 	paint_cells(cells, terrain_name)
 	
+func random_floor_cell():
+	var coord = null
+	if has_rooms():
+		coord = Rand.pos_in_rect(Rand.choice(rooms))
+	else:
+		coord = Rand.pos_in_rect(rect)
+	if board.is_walkable(coord):
+		return coord
+	else:
+		var spiral = board.spiral(coord,  null, true, true, rect)
+		for attempt in spiral:
+			if board.is_floor(attempt):
+				return attempt
+	return null
+	
 func gen_level(nb_rooms=4):
+	## Generate a default underground level
 	paint_rect(rect, "rock")
+	gen_rooms(nb_rooms)
+	add_stairs()
+
+func gen_rooms(nb_rooms:int):
+	## Generate `nb_rooms` non-overlapping rooms and connect them with corridors
 	var partitions = [rect]
 	var nb_iter = 0
 	var areas = null
@@ -105,15 +126,24 @@ func gen_level(nb_rooms=4):
 		add_room(Rand.sub_rect(rect, MIN_ROOM_SIDE))
 	for i in rooms.size()-1:
 		connect_rooms(rooms[i], rooms[i+1])
-	add_stairs()	
+
+func gen_maze(rect_, biases=null):
+	## Fill rect with a maze.
+	var mazer = Mazes.GrowingTree.new(self, biases, rect_, false)
+	mazer.fill()
 	
-func add_stairs():
+func add_stairs(stairs=["stairs-up", "stairs-down"]):
 	## place stairs as far appart as possible
-	# TODO: stairs should always be in a room
-	# TODO: support other configurations, like (up, up, down)
+	# TODO: stairs should always be in a room when we have rooms
+	
+	# the first two that we receice are as far as possible from one another
 	var poles = find_poles()
-	paint_cells([poles[0]], "stairs-up")
-	paint_cells([poles[1]], "stairs-down")
+	paint_cells([poles[0]], stairs.pop_front())
+	if not stairs.is_empty():
+		paint_cells([poles[1]], stairs.pop_front())
+	while not stairs.is_empty():
+		var coord = random_floor_cell()
+		paint_cells([coord], stairs.pop_back())
 
 func find_poles():
 	## Return an array with the two coordinates that are the furthest apart 
