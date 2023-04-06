@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://v8da3elp8mal"]
+[gd_resource type="ShaderMaterial" load_steps=8 format=3 uid="uid://v8da3elp8mal"]
 
 [ext_resource type="Shader" path="res://src/ui/water.gdshader" id="1_r38oh"]
 [ext_resource type="Texture2D" uid="uid://c5cf0e3o31hjk" path="res://assets/sample-floor.png" id="2_f3rsh"]
@@ -12,7 +12,24 @@ fractal_weighted_strength = 0.7
 seamless = true
 noise = SubResource("FastNoiseLite_f7y2p")
 
+[sub_resource type="Gradient" id="Gradient_iwg4o"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.775281, 0.986014)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_k4tut"]
+frequency = 0.032
+fractal_type = 2
+fractal_octaves = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bbmo6"]
+width = 2048
+height = 2048
+bump_strength = 29.2
+color_ramp = SubResource("Gradient_iwg4o")
+noise = SubResource("FastNoiseLite_k4tut")
+
 [resource]
 shader = ExtResource("1_r38oh")
 shader_parameter/noise = SubResource("NoiseTexture2D_a7nx6")
+shader_parameter/wave1 = SubResource("NoiseTexture2D_bbmo6")
 shader_parameter/submerged_floor = ExtResource("2_f3rsh")
