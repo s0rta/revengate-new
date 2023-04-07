@@ -160,3 +160,90 @@ Baw collapsed on the ground after passing the door. The penumbra gave just enoug
 It all came back slowly after that: she was here for documents and she liked spying. She started walking as silently as she could down the hallway. She also started recall the plans of the Church compound that she had studied before her mission. The plans had shown a wall around the perimeter of the compound. Baw had never seen the wall, but she could picture it in her mind: old and tall, aged enough to feature plenty of gaps between the stones. 
 
 Baw would climb that wall on her way out.
+
+
+# Hiding in the Shadows
+
+"I want someone behind that bush and two persons in that shed over there." The officer was giving orders while pointing with his saber. The mirror polish of the blade was scattering the orange rays of the setting sun around him.
+
+"Where should we put the lanterns, captain?" One of the half dozen soldiers around the officer asked.
+
+"For the fourth time, Ferland, we are here to catch grave robbers. Do you really think they will show up if we announce that we are here?" the captain replied without turning towards Ferland.
+
+"But it's the new moon tonight, captain. We won't be able to see a damn."
+
+"Ferland," the officer replied after a long pause, "don't you think that it would be perfect if darkness prevented the trespassers from seeing us? You can light all the lanterns you want after we have them in cuffs. I certainly would not want you to trip and injure one of your sensitive toes on the way out." The officer turned to face Ferland while the other soldiers chuckled.
+
+Captain Filo was also annoyed by this assignment, but he knew better than to let it show. There was simply no pattern to the grave robbing that had started a few months prior. There were a few graves of rich people that got dug open, but they dug mostly poor people out. If they were after jewels, their strategy was flawed. Some body parts were sometimes missing, but then again, there was no pattern. They seemed to come any day of the month, but they also seemed to prefer dark and cloudy nights. This was the only fact that gave the captain some confidence that they would see some action tonight rather than being posted here every night for the next three weeks.
+
+"That will be all, soldiers. Go get a warm meal and come back in small groups to take your positions before 21-o'clock. If anyone comes back drunk I will have them whipped. Dismissed!"
+
+***
+
+Crouched in a corner of the tool shed, Ferland was jittery. In retrospect, downing half of that second pot of coffee had been a bad idea, but after the captain's speech, he had no intention of falling asleep on duty. His bladder seemed to agree with the assessment.
+
+"I need to take a leak, " he told Alice who was sitting on a crate at the opposite corner. Alice quietly nodded. Ferland hated how she could remain perfectly calm and fully alert all at the same time.
+
+Ferland struggled to exit the shed quietly. There were various landscaping implement hanging from all the walls and his long rapier was threatening to knock them down whenever he moved. The night was as dark as coal,so he didn't have to go far to gain some privacy. It was mostly a matter of feeling around to make sure he would not relieve himself on a tomb. Ferland was not religious nor particularly superstitious, but he had seen his share of comrades expire in combat and that gave him some respect for the dead.
+
+Beyond the cemetery walls, the city was still alive. Carriages were moving about and the laughter of revelers leaving absinthe lounges filled the air. Much closer, crickets and an occasional owl were playing tricks with Ferland's nerves.
+
+He knew he was not alone – there were five other soldiers hidden in nearby bushes – but he also didn't want to let an intruder sneak by while he had his pants down. The smells were off. It smelled mostly of grass and freshly turned dirt, but there was something else, not rotting bodies, which Ferland was familiar with. It was something peculiar, musty, but he could not put his finger on it.
+
+Ferland hurried with his business. The night was till, but shadows were dancing around him. Ferland had never studied optics, but he knew that this was wrong. In his mind, a still light source shining on a still object should be casting still shadows. He listed more carefully, trying to pick the rustle of leaves. Nothing. There was no wind tonight.
+
+He started heading back towards the shed. Then he saw the movement in the corner of his eye, he was sure of it. A shadow as tall as he was had just slid behind a bush. The grave digger was more silent than he expected, but Ferland had spotted him now and he would be the one catching him.
+
+Ferland crouched, lifting the scabbard of his rapier to prevent it from noisily scrape the ground. He peered into the darkness, listening carefully. Right there, behind the bush, was definitely something moving.
+
+Ferland reviewed his options while his heart rate kept increasing. He could call for reinforcement and corner the intruders, he could face them sword drawn and a ask for surrender, but since the intruder was most certainly alone, Ferland could also jump over the bush and tackle him into submission. Ferland knew how to wrestle guys much bigger than himself and he felt good about this plan. The blood rushing in his veins was making a deafening thumping in his ears. He had to move soon.
+
+Ferland sprinted towards the bush and leapt with arms extended ready to grab onto a torso or a leg. He landed face first with a thud.
+
+Ferland rolled over and quickly reassess the situation. He had obviously revealed his position now and he had to react fact. He scanned his surroundings but nothing seemed to make sense.
+
+The dark figure was still there, standing slightly taller than the bush. Had he dodged? Ferland sprang to his feet and drew his rapier.
+
+"Don't move!" He called.
+
+Everything was still except Ferland's sword point which was oscillating a lot more than he liked. Then the figure started heading closer.
+
+"Don't move!" He called again. "I'm not alone here. You are surrounded."
+
+The dark shape kept drawing closer. Ferland spurt into a warning strike, aiming for the left shoulder. He missed.
+
+Or did he? His blade was extended right through the shader where a shoulder should have been, but he had felt to resistance at all on the way in. He pushed back two steps. He squinted trying to make sense of it all. The dark shape kept advancing. Ferland jumped forward aiming for the abdomen. 
+
+He felt no resistance as his blade went through. Whatever it was, the dark shape was not solid. The shape touched Ferland's extended right knee.
+
+"Putain!" he let out as he fell to the ground. The touch had felt like a cold bayonette penetrating his flesh and could no longer flex his knee.
+
+He rolled away as best as he could. The sound of racing footsteps were drawing closer. Ferland moved his blade facing their general direction.
+
+Captain Filo appeared saber in hand. "Fall back you dim!" he called while switching to the en-garde stance. Ferland kept rolling until he was four steps behind the captain.
+
+He could see the captain slashing with a steady cadence. The saber was passing right through the dark shape with every strike. Convulsions were moving through the shape when the blade swept. The captain kept pushing his way forward. Two soldiers with lanterns in hand join the scene.
+
+In the dim light of the lanterns, all doubt escaped Ferland's mind. "Bordel..." muttered the man to his left. Several steps away, the captain was slashing at a transparent mass just slightly darker than the surrounding night. The dark mass was clearly retreating now. 
+
+"There are ghosts here, captain" Ferland called out when Captain Filo started heading back towards them.
+
+"Of course there are ghosts here", the captain sneered with exasperation. "That's why we build those places, to the ghosts stay in rather than wandering the streets."
+
+"I thought..." Ferland trailed.
+
+"You thought what?" The captain asked. "You thought that you knew better that to follow orders? You were assigned a weapon for this mission, a saber just like this one and I was there when you picked it up from the armory. Did you think of getting a few Francs by pawning it?"
+
+"No, no captain, " Ferland stammered. "I thought that since I have a lot more training with the rapier I would be better armed with a familiar blade. I was not expecting... those." He gestured in the direction where the captain had been a moment earlier.
+
+All the soldiers were now assembled, most of them carrying a kerosene lantern. "Anyone else had some great idea to make the night more interesting?" the captain asked them.
+
+"I also came with my rapier, captain," Alice replied sheepishly, "for the same reasons."
+
+"Help this man to his feet," Captain Filo snapped, "then out of my sight! All of you! We won't catch anyone tonight with all this racket."
+
+They left in silence, slowly letting the night envelope Captain Filo.
+
+"There is a lounge three blocks from here, Ferland," the man who was helping him walk said after a while. "You look like you could use a date with a magical lady dressed in green."
+
+"No, thank you," replied Ferland after carefully considering the offer. "Maybe tomorrow, but I've had enough surreal for today."
