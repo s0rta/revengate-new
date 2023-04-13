@@ -371,6 +371,7 @@ visible = false
 script = ExtResource("14_ulj2m")
 
 [node name="DeckBuilder" parent="." instance=ExtResource("30_c7r3i")]
+unique_name_in_owner = true
 
 [node name="CommandPack" type="Node" parent="."]
 unique_name_in_owner = true

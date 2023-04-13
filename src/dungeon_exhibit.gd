@@ -67,17 +67,19 @@ func follow_connector_at(old_board:RevBoard, coord):
 		new_board = conn.far_board
 	else:
 		# FIXME: the dungeon should do most of that
-		new_board = $Dungeon.build_board(old_board.depth + 1)
-		# connect the stairs together
 		var near_terrain = old_board.get_cell_terrain(coord)
+		var new_loc = old_board.get_cell_rec_val(coord, "conn_target", "world_loc")
+		new_board = $Dungeon.build_board(old_board.depth + 1, new_loc, $Dungeon.DEF_SIZE, old_board.world_loc)
+		# connect the stairs together
 		var far_terrain = $Dungeon.opposite_connector(near_terrain)
 		var far = new_board.get_cell_by_terrain(far_terrain)
-		# TODO: add_connection() should return the new record
-		old_board.add_connection(coord, new_board, far)		
-		conn = old_board.get_connection(coord)
+		conn = old_board.add_connection(coord, new_board, far)
+		old_board.clear_cell_rec(coord, "conn_target")
 		
 	old_board.set_active(false)
 	new_board.set_active(true)
+	print("New board is active, depth: %s, loc: %s" % [new_board.depth, RevBoard.world_loc_str(new_board.world_loc)])
+	print("   neighbors are: %s" % [new_board.get_neighbors_str()])
 
 func _show_exit_selector(old_board, coords):
 	var vbox = %ExitSelector/VBox 

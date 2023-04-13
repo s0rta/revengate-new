@@ -143,6 +143,26 @@ texture_region_size = Vector2i(32, 32)
 0:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:3/0/physics_layer_0/angular_velocity = 0.0
 0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+2:1/0 = 0
+2:1/0/terrain_set = 0
+2:1/0/terrain = 6
+2:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:1/0/physics_layer_0/angular_velocity = 0.0
+3:1/0 = 0
+3:1/0/terrain_set = 0
+3:1/0/terrain = 6
+3:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:1/0/physics_layer_0/angular_velocity = 0.0
+4:1/0 = 0
+4:1/0/terrain_set = 0
+4:1/0/terrain = 6
+4:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+4:1/0/physics_layer_0/angular_velocity = 0.0
+5:1/0 = 0
+5:1/0/terrain_set = 0
+5:1/0/terrain = 6
+5:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+5:1/0/physics_layer_0/angular_velocity = 0.0
 
 [sub_resource type="TileSet" id="1"]
 tile_size = Vector2i(32, 32)
@@ -160,6 +180,8 @@ terrain_set_0/terrain_4/name = "stairs-down"
 terrain_set_0/terrain_4/color = Color(0.329412, 0.462745, 0.623529, 1)
 terrain_set_0/terrain_5/name = "water"
 terrain_set_0/terrain_5/color = Color(0.027451, 0.027451, 0.85098, 1)
+terrain_set_0/terrain_6/name = "gateway"
+terrain_set_0/terrain_6/color = Color(0.584314, 0.396078, 0.192157, 1)
 sources/0 = SubResource("TileSetAtlasSource_x5cyv")
 
 [node name="Board" type="TileMap"]
