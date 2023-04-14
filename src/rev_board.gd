@@ -837,6 +837,10 @@ static func dist(from, to):
 	## Return the distance between two tiles in number of moves.
 	## Obstacles are not taken into account, use path() for that.
 	## This is also known at the Chebyshev distance.
+	if from is Actor or from is Item:
+		from = from.get_cell_coord()
+	if to is Actor or to is Item:
+		to = to.get_cell_coord()
 	return max(abs(from.x - to.x), abs(from.y - to.y))
 
 static func man_dist(from, to):
