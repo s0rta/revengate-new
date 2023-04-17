@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-## Defend your personal space if your are with actors who look like your and make 
-## your feel territorial
+## Defend your personal space if your are near actors who look like you and 
+## thereby make your feel territorial
 class_name TribalTerritorial extends Strategy
 
 const INFLUENCE_RADIUS = 5

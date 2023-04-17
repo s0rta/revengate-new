@@ -22,11 +22,11 @@ func _unhandled_input(event):
 	if Input.is_action_just_pressed("up"):
 		go_higher()
 	elif Input.is_action_just_pressed("down"):
-		go_deeper()
+		go_lower()
 	elif Input.is_action_just_pressed("right"):
-		print("Right")
+		go_deeper()
 	elif Input.is_action_just_pressed("left"):
-		print("Left")
+		go_shallower()
 	elif Input.is_action_just_pressed("refresh"):
 		refresh()
 	$/root.set_input_as_handled()
@@ -38,43 +38,93 @@ func refresh():
 	else:
 		print("No active board to refresh.")
 
-func go_deeper():
-	## Go further into the dungeon vertically
-	var old_board = $Dungeon.get_board()
-	var stairs = old_board.get_cells_by_terrain("stairs-down")
-	if stairs.is_empty():
-		print("No stairs to go down!")
-	elif len(stairs) > 1:
-		_show_exit_selector(old_board, stairs)
+func _progress_on_depth(depth_pred):
+	## Pick an exit that match `depth_pred`
+	## Return if at least one exit could be found
+	var old_board = $Dungeon.get_board() as RevBoard
+	var coords = []
+	for coord in old_board.get_connectors():
+		var depth = old_board.get_cell_rec_val(coord, "conn_target", "depth")
+		if depth == null:
+			depth = old_board.get_connection(coord).far_board.depth
+		if depth_pred.call(depth):
+			coords.append(coord)
+	if coords.is_empty():
+		return false
 	else:
-		follow_connector_at(old_board, stairs[0])
+		if len(coords) > 1:
+			_show_exit_selector(old_board, coords)
+		else:
+			follow_connector_at(old_board, coords[0])
+	return true
+
+func _progress_on_loc(loc_pred):
+	## Pick an exit that match `loc_pred`
+	## Return if at least one exit could be found
+	var old_board = $Dungeon.get_board() as RevBoard
+	var coords = []
+	for coord in old_board.get_connectors():
+		var loc = old_board.get_cell_rec_val(coord, "conn_target", "world_loc")
+		if loc == null:
+			loc = old_board.get_connection(coord).far_board.world_loc
+		if loc_pred.call(loc):
+			coords.append(coord)
+	if coords.is_empty():
+		return false
+	else:
+		if len(coords) > 1:
+			_show_exit_selector(old_board, coords)
+		else:
+			follow_connector_at(old_board, coords[0])
+	return true
+	
+func go_deeper():
+	## Go further into the dungeon topologically
+	var old_board = $Dungeon.get_board() as RevBoard
+	var deeper = func(depth):
+		return depth > old_board.depth
+	if not _progress_on_depth(deeper):
+		print("No exits to go deeper!")
+
+func go_shallower():
+	## Go back towards the entrance of the dungeon 
+	var old_board = $Dungeon.get_board() as RevBoard
+	var shallower = func(depth):
+		return depth < old_board.depth
+	if not _progress_on_depth(shallower):
+		print("No exits to go back towards the entrance of the dungeon!")
 
 func go_higher():
-	## Go closer to the entrance, vertically
-	var old_board = $Dungeon.get_board()
-	var stairs = old_board.get_cells_by_terrain("stairs-up")
-	if stairs.is_empty():
-		print("No stairs to go up!")
-	elif len(stairs) > 1:
-		_show_exit_selector(old_board, stairs)
-	else:
-		follow_connector_at(old_board, stairs[0])
+	## Go closer to the surface
+	var old_board = $Dungeon.get_board() as RevBoard
+	var higher = func(loc):
+		return loc.z > old_board.world_loc.z
+	if not _progress_on_loc(higher):
+		print("No exits to go back towards the surface!")
+
+func go_lower():
+	## Go away from the surface
+	var old_board = $Dungeon.get_board() as RevBoard
+	var lower = func(loc):
+		return loc.z < old_board.world_loc.z
+	if not _progress_on_loc(lower):
+		print("No exits to go lower!")
 
 func follow_connector_at(old_board:RevBoard, coord):
-	var new_board = null
+	var new_board:RevBoard
 	var conn = old_board.get_connection(coord)
 	if conn:
 		new_board = conn.far_board
 	else:
 		# FIXME: the dungeon should do most of that
 		var near_terrain = old_board.get_cell_terrain(coord)
-		var new_loc = old_board.get_cell_rec_val(coord, "conn_target", "world_loc")
-		new_board = $Dungeon.build_board(old_board.depth + 1, new_loc, $Dungeon.DEF_SIZE, old_board.world_loc)
+		var conn_rec = old_board.get_cell_rec(coord, "conn_target")
+		var new_loc = conn_rec.world_loc
+		new_board = $Dungeon.build_board(conn_rec.depth, new_loc, $Dungeon.DEF_SIZE, old_board.world_loc)
+		
 		# connect the stairs together
-		var far_terrain = $Dungeon.opposite_connector(near_terrain)
-		var far = new_board.get_cell_by_terrain(far_terrain)
-		conn = old_board.add_connection(coord, new_board, far)
-		old_board.clear_cell_rec(coord, "conn_target")
+		var far_coord = new_board.get_connector_for_loc(old_board.world_loc)
+		conn = old_board.add_connection(coord, new_board, far_coord)
 		
 	old_board.set_active(false)
 	new_board.set_active(true)

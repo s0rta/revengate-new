@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=31 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -19,7 +19,6 @@
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
 [ext_resource type="Script" path="res://src/victory_probe.gd" id="14_ulj2m"]
-[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="14_w2q2k"]
 [ext_resource type="PackedScene" uid="uid://cgdqkl167nhyj" path="res://src/ui/actor_details_screen.tscn" id="14_yna85"]
 [ext_resource type="PackedScene" uid="uid://c53orli8sl3yx" path="res://src/items/corpse.tscn" id="16_vn1es"]
 [ext_resource type="PackedScene" uid="uid://cl6ylq5q74oxy" path="res://src/ui/messages_pane.tscn" id="17_n3emp"]
@@ -98,24 +97,15 @@ position = Vector2(208, 272)
 
 [node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("12_53g87")]
 position = Vector2(688, 208)
-char = "@"
-caption = "Michel Boilou"
-color = Color(0.160784, 0.701961, 0.54902, 1)
-conversation_file = "res://src/story/intro.dialogue"
-conversation_sect = "meet_michel"
-health = 90
-strength = 70
-agility = 65
-
-[node name="SelfDefense" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel"]
-script = ExtResource("14_w2q2k")
-priority = 0.9
 
 [node name="PotionOfRegen" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel" instance=ExtResource("12_c1kwk")]
 visible = false
 
 [node name="PotionOfRegen2" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel" instance=ExtResource("12_c1kwk")]
 visible = false
+char = "⚒"
+caption = ""
+consumable = false
 
 [node name="PotionOfRegen3" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel" instance=ExtResource("12_c1kwk")]
 visible = false
@@ -134,9 +124,6 @@ position = Vector2(464, 272)
 [node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]
 anchor_mode = 0
 position_smoothing_enabled = true
-
-[node name="BoardArea@GestureSurveyor@Viewport@Board@Michel@PotionOfRegen" parent="." instance=ExtResource("12_c1kwk")]
-visible = false
 
 [node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]
 

@@ -114,10 +114,17 @@ UI:
 - [ ] end of game stats
 - [ ] pinch to zoom
 
+Combat:
+- [x] TribalTerritorial strategy
+- [ ] Quest NPC has self defence
+
 Builder:
 - [ ] Allow mixing rooms and mazes in level generation
 - [ ] more than one way up or down on some levels
 
+## v0.8
+Combat:
+- [ ] TribalTerritorial uses perception rather than dist()
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]

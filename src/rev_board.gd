@@ -706,11 +706,12 @@ func add_connection(near_coord, far_board, far_coord):
 	## Connections has a near (self) and a far side (far_board). This method makes the
 	## connection bi-directional.
 	## Return the near-side of the connection
-	# TODO: connect the path, not the board, since that will serialize better
+	# TODO: connect the resource path, not the board, since that will serialize better
 	var near_conn = {"far_board": far_board, "far_coord": far_coord}
 	set_cell_rec(near_coord, "connection", near_conn)
 	far_board.set_cell_rec(far_coord, "connection", {"far_board": self, "far_coord": near_coord})
 	clear_cell_rec(near_coord, "conn_target")
+	far_board.clear_cell_rec(far_coord, "conn_target")
 	return near_conn
 
 func get_connection(coord:Vector2i):
@@ -723,6 +724,17 @@ func get_connectors():
 	for terrain in CONNECTOR_TERRAINS:
 		coords += get_cells_by_terrain(terrain)
 	return coords
+	
+func get_connector_for_loc(world_loc:Vector3i):
+	## Return the coord of the connector that leads to `world_loc` 
+	## or null if no such connector exists.
+	for coord in get_connectors():
+		var loc = get_cell_rec_val(coord, "conn_target", "world_loc")
+		if loc == null:
+			loc = get_cell_rec_val(coord, "connection", "far_board").world_loc
+		if loc == world_loc:
+			return coord
+	return null
 
 func get_connector_terrains():
 	## Return a list of all connector terrains on this board, duplicates included.

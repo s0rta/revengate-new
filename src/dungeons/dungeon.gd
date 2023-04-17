@@ -20,8 +20,8 @@ class_name Dungeon extends Node
 
 const HIGHER = Vector3i(0, 0, 1)
 const LOWER = Vector3i(0, 0, -1)
-const NORTH = Vector3i(0, 1, 0)
-const SOUTH = Vector3i(0, -1, 0)
+const NORTH = Vector3i(0, -1, 0)
+const SOUTH = Vector3i(0, 1, 0)
 const EAST = Vector3i(1, 0, 0)
 const WEST = Vector3i(-1, 0 ,0)
 
@@ -95,10 +95,8 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=DEF_SIZE, prev_loc=nul
 		builder.gen_rooms(randi_range(3, 6))
 		
 	if neighbors == null:
-		neighbors = _neighbors_for_level(world_loc, prev_loc)
+		neighbors = _neighbors_for_level(depth, world_loc, prev_loc)
 	add_connectors(builder, neighbors)
-
-	
 	populate_board(builder, depth)
 	return new_board
 
@@ -119,15 +117,15 @@ func _maze_biases(depth:int):
 
 func add_connectors(builder, neighbors):
 	## place stairs and other cross-board connectors on a board
-	# TODO: stairs should always be in a room when we have rooms
+	# TODO: if we have rooms, stairs should be in one of them
 
 	# FIXME: if there are stairs, we should put the first two at the poles
 	var board = builder.board as RevBoard
-	for neighbor in neighbors:
-		var terrain = _neighbor_connector_terrain(board.world_loc, neighbor)
+	for rec in neighbors:
+		var terrain = _neighbor_connector_terrain(board.world_loc, rec.world_loc)
 		var coord = builder.random_floor_cell()
 		builder.paint_cells([coord], terrain)
-		board.set_cell_rec(coord, "conn_target", {"world_loc": neighbor})
+		board.set_cell_rec(coord, "conn_target", rec)
 
 func _is_aligned(loc1:Vector3i, loc2:Vector3i):
 	## Return whether world locations `loc1` and `loc2` are the same or 
@@ -154,7 +152,7 @@ func _loc_elev(world_loc):
 	else:
 		return elev_to_dest
 	
-func _neighbors_for_level(world_loc:Vector3i, prev=null):
+func _neighbors_for_level(depth:int, world_loc:Vector3i, prev=null):
 	## Return an array of world locations a new level should be connect to
 	
 	var elev = _loc_elev(world_loc)
@@ -165,22 +163,26 @@ func _neighbors_for_level(world_loc:Vector3i, prev=null):
 		if world_loc.z < 0:
 			locs.append(world_loc + HIGHER)
 	if elev == tunneling_elevation:
-		print("we are low enough!")
-		if world_loc.x != dest_world_loc.x:
-			locs.append(sign(dest_world_loc.x - world_loc.x) * SOUTH)
-		elif world_loc.y != dest_world_loc.y:
-			locs.append(sign(dest_world_loc.y - world_loc.y) * EAST)
+		var dest_delta = dest_world_loc - world_loc
+		var side_steps = []
+		if dest_delta.x:
+			side_steps.append(world_loc + sign(dest_delta.x) * EAST)
+		if dest_delta.y:
+			side_steps.append(world_loc + sign(dest_delta.y) * SOUTH)
+		if not side_steps.is_empty():
+			locs.append(Rand.choice(side_steps))
 	if prev != null and prev not in locs:
 		locs.append(prev)
-	return locs
-
-func _connector_terrains_for_loc(world_loc:Vector3i, prev=null):
-	var neighbors = _neighbors_for_level(world_loc, prev)
-	var connectors = []
-	for loc in neighbors:
-		var terrain = _neighbor_connector_terrain(world_loc, loc)
-		connectors.append(terrain)
-	return connectors
+		
+	var recs = []  # same record we attach to the cell: {"world_loc":..., "depth":...}
+	var far_depth = null
+	for loc in locs:
+		if loc == prev:
+			far_depth = depth - 1
+		else:
+			far_depth = depth + 1
+		recs.append({"world_loc":loc, "depth":far_depth})
+	return recs
 
 func populate_board(builder, depth):
 	var index = builder.board.make_index()
@@ -219,15 +221,28 @@ func _place_card(card, builder, index=null):
 	builder.place(instance, builder.has_rooms(), null, true, null, index)
 	return card.spawn_cost
 
+func _get_conn_target_recs(board:RevBoard):
+	## Return an array of connection targets from a board (actual or implied)
+	var recs = []
+
+	for coord in board.get_connectors():
+		var rec = board.get_cell_rec(coord, "conn_target")
+		if rec != null:
+			recs.append(rec)
+		else:
+			rec = board.get_cell_rec(coord, "connection")
+			recs.append({"world_loc":rec.far_board.world_loc, "depth":rec.far_board.depth})
+	return recs
+
 func regen(board:RevBoard):
 	## Replace board with a freshly generater one
 #	var stairs = board.get_connector_terrains()
 	var size = board.get_used_rect().size
-	var neighbors = board.get_neighbors()
+	var neighbors = _get_conn_target_recs(board)
 	var new_board = build_board(board.depth, board.world_loc, size, null, neighbors)
 
+	# Move connections from the old board to the new one
 	var far_loc_to_coord = {}
-
 	for coord in new_board.get_connectors():
 		var far_loc = new_board.get_cell_rec_val(coord, "conn_target", "world_loc")
 		far_loc_to_coord[far_loc] = coord
@@ -244,6 +259,5 @@ func regen(board:RevBoard):
 			
 	new_board.set_active(true)
 	board.set_active(false)
-	# FIXME: connect the neighbour boards to the new one
 	board.queue_free()
 	
