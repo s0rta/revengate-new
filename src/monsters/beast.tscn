@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="3_0u52l"]
 
 [node name="Beast" instance=ExtResource("1_qcguu")]
+visible = false
 faction = 2
 
 [node name="Label" parent="." index="0"]

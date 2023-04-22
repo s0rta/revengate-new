@@ -82,11 +82,12 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=DEF_SIZE, prev_loc=nul
 	new_board.clear()	
 	
 	var builder = BoardBuilder.new(new_board, Rect2i(Vector2i.ZERO, size))
+	builder.floor_terrain = "floor-rough"
 	var outer_rect = Rect2i(Vector2i.ZERO, size)
 	
 	if _lvl_is_maze(depth):
 		# TODO: put most of this in the builder
-		builder.paint_rect(outer_rect, "wall")
+		builder.paint_rect(outer_rect, builder.wall_terrain)
 		var inner_rect = Rect2i(outer_rect.position+Vector2i.ONE, outer_rect.size-Vector2i.ONE)
 		var biases = _maze_biases(depth)
 		builder.gen_maze(inner_rect, biases)

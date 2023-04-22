@@ -24,6 +24,8 @@ const MIN_PART_SIZE = MIN_ROOM_SIDE*2 + ROOM_PAD
 
 var board: RevBoard
 var rect: Rect2i
+var floor_terrain = "floor"
+var wall_terrain = "wall-old"
 var terrain_names := {}
 var rooms = []  # array of Rect2i, there may be walls along the perimeter
 
@@ -49,11 +51,10 @@ func has_rooms():
 
 func add_room(rect: Rect2i, walls=true):
 	rooms.append(rect)
-	paint_rect(rect, "floor")
+	paint_rect(rect, floor_terrain)
 	if walls:
-		var wall = terrain_names["wall"]
 		var path = V.rect_perim(rect)	
-		board.set_cells_terrain_path(0, path, wall[0], wall[1])
+		paint_path(path, wall_terrain)
 		
 func paint_cells(cells, terrain_name):
 	if terrain_name in RevBoard.INDEXED_TERRAINS:
@@ -179,7 +180,7 @@ func connect_rooms(room1, room2):
 		for j in range(0, v.y, v_sign.y):
 			cells.append(c1 + V.i(v.x, j))
 	# TODO: replaced walls should become doors
-	paint_path(cells, "floor")
+	paint_path(cells, floor_terrain)
 
 func place(thing, in_room=true, coord=null, free:bool=true, bbox=null, index=null):
 	## Put `thing` on the on a board cell, return where it was placed.

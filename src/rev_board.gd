@@ -24,7 +24,7 @@ const CONNECTOR_TERRAINS = ["stairs-down", "stairs-up", "gateway"]
 # which terrains do we index for later retrieval?
 const INDEXED_TERRAINS = CONNECTOR_TERRAINS
 # plain floor without other features
-const FLOOR_TERRAINS = ["floor"]
+const FLOOR_TERRAINS = ["floor", "floor-rough", "floor-dirt"]
 
 signal new_message(message)
 

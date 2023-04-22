@@ -123,7 +123,7 @@ class RecursiveBacktracker extends MazeBuilder:
 		if seen.get(coord):
 			return
 		
-		builder.paint_cells([coord], "floor")
+		builder.paint_cells([coord], builder.floor_terrain)
 		seen[coord] = true
 		
 		var adjs = adj_supercells(coord)
@@ -132,7 +132,7 @@ class RecursiveBacktracker extends MazeBuilder:
 			if not seen.get(adj):
 				_fill(adj)
 				var joint = (coord + adj) / 2
-				builder.paint_cells([joint], "floor")
+				builder.paint_cells([joint], builder.floor_terrain)
 
 	func fill(coord=null):
 		# start of the algo, init state then start recursing
@@ -244,7 +244,7 @@ class GrowingTree extends MazeBuilder:
 			start = rand_supercell()
 		stack = [start]
 		seen = {start:true}
-		builder.paint_cells([start], "floor")
+		builder.paint_cells([start], builder.floor_terrain)
 
 		var done = false
 		while not done:
@@ -261,7 +261,7 @@ class GrowingTree extends MazeBuilder:
 				stack.append(adj)
 				seen[adj] = true
 				var joint = (grow_point + adj) / 2
-				builder.paint_cells([adj, joint], "floor")
+				builder.paint_cells([adj, joint], builder.floor_terrain)
 								
 	func merge_at(supercell):
 		## Merge two corridors at `supercell` by removing the wall at the far side of the dead-end.
@@ -269,7 +269,7 @@ class GrowingTree extends MazeBuilder:
 			var cell = supercell + dir
 			if builder.board.is_walkable(cell):
 				var joint = supercell - dir
-				builder.paint_cells([joint], "floor")
+				builder.paint_cells([joint], builder.floor_terrain)
 				break
 
 	func is_mergeable(supercell):
