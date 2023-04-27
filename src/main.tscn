@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=32 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
 [ext_resource type="Script" path="res://src/victory_probe.gd" id="14_ulj2m"]
 [ext_resource type="PackedScene" uid="uid://cgdqkl167nhyj" path="res://src/ui/actor_details_screen.tscn" id="14_yna85"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="15_ioj2j"]
 [ext_resource type="PackedScene" uid="uid://c53orli8sl3yx" path="res://src/items/corpse.tscn" id="16_vn1es"]
 [ext_resource type="PackedScene" uid="uid://cl6ylq5q74oxy" path="res://src/ui/messages_pane.tscn" id="17_n3emp"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="17_ou76k"]
@@ -113,6 +114,10 @@ visible = false
 [node name="Saber" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel" instance=ExtResource("38_pnvrw")]
 visible = false
 is_equipped = true
+
+[node name="SelfDefense" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Board/Michel"]
+script = ExtResource("15_ioj2j")
+priority = 0.8
 
 [node name="Hammer" parent="BoardArea/GestureSurveyor/Viewport/Board" instance=ExtResource("35_fqryl")]
 visible = false

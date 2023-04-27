@@ -70,6 +70,13 @@ func get_board():
 			return board
 	return null
 
+func make_builder(board, rect):
+	## Return a new builder configure for the style of the current dungeon.
+	var builder = BoardBuilder.new(board, rect)
+	builder.floor_terrain = "floor-rough"
+	builder.wall_terrain = "wall-old"	
+	return builder
+
 func build_board(depth, world_loc:Vector3i, size:Vector2i=DEF_SIZE, prev_loc=null, neighbors=null):
 	## Make a new board with fresh terrain, monsters, and items.
 	# FIXME: set the board turn
@@ -81,8 +88,7 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=DEF_SIZE, prev_loc=nul
 	add_child(new_board)
 	new_board.clear()	
 	
-	var builder = BoardBuilder.new(new_board, Rect2i(Vector2i.ZERO, size))
-	builder.floor_terrain = "floor-rough"
+	var builder = make_builder(new_board, Rect2i(Vector2i.ZERO, size))
 	var outer_rect = Rect2i(Vector2i.ZERO, size)
 	
 	if _lvl_is_maze(depth):

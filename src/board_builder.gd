@@ -25,7 +25,7 @@ const MIN_PART_SIZE = MIN_ROOM_SIDE*2 + ROOM_PAD
 var board: RevBoard
 var rect: Rect2i
 var floor_terrain = "floor"
-var wall_terrain = "wall-old"
+var wall_terrain = "wall"
 var terrain_names := {}
 var rooms = []  # array of Rect2i, there may be walls along the perimeter
 
