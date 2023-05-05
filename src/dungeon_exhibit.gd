@@ -18,6 +18,18 @@
 ## A standalone scene to see the levels that a dungeon can generate.
 class_name DungeonExhibit extends Node2D
 
+var board: RevBoard  # the active board
+
+func _ready():
+	var dungeon:Dungeon = find_children("", "Dungeon", false, false)[0]
+	board = dungeon.starting_board
+	
+func _switch_board(new_board:RevBoard):
+	## set `new_board` as the active board
+	board.set_active(false)
+	new_board.set_active(true)
+	board = new_board
+
 func _unhandled_input(event):
 	if Input.is_action_just_pressed("up"):
 		go_higher()
@@ -31,17 +43,24 @@ func _unhandled_input(event):
 		refresh()
 	$/root.set_input_as_handled()
 
+func _get_dungeon(board:RevBoard):
+	var parent = board.get_parent()
+	if parent is Dungeon:
+		return parent
+	return null
+
 func refresh():
-	var board = $Dungeon.get_board()
 	if board:
-		$Dungeon.regen(board)
+		var dungeon = _get_dungeon(board)
+		if dungeon:
+			dungeon.regen(board)
 	else:
 		print("No active board to refresh.")
 
 func _progress_on_depth(depth_pred):
 	## Pick an exit that match `depth_pred`
 	## Return if at least one exit could be found
-	var old_board = $Dungeon.get_board() as RevBoard
+	var old_board = board
 	var coords = []
 	for coord in old_board.get_connectors():
 		var depth = old_board.get_cell_rec_val(coord, "conn_target", "depth")
@@ -61,7 +80,7 @@ func _progress_on_depth(depth_pred):
 func _progress_on_loc(loc_pred):
 	## Pick an exit that match `loc_pred`
 	## Return if at least one exit could be found
-	var old_board = $Dungeon.get_board() as RevBoard
+	var old_board = board
 	var coords = []
 	for coord in old_board.get_connectors():
 		var loc = old_board.get_cell_rec_val(coord, "conn_target", "world_loc")
@@ -80,7 +99,7 @@ func _progress_on_loc(loc_pred):
 	
 func go_deeper():
 	## Go further into the dungeon topologically
-	var old_board = $Dungeon.get_board() as RevBoard
+	var old_board = board
 	var deeper = func(depth):
 		return depth > old_board.depth
 	if not _progress_on_depth(deeper):
@@ -88,7 +107,7 @@ func go_deeper():
 
 func go_shallower():
 	## Go back towards the entrance of the dungeon 
-	var old_board = $Dungeon.get_board() as RevBoard
+	var old_board = board
 	var shallower = func(depth):
 		return depth < old_board.depth
 	if not _progress_on_depth(shallower):
@@ -96,7 +115,7 @@ func go_shallower():
 
 func go_higher():
 	## Go closer to the surface
-	var old_board = $Dungeon.get_board() as RevBoard
+	var old_board = board
 	var higher = func(loc):
 		return loc.z > old_board.world_loc.z
 	if not _progress_on_loc(higher):
@@ -104,7 +123,7 @@ func go_higher():
 
 func go_lower():
 	## Go away from the surface
-	var old_board = $Dungeon.get_board() as RevBoard
+	var old_board = board
 	var lower = func(loc):
 		return loc.z < old_board.world_loc.z
 	if not _progress_on_loc(lower):
@@ -126,8 +145,7 @@ func follow_connector_at(old_board:RevBoard, coord):
 		var far_coord = new_board.get_connector_for_loc(old_board.world_loc)
 		conn = old_board.add_connection(coord, new_board, far_coord)
 		
-	old_board.set_active(false)
-	new_board.set_active(true)
+	_switch_board(new_board)
 	print("New board is active, depth: %s, loc: %s" % [new_board.depth, RevBoard.world_loc_str(new_board.world_loc)])
 	print("   neighbors are: %s" % [new_board.get_neighbors_str()])
 

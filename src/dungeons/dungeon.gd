@@ -58,6 +58,8 @@ func _ready():
 	starting_board = find_child("StartingBoard")
 	if starting_board == null:
 		starting_board = build_board(start_depth, start_world_loc, DEF_SIZE)
+	else:
+		finalize_static_board(starting_board)
 
 func get_boards():
 	## Return all the boards that are part of this dungeon
@@ -76,6 +78,10 @@ func make_builder(board, rect):
 	builder.floor_terrain = "floor-rough"
 	builder.wall_terrain = "wall-old"	
 	return builder
+
+func finalize_static_board(board:RevBoard):
+	## do a bit of cleanup to make a static board fit in the dungeon
+	assert(false, "must be overridden by sub classes of Dungeon")
 
 func build_board(depth, world_loc:Vector3i, size:Vector2i=DEF_SIZE, prev_loc=null, neighbors=null):
 	## Make a new board with fresh terrain, monsters, and items.

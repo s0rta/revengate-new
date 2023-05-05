@@ -151,3 +151,26 @@ static func split_rect(rect:Rect2i, orientation, pad=0, min_side=1):
 		return null
 	return [Rect2i(rect.position, br1 - rect.position + Vector2i.ONE), 
 			Rect2i(tl2, rect.end - tl2)]  # rect.end is outside the rect!
+
+static func coord_in_region(board:RevBoard, region, valid_pred=null):
+	## Return a random coordinate inside the region.
+	## if a callable is supplied as `valid_pred` the coord will be true for this predicate.
+	## Return null if no coord can be found matching valid_pred.
+	var rect = board.get_used_rect()
+	var region_rect = Geom.region_bounding_rect(rect, region)
+	var coord = pos_in_rect(region_rect)
+	if valid_pred == null and Geom.region_has_coord(rect, region, coord):
+		return coord
+	var is_valid = func (coord):
+		if not Geom.region_has_coord(rect, region, coord):
+			return false
+		elif valid_pred != null:
+			return valid_pred.call(coord)
+		else:
+			return true
+	var spiral = board.spiral(coord, null, false)
+	for c in spiral:
+		if is_valid.call(c):
+			return c
+	return null
+	

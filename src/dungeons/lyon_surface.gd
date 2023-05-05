@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-class_name LyonCity extends Dungeon
+class_name LyonSurface extends Dungeon
 
 func make_builder(board, rect):
 	## Return a new builder configure for the style of the current dungeon.
@@ -23,3 +23,9 @@ func make_builder(board, rect):
 	builder.floor_terrain = "floor"
 	builder.wall_terrain = "wall"	
 	return builder
+
+func finalize_static_board(board:RevBoard):
+	## do a bit of cleanup to make a static board fit in the dungeon
+	board.scan_terrain()
+	# FIXME: add conn_targets
+	board.ddump_connectors()

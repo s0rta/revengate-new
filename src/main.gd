@@ -209,24 +209,21 @@ func _maze_biases(depth:int):
 func test():
 	print("Testing: 1, 2... 1, 2!")
 
-	var board = get_board() as RevBoard
-	var rec = board.get_cell_rec(V.i(0, 0), "test")
-	print("Rec for %s is %s" % [board.coord_str(V.i(0, 0)), rec])
-	board.set_cell_rec(V.i(0, 0), "test", {"a":1, "b":2})
-	rec = board.get_cell_rec(V.i(0, 0), "test")
-	print("Rec for %s is %s" % [board.coord_str(V.i(0, 0)), rec])
-	board.set_cell_rec_val(V.i(0, 0), "test", "c", 3)
-	print("Rec.c for %s is %s" % [board.coord_str(V.i(0, 0)), board.get_cell_rec_val(V.i(0, 0), "test", "c")])
-	print("Rec.d for %s is %s" % [board.coord_str(V.i(0, 0)), board.get_cell_rec_val(V.i(0, 0), "test", "d", 42)])
-	rec = board.get_cell_rec(V.i(0, 0), "test")
-	print("Rec for %s is %s" % [board.coord_str(V.i(0, 0)), rec])
-	board.set_cell_rec(V.i(0, 0), "test", {"Kapow!":666})
-	rec = board.get_cell_rec(V.i(0, 0), "test")
-	print("Rec for %s is %s" % [board.coord_str(V.i(0, 0)), rec])
-	board.clear_cell_rec(V.i(0, 0), "test")
-	rec = board.get_cell_rec(V.i(0, 0), "test")
-	print("Rec for %s is %s" % [board.coord_str(V.i(0, 0)), rec])
+	var rect = Rect2i(0, 0, 11, 11)
+	var mat = RevBoard.Matrix.new(rect.size)
+	for i in rect.size.x:
+		for j in rect.size.y:
+			var coord = V.i(i, j)
+			mat.setv(coord, Geom.coord_region(coord, rect))
+	print(mat)
 
-	
+	var board = get_board() as RevBoard
+	mat = RevBoard.Matrix.new(board.get_used_rect().size, " ")
+	for i in 10:
+		var coord = Rand.coord_in_region(board, V.i(0,-1), board.is_walkable)
+		mat.setv(coord, "x")
+	print(mat)
+
 func test2():
 	print("Testing: 2, 1... 2, 1!")
+	

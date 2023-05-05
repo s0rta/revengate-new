@@ -53,7 +53,7 @@ func add_room(rect: Rect2i, walls=true):
 	rooms.append(rect)
 	paint_rect(rect, floor_terrain)
 	if walls:
-		var path = V.rect_perim(rect)	
+		var path = Geom.rect_perim(rect)	
 		paint_path(path, wall_terrain)
 		
 func paint_cells(cells, terrain_name):

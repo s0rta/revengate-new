@@ -545,7 +545,6 @@ class BoardIndex extends RefCounted:
 		for coord in _coord_to_items:
 			print("  items at %s: %s" % [RevBoard.coord_str(coord), _coord_to_items[coord]])
 
-
 static func canvas_to_board(cpos):
 	## Return a coordinate in number of tiles from coord in pixels.
 	return Vector2i(int(cpos.x) / TILE_SIZE,
@@ -1088,4 +1087,18 @@ func _on_actor_died(coord, actor):
 func add_message(actor, message):
 	# TODO check for visibility before propagating up
 	emit_signal("new_message", message)
+
+func ddump_connector(coord:Vector2i):
+	var info = {"near_coord": coord}
+	var conn = get_connection(coord)
+	if conn != null:
+		info.connected = true
+	else:
+		info.connected = false
+		info.target = get_cell_rec(conn, "conn_target")
+	print("Connector at %s: %s" % [coord_str(coord), info])
 	
+func ddump_connectors():
+	for coord in get_connectors():
+		ddump_connector(coord)
+
