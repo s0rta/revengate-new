@@ -155,3 +155,10 @@ He studied to become a Benedict monk, but fell in love with a woman and left the
 He got initiated to the Blue Circle Lodge in Germany. He quickly climbed the ranks, reaching "master" after only eight years. That's when he came back to establish the Franconian chapter of the secret society.
 
 De Lévi aspires to restore magic at the core of human society.  He sees magic as compatible with religion and hopes to see monks reuniting with the ancient art to have a bigger impact on their communities. He also feels like too much credit is given to science and hopes to take away some of the hero glamour from the researchers. At the same time, he feels like magic is too powerful for the masses and he wants to keep it's teaching secret and well controlled.
+
+
+## Inspiration for Future Characters
+* Allan Kardec, 1804–1869, founder of spiritism, lived in Lyon
+* Joseph-Antoine Boullan, 1824–1893, satanist, lived in Lyon
+* Pierre-Eugène Vintras, 1807–1875, satanist, lived in Lyon
+
