@@ -47,3 +47,18 @@ const CORE_STATS := ["agility", "strength"]
 const SKILLS := ["evasion", "innate_attack", "fencing"]
 # TODO: should be a const, but the parser has issue with the `+` expression
 var CHALLENGES := [] + SKILLS
+
+# Increments for world locations
+const LOC_HIGHER = Vector3i(0, 0, 1)
+const LOC_LOWER = Vector3i(0, 0, -1)
+const LOC_NORTH = Vector3i(0, -1, 0)
+const LOC_SOUTH = Vector3i(0, 1, 0)
+const LOC_EAST = Vector3i(1, 0, 0)
+const LOC_WEST = Vector3i(-1, 0 ,0)
+
+# Board Regions
+const REG_CENTER = Vector2i.ZERO
+const REG_NORTH = Vector2i(0, -1)
+const REG_SOUTH = Vector2i(0, 1)
+const REG_EAST = Vector2i(1, 0)
+const REG_WEST = Vector2i(-1, 0)

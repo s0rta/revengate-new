@@ -41,7 +41,7 @@ static func coord_region(coord:Vector2i, rect:Rect2i):
 	var ratio = Vector2(abs(offset)) / Vector2(rect.size - Vector2i.ONE)  # transposed in 0..1
 	if CENTRAL_REGION_MARGIN < ratio.x and ratio.x < 1.0 - CENTRAL_REGION_MARGIN:
 		if 0.3 < ratio.y and ratio.y < 1.0 - CENTRAL_REGION_MARGIN:
-			return Vector2i.ZERO
+			return Consts.REG_CENTER
 	
 	# diag1 is NW-SW, x-y=0, sign test is x-y
 	# diag2 is SW-NE, -x-y=1, sign test is -x-y+1
@@ -50,13 +50,13 @@ static func coord_region(coord:Vector2i, rect:Rect2i):
 	var s1 = sign(ratio.x - ratio.y)
 	var s2 = sign(-ratio.x - ratio.y + 1.0)
 	if s1 >= 0 and s2 >= 0: 
-		return V.i(0, -1)
+		return Consts.REG_NORTH
 	elif s1 <= 0 and s2 <= 0: 
-		return V.i(0, 1)
+		return Consts.REG_SOUTH
 	elif s1 < 0 and s2 > 0:
-		return V.i(-1, 0)
+		return Consts.REG_WEST
 	elif s1 > 0 and s2 < 0:
-		return V.i(1, 0)
+		return Consts.REG_EAST
 	else:
 		assert(false, "failed to find the region for %s" % RevBoard.coord_str(coord))
 
@@ -66,20 +66,20 @@ static func region_has_coord(rect, region, coord):
 	var ratio = Vector2(abs(offset)) / Vector2(rect.size - Vector2i.ONE)  # transposed in 0..1
 	if CENTRAL_REGION_MARGIN < ratio.x and ratio.x < 1.0 - CENTRAL_REGION_MARGIN:
 		if 0.3 < ratio.y and ratio.y < 1.0 - CENTRAL_REGION_MARGIN:
-			return region == Vector2i.ZERO
+			return region == Consts.REG_CENTER
 	# see the comments in coord_region() to know how the signs work
 	var s1 = sign(ratio.x - ratio.y)
 	var s2 = sign(-ratio.x - ratio.y + 1.0)
 	
-	if region == V.i(0, -1):
+	if region == Consts.REG_NORTH:
 		return s1 >= 0 and s2 >= 0
-	elif region == V.i(0, 1):
+	elif region == Consts.REG_SOUTH:
 		return s1 <= 0 and s2 <= 0
-	elif region == V.i(-1, 0):
+	elif region == Consts.REG_WEST:
 		return s1 < 0 and s2 > 0
-	elif region == V.i(1, 0):
+	elif region == Consts.REG_EAST:
 		return s1 > 0 and s2 < 0
-	elif region == Vector2i.ZERO:
+	elif region == Consts.REG_CENTER:
 		return false
 	else:
 		assert(false, "unknown region %s" % region)
@@ -87,21 +87,21 @@ static func region_has_coord(rect, region, coord):
 static func region_bounding_rect(rect:Rect2i, region:Vector2i):
 	## Return return a rect that fully encloses `region`. This might also include some coordinates
 	## outside of the region since most regions are not rectangular.
-	if region == Vector2i.ZERO:
+	if region == Consts.REG_CENTER:
 		var in_pos = Vector2i((CENTRAL_REGION_MARGIN * rect.size).round())
 		var in_size = Vector2i((1.0 - 2*CENTRAL_REGION_MARGIN) * rect.size)
 		return Rect2i(rect.position + in_pos, in_size)
-	elif region == Vector2i(0, -1):
+	elif region == Consts.REG_NORTH:
 		var in_size = Vector2i(rect.size.x, roundi(CENTRAL_REGION_MARGIN*rect.size.y))
 		return Rect2i(rect.position, in_size)
-	elif region == V.i(0, 1):
+	elif region == Consts.REG_SOUTH:
 		var in_size = Vector2i(rect.size.x, roundi(CENTRAL_REGION_MARGIN*rect.size.y))
 		var in_pos = Vector2i(0, (1.0-CENTRAL_REGION_MARGIN)*rect.size.y)
 		return Rect2i(rect.position + in_pos, in_size)
-	elif region == V.i(-1, 0):
+	elif region == Consts.REG_WEST:
 		var in_size = Vector2i(roundi(CENTRAL_REGION_MARGIN*rect.size.x), rect.size.y)
 		return Rect2i(rect.position, in_size)
-	elif region == V.i(1, 0):
+	elif region == Consts.REG_EAST:
 		var in_size = Vector2i(roundi(CENTRAL_REGION_MARGIN*rect.size.x), rect.size.y)
 		var in_pos = Vector2i((1.0-CENTRAL_REGION_MARGIN)*rect.size.x, 0)
 		return Rect2i(rect.position + in_pos, in_size)

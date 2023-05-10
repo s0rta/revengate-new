@@ -18,13 +18,6 @@
 ## A collection of boards with similar attributes
 class_name Dungeon extends Node
 
-const HIGHER = Vector3i(0, 0, 1)
-const LOWER = Vector3i(0, 0, -1)
-const NORTH = Vector3i(0, -1, 0)
-const SOUTH = Vector3i(0, 1, 0)
-const EAST = Vector3i(1, 0, 0)
-const WEST = Vector3i(-1, 0 ,0)
-
 const DEF_SIZE = Vector2i(24, 16)
 const FIRST_MAZE = 6
 const ALL_MAZES = 13
@@ -172,16 +165,16 @@ func _neighbors_for_level(depth:int, world_loc:Vector3i, prev=null):
 	
 	var locs = []
 	if _is_aligned(world_loc, start_world_loc) or _is_aligned(world_loc, dest_world_loc):
-		locs.append(world_loc + LOWER)
+		locs.append(world_loc + Consts.LOC_LOWER)
 		if world_loc.z < 0:
-			locs.append(world_loc + HIGHER)
+			locs.append(world_loc + Consts.LOC_HIGHER)
 	if elev == tunneling_elevation:
 		var dest_delta = dest_world_loc - world_loc
 		var side_steps = []
 		if dest_delta.x:
-			side_steps.append(world_loc + sign(dest_delta.x) * EAST)
+			side_steps.append(world_loc + sign(dest_delta.x) * Consts.LOC_EAST)
 		if dest_delta.y:
-			side_steps.append(world_loc + sign(dest_delta.y) * SOUTH)
+			side_steps.append(world_loc + sign(dest_delta.y) * Consts.LOC_SOUTH)
 		if not side_steps.is_empty():
 			locs.append(Rand.choice(side_steps))
 	if prev != null and prev not in locs:
