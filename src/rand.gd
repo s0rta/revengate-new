@@ -94,7 +94,7 @@ static func biased_choice(seq:Array, bias, biased_elem=null):
 	var val = randf_range(0, tot)
 	return seq[cum_weights.bsearch(val) - 1]
 	
-static func pos_in_rect(rect:Rect2i):
+static func coord_in_rect(rect:Rect2i):
 	var offset = Vector2i(randi_range(0, rect.size.x-1), 
 						randi_range(0, rect.size.y-1))
 	return rect.position + offset
@@ -158,7 +158,7 @@ static func coord_in_region(board:RevBoard, region, valid_pred=null):
 	## Return null if no coord can be found matching valid_pred.
 	var rect = board.get_used_rect()
 	var region_rect = Geom.region_bounding_rect(rect, region)
-	var coord = pos_in_rect(region_rect)
+	var coord = coord_in_rect(region_rect)
 	if valid_pred == null and Geom.region_has_coord(rect, region, coord):
 		return coord
 	var is_valid = func (coord):

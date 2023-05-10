@@ -78,9 +78,9 @@ func paint_rect(rect, terrain_name):
 func random_floor_cell():
 	var coord = null
 	if has_rooms():
-		coord = Rand.pos_in_rect(Rand.choice(rooms))
+		coord = Rand.coord_in_rect(Rand.choice(rooms))
 	else:
-		coord = Rand.pos_in_rect(rect)
+		coord = Rand.coord_in_rect(rect)
 	if board.is_walkable(coord):
 		return coord
 	else:
@@ -153,7 +153,7 @@ func find_poles():
 	# the second starting at the first pole will find the second one.
 	var start = null
 	if has_rooms():
-		start = Rand.pos_in_rect(Rand.choice(rooms))
+		start = Rand.coord_in_rect(Rand.choice(rooms))
 	var metrics:RevBoard.BoardMetrics = board.dist_metrics(start)
 	metrics = board.dist_metrics(metrics.furthest_coord)
 	return [metrics.start, metrics.furthest_coord]
@@ -192,11 +192,11 @@ func place(thing, in_room=true, coord=null, free:bool=true, bbox=null, index=nul
 	if coord is Vector2i:
 		cell = Vector2i(coord.x, coord.y)
 	elif in_room:
-		cell = Rand.pos_in_rect(Rand.choice(rooms))
+		cell = Rand.coord_in_rect(Rand.choice(rooms))
 	else:
 		if bbox == null:
 			bbox = rect
-		cell = Rand.pos_in_rect(bbox)
+		cell = Rand.coord_in_rect(bbox)
 
 	var available = true
 	if free:
