@@ -586,6 +586,14 @@ func set_active(active:=true):
 func is_active():
 	return visible and is_layer_enabled(0)
 
+func get_dungeon():
+	## Return which dungeon this board is a part of or null if the board is not part of a dungeon.
+	var parent = get_parent()
+	if parent is Dungeon:
+		return parent
+	else:
+		return null
+
 func detect_actors():
 	## Register all actors currently on the board.
 	for actor in get_actors():
@@ -871,7 +879,7 @@ func _init_metric_context(start, dest, free_dest=false, max_dist=null):
 	var bbox:Rect2i = get_used_rect()
 	var index = make_index()
 	if start == null:
-		start = Rand.pos_in_rect(bbox)
+		start = Rand.coord_in_rect(bbox)
 		if not is_walkable(start):
 			start = spiral(start, null, true, true, null, index).next()
 			
@@ -1095,7 +1103,7 @@ func ddump_connector(coord:Vector2i):
 		info.connected = true
 	else:
 		info.connected = false
-		info.target = get_cell_rec(conn, "conn_target")
+		info.target = get_cell_rec(coord, "conn_target")
 	print("Connector at %s: %s" % [coord_str(coord), info])
 	
 func ddump_connectors():

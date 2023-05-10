@@ -21,9 +21,12 @@ class_name DungeonExhibit extends Node2D
 var board: RevBoard  # the active board
 
 func _ready():
-	var dungeon:Dungeon = find_children("", "Dungeon", false, false)[0]
-	board = dungeon.starting_board
-	
+	for dungeon in find_children("", "Dungeon", false, false):
+		if dungeon.starting_board != null:
+			board = dungeon.starting_board
+			break
+	assert(board != null, "Could not find a starting board!")
+
 func _switch_board(new_board:RevBoard):
 	## set `new_board` as the active board
 	board.set_active(false)
@@ -136,10 +139,9 @@ func follow_connector_at(old_board:RevBoard, coord):
 		new_board = conn.far_board
 	else:
 		# FIXME: the dungeon should do most of that
-		var near_terrain = old_board.get_cell_terrain(coord)
-		var conn_rec = old_board.get_cell_rec(coord, "conn_target")
-		var new_loc = conn_rec.world_loc
-		new_board = $Dungeon.build_board(conn_rec.depth, new_loc, $Dungeon.DEF_SIZE, old_board.world_loc)
+		var conn_target = old_board.get_cell_rec(coord, "conn_target")
+		var old_dungeon = old_board.get_dungeon() 
+		new_board = old_dungeon.new_board_for_target(old_board, conn_target)
 		
 		# connect the stairs together
 		var far_coord = new_board.get_connector_for_loc(old_board.world_loc)
@@ -167,3 +169,8 @@ func _show_exit_selector(old_board, coords):
 func _on_exit_selector_gui_input(event):
 	if event is InputEventMouseButton:
 		%ExitSelector.hide()
+		
+func find_dungeon(name):
+	## Return dungeon named `name`
+	return find_child(name, false, false)
+	

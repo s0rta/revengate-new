@@ -49,9 +49,7 @@ func _ready():
 		deck_builder = load("res://src/default_deck_builder.tscn").instantiate()
 		
 	starting_board = find_child("StartingBoard")
-	if starting_board == null:
-		starting_board = build_board(start_depth, start_world_loc, DEF_SIZE)
-	else:
+	if starting_board != null:
 		finalize_static_board(starting_board)
 
 func get_boards():
@@ -267,3 +265,18 @@ func regen(board:RevBoard):
 	board.set_active(false)
 	board.queue_free()
 	
+func new_board_for_target(old_board, conn_target):
+	## Return a freshly created board that has not been connected yet.
+	# This method is mostly about find which dungeon should generate the new board.
+	# See Dungeon.build_board() and it's sub-classes for the progen proper.
+	var dungeon = null
+	var dungeon_name = conn_target.get("dungeon")
+	if dungeon_name != null:
+		dungeon = get_parent().find_dungeon(dungeon_name)
+	else:
+		dungeon = self
+	assert(dungeon != null, "Dungeon can't be found for conn_target: %s" % conn_target)
+	var new_loc = conn_target.world_loc
+	var new_board = dungeon.build_board(conn_target.depth, new_loc, dungeon.DEF_SIZE, old_board.world_loc)
+	return new_board
+ 
