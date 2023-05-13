@@ -143,7 +143,7 @@ func follow_connector_at(old_board:RevBoard, coord):
 		var old_dungeon = old_board.get_dungeon() 
 		new_board = old_dungeon.new_board_for_target(old_board, conn_target)
 		
-		# connect the stairs together
+		# connect the outgoing connecter with the incomming one
 		var far_coord = new_board.get_connector_for_loc(old_board.world_loc)
 		conn = old_board.add_connection(coord, new_board, far_coord)
 		

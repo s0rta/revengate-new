@@ -52,6 +52,17 @@ func _ready():
 	if starting_board != null:
 		finalize_static_board(starting_board)
 
+func dungeon_for_loc(world_loc:Vector3i):
+	## Return the name of the dungeon where `world_loc` belongs or null is it's part of the current dungeon
+	assert(false, "Not implemented")
+
+func make_builder(board, rect):
+	## Return a new builder configure for the style of the current dungeon.
+	var builder = BoardBuilder.new(board, rect)
+	builder.floor_terrain = "floor-rough"
+	builder.wall_terrain = "wall-old"	
+	return builder
+	
 func get_boards():
 	## Return all the boards that are part of this dungeon
 	return find_children("", "RevBoard", false, false)
@@ -62,13 +73,6 @@ func get_board():
 		if board.is_active():
 			return board
 	return null
-
-func make_builder(board, rect):
-	## Return a new builder configure for the style of the current dungeon.
-	var builder = BoardBuilder.new(board, rect)
-	builder.floor_terrain = "floor-rough"
-	builder.wall_terrain = "wall-old"	
-	return builder
 
 func finalize_static_board(board:RevBoard):
 	## do a bit of cleanup to make a static board fit in the dungeon
@@ -185,7 +189,11 @@ func _neighbors_for_level(depth:int, world_loc:Vector3i, prev=null):
 			far_depth = depth - 1
 		else:
 			far_depth = depth + 1
-		recs.append({"world_loc":loc, "depth":far_depth})
+		var rec = {"world_loc":loc, "depth":far_depth}
+		var dungeon = dungeon_for_loc(loc)
+		if dungeon != null:
+			rec.dungeon = dungeon
+		recs.append(rec)
 	return recs
 
 func populate_board(builder, depth):

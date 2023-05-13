@@ -17,6 +17,14 @@
 
 class_name LyonSurface extends Dungeon
 
+const STARTING_CONN_TARGETS = {Vector2i(5, 3): {"dungeon": "Traboule2"}}
+
+func dungeon_for_loc(world_loc:Vector3i):
+	## Return the name of the dungeon where `world_loc` belongs or null is it's part of the current dungeon
+	if world_loc.z < 0:
+		return "Traboule1"
+	return null
+
 func make_builder(board, rect):
 	## Return a new builder configure for the style of the current dungeon.
 	var builder = BoardBuilder.new(board, rect)
@@ -24,11 +32,8 @@ func make_builder(board, rect):
 	builder.wall_terrain = "wall"	
 	return builder
 
-func dungeon_for_loc(world_loc:Vector3i):
-	## Return the name of the dungeon where `world_loc` belongs or null is it's part of the current dungeon
-	if world_loc.z < 0:
-		return "Traboule"
-	return null
+func _lvl_is_maze(depth):
+	return false
 
 func finalize_static_board(board:RevBoard):
 	## do a bit of cleanup to make a static board fit in the dungeon
@@ -39,6 +44,8 @@ func finalize_static_board(board:RevBoard):
 			var rec = board.get_cell_rec(coord, "conn_target")
 			if rec == null:
 				rec = {}
+			if STARTING_CONN_TARGETS.has(coord):
+				rec.merge(STARTING_CONN_TARGETS[coord], true)
 			rec.depth = board.depth + 1
 			var terrain = board.get_cell_terrain(coord)
 			var z_delta = 0
@@ -50,6 +57,7 @@ func finalize_static_board(board:RevBoard):
 			var region = Geom.coord_region(coord, board.get_used_rect())
 			var loc_delta = Vector3i(region.x, region.y, z_delta)
 			rec.world_loc = board.world_loc + loc_delta
-			rec.dungeon = dungeon_for_loc(rec.world_loc)
+			if not STARTING_CONN_TARGETS.has(coord):
+				rec.dungeon = dungeon_for_loc(rec.world_loc)
 			board.set_cell_rec(coord, "conn_target", rec)
 	board.ddump_connectors()

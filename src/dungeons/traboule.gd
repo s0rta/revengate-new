@@ -17,6 +17,12 @@
 
 class_name Traboule extends Dungeon
 
+func dungeon_for_loc(world_loc:Vector3i):
+	## Return the name of the dungeon where `world_loc` belongs or null is it's part of the current dungeon
+	if world_loc.z >= 0:
+		return "LyonSurface"
+	return null
+
 func make_builder(board, rect):
 	## Return a new builder configure for the style of the current dungeon.
 	var builder = BoardBuilder.new(board, rect)
