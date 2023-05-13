@@ -99,7 +99,7 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=DEF_SIZE, prev_loc=nul
 		var biases = _maze_biases(depth)
 		builder.gen_maze(inner_rect, biases)
 	else:
-		builder.paint_rect(outer_rect, "rock")
+		builder.paint_rect(outer_rect, builder.clear_terrain)
 		builder.gen_rooms(randi_range(3, 6))
 		
 	if neighbors == null:

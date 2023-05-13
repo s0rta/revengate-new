@@ -24,6 +24,7 @@ const MIN_PART_SIZE = MIN_ROOM_SIDE*2 + ROOM_PAD
 
 var board: RevBoard
 var rect: Rect2i
+var clear_terrain = "rock"
 var floor_terrain = "floor"
 var wall_terrain = "wall"
 var terrain_names := {}

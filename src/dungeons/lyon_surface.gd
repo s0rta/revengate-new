@@ -28,6 +28,7 @@ func dungeon_for_loc(world_loc:Vector3i):
 func make_builder(board, rect):
 	## Return a new builder configure for the style of the current dungeon.
 	var builder = BoardBuilder.new(board, rect)
+	builder.clear_terrain = "floor"
 	builder.floor_terrain = "floor"
 	builder.wall_terrain = "wall"	
 	return builder
