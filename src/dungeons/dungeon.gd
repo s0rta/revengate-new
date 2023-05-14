@@ -123,15 +123,33 @@ func _maze_biases(depth:int):
 	var reconnect = diff_steps * diff_slope + easy_reconnect
 	return {"twistiness": 0.3, "branching": 0.3, "reconnect": reconnect}
 
-func add_connectors(builder, neighbors):
-	## place stairs and other cross-board connectors on a board
-	# TODO: if we have rooms, stairs should be in one of them
+func _region_for_loc(near_loc, far_loc):
+	## Return which region should host the connector to go from near_loc to far_loc
+	if near_loc.x == far_loc.x and near_loc.y == far_loc.y:
+		return Consts.REG_CENTER
+	elif near_loc.x > far_loc.x and near_loc.y == far_loc.y:
+		return Consts.REG_NORTH
+	elif near_loc.x < far_loc.x and near_loc.y == far_loc.y:
+		return Consts.REG_SOUTH
+	elif near_loc.x == far_loc.x and near_loc.y > far_loc.y:
+		return Consts.REG_WEST
+	elif near_loc.x == far_loc.x and near_loc.y < far_loc.y:
+		return Consts.REG_EAST
+	else:
+		assert(false, "Can't relate where %s is relative to %s" % [near_loc, far_loc])
 
-	# FIXME: if there are stairs, we should put the first two at the poles
+func add_connectors(builder:BoardBuilder, neighbors):
+	## place stairs and other cross-board connectors on a board
+	# TODO: 
+	#   - if we have rooms, stairs should be in one of them
+	#   - gateways should be next to a wall
+	# both should be solvable with the predicate function
+
 	var board = builder.board as RevBoard
 	for rec in neighbors:
+		var region = _region_for_loc(board.world_loc, rec.world_loc)
 		var terrain = _neighbor_connector_terrain(board.world_loc, rec.world_loc)
-		var coord = builder.random_floor_cell()
+		var coord = Rand.coord_in_region(board, region, board.is_floor)
 		builder.paint_cells([coord], terrain)
 		board.set_cell_rec(coord, "conn_target", rec)
 
