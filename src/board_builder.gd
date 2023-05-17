@@ -56,7 +56,13 @@ func add_room(rect: Rect2i, walls=true):
 	if walls:
 		var path = Geom.rect_perim(rect)	
 		paint_path(path, wall_terrain)
-		
+
+func room_region(room: Rect2i):
+	## Return the region that this room is mostly in. 
+	## It's possible that the room also spills slightly into other regions.
+	var center = room.get_center()
+	return Geom.coord_region(center, rect)
+
 func paint_cells(cells, terrain_name):
 	if terrain_name in RevBoard.INDEXED_TERRAINS:
 		board._append_terrain_cells(cells, terrain_name)
@@ -90,6 +96,27 @@ func random_floor_cell():
 			if board.is_floor(attempt):
 				return attempt
 	return null
+
+func random_coord_in_region(region, valid_pred=null):
+	## Return a random coordinate inside the region.
+	## if a callable is supplied as `valid_pred` the coord will be true for this predicate.
+	## Return null if no coord can be found matching valid_pred.
+	var region_rect = Geom.region_bounding_rect(rect, region)
+	var coord = Rand.coord_in_rect(region_rect)
+	if valid_pred == null and Geom.region_has_coord(rect, region, coord):
+		return coord
+	var is_valid = func (coord):
+		if not Geom.region_has_coord(rect, region, coord):
+			return false
+		elif valid_pred != null:
+			return valid_pred.call(coord)
+		else:
+			return true
+	var spiral = board.spiral(coord, null, false)
+	for c in spiral:
+		if is_valid.call(c):
+			return c
+	return null
 	
 func gen_level(nb_rooms=4):
 	## Generate a default underground level
@@ -97,7 +124,7 @@ func gen_level(nb_rooms=4):
 	gen_rooms(nb_rooms)
 	add_stairs()
 
-func gen_rooms(nb_rooms:int):
+func gen_rooms(nb_rooms:int, add_corridors:=true):
 	## Generate `nb_rooms` non-overlapping rooms and connect them with corridors
 	var partitions = [rect]
 	var nb_iter = 0
@@ -126,8 +153,16 @@ func gen_rooms(nb_rooms:int):
 		nb_iter += 1
 	for rect in partitions:
 		add_room(Rand.sub_rect(rect, MIN_ROOM_SIDE))
-	for i in rooms.size()-1:
-		connect_rooms(rooms[i], rooms[i+1])
+	if add_corridors:
+		for i in rooms.size()-1:
+			connect_rooms(rooms[i], rooms[i+1])
+
+func open_rooms():
+	## Add an opening to each of the known rooms
+	for room in rooms:
+		var region = Geom.coord_region(room.get_center(), rect)
+		var coord = Rand.coord_on_rect_perim(room, -region)
+		paint_cells([coord], "door-open")
 
 func gen_maze(rect_, biases=null):
 	## Fill rect with a maze.

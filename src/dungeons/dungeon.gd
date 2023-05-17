@@ -19,8 +19,6 @@
 class_name Dungeon extends Node
 
 const DEF_SIZE = Vector2i(24, 16)
-const FIRST_MAZE = 6
-const ALL_MAZES = 13
 
 # more than one set of stairs going up or down
 const EXTRA_UP_PROB = 0.3
@@ -78,6 +76,11 @@ func finalize_static_board(board:RevBoard):
 	## do a bit of cleanup to make a static board fit in the dungeon
 	assert(false, "must be overridden by sub classes of Dungeon")
 
+func fill_new_board(builder, new_board, depth, world_loc, size):
+	## put the main geometry on a freshly created board, except for connectors
+	assert(false, "must be overridden by sub classes of Dungeon")
+	
+
 func build_board(depth, world_loc:Vector3i, size:Vector2i=DEF_SIZE, prev_loc=null, neighbors=null):
 	## Make a new board with fresh terrain, monsters, and items.
 	# FIXME: set the board turn
@@ -88,52 +91,27 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=DEF_SIZE, prev_loc=nul
 	new_board.world_loc = world_loc
 	add_child(new_board)
 	new_board.clear()	
-	
+
 	var builder = make_builder(new_board, Rect2i(Vector2i.ZERO, size))
-	var outer_rect = Rect2i(Vector2i.ZERO, size)
-	
-	if _lvl_is_maze(depth):
-		# TODO: put most of this in the builder
-		builder.paint_rect(outer_rect, builder.wall_terrain)
-		var inner_rect = Rect2i(outer_rect.position+Vector2i.ONE, outer_rect.size-Vector2i.ONE)
-		var biases = _maze_biases(depth)
-		builder.gen_maze(inner_rect, biases)
-	else:
-		builder.paint_rect(outer_rect, builder.clear_terrain)
-		builder.gen_rooms(randi_range(3, 6))
-		
+	fill_new_board(builder, new_board, depth, world_loc, size)
+			
 	if neighbors == null:
 		neighbors = _neighbors_for_level(depth, world_loc, prev_loc)
 	add_connectors(builder, neighbors)
 	populate_board(builder, depth)
 	return new_board
 
-func _lvl_is_maze(depth:int):
-	## Return whether the next board be a maze?
-	return Rand.linear_prob_test(depth, FIRST_MAZE-1, ALL_MAZES)
-
-func _maze_biases(depth:int):
-	## Return the bias params for a maze generated at a given depth
-	var easy_depth = FIRST_MAZE
-	var hard_depth = ALL_MAZES
-	var easy_reconnect = 0.7
-	var hard_reconnect = 0.3
-	var diff_slope = (hard_reconnect - easy_reconnect) / (hard_depth - easy_depth)
-	var diff_steps = (clamp(depth, easy_depth, hard_depth) - easy_depth)
-	var reconnect = diff_steps * diff_slope + easy_reconnect
-	return {"twistiness": 0.3, "branching": 0.3, "reconnect": reconnect}
-
 func _region_for_loc(near_loc, far_loc):
 	## Return which region should host the connector to go from near_loc to far_loc
 	if near_loc.x == far_loc.x and near_loc.y == far_loc.y:
 		return Consts.REG_CENTER
-	elif near_loc.x > far_loc.x and near_loc.y == far_loc.y:
-		return Consts.REG_NORTH
-	elif near_loc.x < far_loc.x and near_loc.y == far_loc.y:
-		return Consts.REG_SOUTH
 	elif near_loc.x == far_loc.x and near_loc.y > far_loc.y:
-		return Consts.REG_WEST
+		return Consts.REG_NORTH
 	elif near_loc.x == far_loc.x and near_loc.y < far_loc.y:
+		return Consts.REG_SOUTH
+	elif near_loc.x > far_loc.x and near_loc.y == far_loc.y:
+		return Consts.REG_WEST
+	elif near_loc.x < far_loc.x and near_loc.y == far_loc.y:
 		return Consts.REG_EAST
 	else:
 		assert(false, "Can't relate where %s is relative to %s" % [near_loc, far_loc])
@@ -149,7 +127,7 @@ func add_connectors(builder:BoardBuilder, neighbors):
 	for rec in neighbors:
 		var region = _region_for_loc(board.world_loc, rec.world_loc)
 		var terrain = _neighbor_connector_terrain(board.world_loc, rec.world_loc)
-		var coord = Rand.coord_in_region(board, region, board.is_floor)
+		var coord = builder.random_coord_in_region(region, board.is_floor)
 		builder.paint_cells([coord], terrain)
 		board.set_cell_rec(coord, "conn_target", rec)
 
@@ -290,6 +268,7 @@ func regen(board:RevBoard):
 	new_board.set_active(true)
 	board.set_active(false)
 	board.queue_free()
+	return new_board
 	
 func new_board_for_target(old_board, conn_target):
 	## Return a freshly created board that has not been connected yet.

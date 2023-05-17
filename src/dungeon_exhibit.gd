@@ -56,7 +56,7 @@ func refresh():
 	if board:
 		var dungeon = _get_dungeon(board)
 		if dungeon:
-			dungeon.regen(board)
+			board = dungeon.regen(board)
 	else:
 		print("No active board to refresh.")
 

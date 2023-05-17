@@ -33,9 +33,6 @@ func make_builder(board, rect):
 	builder.wall_terrain = "wall"	
 	return builder
 
-func _lvl_is_maze(depth):
-	return false
-
 func finalize_static_board(board:RevBoard):
 	## do a bit of cleanup to make a static board fit in the dungeon
 	board.scan_terrain()
@@ -62,3 +59,31 @@ func finalize_static_board(board:RevBoard):
 				rec.dungeon = dungeon_for_loc(rec.world_loc)
 			board.set_cell_rec(coord, "conn_target", rec)
 	board.ddump_connectors()
+
+func fill_new_board(builder:BoardBuilder, new_board, depth, world_loc, size):
+	## put the main geometry on a freshly created board, except for connectors
+	var outer_rect = Rect2i(Vector2i.ZERO, size)
+
+	builder.paint_rect(outer_rect, builder.clear_terrain)
+	builder.paint_path(Geom.rect_perim(outer_rect), "wall")
+	
+	var old_rect = builder.rect
+	builder.rect = Geom.inner_rect(builder.rect, 1)
+	builder.gen_rooms(randi_range(3, 6), false)
+	builder.open_rooms()
+	
+	builder.rect = old_rect
+	
+func add_connectors(builder:BoardBuilder, neighbors):
+	## place stairs and other cross-board connectors on a board
+	var board = builder.board as RevBoard
+	var coord:Vector2i	
+	for rec in neighbors:
+		var region = _region_for_loc(board.world_loc, rec.world_loc)
+		var terrain = _neighbor_connector_terrain(board.world_loc, rec.world_loc)
+		if terrain == "gateway" and region != Consts.REG_CENTER:
+			coord = Rand.coord_on_rect_perim(builder.rect, region)
+		else:
+			coord = builder.random_coord_in_region(region, board.is_floor)
+		builder.paint_cells([coord], terrain)
+		board.set_cell_rec(coord, "conn_target", rec)

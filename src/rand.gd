@@ -99,6 +99,27 @@ static func coord_in_rect(rect:Rect2i):
 						randi_range(0, rect.size.y-1))
 	return rect.position + offset
 
+static func coord_on_rect_perim(rect: Rect2i, region=null):
+	## Return a coordinate along the perimeter of `rect`. Corners are excluted.
+	## region: if supplied, only this side is considered.
+	if region == null or region == Consts.REG_CENTER:
+		region = choice([Consts.REG_NORTH, Consts.REG_SOUTH, Consts.REG_WEST, Consts.REG_EAST])
+
+	# We pick a random coord inside the rect, then project it against one of the 
+	# sides accoding to the region.
+	# rect.end() is outside the rect, so we have to subtract 1 from it
+	var coord = coord_in_rect(Geom.inner_rect(rect))
+	if region == Consts.REG_NORTH:
+		return V.i(coord.x, rect.position.y)
+	elif region == Consts.REG_SOUTH:
+		return V.i(coord.x, rect.end.y-1)
+	elif region == Consts.REG_WEST:
+		return V.i(rect.position.x, coord.y)
+	elif region == Consts.REG_EAST:
+		return V.i(rect.end.x-1, coord.y)
+	else:
+		assert(false, "Unknown region: %s" % region)
+
 static func sub_rect(rect:Rect2i, min_side=1):
 	## Return a rectangle that is contained inside rect, likely smaller, 
 	## with sides no smaller than min_side.
@@ -152,25 +173,3 @@ static func split_rect(rect:Rect2i, orientation, pad=0, min_side=1):
 	return [Rect2i(rect.position, br1 - rect.position + Vector2i.ONE), 
 			Rect2i(tl2, rect.end - tl2)]  # rect.end is outside the rect!
 
-static func coord_in_region(board:RevBoard, region, valid_pred=null):
-	## Return a random coordinate inside the region.
-	## if a callable is supplied as `valid_pred` the coord will be true for this predicate.
-	## Return null if no coord can be found matching valid_pred.
-	var rect = board.get_used_rect()
-	var region_rect = Geom.region_bounding_rect(rect, region)
-	var coord = coord_in_rect(region_rect)
-	if valid_pred == null and Geom.region_has_coord(rect, region, coord):
-		return coord
-	var is_valid = func (coord):
-		if not Geom.region_has_coord(rect, region, coord):
-			return false
-		elif valid_pred != null:
-			return valid_pred.call(coord)
-		else:
-			return true
-	var spiral = board.spiral(coord, null, false)
-	for c in spiral:
-		if is_valid.call(c):
-			return c
-	return null
-	

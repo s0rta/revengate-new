@@ -208,22 +208,22 @@ func _maze_biases(depth:int):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-
-	var rect = Rect2i(0, 0, 11, 11)
-	var mat = RevBoard.Matrix.new(rect.size)
-	for i in rect.size.x:
-		for j in rect.size.y:
-			var coord = V.i(i, j)
-			mat.setv(coord, Geom.coord_region(coord, rect))
-	print(mat)
-
-	var board = get_board() as RevBoard
-	mat = RevBoard.Matrix.new(board.get_used_rect().size, " ")
+	var rect = Rect2i(3, 5, 15, 10)
+	var region = null
+	print("Rect: %s" % rect)
 	for i in 10:
-		var coord = Rand.coord_in_region(board, V.i(0,-1), board.is_walkable)
-		mat.setv(coord, "x")
-	print(mat)
+		var coord = Rand.coord_on_rect_perim(rect, region)
+		assert(rect.has_point(coord))
+		print("Coord on perim: %s" % coord)
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
+	var board = get_board()
+	var builder = BoardBuilder.new(board)
+	var rect = board.get_used_rect()
 	
+	for pair in [["N", Consts.REG_NORTH], ["W", Consts.REG_WEST]]:
+		var name = pair[0]
+		var reg = pair[1]
+		var coord = builder.random_coord_in_region(reg)
+		print("%s: coord: %s in %s detected as %s" % [name, coord, reg, Geom.coord_region(coord, rect)])

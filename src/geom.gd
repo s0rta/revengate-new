@@ -34,6 +34,14 @@ static func rect_perim(rect: Rect2i) -> Array:
 		coords.append(rect.position + V.i(0, j))
 	return coords
 
+static func inner_rect(rect:Rect2i, margin=0):
+	## Return a Rect2i that is one tile inside `rect`
+	## margin: if >0, that many tiles separate the outer rect perimiter tiles from the inner rect.
+	var delta = Vector2i.ONE * (1 + margin)
+	assert(rect.size.x > delta.x*2 and rect.size.y > delta.y*2, 
+			"%s is too small to contain an inner rect" % rect)
+	return Rect2i(rect.position+delta, rect.size-delta*2)
+
 static func coord_region(coord:Vector2i, rect:Rect2i):
 	## Return a 0..1 vector telling us where the coord is inside rect.
 	## The return value represent one of the 4 cardinal points or the center [0:0]
