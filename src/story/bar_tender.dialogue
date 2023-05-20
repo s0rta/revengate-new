@@ -1,0 +1,13 @@
+~ intro
+
+Simon: Welcome to Café Caché!
+Simon: Since this is your first time, this drink is on the house.
+do checkpoint("about_lyon")
+do speaker_give_item()
+Simon: You are welcome back anytime, but please remember: we like to keep a low profile and we'd prefer if you didn't tell anyone about this place. 
+=> END
+
+~ about_lyon
+Simon: Hills are very steep in Lyon, which is why most of our streets run parallel to the rivers. The best way to get around on foot is to know which door hides a traboule. 
+Simon: Traboules are dark an twisty, but they usually get you where you want to go faster than a horse carriage.
+=> END
