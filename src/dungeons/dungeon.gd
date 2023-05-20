@@ -72,11 +72,18 @@ func get_board():
 			return board
 	return null
 
+func find_dungeon(name):
+	## Return the dungeon named `name`.
+	## All dungeons locatable by name must be siblings under a common parent.
+	var node = get_parent().find_child(name, false, false)
+	assert(node is Dungeon, "%s is not a Dungeon" % name)
+	return node
+	
 func finalize_static_board(board:RevBoard):
 	## do a bit of cleanup to make a static board fit in the dungeon
 	assert(false, "must be overridden by sub classes of Dungeon")
 
-func fill_new_board(builder, new_board, depth, world_loc, size):
+func fill_new_board(builder, depth, world_loc, size):
 	## put the main geometry on a freshly created board, except for connectors
 	assert(false, "must be overridden by sub classes of Dungeon")
 	
@@ -93,7 +100,7 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=DEF_SIZE, prev_loc=nul
 	new_board.clear()	
 
 	var builder = make_builder(new_board, Rect2i(Vector2i.ZERO, size))
-	fill_new_board(builder, new_board, depth, world_loc, size)
+	fill_new_board(builder, depth, world_loc, size)
 			
 	if neighbors == null:
 		neighbors = _neighbors_for_level(depth, world_loc, prev_loc)
@@ -272,12 +279,12 @@ func regen(board:RevBoard):
 	
 func new_board_for_target(old_board, conn_target):
 	## Return a freshly created board that has not been connected yet.
-	# This method is mostly about find which dungeon should generate the new board.
+	# This method is mostly about finding which dungeon should generate the new board.
 	# See Dungeon.build_board() and it's sub-classes for the progen proper.
 	var dungeon = null
 	var dungeon_name = conn_target.get("dungeon")
 	if dungeon_name != null:
-		dungeon = get_parent().find_dungeon(dungeon_name)
+		dungeon = find_dungeon(dungeon_name)
 	else:
 		dungeon = self
 	assert(dungeon != null, "Dungeon can't be found for conn_target: %s" % conn_target)

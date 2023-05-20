@@ -19,43 +19,46 @@ extends Node2D
 
 # The hero moved to a different level, the UI and turn logic are affected and must be notified
 signal board_changed(new_board)
-						
-const SCENE_PATH_FMT = "res://src/%s.tscn"
-const FIRST_MAZE = 6
-const ALL_MAZES = 13
 
 @onready var hero:Actor = find_child("Hero")
 @onready var hud = $HUD
-@onready var boards_cont: Node = find_child("Board").get_parent()
+#@onready var boards_cont: Node = find_child("Board").get_parent()
+@onready var dungeons_cont: Node = %Viewport  # all dungeons must be direct descendent of this node
 @onready var commands = $CommandPack
+var board: RevBoard  # the active board
 
 func _ready():
 	Tender.hero = hero
 	Tender.hud = hud
 	Tender.viewport = %Viewport
 	
-	# FIXME: the original board should be able to re-index it's content
-	var board = find_child("Board")
-	assert(board, "Can't find the first game board")
-	board._append_terrain_cells([V.i(23, 2)], "stairs-down")
+	_discover_start_board()
 	hud.set_hero(hero)
 	$VictoryProbe.hero = hero
 	hero.died.connect(_on_hero_died)
 	board_changed.connect($TurnQueue.invalidate_turn)
 	board_changed.connect(center_on_hero)
 	await $TurnQueue.run()
-
+	
+func _discover_start_board():
+	## Find the board that the game should start with
+	for dungeon in dungeons_cont.find_children("", "Dungeon", false, false):
+		if dungeon.starting_board != null:
+			_activate_board(dungeon.starting_board)
+			break
+	assert(board != null, "Could not find a starting board!")
+	
+func _activate_board(new_board):
+	## Mark `new_board` as the current game board
+	if board != null:
+		board.set_active(false)
+	new_board.start_turn($TurnQueue.turn)  # catch up with conditions and decay
+	new_board.set_active(true)
+	board = new_board
+	
 func get_board():
 	## Return the current active board
-	var current = null
-	assert(boards_cont, "Board container must be initialized")
-	for node in boards_cont.get_children():
-		if node is RevBoard and node.visible:
-			current = node
-	if current:
-		return current
-	else:
-		return find_child("Board")
+	return board
 
 func show_inventory_screen() -> bool:
 	## popup the inventory screen
@@ -76,83 +79,23 @@ func switch_board_at(coord):
 	if conn:
 		new_board = conn.far_board
 	else:
-		new_board = build_board(old_board.depth + 1)
-		# connect the stairs together
-		var far = new_board.get_cell_by_terrain("stairs-up")
-		# TODO: add_connection() should return the new record
-		old_board.add_connection(coord, new_board, far)		
-		conn = old_board.get_connection(coord)
+		# FIXME: the dungeon should do most of that
+		var conn_target = old_board.get_cell_rec(coord, "conn_target")
+		var old_dungeon = old_board.get_dungeon()
+		new_board = old_dungeon.new_board_for_target(old_board, conn_target)
+
+		# connect the outgoing connector with the incomming one
+		var far_coord = new_board.get_connector_for_loc(old_board.world_loc)
+		conn = old_board.add_connection(coord, new_board, far_coord)
 		
 	new_board.new_message.connect($HUD.add_message)
-	old_board.set_active(false)
-	new_board.start_turn($TurnQueue.turn)  # catch up with conditions and decay
-	new_board.set_active(true)
+	_activate_board(new_board)
 	
 	var builder = BoardBuilder.new(new_board)
 	var index = new_board.make_index()
 	var new_pos = builder.place(hero, builder.has_rooms(), conn.far_coord, true, null, index)
 	$HUD.refresh_buttons_vis(null, new_pos)
 	emit_signal("board_changed", new_board)
-
-func _place_card(card, builder, index=null):
-	## Instantiate a card and place in in a free spot on the board.
-	## Return the spawn_cost of the placed card.
-	var instance = card.duplicate()
-	instance.show()
-	builder.place(instance, builder.has_rooms(), null, true, null, index)
-	return card.spawn_cost
-
-func build_board(depth):
-	## Return a brand new fully initiallized unconnected RevBoard
-	var scene = load("res://src/rev_board.tscn") as PackedScene
-	var new_board = scene.instantiate() as RevBoard
-	new_board.depth = depth
-	new_board.current_turn = $TurnQueue.turn
-	boards_cont.add_child(new_board)
-	var builder = BoardBuilder.new(new_board)
-	if _lvl_is_maze(depth):
-		# TODO: put most of this in the builder
-		var outer_rect = Rect2i(builder.rect.position, builder.rect.size+3*Vector2i.ONE)
-		var inner_rect = Rect2i(outer_rect.position+Vector2i.ONE, outer_rect.size-Vector2i.ONE)
-		builder.paint_rect(outer_rect, "wall")
-		var biases = _maze_biases(depth)
-		var mazer = Mazes.GrowingTree.new(builder, biases, inner_rect, false)
-		mazer.fill()
-		var poles = builder.find_poles()
-		builder.paint_cells([poles[0]], "stairs-up")
-		builder.paint_cells([poles[1]], "stairs-down")
-	else:
-		builder.gen_level()
-	
-	var index = new_board.make_index()
-	
-	# Items
-	var budget = max(0, depth*1.2)
-
-	# mandatory items
-	var deck = %DeckBuilder.gen_mandatory_item_deck(depth)
-	while not deck.is_empty():
-		budget -= _place_card(deck.draw(), builder, index)
-	
-	# optional items, if we have any spawning budget left
-	deck = %DeckBuilder.gen_item_deck(depth, budget)
-	while not deck.is_empty() and budget > 0:
-		budget -= _place_card(deck.draw(), builder, index)
-		
-	# Monsters
-	budget = max(0, depth * 2.3)
-	
-	# mandatory monsters
-	deck = %DeckBuilder.gen_mandatory_monster_deck(depth)
-	while not deck.is_empty():
-		budget -= _place_card(deck.draw(), builder, index)
-
-	# optional monsters, if we have any spawning budget left
-	deck = %DeckBuilder.gen_monster_deck(depth, budget)
-	while not deck.is_empty() and budget > 0:
-		budget -= _place_card(deck.draw(), builder, index)
-
-	return new_board
 	
 func _on_hero_died(_coord):
 	conclude_game(false)
@@ -191,39 +134,8 @@ func show_context_menu_for(coord):
 	var acted = await %ContextMenuPopup.closed
 	return acted
 
-func _lvl_is_maze(depth:int):
-	## Return whether the next board be a maze?
-	return Rand.linear_prob_test(depth, FIRST_MAZE-1, ALL_MAZES)
-
-func _maze_biases(depth:int):
-	## Return the bias params for a maze generated at a given depth
-	var easy_depth = FIRST_MAZE
-	var hard_depth = ALL_MAZES
-	var easy_reconnect = 0.7
-	var hard_reconnect = 0.3
-	var diff_slope = (hard_reconnect - easy_reconnect) / (hard_depth - easy_depth)
-	var diff_steps = (clamp(depth, easy_depth, hard_depth) - easy_depth)
-	var reconnect = diff_steps * diff_slope + easy_reconnect
-	return {"twistiness": 0.3, "branching": 0.3, "reconnect": reconnect}
-
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	var rect = Rect2i(3, 5, 15, 10)
-	var region = null
-	print("Rect: %s" % rect)
-	for i in 10:
-		var coord = Rand.coord_on_rect_perim(rect, region)
-		assert(rect.has_point(coord))
-		print("Coord on perim: %s" % coord)
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-	var board = get_board()
-	var builder = BoardBuilder.new(board)
-	var rect = board.get_used_rect()
-	
-	for pair in [["N", Consts.REG_NORTH], ["W", Consts.REG_WEST]]:
-		var name = pair[0]
-		var reg = pair[1]
-		var coord = builder.random_coord_in_region(reg)
-		print("%s: coord: %s in %s detected as %s" % [name, coord, reg, Geom.coord_region(coord, rect)])

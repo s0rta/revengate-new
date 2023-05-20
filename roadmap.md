@@ -108,11 +108,14 @@ UI:
 - [x] use the Godot mobile renderer
 
 ## v0.7
-- [ ] water ripples have highlights and edge-of-pool reflections 
-- [ ] Lyon overworld
-- [ ] locked doors
+- [ ] new level design for Lyon surface
 - [ ] end of game stats
 - [ ] pinch to zoom
+- [ ] new starting quest: Cards Collection about retreiving stolen loom punch cards
+
+VFX:
+- [x] water highlights 
+- [ ] edge of water reflections 
 
 Combat:
 - [x] TribalTerritorial strategy
@@ -120,7 +123,7 @@ Combat:
 
 Builder:
 - [ ] Allow mixing rooms and mazes in level generation
-- [ ] more than one way up or down on some levels
+- [x] more than one way up or down on some levels
 
 ## v0.8
 Combat:
@@ -145,3 +148,9 @@ Combat:
 - [ ] Deck.peek(): select the next card, but do not remove it from the deck
 - [ ] smoke and shrapnel particles in the explosion VFX
 - [ ] help screen with contextual content
+- [ ] Lyon overworld map - https://www.fondsenligne.archives-lyon.fr/ac69v2/plan.php
+- [ ] on-screen joystick
+- [ ] parametric pre-fabs
+- [ ] closable doors
+- [ ] locked doors
+- [ ] auto-pan to hero when he gets close to the egde of the screen

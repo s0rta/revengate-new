@@ -33,7 +33,7 @@ func make_builder(board, rect):
 	builder.wall_terrain = "wall-old"	
 	return builder
 
-func fill_new_board(builder, new_board, depth, world_loc, size):
+func fill_new_board(builder, depth, world_loc, size):
 	## put the main geometry on a freshly created board, except for connectors
 	var outer_rect = Rect2i(Vector2i.ZERO, size)
 

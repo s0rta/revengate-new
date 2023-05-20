@@ -60,7 +60,7 @@ func finalize_static_board(board:RevBoard):
 			board.set_cell_rec(coord, "conn_target", rec)
 	board.ddump_connectors()
 
-func fill_new_board(builder:BoardBuilder, new_board, depth, world_loc, size):
+func fill_new_board(builder:BoardBuilder, depth, world_loc, size):
 	## put the main geometry on a freshly created board, except for connectors
 	var outer_rect = Rect2i(Vector2i.ZERO, size)
 

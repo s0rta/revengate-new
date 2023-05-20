@@ -170,7 +170,3 @@ func _on_exit_selector_gui_input(event):
 	if event is InputEventMouseButton:
 		%ExitSelector.hide()
 		
-func find_dungeon(name):
-	## Return dungeon named `name`
-	return find_child(name, false, false)
-	
