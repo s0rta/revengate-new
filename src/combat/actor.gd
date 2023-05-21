@@ -470,14 +470,18 @@ func update_health(hp_delta: int):
 		anim = _anim_health_change($HealingLabel, hp_delta, Vector2(.25, .5))
 		
 	if health <= 0:
-		play_sound("DeathSound")
-		emit_signal("died", get_cell_coord())
-		# we do not need create_anim() since sub-tweens have the same signal as the root tween
-		var anim3 = anim.parallel()  
-		anim3.tween_property($Label, "modulate", Color(.8, 0, 0, .7), .1)
-		anim3.tween_property($Label, "modulate", Color(0, 0, 0, 0), .4)
-		anim3.finished.connect(self.queue_free, CONNECT_ONE_SHOT)
-	return anim
+		die()
+
+func die():
+	## Animate our ultimate demise, drop our inventory, then remove ourself from this cruel world.
+	play_sound("DeathSound")
+	emit_signal("died", get_cell_coord())
+	for item in get_items():
+		drop_item(item)
+	var anim = create_anim()
+	anim.tween_property($Label, "modulate", Color(.8, 0, 0, .7), .1)
+	anim.tween_property($Label, "modulate", Color(0, 0, 0, 0), .4)
+	anim.finished.connect(self.queue_free, CONNECT_ONE_SHOT)
 
 func _learn_attack(attacker):
 	## Remember who just hit us.

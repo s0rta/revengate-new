@@ -123,7 +123,7 @@ VFX:
 Combat:
 - [x] TribalTerritorial strategy
 - [ ] Quest NPC has self defence
-- [ ] death drops
+- [x] death drops
 
 Builder:
 - [ ] Allow mixing rooms and mazes in level generation
