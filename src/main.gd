@@ -54,6 +54,9 @@ func _activate_board(new_board):
 		board.set_active(false)
 	new_board.start_turn($TurnQueue.turn)  # catch up with conditions and decay
 	new_board.set_active(true)
+	
+	if not new_board.new_message.is_connected($HUD.add_message):
+		new_board.new_message.connect($HUD.add_message)
 	board = new_board
 	
 func get_board():
@@ -87,8 +90,6 @@ func switch_board_at(coord):
 		# connect the outgoing connector with the incomming one
 		var far_coord = new_board.get_connector_for_loc(old_board.world_loc)
 		conn = old_board.add_connection(coord, new_board, far_coord)
-		
-	new_board.new_message.connect($HUD.add_message)
 	_activate_board(new_board)
 	
 	var builder = BoardBuilder.new(new_board)

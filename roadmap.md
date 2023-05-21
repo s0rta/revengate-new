@@ -113,7 +113,7 @@ UI:
 - [ ] pinch to zoom
 - [ ] new starting quest: Cards Collection about retreiving stolen loom punch cards
 - [ ] bug: "follow stairs" is the wrong button label for horizontal gateways
-- [ ] bug: no message when getting potions from barman
+- [x] bug: no message when getting potions from barman
 - [ ] connector tiles whould always be stairs when changing elevation
 
 VFX:
