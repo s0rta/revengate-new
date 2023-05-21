@@ -105,7 +105,7 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=DEF_SIZE, prev_loc=nul
 	if neighbors == null:
 		neighbors = _neighbors_for_level(depth, world_loc, prev_loc)
 	add_connectors(builder, neighbors)
-	populate_board(builder, depth)
+	populate_board(builder, depth, world_loc)
 	return new_board
 
 func _region_for_loc(near_loc, far_loc):
@@ -199,19 +199,19 @@ func _neighbors_for_level(depth:int, world_loc:Vector3i, prev=null):
 		recs.append(rec)
 	return recs
 
-func populate_board(builder, depth):
+func populate_board(builder, depth, world_loc:Vector3i):
 	var index = builder.board.make_index()
 	
 	# Items
 	var budget = max(0, depth*1.2)
 
 	# mandatory items
-	var deck = deck_builder.gen_mandatory_item_deck(depth)
+	var deck = deck_builder.gen_mandatory_item_deck(depth, world_loc)
 	while not deck.is_empty():
 		budget -= _place_card(deck.draw(), builder, index)
 	
 	# optional items, if we have any spawning budget left
-	deck = deck_builder.gen_item_deck(depth, budget)
+	deck = deck_builder.gen_item_deck(depth, world_loc, budget)
 	while not deck.is_empty() and budget > 0:
 		budget -= _place_card(deck.draw(), builder, index)
 		
@@ -219,12 +219,12 @@ func populate_board(builder, depth):
 	budget = max(0, depth * 2.3)
 	
 	# mandatory monsters
-	deck = deck_builder.gen_mandatory_monster_deck(depth)
+	deck = deck_builder.gen_mandatory_monster_deck(depth, world_loc)
 	while not deck.is_empty():
 		budget -= _place_card(deck.draw(), builder, index)
 
 	# optional monsters, if we have any spawning budget left
-	deck = deck_builder.gen_monster_deck(depth, budget)
+	deck = deck_builder.gen_monster_deck(depth, world_loc, budget)
 	while not deck.is_empty() and budget > 0:
 		budget -= _place_card(deck.draw(), builder, index)
 

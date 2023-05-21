@@ -55,6 +55,7 @@ const LOC_NORTH = Vector3i(0, -1, 0)
 const LOC_SOUTH = Vector3i(0, 1, 0)
 const LOC_EAST = Vector3i(1, 0, 0)
 const LOC_WEST = Vector3i(-1, 0 ,0)
+const LOC_INVALID = Vector3i(256, 256, 256)
 
 # Board Regions
 const REG_CENTER = Vector2i.ZERO

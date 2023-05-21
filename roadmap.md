@@ -112,6 +112,9 @@ UI:
 - [ ] end of game stats
 - [ ] pinch to zoom
 - [ ] new starting quest: Cards Collection about retreiving stolen loom punch cards
+- [ ] bug: "follow stairs" is the wrong button label for horizontal gateways
+- [ ] bug: no message when getting potions from barman
+- [ ] connector tiles whould always be stairs when changing elevation
 
 VFX:
 - [x] water highlights 
@@ -120,6 +123,7 @@ VFX:
 Combat:
 - [x] TribalTerritorial strategy
 - [ ] Quest NPC has self defence
+- [ ] death drops
 
 Builder:
 - [ ] Allow mixing rooms and mazes in level generation
@@ -151,6 +155,7 @@ Combat:
 - [ ] Lyon overworld map - https://www.fondsenligne.archives-lyon.fr/ac69v2/plan.php
 - [ ] on-screen joystick
 - [ ] parametric pre-fabs
+  - [ ] pre-fabs can inject rules in the deck generator after the geometry pass of a new board
 - [ ] closable doors
 - [ ] locked doors
 - [ ] auto-pan to hero when he gets close to the egde of the screen

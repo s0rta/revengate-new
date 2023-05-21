@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="8_eau7g"]
 [ext_resource type="PackedScene" uid="uid://c3uuk6yfc2thp" path="res://src/monsters/sahwakoon.tscn" id="9_s5p53"]
 [ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="10_xudxm"]
-[ext_resource type="PackedScene" uid="uid://b868r5vu2iiyh" path="res://src/items/missing_watch.tscn" id="11_lmcdh"]
+[ext_resource type="PackedScene" uid="uid://djjksywe6fjk4" path="res://src/items/lost_loom_cards.tscn" id="11_320yy"]
 [ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="12_5tg6f"]
 [ext_resource type="PackedScene" uid="uid://c7fgdridawfb3" path="res://src/items/magic_capsule_of_regen.tscn" id="13_hakha"]
 [ext_resource type="PackedScene" uid="uid://dj5x5c687ddyj" path="res://src/items/amulet_of_strength.tscn" id="14_dvumj"]
@@ -26,10 +26,8 @@
 script = ExtResource("1_yitoo")
 
 [node name="SewerOtter" parent="." instance=ExtResource("2_i1rpj")]
-visible = false
 
 [node name="Labras" parent="." instance=ExtResource("3_tqdik")]
-visible = false
 
 [node name="DesertCentipede" parent="." instance=ExtResource("4_m33kh")]
 
@@ -37,7 +35,6 @@ visible = false
 visible = false
 
 [node name="SulantTiger" parent="." instance=ExtResource("6_da4pf")]
-visible = false
 
 [node name="Max3PerFloor" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -45,10 +42,8 @@ max_board_occ = 3
 min_board_occ = 1
 
 [node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_eau7g")]
-visible = false
 
 [node name="Sahwakoon" parent="Max3PerFloor" instance=ExtResource("9_s5p53")]
-visible = false
 
 [node name="Max2PerGame" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -60,12 +55,11 @@ spawn_cost = 8.0
 
 [node name="QuestItem" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
-max_depth = 12
 max_dungeon_occ = 1
 min_dungeon_occ = 1
+world_loc = Vector3i(0, 1, 0)
 
-[node name="MissingWatch" parent="QuestItem" instance=ExtResource("11_lmcdh")]
-spawn_cost = 8.0
+[node name="LoomCards" parent="QuestItem" instance=ExtResource("11_320yy")]
 
 [node name="Unique" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -106,4 +100,3 @@ min_depth = 7
 max_dungeon_occ = 2
 
 [node name="Pacherr" parent="RareAndDeep" instance=ExtResource("21_2o5vb")]
-visible = false

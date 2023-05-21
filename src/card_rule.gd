@@ -20,7 +20,6 @@
 ## A rule to determine when we can add our children cards to a generation deck
 class_name CardRule extends Node
 
-# TODO: min_* rules can default to 0 rather than -1
 @export var min_depth:int = 0
 @export var max_depth:int = -1
 @export var max_board_occ:int = -1
@@ -29,6 +28,9 @@ class_name CardRule extends Node
 # applied by forcing those cards in the mandatory deck for a floor
 @export var min_board_occ:int = 0
 @export var min_dungeon_occ:int = 0
+
+# the item is guarateed to be generated for a board at this location
+@export var world_loc := Consts.LOC_INVALID
 
 func _get_configuration_warnings():
 	var warnings = []

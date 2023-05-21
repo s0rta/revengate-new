@@ -21,7 +21,7 @@ class_name DeckBuilder extends Node
 
 var draw_counts := {}  # card -> nb_draws mapping
 
-func _add_all_cards(deck, node:Node, depth, budget, card_type="Actor", rule=null):
+func _add_all_cards(deck, node:Node, depth, world_loc:Vector3i, budget, card_type="Actor", rule=null):
 	## Add all card direct children of `node` to `deck`
 	## nb_occurences is adjusted according to `bugdet`
 
@@ -31,7 +31,7 @@ func _add_all_cards(deck, node:Node, depth, budget, card_type="Actor", rule=null
 		if rule != null and rule.max_board_occ != -1:
 			nb_occ = min(nb_occ, rule.max_board_occ)
 		if rule != null:
-			nb_occ -= nb_mandatory_occ(card, rule, depth)
+			nb_occ -= nb_mandatory_occ(card, rule, depth, world_loc)
 			if rule.max_dungeon_occ != -1:
 				nb_occ = min(nb_occ, rule.max_dungeon_occ - draw_counts.get(card, 0))
 		nb_occ = max(nb_occ, 0)
@@ -43,16 +43,17 @@ func tally_draw(card):
 		draw_counts[card] = 0
 	draw_counts[card] += 1
 
-func nb_mandatory_occ(card, rule, depth):
+func nb_mandatory_occ(card, rule, depth, world_loc:Vector3i):
 	## Return how many occurences are mandated by a rule
 		
 	var dungeon_deficit = 0
-	if rule.min_dungeon_occ and depth == rule.max_depth:
+	if (rule.min_dungeon_occ and depth == rule.max_depth) \
+			or (rule.world_loc != Consts.LOC_INVALID and rule.world_loc == world_loc):
 		dungeon_deficit = rule.min_dungeon_occ - draw_counts.get(card, 0)
 	var nb_occ = max(0, rule.min_board_occ, dungeon_deficit)
 	return nb_occ
 
-func gen_mandatory_deck(card_type, depth):
+func gen_mandatory_deck(card_type, depth, world_loc:Vector3i):
 	## Return a deck of cards that must be fully distributed before any draw is
 	##   done from the regular deck.
 	## The mandatory deck is probabilistic and the order of cards is random.
@@ -66,15 +67,15 @@ func gen_mandatory_deck(card_type, depth):
 		if child is CardRule:
 			var rule = child
 			for card in rule.find_children("", card_type):
-				var nb_occ = nb_mandatory_occ(card, rule, depth)
+				var nb_occ = nb_mandatory_occ(card, rule, depth, world_loc)
 				if nb_occ:
 					deck.add_card(card, nb_occ)
 	deck.normalize()
 	return deck
 
-func gen_deck(card_type, depth, budget):
+func gen_deck(card_type, depth, world_loc:Vector3i, budget):
 	var deck = Deck.new(null, tally_draw)
-	_add_all_cards(deck, self, depth, budget, card_type)
+	_add_all_cards(deck, self, depth, world_loc, budget, card_type)
 	for child in get_children():
 		if child is CardRule:
 			var rule = child
@@ -82,18 +83,18 @@ func gen_deck(card_type, depth, budget):
 				continue
 			if child.max_depth != -1 and depth > child.max_depth:
 				continue
-			_add_all_cards(deck, rule, depth, budget, card_type, rule)	
+			_add_all_cards(deck, rule, depth, world_loc, budget, card_type, rule)	
 	deck.normalize()
 	return deck
 
-func gen_monster_deck(depth, budget):
-	return gen_deck("Actor", depth, budget)
+func gen_monster_deck(depth, world_loc:Vector3i, budget, ):
+	return gen_deck("Actor", depth, world_loc, budget)
 
-func gen_mandatory_monster_deck(depth):
-	return gen_mandatory_deck("Actor", depth)
+func gen_mandatory_monster_deck(depth, world_loc:Vector3i):
+	return gen_mandatory_deck("Actor", depth, world_loc)
 
-func gen_item_deck(depth, budget):
-	return gen_deck("Item", depth, budget)
+func gen_item_deck(depth, world_loc:Vector3i, budget):
+	return gen_deck("Item", depth, world_loc, budget)
 
-func gen_mandatory_item_deck(depth):
-	return gen_mandatory_deck("Item", depth)
+func gen_mandatory_item_deck(depth, world_loc:Vector3i):
+	return gen_mandatory_deck("Item", depth, world_loc)
