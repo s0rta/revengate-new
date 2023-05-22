@@ -110,7 +110,7 @@ UI:
 ## v0.7
 - [ ] new level design for Lyon surface
 - [ ] new starting quest: Cards Collection about retreiving stolen loom punch cards
-- [ ] bug: "follow stairs" is the wrong button label for horizontal gateways
+- [x] bug: "follow stairs" is the wrong button label for horizontal gateways
 - [x] bug: no message when getting potions from barman
 - [ ] connector tiles should always be stairs when changing elevation
 
