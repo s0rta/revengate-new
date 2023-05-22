@@ -84,7 +84,7 @@ func _unhandled_input(event):
 		
 	if move:
 		var dest = get_cell_coord() + move
-		if index.is_free(dest):
+		if board.is_on_board(dest) and index.is_free(dest):
 			self.move_by(move)
 			acted = true
 		else:

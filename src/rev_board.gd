@@ -704,9 +704,10 @@ func get_cell_terrain(coord):
 	return tile_set.get_terrain_name(data.terrain_set, data.terrain)
 	
 func is_on_board(coord):
-	## Return whether the coord is strictly contained inside the game board
+	## Return whether the coord is strictly contained inside the game board.
+	## For non-rectangular boards, cells without tiles are considered outside the board.
 	var bbox = get_used_rect()
-	return bbox.has_point(coord)
+	return bbox.has_point(coord) and get_cell_tile_data(0, coord) != null
 
 func add_connection(near_coord, far_board, far_coord):
 	## Connect this board with another one.

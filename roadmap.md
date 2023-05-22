@@ -109,16 +109,13 @@ UI:
 
 ## v0.7
 - [ ] new level design for Lyon surface
-- [ ] end of game stats
-- [ ] pinch to zoom
 - [ ] new starting quest: Cards Collection about retreiving stolen loom punch cards
 - [ ] bug: "follow stairs" is the wrong button label for horizontal gateways
 - [x] bug: no message when getting potions from barman
-- [ ] connector tiles whould always be stairs when changing elevation
+- [ ] connector tiles should always be stairs when changing elevation
 
 VFX:
 - [x] water highlights 
-- [ ] edge of water reflections 
 
 Combat:
 - [x] TribalTerritorial strategy
@@ -126,12 +123,16 @@ Combat:
 - [x] death drops
 
 Builder:
-- [ ] Allow mixing rooms and mazes in level generation
 - [x] more than one way up or down on some levels
 
 ## v0.8
+- [ ] end of game stats
+- [ ] pinch to zoom
+- [ ] Allow mixing rooms and mazes in level generation
+
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()
+
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
@@ -159,3 +160,4 @@ Combat:
 - [ ] closable doors
 - [ ] locked doors
 - [ ] auto-pan to hero when he gets close to the egde of the screen
+- [ ] VFX: edge of water reflections 

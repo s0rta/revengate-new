@@ -49,8 +49,10 @@ class Attack extends Command:
 		super(index_)
 
 	func is_valid_for(coord:Vector2i):
-		var hero_coord = Tender.hero.get_cell_coord()
 		var board = Tender.hero.get_board()
+		if not board.is_on_board(coord):
+			return false
+		var hero_coord = Tender.hero.get_cell_coord()
 		var dist = board.dist(hero_coord, coord)
 		return dist == 1 and index.actor_at(coord)
 		
@@ -66,8 +68,10 @@ class Talk extends Command:
 		super(index_)
 
 	func is_valid_for(coord:Vector2i):
-		var hero_coord = Tender.hero.get_cell_coord()
 		var board = Tender.hero.get_board()
+		if not board.is_on_board(coord):
+			return false
+		var hero_coord = Tender.hero.get_cell_coord()
 		var dist = board.dist(hero_coord, coord)
 		# TODO: it would make sense to have conversations further apart
 		var other = index.actor_at(coord)
@@ -128,6 +132,8 @@ class TravelTo extends Command:
 
 	func is_valid_for(coord:Vector2i):
 		var board = Tender.hero.get_board()
+		if not board.is_on_board(coord):
+			return false
 		var hero_coord = Tender.hero.get_cell_coord()
 		return index.is_free(coord) and board.path(hero_coord, coord)
 		
