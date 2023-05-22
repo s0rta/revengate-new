@@ -20,14 +20,10 @@ class_name Dungeon extends Node
 
 const DEF_SIZE = Vector2i(24, 16)
 
-# more than one set of stairs going up or down
-const EXTRA_UP_PROB = 0.3
-const EXTRA_DOWN_PROB = 0.3
-
 @export var start_depth := 0
 @export var start_world_loc: Vector3i
 @export var dest_world_loc := Vector3i(3, 5, 0)
-@export var tunneling_elevation := -5  # start going horizontal once we reach that depth
+@export var tunneling_elevation := -3  # start going horizontal once we reach that depth
 var deck_builder: DeckBuilder
 var starting_board: RevBoard
 
@@ -147,11 +143,10 @@ func _neighbor_connector_terrain(near_loc:Vector3i, far_loc:Vector3i):
 	## Return the terrain that should be used to make the connector between 
 	## `near_loc` and `far_loc`.
 	var delta = far_loc - near_loc
-	if _is_aligned(near_loc, far_loc):
-		if delta.z > 0:
-			return "stairs-up"
-		else:
-			return "stairs-down"
+	if delta.z > 0:
+		return "stairs-up"
+	elif delta.z < 0:
+		return "stairs-down"
 	else:
 		return "gateway"
 	

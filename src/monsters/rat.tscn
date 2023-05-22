@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://src/strategies/tribal_territorial.gd" id="6_larah"]
 
 [node name="Rat" instance=ExtResource("1_cnguh")]
-visible = false
 char = "r"
 caption = "rat"
 spawn_cost = 1.0

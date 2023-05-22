@@ -137,6 +137,8 @@ func show_context_menu_for(coord):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
+	var coord = Tender.hero.get_cell_coord()
+	Tender.viewport.effect_at_coord("explosion_vfx", coord)
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")

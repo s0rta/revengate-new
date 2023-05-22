@@ -129,15 +129,10 @@ refresh={
 
 [internationalization]
 
-locale/translations_pot_files=PackedStringArray("res://src/story/intro.dialogue", "res://src/story/narrations.dialogue", "res://src/story/nadege.dialogue", "res://src/story/bar_tender.dialogue")
-
-[physics]
-
-common/enable_pause_aware_picking=true
+locale/translations_pot_files=PackedStringArray("res://src/story/narrations.dialogue", "res://src/story/nadege.dialogue", "res://src/story/bar_tender.dialogue", "res://src/story/michel.dialogue", "res://src/story/bar_chatter.dialogue")
 
 [rendering]
 
-renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)
 environment/default_environment="res://default_env.tres"

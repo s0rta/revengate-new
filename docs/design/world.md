@@ -2,12 +2,17 @@
 The Revengate World
 ===================
 
-Revengate takes place in a steampunk parallel universe closely based on Earth in the Victorian era.  Magic exists, human races are more spread out than they are on our Earth, guns are still impractical, Europe is widely developed, but so are many other cities around the world.
+Revengate takes place in a steampunk parallel universe closely based on Earth during the Victorian era.  Magic exists, human races are more spread out than they are on our Earth, guns are still impractical, Europe is widely developed, but so are many other nations around the world.
+
+## On Timelines
+
+What follows describes a world and events that are very similar to our real world. Where confusion is possible, the out-game real world is refered to as "Earth timeline" or "player's timeline". In contrast, the in-game world is either "the Revengate timeline" or "the hero's timeline". The in-game planet is called Revena. 
+
 
 ## World
-The game starts in 502 AP, which roughly corresponds to 1855 of our world. The setting is Victorian era Franconia, located roughly where modern France is. See World Events for more details on the current calendar era.
+The game starts in 502 AP, which roughly corresponds to 1855 CE in the Earth timeline. The setting is Victorian era Franconia, located roughly where modern France is. See World Events for more details on the current calendar era.
 
-Technology, science, and medicine is comparable to that of 1855 of our world, except for a few specific discoveries that came a couple decades early or a couple decades late. The industrial revolution is getting started. Guns are all impractical muzzle loaders. Magic is fairly common and its proponents are at odd with the industrial elite. Electricity is rare, steam and clockwork mechanisms are the main sources of mechanized work. Hot air balloons can be seen once in a while, steerable airships are about to be invented.
+Technology, science, and medicine is comparable to that of 1855 CE on Earth, except for a few specific discoveries that came a couple decades early or a couple decades late. The industrial revolution is getting started. Guns are all impractical muzzle loaders. Magic is fairly common and its proponents are at odd with the industrial elite. Electricity is rare, steam and clockwork mechanisms are the main sources of mechanized work. Hot air balloons can be seen once in a while, steerable airships are about to be invented.
 
 There are many ideological conflicts in the world: science vs magic, democracy vs autocratic rule, hedonism vs industrial efficiency, colonialism vs local autonomy. In time, the hero will get to pick a side for many of these conflicts, with pro and cons on both sides of the conflicts.
 
@@ -40,7 +45,7 @@ The game starts with the hero being recruited by the Compagnie des Lumières, us
 ## Major Events
 ### Great Plague of 1347
 
-The Black Plague swept Eurasia from 1347 to 1353 AD. When the world could finally claim victory on the epidemic, nothing was the same anymore and so a new calendar era was started, noted "AP" for Abscido Pestis, Après la Peste, and After the Plague.
+The Black Plague swept Eurasia from 1347 to 1353 CE. When the world could finally claim victory on the epidemic, nothing was the same anymore and so a new calendar era was started, noted "AP" for Abscido Pestis, Après la Peste, and After the Plague.
 
 Many institutions fell with the passing of their members and out of necessity, the commoners started enjoying a great deal more freedom. One notable societal change, at least from what we can make up from the written records, is that magic used to be fairly common before the epidemic, but vanished almost entirely by the time the outbreak got under control. The reason why is still a topic of speculation.
 

@@ -1,24 +1,22 @@
-[gd_scene load_steps=9 format=3 uid="uid://dxk8rrdv6fb1e"]
+[gd_scene load_steps=9 format=3 uid="uid://dscrig88vn02j"]
 
-[ext_resource type="Script" path="res://src/combat/actor.gd" id="1_wqixm"]
-[ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_jac18"]
-[ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="3_7rrp4"]
-[ext_resource type="Script" path="res://src/combat/memory.gd" id="4_6hcbr"]
-[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="5_qkouh"]
-[ext_resource type="PackedScene" uid="uid://d8ovanvojd5g" path="res://src/weapons/knife.tscn" id="7_ayv21"]
-[ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="7_wyehf"]
+[ext_resource type="Script" path="res://src/combat/actor.gd" id="1_m3thf"]
+[ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_kyh1y"]
+[ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="3_djlca"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="4_2for5"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="5_ss1hs"]
+[ext_resource type="PackedScene" uid="uid://d8ovanvojd5g" path="res://src/weapons/knife.tscn" id="6_gy0x1"]
+[ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="7_3m3yl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_00etm"]
 size = Vector2(32, 32)
 
-[node name="BarTender" type="Area2D"]
+[node name="BarPatron" type="Area2D"]
 visible = false
-script = ExtResource("1_wqixm")
+script = ExtResource("1_m3thf")
 char = "@"
-caption = "Simon"
-color = Color(0.372549, 0.67451, 0.498039, 1)
-conversation_file = "res://src/story/bar_tender.dialogue"
-faction = 1
+caption = "Visitor"
+color = Color(0.670588, 0.670588, 0.670588, 1)
 
 [node name="Label" type="Label" parent="."]
 anchors_preset = 15
@@ -43,10 +41,10 @@ visible = false
 shape = SubResource("RectangleShape2D_00etm")
 
 [node name="MissSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_jac18")
+stream = ExtResource("2_kyh1y")
 
 [node name="DeathSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_7rrp4")
+stream = ExtResource("3_djlca")
 
 [node name="DamageLabel" type="Label" parent="."]
 visible = false
@@ -68,16 +66,16 @@ theme_override_font_sizes/font_size = 21
 text = "?"
 
 [node name="Mem" type="Node" parent="."]
-script = ExtResource("4_6hcbr")
+script = ExtResource("4_2for5")
 
 [node name="SelfDefense" type="Node" parent="."]
-script = ExtResource("5_qkouh")
+script = ExtResource("5_ss1hs")
 
-[node name="Knife" parent="." instance=ExtResource("7_ayv21")]
+[node name="Knife" parent="." instance=ExtResource("6_gy0x1")]
 visible = false
 is_equipped = true
 
-[node name="PotionOfHealing" parent="." instance=ExtResource("7_wyehf")]
+[node name="PotionOfHealing" parent="." instance=ExtResource("7_3m3yl")]
 visible = false
 
 [connection signal="was_attacked" from="." to="." method="_learn_attack"]

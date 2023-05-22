@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=29 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -11,23 +11,22 @@
 [ext_resource type="Script" path="res://src/ui/zoom_slider.gd" id="8_7qyjt"]
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="9_7u4fi"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
-[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="12_53g87"]
-[ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="12_c1kwk"]
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
 [ext_resource type="Script" path="res://src/dungeons/traboule.gd" id="13_u4fm7"]
 [ext_resource type="PackedScene" uid="uid://ptaq5gcssl32" path="res://src/people/nadege.tscn" id="13_wcjwx"]
+[ext_resource type="PackedScene" uid="uid://goqt5kdryn0c" path="res://src/people/michel.tscn" id="13_ymwa7"]
+[ext_resource type="PackedScene" uid="uid://c71npa04ilk1k" path="res://src/weapons/umbrella.tscn" id="14_ih5ox"]
 [ext_resource type="Script" path="res://src/victory_probe.gd" id="14_ulj2m"]
 [ext_resource type="PackedScene" uid="uid://dxk8rrdv6fb1e" path="res://src/people/bar_tender.tscn" id="14_x3gva"]
 [ext_resource type="PackedScene" uid="uid://cgdqkl167nhyj" path="res://src/ui/actor_details_screen.tscn" id="14_yna85"]
-[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="15_ioj2j"]
+[ext_resource type="PackedScene" uid="uid://dscrig88vn02j" path="res://src/people/bar_patron.tscn" id="15_mexm3"]
 [ext_resource type="PackedScene" uid="uid://cl6ylq5q74oxy" path="res://src/ui/messages_pane.tscn" id="17_n3emp"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="17_ou76k"]
 [ext_resource type="PackedScene" uid="uid://cd6ngrhhgito0" path="res://src/ui/dialogue_pane.tscn" id="18_vtucs"]
 [ext_resource type="PackedScene" uid="uid://b0n7osww35hyh" path="res://src/ui/narration_pane.tscn" id="20_21sjb"]
 [ext_resource type="PackedScene" uid="uid://bb5upsioptfc4" path="res://src/ui/context_menu_popup.tscn" id="25_n5bfn"]
 [ext_resource type="PackedScene" uid="uid://c185mr0bu3u3w" path="res://src/default_deck_builder.tscn" id="30_c7r3i"]
-[ext_resource type="PackedScene" uid="uid://6ml8upew405" path="res://src/weapons/saber.tscn" id="38_pnvrw"]
 [ext_resource type="Script" path="res://src/command_pack.gd" id="41_hgs5k"]
 
 [node name="Main" type="Node2D"]
@@ -78,33 +77,6 @@ visible = false
 visible = false
 position = Vector2(192, 256)
 
-[node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("12_53g87")]
-position = Vector2(464, 80)
-char = "@"
-caption = "Michel"
-color = Color(0.117647, 0.603922, 0.517647, 1)
-conversation_file = "res://src/story/intro.dialogue"
-
-[node name="PotionOfRegen" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Michel" instance=ExtResource("12_c1kwk")]
-visible = false
-
-[node name="PotionOfRegen2" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Michel" instance=ExtResource("12_c1kwk")]
-visible = false
-char = "⚒"
-caption = ""
-consumable = false
-
-[node name="PotionOfRegen3" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Michel" instance=ExtResource("12_c1kwk")]
-visible = false
-
-[node name="Saber" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Michel" instance=ExtResource("38_pnvrw")]
-visible = false
-is_equipped = true
-
-[node name="SelfDefense" type="Node" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Michel"]
-script = ExtResource("15_ioj2j")
-priority = 0.8
-
 [node name="Nadege" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("13_wcjwx")]
 visible = true
 position = Vector2(48, 80)
@@ -112,6 +84,25 @@ position = Vector2(48, 80)
 [node name="BarTender" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("14_x3gva")]
 visible = true
 position = Vector2(48, 240)
+
+[node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("13_ymwa7")]
+visible = true
+position = Vector2(464, 80)
+
+[node name="Umbrella" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("14_ih5ox")]
+position = Vector2(336, 48)
+
+[node name="BarPatron" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
+visible = true
+position = Vector2(112, 272)
+conversation_file = "res://src/story/bar_chatter.dialogue"
+conversation_sect = "ghosts"
+
+[node name="BarPatron2" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
+visible = true
+position = Vector2(112, 208)
+conversation_file = "res://src/story/bar_chatter.dialogue"
+conversation_sect = "privacy"
 
 [node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]
 anchor_mode = 0

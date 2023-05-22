@@ -1,23 +1,24 @@
-[gd_scene load_steps=9 format=3 uid="uid://dxk8rrdv6fb1e"]
+[gd_scene load_steps=10 format=3 uid="uid://goqt5kdryn0c"]
 
-[ext_resource type="Script" path="res://src/combat/actor.gd" id="1_wqixm"]
-[ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_jac18"]
-[ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="3_7rrp4"]
-[ext_resource type="Script" path="res://src/combat/memory.gd" id="4_6hcbr"]
-[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="5_qkouh"]
-[ext_resource type="PackedScene" uid="uid://d8ovanvojd5g" path="res://src/weapons/knife.tscn" id="7_ayv21"]
-[ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="7_wyehf"]
+[ext_resource type="Script" path="res://src/combat/actor.gd" id="1_ehlt0"]
+[ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_yi84o"]
+[ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="3_durrf"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="4_7i0lk"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="5_fi05d"]
+[ext_resource type="PackedScene" path="res://src/weapons/sword.tscn" id="6_cc5if"]
+[ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="7_c3he0"]
+[ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="8_bjge3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_00etm"]
 size = Vector2(32, 32)
 
-[node name="BarTender" type="Area2D"]
+[node name="Michel" type="Area2D"]
 visible = false
-script = ExtResource("1_wqixm")
+script = ExtResource("1_ehlt0")
 char = "@"
-caption = "Simon"
-color = Color(0.372549, 0.67451, 0.498039, 1)
-conversation_file = "res://src/story/bar_tender.dialogue"
+caption = "Michel Boilou"
+color = Color(0.117647, 0.603922, 0.517647, 1)
+conversation_file = "res://src/story/michel.dialogue"
 faction = 1
 
 [node name="Label" type="Label" parent="."]
@@ -33,7 +34,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 auto_translate = false
 theme_type_variation = &"AsciiGraphics"
-theme_override_colors/font_color = Color(0.372549, 0.67451, 0.498039, 1)
+theme_override_colors/font_color = Color(0.368627, 0.615686, 0.87451, 1)
 text = "@"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -43,10 +44,10 @@ visible = false
 shape = SubResource("RectangleShape2D_00etm")
 
 [node name="MissSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_jac18")
+stream = ExtResource("2_yi84o")
 
 [node name="DeathSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_7rrp4")
+stream = ExtResource("3_durrf")
 
 [node name="DamageLabel" type="Label" parent="."]
 visible = false
@@ -68,16 +69,19 @@ theme_override_font_sizes/font_size = 21
 text = "?"
 
 [node name="Mem" type="Node" parent="."]
-script = ExtResource("4_6hcbr")
+script = ExtResource("4_7i0lk")
 
 [node name="SelfDefense" type="Node" parent="."]
-script = ExtResource("5_qkouh")
+script = ExtResource("5_fi05d")
 
-[node name="Knife" parent="." instance=ExtResource("7_ayv21")]
+[node name="Sword" parent="." instance=ExtResource("6_cc5if")]
 visible = false
 is_equipped = true
 
-[node name="PotionOfHealing" parent="." instance=ExtResource("7_wyehf")]
+[node name="PotionOfHealing" parent="." instance=ExtResource("7_c3he0")]
+visible = false
+
+[node name="PotionOfRegen" parent="." instance=ExtResource("8_bjge3")]
 visible = false
 
 [connection signal="was_attacked" from="." to="." method="_learn_attack"]

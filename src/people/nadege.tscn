@@ -18,6 +18,7 @@ char = "@"
 caption = "Nadège Cyrat"
 color = Color(0.368627, 0.615686, 0.87451, 1)
 conversation_file = "res://src/story/nadege.dialogue"
+faction = 1
 
 [node name="Label" type="Label" parent="."]
 anchors_preset = 15
@@ -32,8 +33,8 @@ grow_vertical = 2
 size_flags_horizontal = 4
 auto_translate = false
 theme_type_variation = &"AsciiGraphics"
-theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
-text = "x"
+theme_override_colors/font_color = Color(0.368627, 0.615686, 0.87451, 1)
+text = "@"
 horizontal_alignment = 1
 vertical_alignment = 1
 

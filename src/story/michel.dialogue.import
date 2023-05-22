@@ -1,0 +1,14 @@
+[remap]
+
+importer="dialogue_manager_compiler_6"
+type="Resource"
+uid="uid://ddcq1jgfkl2rc"
+path="res://.godot/imported/michel.dialogue-b190d9240953899a12802552051ff440.tres"
+
+[deps]
+
+source_file="res://src/story/michel.dialogue"
+dest_files=["res://.godot/imported/michel.dialogue-b190d9240953899a12802552051ff440.tres"]
+
+[params]
+
