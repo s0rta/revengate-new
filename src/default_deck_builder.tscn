@@ -53,13 +53,13 @@ max_dungeon_occ = 2
 visible = false
 spawn_cost = 8.0
 
-[node name="QuestItem" type="Node" parent="."]
+[node name="QuestGoals" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
 max_dungeon_occ = 1
 min_dungeon_occ = 1
 world_loc = Vector3i(0, 1, 0)
 
-[node name="LoomCards" parent="QuestItem" instance=ExtResource("11_320yy")]
+[node name="LoomCards" parent="QuestGoals" instance=ExtResource("11_320yy")]
 
 [node name="Unique" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -79,6 +79,7 @@ caption = "amulet of strength"
 
 [node name="Rare" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
+min_depth = 3
 max_dungeon_occ = 2
 
 [node name="Hammer" parent="Rare" instance=ExtResource("15_ngw60")]

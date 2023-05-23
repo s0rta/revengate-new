@@ -36,6 +36,8 @@ func _get_configuration_warnings():
 	var warnings = []
 	if min_depth < 0:
 		warnings.append("`min_depth` should not be negative")
-	if min_dungeon_occ and max_depth == -1:
-		warnings.append("You must specify `max_depth` for `min_dungeon_occ` to have an effect.")
+	if min_dungeon_occ and max_depth == -1 and world_loc == Consts.LOC_INVALID:
+		warnings.append("You must specify `max_depth` or `world_loc` for `min_dungeon_occ` to have an effect.")
+	if world_loc != Consts.LOC_INVALID and min_dungeon_occ <= 0:
+		warnings.append("`min_dungeon_occ` must be positive for `world_loc` to have an effect.")
 	return warnings

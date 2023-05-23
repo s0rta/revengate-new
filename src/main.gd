@@ -58,6 +58,7 @@ func _activate_board(new_board):
 	if not new_board.new_message.is_connected($HUD.add_message):
 		new_board.new_message.connect($HUD.add_message)
 	board = new_board
+	print("New active board, world loc is: %s" % new_board.world_loc_str(new_board.world_loc))
 	
 func get_board():
 	## Return the current active board
@@ -137,8 +138,6 @@ func show_context_menu_for(coord):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	var coord = Tender.hero.get_cell_coord()
-	Tender.viewport.effect_at_coord("explosion_vfx", coord)
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
