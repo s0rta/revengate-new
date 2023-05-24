@@ -16,6 +16,7 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 @tool
+@icon("res://assets/dcss/cyclops_new.png")
 class_name Actor extends Area2D
 
 # the internal state changed

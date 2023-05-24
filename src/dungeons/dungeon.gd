@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
+@icon("res://assets/dcss/rock_stairs_down.png")
 ## A collection of boards with similar attributes
 class_name Dungeon extends Node
 
