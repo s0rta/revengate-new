@@ -46,12 +46,6 @@ enum States {
 	ACTING,
 }
 
-enum Factions {
-	NONE,
-	LUX_CO,
-	BEASTS
-}
-
 # std. dev. for a normal distribution more or less contained in 0..100
 const SIGMA := 12.5  
 # average of the above distribution
@@ -87,7 +81,7 @@ const CRITICAL_MULT := 0.35
 @export var healing_prob := 0.05  # %chance to heal at any given turn
 @export var resistance: Consts.DamageFamily = Consts.DamageFamily.NONE  # at most one!
 
-@export var faction := Factions.NONE
+@export var faction := Consts.Factions.NONE
 
 # bestiary entry
 @export_group("Bestiary")
@@ -503,11 +497,11 @@ func is_unexposed():
 
 func is_friend(other: Actor):
 	## Return whether `self` has positive sentiment towards `other`
-	return faction != Factions.NONE and faction == other.faction
+	return faction != Consts.Factions.NONE and faction == other.faction
 	
 func is_foe(other: Actor):
 	## Return whether `self` has negative sentiment towards `other`
-	return faction != Factions.LUX_CO and other.faction == Factions.LUX_CO
+	return faction != Consts.Factions.LUX_CO and other.faction == Consts.Factions.LUX_CO
 	
 func is_impartial(other: Actor):
 	## Return whether `self` has neutral sentiment towards `other`

@@ -35,6 +35,14 @@ enum DamageFamily {
 	CHEMICAL
 }
 
+## Factions pre-define many of the allegiances and animosities
+enum Factions {
+	NONE,
+	LUX_CO,
+	BEASTS, 
+	OUTLAWS
+}
+
 enum SkillLevel {
 	NEOPHYTE,  # no skills at all
 	INITIATE, 

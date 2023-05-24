@@ -782,6 +782,8 @@ func is_floor(coord:Vector2i):
 func is_walkable(coord:Vector2i):
 	## Return whether a cell is walkable for normal actors
 	# collision is only specified on physics layer 0
+	if not is_on_board(coord):
+		return false
 	var tdata = get_cell_tile_data(0, coord)
 	assert(tdata != null, "no data for coord=%s" % coord)
 	var poly = tdata.get_collision_polygons_count(0)

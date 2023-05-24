@@ -18,7 +18,7 @@
 @tool
 class_name Hero extends Actor
 
-const ENEMY_FACTIONS = [Factions.BEASTS]
+const ENEMY_FACTIONS = [Consts.Factions.BEASTS, Consts.Factions.OUTLAWS]
 
 func _ready():
 	state = States.LISTENING

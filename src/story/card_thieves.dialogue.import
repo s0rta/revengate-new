@@ -1,0 +1,14 @@
+[remap]
+
+importer="dialogue_manager_compiler_6"
+type="Resource"
+uid="uid://brg67gnrt118n"
+path="res://.godot/imported/card_thieves.dialogue-58d58480d21a679d92f42db0b0110265.tres"
+
+[deps]
+
+source_file="res://src/story/card_thieves.dialogue"
+dest_files=["res://.godot/imported/card_thieves.dialogue-58d58480d21a679d92f42db0b0110265.tres"]
+
+[params]
+

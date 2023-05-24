@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://c185mr0bu3u3w"]
+[gd_scene load_steps=23 format=3 uid="uid://c185mr0bu3u3w"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_yitoo"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_i1rpj"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="10_xudxm"]
 [ext_resource type="PackedScene" uid="uid://djjksywe6fjk4" path="res://src/items/lost_loom_cards.tscn" id="11_320yy"]
 [ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="12_5tg6f"]
+[ext_resource type="PackedScene" uid="uid://d8jxxkoa4b00" path="res://src/people/outlaw.tscn" id="12_g5w02"]
 [ext_resource type="PackedScene" uid="uid://c7fgdridawfb3" path="res://src/items/magic_capsule_of_regen.tscn" id="13_hakha"]
 [ext_resource type="PackedScene" uid="uid://dj5x5c687ddyj" path="res://src/items/amulet_of_strength.tscn" id="14_dvumj"]
 [ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="15_ngw60"]
@@ -60,6 +61,12 @@ min_dungeon_occ = 1
 world_loc = Vector3i(0, 1, 0)
 
 [node name="LoomCards" parent="QuestGoals" instance=ExtResource("11_320yy")]
+
+[node name="Outlaw" parent="QuestGoals" instance=ExtResource("12_g5w02")]
+
+[node name="Outlaw2" parent="QuestGoals" instance=ExtResource("12_g5w02")]
+
+[node name="Outlaw3" parent="QuestGoals" instance=ExtResource("12_g5w02")]
 
 [node name="Unique" type="Node" parent="."]
 script = ExtResource("7_bd8gw")

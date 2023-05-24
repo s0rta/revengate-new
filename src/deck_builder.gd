@@ -85,7 +85,7 @@ func gen_mandatory_deck(card_type, depth, world_loc:Vector3i):
 	for child in get_children():
 		if child is CardRule:
 			var rule = child
-			for card in rule.find_children("", card_type):
+			for card in rule.find_children("", card_type, false):
 				var nb_occ = nb_mandatory_occ(card, rule, depth, world_loc)
 				if nb_occ:
 					set_hold(card, nb_occ)
