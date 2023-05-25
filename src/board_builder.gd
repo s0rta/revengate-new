@@ -97,9 +97,11 @@ func random_floor_cell():
 				return attempt
 	return null
 
-func random_coord_in_region(region, valid_pred=null):
+func random_coord_in_region(region, valid_pred=null, strict=false):
 	## Return a random coordinate inside the region.
 	## if a callable is supplied as `valid_pred` the coord will be true for this predicate.
+	## strict: coord must be in region, otherwise, a nearby fallback is acceptable when no 
+	##   coords exist in region.
 	## Return null if no coord can be found matching valid_pred.
 	var region_rect = Geom.region_bounding_rect(rect, region)
 	var coord = Rand.coord_in_rect(region_rect)
@@ -116,6 +118,16 @@ func random_coord_in_region(region, valid_pred=null):
 	for c in spiral:
 		if is_valid.call(c):
 			return c
+	if strict:
+		return null
+	# the region if full, falling back to nearby coords in the rest of the board
+	spiral = board.spiral(coord, null, false)
+	for c in spiral:
+		if valid_pred:
+			if valid_pred.call(c):
+				return c
+		else:
+			return c	
 	return null
 	
 func gen_level(nb_rooms=4):
@@ -246,13 +258,6 @@ func place(thing, in_room=true, coord=null, free:bool=true, bbox=null, index=nul
 		# placement and we're just trying to find a fallback.
 		bbox = null  
 		cell = board.spiral(cell, null, true, true, bbox, index).next()
-
-	thing.place(cell, true)
-	if index:
-		if thing is Actor:
-			index.refresh_actor(thing, false)
-		else:
-			index.refresh_item(thing, false)
 		
 	# reparent if needed
 	if thing is Node:
@@ -265,6 +270,14 @@ func place(thing, in_room=true, coord=null, free:bool=true, bbox=null, index=nul
 			board.add_child(thing)
 			if thing is Actor:
 				board.register_actor(thing)
-	
+
+	# do the actual coord update	
+	thing.place(cell, true)
+	if index:
+		if thing is Actor:
+			index.refresh_actor(thing, false)
+		else:
+			index.refresh_item(thing, false)
+
 	return cell
 

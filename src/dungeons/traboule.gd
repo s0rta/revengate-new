@@ -37,19 +37,22 @@ func fill_new_board(builder, depth, world_loc, size):
 	## put the main geometry on a freshly created board, except for connectors
 	var outer_rect = Rect2i(Vector2i.ZERO, size)
 
-	if _lvl_is_maze(depth):
-		# TODO: put most of this in the builder
+	if _lvl_is_maze(depth, world_loc):
+		assert(builder.rect.size % 2 == Vector2i.ONE, "maze levels should have odd sizes")
 		builder.paint_rect(outer_rect, builder.wall_terrain)
-		var inner_rect = Rect2i(outer_rect.position+Vector2i.ONE, outer_rect.size-Vector2i.ONE)
+		var inner_rect = Rect2i(outer_rect.position+Vector2i.ONE, outer_rect.size-Vector2i.ONE*2)
 		var biases = _maze_biases(depth)
 		builder.gen_maze(inner_rect, biases)
 	else:
 		builder.paint_rect(outer_rect, builder.clear_terrain)
 		builder.gen_rooms(randi_range(3, 6))
 
-func _lvl_is_maze(depth:int):
+func _lvl_is_maze(depth:int, world_loc:Vector3i):
 	## Return whether the next board be a maze?
-	return Rand.linear_prob_test(depth, FIRST_MAZE-1, ALL_MAZES)
+	if _loc_elev(world_loc) == tunneling_elevation:
+		return true
+	else:
+		return Rand.linear_prob_test(depth, FIRST_MAZE-1, ALL_MAZES)
 
 func _maze_biases(depth:int):
 	## Return the bias params for a maze generated at a given depth
@@ -61,3 +64,17 @@ func _maze_biases(depth:int):
 	var diff_steps = (clamp(depth, easy_depth, hard_depth) - easy_depth)
 	var reconnect = diff_steps * diff_slope + easy_reconnect
 	return {"twistiness": 0.3, "branching": 0.3, "reconnect": reconnect}
+
+func add_connectors(builder:BoardBuilder, neighbors):
+	## place stairs and other cross-board connectors on a board
+	var board = builder.board as RevBoard
+	var coord:Vector2i	
+	for rec in neighbors:
+		var region = _region_for_loc(board.world_loc, rec.world_loc)
+		var terrain = _neighbor_connector_terrain(board.world_loc, rec.world_loc)
+		if terrain == "gateway" and region != Consts.REG_CENTER and not builder.has_rooms():
+			coord = Rand.coord_on_rect_perim(builder.rect, region)
+		else:
+			coord = builder.random_coord_in_region(region, board.is_floor)
+		builder.paint_cells([coord], terrain)
+		board.set_cell_rec(coord, "conn_target", rec)

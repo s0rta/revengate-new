@@ -58,15 +58,29 @@ spawn_cost = 8.0
 script = ExtResource("7_bd8gw")
 max_dungeon_occ = 1
 min_dungeon_occ = 1
-world_loc = Vector3i(0, 1, 0)
-
-[node name="LoomCards" parent="QuestGoals" instance=ExtResource("11_320yy")]
+world_loc = Vector3i(3, 3, 0)
 
 [node name="Outlaw" parent="QuestGoals" instance=ExtResource("12_g5w02")]
+
+[node name="LoomCards" parent="QuestGoals/Outlaw" instance=ExtResource("11_320yy")]
 
 [node name="Outlaw2" parent="QuestGoals" instance=ExtResource("12_g5w02")]
 
 [node name="Outlaw3" parent="QuestGoals" instance=ExtResource("12_g5w02")]
+
+[node name="FakeQuest" type="Node" parent="."]
+script = ExtResource("7_bd8gw")
+max_dungeon_occ = 1
+min_dungeon_occ = 1
+world_loc = Vector3i(0, 1, 0)
+
+[node name="Outlaw" parent="FakeQuest" instance=ExtResource("12_g5w02")]
+
+[node name="LoomCards" parent="FakeQuest/Outlaw" instance=ExtResource("11_320yy")]
+
+[node name="Outlaw2" parent="FakeQuest" instance=ExtResource("12_g5w02")]
+
+[node name="Outlaw3" parent="FakeQuest" instance=ExtResource("12_g5w02")]
 
 [node name="Unique" type="Node" parent="."]
 script = ExtResource("7_bd8gw")

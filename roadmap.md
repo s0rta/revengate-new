@@ -108,8 +108,8 @@ UI:
 - [x] use the Godot mobile renderer
 
 ## v0.7
-- [ ] new level design for Lyon surface
-- [ ] new starting quest: Cards Collection about retreiving stolen loom punch cards
+- [x] new level design for Lyon surface
+- [x] new starting quest: Cards Collection about retreiving stolen loom punch cards
 - [x] bug: "follow stairs" is the wrong button label for horizontal gateways
 - [x] bug: no message when getting potions from barman
 - [x] connector tiles should always be stairs when changing elevation
@@ -119,7 +119,7 @@ VFX:
 
 Combat:
 - [x] TribalTerritorial strategy
-- [ ] Quest NPC has self defence
+- [x] Quest NPC has self defense
 - [x] death drops
 
 Builder:

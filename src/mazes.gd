@@ -37,14 +37,21 @@ class MazeBuilder extends RefCounted:
 		
 		if even_align:
 			_align_rect()
-		# Make sure we don't attempt to fill partial supercells
-		rect.size -= rect.size % 2
 
 	func _align_rect():
 		## Make sure our rect aligns to make every supercells anchored on an even coord
 		var offset = rect.position % 2
 		rect.position += offset
 		rect.size -= offset
+	
+	func effective_rect():
+		## Return the rect that will/have-been be filled by the maze. 
+		## The difference between this and the rect passed to the constructor is due to 
+		## grid alignment and the unavoidable parital filling of supercells around the bottom
+		## and right edges.
+		var erect = Rect2i(rect)
+		erect.size = erect.size + erect.size % 2 - Vector2i.ONE
+		return erect.size
 	
 	func set_mask(mask_):
 		mask = mask_

@@ -24,7 +24,8 @@ This is a list of loose ends, code optimization, and small tasks for the Godot i
 - [ ] inspect_tile() includes coord, pos, terrain, destination board for connectors
 - [ ] Main.make_board() returns the builder
 - [ ] BoadBuilder keeps and maintain an index
-
+- [ ] factor out TileSpiral from RevBoard
+ 
 ## Main
 - [ ] Main sets the board on the turn queue, starts the turns in Main._ready()
 

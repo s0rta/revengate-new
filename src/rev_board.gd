@@ -709,12 +709,14 @@ func is_on_board(coord):
 	var bbox = get_used_rect()
 	return bbox.has_point(coord) and get_cell_tile_data(0, coord) != null
 
-func add_connection(near_coord, far_board, far_coord):
+func add_connection(near_coord, far_board, far_coord=null):
 	## Connect this board with another one.
 	## Connections has a near (self) and a far side (far_board). This method makes the
 	## connection bi-directional.
 	## Return the near-side of the connection
 	# TODO: connect the resource path, not the board, since that will serialize better
+	if far_coord == null:
+		far_coord = far_board.get_connector_for_loc(world_loc)
 	var near_conn = {"far_board": far_board, "far_coord": far_coord}
 	set_cell_rec(near_coord, "connection", near_conn)
 	far_board.set_cell_rec(far_coord, "connection", {"far_board": self, "far_coord": near_coord})

@@ -19,12 +19,12 @@
 ## A collection of boards with similar attributes
 class_name Dungeon extends Node
 
-const DEF_SIZE = Vector2i(24, 16)
+const DEF_SIZE = Vector2i(23, 15)
 
 @export var start_depth := 0
 @export var start_world_loc: Vector3i
 @export var dest_world_loc := Vector3i(3, 5, 0)
-@export var tunneling_elevation := -3  # start going horizontal once we reach that depth
+@export var tunneling_elevation := -2  # start going horizontal once we reach that depth
 var deck_builder: DeckBuilder
 var starting_board: RevBoard
 
@@ -161,9 +161,7 @@ func _loc_elev(world_loc):
 	
 func _neighbors_for_level(depth:int, world_loc:Vector3i, prev=null):
 	## Return an array of world locations a new level should be connect to
-	
 	var elev = _loc_elev(world_loc)
-	
 	var locs = []
 	if _is_aligned(world_loc, start_world_loc) or _is_aligned(world_loc, dest_world_loc):
 		locs.append(world_loc + Consts.LOC_LOWER)
@@ -199,7 +197,7 @@ func populate_board(builder, depth, world_loc:Vector3i):
 	var index = builder.board.make_index()
 	
 	# Items
-	var budget = max(0, depth*1.2)
+	var budget = max(0, depth*1.05)
 
 	# mandatory items
 	var deck = deck_builder.gen_mandatory_item_deck(depth, world_loc)

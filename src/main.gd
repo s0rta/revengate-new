@@ -83,14 +83,12 @@ func switch_board_at(coord):
 	if conn:
 		new_board = conn.far_board
 	else:
-		# FIXME: the dungeon should do most of that
 		var conn_target = old_board.get_cell_rec(coord, "conn_target")
 		var old_dungeon = old_board.get_dungeon()
 		new_board = old_dungeon.new_board_for_target(old_board, conn_target)
 
 		# connect the outgoing connector with the incomming one
-		var far_coord = new_board.get_connector_for_loc(old_board.world_loc)
-		conn = old_board.add_connection(coord, new_board, far_coord)
+		conn = old_board.add_connection(coord, new_board)
 	_activate_board(new_board)
 	
 	var builder = BoardBuilder.new(new_board)
