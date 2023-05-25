@@ -7,6 +7,7 @@
 char = "🍸"
 caption = "potion of regeneration"
 consumable = true
+spawn_cost = 3.0
 
 [node name="Effect" type="Node" parent="." index="1"]
 script = ExtResource("2_63tlt")

@@ -80,9 +80,7 @@ func _gui_input(event):
 		if event.pressed and event.double_click:
 			# BUG: Our current implementation of doubletap actions is wrong because single tap
 			# actions have already been done by the time this handler is called. 
-			assert(false, "wrong implementation")  
-			%ActorDetailsScreen.popup()
-			accept_event()
+			print("Double tap is not implemented, ignoring...")
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 			$LongTapTimer.stop()
 			$LongTapTimer.start()

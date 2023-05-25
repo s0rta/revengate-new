@@ -35,7 +35,9 @@ func make_builder(board, rect):
 
 func finalize_static_board(board:RevBoard):
 	## do a bit of cleanup to make a static board fit in the dungeon
+	# FIXME: a few of those can go with the parent class
 	board.scan_terrain()
+	board.world_loc = start_world_loc
 	print("Board world loc: %s" % board.world_loc_str(board.world_loc))
 	for coord in board.get_connectors():
 		if not board.get_connection(coord):  # we only add data to the unconnected coords
