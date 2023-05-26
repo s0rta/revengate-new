@@ -121,21 +121,23 @@ Combat:
 - [x] TribalTerritorial strategy
 - [x] Quest NPC has self defense
 - [x] death drops
+- [x] umbrella
 
 Builder:
 - [x] more than one way up or down on some levels
 
 ## v0.8
-- [ ] unique items are per-game unique, not only per-dungeon unique
-- [ ] item to increase latent healing
 - [ ] stairs are further apart
 - [ ] end of game stats
 - [ ] pinch to zoom
 - [ ] Allow mixing rooms and mazes in level generation
 
+Items:
+- [ ] unique items are per-game unique, not only per-dungeon unique
+- [ ] item to increase latent healing
+
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()
-
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]

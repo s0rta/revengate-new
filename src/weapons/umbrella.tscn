@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://c71npa04ilk1k"]
+[gd_scene load_steps=4 format=3 uid="uid://c71npa04ilk1k"]
 
 [ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_etf0n"]
 [ext_resource type="Script" path="res://src/weapons/weapon.gd" id="1_nhkai"]
+[ext_resource type="AudioStream" uid="uid://d1ve3m18ud783" path="res://src/weapons/stick-hit-01.mp3" id="3_jljv3"]
 
 [node name="Umbrella" instance=ExtResource("1_etf0n")]
 script = ExtResource("1_nhkai")
@@ -14,3 +15,7 @@ caption = "umbrella"
 
 [node name="Label" parent="." index="0"]
 text = "⚔"
+
+[node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
+stream = ExtResource("3_jljv3")
+volume_db = -12.0

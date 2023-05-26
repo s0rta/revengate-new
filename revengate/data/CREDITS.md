@@ -46,6 +46,7 @@ https://opengameart.org/content/rpg-sound-pack
 Additionnal sound effects CC-BY-SA Yannick Gingras:
 - end screens sound effects
 - hammer-01
+- stick-01
 - ethereal-01, 02
 - razor
 - explosion-01
