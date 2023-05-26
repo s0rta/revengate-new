@@ -6,7 +6,7 @@ Michel: Did you get a job from Nadège?
 	Michel: Execellent!
 	=> extra_potions
 - Who is that?
-	Michel: She hangs in the café. Take the secret door in broom closet on the left and go talk to her.
+	Michel: She hangs at the Café Caché. Take the secret door in my broom closet on the left and go talk to her.
 	=> END
 
 ~ extra_potions
@@ -19,7 +19,7 @@ Michel: I have too many potions and they use some valuable shelve space. Would y
 	do checkpoint("dungeon_intro")
 	Michel: That's a bold choice!
 
-Michel: I'll be right here. Chat with me again if you want to learn more about how things work around there.
+Michel: I'll be right here. Chat with me again if you want to learn more about how things work around here.
 => END
 
 ~ dungeon_intro

@@ -11,9 +11,9 @@ The blade was moving dangerously fast around the young man's Adam's apple. He wa
 
 The loud hissing came every minute or so but it didn't seem to have any effect on the swift strokes of the barber's blade.
 
-"How's the job hunting?" the barber asked.
+"How's the job hunting going?" the barber asked.
 
-"Not good, Michel," the young man on the chair replied. "No one is hiring architects anymore. It's like they aren't making building anymore. All they are looking for are sailors and engineers, probably to build more of those dragons like they have next door."
+"Not good, Michel," the young man on the chair replied. "No one is hiring architects these days. It's like they aren't making buildings anymore. All they are looking for are sailors and engineers, probably to build more of those dragons like they have next door."
 
 "That fierce beast is a rotopress," Michel replied. "Instead of going up and down, it goes round and round. It prints pages by rolling the types over them. It's quite the sight."
 
@@ -23,15 +23,15 @@ Michel worked in silence for a several minutes, then he switched to a smaller bl
 
 "Don't worry about that, Michel. My father saw that I learned how to defend myself." There was not point in hiding the truth. "He was a very assertive man and more often than not, it's him that I had to wrestle down." 
 
-Michel the barber removed the remnants of shaving soap with a wet towel, then rubbed some fragrant lotion between his hands. The young man braces for the sting, but he was sank back down in the chair when a blanket of comfort enveloped his face.
+Michel the barber removed the remnants of shaving soap with a wet towel, then rubbed some fragrant lotion between his hands. The young man braced for the sting, but he sank back down in the chair when a blanket of comfort enveloped his face.
 
 "This smells good!" The young man exclaimed. "Quite exotic!"
 
 "This is sandal wood. Traders from Morocco have it at the market from time to time, but the only reliable supply is with the smugglers" Michel passed the young man a large mirror, almost 10cm across. "You'd probably get lost down there. They say those dark passages are as twisty as Pinot vines."
 
-The barber was obviously referring to the network of corridors built under Lyon over the years by the silk workers.
+The barber was obviously referring to the network of corridors that the silk workers had built under Lyon over the years.
 
-"The traboules?" the young man replied. "I've seen many plans in school. I don't think they are the maze that people claim they are. They mostly run East-West and their is a method to their madness. Structural walls for example are very obvious. Those never twist." 
+"The traboules?" the young man replied. "I've seen many plans in school. I don't think they are the maze that people claim they are. They mostly run East-West and there is a method to their madness. Structural walls for example are very obvious. Those never twist." 
 
 A faint smile slowly grew under the barber's perfectly curved mustache. 
 
