@@ -126,6 +126,9 @@ Builder:
 - [x] more than one way up or down on some levels
 
 ## v0.8
+- [ ] unique items are per-game unique, not only per-dungeon unique
+- [ ] item to increase latent healing
+- [ ] stairs are further apart
 - [ ] end of game stats
 - [ ] pinch to zoom
 - [ ] Allow mixing rooms and mazes in level generation

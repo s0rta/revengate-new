@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://c185mr0bu3u3w"]
+[gd_scene load_steps=25 format=3 uid="uid://c185mr0bu3u3w"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_yitoo"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_i1rpj"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://d8jxxkoa4b00" path="res://src/people/outlaw.tscn" id="12_g5w02"]
 [ext_resource type="PackedScene" uid="uid://c7fgdridawfb3" path="res://src/items/magic_capsule_of_regen.tscn" id="13_hakha"]
 [ext_resource type="PackedScene" uid="uid://dj5x5c687ddyj" path="res://src/items/amulet_of_strength.tscn" id="14_dvumj"]
+[ext_resource type="PackedScene" uid="uid://b80ulbklxp5at" path="res://src/items/potion_of_poison.tscn" id="15_0p6sp"]
 [ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="15_ngw60"]
 [ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="16_ygxep"]
 [ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="17_4rmpd"]
@@ -61,27 +62,21 @@ max_dungeon_occ = 1
 min_dungeon_occ = 1
 world_loc = Vector3i(7, 1, 0)
 
-[node name="Outlaw" parent="QuestGoals" instance=ExtResource("12_g5w02")]
+[node name="Outlaw1" parent="QuestGoals" instance=ExtResource("12_g5w02")]
 
-[node name="LoomCards" parent="QuestGoals/Outlaw" instance=ExtResource("11_320yy")]
+[node name="LoomCards" parent="QuestGoals/Outlaw1" instance=ExtResource("11_320yy")]
 
 [node name="Outlaw2" parent="QuestGoals" instance=ExtResource("12_g5w02")]
 
+[node name="PotionOfHealing" parent="QuestGoals/Outlaw2" instance=ExtResource("22_bxpqo")]
+visible = false
+
+[node name="PotionOfRegen" parent="QuestGoals/Outlaw2" instance=ExtResource("12_5tg6f")]
+visible = false
+
 [node name="Outlaw3" parent="QuestGoals" instance=ExtResource("12_g5w02")]
 
-[node name="FakeQuest" type="Node" parent="."]
-script = ExtResource("7_bd8gw")
-max_dungeon_occ = 1
-min_dungeon_occ = 1
-world_loc = Vector3i(0, 1, 0)
-
-[node name="Outlaw" parent="FakeQuest" instance=ExtResource("12_g5w02")]
-
-[node name="LoomCards" parent="FakeQuest/Outlaw" instance=ExtResource("11_320yy")]
-
-[node name="Outlaw2" parent="FakeQuest" instance=ExtResource("12_g5w02")]
-
-[node name="Outlaw3" parent="FakeQuest" instance=ExtResource("12_g5w02")]
+[node name="PotionOfPoison" parent="QuestGoals/Outlaw3" instance=ExtResource("15_0p6sp")]
 
 [node name="Unique" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
