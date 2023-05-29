@@ -127,9 +127,9 @@ Builder:
 - [x] more than one way up or down on some levels
 
 ## v0.8
+- [ ] all buttons fire on Up rather than Pressed
 - [ ] stairs are further apart
 - [ ] end of game stats
-- [ ] pinch to zoom
 - [ ] Allow mixing rooms and mazes in level generation
 
 Items:
@@ -139,9 +139,11 @@ Items:
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()
 
+UX:
+- [x] pinch to zoom
+
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
-- [ ] pinch to zoom
 
   
 ## v1.0
@@ -166,3 +168,4 @@ Combat:
 - [ ] locked doors
 - [ ] auto-pan to hero when he gets close to the egde of the screen
 - [ ] VFX: edge of water reflections 
+- [ ] items long descriptions

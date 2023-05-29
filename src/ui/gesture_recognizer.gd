@@ -21,10 +21,16 @@ signal capture_stopped(success, position)
 signal action_started(message)
 signal action_complete
 
+const POS_EPSILON = 2.0  # positions that far apart are considered to be the same
+
 @onready var viewport: SubViewport = find_child("Viewport")
 var is_capturing_clicks := false
 var has_panned := false
 var was_long_tap := false
+
+# multi-touch recognition
+var nb_touching := 0
+var touches_pos := {}  # event.index -> pos
 
 ## Act on Cell: do the default action for a particular tile.
 class ActEvent extends InputEventAction:
@@ -76,47 +82,99 @@ func _input(event):
 			emit_signal("capture_stopped", true, event.position)
 
 func _gui_input(event):
-	if event is InputEventMouseButton:
-		if event.pressed and event.double_click:
-			# BUG: Our current implementation of doubletap actions is wrong because single tap
-			# actions have already been done by the time this handler is called. 
-			print("Double tap is not implemented, ignoring...")
-		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+	# The emulate_mouse_from_touch setting causes Godot to emit both an InputEventMouseButton and
+	# an InputEventScreenTouch on mobile. The mouse event arrives first and we ignore it here to 
+	# avoid doing touch actions twice. We can't do this filtering in _input() because HUD buttons
+	# are blind to touch events and rely on on InputEventMouseButton 
+	if OS.has_feature("mobile") and event is InputEventMouseButton:
+		accept_event()
+
+	# TODO: MOUSE_BUTTON_RIGHT should pop the context menu
+
+	# touch actions are treated like MOUSE_BUTTON_LEFT
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT \
+			or event is InputEventScreenTouch:
+		var index = event.get("index")
+		if index == null:
+			index = 0
+		
+		# TODO: we should accept the event to prevent any other controls from processing it, 
+		#   but doing so silences all the events, even the ones that we are injecting into 
+		#   the game viewport. Not sure how to work around that...
+		# accept_event()
+		if event.pressed:
 			$LongTapTimer.stop()
 			$LongTapTimer.start()
-		elif not has_panned and event.button_index == MOUSE_BUTTON_LEFT:  # release
-			# FIXME: only fire if hero is accepting
-			if $LongTapTimer.time_left == 0:
-				var context_event = ContextMenuEvent.new(event.position)
-				viewport.inject_event(context_event)
-				accept_event()
-			else:
-				print("tap release: %s seconds left for a long tap" % $LongTapTimer.time_left)
-		
-	if event.is_action_pressed("pan"):
-		has_panned = false
-		accept_event()
-	elif event.is_action_released("pan"):
-		if has_panned:
-			accept_event()
-		else:
-			# FIXME: we should stop propagating the click, but accept_event() kills *any* event, 
-			#   including the accept action.
-			# accept_event()  
-			var act_event = ActEvent.new(event.position)
-			viewport.inject_event(act_event)
-		
-	if Input.is_action_pressed("pan"):
-		if event is InputEventMouseMotion:
+			touches_pos[index] = event.position
+			nb_touching = len(touches_pos)
+			if nb_touching == 1:
+				has_panned = false
+		else: # release
+			touches_pos.erase(index)
+			nb_touching = len(touches_pos)
+			if nb_touching == 0:
+				if not has_panned: 
+					# FIXME: only fire if hero is accepting
+					if $LongTapTimer.time_left == 0:
+						var context_event = ContextMenuEvent.new(event.position)
+						viewport.inject_event(context_event)
+					else:
+						var act_event = ActEvent.new(event.position)
+						viewport.inject_event(act_event)
+						print("tap release: %s seconds left for a long tap" % $LongTapTimer.time_left)
+
+	if nb_touching > 0 and (event is InputEventScreenDrag or event is InputEventMouseMotion):
+		var index = event.get("index")
+		if index == null:
+			index = 0
+		var info = _mt_info(index, event.position)
+		if not info.center_eq:
 			has_panned = true
 			var camera = viewport.get_camera_2d()
 			camera.offset -= event.relative
+		if not info.avg_dist_eq:
+			var factor = 1+(info.avg_dist_old - info.avg_dist_new) / info.avg_dist_old
+			# re-zoom
+			viewport.zoom *= factor
+			touches_pos[index] = event.position
 		accept_event()
+	
+	if event.is_action_pressed("zoom-in"):
+		viewport.zoom_in()
+	elif event.is_action_pressed("zoom-out"):
+		viewport.zoom_out()
+	# consume both zoom press and zoom release
+	if event.is_action("zoom-in") or event.is_action("zoom-out"):
+		accept_event()
+
 
 func _unhandled_input(event):
 	if is_capturing_clicks and event.is_action_released("ui_cancel"):
 		emit_signal("capture_stopped", false, null)
 		accept_event()
+
+func _mt_info(current_index, current_pos):
+	## Return a dictionary of information about the current multi-touch event
+	var info = {}
+	var total = Vector2.ZERO
+	for index in touches_pos:
+		total += touches_pos[index]
+	info.center_old = total / nb_touching
+	total = 0.0
+	for index in touches_pos:
+		total += info.center_old.distance_to(touches_pos[index])
+	info.avg_dist_old = total / nb_touching
+	info.center_new = info.center_old + (current_pos - touches_pos[current_index]) / nb_touching
+	total = 0.0
+	for index in touches_pos:
+		if index == current_index:
+			total += info.center_new.distance_to(current_pos)
+		else:
+			total += info.center_new.distance_to(touches_pos[index])
+	info.avg_dist_new = total / nb_touching
+	info.center_eq = info.center_old.distance_to(info.center_new) < POS_EPSILON
+	info.avg_dist_eq = abs(info.avg_dist_old - info.avg_dist_new) < POS_EPSILON
+	return info
 
 func start_loot():
 	## Start the loot action, pass the control to Hero

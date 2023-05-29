@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=28 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -8,7 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://bxjfh12dtkof6" path="res://src/combat/hero.tscn" id="4_lrsod"]
 [ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="5_odllu"]
 [ext_resource type="Script" path="res://src/hud.gd" id="7_4dw6n"]
-[ext_resource type="Script" path="res://src/ui/zoom_slider.gd" id="8_7qyjt"]
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="9_7u4fi"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
@@ -123,20 +122,6 @@ dest_world_loc = Vector3i(7, 1, 0)
 [node name="HUD" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("7_4dw6n")
-
-[node name="ZoomSlider" type="VSlider" parent="HUD"]
-custom_minimum_size = Vector2(32, 0)
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_right = 16.0
-grow_vertical = 2
-focus_mode = 0
-min_value = 0.5
-max_value = 2.0
-step = 0.02
-value = 1.0
-tick_count = 15
-script = ExtResource("8_7qyjt")
 
 [node name="LMargin" type="MarginContainer" parent="HUD"]
 anchors_preset = 2
@@ -364,7 +349,6 @@ script = ExtResource("41_hgs5k")
 [connection signal="picked_item" from="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" to="HUD" method="update_states_at"]
 [connection signal="state_changed" from="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" to="HUD" method="_on_hero_state_changed"]
 [connection signal="strategy_expired" from="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" to="HUD" method="refresh_cancel_button_vis"]
-[connection signal="value_changed" from="HUD/ZoomSlider" to="BoardArea/GestureSurveyor/Viewport" method="_on_zoom_slider_value_changed"]
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/LootButton" to="BoardArea/GestureSurveyor" method="start_loot"]
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/InventoryButton" to="BoardArea/GestureSurveyor" method="show_inventory"]

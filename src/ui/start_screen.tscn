@@ -121,7 +121,7 @@ Enjoy!
 [node name="Tabulator" type="Node" parent="."]
 script = ExtResource("3_jig7u")
 
-[connection signal="pressed" from="NewGameButton" to="." method="start_new_game"]
-[connection signal="pressed" from="HBoxContainer2/CreditsButton" to="." method="_on_credits_button_pressed"]
-[connection signal="pressed" from="HBoxContainer2/LicenseButton" to="." method="_on_license_button_pressed"]
-[connection signal="pressed" from="HBoxContainer2/PrivacyButton" to="." method="_on_privacy_button_pressed"]
+[connection signal="button_up" from="NewGameButton" to="." method="start_new_game"]
+[connection signal="button_up" from="HBoxContainer2/CreditsButton" to="." method="_on_credits_button_pressed"]
+[connection signal="button_up" from="HBoxContainer2/LicenseButton" to="." method="_on_license_button_pressed"]
+[connection signal="button_up" from="HBoxContainer2/PrivacyButton" to="." method="_on_privacy_button_pressed"]

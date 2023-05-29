@@ -17,6 +17,13 @@
 
 extends SubViewport
 
+var zoom := 1.0:
+	get:
+		return zoom
+	set(new_zoom):
+		zoom = new_zoom
+		size_2d_override = size * zoom
+
 func _ready():
 	# we set those here because the parent container tends to override them in the scene editor
 	if size_2d_override == Vector2i.ZERO:
@@ -28,6 +35,14 @@ func pos_to_local(pos):
 	var offset = get_camera_2d().offset
 	var transform = get_final_transform().affine_inverse()
 	return pos * transform + offset
+
+func zoom_in(factor:=1.05):
+	## Increase magnification
+	zoom *= factor
+	
+func zoom_out(factor:=1.05):
+	## Decrease magnification
+	zoom /= factor
 
 func global_pos_to_board_coord(pos):
 	## Convert a screen pixel `pos` into a Board tile `coord`.
@@ -46,9 +61,6 @@ func inject_event(event, manual_xform=true):
 	elif event is InputEventMouseButton:
 		event.position -= offset
 	push_unhandled_input(event, not manual_xform)
-
-func _on_zoom_slider_value_changed(value):
-	size_2d_override = size / value
 
 func center_on_coord(coord):
 	## move the camera to be directly above `coord`
