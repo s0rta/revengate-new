@@ -71,3 +71,8 @@ const REG_NORTH = Vector2i(0, -1)
 const REG_SOUTH = Vector2i(0, 1)
 const REG_EAST = Vector2i(1, 0)
 const REG_WEST = Vector2i(-1, 0)
+const REGION_CHARS = {"C": REG_CENTER, 
+						"N": REG_NORTH, 
+						"S": REG_SOUTH, 
+						"E": REG_EAST, 
+						"W": REG_WEST}

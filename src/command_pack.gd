@@ -18,7 +18,7 @@
 ## A container for player-triggered game commands.
 class_name CommandPack extends Node
 
-var _cmd_classes = []
+var _cmd_classes = []  # all sub-classes of Command must be added to this list
 
 ## A game command
 class Command extends RefCounted:

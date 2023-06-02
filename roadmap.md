@@ -130,11 +130,15 @@ Builder:
 - [ ] all buttons fire on Up rather than Pressed
 - [ ] stairs are further apart
 - [ ] end of game stats
+
+Progen:
 - [ ] Allow mixing rooms and mazes in level generation
+- [ ] Prefabs for common surface features
 
 Items:
 - [ ] unique items are per-game unique, not only per-dungeon unique
 - [ ] item to increase latent healing
+- [ ] potion of booze: heals, but impairs perception and agility
 
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()

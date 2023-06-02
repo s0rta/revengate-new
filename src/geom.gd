@@ -116,3 +116,25 @@ static func region_bounding_rect(rect:Rect2i, region:Vector2i):
 	else:
 		assert(false, "Invalid region: %s" % region)
 
+static func region_outside_rect(rect:Rect2i, region:Vector2i):
+	## Return the complement of a region bounding rect. The rect won't contain any coords from 
+	## the region, but it might not contain all the coords that are not in the region sice some 
+	## regions are not rectangular.
+	## REG_CENTER does not have an outside-rect
+
+	var reg_rect = region_bounding_rect(rect, region)
+
+	if region == Consts.REG_NORTH:
+		var size = Vector2i(rect.size.x, rect.size.y - reg_rect.size.y)
+		return Rect2i(Vector2i(rect.position.x, reg_rect.end.y), size)
+	elif region == Consts.REG_SOUTH:
+		var size = Vector2i(rect.size.x, rect.size.y - reg_rect.size.y)
+		return Rect2i(rect.position, size)
+	elif region == Consts.REG_WEST:
+		var size = Vector2i(rect.size.x - reg_rect.size.x, rect.size.y)
+		return Rect2i(Vector2i(reg_rect.end.x, rect.position.y), size)
+	elif region == Consts.REG_EAST:
+		var size = Vector2i(rect.size.x - reg_rect.size.x, rect.size.y)
+		return Rect2i(rect.position, size)
+	else:
+		assert(false, "Invalid region: %s" % region)

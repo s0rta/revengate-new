@@ -136,6 +136,14 @@ func show_context_menu_for(coord):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
+	
+	var board = Tender.hero.get_board()
+	var builder = BoardBuilder.new(board)
+
+	var fabs = PrefabPack.parse_fabstr("WrNr", builder)
+	print("Fabs: %s" % [fabs])
+	for fab in fabs:
+		fab.fill()
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")

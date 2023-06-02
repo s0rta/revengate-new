@@ -63,11 +63,14 @@ func room_region(room: Rect2i):
 	var center = room.get_center()
 	return Geom.coord_region(center, rect)
 
-func paint_cells(cells, terrain_name):
+func paint_cell(coord, terrain_name):
+	paint_cells([coord], terrain_name)
+
+func paint_cells(coords, terrain_name):
 	if terrain_name in RevBoard.INDEXED_TERRAINS:
-		board._append_terrain_cells(cells, terrain_name)
+		board._append_terrain_cells(coords, terrain_name)
 	var tkey = terrain_names[terrain_name]
-	board.set_cells_terrain_connect(0, cells, tkey[0], tkey[1])
+	board.set_cells_terrain_connect(0, coords, tkey[0], tkey[1])
 	
 func paint_path(path, terrain_name):
 	assert(terrain_name not in RevBoard.INDEXED_TERRAINS, "indexing path terrain is not implemented")
