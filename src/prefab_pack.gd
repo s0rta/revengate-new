@@ -145,6 +145,17 @@ static func parse_fabstr(fabstr:String, builder:BoardBuilder, rect=null):
 	assert(_fab_chars.has(fabstr[-1]), "Last fabstr element must be a fab char!")
 	return fabs			
 
-func ddump():
+static func fabs_untouched_rect(fabs):
+	## Return the smallest untouched rect for all fabs in an array
+	var rect = null
+	for fab in fabs:
+		var frect = fab.get_untouched_rect()
+		if frect == null:
+			continue
+		if rect == null or rect.encolses(frect):
+			rect = frect
+	return rect
+
+static func ddump():
 	print("Registered prefab characters are: %s" % [_fab_chars.keys()])
 	

@@ -20,6 +20,7 @@
 class_name Dungeon extends Node
 
 const DEF_SIZE = Vector2i(23, 15)
+var prefab_map = {Vector3i(8, 3, 0): "Er"}
 
 @export var start_depth := 0
 @export var start_world_loc: Vector3i
@@ -286,3 +287,16 @@ func new_board_for_target(old_board, conn_target):
 	var new_board = dungeon.build_board(conn_target.depth, new_loc, dungeon.DEF_SIZE, old_board.world_loc)
 	return new_board
  
+func add_loc_prefabs(builder, world_loc:Vector3i):
+	## Add the fab content to a board, return the unfabbed rect  or null if no fabs were applied
+	if not prefab_map.has(world_loc):
+		return
+	
+	var fabs = PrefabPack.parse_fabstr(prefab_map[world_loc], builder)
+	if fabs == null:
+		return null
+	for fab in PrefabPack.parse_fabstr(prefab_map[world_loc], builder):
+		fab.fill()
+	var rect = PrefabPack.fabs_untouched_rect(fabs)
+	return rect
+	

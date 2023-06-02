@@ -68,13 +68,15 @@ func fill_new_board(builder:BoardBuilder, depth, world_loc, size):
 
 	builder.paint_rect(outer_rect, builder.clear_terrain)
 	builder.paint_path(Geom.rect_perim(outer_rect), "wall")
+	var unfabbed_rect = add_loc_prefabs(builder, world_loc)
+	if unfabbed_rect != null:
+		outer_rect = unfabbed_rect
 	
-	var old_rect = builder.rect
-	builder.rect = Geom.inner_rect(builder.rect, 1)
-	builder.gen_rooms(randi_range(3, 6), false)
+	builder.rect = Geom.inner_rect(outer_rect, 1)
+	builder.gen_rooms(randi_range(3, 4), false)
 	builder.open_rooms()
 	
-	builder.rect = old_rect
+	builder.rect = outer_rect
 	
 func add_connectors(builder:BoardBuilder, neighbors):
 	## place stairs and other cross-board connectors on a board
