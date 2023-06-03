@@ -245,9 +245,8 @@ func _get_conn_target_recs(board:RevBoard):
 	return recs
 
 func regen(board:RevBoard):
-	## Replace board with a freshly generater one
-#	var stairs = board.get_connector_terrains()
-	var size = board.get_used_rect().size
+	## Replace board with a freshly generated one
+	var size = DEF_SIZE
 	var neighbors = _get_conn_target_recs(board)
 	var new_board = build_board(board.depth, board.world_loc, size, null, neighbors)
 

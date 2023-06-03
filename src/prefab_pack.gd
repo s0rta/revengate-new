@@ -53,18 +53,26 @@ class Prefab extends RefCounted:
 	
 class RiverFab extends Prefab:
 	var span:int  # average distance between river banks
-	var cross_axis:int
-	var flow_axis:int
+	var cross_axis:int  # perpendicular to the river flow
+	var flow_axis:int  # parallel to the river flow
+	var flow_step:Vector2i
+	var cross_step:Vector2i
 	
 	func _init(builder, rect, region):
 		super(builder, rect, region)
 		caption = "river"
 		if region == Consts.REG_NORTH or region == Consts.REG_SOUTH:
+			# horizontal river
 			cross_axis = Vector2i.AXIS_Y
 			flow_axis = Vector2i.AXIS_X
+			flow_step = Vector2i.RIGHT
+			cross_step = Vector2i.DOWN
 		else:
+			# veritical river
 			cross_axis = Vector2i.AXIS_X
 			flow_axis = Vector2i.AXIS_Y
+			flow_step = Vector2i.DOWN
+			cross_step = Vector2i.RIGHT
 		var cross_side = _cross_dim()
 		assert(cross_side >= 1, "Region is too small for a river")
 		if cross_side >= 3:
@@ -73,16 +81,6 @@ class RiverFab extends Prefab:
 			span = 1
 
 	func fill():
-		var step_vec: Vector2i
-		var bend_vec: Vector2i
-		if region == Consts.REG_NORTH or region == Consts.REG_SOUTH:
-			# horizontal river
-			step_vec = Vector2i.RIGHT
-			bend_vec = Vector2i.DOWN
-		else:
-			# veritical river
-			step_vec = Vector2i.DOWN
-			bend_vec = Vector2i.RIGHT
 		var near_limit = fab_rect.position[cross_axis]  # the side that is closer to the origin
 		var far_limit = fab_rect.end[cross_axis] - 1  # the side further away from the origin
 
@@ -92,7 +90,7 @@ class RiverFab extends Prefab:
 		for k in fab_rect.size[flow_axis]:
 			var coords = []
 			for i in span:
-				coords.append(fab_rect.position + step_vec*k + bend_vec*(near_edge+i))
+				coords.append(fab_rect.position + flow_step*k + cross_step*(near_edge+i))
 			var shifts = [0]  # where the banks can move for the next step
 			if near_edge > 0:
 				shifts.append(-1)
@@ -106,9 +104,10 @@ class RiverFab extends Prefab:
 					pad_edge = near_edge + shift
 				else:
 					pad_edge = near_edge + span
-				coords.append(fab_rect.position + step_vec*k + bend_vec*pad_edge)
+				coords.append(fab_rect.position + flow_step*k + cross_step*pad_edge)
 			builder.paint_cells(coords, "water")
 			near_edge += shift
+		_clear_beyond_land()
 		
 	func _cross_dim():
 		## Return how big our available rect is on the side perpendicular to the river flow
@@ -117,6 +116,22 @@ class RiverFab extends Prefab:
 	func _flow_dim():
 		## Return how big our available rect is on the side parallel to the river flow
 		return fab_rect.size[flow_axis]
+
+	func _clear_beyond_land():
+		## Clear all the terrain between the river and the edge of the map
+		var cross_vect = -region
+		var sign = cross_vect[cross_axis]
+		var cross_start_step = 0
+		if sign < 0:
+			cross_start_step = fab_rect.size[cross_axis] - 1 
+		for k in fab_rect.size[flow_axis]:
+			for i in fab_rect.size[cross_axis]:
+				var cross_delta = (i*sign + cross_start_step) * cross_step
+				var coord = fab_rect.position + flow_step*k + cross_delta
+				if builder.board.get_cell_terrain(coord) == "water":
+					break
+				else:
+					builder.board.erase_cell(0, coord)
 
 static func parse_fabstr(fabstr:String, builder:BoardBuilder, rect=null):
 	## Return a list of prefab instances for fabstr.

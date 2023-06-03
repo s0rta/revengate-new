@@ -130,10 +130,12 @@ Builder:
 - [ ] all buttons fire on Up rather than Pressed
 - [ ] stairs are further apart
 - [ ] end of game stats
+- [ ] start screen makes it clear when running a debug build
 
 Progen:
 - [ ] Allow mixing rooms and mazes in level generation
-- [ ] Prefabs for common surface features
+- [x] prefabs invocation system
+- [x] river prefab
 
 Items:
 - [ ] unique items are per-game unique, not only per-dungeon unique
