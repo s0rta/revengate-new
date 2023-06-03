@@ -19,4 +19,4 @@ export_presets.cfg
 android/build
 build
 android/.build_version
-
+.DS_Store
