@@ -140,13 +140,16 @@ func gen_level(nb_rooms=4):
 	add_stairs()
 
 func gen_rooms(nb_rooms:int, add_corridors:=true):
-	## Generate `nb_rooms` non-overlapping rooms and connect them with corridors
+	## Generate up to `nb_rooms` non-overlapping rooms and optionaly connect them with corridors
+	## Fewer than `nb_rooms` will be generated if builder.rect is too small.
+	## Return how many rooms were generated.
 	var partitions = [rect]
 	var nb_iter = 0
 	var areas = null
 	var size = null
 	var indices = null
-	while partitions.size() < nb_rooms and nb_iter < 10:
+	var is_full := false
+	while not is_full and partitions.size() < nb_rooms and nb_iter < 10:
 		areas = []
 		indices = []
 		for i in partitions.size():
@@ -155,6 +158,9 @@ func gen_rooms(nb_rooms:int, add_corridors:=true):
 				continue  # ignore tiny partitions
 			indices.append(i)
 			areas.append(partitions[i].get_area())
+		if indices.is_empty():
+			is_full = true
+			break
 			
 		# favor splitting the big partitions first
 		var index = Rand.weighted_choice(indices, areas)
@@ -171,6 +177,8 @@ func gen_rooms(nb_rooms:int, add_corridors:=true):
 	if add_corridors:
 		for i in rooms.size()-1:
 			connect_rooms(rooms[i], rooms[i+1])
+	# not using rooms.size() because we might have started with existing rooms
+	return partitions.size()
 
 func open_rooms():
 	## Add an opening to each of the known rooms

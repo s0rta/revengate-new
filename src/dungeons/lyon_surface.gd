@@ -73,7 +73,7 @@ func fill_new_board(builder:BoardBuilder, depth, world_loc, size):
 		outer_rect = unfabbed_rect
 	
 	builder.rect = Geom.inner_rect(outer_rect, 1)
-	builder.gen_rooms(randi_range(3, 4), false)
+	builder.gen_rooms(randi_range(3, 6), false)
 	builder.open_rooms()
 	
 	builder.rect = outer_rect
