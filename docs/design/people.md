@@ -112,3 +112,53 @@ He is very skilled at getting unsuspecting patrons to open up about private deta
 His shop is located next to a very active newspaper. The noisy steam powered printing press next door easily drowns the conversations and the occasional light music in the absinthe café. 
 
 Boilou is now 38 with a three year old son and his wife is pregnant with another child.
+
+
+## Philippe Blûmot
+
+Philippe Blûmot is the leader of the canut underground. He is independently wealthy from operating a loop of his own and exerts considerable influence in Lyon through his role in the underground network.
+
+He is a third generation silk worker. His father had a loom before him, but Philippe insisted in commissioning his own loom so he could run more complex punch card patterns. He is a master of the loom and can tell at a glance what pattern a stack of cards will produce. He also uses cards for secret communications with other loom masters who are able to tell if a deck would produce a nonsense weave and thereby convey some hidden meaning.
+
+His two younger brothers, Jacques and Martin, went into trade and farming respectively, staying only tangentially connected with the family tradition. They do not want anything to do with Philippe's work with the underground. 
+
+Philippe Blûmot is a masters of the traboules. He knows all the shortcuts, what password will open which doors, and where are the transient bases of the canut underground. 
+
+Philippe Blûmot is an adept of the two weapon rapier and dagger fighting style, a techniques well adapted to the narrow corridors of the traboules. He has no skills with poisons himself, but there are many able assassins working for him in the canut underground.
+
+Blûmot wears his dark brown hair short. He always sports a well groomed handlebar mustache in the classic Franconian style. More often than not, he wears a sleeveless vest of fine silk over a white shirt. His vests always feature elaborate patterns such as paisley, which are always weaved, never printed. A brightly coloured tucked-in plain silk cravat completes the outfit.
+
+There is something mysterious about his bright blue eyes – the gaze you'd expect from a stage magician.
+
+His drink of choice is cognac drank neat from a snifter. He also starts his days with several cups of coffee, which is drinks black with a decadent number of sugar cubes.
+
+Blûmot's speech is courteous and sophisticated. He readily employs flattery to secure large orders from nobles, just like he praises to cement the loyalty of this staff both at the loom and with the underground.
+
+
+## Pierre Dupont
+
+Pierre Dupont is a poet and song writer from Lyon. Mélissandre Favaresse is having an affair with him. 
+
+Dupont is the son of a blacksmith. His mother died while he was still a toddler. He spent some time in Paris where he met Baudelaire and a few other more famous poets. He wrote one revolutionary song, Le Chant des Ouvriers, something that Lux Co. is not fond of, but these days he writes mostly about romantic love.
+
+He is 33 when our adventure starts in 502 AP.
+
+Dupont is tall with broad shoulders. He keeps hi dark brown hair long and boasts a well trimmed full beard of the same colour.  His light brown eyes are full of fire and passion. He sings in local pubs and will occasionally burst into signing while sitting in  a café, which would be a disturbing behaving from most people, but since Dupont in  endowed with a rich and beautiful voice, his songs are always welcome. It's during one of those impromptu songs that he met Mélissandre.
+
+
+## Édouard de Lévi
+
+Édouard de Lévi is a mage and a Grand Master of the Blue Circle lodge. He is 52 at the start of our adventure and lives in Montpelier.
+
+He studied to become a Benedict monk, but fell in love with a woman and left the order before taking the vows. During his studies, he proved to be a voracious reader and managed to get his hands on a few occult manuals tucked away in a dark corner of the abbey. He immediately showed affinity for the material, but without proper teaching, he would have to wait before he could unlock any of the most significant spells.
+
+He got initiated to the Blue Circle Lodge in Germany. He quickly climbed the ranks, reaching "master" after only eight years. That's when he came back to establish the Franconian chapter of the secret society.
+
+De Lévi aspires to restore magic at the core of human society.  He sees magic as compatible with religion and hopes to see monks reuniting with the ancient art to have a bigger impact on their communities. He also feels like too much credit is given to science and hopes to take away some of the hero glamour from the researchers. At the same time, he feels like magic is too powerful for the masses and he wants to keep it's teaching secret and well controlled.
+
+
+## Inspiration for Future Characters
+* Allan Kardec, 1804–1869, founder of spiritism, lived in Lyon
+* Joseph-Antoine Boullan, 1824–1893, satanist, lived in Lyon
+* Pierre-Eugène Vintras, 1807–1875, satanist, lived in Lyon
+

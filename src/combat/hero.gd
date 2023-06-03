@@ -18,7 +18,7 @@
 @tool
 class_name Hero extends Actor
 
-const ENEMY_FACTIONS = [Factions.BEASTS]
+const ENEMY_FACTIONS = [Consts.Factions.BEASTS, Consts.Factions.OUTLAWS]
 
 func _ready():
 	state = States.LISTENING
@@ -84,7 +84,7 @@ func _unhandled_input(event):
 		
 	if move:
 		var dest = get_cell_coord() + move
-		if index.is_free(dest):
+		if board.is_on_board(dest) and index.is_free(dest):
 			self.move_by(move)
 			acted = true
 		else:

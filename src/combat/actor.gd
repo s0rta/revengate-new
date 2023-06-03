@@ -16,6 +16,7 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 @tool
+@icon("res://assets/dcss/cyclops_new.png")
 class_name Actor extends Area2D
 
 # the internal state changed
@@ -44,12 +45,6 @@ enum States {
 	IDLE,
 	LISTENING,
 	ACTING,
-}
-
-enum Factions {
-	NONE,
-	LUX_CO,
-	BEASTS
 }
 
 # std. dev. for a normal distribution more or less contained in 0..100
@@ -87,7 +82,7 @@ const CRITICAL_MULT := 0.35
 @export var healing_prob := 0.05  # %chance to heal at any given turn
 @export var resistance: Consts.DamageFamily = Consts.DamageFamily.NONE  # at most one!
 
-@export var faction := Factions.NONE
+@export var faction := Consts.Factions.NONE
 
 # bestiary entry
 @export_group("Bestiary")
@@ -470,14 +465,18 @@ func update_health(hp_delta: int):
 		anim = _anim_health_change($HealingLabel, hp_delta, Vector2(.25, .5))
 		
 	if health <= 0:
-		play_sound("DeathSound")
-		emit_signal("died", get_cell_coord())
-		# we do not need create_anim() since sub-tweens have the same signal as the root tween
-		var anim3 = anim.parallel()  
-		anim3.tween_property($Label, "modulate", Color(.8, 0, 0, .7), .1)
-		anim3.tween_property($Label, "modulate", Color(0, 0, 0, 0), .4)
-		anim3.finished.connect(self.queue_free, CONNECT_ONE_SHOT)
-	return anim
+		die()
+
+func die():
+	## Animate our ultimate demise, drop our inventory, then remove ourself from this cruel world.
+	play_sound("DeathSound")
+	emit_signal("died", get_cell_coord())
+	for item in get_items():
+		drop_item(item)
+	var anim = create_anim()
+	anim.tween_property($Label, "modulate", Color(.8, 0, 0, .7), .1)
+	anim.tween_property($Label, "modulate", Color(0, 0, 0, 0), .4)
+	anim.finished.connect(self.queue_free, CONNECT_ONE_SHOT)
 
 func _learn_attack(attacker):
 	## Remember who just hit us.
@@ -499,11 +498,11 @@ func is_unexposed():
 
 func is_friend(other: Actor):
 	## Return whether `self` has positive sentiment towards `other`
-	return faction != Factions.NONE and faction == other.faction
+	return faction != Consts.Factions.NONE and faction == other.faction
 	
 func is_foe(other: Actor):
 	## Return whether `self` has negative sentiment towards `other`
-	return faction != Factions.LUX_CO and other.faction == Factions.LUX_CO
+	return faction != Consts.Factions.LUX_CO and other.faction == Consts.Factions.LUX_CO
 	
 func is_impartial(other: Actor):
 	## Return whether `self` has neutral sentiment towards `other`

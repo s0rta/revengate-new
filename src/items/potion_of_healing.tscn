@@ -7,8 +7,9 @@
 char = "🍸"
 caption = "potion of healing"
 consumable = true
+spawn_cost = 2.0
 
 [node name="Effect" type="Node" parent="." index="1"]
 script = ExtResource("2_tg0bb")
-healing = 12
+healing = 20
 immediate = true

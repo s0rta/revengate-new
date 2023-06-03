@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://d8jxxkoa4b00"]
+
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_hsr0b"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_4vfua"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="3_l1owh"]
+[ext_resource type="PackedScene" path="res://src/weapons/sword.tscn" id="4_lvbl2"]
+
+[node name="Outlaw" instance=ExtResource("1_hsr0b")]
+visible = false
+char = "@"
+caption = "Outlaw"
+color = Color(0.921569, 0.45098, 0.45098, 1)
+conversation_file = "res://src/story/card_thieves.dialogue"
+spawn_cost = 1.0
+health = 30
+strength = 40
+agility = 40
+intelligence = 45
+faction = 3
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.45098, 0.45098, 1)
+text = "@"
+
+[node name="Tracking" type="Node" parent="." index="7"]
+script = ExtResource("2_4vfua")
+priority = 0.5
+
+[node name="SelfDefense" type="Node" parent="." index="8"]
+script = ExtResource("3_l1owh")
+priority = 0.9
+
+[node name="Sword" parent="." index="9" instance=ExtResource("4_lvbl2")]
+visible = false
+is_equipped = true

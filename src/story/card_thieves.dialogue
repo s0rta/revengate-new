@@ -1,0 +1,9 @@
+~ intro
+Thief: I want nothing to do with you. Leave now and we'll pretend nothing happened.
+do checkpoint("about_cards")
+=> END
+
+~ about_cards
+Thief: Why are you after those cards anyway? Why is everyone so interested in them!?
+
+=> END

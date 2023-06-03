@@ -60,7 +60,31 @@ People:
 - Urbain Leverrier: politician and mathematician, famed for the mathematical prediction of Neptune, classist, he is strongly against a broad dissemination of scientific knowledge
 - Édouard de Lévi: former monk turned magician, head of an underground society of magicians
 
-Detailed plot soon...
+The adventure starts when Urbain Leverrier hires Lux Co. He had words that Gaston Planté made progress towards what could become a reusable battery. He wants to offer support to the inventor and also make sure that the diffusion of his discovery is kept as limited as possible. 
+
+In Paris, after talking with Planté, it seems like the best way to help him would be to acquire an obscure array of rare chemicals and glassware. A trip around the docks is enough to identify the possible suppliers, but the price is steep.
+
+We can secure the funds by doing some odd jobs, which will involve visiting a few cafés and a few trips down the catacombs. The smugglers are always grateful for help moving their cargo around.
+
+During a random outing in a café, the hero might come in contact with Victor Meunier. Meunier being up to date with most of the scientific progress in town recognizes the bill of material as likely useful to design batteries and quickly make the connection with Planté's work. He offers his help in exchange for an interview in his scientific journal. Accepting the help will greatly simplify the acquisition of the chemicals, but will also anger Leverrier.
+
+No matter who the hero takes for ally, it is soon apparent that sabotage attempts on getting the chemicals are being coordinated through the city.
+
+Along the smuggling routes, many traps have now been installed and dangerous marauders are patrolling. Retreat will be the wisest course of action for all but the most seasons  adventurers. Reporting the lack of progress to the smugglers, the hero learns that Édouard de Lévi is behind the blockade. They recommend confronting him to see if anything would make him change his mind.
+
+De Lévi explains how he is trying to avoid having another scientist being turned into a hero and offers some magical teaching in exchange for the death of Planté. Killing Planté will alienate Lux Co. It results in a victory, but also the end of the game since the hero is now unemployable (until we develop a set of non-Lux-Co campaigns).
+
+Killing de Lévi is unlikely to succeed given his mastery of magic. We can also expect the rest of his lodge to keep deploying covert actions. The options are to either appease him some other way or to convince the government to send a coordinated military strike after the lodge.
+
+Raymond Planté can help negotiate a seat on the government advisory council for de Lévi. That will appease him, but also give him a lot of power, which might imped future scientific progress. Another option is to go steal a rare spellbook from a monastery for de Lévi. This gives de Lévi more magical abilities, but does not give him any political gains. Either options are victories for the campaign.
+
+The Blue Circle Lodge is a secret society and that makes the scope of a military intervention ill defined. Most of the members are unknown and the registered address of the organisation is unlikely to be where the most interesting secrets are kept. Survivors might end up going into hiding for another century or two, but the organisation can't be stopped completely. Still a military intervention would go a long way to discredit the lodge and impede their recruiting effort.
+
+Before a military action can be approved, some covert work must be done to gather evidence that is strong enough to convince the government. Once the government takes over, the hero's influence ends and they must watch the action unfold from a distance. In the end, de Lévi escapes, but the blockade is lifted and Planté can resume his work.
+
+At this point, Planté is guaranteed to succeed, but the long term impact of his invention will depend on how motivated he is to share his discovery. He will make plenty of money from it either way and might express his gratitude to the hero at a later date.
+
+At a much later date, the availability of a a reliable telegraph system will depend on this discovery, so will countless discoveries related to electricity and the occasional encounter with the feared electrical automaton.
 
 
 ## A Picture Worth a Thousand Tears

@@ -94,10 +94,31 @@ static func biased_choice(seq:Array, bias, biased_elem=null):
 	var val = randf_range(0, tot)
 	return seq[cum_weights.bsearch(val) - 1]
 	
-static func pos_in_rect(rect:Rect2i):
+static func coord_in_rect(rect:Rect2i):
 	var offset = Vector2i(randi_range(0, rect.size.x-1), 
 						randi_range(0, rect.size.y-1))
 	return rect.position + offset
+
+static func coord_on_rect_perim(rect: Rect2i, region=null):
+	## Return a coordinate along the perimeter of `rect`. Corners are excluted.
+	## region: if supplied, only this side is considered.
+	if region == null or region == Consts.REG_CENTER:
+		region = choice([Consts.REG_NORTH, Consts.REG_SOUTH, Consts.REG_WEST, Consts.REG_EAST])
+
+	# We pick a random coord inside the rect, then project it against one of the 
+	# sides accoding to the region.
+	# rect.end() is outside the rect, so we have to subtract 1 from it
+	var coord = coord_in_rect(Geom.inner_rect(rect))
+	if region == Consts.REG_NORTH:
+		return V.i(coord.x, rect.position.y)
+	elif region == Consts.REG_SOUTH:
+		return V.i(coord.x, rect.end.y-1)
+	elif region == Consts.REG_WEST:
+		return V.i(rect.position.x, coord.y)
+	elif region == Consts.REG_EAST:
+		return V.i(rect.end.x-1, coord.y)
+	else:
+		assert(false, "Unknown region: %s" % region)
 
 static func sub_rect(rect:Rect2i, min_side=1):
 	## Return a rectangle that is contained inside rect, likely smaller, 
@@ -151,3 +172,4 @@ static func split_rect(rect:Rect2i, orientation, pad=0, min_side=1):
 		return null
 	return [Rect2i(rect.position, br1 - rect.position + Vector2i.ONE), 
 			Rect2i(tl2, rect.end - tl2)]  # rect.end is outside the rect!
+

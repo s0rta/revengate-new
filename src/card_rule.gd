@@ -20,7 +20,6 @@
 ## A rule to determine when we can add our children cards to a generation deck
 class_name CardRule extends Node
 
-# TODO: min_* rules can default to 0 rather than -1
 @export var min_depth:int = 0
 @export var max_depth:int = -1
 @export var max_board_occ:int = -1
@@ -30,10 +29,15 @@ class_name CardRule extends Node
 @export var min_board_occ:int = 0
 @export var min_dungeon_occ:int = 0
 
+# the item is guarateed to be generated for a board at this location
+@export var world_loc := Consts.LOC_INVALID
+
 func _get_configuration_warnings():
 	var warnings = []
 	if min_depth < 0:
 		warnings.append("`min_depth` should not be negative")
-	if min_dungeon_occ and max_depth == -1:
-		warnings.append("You must specify `max_depth` for `min_dungeon_occ` to have an effect.")
+	if min_dungeon_occ and max_depth == -1 and world_loc == Consts.LOC_INVALID:
+		warnings.append("You must specify `max_depth` or `world_loc` for `min_dungeon_occ` to have an effect.")
+	if world_loc != Consts.LOC_INVALID and min_dungeon_occ <= 0:
+		warnings.append("`min_dungeon_occ` must be positive for `world_loc` to have an effect.")
 	return warnings

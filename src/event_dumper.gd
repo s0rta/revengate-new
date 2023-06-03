@@ -30,7 +30,7 @@ extends Control
 # Both Viewport.set_input_as_handled() and Control.accept_event() immediately stop the propagation 
 # of an event. They can be called from any of the *_input() methods. Accepting the event in 
 # _gui_input() will stop the built-in behavior of the control.
-# z_index changes the drawing, not the input handling
+# z_index changes the drawing, not the order of input handling
 
 func print_event(event, meth_name):
 	Utils.ddump_event(event, self, meth_name)

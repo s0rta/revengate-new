@@ -1,0 +1,35 @@
+~ meet_michel
+
+Michel: Welcome back the Steamy Towels barbershop!
+Michel: Did you get a job from Nadège?
+- I did! 
+	Michel: Execellent!
+	=> extra_potions
+- Who is that?
+	Michel: She hangs at the Café Caché. Take the secret door in my broom closet on the left and go talk to her.
+	=> END
+
+~ extra_potions
+Michel: I have too many potions and they use some valuable shelve space. Would you like one?
+- Sure! 
+	do checkpoint("dungeon_intro")
+	do speaker_give_item()
+	Michel: There you go!
+- No, thank you.
+	do checkpoint("dungeon_intro")
+	Michel: That's a bold choice!
+
+Michel: I'll be right here. Chat with me again if you want to learn more about how things work around here.
+=> END
+
+~ dungeon_intro
+
+Michel: Monsters are represented by letters. You beat them up by tapping on then. You look like a tough person, but you are not invincible. Keep an eye on your Health at the bottom right. 
+
+Michel: You can get more info about monsters by using the magnifying glass (🔍, top right). You can also use it on yourself. Items are white icons scattered through the areas. You need to be standing over them to loot (pick) them.
+
+Michel: Try a long tap (hold your finger down for a bit) at different locations. You will see action option based on what is there.
+
+Michel: If a button has [b]bold[/b] text, it means that what it does counts as your action for the turn. Right after pressing it, your turn ends and monsters will start acting. There are a few obvious exceptions and I'm sure you will figure them out.
+
+Michel: Good luck!

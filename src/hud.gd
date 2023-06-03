@@ -48,7 +48,14 @@ func refresh_hps(_new_health=null):
 func update_states_at(hero_coord):
 	## Refresh internal states by taking into account a recent change at `hero_coord`
 	var board = hero.get_board()
-	stairs_button.visible = board.is_connector(hero_coord)
+	if board.is_connector(hero_coord):
+		stairs_button.visible = true
+		if "gateway" == board.get_cell_terrain(hero_coord):
+			stairs_button.text = "Follow Passage"
+		else:
+			stairs_button.text = "Follow Stairs"
+	else:
+		stairs_button.visible = false
 	var index = board.make_index()
 	loot_button.visible = null != index.top_item_at(hero_coord)
 	refresh_cancel_button_vis()

@@ -6,6 +6,8 @@ This is a list of loose ends, code optimization, and small tasks for the Godot i
 ## Developer Efficiency
 - [ ] function to dump detailed status of all the actors on a board
 - [ ] factor out the common boiler plate from cheats and gesture `start_` methods
+- [ ] panku console for interactive REPL
+- [ ] gdunit4 for unit tests
 
 ## Combat
 - [ ] over healing should slowly revert back to normal max health
@@ -22,7 +24,8 @@ This is a list of loose ends, code optimization, and small tasks for the Godot i
 - [ ] inspect_tile() includes coord, pos, terrain, destination board for connectors
 - [ ] Main.make_board() returns the builder
 - [ ] BoadBuilder keeps and maintain an index
-
+- [ ] factor out TileSpiral from RevBoard
+ 
 ## Main
 - [ ] Main sets the board on the turn queue, starts the turns in Main._ready()
 
@@ -31,3 +34,9 @@ This is a list of loose ends, code optimization, and small tasks for the Godot i
 - [ ] message screen button should flash when new messages are added, rate limited to avoid the strobe effect
 - [ ] a `ViewPanner` might be a more gesture-aware way to move the camera around; ref.: https://github.com/godotengine/godot/pull/71685
 - [ ] we show the game over screen before the death animation of the hero is done
+
+## VFX
+- [ ] panning the board moves the wave highlight 
+      hint: https://godotengine.org/qa/103814/prevent-texture-with-screen_uv-from-moving-with-camera
+      
+

@@ -108,21 +108,53 @@ UI:
 - [x] use the Godot mobile renderer
 
 ## v0.7
-- [ ] water ripples have highlights and edge-of-pool reflections 
+- [x] new level design for Lyon surface
+- [x] new starting quest: Cards Collection about retreiving stolen loom punch cards
+- [x] bug: "follow stairs" is the wrong button label for horizontal gateways
+- [x] bug: no message when getting potions from barman
+- [x] connector tiles should always be stairs when changing elevation
+
+VFX:
+- [x] water highlights 
+
+Combat:
+- [x] TribalTerritorial strategy
+- [x] Quest NPC has self defense
+- [x] death drops
+- [x] umbrella
 
 Builder:
-- [ ] Allow mixing rooms and mazes in level generation
+- [x] more than one way up or down on some levels
 
+## v0.8
+- [ ] all buttons fire on Up rather than Pressed
+- [ ] stairs are further apart
+- [ ] end of game stats
+- [ ] start screen makes it clear when running a debug build
+
+Progen:
+- [ ] Allow mixing rooms and mazes in level generation
+- [x] prefabs invocation system
+- [x] river prefab
+
+Items:
+- [ ] unique items are per-game unique, not only per-dungeon unique
+- [ ] item to increase latent healing
+- [ ] potion of booze: heals, but impairs perception and agility
+
+Combat:
+- [ ] TribalTerritorial uses perception rather than dist()
+
+UX:
+- [x] pinch to zoom
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
-- [ ] pinch to zoom
 
   
 ## v1.0
 - [ ] release on F-Droid
 - [ ] saved games
-- [ ] Lyon overworld
 - [ ] A Fight for Fumes campaign
 - [ ] Rhymes with Remorse campaign
 
@@ -134,3 +166,12 @@ Builder:
 - [ ] Deck.peek(): select the next card, but do not remove it from the deck
 - [ ] smoke and shrapnel particles in the explosion VFX
 - [ ] help screen with contextual content
+- [ ] Lyon overworld map - https://www.fondsenligne.archives-lyon.fr/ac69v2/plan.php
+- [ ] on-screen joystick
+- [ ] parametric pre-fabs
+  - [ ] pre-fabs can inject rules in the deck generator after the geometry pass of a new board
+- [ ] closable doors
+- [ ] locked doors
+- [ ] auto-pan to hero when he gets close to the egde of the screen
+- [ ] VFX: edge of water reflections 
+- [ ] items long descriptions

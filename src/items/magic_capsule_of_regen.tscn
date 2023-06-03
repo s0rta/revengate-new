@@ -10,5 +10,5 @@ consumable = true
 [node name="Effect" type="Node" parent="." index="1"]
 script = ExtResource("2_qi62v")
 healing = 3
-nb_turns = 5
+nb_turns = 8
 magical = true

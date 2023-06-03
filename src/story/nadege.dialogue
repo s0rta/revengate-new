@@ -1,0 +1,13 @@
+~ intro
+
+Nadège: So you are the new guy? I have a job for you.
+Nadège: A stack of loom punch cards (𝌕) was stolen a few days ago and we have a lead on where the thieves are hiding. It's a gated neighborhood a few blocks NW of here, there is a discrete way in with the traboule around the corner.
+Nadège: Take this, just in case you need to defend yourself.
+do checkpoint("about_mission")
+do speaker_give_item()
+Nadège: Don't forget to equip it in the Inventory screen or you might take a beating.
+=> END
+
+~ about_mission
+Nadège: I don't know what's important about those loom cards. It's a good idea in our line of work to ask as few questions as possible.
+=> END

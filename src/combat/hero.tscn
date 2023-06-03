@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://bxjfh12dtkof6"]
+[gd_scene load_steps=5 format=3 uid="uid://bxjfh12dtkof6"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_bgbko"]
 [ext_resource type="Script" path="res://src/combat/hero.gd" id="2_jrjv3"]
 [ext_resource type="AudioStream" uid="uid://bajy1gsb550i5" path="res://src/combat/hero_miss.wav" id="4_y2iie"]
-[ext_resource type="PackedScene" uid="uid://d8ovanvojd5g" path="res://src/weapons/knife.tscn" id="5_6f5ga"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="6_6imm7"]
 
 [node name="Hero" instance=ExtResource("1_bgbko")]
@@ -12,6 +11,7 @@ script = ExtResource("2_jrjv3")
 char = "@"
 caption = "hero"
 color = Color(1, 1, 1, 1)
+healing_prob = 0.07
 faction = 1
 
 [node name="Label" parent="." index="0"]
@@ -28,7 +28,3 @@ stream = ExtResource("4_y2iie")
 [node name="SkillLevels" type="Node" parent="." index="7"]
 script = ExtResource("6_6imm7")
 fencing = 1
-
-[node name="Knife" parent="." index="8" instance=ExtResource("5_6f5ga")]
-visible = false
-is_equipped = true

@@ -23,7 +23,7 @@ var hero: Actor
 
 func has_quest_item(actor:Actor):
 	for item in actor.get_items():
-		if item.char == "⌚" and item.name == "MissingWatch":
+		if item.char == "𝌕" and item.name == "LoomCards":
 			return true
 	return false
 	

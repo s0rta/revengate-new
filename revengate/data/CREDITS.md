@@ -9,6 +9,7 @@ Additionnal coding:
 - Chris J. Wallace
 - Angel Hudgins
 - JT Wright
+- Rodrigo Espinosa de los Monteros
 
 2D tiles: CC0, released by the Craw Stone Soup team
 https://opengameart.org/content/dungeon-crawl-32x32-tiles
@@ -45,6 +46,7 @@ https://opengameart.org/content/rpg-sound-pack
 Additionnal sound effects CC-BY-SA Yannick Gingras:
 - end screens sound effects
 - hammer-01
+- stick-01
 - ethereal-01, 02
 - razor
 - explosion-01

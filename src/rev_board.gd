@@ -19,16 +19,26 @@ class_name RevBoard extends TileMap
 
 const TILE_SIZE = 32
 
+# which terrains lead to other boards?
+const CONNECTOR_TERRAINS = ["stairs-down", "stairs-up", "gateway"]
 # which terrains do we index for later retrieval?
-const INDEXED_TERRAINS = ["stairs-down", "stairs-up"]
+const INDEXED_TERRAINS = CONNECTOR_TERRAINS
+# plain floor without other features
+const FLOOR_TERRAINS = ["floor", "floor-rough", "floor-dirt"]
 
 signal new_message(message)
 
 # approximate topological distance to the starting board, used for spawning difficulty
 var depth := 0  
-var connector_by_coord := {}  # (x, y) -> {far_board:_, far_coord:_}
+
+var world_loc: Vector3i  # relative positioning of this board in the world
+
+# per-cell custom data, unlike the per-tile data provided by TileMap
+var _cell_records := {}  # (x, y) -> {'rec_name' -> {...}}
+
 var _cells_by_terrain := {}  # terrain_name -> array of coords
 var current_turn := 0
+
 
 ## PriorityQueue based on distance: dequeing is always with the 
 ## smallest value.
@@ -535,7 +545,6 @@ class BoardIndex extends RefCounted:
 		for coord in _coord_to_items:
 			print("  items at %s: %s" % [RevBoard.coord_str(coord), _coord_to_items[coord]])
 
-
 static func canvas_to_board(cpos):
 	## Return a coordinate in number of tiles from coord in pixels.
 	return Vector2i(int(cpos.x) / TILE_SIZE,
@@ -547,11 +556,15 @@ static func board_to_canvas(coord):
 	return Vector2(coord.x * TILE_SIZE + half_tile, 
 					coord.y * TILE_SIZE + half_tile)
 
-static func supercell_str(coord):
+static func world_loc_str(loc:Vector3i):
+	## Return a short hand notation of a world location
+	return "⟪%s, %s, %s⟫" % [loc.x, loc.y, loc.z]
+
+static func supercell_str(coord:Vector2i):
 	## Return a short hand notation of a supercell coord that is different from Vector2i.to_string()
 	return "⟦%d¦%d⟧" % [coord.x, coord.y]	
 
-static func coord_str(coord):
+static func coord_str(coord:Vector2i):
 	## Return a short hand notation of coord that is different from Vector2i.to_string()
 	return "[%d:%d]" % [coord.x, coord.y]	
 
@@ -569,6 +582,17 @@ func set_active(active:=true):
 	if active:
 		detect_actors()
 		reset_items_visibility()
+
+func is_active():
+	return visible and is_layer_enabled(0)
+
+func get_dungeon():
+	## Return which dungeon this board is a part of or null if the board is not part of a dungeon.
+	var parent = get_parent()
+	if parent is Dungeon:
+		return parent
+	else:
+		return null
 
 func detect_actors():
 	## Register all actors currently on the board.
@@ -611,11 +635,52 @@ func make_index():
 	var items = get_items()
 	return BoardIndex.new(self, actors, items)
 
+func get_cell_rec(coord:Vector2i, rec_name):
+	## Return the per-cell record `rec_name` for coord
+	if _cell_records.has(coord) and _cell_records[coord].has(rec_name):
+		return _cell_records[coord][rec_name]
+	return null
+
+func get_cell_rec_val(coord:Vector2i, rec_name, key, default=null):
+	## Return a specific value form the per-cell record `rec_name` for coord
+	if _cell_records.has(coord) and _cell_records[coord].has(rec_name):
+		return _cell_records[coord][rec_name].get(key, default)
+	return null
+
+func clear_cell_rec(coord:Vector2i, rec_name):
+	## Delete the per-cell record `rec_name` for coord
+	if _cell_records.has(coord) and _cell_records[coord].has(rec_name):
+		_cell_records[coord].erase(rec_name)
+
+func set_cell_rec(coord:Vector2i, rec_name, rec:Dictionary):
+	## Set a per-cell record
+	if not _cell_records.has(coord):
+		_cell_records[coord] = {}
+	_cell_records[coord][rec_name] = rec
+
+func set_cell_rec_val(coord:Vector2i, rec_name, key, value):
+	## Set a specific value inside a per-cell record
+	if not _cell_records.has(coord):
+		_cell_records[coord] = {}
+	if not _cell_records[coord].has(rec_name):
+		_cell_records[coord][rec_name] = {}
+	_cell_records[coord][rec_name][key] = value
+	
 func _append_terrain_cells(cells, terrain_name):
 	assert(terrain_name in INDEXED_TERRAINS)
 	if terrain_name not in _cells_by_terrain:
 		_cells_by_terrain[terrain_name] = []
 	_cells_by_terrain[terrain_name] += cells
+
+func scan_terrain():
+	## Re-index the terrain of all non-empty cells. 
+	## This is only needed for board that are built manually. BoardBuilders do 
+	## the indexing automatically when painting cells.
+	_cells_by_terrain = {}
+	for coord in get_used_cells(0):
+		var terrain = get_cell_terrain(coord)
+		if terrain in INDEXED_TERRAINS:
+			_append_terrain_cells([coord], terrain)
 
 func get_cells_by_terrain(terrain_name):
 	## Return all known cells of terrain_name.
@@ -639,35 +704,88 @@ func get_cell_terrain(coord):
 	return tile_set.get_terrain_name(data.terrain_set, data.terrain)
 	
 func is_on_board(coord):
-	## Return whether the coord is strictly contained inside the game board
+	## Return whether the coord is strictly contained inside the game board.
+	## For non-rectangular boards, cells without tiles are considered outside the board.
 	var bbox = get_used_rect()
-	return bbox.has_point(coord)
+	return bbox.has_point(coord) and get_cell_tile_data(0, coord) != null
 
-func add_connection(near_coord, far_board, far_coord):
+func add_connection(near_coord, far_board, far_coord=null):
 	## Connect this board with another one.
 	## Connections has a near (self) and a far side (far_board). This method makes the
 	## connection bi-directional.
-	# TODO: connect the path, not the board, since that will serialize better
-	connector_by_coord[near_coord] = {"far_board": far_board, "far_coord": far_coord}
-	far_board.connector_by_coord[far_coord] = {"far_board": self, "far_coord": near_coord}
+	## Return the near-side of the connection
+	# TODO: connect the resource path, not the board, since that will serialize better
+	if far_coord == null:
+		far_coord = far_board.get_connector_for_loc(world_loc)
+	var near_conn = {"far_board": far_board, "far_coord": far_coord}
+	set_cell_rec(near_coord, "connection", near_conn)
+	far_board.set_cell_rec(far_coord, "connection", {"far_board": self, "far_coord": near_coord})
+	clear_cell_rec(near_coord, "conn_target")
+	far_board.clear_cell_rec(far_coord, "conn_target")
+	return near_conn
 
 func get_connection(coord:Vector2i):
 	## Return the far-side data of a cross-board connection
-	if connector_by_coord.has(coord):
-		return connector_by_coord[coord]
-	else:
-		return null
+	return get_cell_rec(coord, "connection")
+
+func get_connectors():
+	## Return the an array of coords for all the connectors on this board.
+	var coords = []
+	for terrain in CONNECTOR_TERRAINS:
+		coords += get_cells_by_terrain(terrain)
+	return coords
+	
+func get_connector_for_loc(world_loc:Vector3i):
+	## Return the coord of the connector that leads to `world_loc` 
+	## or null if no such connector exists.
+	for coord in get_connectors():
+		var loc = get_cell_rec_val(coord, "conn_target", "world_loc")
+		if loc == null:
+			loc = get_cell_rec_val(coord, "connection", "far_board").world_loc
+		if loc == world_loc:
+			return coord
+	return null
+
+func get_connector_terrains():
+	## Return a list of all connector terrains on this board, duplicates included.
+	var terrains = []
+	for terrain in CONNECTOR_TERRAINS:
+		for i in len(_cells_by_terrain.get(terrain, [])):
+			terrains.append(terrain)
+	return terrains
+
+func get_neighbors():
+	## Return an array of `world_loc` that we should this board will eventually connect to.
+	var neighbors = []
+	for coord in get_connectors():
+		var conn = get_connection(coord)
+		if conn != null:
+			neighbors.append(conn.far_board.world_loc)
+		else:
+			neighbors.append(get_cell_rec_val(coord, "conn_target", "world_loc"))
+	return neighbors
+
+func get_neighbors_str():
+	## Return a string representation of all of our neighbors.
+	var parts = []
+	for loc in get_neighbors():
+		parts.append(world_loc_str(loc))
+	return "[%s]" % ", ".join(parts)
 
 func is_connector(coord:Vector2i):
 	## Return whether `coord` is a tile that can connect to a different board.
-	var data = get_cell_tile_data(0, coord)
-	if data == null:
-		return false
-	return data.get_custom_data("is_connector")
+	var terrain = get_cell_terrain(coord)
+	return CONNECTOR_TERRAINS.has(terrain) 
+
+func is_floor(coord:Vector2i):
+	## Return whether a cell is a plain floor tile (no stairs or doors or anything fancy).
+	return get_cell_terrain(coord) in FLOOR_TERRAINS
 
 func is_walkable(coord:Vector2i):
 	## Return whether a cell is walkable for normal actors
 	# collision is only specified on physics layer 0
+	if not is_on_board(coord):
+		return false
 	var tdata = get_cell_tile_data(0, coord)
 	assert(tdata != null, "no data for coord=%s" % coord)
 	var poly = tdata.get_collision_polygons_count(0)
@@ -743,6 +861,10 @@ static func dist(from, to):
 	## Return the distance between two tiles in number of moves.
 	## Obstacles are not taken into account, use path() for that.
 	## This is also known at the Chebyshev distance.
+	if from is Actor or from is Item:
+		from = from.get_cell_coord()
+	if to is Actor or to is Item:
+		to = to.get_cell_coord()
 	return max(abs(from.x - to.x), abs(from.y - to.y))
 
 static func man_dist(from, to):
@@ -762,7 +884,7 @@ func _init_metric_context(start, dest, free_dest=false, max_dist=null):
 	var bbox:Rect2i = get_used_rect()
 	var index = make_index()
 	if start == null:
-		start = Rand.pos_in_rect(bbox)
+		start = Rand.coord_in_rect(bbox)
 		if not is_walkable(start):
 			start = spiral(start, null, true, true, null, index).next()
 			
@@ -978,4 +1100,18 @@ func _on_actor_died(coord, actor):
 func add_message(actor, message):
 	# TODO check for visibility before propagating up
 	emit_signal("new_message", message)
+
+func ddump_connector(coord:Vector2i):
+	var info = {"near_coord": coord}
+	var conn = get_connection(coord)
+	if conn != null:
+		info.connected = true
+	else:
+		info.connected = false
+		info.target = get_cell_rec(coord, "conn_target")
+	print("Connector at %s: %s" % [coord_str(coord), info])
 	
+func ddump_connectors():
+	for coord in get_connectors():
+		ddump_connector(coord)
+

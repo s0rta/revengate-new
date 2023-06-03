@@ -1,0 +1,14 @@
+[remap]
+
+importer="dialogue_manager_compiler_6"
+type="Resource"
+uid="uid://dqgdx8gbsotlb"
+path="res://.godot/imported/bar_chatter.dialogue-5741e19921ed74cf091256ec0e1bd6f0.tres"
+
+[deps]
+
+source_file="res://src/story/bar_chatter.dialogue"
+dest_files=["res://.godot/imported/bar_chatter.dialogue-5741e19921ed74cf091256ec0e1bd6f0.tres"]
+
+[params]
+
