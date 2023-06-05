@@ -48,6 +48,7 @@ func refresh_hps(_new_health=null):
 func update_states_at(hero_coord):
 	## Refresh internal states by taking into account a recent change at `hero_coord`
 	var board = hero.get_board()
+	%CityMapButton.visible = board.world_loc != Consts.LOC_INVALID and board.world_loc.z >= 0
 	if board.is_connector(hero_coord):
 		stairs_button.visible = true
 		if "gateway" == board.get_cell_terrain(hero_coord):
@@ -98,3 +99,8 @@ func refresh_input_enabled(enabled):
 
 func _on_hero_state_changed(new_state):
 	refresh_input_enabled(new_state == Actor.States.LISTENING)
+
+
+func _on_city_map_button_pressed():
+	var board = Tender.hero.get_board()
+	%CityMapScreen.popup(board.world_loc)

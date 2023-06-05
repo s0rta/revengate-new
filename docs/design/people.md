@@ -161,4 +161,4 @@ De Lévi aspires to restore magic at the core of human society.  He sees magic a
 * Allan Kardec, 1804–1869, founder of spiritism, lived in Lyon
 * Joseph-Antoine Boullan, 1824–1893, satanist, lived in Lyon
 * Pierre-Eugène Vintras, 1807–1875, satanist, lived in Lyon
-
+* Jacques Vaucanson, 1709–1782, inventor, lived in Lyon, early prototype of the programmable loom, produced several anthropomorphic automata

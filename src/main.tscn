@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=29 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="17_ou76k"]
 [ext_resource type="PackedScene" uid="uid://cd6ngrhhgito0" path="res://src/ui/dialogue_pane.tscn" id="18_vtucs"]
 [ext_resource type="PackedScene" uid="uid://b0n7osww35hyh" path="res://src/ui/narration_pane.tscn" id="20_21sjb"]
+[ext_resource type="PackedScene" uid="uid://cf0kj6qn7a40s" path="res://src/ui/city_map_screen.tscn" id="23_aomab"]
 [ext_resource type="PackedScene" uid="uid://bb5upsioptfc4" path="res://src/ui/context_menu_popup.tscn" id="25_n5bfn"]
 [ext_resource type="PackedScene" uid="uid://c185mr0bu3u3w" path="res://src/default_deck_builder.tscn" id="30_c7r3i"]
 [ext_resource type="Script" path="res://src/command_pack.gd" id="41_hgs5k"]
@@ -62,7 +63,7 @@ script = ExtResource("2_5k2x3")
 
 [node name="LyonSurface" type="Node" parent="BoardArea/GestureSurveyor/Viewport"]
 script = ExtResource("4_asi7v")
-start_world_loc = Vector3i(8, 2, 0)
+start_world_loc = Vector3i(13, 5, 0)
 dest_world_loc = Vector3i(255, 255, 255)
 
 [node name="StartingBoard" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface" instance=ExtResource("3_vl15m")]
@@ -114,8 +115,8 @@ script = ExtResource("13_u4fm7")
 
 [node name="Traboule2" type="Node" parent="BoardArea/GestureSurveyor/Viewport"]
 script = ExtResource("13_u4fm7")
-start_world_loc = Vector3i(8, 1, -1)
-dest_world_loc = Vector3i(7, 1, 0)
+start_world_loc = Vector3i(13, 4, -1)
+dest_world_loc = Vector3i(11, 4, 0)
 
 [node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]
 
@@ -230,7 +231,7 @@ text = "Health: "
 layout_mode = 2
 text = "???"
 
-[node name="TRMargin" type="MarginContainer" parent="HUD"]
+[node name="TopRightMargin" type="MarginContainer" parent="HUD"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -240,10 +241,10 @@ grow_horizontal = 0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HUD/TRMargin"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/TopRightMargin"]
 layout_mode = 2
 
-[node name="CancelButton" type="Button" parent="HUD/TRMargin/HBoxContainer"]
+[node name="CancelButton" type="Button" parent="HUD/TopRightMargin/HBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -251,13 +252,20 @@ size_flags_horizontal = 4
 focus_mode = 0
 text = "⮿"
 
-[node name="InspectButton" type="Button" parent="HUD/TRMargin/HBoxContainer"]
+[node name="CityMapButton" type="Button" parent="HUD/TopRightMargin/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+text = "🗺"
+
+[node name="InspectButton" type="Button" parent="HUD/TopRightMargin/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 text = "🔍"
 
-[node name="ShowMessagesButton" type="Button" parent="HUD/TRMargin/HBoxContainer"]
+[node name="ShowMessagesButton" type="Button" parent="HUD/TopRightMargin/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
@@ -324,6 +332,10 @@ visible = false
 unique_name_in_owner = true
 visible = false
 
+[node name="CityMapScreen" parent="HUD" instance=ExtResource("23_aomab")]
+unique_name_in_owner = true
+visible = false
+
 [node name="NarrationPane" parent="HUD" instance=ExtResource("20_21sjb")]
 unique_name_in_owner = true
 visible = false
@@ -357,9 +369,10 @@ script = ExtResource("41_hgs5k")
 [connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/TestButton" to="." method="test"]
 [connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/TestButton2" to="." method="test2"]
 [connection signal="pressed" from="HUD/RGroup/RMargin/RButtonBar/ShowCheatsButton" to="HUD" method="toggle_cheats_box"]
-[connection signal="pressed" from="HUD/TRMargin/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
-[connection signal="pressed" from="HUD/TRMargin/HBoxContainer/InspectButton" to="BoardArea/GestureSurveyor" method="start_inspect_at"]
-[connection signal="pressed" from="HUD/TRMargin/HBoxContainer/ShowMessagesButton" to="HUD/MessagesScreen" method="popup"]
+[connection signal="pressed" from="HUD/TopRightMargin/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="HUD/TopRightMargin/HBoxContainer/CityMapButton" to="HUD" method="_on_city_map_button_pressed"]
+[connection signal="pressed" from="HUD/TopRightMargin/HBoxContainer/InspectButton" to="BoardArea/GestureSurveyor" method="start_inspect_at"]
+[connection signal="pressed" from="HUD/TopRightMargin/HBoxContainer/ShowMessagesButton" to="HUD/MessagesScreen" method="popup"]
 [connection signal="action_complete" from="HUD/CheatsSurveyor" to="HUD" method="hide_action_label"]
 [connection signal="action_started" from="HUD/CheatsSurveyor" to="HUD" method="show_action_label"]
 [connection signal="victory" from="VictoryProbe" to="." method="conclude_game" binds= [true]]

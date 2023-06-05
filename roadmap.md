@@ -147,6 +147,7 @@ Combat:
 
 UX:
 - [x] pinch to zoom
+- [x] Lyon overworld map
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]

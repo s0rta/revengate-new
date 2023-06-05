@@ -20,7 +20,12 @@
 class_name Dungeon extends Node
 
 const DEF_SIZE = Vector2i(23, 15)
-var prefab_map = {Vector3i(8, 3, 0): "Er"}
+var prefab_map = {Vector3i(13, 3, 0): "Er", 
+					Vector3i(13, 4, 0): "Er", 
+					Vector3i(13, 5, 0): "Er", 
+					Vector3i(13, 6, 0): "Er", 
+					Vector3i(13, 7, 0): "Er", 
+				}
 
 @export var start_depth := 0
 @export var start_world_loc: Vector3i

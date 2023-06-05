@@ -10,7 +10,7 @@ script = ExtResource("1_dwit8")
 
 [node name="LyonSurface" type="Node" parent="."]
 script = ExtResource("2_76pop")
-start_world_loc = Vector3i(8, 2, 0)
+start_world_loc = Vector3i(13, 5, 0)
 dest_world_loc = Vector3i(255, 255, 255)
 
 [node name="StartingBoard" parent="LyonSurface" instance=ExtResource("3_aco5t")]
@@ -21,8 +21,8 @@ script = ExtResource("2_jvnug")
 
 [node name="Traboule2" type="Node" parent="."]
 script = ExtResource("2_jvnug")
-start_world_loc = Vector3i(8, 1, -1)
-dest_world_loc = Vector3i(7, 1, 0)
+start_world_loc = Vector3i(13, 4, -1)
+dest_world_loc = Vector3i(11, 4, 0)
 
 [node name="HUD" type="Node" parent="."]
 

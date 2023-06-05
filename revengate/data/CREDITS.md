@@ -54,3 +54,5 @@ Additionnal sound effects CC-BY-SA Yannick Gingras:
 Particle sprites:
 CC0 by Kenney
 https://www.kenney.nl/
+
+The historical map of Lyon in 1855 is Public Domain, digitize by Archives Municipales de Lyon.
