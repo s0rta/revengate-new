@@ -93,4 +93,4 @@ size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Next..."
 
-[connection signal="pressed" from="VBoxContainer/MarginContainer2/OKButton" to="." method="start_new_game"]
+[connection signal="button_up" from="VBoxContainer/MarginContainer2/OKButton" to="." method="start_new_game"]

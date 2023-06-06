@@ -67,4 +67,4 @@ text = "Nice!"
 stream = ExtResource("2_a2cly")
 autoplay = true
 
-[connection signal="pressed" from="VBoxContainer/MarginContainer2/OKButton" to="." method="show_main_screen"]
+[connection signal="button_up" from="VBoxContainer/MarginContainer2/OKButton" to="." method="show_main_screen"]

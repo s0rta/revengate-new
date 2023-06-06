@@ -63,4 +63,4 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "No messages!"
 
-[connection signal="pressed" from="VBoxContainer/MarginContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="button_up" from="VBoxContainer/MarginContainer/BackButton" to="." method="_on_back_button_pressed"]
