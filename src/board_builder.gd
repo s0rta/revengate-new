@@ -54,7 +54,7 @@ func add_room(rect: Rect2i, walls=true):
 	rooms.append(rect)
 	paint_rect(rect, floor_terrain)
 	if walls:
-		var path = Geom.rect_perim(rect)	
+		var path = Geom.rect_perim(rect)
 		paint_path(path, wall_terrain)
 
 func room_region(room: Rect2i):
@@ -130,8 +130,116 @@ func random_coord_in_region(region, valid_pred=null, strict=false):
 			if valid_pred.call(c):
 				return c
 		else:
-			return c	
+			return c
 	return null
+
+func _find_maxi_min(score_rect:Rect2i, all_dist_metrics, valid_pred=null):
+	## Return a coord that is maximal amongst the minimums of all dist_metrics.
+	## In other words, find a coord that is as far as possible when all the dist_metrics 
+	## are considered.
+	## If more than one coords have maximum min_score, then a random one is selected.
+	## Return null if no suitable coord can be found.
+	## score_rect: only coords inside this rect are considered. Use board.get_used_rect() 
+	##   to be exhaustive.
+	var max_score = -INF
+	var max_coords = []
+	for i in score_rect.size.x:
+		for j in score_rect.size.y:
+			var coord = score_rect.position + Vector2i(i, j)
+			if valid_pred != null and not valid_pred.call(coord):
+				continue
+			var vals = []
+			for metrics in all_dist_metrics:
+				var val = metrics.getv(coord)
+				if val != null:
+					vals.append(val)
+			var score = vals.min()
+			if score != null:
+				if score == max_score:
+					max_coords.append(coord)
+				elif score > max_score:
+					max_coords = [coord]
+					max_score = score
+	if not max_coords.is_empty():
+		return Rand.choice(max_coords)
+	else:
+		return null
+
+func random_distant_coords(nb_coords:int, region=null, valid_pred=null, strict=false, other_coords=[]):
+	## Return an array of random coords as distant from one another as possible.
+	## region: if specified, try to pick the coords in that region
+	## valid_pred: only coord that are `true` with this predicate are considered
+	## strict: if false, fewer than nb_coords migth be returned and out-of-region 
+	##   fallbacks are considered.
+	##   if true, return null rather than a partial Array when any requirement can't be satisfied.
+	## other_coords: those existing coords should also be avoided
+	## Only walkable coords are considered
+	assert(nb_coords >= 1)
+	var coord = null
+	var coords = []  # the selected coordinates
+	var pred = func (coord):
+		if coord in coords or coord in other_coords:
+			return false
+		if not board.is_walkable(coord):
+			return false
+		if strict and region != null and not Geom.region_has_coord(rect, region, coord):
+			return false
+		if valid_pred != null and not valid_pred.call(coord):
+			return false
+		return true
+	
+	var score_rect:Rect2i
+	if region != null:
+		score_rect = Geom.region_bounding_rect(rect, region)
+	else:
+		score_rect = rect
+
+	var all_dist_metrics = []
+	for c in other_coords:
+		all_dist_metrics.append(board.dist_metrics(c))
+
+	# bootstrap: the system starts by finding a coord that is fairly distant from everything
+	if other_coords.is_empty():
+		all_dist_metrics.append(board.dist_metrics())
+		coord = _find_maxi_min(score_rect, all_dist_metrics, pred)
+		if coord != null:
+			pass
+		elif strict:
+			return null
+		else:
+			score_rect = rect
+			coord = _find_maxi_min(score_rect, all_dist_metrics, pred)
+			if coord == null:
+				# failed to bootstrap even by allowing fallbacks
+				return null
+		coords.append(coord)
+		all_dist_metrics = []  # erase the bootstrap seed state
+	
+	var succeeded := not coords.is_empty()  # did we find the next coord during the previous iteration?
+	while len(coords) < nb_coords:
+		if succeeded:
+			all_dist_metrics.append(board.dist_metrics(coord))
+		succeeded = false
+		coord = _find_maxi_min(score_rect, all_dist_metrics, pred)
+		if coord != null:
+			coords.append(coord)
+			succeeded = true
+		elif strict:
+			return null
+		elif score_rect != rect:
+			score_rect = rect  # forget about the region, try the whole board
+		else:
+			# we tried the best we could, but failed along the way
+			# deliver a partial result
+			break
+			
+	if Utils.is_debug():
+		print("Selected distant coords: %s" % [coords])
+		print("Dijkstra metrics are: ")
+		for dij in all_dist_metrics:
+			print(dij)
+			
+	return coords
 	
 func gen_level(nb_rooms=4):
 	## Generate a default underground level
@@ -164,10 +272,10 @@ func gen_rooms(nb_rooms:int, add_corridors:=true):
 			
 		# favor splitting the big partitions first
 		var index = Rand.weighted_choice(indices, areas)
-		var sub_parts = Rand.split_rect(partitions[index], 
-				Rand.Orientation.LONG_SIDE, 
-				ROOM_PAD, 
-				MIN_ROOM_SIDE)
+		var sub_parts = Rand.split_rect(partitions[index],
+			Rand.Orientation.LONG_SIDE,
+			ROOM_PAD,
+			MIN_ROOM_SIDE)
 		if sub_parts != null:
 			partitions[index] = sub_parts[1]
 			partitions.insert(index, sub_parts[0])
@@ -241,7 +349,7 @@ func connect_rooms(room1, room2):
 	# TODO: replaced walls should become doors
 	paint_path(cells, floor_terrain)
 
-func place(thing, in_room=true, coord=null, free:bool=true, bbox=null, index=null):
+func place(thing, in_room:=true, coord=null, free:bool=true, bbox=null, index=null):
 	## Put `thing` on the on a board cell, return where it was placed.
 	## Fallback to nearby cells if needed.
 	## If coord is not provided, a random position is selected.
@@ -267,7 +375,7 @@ func place(thing, in_room=true, coord=null, free:bool=true, bbox=null, index=nul
 		var old_cell = cell
 		# We ignore the bounding box at this point since we already failed an optimal 
 		# placement and we're just trying to find a fallback.
-		bbox = null  
+		bbox = null
 		cell = board.spiral(cell, null, true, true, bbox, index).next()
 		
 	# reparent if needed

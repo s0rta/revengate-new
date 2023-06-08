@@ -114,7 +114,7 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=DEF_SIZE, prev_loc=nul
 func _region_for_loc(near_loc, far_loc):
 	## Return which region should host the connector to go from near_loc to far_loc
 	if near_loc.x == far_loc.x and near_loc.y == far_loc.y:
-		return Consts.REG_CENTER
+		return null
 	elif near_loc.x == far_loc.x and near_loc.y > far_loc.y:
 		return Consts.REG_NORTH
 	elif near_loc.x == far_loc.x and near_loc.y < far_loc.y:

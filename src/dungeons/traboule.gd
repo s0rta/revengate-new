@@ -65,16 +65,37 @@ func _maze_biases(depth:int):
 	var reconnect = diff_steps * diff_slope + easy_reconnect
 	return {"twistiness": 0.3, "branching": 0.3, "reconnect": reconnect}
 
+func _group_neighbors_by_region(cur_world_loc:Vector3i, neighbors:Array):
+	## Return a dict in the form of {region:[conn_target1, conn_target2, ...]}
+	var reg_map = {}
+	for rec in neighbors:
+		var region = _region_for_loc(cur_world_loc, rec.world_loc)
+		if not reg_map.has(region):
+			reg_map[region] = []
+		reg_map[region].append(rec)
+	return reg_map
+
 func add_connectors(builder:BoardBuilder, neighbors):
 	## place stairs and other cross-board connectors on a board
 	var board = builder.board as RevBoard
-	var coord:Vector2i	
-	for rec in neighbors:
-		var region = _region_for_loc(board.world_loc, rec.world_loc)
-		var terrain = _neighbor_connector_terrain(board.world_loc, rec.world_loc)
-		if terrain == "gateway" and region != Consts.REG_CENTER and not builder.has_rooms():
-			coord = Rand.coord_on_rect_perim(builder.rect, region)
-		else:
-			coord = builder.random_coord_in_region(region, board.is_floor)
-		builder.paint_cells([coord], terrain)
-		board.set_cell_rec(coord, "conn_target", rec)
+	var coord:Vector2i
+	var reg_map = _group_neighbors_by_region(board.world_loc, neighbors)
+	var all_conn_coords = []
+	for region in Consts.ALL_REGIONS + [null]:
+		var connectors = reg_map.get(region)
+		if connectors == null:
+			continue
+		var nb_connectors = len(connectors)
+		var coords = builder.random_distant_coords(nb_connectors, region, board.is_floor, false, all_conn_coords)
+		assert(len(coords)==nb_connectors, "The board is too full to place all the connectors")
+		for i in nb_connectors:
+			var rec = reg_map[region][i]
+			var terrain = _neighbor_connector_terrain(board.world_loc, rec.world_loc)
+			if terrain == "gateway" and region != Consts.REG_CENTER and not builder.has_rooms():
+				coord = Rand.coord_on_rect_perim(builder.rect, region)
+			else:
+				coord = coords[i]
+			builder.paint_cells([coord], terrain)
+			board.set_cell_rec(coord, "conn_target", rec)
+			all_conn_coords.append(coord)
+	

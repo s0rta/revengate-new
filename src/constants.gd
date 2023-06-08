@@ -76,3 +76,4 @@ const REGION_CHARS = {"C": REG_CENTER,
 						"S": REG_SOUTH, 
 						"E": REG_EAST, 
 						"W": REG_WEST}
+const ALL_REGIONS = [REG_NORTH, REG_SOUTH, REG_EAST, REG_WEST, REG_CENTER]
