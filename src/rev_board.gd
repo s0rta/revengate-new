@@ -130,7 +130,7 @@ class Matrix:
 	func duplicate():
 		var mat = Matrix.new(size)
 		for j in range(size.y):
-			mat.cells[j] = Array(cells[j])
+			mat.cells[j] = cells[j].duplicate()
 		return mat
 		
 	func replace(old_val, new_val):
@@ -387,6 +387,7 @@ class BoardIndex extends RefCounted:
 	var _item_to_coord := {}
 
 	var _los := {}  # [from, to] -> [[x1:y1], ..., [xn:yn]]
+	var _metrics := {}  # [start, dest, free_dest, max_dist] -> dijkstra_metrics
 
 	func _init(board_, actors, items=[]):
 		board = board_
@@ -519,6 +520,20 @@ class BoardIndex extends RefCounted:
 			return _los[[to, from]] != null
 		else:
 			return line_of_sight(from, to) != null
+
+	func dist_metrics(start, dest=null, free_dest=false, max_dist=null):
+		## Like Board.dist_metrics(), but cached
+		var key = [start, dest, free_dest, max_dist]
+		if _metrics.has(key):
+			return _metrics[key]
+		var metrics = board.dist_metrics(start, dest, free_dest, max_dist)
+		_metrics[key] = metrics
+		return metrics
+
+	func erase_dist_metrics(start, dest=null, free_dest=false, max_dist=null):
+		var key = [start, dest, free_dest, max_dist]
+		if _metrics.has(key):
+			_metrics.erase(key)
 
 	func get_actors_in_sight(from, max_radius, include_center=false):
 		## Return a list of actors that are visible from `from`

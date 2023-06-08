@@ -18,11 +18,17 @@ layer_0/tile_data = PackedInt32Array(17, 393216, 3, 16, 327680, 3, 15, 458752, 3
 
 [node name="Traboule1" type="Node" parent="."]
 script = ExtResource("2_jvnug")
+start_depth = null
+start_world_loc = null
+dest_world_loc = null
+tunneling_elevation = null
 
 [node name="Traboule2" type="Node" parent="."]
 script = ExtResource("2_jvnug")
+start_depth = null
 start_world_loc = Vector3i(13, 4, -1)
 dest_world_loc = Vector3i(11, 4, 0)
+tunneling_elevation = null
 
 [node name="HUD" type="Node" parent="."]
 

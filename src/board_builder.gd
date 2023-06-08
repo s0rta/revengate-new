@@ -133,7 +133,7 @@ func random_coord_in_region(region, valid_pred=null, strict=false):
 			return c
 	return null
 
-func _find_maxi_min(score_rect:Rect2i, all_dist_metrics, valid_pred=null):
+func _find_maxi_min(score_rect:Rect2i, other_coords:Array, index:RevBoard.BoardIndex, valid_pred=null):
 	## Return a coord that is maximal amongst the minimums of all dist_metrics.
 	## In other words, find a coord that is as far as possible when all the dist_metrics 
 	## are considered.
@@ -149,7 +149,8 @@ func _find_maxi_min(score_rect:Rect2i, all_dist_metrics, valid_pred=null):
 			if valid_pred != null and not valid_pred.call(coord):
 				continue
 			var vals = []
-			for metrics in all_dist_metrics:
+			for other_coord in other_coords:
+				var metrics = index.dist_metrics(other_coord)
 				var val = metrics.getv(coord)
 				if val != null:
 					vals.append(val)
@@ -165,7 +166,7 @@ func _find_maxi_min(score_rect:Rect2i, all_dist_metrics, valid_pred=null):
 	else:
 		return null
 
-func random_distant_coords(nb_coords:int, region=null, valid_pred=null, strict=false, other_coords=[]):
+func random_distant_coords(nb_coords:int, region=null, valid_pred=null, strict=false, other_coords=[], index=null):
 	## Return an array of random coords as distant from one another as possible.
 	## region: if specified, try to pick the coords in that region
 	## valid_pred: only coord that are `true` with this predicate are considered
@@ -175,10 +176,13 @@ func random_distant_coords(nb_coords:int, region=null, valid_pred=null, strict=f
 	## other_coords: those existing coords should also be avoided
 	## Only walkable coords are considered
 	assert(nb_coords >= 1)
+	if index == null:
+		index = board.make_index()
 	var coord = null
 	var coords = []  # the selected coordinates
+	var all_coords = other_coords + coords  # everything we have to stay away from
 	var pred = func (coord):
-		if coord in coords or coord in other_coords:
+		if coord in all_coords:
 			return false
 		if not board.is_walkable(coord):
 			return false
@@ -193,37 +197,33 @@ func random_distant_coords(nb_coords:int, region=null, valid_pred=null, strict=f
 		score_rect = Geom.region_bounding_rect(rect, region)
 	else:
 		score_rect = rect
-
-	var all_dist_metrics = []
-	for c in other_coords:
-		all_dist_metrics.append(board.dist_metrics(c))
-
+	
 	# bootstrap: the system starts by finding a coord that is fairly distant from everything
+	var seed = random_floor_cell()
 	if other_coords.is_empty():
-		all_dist_metrics.append(board.dist_metrics())
-		coord = _find_maxi_min(score_rect, all_dist_metrics, pred)
+		all_coords.append(seed)
+		coord = _find_maxi_min(score_rect, all_coords, index, pred)
 		if coord != null:
 			pass
 		elif strict:
 			return null
 		else:
+			# dropping the region constraint
 			score_rect = rect
-			coord = _find_maxi_min(score_rect, all_dist_metrics, pred)
+			coord = _find_maxi_min(score_rect, all_coords, index, pred)
 			if coord == null:
 				# failed to bootstrap even by allowing fallbacks
 				return null
-		coords.append(coord)
-		all_dist_metrics = []  # erase the bootstrap seed state
+		
+		# erase the bootstrap seed state
+		all_coords[-1] = coord
+		index.erase_dist_metrics(seed)
 	
-	var succeeded := not coords.is_empty()  # did we find the next coord during the previous iteration?
 	while len(coords) < nb_coords:
-		if succeeded:
-			all_dist_metrics.append(board.dist_metrics(coord))
-		succeeded = false
-		coord = _find_maxi_min(score_rect, all_dist_metrics, pred)
+		coord = _find_maxi_min(score_rect, all_coords, index, pred)
 		if coord != null:
 			coords.append(coord)
-			succeeded = true
+			all_coords.append(coord)
 		elif strict:
 			return null
 		elif score_rect != rect:
@@ -236,7 +236,9 @@ func random_distant_coords(nb_coords:int, region=null, valid_pred=null, strict=f
 	if Utils.is_debug():
 		print("Selected distant coords: %s" % [coords])
 		print("Dijkstra metrics are: ")
-		for dij in all_dist_metrics:
+		for i in len(all_coords)-1:
+			# not printing the last one since it was not considered to pick the maxi_min
+			var dij = index.dist_metrics(all_coords[i])
 			print(dij)
 			
 	return coords

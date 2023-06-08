@@ -78,6 +78,7 @@ func _group_neighbors_by_region(cur_world_loc:Vector3i, neighbors:Array):
 func add_connectors(builder:BoardBuilder, neighbors):
 	## place stairs and other cross-board connectors on a board
 	var board = builder.board as RevBoard
+	var index = board.make_index()
 	var coord:Vector2i
 	var reg_map = _group_neighbors_by_region(board.world_loc, neighbors)
 	var all_conn_coords = []
@@ -86,7 +87,7 @@ func add_connectors(builder:BoardBuilder, neighbors):
 		if connectors == null:
 			continue
 		var nb_connectors = len(connectors)
-		var coords = builder.random_distant_coords(nb_connectors, region, board.is_floor, false, all_conn_coords)
+		var coords = builder.random_distant_coords(nb_connectors, region, board.is_floor, false, all_conn_coords, index)
 		assert(len(coords)==nb_connectors, "The board is too full to place all the connectors")
 		for i in nb_connectors:
 			var rec = reg_map[region][i]
