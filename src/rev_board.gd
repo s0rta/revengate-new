@@ -508,12 +508,16 @@ class BoardIndex extends RefCounted:
 
 	func line_of_sight(from, to):
 		## Like Board.line_of_sight(), but cached
+		from = CombatUtils.as_coord(from)
+		to = CombatUtils.as_coord(to)
 		if not _los.has([from, to]):
 			_los[[from, to]] = board.line_of_sight(from, to)
 		return _los[[from, to]]  # could be null
 
 	func has_los(from, to):
 		## Return whether there is a line of sight between `from` and `to`
+		from = CombatUtils.as_coord(from)
+		to = CombatUtils.as_coord(to)
 		if _los.has([from, to]):
 			return _los[[from, to]] != null
 		elif _los.has([to, from]):
@@ -1051,6 +1055,9 @@ func line_of_sight(coord1, coord2):
 	## Return an array of coords in the line of sight between coord1 and coord2 
 	## or null if the direct path is visibly obstructed.
 	## Both end point params are included in the returned array.
+	coord1 = CombatUtils.as_coord(coord1)
+	coord2 = CombatUtils.as_coord(coord2)
+	
 	var steps = []
 	var nb_steps = dist(coord1, coord2) + 1
 	var mult = max(1, nb_steps - 1)

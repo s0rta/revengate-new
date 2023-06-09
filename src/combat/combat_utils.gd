@@ -37,3 +37,12 @@ static func apply_all_effects(weapon, victim):
 	for node in weapon.get_children():
 		if node is Effect:
 			node.apply(victim)
+
+static func as_coord(thing):
+	## Return the board coordinates of `thing`
+	if thing is Vector2i:
+		return thing
+	elif thing is Actor or thing is Item:
+		return thing.get_cell_coord()
+	else:
+		assert(false, "Don't know how to get board coordinates of %s" % thing)

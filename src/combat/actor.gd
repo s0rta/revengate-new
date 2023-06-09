@@ -58,6 +58,10 @@ const RESIST_MULT := 0.5
 # 35% more damage on a critical hit
 const CRITICAL_MULT := 0.35
 
+# Perception
+const MAX_SIGHT_DIST = 30  # perfect sight
+const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
+
 # main visuals
 @export_group("Visuals")
 @export var char := "x"
@@ -129,6 +133,10 @@ func ddump():
 	print("  core stats: %s" % get_base_stats())
 	print("  modifiers:  %s" % get_modifiers())
 	print("  skills:  %s" % get_skills())
+	if Tender.hero.perceives(self):
+		print("  perceived by Hero")
+	if perceives(Tender.hero):
+		print("  perceives Hero")
 
 func is_idle() -> bool:
 	return state == States.IDLE
@@ -492,7 +500,7 @@ func is_expired():
 	return is_dead()
 
 func is_unexposed():
-	## Return if this actor on a board other than the active one
+	## Return if this actor is on a board other than the active one
 	var parent = get_parent()
 	return parent == null or not parent.visible
 
@@ -507,6 +515,28 @@ func is_foe(other: Actor):
 func is_impartial(other: Actor):
 	## Return whether `self` has neutral sentiment towards `other`
 	return !is_friend(other) and !is_foe(other)
+
+func perceives(thing, index=null):
+	## Return whether we can perceive `thing`
+	var board = get_board()
+	var there = CombatUtils.as_coord(thing)
+	if thing == self:
+		return true
+	elif perception <= 0:
+		return false
+	elif not (thing is Vector2i) and board != thing.get_board():
+		return false
+	var min = 1
+	var dist = board.dist(self, there)
+	if dist > min + MAX_SIGHT_DIST / 100.0 * perception:
+		return false
+	elif dist <= min + MAX_AWARENESS_DIST / 100.0 * perception:
+		return true
+	# In sight-only range, so perceived when there is a clear line of sight
+	if index == null:
+		return board.line_of_sight(self, thing) != null
+	else:
+		return index.has_los(self, thing)
 
 func get_conversation():
 	## Return a {res:..., sect:...} dict or null if the actor has nothing to say
