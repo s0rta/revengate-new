@@ -18,10 +18,6 @@
 ## something that can fit in someone's inventory
 class_name Item extends Node2D
 
-const FADE_DURATION := .15
-const FADE_MODULATE := Color(.7, .7, .7, 0.0)
-const VIS_MODULATE := Color.WHITE
-
 @export var char := "⚒"
 @export var caption := ""
 @export var consumable := false
@@ -111,21 +107,21 @@ func place(coord, _immediate=null):
 func fade_out():
 	## Slowly hide the item with an animation. 
 	var anim = get_tree().create_tween()
-	anim.tween_property(self, "modulate", FADE_MODULATE, FADE_DURATION)
+	anim.tween_property(self, "modulate", Consts.FADE_MODULATE, Consts.FADE_DURATION)
 	await anim.finished
 	visible = false
 	
 func fade_in():
 	## Slowly display the item with an animation. 
-	modulate = FADE_MODULATE
+	modulate = Consts.FADE_MODULATE
 	visible = true
 	var anim = get_tree().create_tween()
-	anim.tween_property(self, "modulate", VIS_MODULATE, FADE_DURATION)
+	anim.tween_property(self, "modulate", Consts.VIS_MODULATE, Consts.FADE_DURATION)
 
 func flash_in():
 	## Istantly display the item without animation. 
 	## The inverse of this operation is the built-in CanvasItem.hide()
-	modulate = VIS_MODULATE
+	modulate = Consts.VIS_MODULATE
 	show()
 
 func toggle_visible(animate:=true):

@@ -127,8 +127,8 @@ Builder:
 - [x] more than one way up or down on some levels
 
 ## v0.8
-- [ ] all buttons fire on Up rather than Pressed
-- [ ] stairs are further apart
+- [x] all buttons fire on Up rather than Pressed for Windows 11 compatibility
+- [x] stairs are further apart
 - [ ] end of game stats
 - [ ] start screen makes it clear when running a debug build
 

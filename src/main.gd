@@ -22,7 +22,6 @@ signal board_changed(new_board)
 
 @onready var hero:Actor = find_child("Hero")
 @onready var hud = $HUD
-#@onready var boards_cont: Node = find_child("Board").get_parent()
 @onready var dungeons_cont: Node = %Viewport  # all dungeons must be direct descendent of this node
 @onready var commands = $CommandPack
 var board: RevBoard  # the active board
@@ -136,6 +135,13 @@ func show_context_menu_for(coord):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
+	var index = Tender.hero.get_board().make_index()
+	for actor in index.get_actors():
+		if actor.visible:
+			actor.fade_out()
+		else:
+			actor.fade_in()
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
+

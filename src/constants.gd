@@ -77,3 +77,8 @@ const REGION_CHARS = {"C": REG_CENTER,
 						"E": REG_EAST, 
 						"W": REG_WEST}
 const ALL_REGIONS = [REG_NORTH, REG_SOUTH, REG_EAST, REG_WEST, REG_CENTER]
+
+# Animations and VFX
+const FADE_DURATION := .15
+const FADE_MODULATE := Color(.7, .7, .7, 0.0)
+const VIS_MODULATE := Color.WHITE

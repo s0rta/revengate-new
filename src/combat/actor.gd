@@ -60,7 +60,7 @@ const CRITICAL_MULT := 0.35
 
 # Perception
 const MAX_SIGHT_DIST = 30  # perfect sight
-const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
+const MAX_AWARENESS_DIST = 1  # perfect out-of-sight sensing
 
 # main visuals
 @export_group("Visuals")
@@ -298,7 +298,20 @@ func place(board_coord, immediate:=false):
 	reset_dest()
 	position = RevBoard.board_to_canvas(board_coord)
 	emit_signal("moved", old_coord, board_coord)
+
+func fade_out():
+	## Slowly hide the Actor with an animation. 
+	var anim = create_anim()
+	anim.tween_property(self, "modulate", Consts.FADE_MODULATE, Consts.FADE_DURATION)
+	await anim.finished
+	visible = false
 	
+func fade_in():
+	## Slowly display the item with an animation. 
+	visible = true
+	var anim = create_anim()
+	anim.tween_property(self, "modulate", Consts.VIS_MODULATE, Consts.FADE_DURATION)
+
 func move_by(cell_vect: Vector2i):
 	## Move by the specified number of tiles from the current position. 
 	## The move is animated, return the animation.

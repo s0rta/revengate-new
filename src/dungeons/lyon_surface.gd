@@ -85,7 +85,9 @@ func add_connectors(builder:BoardBuilder, neighbors):
 	for rec in neighbors:
 		var region = _region_for_loc(board.world_loc, rec.world_loc)
 		var terrain = _neighbor_connector_terrain(board.world_loc, rec.world_loc)
-		if terrain == "gateway" and region != Consts.REG_CENTER:
+		if region == null:
+			coord = builder.random_floor_cell()
+		elif terrain == "gateway" and region != Consts.REG_CENTER:
 			coord = Rand.coord_on_rect_perim(builder.rect, region)
 		else:
 			coord = builder.random_coord_in_region(region, board.is_floor)

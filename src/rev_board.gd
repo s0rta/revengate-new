@@ -1115,6 +1115,13 @@ func _on_actor_moved(from, to):
 	item = index.top_item_at(to)
 	if item:
 		item.fade_out()
+		
+	if Tender.hero:
+		for actor in index.get_actors():
+			if actor.visible and not Tender.hero.perceives(actor):
+				actor.fade_out()
+			elif not actor.visible and Tender.hero.perceives(actor):
+				actor.fade_in()
 
 func _on_actor_died(coord, actor):
 	deregister_actor(actor)

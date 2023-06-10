@@ -8,10 +8,11 @@
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="6_chfdi"]
 
 [node name="Ghost" instance=ExtResource("1_lcl86")]
+visible = false
 char = "𝔤"
 caption = "ghost"
 color = Color(0.411765, 0.411765, 0.411765, 0.701961)
-spawn_cost = 8
+spawn_cost = 8.0
 health = 70
 strength = 10
 intelligence = 30

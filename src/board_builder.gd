@@ -143,14 +143,16 @@ func _find_maxi_min(score_rect:Rect2i, other_coords:Array, index:RevBoard.BoardI
 	##   to be exhaustive.
 	var max_score = -INF
 	var max_coords = []
+	var other_metrics = []
+	for other_coord in other_coords:
+		other_metrics.append(index.dist_metrics(other_coord))
 	for i in score_rect.size.x:
 		for j in score_rect.size.y:
 			var coord = score_rect.position + Vector2i(i, j)
 			if valid_pred != null and not valid_pred.call(coord):
 				continue
 			var vals = []
-			for other_coord in other_coords:
-				var metrics = index.dist_metrics(other_coord)
+			for metrics in other_metrics:
 				var val = metrics.getv(coord)
 				if val != null:
 					vals.append(val)

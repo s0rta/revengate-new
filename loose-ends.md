@@ -39,5 +39,4 @@ This is a list of loose ends, code optimization, and small tasks for the Godot i
 ## VFX
 - [ ] panning the board moves the wave highlight 
       hint: https://godotengine.org/qa/103814/prevent-texture-with-screen_uv-from-moving-with-camera
-      
-
+- [ ] merge Actor.fade_in() and Item.fade_in()
