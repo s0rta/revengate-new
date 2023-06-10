@@ -31,6 +31,7 @@ func _ready():
 	time = 0
 	material.set_shader_parameter("time", time)
 	reset_start_time()
+	start_particles()
 
 func _process(delta):
 	time += delta
@@ -41,3 +42,8 @@ func _process(delta):
 func reset_start_time():
 	material.set_shader_parameter("start_time", time)
 	
+func start_particles():
+	for node in get_children():
+		if node is GPUParticles2D:
+			node = node as GPUParticles2D
+			node.emitting = true

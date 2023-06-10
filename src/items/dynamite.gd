@@ -18,15 +18,18 @@
 extends Item
 
 func _dissipate():
+	blow_up()
+	super()
+
+func blow_up():
 	if not is_unexposed():
 		$Sound.play()
-		$Label.text = "💥"
 		Tender.viewport.effect_at_coord("explosion_vfx", get_cell_coord())
 	splash_damage()
 	if $Sound.playing:
+		# FIXME: does not seem to wait long enought all the time
 		await $Sound.finished
-	super()
-
+		
 func splash_damage():
 	## Hurt everyone in the blast radius
 	var board = get_board()
