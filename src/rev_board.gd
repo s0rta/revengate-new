@@ -21,6 +21,7 @@ const TILE_SIZE = 32
 
 # which terrains lead to other boards?
 const CONNECTOR_TERRAINS = ["stairs-down", "stairs-up", "gateway"]
+const STAIRS_TERRAINS = ["stairs-down", "stairs-up"]
 # which terrains do we index for later retrieval?
 const INDEXED_TERRAINS = CONNECTOR_TERRAINS
 # plain floor without other features

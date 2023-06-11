@@ -217,8 +217,10 @@ func random_distant_coords(nb_coords:int, region=null, valid_pred=null, strict=f
 				# failed to bootstrap even by allowing fallbacks
 				return null
 		
+		coords.append(coord)
 		# erase the bootstrap seed state
-		all_coords[-1] = coord
+		assert(all_coords.pop_back()==seed)
+		all_coords.append(coord)
 		index.erase_dist_metrics(seed)
 	
 	while len(coords) < nb_coords:

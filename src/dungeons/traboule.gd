@@ -74,28 +74,38 @@ func _group_neighbors_by_region(cur_world_loc:Vector3i, neighbors:Array):
 			reg_map[region] = []
 		reg_map[region].append(rec)
 	return reg_map
+	
+func _nb_stairs(conn_targets):
+	var nb := 0
+	for rec in conn_targets:
+		if rec.near_terrain in RevBoard.STAIRS_TERRAINS:
+			nb += 1
+	return nb
 
 func add_connectors(builder:BoardBuilder, neighbors):
 	## place stairs and other cross-board connectors on a board
 	var board = builder.board as RevBoard
 	var index = board.make_index()
 	var coord:Vector2i
+	var stairs_coords:Array
 	var reg_map = _group_neighbors_by_region(board.world_loc, neighbors)
 	var all_conn_coords = []
 	for region in Consts.ALL_REGIONS + [null]:
 		var connectors = reg_map.get(region)
 		if connectors == null:
 			continue
-		var nb_connectors = len(connectors)
-		var coords = builder.random_distant_coords(nb_connectors, region, board.is_floor, false, all_conn_coords, index)
-		assert(len(coords)==nb_connectors, "The board is too full to place all the connectors")
-		for i in nb_connectors:
-			var rec = reg_map[region][i]
-			var terrain = _neighbor_connector_terrain(board.world_loc, rec.world_loc)
+		var nb_stairs = _nb_stairs(connectors)
+		if nb_stairs:
+			stairs_coords = builder.random_distant_coords(nb_stairs, region, board.is_floor, false, all_conn_coords, index)
+		else:
+			stairs_coords = []
+		assert(len(stairs_coords)==nb_stairs, "The board is too full to place all the connectors")
+		for rec in connectors:
+			var terrain = rec.near_terrain
 			if terrain == "gateway" and region != Consts.REG_CENTER and not builder.has_rooms():
 				coord = Rand.coord_on_rect_perim(builder.rect, region)
 			else:
-				coord = coords[i]
+				coord = stairs_coords.pop_back()
 			builder.paint_cells([coord], terrain)
 			board.set_cell_rec(coord, "conn_target", rec)
 			all_conn_coords.append(coord)

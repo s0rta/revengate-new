@@ -93,8 +93,6 @@ func fill_new_board(builder, depth, world_loc, size):
 
 func build_board(depth, world_loc:Vector3i, size:Vector2i=DEF_SIZE, prev_loc=null, neighbors=null):
 	## Make a new board with fresh terrain, monsters, and items.
-	# FIXME: set the board turn
-	
 	var scene = load("res://src/rev_board.tscn") as PackedScene
 	var new_board = scene.instantiate() as RevBoard
 	new_board.depth = depth
@@ -192,7 +190,8 @@ func _neighbors_for_level(depth:int, world_loc:Vector3i, prev=null):
 			far_depth = depth - 1
 		else:
 			far_depth = depth + 1
-		var rec = {"world_loc":loc, "depth":far_depth}
+		var near_terrain = _neighbor_connector_terrain(world_loc, loc)
+		var rec = {"world_loc":loc, "depth":far_depth, "near_terrain":near_terrain}
 		var dungeon = dungeon_for_loc(loc)
 		if dungeon != null:
 			rec.dungeon = dungeon
@@ -246,7 +245,10 @@ func _get_conn_target_recs(board:RevBoard):
 			recs.append(rec)
 		else:
 			rec = board.get_cell_rec(coord, "connection")
-			recs.append({"world_loc":rec.far_board.world_loc, "depth":rec.far_board.depth})
+			var terrain = board.get_cell_terrain(coord)
+			recs.append({"world_loc":rec.far_board.world_loc, 
+						"depth":rec.far_board.depth, 
+						"near_terrain":terrain})
 	return recs
 
 func regen(board:RevBoard):

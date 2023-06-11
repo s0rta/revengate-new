@@ -129,11 +129,9 @@ Builder:
 ## v0.8
 - [x] all buttons fire on Up rather than Pressed for Windows 11 compatibility
 - [x] stairs are further apart
-- [ ] end of game stats
 - [ ] start screen makes it clear when running a debug build
 
 Progen:
-- [ ] Allow mixing rooms and mazes in level generation
 - [x] prefabs invocation system
 - [x] river prefab
 
@@ -148,6 +146,10 @@ Combat:
 UX:
 - [x] pinch to zoom
 - [x] Lyon overworld map
+
+## v0.9
+- [ ] Allow mixing rooms and mazes in level generation
+- [ ] end of game stats
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
