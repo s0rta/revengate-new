@@ -322,15 +322,19 @@ func move_to(board_coord):
 	## Move to the specified board coordinate in number of tiles from the 
 	## origin. 
 	## The move is animated.
-	var old_coord = get_cell_coord()
-	var anim := create_anim()
-	var cpos = RevBoard.board_to_canvas(board_coord)
-	anim.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
-	anim.tween_property(self, "position", cpos, .3)
-	dest = board_coord
-	anim.finished.connect(reset_dest, CONNECT_ONE_SHOT)
-	# TODO: it might be better to emit at the end of the animation
-	emit_signal("moved", old_coord, board_coord)
+	# only animating if the player would see it
+	if is_unexposed() and get_board().is_cell_unexposed(board_coord):
+		place(board_coord)
+	else:
+		var old_coord = get_cell_coord()
+		var anim := create_anim()
+		var cpos = RevBoard.board_to_canvas(board_coord)
+		anim.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
+		anim.tween_property(self, "position", cpos, .3)
+		dest = board_coord
+		anim.finished.connect(reset_dest, CONNECT_ONE_SHOT)
+		# TODO: it might be better to emit at the end of the animation
+		emit_signal("moved", old_coord, board_coord)
 	return true
 
 func move_toward_actor(actor):
@@ -434,8 +438,8 @@ func anim_hit(foe, weapon, damage):
 	
 	foe.update_health(-damage)
 	foe.emit_signal("was_attacked", self)
-	var anim = _anim_lunge(foe)
-	return anim
+	if not (is_unexposed() and foe.is_unexposed()):
+		_anim_lunge(foe)
 
 func play_sound(node_name, weapon=null):
 	## Play the most specific sound for "node_name": either from the weapon or from the actor node.
@@ -450,6 +454,8 @@ func play_sound(node_name, weapon=null):
 	assert(false, "Could not play any sound for %s!" % node_name)
 
 func _anim_health_change(label_, number, direction:Vector2):
+	if is_unexposed():
+		return
 	var label = label_.duplicate()
 	add_child(label)
 	label.text = "%d" % number
@@ -465,7 +471,6 @@ func _anim_health_change(label_, number, direction:Vector2):
 	anim2.tween_property(label, "modulate", Color(0, 0, 0, 0), .25)
 	var timer := get_tree().create_timer(.25)
 	timer.timeout.connect(anim2.play)
-	return anim
 
 func update_health(hp_delta: int):
 	## Update our health and animate the event.
@@ -481,23 +486,27 @@ func update_health(hp_delta: int):
 		
 	var anim = null
 	if hp_delta < 0:
-		anim = _anim_health_change($DamageLabel, -hp_delta, Vector2(.25, -.5))
+		_anim_health_change($DamageLabel, -hp_delta, Vector2(.25, -.5))
 	else:
-		anim = _anim_health_change($HealingLabel, hp_delta, Vector2(.25, .5))
+		_anim_health_change($HealingLabel, hp_delta, Vector2(.25, .5))
 		
 	if health <= 0:
 		die()
 
 func die():
 	## Animate our ultimate demise, drop our inventory, then remove ourself from this cruel world.
-	play_sound("DeathSound")
 	emit_signal("died", get_cell_coord())
 	for item in get_items():
 		drop_item(item)
-	var anim = create_anim()
-	anim.tween_property($Label, "modulate", Color(.8, 0, 0, .7), .1)
-	anim.tween_property($Label, "modulate", Color(0, 0, 0, 0), .4)
-	anim.finished.connect(self.queue_free, CONNECT_ONE_SHOT)
+
+	if is_unexposed():
+		queue_free()
+	else:
+		play_sound("DeathSound")
+		var anim = create_anim()
+		anim.tween_property($Label, "modulate", Color(.8, 0, 0, .7), .1)
+		anim.tween_property($Label, "modulate", Color(0, 0, 0, 0), .4)
+		anim.finished.connect(self.queue_free, CONNECT_ONE_SHOT)
 
 func _learn_attack(attacker):
 	## Remember who just hit us.
@@ -513,9 +522,18 @@ func is_expired():
 	return is_dead()
 
 func is_unexposed():
-	## Return if this actor is on a board other than the active one
+	## Return if this actor is where the hero should could be aware of them
+	
+	# on a board other than the active one
 	var parent = get_parent()
-	return parent == null or not parent.visible
+	if parent == null or not parent.visible:
+		return true
+
+	# out of sight
+	if Tender.hero and not Tender.hero.perceives(self):
+		return true
+
+	return false
 
 func is_friend(other: Actor):
 	## Return whether `self` has positive sentiment towards `other`
@@ -533,7 +551,7 @@ func perceives(thing, index=null):
 	## Return whether we can perceive `thing`
 	var board = get_board()
 	var there = CombatUtils.as_coord(thing)
-	if thing == self:
+	if thing is Actor and thing == self:
 		return true
 	elif perception <= 0:
 		return false

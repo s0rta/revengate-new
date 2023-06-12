@@ -1052,6 +1052,15 @@ func path(start, dest, free_dest=true, max_dist=null):
 	var metrics = astar_metrics(start, dest, free_dest, max_dist)
 	return metrics.path()
 
+func is_cell_unexposed(coord):
+	## Return whether the hero can perceive the cell at coord
+	if not visible:
+		# this board is not active
+		return true
+	if Tender.hero and not Tender.hero.perceives(coord):
+		return true
+	return false
+
 func line_of_sight(coord1, coord2):
 	## Return an array of coords in the line of sight between coord1 and coord2 
 	## or null if the direct path is visibly obstructed.
@@ -1117,19 +1126,18 @@ func _on_actor_moved(from, to):
 	if item:
 		item.fade_out()
 		
-	if Tender.hero:
-		for actor in index.get_actors():
-			if actor.visible and not Tender.hero.perceives(actor):
-				actor.fade_out()
-			elif not actor.visible and Tender.hero.perceives(actor):
-				actor.fade_in()
+	for actor in index.get_actors():
+		if actor.visible and actor.is_unexposed():
+			actor.fade_out()
+		elif not actor.visible and not actor.is_unexposed():
+			actor.fade_in()
 
 func _on_actor_died(coord, actor):
 	deregister_actor(actor)
 	
 func add_message(actor, message):
-	# TODO check for visibility before propagating up
-	emit_signal("new_message", message)
+	if not actor.is_unexposed():
+		emit_signal("new_message", message)
 
 func ddump_connector(coord:Vector2i):
 	var info = {"near_coord": coord}
