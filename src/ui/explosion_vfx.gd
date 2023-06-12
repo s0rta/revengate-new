@@ -32,6 +32,7 @@ func _ready():
 	material.set_shader_parameter("time", time)
 	reset_start_time()
 	start_particles()
+	$Sound.play()
 
 func _process(delta):
 	time += delta

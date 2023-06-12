@@ -1,9 +1,10 @@
-[gd_scene load_steps=21 format=3 uid="uid://digge31pscsl"]
+[gd_scene load_steps=22 format=3 uid="uid://digge31pscsl"]
 
 [ext_resource type="Shader" path="res://src/ui/explosion_vfx.gdshader" id="1_hlm6u"]
 [ext_resource type="Script" path="res://src/ui/explosion_vfx.gd" id="2_jtoju"]
 [ext_resource type="Texture2D" uid="uid://bxs0fp4u36b06" path="res://addons/kenney_particle_pack/scorch_01.png" id="3_hje1q"]
 [ext_resource type="Texture2D" uid="uid://dvoyfk1h103dp" path="res://addons/kenney_particle_pack/smoke_07.png" id="4_ficeo"]
+[ext_resource type="AudioStream" uid="uid://cdddart17v3fw" path="res://src/items/explosion-01.mp3" id="5_8k2py"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b227l"]
 resource_local_to_scene = true
@@ -145,5 +146,8 @@ amount = 1
 process_material = SubResource("ParticleProcessMaterial_tnx1l")
 texture = ExtResource("4_ficeo")
 one_shot = true
+
+[node name="Sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_8k2py")
 
 [connection signal="timeout" from="DebugTimer" to="." method="reset_start_time"]

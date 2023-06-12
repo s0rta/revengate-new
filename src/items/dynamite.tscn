@@ -1,9 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://btvcwiysrm7i6"]
+[gd_scene load_steps=3 format=3 uid="uid://btvcwiysrm7i6"]
 
 [ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_tmhdi"]
 [ext_resource type="Script" path="res://src/items/dynamite.gd" id="2_qtjb3"]
-[ext_resource type="AudioStream" uid="uid://cdddart17v3fw" path="res://src/items/explosion-01.mp3" id="3_o2lo4"]
-[ext_resource type="PackedScene" uid="uid://cu1qq2upenaq4" path="res://src/items/explosion.tscn" id="3_obb6b"]
 
 [node name="Dynamite" instance=ExtResource("1_tmhdi")]
 script = ExtResource("2_qtjb3")
@@ -11,8 +9,3 @@ char = "💣"
 caption = "dynamite"
 switchable = true
 spawn_cost = 4.0
-
-[node name="explosion" parent="." index="0" instance=ExtResource("3_obb6b")]
-
-[node name="Sound" type="AudioStreamPlayer" parent="." index="2"]
-stream = ExtResource("3_o2lo4")
