@@ -112,17 +112,11 @@ position_smoothing_enabled = true
 
 [node name="Traboule1" type="Node" parent="BoardArea/GestureSurveyor/Viewport"]
 script = ExtResource("13_u4fm7")
-start_depth = null
-start_world_loc = null
-dest_world_loc = null
-tunneling_elevation = null
 
 [node name="Traboule2" type="Node" parent="BoardArea/GestureSurveyor/Viewport"]
 script = ExtResource("13_u4fm7")
-start_depth = null
 start_world_loc = Vector3i(13, 4, -1)
 dest_world_loc = Vector3i(11, 4, 0)
-tunneling_elevation = null
 
 [node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]
 
