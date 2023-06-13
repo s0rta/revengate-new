@@ -19,6 +19,10 @@ class_name RevBoard extends TileMap
 
 const TILE_SIZE = 32
 
+# clockwise around a cell starting at top left
+const ADJ_OFFSETS = [Vector2i(-1, -1), Vector2i(0, -1), Vector2i(1, -1), Vector2i(1, 0), 
+					Vector2i(1, 1), Vector2i(0, 1), Vector2i(-1, 1), Vector2i(-1, 0)]
+
 # which terrains lead to other boards?
 const CONNECTOR_TERRAINS = ["stairs-down", "stairs-up", "gateway"]
 const STAIRS_TERRAINS = ["stairs-down", "stairs-up"]
@@ -843,16 +847,21 @@ func adjacents(pos:Vector2i, free:bool=true, in_board:bool=true,
 	## see filter_coords() for the description of the other params
 	# This is a special case of ring()
 	var coords = []
-	for i in [-1, 0, 1]:
-		coords.append(pos + Vector2i(i, -1))
-	for j in [0, 1]:
-		coords.append(pos + Vector2i(1, j))
-	for i in [0, -1]:
-		coords.append(pos + Vector2i(i, 1))
-	for j in [0]:
-		coords.append(pos + Vector2i(-1, j))
-		
+	for offset in ADJ_OFFSETS:
+		coords.append(pos + offset)
 	return filter_coords(coords, free, in_board, bbox, index)
+
+func adjacents_walkable(pos:Vector2i, filter_pred=null):
+	## Return an Array of coords immediately next to `pos`, in-board and walkable.
+	## filter_pred: only coords that are true for this function are returned.
+	var coords = []
+	for offset in ADJ_OFFSETS:
+		coords.append(pos + offset)
+	coords = filter_coords(coords, false, true, get_used_rect())
+	coords = coords.filter(is_walkable)
+	if filter_pred != null:
+		coords = coords.filter(filter_pred)
+	return coords
 
 func filter_coords(coords, free, in_board, bbox, index=null):
 	## Return a sub-selection of coords that match criteria for being walkable 
@@ -891,18 +900,24 @@ static func man_dist(from, to):
 	## Return the Manhattan distance between to and from.
 	return abs(from.x - to.x) + abs(from.y - to.y)
 
-func _init_metric_context(start, dest, free_dest=false, max_dist=null):
+func _init_metric_context(start, dest, free_dest=false, max_dist=null, valid_pred=null):
 	## Initialize a few internal variables that we need for building a BoardMetrics, 
 	## no matter which algo is used.
 	## `free_dest`: does the destination have to be walkable?
 	##   true: ex.: you want to go there;
 	##   false: ex.: you want to get close and attack the actor standing there.
-	if dest:
-		assert(is_walkable(Vector2i(dest.x, dest.y)))
+	## `valid_pred`: function to determine if a coord is valid for exploration, 
+	##   ex.: board.is_walkable() or index.is_free()
+	var index = make_index()
+	if valid_pred == null:
+		valid_pred = index.is_free
+	
+	if dest and free_dest:
+		# FIXME: leaving this with is_walkable might be better
+		assert(valid_pred.call(Vector2i(dest.x, dest.y)))
 
 	# find the start: randomize if not provided
 	var bbox:Rect2i = get_used_rect()
-	var index = make_index()
 	if start == null:
 		start = Rand.coord_in_rect(bbox)
 		if not is_walkable(start):
@@ -910,21 +925,22 @@ func _init_metric_context(start, dest, free_dest=false, max_dist=null):
 			
 	var metrics = BoardMetrics.new(bbox.size, start, dest)	
 	var invalid_dest = false
-	if free_dest and dest!=null:
-		invalid_dest = not index.is_free(dest)
+	if free_dest and dest != null:
+		invalid_dest = not valid_pred.call(dest)
 
 	return {"index": index, "bbox": bbox,
 			"start": start, "dest": dest, "invalid_dest": invalid_dest,
 			"queue": DistQueue.new(), "done": {}, 
+			"pred": valid_pred,
 			"pre_dist": null,   # dist from start to a coord
 			"post_dist": null,  # dist from a coord to dest
 			"metrics": metrics}
 
-func astar_metrics(start_, dest_, free_dest_=false, max_dist=null):
+func astar_metrics(start_, dest_, free_dest_=false, max_dist=null, valid_pred=null):
 	## Return sparse BoardMetrics using the A* algorithm. 
 	## If max_dist is provided, only explore until max_dist depth is reached 
 	## and return partial metrics.
-	var ctx = _init_metric_context(start_, dest_, free_dest_, max_dist)
+	var ctx = _init_metric_context(start_, dest_, free_dest_, max_dist, valid_pred)
 	if ctx.invalid_dest:
 		return ctx.metrics
 	var estimate = dist(ctx.start, ctx.dest)
@@ -947,7 +963,7 @@ func astar_metrics(start_, dest_, free_dest_=false, max_dist=null):
 		if ctx.done.has(current) or dist[1] == max_dist:
 			continue  # this position is finalized already
 
-		for pos in adjacents(current, true, true, ctx.bbox, ctx.index):
+		for pos in adjacents_walkable(current, ctx.pred):
 			if ctx.done.has(pos):
 				continue
 			ctx.pre_dist = ctx.metrics.getv(pos)
@@ -961,12 +977,12 @@ func astar_metrics(start_, dest_, free_dest_=false, max_dist=null):
 	return ctx.metrics
 	
 
-func astar_metrics_custom(pump:MetricsPump, start_, dest_, free_dest_=false, max_dist=null):
+func astar_metrics_custom(pump:MetricsPump, start_, dest_, free_dest_=false, max_dist=null, valid_pred=null):
 	## Return sparse BoardMetrics using the A* algorithm. 
 	## pump: the fully initialized extractor for the intermediate values
 	## all other params like `astar_metrics()`
 	# find our size
-	var ctx = _init_metric_context(start_, dest_, free_dest_, max_dist)
+	var ctx = _init_metric_context(start_, dest_, free_dest_, max_dist, valid_pred)
 	if ctx.invalid_dest:
 		return ctx.metrics
 	var estimate = pump.dist_estim(ctx.start, ctx.dest)
@@ -991,7 +1007,7 @@ func astar_metrics_custom(pump:MetricsPump, start_, dest_, free_dest_=false, max
 		if ctx.done.has(current) or dist[1] == max_dist:
 			continue  # this position is finalized already
 
-		for pos in adjacents(current, true, true, ctx.bbox, ctx.index):
+		for pos in adjacents_walkable(current, ctx.pred):
 			if ctx.done.has(pos):
 				continue
 			ctx.pre_dist = ctx.metrics.getv(pos)
@@ -1006,7 +1022,7 @@ func astar_metrics_custom(pump:MetricsPump, start_, dest_, free_dest_=false, max
 		ctx.done[current] = true
 	return ctx.metrics
 
-func dist_metrics(start_=null, dest_=null, free_dest_=false, max_dist=null):
+func dist_metrics(start_=null, dest_=null, free_dest_=false, max_dist=null, valid_pred=null):
 	## Return distance metrics or all positions accessible from start. 
 	## Start is randomly selected if not provided.
 	## Stop exploring after reaching `dest` if provided.
@@ -1016,7 +1032,7 @@ func dist_metrics(start_=null, dest_=null, free_dest_=false, max_dist=null):
 	if ctx.invalid_dest:
 		return ctx.metrics
 	var dist = 0
-	
+
 	ctx.queue.enqueue(ctx.start, dist)
 	var current = null
 	while not ctx.queue.empty():
@@ -1032,7 +1048,7 @@ func dist_metrics(start_=null, dest_=null, free_dest_=false, max_dist=null):
 		if ctx.done.has(current) or dist == max_dist:
 			continue  # this position is finalized already
 
-		for pos in adjacents(current, true, true, ctx.bbox, ctx.index):
+		for pos in adjacents_walkable(current, ctx.pred):
 			if ctx.done.has(pos):
 				continue
 			ctx.pre_dist = ctx.metrics.getv(pos)
@@ -1050,6 +1066,12 @@ func path(start, dest, free_dest=true, max_dist=null):
 	##   true: ex.: you want to go there;
 	##   false: ex.: you want to get close and attack the actor standing there.
 	var metrics = astar_metrics(start, dest, free_dest, max_dist)
+	return metrics.path()
+
+func path_potential(start, dest, max_dist=null):
+	## Return an Array of coordinates from `start` to `dest`, only looking if cells are walkable 
+	## and ignoring whether they are occupied.
+	var metrics = astar_metrics(start, dest, true, max_dist, is_walkable)
 	return metrics.path()
 
 func is_cell_unexposed(coord):

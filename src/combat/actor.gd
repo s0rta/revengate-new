@@ -60,7 +60,7 @@ const CRITICAL_MULT := 0.35
 
 # Perception
 const MAX_SIGHT_DIST = 30  # perfect sight
-const MAX_AWARENESS_DIST = 1  # perfect out-of-sight sensing
+const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 
 # main visuals
 @export_group("Visuals")
@@ -549,7 +549,11 @@ func is_impartial(other: Actor):
 
 func perceives(thing, index=null):
 	## Return whether we can perceive `thing`
+	var min = 1
+	var sight_dist = min + MAX_SIGHT_DIST / 100.0 * perception
+	var aware_dist = min + MAX_AWARENESS_DIST / 100.0 * perception
 	var board = get_board()
+	var here = get_cell_coord()
 	var there = CombatUtils.as_coord(thing)
 	if thing is Actor and thing == self:
 		return true
@@ -557,12 +561,16 @@ func perceives(thing, index=null):
 		return false
 	elif not (thing is Vector2i) and board != thing.get_board():
 		return false
-	var min = 1
+
 	var dist = board.dist(self, there)
-	if dist > min + MAX_SIGHT_DIST / 100.0 * perception:
+	if dist > sight_dist:
 		return false
-	elif dist <= min + MAX_AWARENESS_DIST / 100.0 * perception:
+	elif dist <= min:
 		return true
+	elif dist <= aware_dist:
+		# no sight needed if you are close enough to smell/hear/feel them
+		if board.path_potential(here, there, aware_dist):
+			return true
 	# In sight-only range, so perceived when there is a clear line of sight
 	if index == null:
 		return board.line_of_sight(self, thing) != null
