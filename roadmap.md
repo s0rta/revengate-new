@@ -129,7 +129,7 @@ Builder:
 ## v0.8
 - [x] all buttons fire on Up rather than Pressed for Windows 11 compatibility
 - [x] stairs are further apart
-- [ ] start screen makes it clear when running a debug build
+- [x] start screen makes it clear when running a debug build
 
 Progen:
 - [x] prefabs invocation system
