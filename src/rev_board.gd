@@ -484,10 +484,7 @@ class BoardIndex extends RefCounted:
 
 	func actor_at(coord:Vector2i):
 		## Return the actor occupying `coord` or null if there is no one there.
-		if _coord_to_actor.has(coord):
-			return _coord_to_actor[coord]
-		else:
-			return null
+		return _coord_to_actor.get(coord)
 	
 	func top_item_at(coord:Vector2i):
 		## return item at the top of the stack at `coord` or null if there are no items there.
@@ -900,7 +897,7 @@ static func man_dist(from, to):
 	## Return the Manhattan distance between to and from.
 	return abs(from.x - to.x) + abs(from.y - to.y)
 
-func _init_metric_context(start, dest, free_dest=false, max_dist=null, valid_pred=null):
+func _init_metric_context(start, dest, free_dest=false, max_dist=null, valid_pred=null, index=null):
 	## Initialize a few internal variables that we need for building a BoardMetrics, 
 	## no matter which algo is used.
 	## `free_dest`: does the destination have to be walkable?
@@ -908,13 +905,14 @@ func _init_metric_context(start, dest, free_dest=false, max_dist=null, valid_pre
 	##   false: ex.: you want to get close and attack the actor standing there.
 	## `valid_pred`: function to determine if a coord is valid for exploration, 
 	##   ex.: board.is_walkable() or index.is_free()
-	var index = make_index()
+	## `index`: the BoardIndex to query, a fresh one will be created internally if `null`.
+	if index == null:
+		index = make_index()
 	if valid_pred == null:
 		valid_pred = index.is_free
 	
-	if dest and free_dest:
-		# FIXME: leaving this with is_walkable might be better
-		assert(valid_pred.call(Vector2i(dest.x, dest.y)))
+	if dest:
+		assert(is_walkable(Vector2i(dest.x, dest.y)))
 
 	# find the start: randomize if not provided
 	var bbox:Rect2i = get_used_rect()
@@ -936,11 +934,11 @@ func _init_metric_context(start, dest, free_dest=false, max_dist=null, valid_pre
 			"post_dist": null,  # dist from a coord to dest
 			"metrics": metrics}
 
-func astar_metrics(start_, dest_, free_dest_=false, max_dist=null, valid_pred=null):
+func astar_metrics(start_, dest_, free_dest_=false, max_dist=null, valid_pred=null, index=null):
 	## Return sparse BoardMetrics using the A* algorithm. 
 	## If max_dist is provided, only explore until max_dist depth is reached 
 	## and return partial metrics.
-	var ctx = _init_metric_context(start_, dest_, free_dest_, max_dist, valid_pred)
+	var ctx = _init_metric_context(start_, dest_, free_dest_, max_dist, valid_pred, index)
 	if ctx.invalid_dest:
 		return ctx.metrics
 	var estimate = dist(ctx.start, ctx.dest)
@@ -977,12 +975,13 @@ func astar_metrics(start_, dest_, free_dest_=false, max_dist=null, valid_pred=nu
 	return ctx.metrics
 	
 
-func astar_metrics_custom(pump:MetricsPump, start_, dest_, free_dest_=false, max_dist=null, valid_pred=null):
+func astar_metrics_custom(pump:MetricsPump, start_, dest_, free_dest_=false, max_dist=null, 
+							valid_pred=null, index=null):
 	## Return sparse BoardMetrics using the A* algorithm. 
 	## pump: the fully initialized extractor for the intermediate values
 	## all other params like `astar_metrics()`
 	# find our size
-	var ctx = _init_metric_context(start_, dest_, free_dest_, max_dist, valid_pred)
+	var ctx = _init_metric_context(start_, dest_, free_dest_, max_dist, valid_pred, index)
 	if ctx.invalid_dest:
 		return ctx.metrics
 	var estimate = pump.dist_estim(ctx.start, ctx.dest)
@@ -1022,13 +1021,13 @@ func astar_metrics_custom(pump:MetricsPump, start_, dest_, free_dest_=false, max
 		ctx.done[current] = true
 	return ctx.metrics
 
-func dist_metrics(start_=null, dest_=null, free_dest_=false, max_dist=null, valid_pred=null):
+func dist_metrics(start_=null, dest_=null, free_dest_=false, max_dist=null, valid_pred=null, index=null):
 	## Return distance metrics or all positions accessible from start. 
 	## Start is randomly selected if not provided.
 	## Stop exploring after reaching `dest` if provided.
 	## Do not explore further than `max_dist` if provided. 
 	# using the Dijkstra algo
-	var ctx = _init_metric_context(start_, dest_, free_dest_, max_dist)
+	var ctx = _init_metric_context(start_, dest_, free_dest_, max_dist, valid_pred, index)
 	if ctx.invalid_dest:
 		return ctx.metrics
 	var dist = 0
@@ -1059,19 +1058,34 @@ func dist_metrics(start_=null, dest_=null, free_dest_=false, max_dist=null, vali
 		ctx.done[current] = true
 	return ctx.metrics
 
-func path(start, dest, free_dest=true, max_dist=null):
+func path(start, dest, free_dest=true, max_dist=null, index=null):
 	## Return an Array of coordinates from `start` to `dest`.
 	## See BoardMetrics.path() for more details.
 	## `free_dest`: does the destination have to be walkable?
 	##   true: ex.: you want to go there;
 	##   false: ex.: you want to get close and attack the actor standing there.
-	var metrics = astar_metrics(start, dest, free_dest, max_dist)
+	var metrics = astar_metrics(start, dest, free_dest, max_dist, index)
 	return metrics.path()
 
-func path_potential(start, dest, max_dist=null):
+func path_potential(start, dest, max_dist=null, index=null):
 	## Return an Array of coordinates from `start` to `dest`, only looking if cells are walkable 
 	## and ignoring whether they are occupied.
-	var metrics = astar_metrics(start, dest, true, max_dist, is_walkable)
+	var metrics = astar_metrics(start, dest, true, max_dist, is_walkable, index)
+	return metrics.path()
+
+func path_perceived(start, dest, pov_actor:Actor, max_dist=null, index=null):
+	## Return an Array of coordinates from `start` to `dest` as seen by `pov_actor`.
+	# make a killer pred
+	if index == null:
+		index = make_index()
+	var pred = func(coord):
+		if not is_walkable(coord):
+			return false
+		var actor = index.actor_at(coord)
+		if actor != null and pov_actor.perceives(actor, index):
+			return false
+		return is_walkable(coord)
+	var metrics = astar_metrics(start, dest, true, max_dist, pred, index)
 	return metrics.path()
 
 func is_cell_unexposed(coord):

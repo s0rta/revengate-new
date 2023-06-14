@@ -347,12 +347,12 @@ func move_toward_actor(actor):
 	else:
 		return false
 
-func travel_to(there):
+func travel_to(there, index=null):
 	## Start the multi-turn journey that takes us to `there`, 
 	##   return `false` if the journey is not possible.
 	## Depending on where we are in the turn logic, the caller might need to call `stop_listening()` 
 	## for the travelling strategy to kick in, otherwise, it will only be active on the next turn.
-	var path = get_board().path(get_cell_coord(), there, true)
+	var path = get_board().path_perceived(get_cell_coord(), there, self, null, index)
 	if path == null or path.size() == 0:
 		return false
 	else:
@@ -571,7 +571,7 @@ func perceives(thing, index=null):
 		# no sight needed if you are close enough to smell/hear/feel them
 		if board.path_potential(here, there, aware_dist):
 			return true
-	# In sight-only range, so perceived when there is a clear line of sight
+	# In sight-only range: perceived when there is a clear line of sight
 	if index == null:
 		return board.line_of_sight(self, thing) != null
 	else:

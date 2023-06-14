@@ -39,9 +39,10 @@ func _unhandled_input(event):
 	if event.is_action("act-on-cell"):
 		var coord = RevBoard.canvas_to_board(event.position)
 		print("Click at pos=%s, coord=%s" % [event.position, RevBoard.coord_str(coord)])
-		
+
+		var other = index.actor_at(coord)
 		if RevBoard.dist(get_cell_coord(), coord) == 1:
-			var other = index.actor_at(coord)
+
 			if other and is_foe(other):
 				attack(other)
 				acted = true
@@ -54,8 +55,10 @@ func _unhandled_input(event):
 			elif index.is_free(coord):
 				move_to(coord)
 				acted = true
-		elif board.is_on_board(coord) and index.is_free(coord) and travel_to(coord):
-			return await act()
+		elif board.is_walkable(coord):
+			if (other == null or not perceives(other, index)) and travel_to(coord, index):
+				# if the destination at least seems unoccupied, we start travelling there
+				return await act()
 	elif event.is_action_pressed("context-menu"):
 		var coord = RevBoard.canvas_to_board(event.position)
 		acted = await $"/root/Main".show_context_menu_for(coord)

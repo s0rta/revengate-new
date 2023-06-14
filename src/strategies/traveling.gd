@@ -53,7 +53,7 @@ func _set_path(path_):
 func _make_path():
 	var board = me.get_board()
 	assert(board, "Traveling only works on scenes with a board")
-	var path_ = board.path(me.get_cell_coord(), dest, true)
+	var path_ = board.path_perceived(me.get_cell_coord(), dest, me)
 	if path_ == null:
 		unreachable = true
 	return path_
