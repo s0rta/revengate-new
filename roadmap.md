@@ -136,12 +136,11 @@ Progen:
 - [x] river prefab
 
 Items:
-- [ ] unique items are per-game unique, not only per-dungeon unique
-- [ ] item to increase latent healing
-- [ ] potion of booze: heals, but impairs perception and agility
+- [x] potion of booze: heals, but impairs perception and agility
 
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()
+- [x] perception affect who you can see
 
 UX:
 - [x] pinch to zoom
@@ -150,6 +149,11 @@ UX:
 ## v0.9
 - [ ] Allow mixing rooms and mazes in level generation
 - [ ] end of game stats
+
+- Items:
+- [ ] unique items are per-game unique, not only per-dungeon unique
+- [ ] item to increase latent healing
+
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]

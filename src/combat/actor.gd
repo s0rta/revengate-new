@@ -549,15 +549,16 @@ func is_impartial(other: Actor):
 
 func perceives(thing, index=null):
 	## Return whether we can perceive `thing`
+	var percep = get_stat("perception")
 	var min = 1
-	var sight_dist = min + MAX_SIGHT_DIST / 100.0 * perception
-	var aware_dist = min + MAX_AWARENESS_DIST / 100.0 * perception
+	var sight_dist = min + MAX_SIGHT_DIST / 100.0 * percep
+	var aware_dist = min + MAX_AWARENESS_DIST / 100.0 * percep
 	var board = get_board()
 	var here = get_cell_coord()
 	var there = CombatUtils.as_coord(thing)
 	if thing is Actor and thing == self:
 		return true
-	elif perception <= 0:
+	elif percep <= 0:
 		return false
 	elif not (thing is Vector2i) and board != thing.get_board():
 		return false

@@ -25,6 +25,8 @@ class_name Effect extends Node
 @export var damage_family := Consts.DamageFamily.NONE
 @export var strength := 0
 @export var agility := 0
+@export var intelligence := 0
+@export var perception := 0
 @export_range(0, 1) var probability := 1.0  # chance that the effect will be applied
 @export var immediate := false
 @export var nb_turns := 1

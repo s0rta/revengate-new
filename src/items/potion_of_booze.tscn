@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://lpworv1rq2g3"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_q2tfm"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_3svxc"]
+
+[node name="PotionOfBooze" instance=ExtResource("1_q2tfm")]
+char = "🍾"
+caption = "potion of booze"
+consumable = true
+spawn_cost = 3.0
+
+[node name="Effect" type="Node" parent="." index="1"]
+script = ExtResource("2_3svxc")
+healing = 1
+agility = -10
+perception = -20
+nb_turns = 15

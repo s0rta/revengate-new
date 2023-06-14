@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dxk8rrdv6fb1e"]
+[gd_scene load_steps=10 format=3 uid="uid://dxk8rrdv6fb1e"]
 
 [ext_resource type="Script" path="res://src/combat/actor.gd" id="1_wqixm"]
 [ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_jac18"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="5_qkouh"]
 [ext_resource type="PackedScene" uid="uid://d8ovanvojd5g" path="res://src/weapons/knife.tscn" id="7_ayv21"]
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="7_wyehf"]
+[ext_resource type="PackedScene" uid="uid://lpworv1rq2g3" path="res://src/items/potion_of_booze.tscn" id="8_5um8d"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_00etm"]
 size = Vector2(32, 32)
@@ -79,5 +80,7 @@ is_equipped = true
 
 [node name="PotionOfHealing" parent="." instance=ExtResource("7_wyehf")]
 visible = false
+
+[node name="PotionOfBooze" parent="." instance=ExtResource("8_5um8d")]
 
 [connection signal="was_attacked" from="." to="." method="_learn_attack"]

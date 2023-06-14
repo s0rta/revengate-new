@@ -51,7 +51,7 @@ enum SkillLevel {
 	MYTHICAL,  # beyon the realm of mortals
 }
 
-const CORE_STATS := ["agility", "strength"] 
+const CORE_STATS := ["agility", "strength", "intelligence", "perception"] 
 const SKILLS := ["evasion", "innate_attack", "fencing"]
 # TODO: should be a const, but the parser has issue with the `+` expression
 var CHALLENGES := [] + SKILLS
