@@ -104,6 +104,18 @@ func place(coord, _immediate=null):
 	## _immediate: ignored.
 	position = RevBoard.board_to_canvas(coord)
 
+func should_show(index=null):
+	if index == null:
+		index = get_board().make_index()
+	var here = get_cell_coord()
+	if not self == index.top_item_at(here):
+		return false
+	var actor = index.actor_at(here)
+	if actor == null or actor.is_dead() or actor.is_unexposed():
+		return true
+	else:
+		return false
+
 func fade_out():
 	## Slowly hide the item with an animation. 
 	var anim = get_tree().create_tween()

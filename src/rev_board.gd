@@ -1143,12 +1143,8 @@ func reset_items_visibility():
 	var index = make_index()
 	for item in get_items():
 		var coord = item.get_cell_coord()
-		if item == index.top_item_at(coord):
-			var actor = index.actor_at(coord)
-			if not actor or actor.is_dead():
-				item.flash_in()
-			else:
-				item.hide()
+		if item.should_show(index):
+			item.flash_in()
 		else:
 			item.hide()
 
@@ -1156,12 +1152,12 @@ func _on_actor_moved(from, to):
 	## fade in and out the visibility of items being stepped on/off.
 	var index = make_index()
 	var item = index.top_item_at(from)
-	if item:
+	if item and not item.visible and item.should_show(index):
 		item.fade_in()
 	item = index.top_item_at(to)
-	if item:
+	if item and item.visible and not item.should_show(index):
 		item.fade_out()
-		
+
 	for actor in index.get_actors():
 		if actor.visible and actor.is_unexposed():
 			actor.fade_out()
