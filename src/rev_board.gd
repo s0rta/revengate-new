@@ -595,6 +595,7 @@ static func canvas_to_board_str(cpos):
 func _ready():
 	detect_actors()
 	reset_items_visibility()
+	reset_actors_visibility()
 
 func set_active(active:=true):
 	## Make the board active: visible and collidable)
@@ -603,6 +604,7 @@ func set_active(active:=true):
 	if active:
 		detect_actors()
 		reset_items_visibility()
+		reset_actors_visibility()
 
 func is_active():
 	return visible and is_layer_enabled(0)
@@ -1139,7 +1141,6 @@ func get_items():
 
 func reset_items_visibility():
 	## Show or hide items depending on their stacking order. No animations performed.
-	# FIXME: check actors too
 	var index = make_index()
 	for item in get_items():
 		var coord = item.get_cell_coord()
@@ -1147,6 +1148,18 @@ func reset_items_visibility():
 			item.flash_in()
 		else:
 			item.hide()
+
+func reset_actors_visibility():
+	## Show or hide actors depending on whether they are perceived
+	var index = make_index()
+	var use_perception = false
+	if Tender.hero and Tender.hero.get_board() == self:
+		use_perception = true
+	for actor in get_actors():
+		if use_perception:
+			actor.visible = not actor.is_unexposed(index)
+		else:
+			actor.visible = true
 
 func _on_actor_moved(from, to):
 	## fade in and out the visibility of items being stepped on/off.

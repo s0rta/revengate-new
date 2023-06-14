@@ -89,7 +89,7 @@ position = Vector2(48, 240)
 
 [node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("13_ymwa7")]
 visible = true
-position = Vector2(464, 80)
+position = Vector2(464, 48)
 
 [node name="Umbrella" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("14_ih5ox")]
 position = Vector2(336, 48)

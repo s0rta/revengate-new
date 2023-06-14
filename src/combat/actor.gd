@@ -521,7 +521,7 @@ func is_dead():
 func is_expired():
 	return is_dead()
 
-func is_unexposed():
+func is_unexposed(index=null):
 	## Return if this actor is where the hero should could be aware of them
 	
 	# on a board other than the active one
@@ -530,7 +530,7 @@ func is_unexposed():
 		return true
 
 	# out of sight
-	if Tender.hero and not Tender.hero.perceives(self):
+	if Tender.hero and not Tender.hero.perceives(self, index):
 		return true
 
 	return false
