@@ -202,7 +202,7 @@ func populate_board(builder, depth, world_loc:Vector3i):
 	var index = builder.board.make_index()
 	
 	# Items
-	var budget = max(0, depth*1.2)
+	var budget = max(0, depth*1.3)
 
 	# mandatory items
 	var deck = deck_builder.gen_mandatory_item_deck(depth, world_loc)
@@ -215,7 +215,7 @@ func populate_board(builder, depth, world_loc:Vector3i):
 		budget -= _place_card(deck.draw(), builder, index)
 		
 	# Monsters
-	budget = max(0, depth * 1.9)
+	budget = max(0, depth * 1.7)
 	
 	# mandatory monsters
 	deck = deck_builder.gen_mandatory_monster_deck(depth, world_loc)

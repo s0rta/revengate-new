@@ -24,8 +24,12 @@ var waypoint = null   # Vector2i
 var nb_travel_attempts = 0
 
 func find_suitable_waypoint():
+	## Return a random reachable location that is biased towards being far
 	var board: RevBoard = me.get_board()
-	var metrics = board.dist_metrics(me.get_cell_coord())
+	var here = me.get_cell_coord()
+	var metrics = board.dist_metrics(here)
+	if metrics.furthest_coord == here:
+		return null
 	return Rand.weighted_choice(metrics.all_coords(), metrics.all_dists())
 	
 func _get_path(here, there):

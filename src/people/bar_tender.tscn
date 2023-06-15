@@ -83,4 +83,6 @@ visible = false
 
 [node name="PotionOfBooze" parent="." instance=ExtResource("8_5um8d")]
 
+[node name="PotionOfBooze2" parent="." instance=ExtResource("8_5um8d")]
+
 [connection signal="was_attacked" from="." to="." method="_learn_attack"]

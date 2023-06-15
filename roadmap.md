@@ -137,9 +137,9 @@ Progen:
 
 Items:
 - [x] potion of booze: heals, but impairs perception and agility
+- [x] explosions start a particles system
 
 Combat:
-- [ ] TribalTerritorial uses perception rather than dist()
 - [x] perception affect who you can see
 
 UX:
@@ -150,9 +150,12 @@ UX:
 - [ ] Allow mixing rooms and mazes in level generation
 - [ ] end of game stats
 
-- Items:
+Items:
 - [ ] unique items are per-game unique, not only per-dungeon unique
 - [ ] item to increase latent healing
+
+Combat:
+- [ ] TribalTerritorial uses perception rather than dist()
 
 
 ## v??? – when Godot 4 enables the Android gestures recognition

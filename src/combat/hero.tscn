@@ -11,7 +11,8 @@ script = ExtResource("2_jrjv3")
 char = "@"
 caption = "hero"
 color = Color(1, 1, 1, 1)
-healing_prob = 0.07
+strength = 55
+healing_prob = 0.08
 faction = 1
 
 [node name="Label" parent="." index="0"]

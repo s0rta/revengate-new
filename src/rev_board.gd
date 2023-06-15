@@ -914,6 +914,10 @@ func _init_metric_context(start, dest, free_dest=false, max_dist=null, valid_pre
 		valid_pred = index.is_free
 	
 	if dest:
+		# DEBUG: very rarely, rats fail the assert...
+		if not is_walkable(Vector2i(dest.x, dest.y)):
+			ddump_cell(dest)
+		
 		assert(is_walkable(Vector2i(dest.x, dest.y)))
 
 	# find the start: randomize if not provided
@@ -1198,3 +1202,7 @@ func ddump_connectors():
 	for coord in get_connectors():
 		ddump_connector(coord)
 
+func ddump_cell(coord):
+	print("Cell data for %s:" % [coord_str(coord)])
+	print("  terrain: %s" % [get_cell_terrain(coord)])
+	print("  records: %s" % [_cell_records.get(coord)])

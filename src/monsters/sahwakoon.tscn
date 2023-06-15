@@ -9,10 +9,10 @@
 char = "s"
 caption = "sahwakoon"
 color = Color(0.537255, 0.392157, 0.0901961, 1)
-spawn_cost = 2.0
-health = 20
+spawn_cost = 2.2
+health = 17
 strength = 30
-agility = 40
+agility = 39
 intelligence = 25
 resistance = 2
 bestiary_img = "res://src/monsters/sahwakoon.png"

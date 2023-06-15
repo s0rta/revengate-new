@@ -32,6 +32,11 @@ extends Control
 # _gui_input() will stop the built-in behavior of the control.
 # z_index changes the drawing, not the order of input handling
 
+# When mouse emulation is active, each screen tap will trigger both an InputEventMouseButton and
+# an InputEventScreenTouch, in that order. The first one completes the whole propagation as described
+# above before the second one fires. Accepting the first one does not prevents the second one 
+# from firing. Release events are in the same order (mouse before touch).
+
 func print_event(event, meth_name):
 	Utils.ddump_event(event, self, meth_name)
 

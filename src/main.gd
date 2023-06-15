@@ -135,13 +135,6 @@ func show_context_menu_for(coord):
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	var index = Tender.hero.get_board().make_index()
-	for actor in index.get_actors():
-		if actor.visible:
-			actor.fade_out()
-		else:
-			actor.fade_in()
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-

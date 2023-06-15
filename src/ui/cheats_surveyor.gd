@@ -43,6 +43,7 @@ func start_inspect_at():
 	if vals[0]:
 		var viewport = $/root/Main.find_child("Viewport")
 		var coord = viewport.global_pos_to_board_coord(vals[1])
+		# TODO: move most of this to board.ddump_cell()
 		var coord_str = RevBoard.coord_str(coord)
 		print("Data at %s:" % coord_str)
 		var board: RevBoard = $/root/Main.get_board()
@@ -52,6 +53,7 @@ func start_inspect_at():
 		if data:
 			print("  cell data: %s" % [[var_to_str(data), data.get_custom_data
 	("is_connector")]])
+		board.ddump_cell(coord)
 		var actor = index.actor_at(coord)
 		if actor:
 			actor.ddump()
