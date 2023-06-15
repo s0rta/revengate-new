@@ -76,11 +76,12 @@ class ContextMenuEvent extends InputEventAction:
 
 
 func _input(event):
-	if is_capturing_clicks and event is InputEventMouseButton:
-		accept_event()
-		if not event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-			emit_signal("capture_stopped", true, event.position)
-
+	if is_capturing_clicks:
+		if _is_tap_or_left_btn(event):
+			accept_event()
+			if event.pressed:
+				emit_signal("capture_stopped", true, event.position)
+	
 func _gui_input(event):
 	# The emulate_mouse_from_touch setting causes Godot to emit both an InputEventMouseButton and
 	# an InputEventScreenTouch on mobile. The mouse event arrives first and we ignore it here to 
@@ -88,12 +89,12 @@ func _gui_input(event):
 	# are blind to touch events and rely on on InputEventMouseButton 
 	if OS.has_feature("mobile") and event is InputEventMouseButton:
 		accept_event()
+		return
 
 	# TODO: MOUSE_BUTTON_RIGHT should pop the context menu
 
 	# touch actions are treated like MOUSE_BUTTON_LEFT
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT \
-			or event is InputEventScreenTouch:
+	if _is_tap_or_left_btn(event):
 		var index = event.get("index")
 		if index == null:
 			index = 0
@@ -109,7 +110,7 @@ func _gui_input(event):
 			nb_touching = len(touches_pos)
 			if nb_touching == 1:
 				has_panned = false
-		else: # release
+		else:  # release
 			touches_pos.erase(index)
 			nb_touching = len(touches_pos)
 			if nb_touching == 0:
@@ -152,6 +153,14 @@ func _unhandled_input(event):
 	if is_capturing_clicks and event.is_action_released("ui_cancel"):
 		emit_signal("capture_stopped", false, null)
 		accept_event()
+
+func _is_tap_or_left_btn(event):
+	if event is InputEventScreenTouch:
+		return true
+	if not OS.has_feature("mobile"):
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+			return true
+	return false
 
 func _mt_info(current_index, current_pos):
 	## Return a dictionary of information about the current multi-touch event
