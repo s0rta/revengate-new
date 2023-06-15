@@ -100,7 +100,7 @@ class Inspect extends Command:
 		
 	func run(coord:Vector2i) -> bool:
 		var actor = index.actor_at(coord)
-		if actor:
+		if actor and not actor.is_unexposed():
 			Tender.hud.actor_details_screen.fill_with(actor)
 			Tender.hud.actor_details_screen.popup()
 			await Tender.hud.actor_details_screen.closed

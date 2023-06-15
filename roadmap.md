@@ -157,6 +157,9 @@ Items:
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()
 
+UX:
+- [ ] something more reliable than timing to synchronize fading anims
+- [ ] buttons and in-dialogues choices are bigger
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]

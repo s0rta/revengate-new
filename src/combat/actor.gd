@@ -330,7 +330,7 @@ func move_to(board_coord):
 		var anim := create_anim()
 		var cpos = RevBoard.board_to_canvas(board_coord)
 		anim.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
-		anim.tween_property(self, "position", cpos, .3)
+		anim.tween_property(self, "position", cpos, .35)
 		dest = board_coord
 		anim.finished.connect(reset_dest, CONNECT_ONE_SHOT)
 		# TODO: it might be better to emit at the end of the animation

@@ -58,7 +58,7 @@ max_dungeon_occ = 2
 script = ExtResource("7_bd8gw")
 max_dungeon_occ = 1
 min_dungeon_occ = 1
-world_loc = Vector3i(7, 1, 0)
+world_loc = Vector3i(11, 4, 0)
 
 [node name="Outlaw1" parent="QuestGoals" instance=ExtResource("12_g5w02")]
 

@@ -237,14 +237,6 @@ func random_distant_coords(nb_coords:int, region=null, valid_pred=null, strict=f
 			# deliver a partial result
 			break
 			
-	if Utils.is_debug():
-		print("Selected distant coords: %s" % [coords])
-		print("Dijkstra metrics are: ")
-		for i in len(all_coords)-1:
-			# not printing the last one since it was not considered to pick the maxi_min
-			var dij = index.dist_metrics(all_coords[i])
-			print(dij)
-			
 	return coords
 	
 func gen_level(nb_rooms=4):
