@@ -274,3 +274,18 @@ A bloke caught Ivry's attention. Who the hell bought books in a café? Pornograp
 After years of living here, Ivry could close his eyes and see the cogs moving. He could see where the machine was straining and where a small adjustment and a little lubrication would lead to greater efficiency, efficiency in Ivry's hydration routine.
 
 Ivry slowly pushed his glass to allow his beer to warm up in full sun, then he went for a cigarette closer to where he could hear what the bloke was bragging about.
+
+
+# The Sands of Time
+
+*October 26, year 90 AP*
+
+Gilles was afraid. He had woken up screaming last night and his breaches were still damp with is own urine. It didn't matter anymore. Any moment now and they would take him out from this cell and bring him to the gallows. The sound of the cheering crowd told him that much. He felt the texture of the stone wall with his hand and filled his lungs with the aroma of straw and piss, savouring his ability to feel things while it lasted.
+
+Gilles had always been afraid of death. It was hard to avoid growing up with his grandmother telling him tales of watching people fall like flies during the plague. It had been nine years since that fear became an obsession. That was when the Saxons took Joan and burnt her alive. Even her, with all her magic, had been unable to escape the scythe of the reaper.
+
+The crowd was growing louder. Gilles was guilty and he had confessed everything. Almost everything. Now that it was almost over, he was glad that they had never asked why, what he had hopped to gain by taking the lives of all those children. In a moment, he would give the crowd what they were asking, he would die for their collective enjoyment. If the books had been right, he would die, but he would not cease living – maybe he would succeed where Joan had failed. Maybe...
+
+The pages had survived the plague years, but no one who knew how to interpret them had and for almost a century they had been waiting, gathering dust, waiting for someone who was desperate enough to find them and let light shine on their ancient words again.
+
+Gilles heard footsteps coming his way. He closed his eyes and wept softly, unsure if any of it had been worth it.
