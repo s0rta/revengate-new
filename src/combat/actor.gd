@@ -218,6 +218,9 @@ func stat_trial(difficulty, stat_name, challenge=null):
 	var stat = get_stat(stat_name, challenge)
 	return difficulty >= randfn(stat, SIGMA)
 
+func is_hero():
+	return Tender.hero != null and Tender.hero == self
+
 func get_board():
 	## Return the RevBoard this actor is playing on, return `null` is no board is currently active.
 	# board is either the parent or the global board
@@ -245,6 +248,10 @@ func create_anim() -> Tween:
 func is_animating():
 	## Return whether the actor is currently performing an animation.
 	return nb_active_anims > 0
+
+func _dissipate():
+	## Do some cleanup, then vanish forever
+	queue_redraw()
 
 func start_turn(new_turn:int):
 	## Mark the start a new game turn, but we do not play until act() is called.
@@ -496,17 +503,19 @@ func update_health(hp_delta: int):
 func die():
 	## Animate our ultimate demise, drop our inventory, then remove ourself from this cruel world.
 	emit_signal("died", get_cell_coord())
+	if not is_hero():
+		CombatUtils.add_kill(caption)
 	for item in get_items():
 		drop_item(item)
 
 	if is_unexposed():
-		queue_free()
+		_dissipate()
 	else:
 		play_sound("DeathSound")
 		var anim = create_anim()
 		anim.tween_property($Label, "modulate", Color(.8, 0, 0, .7), .1)
 		anim.tween_property($Label, "modulate", Color(0, 0, 0, 0), .4)
-		anim.finished.connect(self.queue_free, CONNECT_ONE_SHOT)
+		anim.finished.connect(self._dissipate, CONNECT_ONE_SHOT)
 
 func _learn_attack(attacker):
 	## Remember who just hit us.

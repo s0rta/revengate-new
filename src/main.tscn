@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=30 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bxjfh12dtkof6" path="res://src/combat/hero.tscn" id="4_lrsod"]
 [ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="5_odllu"]
 [ext_resource type="Script" path="res://src/hud.gd" id="7_4dw6n"]
+[ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="7_t3avj"]
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="9_7u4fi"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
@@ -71,6 +72,9 @@ layer_0/tile_data = PackedInt32Array(17, 393216, 3, 16, 327680, 3, 15, 458752, 3
 
 [node name="Hero" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("4_lrsod")]
 position = Vector2(112, 48)
+
+[node name="Rapier" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" instance=ExtResource("7_t3avj")]
+is_equipped = true
 
 [node name="PotionOfHealing" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_7u4fi")]
 visible = false

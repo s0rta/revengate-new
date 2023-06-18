@@ -19,7 +19,7 @@
 ## This script is autoloaded at `Consts`
 extends Node
 
-const VERSION := "0.8.0"
+const VERSION := "0.8.1"
 const DEBUG = true
 
 ## The kind of damage, mostly used to compute resistances. Can apply to healing as well.
@@ -82,3 +82,5 @@ const ALL_REGIONS = [REG_NORTH, REG_SOUTH, REG_EAST, REG_WEST, REG_CENTER]
 const FADE_DURATION := .15
 const FADE_MODULATE := Color(.7, .7, .7, 0.0)
 const VIS_MODULATE := Color.WHITE
+
+const TAGS = []

@@ -22,7 +22,6 @@ enum States {STOPPED, PROCESSING, SHUTTING_DOWN}
 var state = States.STOPPED
 
 var turn := 0
-# var loop_is_active := false
 var turn_is_valid := true
 
 # TODO: an explicit ref to Main would be cleaner

@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022–2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -16,3 +16,6 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 extends "res://src/ui/secondary_info_screen.gd"
+
+func _ready():
+	%GameSummaryLabel.text = Utils.make_game_summary()

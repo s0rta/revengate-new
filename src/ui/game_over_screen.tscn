@@ -14,38 +14,58 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0431373, 0.027451, 0, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-anchors_preset = 5
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -222.0
-offset_right = 222.0
-offset_bottom = 183.0
+anchor_bottom = 1.0
+offset_left = -439.5
+offset_right = 439.5
 grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
 theme_type_variation = &"BigMarging"
 
-[node name="Title" type="Label" parent="MarginContainer"]
+[node name="Title" type="Label" parent="VBoxContainer/MarginContainer"]
 layout_mode = 2
 theme_type_variation = &"TitleLabel"
 text = "Game Over!"
 horizontal_alignment = 1
 
-[node name="BackButton" type="Button" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -48.5
-offset_top = -15.5
-offset_right = 48.5
-offset_bottom = 15.5
-grow_horizontal = 2
-grow_vertical = 2
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GameSummaryLabel" type="RichTextLabel" parent="VBoxContainer/ScrollContainer/MarginContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+bbcode_enabled = true
+text = "You killed:
+[ul]
+a cat
+a dog
+a snake
+[/ul]"
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="BackButton" type="Button" parent="VBoxContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_vertical = 4
 text = "Back"
 
 [node name="SadSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_mw3q7")
 autoplay = true
 
-[connection signal="button_up" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="button_up" from="VBoxContainer/MarginContainer2/BackButton" to="." method="_on_back_button_pressed"]

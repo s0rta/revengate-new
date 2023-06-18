@@ -25,12 +25,10 @@ signal board_changed(new_board)
 @onready var dungeons_cont: Node = %Viewport  # all dungeons must be direct descendent of this node
 @onready var commands = $CommandPack
 var board: RevBoard  # the active board
+var _seen_locs = {}  # world_locs that have been visited
 
 func _ready():
-	Tender.hero = hero
-	Tender.hud = hud
-	Tender.viewport = %Viewport
-	
+	Tender.reset(hero, hud, %Viewport)	
 	_discover_start_board()
 	hud.set_hero(hero)
 	$VictoryProbe.hero = hero
@@ -53,6 +51,7 @@ func _activate_board(new_board):
 		board.set_active(false)
 	new_board.start_turn($TurnQueue.turn)  # catch up with conditions and decay
 	new_board.set_active(true)
+	_seen_locs[new_board.world_loc] = true
 	
 	if not new_board.new_message.is_connected($HUD.add_message):
 		new_board.new_message.connect($HUD.add_message)
@@ -101,6 +100,12 @@ func _on_hero_died(_coord):
 	
 func conclude_game(victory:=false):
 	## do a final bit of cleanup then show the Game Over screen
+	# compile some end-of-game stats
+	Tender.last_turn = $TurnQueue.turn
+	Tender.nb_locs = _seen_locs.size()
+	Tender.hero_stats = Tender.hero.get_base_stats()
+	Tender.hero_modifiers = Tender.hero.get_modifiers()
+	
 	$TurnQueue.shutdown()
 	if hero.is_animating():
 		print("can't shutdown quite yet, hero animating...")

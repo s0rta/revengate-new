@@ -28,6 +28,9 @@ static func ddump_event(event, node, meth_name):
 	if not event is InputEventMouseMotion:
 		print("%s.%s(%s)" % [node.name, meth_name, event])
 
+static func is_tag(str):
+	return str in Consts.TAGS
+
 static func _combine_modifiers(main_mods, sub_mods):
 	## Combine all the values of `sub_mods` into `main_mods. Changes are done in-place.
 	if sub_mods == null:
@@ -114,3 +117,28 @@ static func fadeout_later(node:Node, nb_secs:float, free:=true):
 	node.hide()
 	if free:
 		node.queue_free()
+
+static func make_game_summary():
+	print("hero is: %s" % Tender.hero)
+	var kill_summary: String
+	if Tender.kills.is_empty():
+		kill_summary = "You didn't defeat any monsters."
+	else:
+		var lines = []
+		var categories = Tender.kills.keys()
+		categories.sort()
+		for cat in categories:
+			lines.append("%s: %s" % [cat, Tender.kills[cat]])
+		kill_summary = "[ul]%s[/ul]" % ["\n".join(lines)]
+	var stats_lines = []
+	for key in Tender.hero_stats:
+		if Tender.hero_modifiers.get(key):
+			stats_lines.append("[ul]%s:%s (%+d)[/ul]" % [key, Tender.hero_stats[key], Tender.hero_modifiers[key]])
+		else:
+			stats_lines.append("[ul]%s:%s[/ul]" % [key, Tender.hero_stats[key]])
+	var stats_summary = "\n".join(stats_lines)
+	return ("Your adventure lasted %d turns and took you through %d locations.\n\n" 
+			+ "[b]Monsters defeated[/b]\n%s\n\n"
+			+ "[b]Character stats (modifiers)[/b]\n%s") % [Tender.last_turn, Tender.nb_locs, 
+															kill_summary, stats_summary]
+	

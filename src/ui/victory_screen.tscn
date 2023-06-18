@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://cqxv2e1rn7uqx"]
 
-[ext_resource type="Script" path="res://src/ui/secondary_info_screen.gd" id="1_c7743"]
+[ext_resource type="Script" path="res://src/ui/victory_screen.gd" id="1_2odf0"]
 [ext_resource type="AudioStream" uid="uid://bukb5uav51053" path="res://assets/sounds/oh-yeah.mp3" id="2_a2cly"]
 
 [node name="VictoryScreen" type="Node"]
-script = ExtResource("1_c7743")
+script = ExtResource("1_2odf0")
 
 [node name="Background" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -46,13 +46,28 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="SummaryLabel" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="VictoryLabel" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 1
 text = "You have made it!
 
-You have faced many monsters , found the quest item, and came back alive. A future version of this game will probably summarize your achiements on this screen, but for now, suffice to say that you are awesome!"
+You have faced numerous monsters , found the quest item, and came back alive! In a future version of this game, a second chapter will start right after this screen, but for now, your only option is to close the game knowing that you are awesome! Or perhaps you'd like to try the first quest again..."
 autowrap_mode = 2
+
+[node name="GameSummaryLabel" type="RichTextLabel" parent="VBoxContainer/ScrollContainer/MarginContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+bbcode_enabled = true
+text = "You killed:
+[ul]
+a cat
+a dog
+a snake
+[/ul]"
+fit_content = true
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2

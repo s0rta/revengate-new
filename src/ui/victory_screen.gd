@@ -15,30 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-## Very common variables and game states that are used in a large number of game components.
-## This script is autoloaded at `Tender`
+extends "res://src/ui/secondary_info_screen.gd"
 
-## The tender cart of a train used to immediately follows a steam locomotive. It contained supplies and items that
-## were used to keep the steam engine running properly, like coal, water, shovels, and tools.
-extends Node
-
-var hero = null
-var hud = null
-var viewport = null
-var kills := {}
-
-# End of game stats
-var last_turn = null
-var nb_locs = null
-var hero_stats = null
-var hero_modifiers = null
-
-func reset(hero_, hud_, viewport_):
-	hero = hero_
-	hud = hud_
-	viewport = viewport_
-	kills = {}
-	last_turn = null
-	nb_locs = null	
-	hero_stats = null
-	hero_modifiers = null
+func _ready():
+	%GameSummaryLabel.text = Utils.make_game_summary()
+	

@@ -105,6 +105,9 @@ func _unhandled_input(event):
 	else:
 		state = States.LISTENING
 
+func _dissipate():
+	pass  # the hero sticks around so we can disect him/her for the end-of-game stats
+
 func is_foe(other: Actor):
 	return ENEMY_FACTIONS.has(other.faction)
 

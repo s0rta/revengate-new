@@ -46,3 +46,9 @@ static func as_coord(thing):
 		return thing.get_cell_coord()
 	else:
 		assert(false, "Don't know how to get board coordinates of %s" % thing)
+
+static func add_kill(actor_type):
+	## Increment the kill count for a given actor type
+	if not Tender.kills.has(actor_type):
+		Tender.kills[actor_type] = 0
+	Tender.kills[actor_type] += 1

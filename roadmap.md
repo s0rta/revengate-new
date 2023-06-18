@@ -147,15 +147,20 @@ UX:
 - [x] Lyon overworld map
 
 ## v0.9
-- [ ] Allow mixing rooms and mazes in level generation
-- [ ] end of game stats
+- [x] end of game stats
+- [ ] closable doors
+- [ ] textual tags to categorize items and monsters
 
 Items:
 - [ ] unique items are per-game unique, not only per-dungeon unique
 - [ ] item to increase latent healing
+- [ ] potion of absinthe
 
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()
+- [ ] Tracking is triggered by perception
+- [ ] silvered weapons
+- [ ] first stab at magic
 
 UX:
 - [ ] something more reliable than timing to synchronize fading anims
@@ -177,14 +182,11 @@ UX:
   - [ ] global flag to disable animations
 - [ ] non-walking movement and path finding (wading, swimming, phasing)
 - [ ] Deck.peek(): select the next card, but do not remove it from the deck
-- [ ] smoke and shrapnel particles in the explosion VFX
 - [ ] help screen with contextual content
-- [ ] Lyon overworld map - https://www.fondsenligne.archives-lyon.fr/ac69v2/plan.php
 - [ ] on-screen joystick
-- [ ] parametric pre-fabs
-  - [ ] pre-fabs can inject rules in the deck generator after the geometry pass of a new board
-- [ ] closable doors
+- [ ] pre-fabs can inject rules in the deck generator after the geometry pass of a new board
 - [ ] locked doors
 - [ ] auto-pan to hero when he gets close to the egde of the screen
 - [ ] VFX: edge of water reflections 
 - [ ] items long descriptions
+- [ ] Allow mixing rooms and mazes in level generation
