@@ -13,11 +13,11 @@ char = "𝔤"
 caption = "ghost"
 color = Color(0.411765, 0.411765, 0.411765, 0.701961)
 spawn_cost = 8.0
-health = 70
+health = 40
 strength = 10
 intelligence = 30
 perception = 40
-tags = Array[String](["ethereal"])
+tags = Array[String](["ethereal", "undead"])
 faction = 2
 description = "The elusive nature of those entities makes them really hard to study."
 

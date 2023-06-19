@@ -56,6 +56,8 @@ const MU := 50
 const RESIST_MULT := 0.5
 # victim-tag -> weapon-tag -> to-hit modifier
 const TO_HIT_FEATURE_MODS = {"ethereal": {"silver": 30}}
+# victim-tag -> weapon-tag -> damage modifier
+const DAMAGE_FEATURE_MODS = {"undead": {"silver": 3}}
 
 # 35% more damage on a critical hit
 const CRITICAL_MULT := 0.35
@@ -662,6 +664,17 @@ func get_resist_mult(weapon):
 	else:
 		return 1.0
 	
+func _get_feature_modifier(foe, weapon, feature_table):
+	## Return the feature-specific modifier(s) when attacking `foe` with `weapon`. 
+	## Return 0 if the weapon has no feature that apply to this attack.
+	## feature_table: TO_HIT_FEATURE_MODS, DAMAGE_FEATURE_MODS, or a similar table
+	var mod = 0
+	for victim_tag in foe.tags:
+		var feature_mods = feature_table.get(victim_tag, {})
+		for weapon_tag in weapon.tags:
+			mod += feature_mods.get(weapon_tag, 0)
+	return mod
+	
 func attack(foe):
 	## A full multi-strike attack on foe.
 	## Sentiment and range are not checked, the caller is responsible for 
@@ -685,11 +698,7 @@ func strike(foe:Actor, weapon):
 	var crit = false
 	# to-hit
 	# pre-compute the to-hit bonnus from features
-	var hit_mod = 0
-	for victim_tag in foe.tags:
-		var feature_mods = TO_HIT_FEATURE_MODS.get(victim_tag, {})
-		for weapon_tag in weapon.tags:
-			hit_mod += feature_mods.get(weapon_tag, 0)
+	var hit_mod = _get_feature_modifier(foe, weapon, TO_HIT_FEATURE_MODS)
 	if stat_trial(foe.get_evasion(weapon), "agility", weapon.skill, hit_mod):
 		# Miss!
 		anim_miss(foe, weapon)
@@ -700,9 +709,10 @@ func strike(foe:Actor, weapon):
 	if roll > MU + 2*SIGMA:
 		crit = true
 
-	# damage roll		
+	# damage roll
 	# TODO: use intelligence for spells
-	var damage = stat_roll("strength") * weapon.damage
+	var dmg_mod = _get_feature_modifier(foe, weapon, DAMAGE_FEATURE_MODS)
+	var damage = stat_roll("strength") * (weapon.damage + dmg_mod)
 	if crit:
 		damage *= CRITICAL_MULT
 	damage = foe.normalize_damage(weapon, damage)

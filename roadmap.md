@@ -155,6 +155,7 @@ Items:
 - [ ] unique items are per-game unique, not only per-dungeon unique
 - [ ] item to increase latent healing
 - [ ] potion of absinthe
+- [ ] "magical" tag replaces the magical flag
 
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()

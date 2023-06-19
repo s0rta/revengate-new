@@ -83,4 +83,4 @@ const FADE_DURATION := .15
 const FADE_MODULATE := Color(.7, .7, .7, 0.0)
 const VIS_MODULATE := Color.WHITE
 
-const TAGS = ["silver", "ethereal"]
+const TAGS = ["silver", "ethereal", "undead"]
