@@ -79,5 +79,6 @@ is_equipped = true
 
 [node name="Knife" parent="." instance=ExtResource("7_lc2k7")]
 visible = false
+tags = Array[String](["gift"])
 
 [connection signal="was_attacked" from="." to="." method="_learn_attack"]

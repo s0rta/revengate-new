@@ -150,6 +150,7 @@ UX:
 - [x] end of game stats
 - [ ] closable doors
 - [x] textual tags to categorize items and monsters
+- [x] use tags to identify NPC gifts
 
 Items:
 - [ ] unique items are per-game unique, not only per-dungeon unique

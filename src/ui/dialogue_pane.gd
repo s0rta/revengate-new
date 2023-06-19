@@ -145,16 +145,13 @@ func checkpoint(title):
 	if speaker:
 		speaker.conversation_sect = title
 
-func speaker_has_items():
+func speaker_has_gifts():
 	if speaker == null:
 		return false
-	return len(speaker.get_items()) > 0
+	return len(speaker.get_items("gift")) > 0
 
 func speaker_give_item():
 	## pass an item from the speaker to the hero
-	var items = []
-	for item in speaker.get_items():
-		if not item.get("is_equipped"):
-			items.append(item)
+	var items = speaker.get_items("gift")
 	var item = Rand.choice(items)
 	speaker.give_item(item, Tender.hero)

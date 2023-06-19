@@ -643,10 +643,13 @@ func get_weapons():
 		return [Rand.weighted_choice(all_weapons, weights)]
 	return active_weapons
 
-func get_items():
+func get_items(tag=null):
+	## Return an array of the items in our inventory.
+	## tag: if null, all the items are returned, 
+	##   otherwise, only the items with this tag are returned.
 	var items = []
 	for node in get_children():
-		if node is Item:
+		if node is Item and (tag == null or tag in node.tags):
 			items.append(node)
 	return items
 
@@ -774,6 +777,7 @@ func give_item(item, actor:Actor):
 	## Give `item` to `actor`
 	assert(item.get_parent() == self, "must possess an item before giving it away")
 	item.reparent(actor)
+	item.tags.erase("gift")  # NPCs keep track of giftable inventory with the "gift" tag
 	add_message("%s gave a %s to %s" % [self.get_caption(), item.get_short_desc(), actor.get_caption()])
 
 func pick_item(item):
