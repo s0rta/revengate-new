@@ -26,10 +26,12 @@ class_name Item extends Node2D
 # TODO: "spawn" sounds more like something that applies to living things...
 @export var spawn_cost := 0.0
 @export var ttl := -1
+@export var tags:Array[String]
 var depleted := false
 
 func _ready():
 	$Label.text = char
+	Utils.assert_all_tags(tags)
 	Utils.hide_unplaced(self)
 
 func _to_string():

@@ -31,6 +31,10 @@ static func ddump_event(event, node, meth_name):
 static func is_tag(str):
 	return str in Consts.TAGS
 
+static func assert_all_tags(strings:Array):
+	for str in strings:
+		assert(is_tag(str), "%s is not a valid tag name" % str)
+
 static func _combine_modifiers(main_mods, sub_mods):
 	## Combine all the values of `sub_mods` into `main_mods. Changes are done in-place.
 	if sub_mods == null:
@@ -141,4 +145,3 @@ static func make_game_summary():
 			+ "[b]Monsters defeated[/b]\n%s\n\n"
 			+ "[b]Character stats (modifiers)[/b]\n%s") % [Tender.last_turn, Tender.nb_locs, 
 															kill_summary, stats_summary]
-	

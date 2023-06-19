@@ -17,6 +17,7 @@ health = 70
 strength = 10
 intelligence = 30
 perception = 40
+tags = Array[String](["ethereal"])
 faction = 2
 description = "The elusive nature of those entities makes them really hard to study."
 

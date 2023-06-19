@@ -9,6 +9,7 @@ damage_family = 2
 char = "⁊"
 caption = "straight razor"
 spawn_cost = 2.0
+tags = Array[String](["silver"])
 
 [node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
 stream = ExtResource("2_u84ut")

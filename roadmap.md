@@ -149,7 +149,7 @@ UX:
 ## v0.9
 - [x] end of game stats
 - [ ] closable doors
-- [ ] textual tags to categorize items and monsters
+- [x] textual tags to categorize items and monsters
 
 Items:
 - [ ] unique items are per-game unique, not only per-dungeon unique
@@ -159,7 +159,7 @@ Items:
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()
 - [ ] Tracking is triggered by perception
-- [ ] silvered weapons
+- [x] silvered weapons
 - [ ] first stab at magic
 
 UX:

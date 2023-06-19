@@ -54,6 +54,8 @@ const MU := 50
 
 # 50% less damage if you have a resistance
 const RESIST_MULT := 0.5
+# victim-tag -> weapon-tag -> to-hit modifier
+const TO_HIT_FEATURE_MODS = {"ethereal": {"silver": 30}}
 
 # 35% more damage on a critical hit
 const CRITICAL_MULT := 0.35
@@ -85,8 +87,10 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 @export var perception := 50
 @export var healing_prob := 0.05  # %chance to heal at any given turn
 @export var resistance: Consts.DamageFamily = Consts.DamageFamily.NONE  # at most one!
+@export var tags:Array[String]
 
 @export var faction := Consts.Factions.NONE
+
 
 # bestiary entry
 @export_group("Bestiary")
@@ -118,6 +122,7 @@ func _get_configuration_warnings():
 func _ready():
 	$Label.text = char
 	$Label.add_theme_color_override("font_color", color)
+	Utils.assert_all_tags(tags)
 	Utils.hide_unplaced(self)
 
 func _to_string():
@@ -211,11 +216,12 @@ func stat_roll(stat_name, challenge=null):
 	# 1% better stat than MU gives 1% higher return on average 
 	return (1 + (stat - MU) / 100.0) * randf()
 
-func stat_trial(difficulty, stat_name, challenge=null):
+func stat_trial(difficulty, stat_name, challenge=null, modifier:=0):
 	## Return true if a random stat_roll is >= than difficulty
 	## Typical difficulties should be from 0 (trivial) to 100 (extremely hard), 
 	## but the scale is unbounded.
-	var stat = get_stat(stat_name, challenge)
+	## Modifier: added to the hero stat
+	var stat = get_stat(stat_name, challenge) + modifier
 	return difficulty >= randfn(stat, SIGMA)
 
 func is_hero():
@@ -671,14 +677,20 @@ func attack(foe):
 			has_hit = strike(foe, weapon) or has_hit
 	return has_hit
 
-func strike(foe, weapon):
+func strike(foe:Actor, weapon):
 	## Strike foe with weapon. The strike could result in a miss. 
 	## The result is immediately visible in the world.
 	# combats works with two random rolls: to-hit then damage.
 	
 	var crit = false
-	# to-hit	
-	if stat_trial(foe.get_evasion(weapon), "agility", weapon.skill):
+	# to-hit
+	# pre-compute the to-hit bonnus from features
+	var hit_mod = 0
+	for victim_tag in foe.tags:
+		var feature_mods = TO_HIT_FEATURE_MODS.get(victim_tag, {})
+		for weapon_tag in weapon.tags:
+			hit_mod += feature_mods.get(weapon_tag, 0)
+	if stat_trial(foe.get_evasion(weapon), "agility", weapon.skill, hit_mod):
 		# Miss!
 		anim_miss(foe, weapon)
 		return false
