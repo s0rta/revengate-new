@@ -108,6 +108,35 @@ static func hide_unplaced(node:Node2D):
 	if not node.get_parent() is RevBoard:
 		node.hide()
 
+static func shroud_node(node:Node2D, animate=true):
+	## Change the display of a node to make it hardly (or not) perceiveable for the player.
+	if node.shrouded:
+		return  # nothing to do
+	if node._shroud_anim:
+		node._shroud_anim.kill()
+	node.shrouded = true
+	if animate:
+		node._shroud_anim = node.get_tree().create_tween()
+		node._shroud_anim.tween_property(node, "modulate", Consts.FADE_MODULATE, Consts.FADE_DURATION)
+	else:
+		node._shroud_anim = null
+		node.modulate = Consts.FADE_MODULATE
+
+static func unshroud_node(node:Node2D, animate=true):
+	## Change the display of a node to make it normally visible to the player
+	if not node.shrouded:
+		return  # nothing to do
+	if node._shroud_anim:
+		node._shroud_anim.kill()
+	node.visible = true
+	node.shrouded = false
+	if animate:
+		node._shroud_anim = node.get_tree().create_tween()
+		node._shroud_anim.tween_property(node, "modulate", Consts.VIS_MODULATE, Consts.FADE_DURATION)
+	else:
+		node._shroud_anim = null
+		node.modulate = Consts.VIS_MODULATE
+
 static func fadeout_later(node:Node, nb_secs:float, free:=true):
 	## Do a fadeout animation on `node` after `nb_secs`.
 	## If `free`, the node is deleted after the fadeout.

@@ -112,7 +112,10 @@ var conditions_turn: int
 var acted_turn: int
 
 var nb_active_anims := 0
+var shrouded := false
+var _shroud_anim = null
 var dest  # keep track of where we are going while animations are running 
+
 
 func _get_configuration_warnings():
 	var warnings = []
@@ -314,18 +317,17 @@ func place(board_coord, immediate:=false):
 	position = RevBoard.board_to_canvas(board_coord)
 	emit_signal("moved", old_coord, board_coord)
 
-func fade_out():
-	## Slowly hide the Actor with an animation. 
-	var anim = create_anim()
-	anim.tween_property(self, "modulate", Consts.FADE_MODULATE, Consts.FADE_DURATION)
-	await anim.finished
-	visible = false
-	
-func fade_in():
-	## Slowly display the item with an animation. 
-	visible = true
-	var anim = create_anim()
-	anim.tween_property(self, "modulate", Consts.VIS_MODULATE, Consts.FADE_DURATION)
+func should_hide(_index=null):
+	return not get_parent() is RevBoard
+
+func should_shroud(index=null):
+	return is_unexposed(index)
+
+func shroud(animate=true):
+	Utils.shroud_node(self, animate)
+		
+func unshroud(animate=true):
+	Utils.unshroud_node(self, animate)
 
 func move_by(cell_vect: Vector2i):
 	## Move by the specified number of tiles from the current position. 
@@ -345,7 +347,7 @@ func move_to(board_coord):
 		var anim := create_anim()
 		var cpos = RevBoard.board_to_canvas(board_coord)
 		anim.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
-		anim.tween_property(self, "position", cpos, .35)
+		anim.tween_property(self, "position", cpos, .25)
 		dest = board_coord
 		anim.finished.connect(reset_dest, CONNECT_ONE_SHOT)
 		# TODO: it might be better to emit at the end of the animation

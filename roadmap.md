@@ -165,7 +165,7 @@ Combat:
 - [ ] first stab at magic
 
 UX:
-- [ ] something more reliable than timing to synchronize fading anims
+- [x] something more reliable than timing to synchronize fading anims
 - [ ] buttons and in-dialogues choices are bigger
 
 ## v??? – when Godot 4 enables the Android gestures recognition

@@ -29,6 +29,9 @@ class_name Item extends Node2D
 @export var tags:Array[String]
 var depleted := false
 
+var shrouded := false  # partially or completely obscured
+var _shroud_anim = null  # only one fading going on at a time
+
 func _ready():
 	$Label.text = char
 	Utils.assert_all_tags(tags)
@@ -45,7 +48,7 @@ func _dissipate():
 	depleted = true
 	if visible:
 		var coord = get_cell_coord()
-		await fade_out()
+		await shroud()
 	queue_free()
 
 func start_new_turn():
@@ -106,49 +109,32 @@ func place(coord, _immediate=null):
 	## _immediate: ignored.
 	position = RevBoard.board_to_canvas(coord)
 
-func should_show(index=null):
+func should_hide(index=null):
+	if not get_parent() is RevBoard:
+		return true
 	if index == null:
 		index = get_board().make_index()
 	var here = get_cell_coord()
-	if not self == index.top_item_at(here):
-		return false
-	var actor = index.actor_at(here)
-	if actor == null or actor.is_dead() or actor.is_unexposed():
+	if self != index.top_item_at(here):
 		return true
 	else:
 		return false
 
-func fade_out():
-	## Slowly hide the item with an animation. 
-	var anim = get_tree().create_tween()
-	anim.tween_property(self, "modulate", Consts.FADE_MODULATE, Consts.FADE_DURATION)
-	await anim.finished
-	visible = false
-	
-func fade_in():
-	## Slowly display the item with an animation. 
-	modulate = Consts.FADE_MODULATE
-	visible = true
-	var anim = get_tree().create_tween()
-	anim.tween_property(self, "modulate", Consts.VIS_MODULATE, Consts.FADE_DURATION)
+func should_shroud(index=null):
+	if index == null:
+		index = get_board().make_index()
+	var here = get_cell_coord()
+	if self == index.top_item_at(here):
+		var actor = index.actor_at(here)
+		if actor != null and not actor.is_dead() and not actor.is_unexposed():
+			return true
+	return false
 
-func flash_in():
-	## Istantly display the item without animation. 
-	## The inverse of this operation is the built-in CanvasItem.hide()
-	modulate = Consts.VIS_MODULATE
-	show()
-
-func toggle_visible(animate:=true):
-	if visible:
-		if animate:
-			fade_out()
-		else:
-			hide()
-	else:
-		if animate:
-			fade_in()
-		else:
-			flash_in()
+func shroud(animate=true):
+	Utils.shroud_node(self, animate)
+		
+func unshroud(animate=true):
+	Utils.unshroud_node(self, animate)
 	
 func is_on_board():
 	## Return `true` if the item is laying somewhere on the board, `false` it belongs to 

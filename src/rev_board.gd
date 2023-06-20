@@ -1147,39 +1147,46 @@ func reset_items_visibility():
 	## Show or hide items depending on their stacking order. No animations performed.
 	var index = make_index()
 	for item in get_items():
-		var coord = item.get_cell_coord()
-		if item.should_show(index):
-			item.flash_in()
-		else:
+		if item.should_hide(index):
 			item.hide()
+		else:
+			item.show()	
+			
+		if item.should_shroud(index):
+			item.shroud(false)
+		else:
+			item.unshroud(false)
 
 func reset_actors_visibility():
 	## Show or hide actors depending on whether they are perceived
 	var index = make_index()
-	var use_perception = false
-	if Tender.hero and Tender.hero.get_board() == self:
-		use_perception = true
 	for actor in get_actors():
-		if use_perception:
-			actor.visible = not actor.is_unexposed(index)
+		if actor.should_hide():
+			actor.hide()
 		else:
-			actor.visible = true
-
+			actor.show()
+			
+		if actor.should_shroud():
+			actor.shroud(false)
+		else:
+			actor.unshroud(true)
+	
 func _on_actor_moved(from, to):
 	## fade in and out the visibility of items being stepped on/off.
 	var index = make_index()
+	
 	var item = index.top_item_at(from)
-	if item and not item.visible and item.should_show(index):
-		item.fade_in()
+	if item:
+		item.unshroud()
 	item = index.top_item_at(to)
-	if item and item.visible and not item.should_show(index):
-		item.fade_out()
+	if item:
+		item.shroud()
 
-	for actor in index.get_actors():
-		if actor.visible and actor.is_unexposed():
-			actor.fade_out()
-		elif not actor.visible and not actor.is_unexposed():
-			actor.fade_in()
+	for actor in get_actors():
+		if actor.should_shroud():
+			actor.shroud()
+		else:
+			actor.unshroud()
 
 func _on_actor_died(coord, actor):
 	deregister_actor(actor)
