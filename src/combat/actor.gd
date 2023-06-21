@@ -148,6 +148,15 @@ func ddump():
 	if perceives(Tender.hero):
 		print("  perceives Hero")
 
+func ddump_pos():
+	print("Officially at %s" % RevBoard.coord_str(get_cell_coord()))
+	if dest:
+		print("  going to %s" % RevBoard.coord_str(dest))
+	print("  is_animating: %s" % is_animating())
+	var fcoord = Vector2(1.0 * position.x / RevBoard.TILE_SIZE, 
+						1.0 * position.y / RevBoard.TILE_SIZE)
+	print("  pos: %s fractional cell: [%s:%s]" % [position, fcoord.x, fcoord.y])
+
 func is_idle() -> bool:
 	return state == States.IDLE
 
@@ -347,7 +356,7 @@ func move_to(board_coord):
 		var anim := create_anim()
 		var cpos = RevBoard.board_to_canvas(board_coord)
 		anim.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
-		anim.tween_property(self, "position", cpos, .25)
+		anim.tween_property(self, "position", cpos, .2)
 		dest = board_coord
 		anim.finished.connect(reset_dest, CONNECT_ONE_SHOT)
 		# TODO: it might be better to emit at the end of the animation

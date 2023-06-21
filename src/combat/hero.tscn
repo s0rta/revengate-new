@@ -30,3 +30,5 @@ stream = ExtResource("4_y2iie")
 [node name="SkillLevels" type="Node" parent="." index="7"]
 script = ExtResource("6_6imm7")
 fencing = 1
+
+[connection signal="moved" from="." to="." method="_on_moved"]

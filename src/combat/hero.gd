@@ -126,3 +126,8 @@ func act():
 		# TODO: it would make sense to let the input handlers tell us if something 
 		#   actually happened.
 		return true
+
+
+func _on_moved(from, to):
+	print("in hero._on_moved(), dest: %s" % dest)
+	assert(to == get_cell_coord(), "moved signal fired before storing intent")

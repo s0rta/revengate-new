@@ -491,6 +491,9 @@ class BoardIndex extends RefCounted:
 		if not _coord_to_items.has(coord) or not _coord_to_items[coord].size():
 			return null
 		return _coord_to_items[coord][-1]
+	
+	func items_at(coord:Vector2i):
+		return _coord_to_items[coord]
 		
 	func actor_foes(me: Actor, max_dist=null):
 		## Return an array of actors for whom `me` has negative sentiment.
@@ -633,11 +636,19 @@ func register_actor(actor):
 		actor.moved.connect(_on_actor_moved)
 		var death_handler = _on_actor_died.bind(actor)
 		actor.died.connect(death_handler, CONNECT_ONE_SHOT)
+	if not actor.picked_item.is_connected(_on_items_changed_at):
+		actor.picked_item.connect(_on_items_changed_at)
+	if not actor.dropped_item.is_connected(_on_items_changed_at):
+		actor.dropped_item.connect(_on_items_changed_at)
 	
 func deregister_actor(actor):
 	## disconnect our connections with `actor`
 	if actor.moved.is_connected(_on_actor_moved):
 		actor.moved.disconnect(_on_actor_moved)
+	if actor.picked_item.is_connected(_on_items_changed_at):
+		actor.picked_item.disconnect(_on_items_changed_at)
+	if actor.dropped_item.is_connected(_on_items_changed_at):
+		actor.dropped_item.disconnect(_on_items_changed_at)
 
 func start_turn(new_turn:int):
 	## Mark the start a new game turn	
@@ -1174,6 +1185,8 @@ func reset_actors_visibility():
 func _on_actor_moved(from, to):
 	## fade in and out the visibility of items being stepped on/off.
 	var index = make_index()
+	assert(index.actor_at(to)!=null, 
+			"The signal seems to have fired before an actor set their dest to %s" % coord_str(to))
 	
 	var item = index.top_item_at(from)
 	if item:
@@ -1187,6 +1200,20 @@ func _on_actor_moved(from, to):
 			actor.shroud()
 		else:
 			actor.unshroud()
+
+func _on_items_changed_at(coord):
+	var index = make_index() as BoardIndex
+	var top = index.top_item_at(coord)
+	if top == null:
+		return  # nothing to do
+	top.show()
+	for item in index.items_at(coord):
+		if item != top:
+			item.hide()
+	if index.actor_at(coord):
+		top.shroud()
+	else:
+		top.unshroud()
 
 func _on_actor_died(coord, actor):
 	deregister_actor(actor)
