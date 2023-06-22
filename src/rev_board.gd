@@ -1189,10 +1189,10 @@ func _on_actor_moved(from, to):
 			"The signal seems to have fired before an actor set their dest to %s" % coord_str(to))
 	
 	var item = index.top_item_at(from)
-	if item:
+	if item and not item.should_shroud():
 		item.unshroud()
 	item = index.top_item_at(to)
-	if item:
+	if item and item.should_shroud():
 		item.shroud()
 
 	for actor in get_actors():
