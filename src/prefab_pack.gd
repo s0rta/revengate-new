@@ -105,7 +105,7 @@ class RiverFab extends Prefab:
 				else:
 					pad_edge = near_edge + span
 				coords.append(fab_rect.position + flow_step*k + cross_step*pad_edge)
-			builder.paint_cells(coords, "water")
+			builder.board.paint_cells(coords, "water")
 			near_edge += shift
 		_clear_beyond_land()
 		

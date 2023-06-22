@@ -66,8 +66,8 @@ func fill_new_board(builder:BoardBuilder, depth, world_loc, size):
 	## put the main geometry on a freshly created board, except for connectors
 	var outer_rect = Rect2i(Vector2i.ZERO, size)
 
-	builder.paint_rect(outer_rect, builder.clear_terrain)
-	builder.paint_path(Geom.rect_perim(outer_rect), "wall")
+	builder.board.paint_rect(outer_rect, builder.clear_terrain)
+	builder.board.paint_path(Geom.rect_perim(outer_rect), "wall")
 	var unfabbed_rect = add_loc_prefabs(builder, world_loc)
 	if unfabbed_rect != null:
 		outer_rect = unfabbed_rect
@@ -91,5 +91,5 @@ func add_connectors(builder:BoardBuilder, neighbors):
 			coord = Rand.coord_on_rect_perim(builder.rect, region)
 		else:
 			coord = builder.random_coord_in_region(region, board.is_floor)
-		builder.paint_cells([coord], terrain)
+		board.paint_cells([coord], terrain)
 		board.set_cell_rec(coord, "conn_target", rec)

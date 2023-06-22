@@ -136,7 +136,7 @@ func add_connectors(builder:BoardBuilder, neighbors):
 		var region = _region_for_loc(board.world_loc, rec.world_loc)
 		var terrain = _neighbor_connector_terrain(board.world_loc, rec.world_loc)
 		var coord = builder.random_coord_in_region(region, board.is_floor)
-		builder.paint_cells([coord], terrain)
+		board.paint_cell(coord, terrain)
 		board.set_cell_rec(coord, "conn_target", rec)
 
 func _is_aligned(loc1:Vector3i, loc2:Vector3i):

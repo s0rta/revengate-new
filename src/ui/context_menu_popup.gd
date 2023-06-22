@@ -39,6 +39,7 @@ func _unhandled_input(event):
 func show_commands(commands, coord=null):
 	# TODO: find where to show the context menu for max visibility
 	for cmd in commands:
+		# TODO: use CommandButton
 		var button = Button.new()
 		button.text = cmd.caption
 		if cmd.is_action:

@@ -34,8 +34,15 @@ class Command extends RefCounted:
 
 	func is_valid_for(coord:Vector2i):
 		assert(false, "Not implemented")
+
+	func is_valid_for_hero_at(coord:Vector2i):
+		return false  # sub-classes must override this to enable the HUD version of this command
 		
 	func run(coord:Vector2i) -> bool:
+		assert(false, "Not implemented")
+		return false
+
+	func run_at_hero(coord:Vector2i) -> bool:
 		assert(false, "Not implemented")
 		return false
 
@@ -144,18 +151,67 @@ class TravelTo extends Command:
 			# didn't work, probably because the path is blocked
 			return false
 		
+class DoorHandler extends Command:
+	var door_at = null
+	var target_terrain:String
+	
+	func _is_valid_door(coord):
+		var board = Tender.hero.get_board() as RevBoard
+		return board.get_cell_terrain(coord) == target_terrain
 
+	func is_valid_for(coord:Vector2i):
+		var board = Tender.hero.get_board() as RevBoard
+		if board.dist(coord, Tender.hero) != 1:
+			return false
+		return _is_valid_door(coord)
+
+	func is_valid_for_hero_at(coord:Vector2i):
+		var board = Tender.hero.get_board() as RevBoard
+		for c in board.adjacents(coord, false):
+			if _is_valid_door(c):
+				door_at = c
+				return true
+		return false
+		
+	func run(coord:Vector2i) -> bool:
+		var board = Tender.hero.get_board() as RevBoard
+		board.toggle_door(coord)
+		return true
+
+	func run_at_hero(coord:Vector2i):
+		return run(door_at)	
+
+class CloseDoor extends DoorHandler:
+	func _init(index_=null):
+		is_action = true
+		caption = "Close door"
+		target_terrain = "door-open"
+		super(index_)
+
+	func _is_valid_door(coord):
+		return super(coord) and index.is_free(coord)
+
+class OpenDoor extends DoorHandler:
+	func _init(index_=null):
+		is_action = true
+		caption = "Open door"
+		target_terrain = "door-closed"
+		super(index_)
+		
 func _ready():
-	_cmd_classes = [Attack, Talk, TravelTo, Inspect]
+	_cmd_classes = [Attack, Talk, TravelTo, Inspect, CloseDoor, OpenDoor]
 
-func commands_for(coord, index=null):
+func commands_for(coord, hero_pov:=false, index=null):
 	## Return a list of valid coordinates for `coord`
+	# TODO: option to make the list from the point of view of the hero
+	
 	if index == null:
 		index = Tender.hero.get_board().make_index()
 	var commands = []
 	for cls in _cmd_classes:
 		var cmd = cls.new(index)
-		if cmd.is_valid_for(coord):
+		if (hero_pov and cmd.is_valid_for_hero_at(coord)) \
+			or (not hero_pov and cmd.is_valid_for(coord)):
 			commands.append(cmd)
 	return commands
 

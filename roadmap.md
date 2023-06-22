@@ -150,7 +150,7 @@ UX:
 - [ ] bug: victory screen is hard to scroll
 - [ ] bug: transient strategies are not freed after expiration
 - [x] end of game stats
-- [ ] closable doors
+- [x] closable doors
 - [x] textual tags to categorize items and monsters
 - [x] use tags to identify NPC gifts
 
@@ -169,6 +169,7 @@ Combat:
 UX:
 - [x] something more reliable than timing to synchronize fading anims
 - [ ] buttons and in-dialogues choices are bigger
+- [ ] tap-away dismisses long-tap options
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]

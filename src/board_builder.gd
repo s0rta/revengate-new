@@ -27,7 +27,6 @@ var rect: Rect2i
 var clear_terrain = "rock"
 var floor_terrain = "floor"
 var wall_terrain = "wall"
-var terrain_names := {}
 var rooms = []  # array of Rect2i, there may be walls along the perimeter
 
 func _init(board:RevBoard, rect=null):
@@ -36,15 +35,6 @@ func _init(board:RevBoard, rect=null):
 		self.rect = board.get_used_rect()
 	else:
 		self.rect = rect
-	update_terrain_names()
-	
-func update_terrain_names():
-	## Refresh the internal cache of "name" -> [tset, tid] mappings
-	var name = ""
-	for tset in range(board.tile_set.get_terrain_sets_count()):
-		for tid in range(board.tile_set.get_terrains_count(tset)):
-			name = board.tile_set.get_terrain_name(tset, tid)
-			terrain_names[name] = [tset, tid]
 
 func has_rooms():
 	## Return whether this builder is aware of rooms.
@@ -52,38 +42,16 @@ func has_rooms():
 
 func add_room(rect: Rect2i, walls=true):
 	rooms.append(rect)
-	paint_rect(rect, floor_terrain)
+	board.paint_rect(rect, floor_terrain)
 	if walls:
 		var path = Geom.rect_perim(rect)
-		paint_path(path, wall_terrain)
+		board.paint_path(path, wall_terrain)
 
 func room_region(room: Rect2i):
 	## Return the region that this room is mostly in. 
 	## It's possible that the room also spills slightly into other regions.
 	var center = room.get_center()
 	return Geom.coord_region(center, rect)
-
-func paint_cell(coord, terrain_name):
-	paint_cells([coord], terrain_name)
-
-func paint_cells(coords, terrain_name):
-	if terrain_name in RevBoard.INDEXED_TERRAINS:
-		board._append_terrain_cells(coords, terrain_name)
-	var tkey = terrain_names[terrain_name]
-	board.set_cells_terrain_connect(0, coords, tkey[0], tkey[1])
-	
-func paint_path(path, terrain_name):
-	assert(terrain_name not in RevBoard.INDEXED_TERRAINS, "indexing path terrain is not implemented")
-	var tkey = terrain_names[terrain_name]
-	board.set_cells_terrain_path(0, path, tkey[0], tkey[1])
-
-func paint_rect(rect, terrain_name):
-	assert(terrain_name not in RevBoard.INDEXED_TERRAINS, "indexing rect terrain is not implemented")
-	var cells = []
-	for i in range(rect.size.x):
-		for j in range(rect.size.y):
-			cells.append(rect.position + V.i(i, j))
-	paint_cells(cells, terrain_name)
 	
 func random_floor_cell():
 	var coord = null
@@ -241,7 +209,7 @@ func random_distant_coords(nb_coords:int, region=null, valid_pred=null, strict=f
 	
 func gen_level(nb_rooms=4):
 	## Generate a default underground level
-	paint_rect(rect, "rock")
+	board.paint_rect(rect, "rock")
 	gen_rooms(nb_rooms)
 	add_stairs()
 
@@ -291,7 +259,7 @@ func open_rooms():
 	for room in rooms:
 		var region = Geom.coord_region(room.get_center(), rect)
 		var coord = Rand.coord_on_rect_perim(room, -region)
-		paint_cells([coord], "door-open")
+		board.paint_cells([coord], "door-open")
 
 func gen_maze(rect_, biases=null):
 	## Fill rect with a maze.
@@ -304,12 +272,12 @@ func add_stairs(stairs=["stairs-up", "stairs-down"]):
 	
 	# the first two that we receice are as far as possible from one another
 	var poles = find_poles()
-	paint_cells([poles[0]], stairs.pop_front())
+	board.paint_cells([poles[0]], stairs.pop_front())
 	if not stairs.is_empty():
-		paint_cells([poles[1]], stairs.pop_front())
+		board.paint_cells([poles[1]], stairs.pop_front())
 	while not stairs.is_empty():
 		var coord = random_floor_cell()
-		paint_cells([coord], stairs.pop_back())
+		board.paint_cells([coord], stairs.pop_back())
 
 func find_poles():
 	## Return an array with the two coordinates that are the furthest apart 
@@ -345,7 +313,7 @@ func connect_rooms(room1, room2):
 		for j in range(0, v.y, v_sign.y):
 			cells.append(c1 + V.i(v.x, j))
 	# TODO: replaced walls should become doors
-	paint_path(cells, floor_terrain)
+	board.paint_path(cells, floor_terrain)
 
 func place(thing, in_room:=true, coord=null, free:bool=true, bbox=null, index=null):
 	## Put `thing` on the on a board cell, return where it was placed.

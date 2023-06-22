@@ -33,6 +33,8 @@ const FLOOR_TERRAINS = ["floor", "floor-rough", "floor-dirt"]
 
 signal new_message(message)
 
+var terrain_names := {}  # name -> (terrain_set, terrain_id)
+
 # approximate topological distance to the starting board, used for spawning difficulty
 var depth := 0  
 
@@ -596,9 +598,18 @@ static func canvas_to_board_str(cpos):
 	return coord_str(canvas_to_board(cpos))
 
 func _ready():
+	detect_terrain_names()
 	detect_actors()
 	reset_items_visibility()
 	reset_actors_visibility()
+
+func detect_terrain_names():
+	## Refresh the internal cache of "name" -> [tset, tid] mappings
+	var name = ""
+	for tset in range(tile_set.get_terrain_sets_count()):
+		for tid in range(tile_set.get_terrains_count(tset)):
+			name = tile_set.get_terrain_name(tset, tid)
+			terrain_names[name] = [tset, tid]
 
 func set_active(active:=true):
 	## Make the board active: visible and collidable)
@@ -909,6 +920,37 @@ static func dist(from, to):
 static func man_dist(from, to):
 	## Return the Manhattan distance between to and from.
 	return abs(from.x - to.x) + abs(from.y - to.y)
+
+func paint_cell(coord, terrain_name):
+	paint_cells([coord], terrain_name)
+
+func paint_cells(coords, terrain_name):
+	if terrain_name in INDEXED_TERRAINS:
+		_append_terrain_cells(coords, terrain_name)
+	var tkey = terrain_names[terrain_name]
+	set_cells_terrain_connect(0, coords, tkey[0], tkey[1])
+
+func paint_path(path, terrain_name):
+	assert(terrain_name not in INDEXED_TERRAINS, "indexing path terrain is not implemented")
+	var tkey = terrain_names[terrain_name]
+	set_cells_terrain_path(0, path, tkey[0], tkey[1])
+
+func paint_rect(rect, terrain_name):
+	var cells = []
+	for i in range(rect.size.x):
+		for j in range(rect.size.y):
+			cells.append(rect.position + V.i(i, j))
+	paint_cells(cells, terrain_name)
+
+func toggle_door(coord:Vector2i):
+	var terrain = get_cell_terrain(coord)
+	if terrain == "door-open":
+		paint_cell(coord, "door-closed")
+	elif terrain == "door-closed":
+		paint_cell(coord, "door-open")
+	else:
+		assert(false, "not implemented")
+	reset_actors_visibility()
 
 func _init_metric_context(start, dest, free_dest=false, max_dist=null, valid_pred=null, index=null):
 	## Initialize a few internal variables that we need for building a BoardMetrics, 

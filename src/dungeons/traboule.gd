@@ -39,12 +39,12 @@ func fill_new_board(builder, depth, world_loc, size):
 
 	if _lvl_is_maze(depth, world_loc):
 		assert(builder.rect.size % 2 == Vector2i.ONE, "maze levels should have odd sizes")
-		builder.paint_rect(outer_rect, builder.wall_terrain)
+		builder.board.paint_rect(outer_rect, builder.wall_terrain)
 		var inner_rect = Rect2i(outer_rect.position+Vector2i.ONE, outer_rect.size-Vector2i.ONE*2)
 		var biases = _maze_biases(depth)
 		builder.gen_maze(inner_rect, biases)
 	else:
-		builder.paint_rect(outer_rect, builder.clear_terrain)
+		builder.board.paint_rect(outer_rect, builder.clear_terrain)
 		builder.gen_rooms(randi_range(3, 6))
 
 func _lvl_is_maze(depth:int, world_loc:Vector3i):
@@ -106,7 +106,7 @@ func add_connectors(builder:BoardBuilder, neighbors):
 				coord = Rand.coord_on_rect_perim(builder.rect, region)
 			else:
 				coord = stairs_coords.pop_back()
-			builder.paint_cells([coord], terrain)
+			board.paint_cell(coord, terrain)
 			board.set_cell_rec(coord, "conn_target", rec)
 			all_conn_coords.append(coord)
 	
