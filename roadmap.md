@@ -147,6 +147,7 @@ UX:
 - [x] Lyon overworld map
 
 ## v0.9
+- [ ] bug: transient strategies are not freed after expiration
 - [x] end of game stats
 - [ ] closable doors
 - [x] textual tags to categorize items and monsters

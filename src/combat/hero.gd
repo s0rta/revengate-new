@@ -114,6 +114,9 @@ func is_foe(other: Actor):
 func act():
 	var strat = get_strategy()
 	if strat:
+		# The turn queu is supposed to await on anims_done before leting us play the next turn
+		assert(not is_animating())
+
 		print("Hero turn automated by %s" % [strat])
 		state = States.ACTING
 		var acted = strat.act()
@@ -126,8 +129,3 @@ func act():
 		# TODO: it would make sense to let the input handlers tell us if something 
 		#   actually happened.
 		return true
-
-
-func _on_moved(from, to):
-	print("in hero._on_moved(), dest: %s" % dest)
-	assert(to == get_cell_coord(), "moved signal fired before storing intent")

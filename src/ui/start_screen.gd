@@ -25,7 +25,8 @@ func _ready():
 	if not $Tabulator.getv("early-stage-disclaimer"):
 		$DisclaimerDia.popup_centered()
 		$Tabulator.setv("early-stage-disclaimer", true)
-	
+	Tender.reset()
+
 func start_new_game():
 	get_tree().change_scene_to_file("res://src/ui/intro_screen.tscn")
 	

@@ -111,7 +111,7 @@ var current_turn: int
 var conditions_turn: int
 var acted_turn: int
 
-var nb_active_anims := 0
+var _anims := []  # all turn-blocking anims
 var shrouded := false
 var _shroud_anim = null
 var dest  # keep track of where we are going while animations are running 
@@ -152,7 +152,7 @@ func ddump_pos():
 	print("Officially at %s" % RevBoard.coord_str(get_cell_coord()))
 	if dest:
 		print("  going to %s" % RevBoard.coord_str(dest))
-	print("  is_animating: %s" % is_animating())
+	print("  is_animating: %s nb_anims:%d" % [is_animating(), len(_anims)])
 	var fcoord = Vector2(1.0 * position.x / RevBoard.TILE_SIZE, 
 						1.0 * position.y / RevBoard.TILE_SIZE)
 	print("  pos: %s fractional cell: [%s:%s]" % [position, fcoord.x, fcoord.y])
@@ -253,25 +253,33 @@ func get_board():
 			return main.get_board()
 	return null
 
-func _dec_active_anims():
-	nb_active_anims = max(0, nb_active_anims - 1)
-	if nb_active_anims == 0:
+func _dec_active_anims(old_anim:Tween):
+	var old_size = len(_anims)
+	_anims.erase(old_anim)
+	
+	# TODO: This _usually_ makes the anim.finished signal propagate to all it's 
+	#   handlers, but not all the time. We need something more reliable.
+	old_anim.kill()
+	
+	if _anims.is_empty():
 		emit_signal("anims_done")
 
 func create_anim() -> Tween:
 	## Return a Tween animation for this actor, register the anim as active.
 	var anim = create_tween()
-	nb_active_anims += 1
-	anim.finished.connect(_dec_active_anims, CONNECT_ONE_SHOT)
+	_anims.append(anim)
+	var cleanup_func = _dec_active_anims.bind(anim)
+	anim.finished.connect(cleanup_func, CONNECT_ONE_SHOT)
 	return anim
 
 func is_animating():
 	## Return whether the actor is currently performing an animation.
-	return nb_active_anims > 0
+	return not _anims.is_empty()
 
 func _dissipate():
 	## Do some cleanup, then vanish forever
 	queue_redraw()
+	queue_free()
 
 func start_turn(new_turn:int):
 	## Mark the start a new game turn, but we do not play until act() is called.
@@ -299,8 +307,9 @@ func finalize_turn():
 	acted_turn = current_turn
 	emit_signal("turn_done")
 
-func reset_dest():
-	dest = null
+func reset_dest(inval_dest=null):
+	if dest and dest == inval_dest:
+		dest = null
 
 func get_cell_coord():
 	## Return the board position occupied by the actor.
@@ -352,14 +361,21 @@ func move_to(board_coord):
 	if is_unexposed() and get_board().is_cell_unexposed(board_coord):
 		place(board_coord)
 	else:
+		# FIXME: kill() the previous anim if it's not done
+		assert(not is_animating(), "reset_dest won't work if we start moving before the previous move is over")
+		
 		var old_coord = get_cell_coord()
 		var anim := create_anim()
 		var cpos = RevBoard.board_to_canvas(board_coord)
 		anim.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
 		anim.tween_property(self, "position", cpos, .2)
 		dest = board_coord
-		anim.finished.connect(reset_dest, CONNECT_ONE_SHOT)
-		# TODO: it might be better to emit at the end of the animation
+		
+		var inval_func = reset_dest.bind(board_coord)
+		anim.finished.connect(inval_func, CONNECT_ONE_SHOT)
+		
+		# We emit before the end of the animation, which allows for more
+		# overlap between our active turn and other visual changes.
 		emit_signal("moved", old_coord, board_coord)
 	return true
 

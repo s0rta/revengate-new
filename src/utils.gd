@@ -128,7 +128,6 @@ static func unshroud_node(node:Node2D, animate=true):
 		return  # nothing to do
 	if node._shroud_anim:
 		node._shroud_anim.kill()
-	node.visible = true
 	node.shrouded = false
 	if animate:
 		node._shroud_anim = node.get_tree().create_tween()

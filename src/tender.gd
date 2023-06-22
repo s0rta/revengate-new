@@ -33,7 +33,7 @@ var nb_locs = null
 var hero_stats = null
 var hero_modifiers = null
 
-func reset(hero_, hud_, viewport_):
+func reset(hero_=null, hud_=null, viewport_=null):
 	hero = hero_
 	hud = hud_
 	viewport = viewport_
