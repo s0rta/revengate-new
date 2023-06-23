@@ -389,19 +389,25 @@ class BoardIndex extends RefCounted:
 	var _actor_to_coord := {}
 	
 	# items can be stacked, so we store them in an array
-	# the top of the stack it at the end (inder=-1)
+	# the top of the stack is at the end (index=-1)
 	var _coord_to_items := {}  # [x:y] -> Array
 	var _item_to_coord := {}
+
+	# there can also be more than one vibe per cell, the stacking order is arbitrary
+	var _coord_to_vibes := {}  # [x:y] -> Array
+	var _vibe_to_coord := {}
 
 	var _los := {}  # [from, to] -> [[x1:y1], ..., [xn:yn]]
 	var _metrics := {}  # [start, dest, free_dest, max_dist] -> dijkstra_metrics
 
-	func _init(board_, actors, items=[]):
+	func _init(board_, actors, items=[], vibes=[]):
 		board = board_
 		for actor in actors:
 			add_actor(actor)
 		for item in items:
 			add_item(item)
+		for vibe in vibes:
+			add_vibe(vibe)
 
 	func has_actor(actor):
 		return _actor_to_coord.has(actor)
@@ -439,6 +445,14 @@ class BoardIndex extends RefCounted:
 			_coord_to_items[coord] = []
 		_coord_to_items[coord].append(item)
 		_item_to_coord[item] = coord
+
+	func add_vibe(vibe):
+		var coord = vibe.get_cell_coord()
+		assert(coord, "trying to index a vibe that is not on the board")
+		if not _coord_to_vibes.has(coord):
+			_coord_to_vibes[coord] = []
+		_coord_to_vibes[coord].append(vibe)
+		_vibe_to_coord[vibe] = coord
 		
 	func remove_actor(actor):
 		var coord = _actor_to_coord[actor]
@@ -495,8 +509,11 @@ class BoardIndex extends RefCounted:
 		return _coord_to_items[coord][-1]
 	
 	func items_at(coord:Vector2i):
-		return _coord_to_items[coord]
+		return _coord_to_items.get(coord, [])
 		
+	func vibes_at(coord:Vector2i):
+		return _coord_to_vibes.get(coord, [])
+
 	func actor_foes(me: Actor, max_dist=null):
 		## Return an array of actors for whom `me` has negative sentiment.
 		## max_dist: in board board tiles
@@ -678,7 +695,8 @@ func start_turn(new_turn:int):
 func make_index():
 	var actors = get_actors()
 	var items = get_items()
-	return BoardIndex.new(self, actors, items)
+	var vibes = get_vibes()
+	return BoardIndex.new(self, actors, items, vibes)
 
 func get_cell_rec(coord:Vector2i, rec_name):
 	## Return the per-cell record `rec_name` for coord
@@ -1195,6 +1213,14 @@ func get_items():
 		if node is Item and not node.is_expired():
 			items.append(node)
 	return items
+	
+func get_vibes():
+	## Return an array of vibes presently on this board.
+	var vibes = []
+	for node in get_children():
+		if node is Vibe:
+			vibes.append(node)
+	return vibes
 
 func reset_items_visibility():
 	## Show or hide items depending on their stacking order. No animations performed.
@@ -1242,6 +1268,12 @@ func _on_actor_moved(from, to):
 			actor.shroud()
 		else:
 			actor.unshroud()
+	
+	if index.actor_at(to) == Tender.hero:
+		var vibes = index.vibes_at(to)
+		if vibes:
+			for vibe in vibes:
+				vibe.activate()
 
 func _on_items_changed_at(coord):
 	var index = make_index() as BoardIndex

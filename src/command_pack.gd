@@ -106,6 +106,7 @@ class Inspect extends Command:
 		return true
 		
 	func run(coord:Vector2i) -> bool:
+		var messages = []
 		var actor = index.actor_at(coord)
 		if actor and not actor.is_unexposed():
 			Tender.hud.actor_details_screen.fill_with(actor)
@@ -114,21 +115,30 @@ class Inspect extends Command:
 			
 		Tender.viewport.flash_coord_selection(coord)
 
+		# only one of Actor or Item message will show
 		var board = Tender.hero.get_board()
 		var here_str = "at %s" % board.coord_str(coord) if Utils.is_debug() else "here"
-		var msg: String
+
+		var vibes = index.vibes_at(coord)
+		for vibe in vibes:
+			if vibe.caption:
+				messages.append("There is %s %s" % [vibe.caption, here_str])
 		var item = index.top_item_at(coord)
 		if item != null:
-			msg = "There is a %s %s" % [item.get_short_desc(), here_str]
+			messages.append("There is a %s %s" % [item.get_short_desc(), here_str])
 		elif board.is_on_board(coord):
 			var terrain = board.get_cell_terrain(coord)
 			if Utils.is_debug():
-				msg = "There is a %s tile %s" % [terrain, here_str]
+				messages.append("There is a %s tile %s" % [terrain, here_str])
 			else:
-				msg = "This is a %s tile" % [terrain]
-		else:
-			msg = "There is nothing %s" % here_str
-		Tender.hud.add_message(msg)
+				messages.append("This is a %s tile" % [terrain])
+		
+		if messages.is_empty():
+			messages.append("There is nothing %s" % here_str)
+
+		for msg in messages:
+			Tender.hud.add_message(msg)
+		
 		return false
 
 class TravelTo extends Command:

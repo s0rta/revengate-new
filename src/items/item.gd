@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-## something that can fit in someone's inventory
+## Something that can fit in someone's inventory
+@icon("res://assets/dcss/urand_mage.png")
 class_name Item extends Node2D
 
 @export var char := "⚒"
