@@ -21,6 +21,7 @@ class_name Vibe extends Node2D
 
 @export var char := ""
 @export var caption := ""
+@export var spawn_cost := 0.0
 @export var tags:Array[String]
 
 func _ready():
@@ -35,6 +36,12 @@ func get_cell_coord():
 		return RevBoard.canvas_to_board(position)
 	else:
 		return null
+
+func place(coord, _immediate=null):
+	## Place the vibe at the specific coordinate without animations.
+	## No tests are done to see if `coord` is a suitable location.
+	## _immediate: ignored.
+	position = RevBoard.board_to_canvas(coord)
 
 func activate():
 	## The Vibe just got noticed, so make that obvious

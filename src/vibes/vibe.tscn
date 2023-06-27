@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dkjne1n771ldd"]
 
-[ext_resource type="Script" path="res://src/vibe.gd" id="1_hmrxv"]
+[ext_resource type="Script" path="res://src/vibes/vibe.gd" id="1_hmrxv"]
 
 [node name="Vibe" type="Node2D"]
 script = ExtResource("1_hmrxv")

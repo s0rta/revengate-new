@@ -203,29 +203,33 @@ func populate_board(builder, depth, world_loc:Vector3i):
 	
 	# Items
 	var budget = max(0, depth*1.3)
-
-	# mandatory items
-	var deck = deck_builder.gen_mandatory_item_deck(depth, world_loc)
-	while not deck.is_empty():
-		budget -= _place_card(deck.draw(), builder, index)
-	
-	# optional items, if we have any spawning budget left
-	deck = deck_builder.gen_item_deck(depth, world_loc, budget)
-	while not deck.is_empty() and budget > 0:
-		budget -= _place_card(deck.draw(), builder, index)
+	_gen_decks_and_place(builder, index, deck_builder, "Item", depth, world_loc, budget)
 		
 	# Monsters
 	budget = max(0, depth * 1.7)
+	_gen_decks_and_place(builder, index, deck_builder, "Actor", depth, world_loc, budget)
 	
-	# mandatory monsters
-	deck = deck_builder.gen_mandatory_monster_deck(depth, world_loc)
+	# Vibe
+	var extra_vibe = []
+	for actor in builder.board.get_actors():
+		extra_vibe += actor.get_vibe_cards()
+	budget = max(0, depth * 1.1)
+	_gen_decks_and_place(builder, index, deck_builder, "Vibe", depth, world_loc, budget, extra_vibe)
+	
+func _gen_decks_and_place(board_builder, index, deck_builder, card_type, 
+							depth, world_loc, budget, 
+							extra_cards=[]):
+	## Generate the two decks for the card_type, draw from them as long as budget allows, 
+	## and place everything on the board.
+	# mandatory cards
+	var deck = deck_builder.gen_mandatory_deck(card_type, depth, world_loc)
 	while not deck.is_empty():
-		budget -= _place_card(deck.draw(), builder, index)
+		budget -= _place_card(deck.draw(), board_builder, index)
 
-	# optional monsters, if we have any spawning budget left
-	deck = deck_builder.gen_monster_deck(depth, world_loc, budget)
+	# optional cards, if we have any spawning budget left
+	deck = deck_builder.gen_deck(card_type, depth, world_loc, budget, extra_cards)
 	while not deck.is_empty() and budget > 0:
-		budget -= _place_card(deck.draw(), builder, index)
+		budget -= _place_card(deck.draw(), board_builder, index)
 
 func _place_card(card, builder, index=null):
 	## Instantiate a card and place in in a free spot on the board.

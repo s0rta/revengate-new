@@ -22,10 +22,13 @@ class_name DeckBuilder extends Node
 var hold_counts := {}  # card -> nb_holds mapping
 var draw_counts := {}  # card -> nb_draws mapping
 
-func _add_all_cards(deck, node:Node, depth, world_loc:Vector3i, budget, card_type="Actor", rule=null):
+func _get_cards(node:Node, card_type):
+	return node.find_children("", card_type, false, false)
+
+func _add_all_cards(deck, cards, depth, world_loc:Vector3i, budget, rule=null):
 	## Add all card direct children of `node` to `deck`
 	## nb_occurences is adjusted according to `bugdet`
-	for card in node.find_children("", card_type, false):
+	for card in cards:
 		assert(card.spawn_cost != 0, "Can only produce decks when spawn_cost is configured")
 		var nb_occ = budget/card.spawn_cost
 		if rule != null:
@@ -93,9 +96,9 @@ func gen_mandatory_deck(card_type, depth, world_loc:Vector3i):
 	deck.normalize()
 	return deck
 
-func gen_deck(card_type, depth, world_loc:Vector3i, budget):
+func gen_deck(card_type, depth, world_loc:Vector3i, budget, extra_cards=[]):
 	var deck = Deck.new(null, tally_draw)
-	_add_all_cards(deck, self, depth, world_loc, budget, card_type)
+	_add_all_cards(deck, _get_cards(self, card_type), depth, world_loc, budget)
 	for child in get_children():
 		if child is CardRule:
 			var rule = child
@@ -105,18 +108,7 @@ func gen_deck(card_type, depth, world_loc:Vector3i, budget):
 				continue
 			if child.max_depth != -1 and depth > child.max_depth:
 				continue
-			_add_all_cards(deck, rule, depth, world_loc, budget, card_type, rule)	
+			_add_all_cards(deck, _get_cards(rule, card_type), depth, world_loc, budget, rule)
+	_add_all_cards(deck, extra_cards, depth, world_loc, budget)
 	deck.normalize()
 	return deck
-
-func gen_monster_deck(depth, world_loc:Vector3i, budget, ):
-	return gen_deck("Actor", depth, world_loc, budget)
-
-func gen_mandatory_monster_deck(depth, world_loc:Vector3i):
-	return gen_mandatory_deck("Actor", depth, world_loc)
-
-func gen_item_deck(depth, world_loc:Vector3i, budget):
-	return gen_deck("Item", depth, world_loc, budget)
-
-func gen_mandatory_item_deck(depth, world_loc:Vector3i):
-	return gen_mandatory_deck("Item", depth, world_loc)

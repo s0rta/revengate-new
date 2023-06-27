@@ -636,6 +636,11 @@ func get_conversation():
 		sect = res.get_titles()[-1]
 	return {"res": res, "sect": sect}
 
+func get_vibe_cards():
+	## Return the vibe cards that this monster can add to the procgen deck.
+	## Cards will be considered, but there is no guaranty that any will be drawn.
+	return find_children("", "Vibe", false, false)
+
 func get_conditions():
 	var conds = []
 	for node in get_children():

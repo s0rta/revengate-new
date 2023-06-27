@@ -282,6 +282,7 @@ func add_stairs(stairs=["stairs-up", "stairs-down"]):
 func find_poles():
 	## Return an array with the two coordinates that are the furthest apart 
 	## by RevBoard.dist().
+	## For something more flexible, see random_distant_coords()
 	# We have to do two consecutive runs of Dijkstra. The first one finds one pole, 
 	# the second starting at the first pole will find the second one.
 	var start = null
@@ -361,8 +362,12 @@ func place(thing, in_room:=true, coord=null, free:bool=true, bbox=null, index=nu
 	if index:
 		if thing is Actor:
 			index.refresh_actor(thing, false)
-		else:
+		elif thing is Item:
 			index.refresh_item(thing, false)
+		elif thing is Vibe:
+			index.refresh_vibe(thing, false)
+		else:
+			assert(false, "Indexing %s is not implemended." % thing)
 
 	return cell
 

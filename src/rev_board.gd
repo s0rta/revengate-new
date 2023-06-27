@@ -489,6 +489,22 @@ class BoardIndex extends RefCounted:
 		_coord_to_items[new_coord].append(item)
 		_item_to_coord[item] = new_coord
 
+	func refresh_vibe(vibe:Vibe, strict:=true):
+		## Refresh the coordiates of `vibe` in the index.
+		## strict: fail if `vibe` is not already in the index.
+		if not _vibe_to_coord.has(vibe):
+			if strict:
+				assert(false, "Can't refresh vibe that is not already part of the index")
+			else:
+				return add_vibe(vibe)
+		var old_coord = _vibe_to_coord[vibe]
+		var new_coord = vibe.get_cell_coord()
+		_coord_to_vibes[old_coord].erase(vibe)
+		if not _coord_to_vibes.has(new_coord):
+			_coord_to_vibes[new_coord] = []
+		_coord_to_vibes[new_coord].append(vibe)
+		_vibe_to_coord[vibe] = new_coord
+
 	func is_occupied(coord):
 		if _coord_to_actor.has(coord):
 			return true
