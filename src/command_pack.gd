@@ -119,10 +119,11 @@ class Inspect extends Command:
 		var board = Tender.hero.get_board()
 		var here_str = "at %s" % board.coord_str(coord) if Utils.is_debug() else "here"
 
-		var vibes = index.vibes_at(coord)
-		for vibe in vibes:
-			if vibe.caption:
-				messages.append("There is %s %s" % [vibe.caption, here_str])
+		if Tender.hero.perceives(coord):
+			var vibes = index.vibes_at(coord)
+			for vibe in vibes:
+				if vibe.caption:
+					messages.append("There is %s %s" % [vibe.caption, here_str])
 		var item = index.top_item_at(coord)
 		if item != null:
 			messages.append("There is a %s %s" % [item.get_short_desc(), here_str])

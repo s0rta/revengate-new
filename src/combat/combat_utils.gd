@@ -42,7 +42,7 @@ static func as_coord(thing):
 	## Return the board coordinates of `thing`
 	if thing is Vector2i:
 		return thing
-	elif thing is Actor or thing is Item:
+	elif thing is Actor or thing is Item or thing is Vibe:
 		return thing.get_cell_coord()
 	else:
 		assert(false, "Don't know how to get board coordinates of %s" % thing)

@@ -570,7 +570,7 @@ func is_unexposed(index=null):
 	
 	# on a board other than the active one
 	var parent = get_parent()
-	if parent == null or not parent.visible:
+	if parent == null or not parent is RevBoard or not parent.visible:
 		return true
 
 	# out of sight

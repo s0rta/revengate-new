@@ -519,13 +519,24 @@ class BoardIndex extends RefCounted:
 		return _coord_to_actor.get(coord)
 	
 	func top_item_at(coord:Vector2i):
-		## return item at the top of the stack at `coord` or null if there are no items there.
+		## return the item at the top of the stack at `coord` or null if there are no items there.
 		if not _coord_to_items.has(coord) or not _coord_to_items[coord].size():
 			return null
 		return _coord_to_items[coord][-1]
 	
 	func items_at(coord:Vector2i):
 		return _coord_to_items.get(coord, [])
+
+	func top_vibe_at(coord:Vector2i):
+		## return visible vibe closest to the top of the stack at `coord` 
+		## or null if there are no vibes there.
+		if not _coord_to_vibes.has(coord) or not _coord_to_vibes[coord].size():
+			return null
+		for i in _coord_to_vibes[coord].size():
+			var vibe = _coord_to_vibes[coord][-1-i]
+			if not vibe.char.is_empty():
+				return vibe
+		return _coord_to_vibes[coord][-1]
 		
 	func vibes_at(coord:Vector2i):
 		return _coord_to_vibes.get(coord, [])
@@ -633,8 +644,7 @@ static func canvas_to_board_str(cpos):
 func _ready():
 	detect_terrain_names()
 	detect_actors()
-	reset_items_visibility()
-	reset_actors_visibility()
+	reset_visibility(get_items() + get_actors() + get_vibes())
 
 func detect_terrain_names():
 	## Refresh the internal cache of "name" -> [tset, tid] mappings
@@ -650,8 +660,7 @@ func set_active(active:=true):
 	set_layer_enabled(0, active)
 	if active:
 		detect_actors()
-		reset_items_visibility()
-		reset_actors_visibility()
+		reset_visibility(get_items() + get_actors() + get_vibes())
 
 func is_active():
 	return visible and is_layer_enabled(0)
@@ -706,7 +715,7 @@ func start_turn(new_turn:int):
 					break
 				node.start_new_turn()
 	current_turn = new_turn
-	reset_items_visibility()
+	reset_visibility(get_items() + get_actors() + get_vibes())
 
 func make_index():
 	var actors = get_actors()
@@ -984,7 +993,7 @@ func toggle_door(coord:Vector2i):
 		paint_cell(coord, "door-open")
 	else:
 		assert(false, "not implemented")
-	reset_actors_visibility()
+	reset_visibility(get_actors() + get_vibes())
 
 func _init_metric_context(start, dest, free_dest=false, max_dist=null, valid_pred=null, index=null):
 	## Initialize a few internal variables that we need for building a BoardMetrics, 
@@ -1238,33 +1247,32 @@ func get_vibes():
 			vibes.append(node)
 	return vibes
 
-func reset_items_visibility():
-	## Show or hide items depending on their stacking order. No animations performed.
-	var index = make_index()
-	for item in get_items():
-		if item.should_hide(index):
-			item.hide()
+func reset_visibility(things:Array, index=null):
+	## Show or hide things depending on whether they are perceived
+	if index == null:
+		index = make_index()
+	for thing in things:
+		if thing.should_hide():
+			thing.hide()
 		else:
-			item.show()	
+			thing.show()
 			
-		if item.should_shroud(index):
-			item.shroud(false)
+		if thing.should_shroud():
+			thing.shroud(false)
 		else:
-			item.unshroud(false)
+			thing.unshroud(true)
 
-func reset_actors_visibility():
-	## Show or hide actors depending on whether they are perceived
-	var index = make_index()
-	for actor in get_actors():
-		if actor.should_hide():
-			actor.hide()
+func update_shrouding(things, index=null):
+	## Shroud or reveal things that have changed perceptibility. 
+	## The change is animated. For an instantaneous change, consider reset_visibility().
+	## nulls are silently ignored.
+	for thing in things:
+		if thing == null:
+			continue
+		if thing.should_shroud(index):
+			thing.shroud()
 		else:
-			actor.show()
-			
-		if actor.should_shroud():
-			actor.shroud(false)
-		else:
-			actor.unshroud(true)
+			thing.unshroud()
 	
 func _on_actor_moved(from, to):
 	## fade in and out the visibility of items being stepped on/off.
@@ -1272,19 +1280,9 @@ func _on_actor_moved(from, to):
 	assert(index.actor_at(to)!=null, 
 			"The signal seems to have fired before an actor set their dest to %s" % coord_str(to))
 	
-	var item = index.top_item_at(from)
-	if item and not item.should_shroud():
-		item.unshroud()
-	item = index.top_item_at(to)
-	if item and item.should_shroud():
-		item.shroud()
+	var things = [index.top_item_at(from), index.top_item_at(to)] + get_actors()
+	update_shrouding(things, index)
 
-	for actor in get_actors():
-		if actor.should_shroud():
-			actor.shroud()
-		else:
-			actor.unshroud()
-	
 	if index.actor_at(to) == Tender.hero:
 		var vibes = index.vibes_at(to)
 		if vibes:
