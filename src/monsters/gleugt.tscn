@@ -1,0 +1,50 @@
+[gd_scene load_steps=7 format=3 uid="uid://cjoutyju3dhre"]
+
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_dxud3"]
+[ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="2_0ala4"]
+[ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_doys4"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="3_t3cu1"]
+[ext_resource type="Script" path="res://src/combat/core_skills.gd" id="5_jt3dc"]
+[ext_resource type="Script" path="res://src/strategies/summoning.gd" id="6_8h78t"]
+
+[node name="Gleugt" instance=ExtResource("1_dxud3")]
+char = "g"
+caption = "gleugt"
+color = Color(0.921569, 0.415686, 0.184314, 1)
+spawn_cost = 12.0
+health = 40
+healing_prob = 0.1
+intelligence = 40
+perception = 45
+mana = 40
+faction = 2
+bestiary_img = "res://src/monsters/gleugt.jpg"
+description = "A gleugt is an horror recognized in many Bavarian folk tales. Gleugts are adept at magic and can cast a wide range of spells, especially the older individuals who can be identified by their longer horns and their more leathery tattered wings. Their mastery of spells come from a natural affinity with magic rather than from long studying. Their intelligence is in fact lower than that of the average human.
+
+Gleugts prefer to dedicate their life to communion with nature through meditation and various rituals, but they will venture inside human civilisations to gather various ingredients for their rituals and for other items that they can't craft themselves. "
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.415686, 0.184314, 1)
+text = "g"
+
+[node name="Claw" type="Node" parent="." index="7"]
+script = ExtResource("2_0ala4")
+damage = 4
+damage_family = 2
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Claw" index="0"]
+stream = ExtResource("3_doys4")
+volume_db = -3.0
+pitch_scale = 1.25
+
+[node name="Tracking" type="Node" parent="." index="8"]
+script = ExtResource("3_t3cu1")
+priority = 0.1
+
+[node name="SkillLevels" type="Node" parent="." index="9"]
+script = ExtResource("5_jt3dc")
+innate_attack = 2
+
+[node name="Summoning" type="Node" parent="." index="10"]
+script = ExtResource("6_8h78t")
+priority = 0.5
