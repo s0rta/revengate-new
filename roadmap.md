@@ -153,6 +153,8 @@ UX:
 - [x] closable doors
 - [x] textual tags to categorize items and monsters
 - [x] use tags to identify NPC gifts
+- [ ] locked doors
+- [x] vibe nodes
 
 Items:
 - [ ] unique items are per-game unique, not only per-dungeon unique
@@ -164,7 +166,7 @@ Combat:
 - [ ] TribalTerritorial uses perception rather than dist()
 - [ ] Tracking is triggered by perception
 - [x] silvered weapons
-- [ ] first stab at magic
+- [x] first stab at magic: summoning spell
 
 UX:
 - [x] something more reliable than timing to synchronize fading anims
@@ -190,8 +192,8 @@ UX:
 - [ ] help screen with contextual content
 - [ ] on-screen joystick
 - [ ] pre-fabs can inject rules in the deck generator after the geometry pass of a new board
-- [ ] locked doors
 - [ ] auto-pan to hero when he gets close to the egde of the screen
 - [ ] VFX: edge of water reflections 
 - [ ] items long descriptions
 - [ ] Allow mixing rooms and mazes in level generation
+- [ ] Strategy.refresh() updates the internal index

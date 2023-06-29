@@ -69,7 +69,7 @@ One thing is certain: you can't walk into a book store and buy a spell book. If 
 
 Some people and creatures have an innate affinity with magic. Those without it can sometimes be taught how to channel magic, but they will never achieve mastery of the magical arts. A certain level of intelligence is necessary to be trained in magic.
 
-Channeling magic, sometimes also called "casting spells", always has a cost: the magician's mana, some material, or even someone's vitality. To channel a spell, you  must both know it (instinctively or from training) and be able to pay its cost.
+Channeling magic, sometimes also called "casting spells", always has a cost: the magician's mental clarity, some material, or even someone's vitality. To channel a spell, you  must both know it (instinctively or from training) and be able to pay its cost.
 
 A channeling device is usually an intricate clockwork mechanism moving potent crystals into their most effective configurations. If you have been trained to its usage, a channeling device can help you channel spells. Finding one that you are unfamiliar with won't help you in any way. Channeling devices can have a variety of effects: they can let you channel harder spells than your training alone would allow, they can lower the cost of a spell, or they can increase the power of a spell. Channeling devices have fragile mechanisms that are easily damaged in combat or by overloading while channeling. Some of them consume a power reserve and they will stop working after a certain number of uses.
 
@@ -77,4 +77,4 @@ At its core, magical channeling manipulates aether. It either turns aether into 
 
 No instrument is known to be able to measure the aether density of a place, but magic sensitive beings can usually perceive fluctuations in aether when they move from place to place. It's not uncommon for places of worship and spiritual landmarks to be built in aether-rich regions.
 
-Mana is not the measure of any particular substances, it's a number on an arbitrary scale of how much channeling someone could do based on their affinity and current state exhaustion.
+Mana is not the measure of any particular substances, it's a number on an arbitrary scale representing how much channeling someone could do based on their affinity and their current state of mental and physical exhaustion.

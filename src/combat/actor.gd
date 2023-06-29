@@ -83,11 +83,14 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 @export_group("Combat")
 @export var health := 50
 @onready var health_full = health  # health can only go above this level in exceptional cases
+@export_range(0.0, 1.0) var healing_prob := 0.05  # %chance to heal at any given turn
 @export var strength := 50
 @export var agility := 50
 @export var intelligence := 50
 @export var perception := 50
-@export var healing_prob := 0.05  # %chance to heal at any given turn
+@export var mana := 0
+@onready var mana_full = mana
+@export_range(0.0, 1.0) var mana_recovery_prob := 0.1
 @export var resistance: Consts.DamageFamily = Consts.DamageFamily.NONE  # at most one!
 @export var tags:Array[String]
 
@@ -781,6 +784,8 @@ func activate_conditions():
 	assert(health_full != null)
 	if health < health_full and Rand.rstest(healing_prob):
 		regen()
+	if mana < mana_full and Rand.rstest(mana_recovery_prob):
+		refocus()
 	for cond in get_conditions():
 		if is_alive():  # there is a chance that we won't make it through all the conditions
 			cond.erupt()
@@ -792,9 +797,19 @@ func regen(delta:=1):
 	assert(delta>=0, "this is for healing, use something else for damage")
 	if health + delta > health_full:
 		delta = health_full - health
-	if delta:
+	if delta > 0:
 		add_message("%s healed a little" % get_caption())
 		update_health(delta)
+		
+func refocus(delta:=1):
+	## Regain some mana from natural recovery
+	## Do nothing if mana is already full
+	assert(delta>=0, "this is for mana recovery, use something else for magic usage")
+	if mana + delta > mana_full:
+		delta = mana_full - mana
+	if delta > 0:
+		add_message("%s seems more focused" % get_caption())
+		mana += delta
 
 func drop_item(item):
 	assert(item.get_parent() == self, "must possess an item before dropping it")
