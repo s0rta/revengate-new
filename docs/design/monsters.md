@@ -175,7 +175,7 @@ And the center of the creature floats the "vital assemblage", a frame of wood an
 
 When a phantruch dies, the creature and the flames completely evaporate, but the vital assemblage remains. Any damage to the vital assemblage is likely to cause the creature to vanish.
 
-The lesser phantruch is help in animation by only two crystals. The weaker magical pulled produced by those simpler vital assemblages cannot reach as far in between the planes of reality and the creature nesting inside the blue flame is therefore much different.
+The lesser phantruch is held in animation by only two crystals. The weaker magical pulled produced by those simpler vital assemblages cannot reach as far in between the planes of reality and the creature nesting inside the blue flame is therefore much different.
 
 The creature of the lesser phantruch resembles a cross between a moray eel and a Chinese dragon. The serpent like beast remains coiled around the vital assemblage until the time of the attack. It attacks by springing forward with the swiftness of the cobra. As it floats in the air, the creature really seems to be swimming. Just like for the greater phantruch, the creature is ethereal and semi-transparent while it remains inside the blue flames.
 
@@ -203,7 +203,7 @@ Gleugts are about as tall as a short human: between 1.25m and 1.5m. Because they
 
 In addition to the mask, gleugts typically wear as sleeveless vest and a skirt that looks more like a Victorian take on the Roman battle attire than like a kilt. It's also common to them to have a pocket watch on a chain and a ceremonial dagger on their belt. 
 
-Gleugts are adept at magic and can cast a wide range of spells, especially the older individuals who can be identified by their longer horns and their more leathery tattered wings. Their mastery of spells come from a natural affinity with magic rather than from long studying. Their intelligence is in fact lower than that of the human and they respond in impulsive manner rather than in a calculated way most of the time. They are smart enough to execute coordinated attacks between multiple individuals and to command other thinking beasts. 
+Gleugts are adept at magic and can cast a wide range of spells, especially the older individuals who can be identified by their longer horns and their more leathery tattered wings. Their mastery of spells come from a natural affinity with magic rather than from long studying. Their intelligence is in fact lower than that of the average human and they respond in impulsive manner rather than in a calculated way most of the time. They are smart enough to execute coordinated attacks between multiple individuals and to command other thinking beasts. 
 
 Gleugts prefer to dedicate their life to communion with nature through meditation and various rituals, but they will venture inside human civilisations to gather various ingredients for their rituals and for other items that they can't craft themselves. 
 

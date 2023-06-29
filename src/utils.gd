@@ -173,3 +173,24 @@ static func make_game_summary():
 			+ "[b]Monsters defeated[/b]\n%s\n\n"
 			+ "[b]Character stats (modifiers)[/b]\n%s") % [Tender.last_turn, Tender.nb_locs, 
 															kill_summary, stats_summary]
+
+static func has_tags(node, tags:Array):
+	## Return whether `node` has all the provided tags
+	## Return `true` when tags is empty
+	if tags.is_empty():
+		return true
+	if node.get("tags") == null:
+		return false
+	for tag in tags:
+		if not tag in node.tags:
+			return false
+	return true
+
+static func has_any_tags(node, tags:Array):
+	## Return whether `node` has any of the provided tags
+	if node.get("tags") == null:
+		return false
+	for tag in tags:
+		if tag in node.tags:
+			return true
+	return false

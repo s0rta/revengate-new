@@ -42,13 +42,8 @@ func splash_damage():
 			# TODO: use take into account the actor's resistance	
 			victim.update_health(-damage)
 
-func get_short_desc():
-	var text = super()
-	if ttl != -1:
-		text += " (lit!)"
-	return text
-
 func toggle():
 	super()
+	tags.append("lit")
 	ttl = 4
 	switchable = false

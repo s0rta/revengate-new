@@ -102,7 +102,14 @@ func get_short_desc():
 	var desc = caption
 	if len(desc) == 0:
 		desc = name
-	return "%s %s" % [$Label.text, desc]
+	var qualifiers = []
+	for tag in ["lit", "broken"]:
+		if tag in tags:
+			qualifiers.append(tag)
+	if qualifiers:
+		return "%s %s (%s)" % [$Label.text, desc, ", ".join(qualifiers)]
+	else:
+		return "%s %s" % [$Label.text, desc]
 
 func place(coord, _immediate=null):
 	## Place the item at the specific coordinate without animations.

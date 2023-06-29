@@ -678,13 +678,17 @@ func get_weapons():
 		return [Rand.weighted_choice(all_weapons, weights)]
 	return active_weapons
 
-func get_items(tag=null):
+func get_items(include_tags=null, exclude_tags=null):
 	## Return an array of the items in our inventory.
-	## tag: if null, all the items are returned, 
-	##   otherwise, only the items with this tag are returned.
+	## include_tags: if provided, only items that have all those tags are returned.
+	## exclude_tags: if provided, only items that have none of those tags are returned.
 	var items = []
 	for node in get_children():
-		if node is Item and (tag == null or tag in node.tags):
+		if node is Item:
+			if include_tags != null and not Utils.has_tags(node, include_tags):
+				continue
+			if exclude_tags != null and Utils.has_any_tags(node, exclude_tags):
+				continue
 			items.append(node)
 	return items
 

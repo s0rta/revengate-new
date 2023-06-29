@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cjoutyju3dhre"]
+[gd_scene load_steps=8 format=3 uid="uid://cjoutyju3dhre"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_dxud3"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="2_0ala4"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="3_t3cu1"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="5_jt3dc"]
 [ext_resource type="Script" path="res://src/strategies/summoning.gd" id="6_8h78t"]
+[ext_resource type="PackedScene" uid="uid://cuiqioehqyffe" path="res://src/items/vital_assemblage.tscn" id="7_0htct"]
 
 [node name="Gleugt" instance=ExtResource("1_dxud3")]
 char = "g"
@@ -47,4 +48,7 @@ innate_attack = 2
 
 [node name="Summoning" type="Node" parent="." index="10"]
 script = ExtResource("6_8h78t")
+probability = 0.1
 priority = 0.5
+
+[node name="VitalAssemblage" parent="." index="11" instance=ExtResource("7_0htct")]

@@ -80,7 +80,8 @@ const ALL_REGIONS = [REG_NORTH, REG_SOUTH, REG_EAST, REG_WEST, REG_CENTER]
 
 # Animations and VFX
 const FADE_DURATION := .15
-const FADE_MODULATE := Color(.7, .7, .7, 0.4)
+const FADE_MODULATE := Color(.7, .7, .7, 0.0)
 const VIS_MODULATE := Color.WHITE
 
-const TAGS = ["silver", "ethereal", "undead", "gift"]
+const TAGS = ["silver", "ethereal", "undead", "gift", "broken", "lit", 
+			"vital-assemblage"]

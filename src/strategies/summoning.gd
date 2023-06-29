@@ -35,6 +35,8 @@ func is_valid():
 	var index = me.get_board().make_index()	
 	if index.actor_foes(me, threat_radius).is_empty():
 		return false
+	if me.get_items(["vital-assemblage"], ["broken"]).is_empty():
+		return false
 	return me.mana >= mana_cost
 
 func act() -> bool:
@@ -44,6 +46,8 @@ func act() -> bool:
 	var here = me.get_cell_coord()
 	var creature = load("res://src/monsters/phantruch-higher.tscn").instantiate()
 	var there = builder.place(creature, false, here, true, null, index)
+	var devices = me.get_items(["vital-assemblage"], ["broken"])
+	me.give_item(Rand.choice(devices), creature)
 	creature.show()
 	Tender.viewport.effect_at_coord("magic_vfx_01", there)
 	me.mana -= mana_cost

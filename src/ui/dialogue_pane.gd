@@ -148,10 +148,10 @@ func checkpoint(title):
 func speaker_has_gifts():
 	if speaker == null:
 		return false
-	return len(speaker.get_items("gift")) > 0
+	return len(speaker.get_items(["gift"])) > 0
 
 func speaker_give_item():
 	## pass an item from the speaker to the hero
-	var items = speaker.get_items("gift")
+	var items = speaker.get_items(["gift"])
 	var item = Rand.choice(items)
 	speaker.give_item(item, Tender.hero)
