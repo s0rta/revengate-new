@@ -22,3 +22,4 @@ class_name StatsModifiers extends Node
 
 @export var agility := 0
 @export var strength := 0
+@export var mana_burn_rate := 0

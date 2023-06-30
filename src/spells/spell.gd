@@ -43,7 +43,7 @@ func _ready():
 func has_reqs():
 	## Return whether the actor can "pay" for this spell. 
 	## The base class only looks for mana. Subclasses should check for more elaborate requirements.
-	return me.mana >= mana_cost
+	return me.has_mana(mana_cost)
 
 func cast():
 	## Activate the spell.

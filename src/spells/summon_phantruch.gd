@@ -41,4 +41,4 @@ func cast():
 	me.give_item(Rand.choice(devices), creature)
 	creature.show()
 	Tender.viewport.effect_at_coord("magic_vfx_01", there)
-	me.mana -= mana_cost
+	me.use_mana(mana_cost)

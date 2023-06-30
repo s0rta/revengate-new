@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cjoutyju3dhre"]
+[gd_scene load_steps=10 format=3 uid="uid://cjoutyju3dhre"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_dxud3"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="2_0ala4"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://src/strategies/summoning.gd" id="6_8h78t"]
 [ext_resource type="PackedScene" uid="uid://cuiqioehqyffe" path="res://src/items/vital_assemblage.tscn" id="7_0htct"]
 [ext_resource type="Script" path="res://src/spells/summon_phantruch.gd" id="8_mba68"]
+[ext_resource type="PackedScene" uid="uid://c18hdsjecec2" path="res://src/items/device_of_easy_focus.tscn" id="9_fjuu7"]
 
 [node name="Gleugt" instance=ExtResource("1_dxud3")]
 char = "g"
@@ -56,3 +57,5 @@ priority = 0.5
 
 [node name="SummonPhantruch" type="Node" parent="." index="12"]
 script = ExtResource("8_mba68")
+
+[node name="DeviceOfEasyFocus" parent="." index="13" instance=ExtResource("9_fjuu7")]

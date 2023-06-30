@@ -90,6 +90,7 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 @export var perception := 50
 @export var mana := 0
 @onready var mana_full = mana
+@export var mana_burn_rate := 100
 @export_range(0.0, 1.0) var mana_recovery_prob := 0.1
 @export var resistance: Consts.DamageFamily = Consts.DamageFamily.NONE  # at most one!
 @export var tags:Array[String]
@@ -214,8 +215,6 @@ func get_stat(stat_name, challenge=null):
 	var mods = get_modifiers()
 	var eff_stat = get(stat_name) + mods.get(stat_name, 0)
 	var challenge_mod = mods.get(challenge, 0)
-	#print("get_stat(%s, %s): %s, %s, %s" % [stat_name, challenge, eff_stat, 
-	#										challenge_mod, skill_mod])
 	return eff_stat + challenge_mod + skill_mod
 
 func get_base_stats():
@@ -224,6 +223,23 @@ func get_base_stats():
 	for name in Consts.CORE_STATS:
 		stats[name] = get(name)
 	return stats
+
+func mana_cost(base_cost):
+	## Return the mana cost for the actor after taking into account all its modifiers
+	return max(1, base_cost * get_stat("mana_burn_rate") / 100)
+
+func has_mana(base_cost):
+	## Return whether the actor has enough mana to perform a spell of a 
+	## given `base_cost` (the cost before taking into account modifiers).
+	return mana >= mana_cost(base_cost)
+	
+func use_mana(base_cost):
+	## Decrease mana. The effective number of mana points will differ from `base_cost` if the 
+	## actor has modifiers. 
+	## Return how many mana points were used.
+	var cost = mana_cost(base_cost)
+	mana -= cost
+	return cost
 
 func stat_roll(stat_name, challenge=null):
 	## Return a random number in [0..1] weighted by the given stat. 
