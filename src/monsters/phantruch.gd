@@ -18,10 +18,9 @@
 class_name Phantruch extends Actor
 
 func die():
-	# TODO: all inventory except the vital assemblage should dissapear into 
-	#   another plane of existance.
-	for item in get_items(["vital-assemblage"]):
+	for item in get_items(["vital-assemblage"], ["broken"]):
 		item.tags.append("broken")
+	# all inventory except the vital assemblage dissapears into another plane of existence.
 	for item in get_items(null, ["vital-assemblage"]):
 		item.reparent($/root)
 		item.queue_free()

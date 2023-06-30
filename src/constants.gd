@@ -52,7 +52,7 @@ enum SkillLevel {
 }
 
 const CORE_STATS := ["agility", "strength", "intelligence", "perception"] 
-const SKILLS := ["evasion", "innate_attack", "fencing"]
+const SKILLS := ["evasion", "innate_attack", "fencing", "channeling"]
 # TODO: should be a const, but the parser has issue with the `+` expression
 var CHALLENGES := [] + SKILLS
 
@@ -84,4 +84,4 @@ const FADE_MODULATE := Color(.7, .7, .7, 0.0)
 const VIS_MODULATE := Color.WHITE
 
 const TAGS = ["silver", "ethereal", "undead", "gift", "broken", "lit", 
-			"vital-assemblage"]
+			"vital-assemblage", "summoning"]

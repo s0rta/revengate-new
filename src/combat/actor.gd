@@ -692,6 +692,20 @@ func get_items(include_tags=null, exclude_tags=null):
 			items.append(node)
 	return items
 
+func get_spells(include_tags=null, exclude_tags=null):
+	## Return an array of known spells.
+	## include_tags: if provided, only spells that have all those tags are returned.
+	## exclude_tags: if provided, only spells that have none of those tags are returned.
+	var spells = []
+	for node in get_children():
+		if node is Spell:
+			if include_tags != null and not Utils.has_tags(node, include_tags):
+				continue
+			if exclude_tags != null and Utils.has_any_tags(node, exclude_tags):
+				continue
+			spells.append(node)
+	return spells
+
 func get_evasion(_weapon):
 	## Return the evasion stat against a particular weapon. 
 	return get_stat("agility", "evasion")

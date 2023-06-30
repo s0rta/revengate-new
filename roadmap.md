@@ -186,7 +186,7 @@ UX:
 
 ## Ice Box: not yet scheduled for a release
 - [ ] Monte Carlo simulator
-  - [ ] global flag to disable animations
+  - [ ] global flag to disable animations (wire inside Actor.is_unexposed())
 - [ ] non-walking movement and path finding (wading, swimming, phasing)
 - [ ] Deck.peek(): select the next card, but do not remove it from the deck
 - [ ] help screen with contextual content
@@ -197,3 +197,4 @@ UX:
 - [ ] items long descriptions
 - [ ] Allow mixing rooms and mazes in level generation
 - [ ] Strategy.refresh() updates the internal index
+- [ ] phantruch is destroyed if the vital assembly is broken or stolen

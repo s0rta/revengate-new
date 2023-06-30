@@ -18,11 +18,11 @@
 ## Opportunistically fight back after being attacked.
 class_name Summoning extends Strategy
 
-@export var mana_cost := 10
-@export_range(0.0, 1.0) var probability = 0.5
+@export_range(0.0, 1.0) var probability = 0.1
 
 var has_activated = null
 var threat_radius = 5
+var spell = null  # selected spell, random if more than one available.
 
 func refresh(turn):
 	has_activated = Rand.rstest(probability)
@@ -35,20 +35,15 @@ func is_valid():
 	var index = me.get_board().make_index()	
 	if index.actor_foes(me, threat_radius).is_empty():
 		return false
-	if me.get_items(["vital-assemblage"], ["broken"]).is_empty():
-		return false
-	return me.mana >= mana_cost
+	var spells = me.get_spells(["summoning"])
+	spells.shuffle()
+	for sp in spells:
+		if sp.has_reqs():
+			spell = sp
+			return true
+	spell = null
+	return false
 
 func act() -> bool:
-	var board = me.get_board()
-	var index = board.make_index()
-	var builder = BoardBuilder.new(board)
-	var here = me.get_cell_coord()
-	var creature = load("res://src/monsters/phantruch-higher.tscn").instantiate()
-	var there = builder.place(creature, false, here, true, null, index)
-	var devices = me.get_items(["vital-assemblage"], ["broken"])
-	me.give_item(Rand.choice(devices), creature)
-	creature.show()
-	Tender.viewport.effect_at_coord("magic_vfx_01", there)
-	me.mana -= mana_cost
+	spell.cast()
 	return true
