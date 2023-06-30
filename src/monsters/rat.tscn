@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://d32rti5y0shob"]
+[gd_scene load_steps=8 format=3 uid="uid://d32rti5y0shob"]
 
 [ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_cnguh"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="3_6ex08"]
@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://da0cslkk526yk" path="res://src/monsters/bite-small.wav" id="4_suc3h"]
 [ext_resource type="Script" path="res://src/strategies/flight_or_fight.gd" id="6_3136s"]
 [ext_resource type="Script" path="res://src/strategies/tribal_territorial.gd" id="6_larah"]
+[ext_resource type="PackedScene" uid="uid://y1ws81ictm30" path="res://src/vibes/rat_poop.tscn" id="7_kqkal"]
 
 [node name="Rat" instance=ExtResource("1_cnguh")]
 char = "r"
@@ -44,3 +45,5 @@ stream = ExtResource("4_suc3h")
 [node name="TribalTerritorial" type="Node" parent="." index="12"]
 script = ExtResource("6_larah")
 priority = 0.8
+
+[node name="RatPoop" parent="." index="13" instance=ExtResource("7_kqkal")]
