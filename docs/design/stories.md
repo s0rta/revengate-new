@@ -280,12 +280,12 @@ Ivry slowly pushed his glass to allow his beer to warm up in full sun, then he w
 
 *October 26, year 90 AP*
 
-Gilles was afraid. He had woken up screaming last night and his breaches were still damp with is own urine. It didn't matter anymore. Any moment now and they would take him out from this cell and bring him to the gallows. The sound of the cheering crowd told him that much. He felt the texture of the stone wall with his hand and filled his lungs with the aroma of straw and piss, savouring his ability to feel things while it lasted.
+Gilles was afraid. He had woken up screaming last night and his breaches were still damp with his own urine. It didn't matter anymore. Any moment now and they would take him out from this cell and bring him to the gallows. The sound of the cheering crowd told him that much. He felt the texture of the stone wall with his hand and filled his lungs with the aroma of straw and piss, savouring his ability to feel things while it lasted.
 
 Gilles had always been afraid of death. It was hard to avoid growing up with his grandmother telling him tales of watching people fall like flies during the plague. It had been nine years since that fear became an obsession. That was when the Saxons took Joan and burnt her alive. Even her, with all her magic, had been unable to escape the scythe of the reaper.
 
 The crowd was growing louder. Gilles was guilty and he had confessed everything. Almost everything. Now that it was almost over, he was glad that they had never asked why, what he had hopped to gain by taking the lives of all those children. In a moment, he would give the crowd what they were asking, he would die for their collective enjoyment. If the books had been right, he would die, but he would not cease living – maybe he would succeed where Joan had failed. Maybe...
 
-The pages had survived the plague years, but no one who knew how to interpret them had and for almost a century they had been waiting, gathering dust, waiting for someone who was desperate enough to find them and let light shine on their ancient words again.
+The pages had survived the plague years, but no one who knew how to interpret them had and for almost a century they had been waiting, gathering dust, waiting for someone who was desperate enough to find them and let light shine on their arcane words again.
 
 Gilles heard footsteps coming his way. He closed his eyes and wept softly, unsure if any of it had been worth it.
