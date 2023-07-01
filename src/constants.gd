@@ -84,4 +84,8 @@ const FADE_MODULATE := Color(.7, .7, .7, 0.0)
 const VIS_MODULATE := Color.WHITE
 
 const TAGS = ["silver", "ethereal", "undead", "gift", "broken", "lit", 
-			"vital-assemblage", "summoning"]
+			# spells
+			"vital-assemblage", "summoning", 
+			# locks
+			"key-blue", "key-red",
+			]

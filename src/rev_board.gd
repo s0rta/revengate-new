@@ -448,7 +448,7 @@ class BoardIndex extends RefCounted:
 
 	func add_vibe(vibe):
 		var coord = vibe.get_cell_coord()
-		assert(coord, "trying to index a vibe that is not on the board")
+		assert(coord != null, "trying to index a vibe that is not on the board")
 		if not _coord_to_vibes.has(coord):
 			_coord_to_vibes[coord] = []
 		_coord_to_vibes[coord].append(vibe)
@@ -1009,7 +1009,7 @@ func _init_metric_context(start, dest, free_dest=false, max_dist=null, valid_pre
 	if valid_pred == null:
 		valid_pred = index.is_free
 	
-	if dest:
+	if dest and free_dest:
 		# DEBUG: very rarely, rats fail the assert...
 		if not is_walkable(Vector2i(dest.x, dest.y)):
 			ddump_cell(dest)
@@ -1172,7 +1172,7 @@ func path(start, dest, free_dest=true, max_dist=null, index=null):
 func path_potential(start, dest, max_dist=null, index=null):
 	## Return an Array of coordinates from `start` to `dest`, only looking if cells are walkable 
 	## and ignoring whether they are occupied.
-	var metrics = astar_metrics(start, dest, true, max_dist, is_walkable, index)
+	var metrics = astar_metrics(start, dest, false, max_dist, is_walkable, index)
 	return metrics.path()
 
 func path_perceived(start, dest, pov_actor:Actor, max_dist=null, index=null):

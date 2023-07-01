@@ -203,11 +203,35 @@ class CloseDoor extends DoorHandler:
 		return super(coord) and index.is_free(coord)
 
 class OpenDoor extends DoorHandler:
+	var key:Item
 	func _init(index_=null):
 		is_action = true
 		caption = "Open door"
 		target_terrain = "door-closed"
 		super(index_)
+
+	func _is_valid_door(coord):
+		if not super(coord):
+			return false
+		var board = Tender.hero.get_board()
+		var cell_rec = board.get_cell_rec(coord, "locked")
+		if cell_rec: 
+			var keys = Tender.hero.get_items([cell_rec.key])
+			if not keys.is_empty():
+				key = Rand.choice(keys)
+			else:
+				return false
+		return true
+
+	func run(coord:Vector2i) -> bool:
+		super(coord)
+		var board = Tender.hero.get_board() as RevBoard
+		var cell_rec = board.get_cell_rec(coord, "locked")
+		if cell_rec != null:
+			board.clear_cell_rec(coord, "locked")
+			key.reparent(key.get_node("/root"))
+			key.queue_free()	
+		return true
 		
 func _ready():
 	_cmd_classes = [Attack, Talk, TravelTo, Inspect, CloseDoor, OpenDoor]
