@@ -48,6 +48,7 @@ priority = 0.1
 script = ExtResource("5_jt3dc")
 innate_attack = 2
 channeling = 2
+device_of_focusing = 1
 
 [node name="Summoning" type="Node" parent="." index="10"]
 script = ExtResource("6_8h78t")

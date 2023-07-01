@@ -6,9 +6,9 @@
 [node name="Saber" instance=ExtResource("1_4hmww")]
 damage = 7
 damage_family = 2
-skill = "fencing"
 char = "🗡"
 caption = "saber"
+skill = "fencing"
 spawn_cost = 6.0
 
 [node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]

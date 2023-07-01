@@ -21,4 +21,3 @@ class_name Weapon extends Item
 @export var damage := 1
 @export var damage_family: Consts.DamageFamily
 @export var is_equipped := false
-@export var skill := ""  # which proficiency can boost our to-hit with this weapon

@@ -44,17 +44,22 @@ static func _combine_modifiers(main_mods, sub_mods):
 		if val:
 			main_mods[key] += val
 
-static func get_node_modifiers(node:Node):
-	## return a dict of all the modifiers for a node
+static func get_node_modifiers(node:Node, valid_pred=null):
+	## Return a dict of all the modifiers for a node
+	## valid_pred: if supplied, only nodes for which the function returns `true` are considered
 	var all_mods = {}
 	for key in Consts.CORE_STATS + Consts.CHALLENGES:
 		all_mods[key] = 0
 	for child in node.get_children():
 		# modifier can be on a `StatsModifiers` sub-node inside a `stats_modifiers` dict attribute
+		if valid_pred and not valid_pred.call(child):
+			continue
 		if child is StatsModifiers:
 			_combine_modifiers(all_mods, child)
 		else:
 			for sub_child in child.get_children():
+				if valid_pred and not valid_pred.call(child):
+					continue
 				if sub_child is StatsModifiers:
 					_combine_modifiers(all_mods, sub_child)
 		_combine_modifiers(all_mods, child.get("stats_modifiers"))

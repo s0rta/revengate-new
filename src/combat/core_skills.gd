@@ -22,3 +22,4 @@ class_name SkillLevels extends Node
 @export var fencing: Consts.SkillLevel = Consts.SkillLevel.NEOPHYTE
 @export var innate_attack: Consts.SkillLevel = Consts.SkillLevel.NEOPHYTE
 @export var channeling: Consts.SkillLevel = Consts.SkillLevel.NEOPHYTE
+@export var device_of_focusing: Consts.SkillLevel = Consts.SkillLevel.NEOPHYTE

@@ -21,6 +21,7 @@ class_name Item extends Node2D
 
 @export var char := "⚒"
 @export var caption := ""
+@export var skill := ""  # which proficiency can boost our stats with this item
 @export var consumable := false
 @export var switchable := false  # can you turn this item ON and OFF?
 

@@ -197,7 +197,15 @@ func get_caption():
 
 func get_modifiers():
 	## return a dict of all the modifiers from items and conditions combined together
-	return Utils.get_node_modifiers(self)
+	var no_skill = Consts.SkillLevel.NEOPHYTE
+	var knows_how_to_use = func (node):
+		var skill = node.get("skill")
+		var my_skills = get_skills()
+		if skill: 
+			return my_skills.get(skill, no_skill) != no_skill
+		else:
+			return true
+	return Utils.get_node_modifiers(self, knows_how_to_use)
 
 func get_skills():
 	return Utils.get_node_skills(self)
