@@ -869,6 +869,38 @@ func is_floor(coord:Vector2i):
 	## Return whether a cell is a plain floor tile (no stairs or doors or anything fancy).
 	return get_cell_terrain(coord) in FLOOR_TERRAINS
 
+func is_locked(coord:Vector2i):
+	if get_cell_terrain(coord) == "door-closed":
+		if get_cell_rec(coord, "locked") != null:
+			return true
+	return false
+
+func lock(coord:Vector2i, key_tag:String):
+	assert(get_cell_terrain(coord) == "door-closed", "Can only lock closed doors")
+	set_cell_rec(coord, "locked", {"key":key_tag})
+
+	var vibe = load("res://src/vibes/locked_door.tscn").instantiate()
+	vibe.key_tag = key_tag
+	add_child(vibe)
+	vibe.place(coord)
+
+func unlock(coord:Vector2i, key:Item):
+	var rec = get_cell_rec(coord, "locked")
+	assert(rec.key in key.tags, "%s is not the right key for this lock, expecting %s" % [key, rec.key])
+	clear_cell_rec(coord, "locked")
+
+	# remove the vibe
+	var index = make_index()
+	for vibe in index.vibes_at(coord):
+		if vibe is LockedDoor:
+			vibe.hide()
+			vibe.reparent($/root)
+			vibe.queue_free()
+
+	# consume the key
+	key.reparent($/root)
+	key.queue_free()
+
 func is_walkable(coord:Vector2i):
 	## Return whether a cell is walkable for normal actors
 	# collision is only specified on physics layer 0

@@ -47,6 +47,9 @@ func get_cell_coord():
 	else:
 		return null
 
+func get_short_desc():
+	return caption
+
 func place(coord, _immediate=null):
 	## Place the vibe at the specific coordinate without animations.
 	## No tests are done to see if `coord` is a suitable location.
@@ -57,7 +60,7 @@ func activate():
 	## The Vibe just got noticed, so make that obvious
 	if caption.is_empty():
 		return  # turns out this vibe is really subtle...
-	Tender.hud.add_message("You notice %s" % caption)
+	Tender.hud.add_message("You notice %s" % get_short_desc())
 	
 func is_unexposed(index=null):
 	## Return if this vibe is where the hero should could be aware of them

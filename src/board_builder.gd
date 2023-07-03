@@ -265,7 +265,16 @@ func gen_maze(rect_, biases=null):
 	## Fill rect with a maze.
 	var mazer = Mazes.GrowingTree.new(self, biases, rect_, false)
 	mazer.fill()
-	
+
+func add_door(coord, open=true, key_tag=null):
+	## Change the tile at coord into a door
+	## key_tag: if supplied, the door is locked with that key
+	var terrain = ["door-closed", "door-open"][int(open)]
+	board.paint_cell(coord, terrain)
+	if key_tag:
+		assert(not open, "Can only lock closed doors")		
+		board.lock(coord, key_tag)
+
 func add_stairs(stairs=["stairs-up", "stairs-down"]):
 	## place stairs as far appart as possible
 	# TODO: stairs should always be in a room when we have rooms

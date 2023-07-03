@@ -153,8 +153,9 @@ UX:
 - [x] closable doors
 - [x] textual tags to categorize items and monsters
 - [x] use tags to identify NPC gifts
-- [ ] locked doors
+- [x] locked doors
 - [x] vibe nodes
+- [ ] second quest
 
 Items:
 - [ ] unique items are per-game unique, not only per-dungeon unique
@@ -198,3 +199,4 @@ UX:
 - [ ] Allow mixing rooms and mazes in level generation
 - [ ] Strategy.refresh() updates the internal index
 - [ ] phantruch is destroyed if the vital assembly is broken or stolen
+- [ ] startled strategy: flee when first contact is from afar, attack when from nearby

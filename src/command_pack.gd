@@ -122,8 +122,9 @@ class Inspect extends Command:
 		if Tender.hero.perceives(coord):
 			var vibes = index.vibes_at(coord)
 			for vibe in vibes:
-				if vibe.caption:
-					messages.append("There is %s %s" % [vibe.caption, here_str])
+				var desc = vibe.get_short_desc()
+				if desc:
+					messages.append("There is %s %s" % [desc, here_str])
 		var item = index.top_item_at(coord)
 		if item != null:
 			messages.append("There is a %s %s" % [item.get_short_desc(), here_str])
@@ -214,8 +215,8 @@ class OpenDoor extends DoorHandler:
 		if not super(coord):
 			return false
 		var board = Tender.hero.get_board()
-		var cell_rec = board.get_cell_rec(coord, "locked")
-		if cell_rec: 
+		if board.is_locked(coord): 
+			var cell_rec = board.get_cell_rec(coord, "locked")
 			var keys = Tender.hero.get_items([cell_rec.key])
 			if not keys.is_empty():
 				key = Rand.choice(keys)
@@ -224,13 +225,10 @@ class OpenDoor extends DoorHandler:
 		return true
 
 	func run(coord:Vector2i) -> bool:
-		super(coord)
 		var board = Tender.hero.get_board() as RevBoard
-		var cell_rec = board.get_cell_rec(coord, "locked")
-		if cell_rec != null:
-			board.clear_cell_rec(coord, "locked")
-			key.reparent(key.get_node("/root"))
-			key.queue_free()	
+		if board.is_locked(coord):
+			board.unlock(coord, key)
+		super(coord)
 		return true
 		
 func _ready():

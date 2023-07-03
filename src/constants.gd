@@ -48,7 +48,7 @@ enum SkillLevel {
 	INITIATE, 
 	PROFICIENT, 
 	EXPERT, 
-	MYTHICAL,  # beyon the realm of mortals
+	MYTHICAL,  # beyond the realm of mortals
 }
 
 const CORE_STATS := ["agility", "strength", "intelligence", "perception", "mana_burn_rate"] 
