@@ -160,12 +160,8 @@ UX:
 Items:
 - [ ] unique items are per-game unique, not only per-dungeon unique
 - [ ] item to increase latent healing
-- [ ] potion of absinthe
-- [ ] "magical" tag replaces the magical flag
 
 Combat:
-- [ ] TribalTerritorial uses perception rather than dist()
-- [ ] Tracking is triggered by perception
 - [x] silvered weapons
 - [x] first stab at magic: summoning spell
 
@@ -173,6 +169,16 @@ UX:
 - [x] something more reliable than timing to synchronize fading anims
 - [ ] buttons and in-dialogues choices are bigger
 - [ ] tap-away dismisses long-tap options
+
+## V0.10
+Items:
+- [ ] potion of absinthe
+- [ ] "magical" tag replaces the magical flag
+
+Combat:
+- [ ] TribalTerritorial uses perception rather than dist()
+- [ ] Tracking is triggered by perception
+
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]

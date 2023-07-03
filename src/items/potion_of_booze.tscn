@@ -8,6 +8,7 @@ char = "🍾"
 caption = "potion of booze"
 consumable = true
 spawn_cost = 3.0
+tags = Array[String](["booze"])
 
 [node name="Effect" type="Node" parent="." index="1"]
 script = ExtResource("2_3svxc")

@@ -155,3 +155,16 @@ func speaker_give_item():
 	var items = speaker.get_items(["gift"])
 	var item = Rand.choice(items)
 	speaker.give_item(item, Tender.hero)
+
+func hero_has_item(include_tags=null, extrude_tags=null):
+	return not Tender.hero.get_items(include_tags, extrude_tags).is_empty()
+
+func hero_give_item(include_tags=null, extrude_tags=null):
+	## pass an item from the hero to the speaker
+	var items = Tender.hero.get_items(include_tags, extrude_tags)
+	var item = Rand.choice(items)
+	Tender.hero.give_item(item, speaker)
+
+func show_message(message):
+	Tender.hero.add_message(message)
+

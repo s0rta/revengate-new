@@ -8,8 +8,45 @@ Bar Patron: They say you can still hear them wail inside the wells of the Saint 
 Bar Patron: I think this story is a lot of rubbish. The ghosts over there 've got to be Roman for sure.
 => END
 
+~ bloody_mary
+Bar Patron: Have your heard about this latest fad, Bloody Mary?
+
+Bar Patron: Teens these days believe they can summon ghosts with candles and a mirror while reading cheesy poetry.
+
+Bar Patron: I think this story is a lot of rubbish. The ghosts are repulsed by silver, so why would they appear in a mirror of all places!?
+do checkpoint("vampire_of_nantes")
+=> END
+
+~ vampire_of_nantes
+Bar Patron: My grand pop uses to tell us the story of the Vampire of Nantes.
+
+Bar Patron: Back when he was a lad, maybe around 430AP, they found over a dozen dead travellers in the woods around Nantes. That happend over the course of two or three years.
+
+Bar Patron: The bodies were always white as undyed silk, very stiff, and hardly decomposed. Completely drained of their blood, that's what Grand Pop said. He even stumpled upon one himself while going fishing! At least that's what he said...
+
+Bar Patron: I think this story is a lot of rubbish. Vampires can't cross open water, so why would one hang around a city full of rivers like Nantes?
+=> END
+
 ~ privacy
 Bar Patron: You can bring me another Cognac if you can stomach the outrageous price they sell the stuff for these days.
 
 Bar Patron: Otherwise, I will mind my own business and I would appreciate if you did the same.
+=> END
+
+~ party_magic
+Bar Patron: If you ask a priest, he will tell you that magic dissapeard during the great plague.
+
+if not hero_has_item(["booze"])
+	Bar Patron: They think they know everything.
+	do checkpoint("privacy")
+	=> END
+
+Bar Patron: I'm not sure why they say that when it's obviously not true. I even know a few tricks myself. I'll show you if you bring me another drink.
+- Sure! 
+	do hero_give_item(["booze"])
+	do show_message("You notice the ashtray floating a few centimeters above the table.")
+	Bar Patron: Pretty cool, right?
+- Err, no. Look's like you've had enough already.
+	Bar Patron: Fine!
+do checkpoint("privacy")
 => END

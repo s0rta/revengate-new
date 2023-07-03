@@ -862,12 +862,20 @@ func drop_item(item):
 	var coord = builder.place(item, false, get_cell_coord(), false)
 	emit_signal("dropped_item", coord)
 
-func give_item(item, actor:Actor):
+func give_item(item, actor=null):
 	## Give `item` to `actor`
+	## If actor is not provided, the item is simply destroyed.
 	assert(item.get_parent() == self, "must possess an item before giving it away")
-	item.reparent(actor)
+	var owner = actor
+	if not owner:
+		owner = $root
+	item.reparent(owner)
 	item.tags.erase("gift")  # NPCs keep track of giftable inventory with the "gift" tag
-	add_message("%s gave a %s to %s" % [self.get_caption(), item.get_short_desc(), actor.get_caption()])
+	if actor:
+		add_message("%s gave a %s to %s" % [self.get_caption(), item.get_short_desc(), actor.get_caption()])
+	else:
+		add_message("%s gave a %s" % [self.get_caption(), item.get_short_desc()])
+		item.queue_free()
 
 func pick_item(item):
 	# TODO: dist() == 1 would also work nicely
