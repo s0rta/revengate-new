@@ -30,12 +30,19 @@ func has_reqs():
 		return false
 	return not me.get_items(["vital-assemblage"], ["broken"]).is_empty()
 
+func get_creature_path():
+	# Expert casters can summon the whole cast, otherwise, only the first creature is available.
+	if me.get_skill("channeling") < Consts.SkillLevel.EXPERT:
+		return PHATRUCH_SCENES[0]
+	else:
+		return Rand.choice(PHATRUCH_SCENES)
+
 func cast():
 	var board = me.get_board()
 	var index = board.make_index()
 	var builder = BoardBuilder.new(board)
 	var here = me.get_cell_coord()
-	var creature = load(Rand.choice(PHATRUCH_SCENES)).instantiate()
+	var creature = load(get_creature_path()).instantiate()
 	var there = builder.place(creature, false, here, true, null, index)
 	var devices = me.get_items(["vital-assemblage"], ["broken"])
 	me.give_item(Rand.choice(devices), creature)

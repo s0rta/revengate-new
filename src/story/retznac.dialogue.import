@@ -1,0 +1,14 @@
+[remap]
+
+importer="dialogue_manager_compiler_6"
+type="Resource"
+uid="uid://dvj15xn2mslts"
+path="res://.godot/imported/retznac.dialogue-b80726c02015dbe2ffe9914f28a08dd7.tres"
+
+[deps]
+
+source_file="res://src/story/retznac.dialogue"
+dest_files=["res://.godot/imported/retznac.dialogue-b80726c02015dbe2ffe9914f28a08dd7.tres"]
+
+[params]
+

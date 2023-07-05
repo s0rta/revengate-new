@@ -1,0 +1,89 @@
+[gd_scene load_steps=19 format=3 uid="uid://dab6wiatrc0m6"]
+
+[ext_resource type="Script" path="res://src/deck_builder.gd" id="1_phj4j"]
+[ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_3bv6l"]
+[ext_resource type="PackedScene" uid="uid://d4f1ul2rt43ys" path="res://src/monsters/labras.tscn" id="3_ia73w"]
+[ext_resource type="PackedScene" uid="uid://b26vqfk7j6un7" path="res://src/monsters/desert_centipede.tscn" id="4_p0gyr"]
+[ext_resource type="PackedScene" uid="uid://cx7utj7hd3ne" path="res://src/monsters/kobold.tscn" id="5_b1bqf"]
+[ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="6_auslx"]
+[ext_resource type="Script" path="res://src/card_rule.gd" id="7_1er0k"]
+[ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="8_vett6"]
+[ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="10_w0tqq"]
+[ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="13_eq3ao"]
+[ext_resource type="PackedScene" uid="uid://d01nbq4dt1cs5" path="res://src/weapons/silver_saber.tscn" id="13_sfc7u"]
+[ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="14_cxrka"]
+[ext_resource type="PackedScene" uid="uid://c7fgdridawfb3" path="res://src/items/magic_capsule_of_regen.tscn" id="16_ap6xo"]
+[ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="19_n7j36"]
+[ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="23_6bt64"]
+[ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="24_3pef4"]
+[ext_resource type="PackedScene" uid="uid://cjoutyju3dhre" path="res://src/monsters/gleugt.tscn" id="25_8ffwd"]
+[ext_resource type="PackedScene" uid="uid://cmshyslfrv0du" path="res://src/vibes/hissing.tscn" id="27_8pr1w"]
+
+[node name="DeckBuilder" type="Node"]
+script = ExtResource("1_phj4j")
+
+[node name="SewerOtter" parent="." instance=ExtResource("2_3bv6l")]
+
+[node name="Labras" parent="." instance=ExtResource("3_ia73w")]
+
+[node name="DesertCentipede" parent="." instance=ExtResource("4_p0gyr")]
+
+[node name="Kobold" parent="." instance=ExtResource("5_b1bqf")]
+
+[node name="SulantTiger" parent="." instance=ExtResource("6_auslx")]
+
+[node name="Max3PerFloor" type="Node" parent="."]
+script = ExtResource("7_1er0k")
+max_board_occ = 3
+min_board_occ = 1
+
+[node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_vett6")]
+
+[node name="Ghost" parent="Max3PerFloor" instance=ExtResource("10_w0tqq")]
+
+[node name="Max2PerDungeon" type="Node" parent="."]
+script = ExtResource("7_1er0k")
+max_dungeon_occ = 2
+
+[node name="Gleugt" parent="Max2PerDungeon" instance=ExtResource("25_8ffwd")]
+
+[node name="Rare" type="Node" parent="."]
+script = ExtResource("7_1er0k")
+min_depth = 3
+max_board_occ = 1
+max_dungeon_occ = 2
+
+[node name="Rapier" parent="Rare" instance=ExtResource("19_n7j36")]
+
+[node name="Dynamite" parent="Rare" instance=ExtResource("23_6bt64")]
+
+[node name="SilverSaber" parent="Rare" instance=ExtResource("13_sfc7u")]
+
+[node name="RareAndDeep" type="Node" parent="."]
+script = ExtResource("7_1er0k")
+min_depth = 7
+max_dungeon_occ = 2
+
+[node name="Pacherr" parent="RareAndDeep" instance=ExtResource("24_3pef4")]
+
+[node name="Healing" type="Node" parent="."]
+script = ExtResource("7_1er0k")
+min_depth = 4
+max_board_occ = 1
+max_dungeon_occ = 3
+
+[node name="PotionOfHealing" parent="Healing" instance=ExtResource("13_eq3ao")]
+
+[node name="PotionOfRegen" parent="Healing" instance=ExtResource("14_cxrka")]
+
+[node name="CapsuleOfRegen" parent="Healing" instance=ExtResource("16_ap6xo")]
+caption = "magic capsule of regen "
+spawn_cost = 4.0
+
+[node name="Hissing" parent="." instance=ExtResource("27_8pr1w")]
+
+[connection signal="visibility_changed" from="Rare/Rapier" to="Rare/Rapier" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Rare/Dynamite" to="Rare/Dynamite" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Healing/PotionOfHealing" to="Healing/PotionOfHealing" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Healing/PotionOfRegen" to="Healing/PotionOfRegen" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Healing/CapsuleOfRegen" to="Healing/CapsuleOfRegen" method="_on_visibility_changed" flags=18]

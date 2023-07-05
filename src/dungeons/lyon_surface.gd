@@ -17,12 +17,15 @@
 
 class_name LyonSurface extends Dungeon
 
-const STARTING_CONN_TARGETS = {Vector2i(5, 3): {"dungeon": "Traboule2"}}
+const STARTING_CONN_TARGETS = {
+		Vector2i(5, 3): {"dungeon": "Traboule1"}, 
+		Vector2i(21, 7): {"dungeon": "Traboule2"}
+	}
 
 func dungeon_for_loc(world_loc:Vector3i):
 	## Return the name of the dungeon where `world_loc` belongs or null is it's part of the current dungeon
 	if world_loc.z < 0:
-		return "Traboule1"
+		return "Traboule2"
 	return null
 
 func make_builder(board, rect):
@@ -38,7 +41,8 @@ func finalize_static_board(board:RevBoard):
 	# FIXME: a few of those can go with the parent class
 	board.scan_terrain()
 	board.world_loc = start_world_loc
-	print("Board world loc: %s" % board.world_loc_str(board.world_loc))
+	board.lock(V.i(20, 8), "key-red")
+	
 	for coord in board.get_connectors():
 		if not board.get_connection(coord):  # we only add data to the unconnected coords
 			var rec = board.get_cell_rec(coord, "conn_target")

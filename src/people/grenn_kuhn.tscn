@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://ddryv4det5wth"]
+
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_w52dt"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_u2ahk"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="3_y4pf0"]
+[ext_resource type="PackedScene" uid="uid://d8ovanvojd5g" path="res://src/weapons/knife.tscn" id="4_o3sek"]
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="5_u78k4"]
+
+[node name="Grenn" instance=ExtResource("1_w52dt")]
+char = "@"
+caption = "Grenn Kuhn the book trader"
+color = Color(0.921569, 0.45098, 0.45098, 1)
+conversation_file = "res://src/story/card_thieves.dialogue"
+spawn_cost = 1.0
+health = 30
+strength = 40
+agility = 44
+intelligence = 60
+faction = 3
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.45098, 0.45098, 1)
+text = "@"
+
+[node name="Tracking" type="Node" parent="." index="7"]
+script = ExtResource("2_u2ahk")
+priority = 0.5
+
+[node name="SelfDefense" type="Node" parent="." index="8"]
+script = ExtResource("3_y4pf0")
+priority = 0.9
+
+[node name="Knife" parent="." index="9" instance=ExtResource("4_o3sek")]
+is_equipped = true
+
+[node name="Item" parent="." index="10" instance=ExtResource("5_u78k4")]
+char = "📒"
+caption = "coded notepad"

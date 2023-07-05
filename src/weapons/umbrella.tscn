@@ -9,7 +9,6 @@ script = ExtResource("1_nhkai")
 damage = 2
 damage_family = 1
 is_equipped = false
-skill = ""
 char = "🌂"
 caption = "umbrella"
 

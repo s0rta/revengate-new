@@ -7,6 +7,13 @@ do speaker_give_item()
 Simon: You are welcome back anytime, but please remember: we like to keep a low profile and we'd prefer if you didn't tell anyone about this place. 
 => END
 
+~ intro_2
+Simon: Welcome back to Café Caché!
+Simon: My good man, you look incredibly weary. Here, take this and hopefully it will bring back your contagious enthusiasm.
+do checkpoint("about_lyon")
+do speaker_give_item()
+=> END
+
 ~ about_lyon
 Simon: Hills are very steep in Lyon, which is why most of our streets run parallel to the rivers. The best way to get around on foot is to know which door hides a traboule. 
 

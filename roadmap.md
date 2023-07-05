@@ -155,10 +155,10 @@ UX:
 - [x] use tags to identify NPC gifts
 - [x] locked doors
 - [x] vibe nodes
-- [ ] second quest
+- [x] second quest
 
 Items:
-- [ ] unique items are per-game unique, not only per-dungeon unique
+- [x] unique items are per-game unique, not only per-dungeon unique
 - [ ] item to increase latent healing
 
 Combat:
@@ -206,3 +206,4 @@ Combat:
 - [ ] Strategy.refresh() updates the internal index
 - [ ] phantruch is destroyed if the vital assembly is broken or stolen
 - [ ] startled strategy: flee when first contact is from afar, attack when from nearby
+- [ ] upgrade DialoguePane to the latest Dialogue Manager API

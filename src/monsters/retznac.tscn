@@ -1,0 +1,54 @@
+[gd_scene load_steps=8 format=3 uid="uid://cbpo1nvheopyj"]
+
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_ymka0"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="4_s3hbp"]
+[ext_resource type="Script" path="res://src/combat/core_skills.gd" id="5_vgonj"]
+[ext_resource type="Script" path="res://src/strategies/summoning.gd" id="6_20m4k"]
+[ext_resource type="PackedScene" uid="uid://cuiqioehqyffe" path="res://src/items/vital_assemblage.tscn" id="7_b5c8f"]
+[ext_resource type="PackedScene" uid="uid://6ml8upew405" path="res://src/weapons/saber.tscn" id="7_tvu27"]
+[ext_resource type="Script" path="res://src/spells/summon_phantruch.gd" id="8_tig2l"]
+
+[node name="Retznac" instance=ExtResource("1_ymka0")]
+char = "𝓡"
+caption = "Retznac the vampire"
+color = Color(0.921569, 0.258824, 0.184314, 1)
+conversation_file = "res://src/story/retznac.dialogue"
+spawn_cost = 20.0
+health = 60
+healing_prob = 0.2
+intelligence = 70
+perception = 65
+mana = 60
+mana_recovery_prob = 0.2
+resistance = 7
+tags = Array[String](["undead", "quest-boss-retznac"])
+faction = 2
+description = "A well dressed man with a pale skin and a calm demeanor."
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.258824, 0.184314, 1)
+text = "𝓡"
+
+[node name="Tracking" type="Node" parent="." index="7"]
+script = ExtResource("4_s3hbp")
+priority = 0.1
+
+[node name="SkillLevels" type="Node" parent="." index="8"]
+script = ExtResource("5_vgonj")
+fencing = 3
+channeling = 3
+device_of_focusing = 1
+
+[node name="Summoning" type="Node" parent="." index="9"]
+script = ExtResource("6_20m4k")
+priority = 0.5
+
+[node name="VitalAssemblage" parent="." index="10" instance=ExtResource("7_b5c8f")]
+
+[node name="VitalAssemblage2" parent="." index="11" instance=ExtResource("7_b5c8f")]
+
+[node name="SummonPhantruch" type="Node" parent="." index="12"]
+script = ExtResource("8_tig2l")
+
+[node name="Saber" parent="." index="13" instance=ExtResource("7_tvu27")]
+is_equipped = true

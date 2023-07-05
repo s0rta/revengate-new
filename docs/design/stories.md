@@ -1,44 +1,11 @@
 Revengate Stories
 =================
 
-Long narrations and short stories set in the Revengate universe. 
+Long narrations and short stories set in the Revengate universe. See also `src/story/*.txt`.
 
 
 ## The Audition
-The blade was moving dangerously fast around the young man's Adam's apple. He was fighting hard to suppress his urge to swallow.
-
-*Psssscht!*
-
-The loud hissing came every minute or so but it didn't seem to have any effect on the swift strokes of the barber's blade.
-
-"How's the job hunting going?" the barber asked.
-
-"Not good, Michel," the young man on the chair replied. "No one is hiring architects these days. It's like they aren't making buildings anymore. All they are looking for are sailors and engineers, probably to build more of those dragons like they have next door."
-
-"That fierce beast is a rotopress," Michel replied. "Instead of going up and down, it goes round and round. It prints pages by rolling the types over them. It's quite the sight."
-
-Michel worked in silence for a several minutes, then he switched to a smaller blade for the delicate short strokes under the young man's nose.
-
-"Have you tried growing a mustache?" Michel asked. "I can shape it for you and it would make you look more experienced." Michel stepped back to consider his work. "But it might also give thieves the impression that you've been successful in life. Did you say you can fight?"
-
-"Don't worry about that, Michel. My father saw that I learned how to defend myself." There was not point in hiding the truth. "He was a very assertive man and more often than not, it's him that I had to wrestle down." 
-
-Michel the barber removed the remnants of shaving soap with a wet towel, then rubbed some fragrant lotion between his hands. The young man braced for the sting, but he sank back down in the chair when a blanket of comfort enveloped his face.
-
-"This smells good!" The young man exclaimed. "Quite exotic!"
-
-"This is sandal wood. Traders from Morocco have it at the market from time to time, but the only reliable supply is with the smugglers" Michel passed the young man a large mirror, almost 10cm across. "You'd probably get lost down there. They say those dark passages are as twisty as Pinot vines."
-
-The barber was obviously referring to the network of corridors that the silk workers had built under Lyon over the years.
-
-"The traboules?" the young man replied. "I've seen many plans in school. I don't think they are the maze that people claim they are. They mostly run East-West and there is a method to their madness. Structural walls for example are very obvious. Those never twist." 
-
-A faint smile slowly grew under the barber's perfectly curved mustache. 
-
-"Today's shave is on the house, young man, to help you settle in your new life. Now please do me a favour and exit from the back. You'll find the door on the other side of that broom closet. If you bump into my friend Nadège on the way out, tell her that I sent you and that you are looking for work."
-
-Puzzled, the young man followed the barber's directions. The closet door lead to a long hallway, which in turn lead to an orate green door. Beyond the door was a café with less than a dozen guests. No one seemed to pay attention to the young man when he sat at the bar.
-
+()[../../src/stories/the_audition.txt]
 
 ## The Initiation
 
@@ -250,30 +217,7 @@ They left in silence, slowly letting the night envelope Captain Filo.
 
 
 # The Sound of Satin
-
-Ivry was sipping a terrible beer right outside a café near the city walls.
-
-*clack clack... clack clack*
-
-The heartbeat of looms was echoing through the narrow streets. Despite the horrible drink, Ivry was not able to repress a smile. That sound was music to his ears, it was music to pretty much everyone's ears in Lyon, a song about the recovering economy and the weavers all busy working.
-
-*clack clack... clack clack*
-
-Of the thousand looms between here and the ships waiting for their cargo of fine silk, Ivry could tell that one sounded too hollow. Ivry, a carpenter and loom mechanic, smiled some more – the owner of that hollow loom would hire him later this week.
-
-It was dinner time for regular folks like Ivry, but the canuts – how master weavers were called around Lyon – were still working and they would keep at it as long as the light was good.
-
-They'd be pouring in the cafés after sundown. Oh yeah, they would be all here and unlike Ivry, many of them would be ordering wine. Lucky bastards! Ivry was not mad, he was just nostalgic of the old times when he would be sipping a light Chardonnay on a hot day like today.
-
-*clack clack... clack clack*
-
-A bloke caught Ivry's attention. Who the hell bought books in a café? Pornography? Ivry had seen those stories and he couldn't see much of the point. Besides, the buyer was dressed well enough that he should have been able to afford a visit to one of Lyon's many brothels. Dressed like that, he could have been a trader, but a trader would never show up in this part of town with a cravate made of... wool? Ivry squinted. Merino wool. It was very well made, but it was still a faux pas.
-
-*clack clack... clack clack*
-
-After years of living here, Ivry could close his eyes and see the cogs moving. He could see where the machine was straining and where a small adjustment and a little lubrication would lead to greater efficiency, efficiency in Ivry's hydration routine.
-
-Ivry slowly pushed his glass to allow his beer to warm up in full sun, then he went for a cigarette closer to where he could hear what the bloke was bragging about.
+()[../../src/stories/sound_of_satin.txt]
 
 
 # The Sands of Time

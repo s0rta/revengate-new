@@ -1,0 +1,114 @@
+[gd_scene load_steps=23 format=3 uid="uid://bvm0q1k13gmym"]
+
+[ext_resource type="Script" path="res://src/deck_builder.gd" id="1_oonn7"]
+[ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_v4koq"]
+[ext_resource type="PackedScene" uid="uid://d4f1ul2rt43ys" path="res://src/monsters/labras.tscn" id="3_8yfcp"]
+[ext_resource type="PackedScene" uid="uid://b26vqfk7j6un7" path="res://src/monsters/desert_centipede.tscn" id="4_de7ji"]
+[ext_resource type="PackedScene" uid="uid://cx7utj7hd3ne" path="res://src/monsters/kobold.tscn" id="5_u3117"]
+[ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="6_urs5r"]
+[ext_resource type="Script" path="res://src/card_rule.gd" id="7_18mi5"]
+[ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="8_mpj13"]
+[ext_resource type="PackedScene" uid="uid://c3uuk6yfc2thp" path="res://src/monsters/sahwakoon.tscn" id="9_ucbey"]
+[ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="10_smtmw"]
+[ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="13_3wmd5"]
+[ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="14_8bfbv"]
+[ext_resource type="PackedScene" uid="uid://c7fgdridawfb3" path="res://src/items/magic_capsule_of_regen.tscn" id="16_r5d4u"]
+[ext_resource type="PackedScene" uid="uid://dj5x5c687ddyj" path="res://src/items/amulet_of_strength.tscn" id="17_6i3li"]
+[ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="18_w8s5s"]
+[ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="19_u2vc1"]
+[ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="20_r43mm"]
+[ext_resource type="PackedScene" uid="uid://6ml8upew405" path="res://src/weapons/saber.tscn" id="21_hyraw"]
+[ext_resource type="PackedScene" path="res://src/weapons/sword.tscn" id="22_bc5m8"]
+[ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="23_hrfvj"]
+[ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="24_8ja44"]
+[ext_resource type="PackedScene" uid="uid://cmshyslfrv0du" path="res://src/vibes/hissing.tscn" id="27_0wnww"]
+
+[node name="DeckBuilder" type="Node"]
+script = ExtResource("1_oonn7")
+
+[node name="SewerOtter" parent="." instance=ExtResource("2_v4koq")]
+
+[node name="Labras" parent="." instance=ExtResource("3_8yfcp")]
+
+[node name="DesertCentipede" parent="." instance=ExtResource("4_de7ji")]
+
+[node name="Kobold" parent="." instance=ExtResource("5_u3117")]
+
+[node name="SulantTiger" parent="." instance=ExtResource("6_urs5r")]
+
+[node name="Max3PerFloor" type="Node" parent="."]
+script = ExtResource("7_18mi5")
+max_board_occ = 3
+min_board_occ = 1
+
+[node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_mpj13")]
+
+[node name="Sahwakoon" parent="Max3PerFloor" instance=ExtResource("9_ucbey")]
+
+[node name="Max3PerDungeon" type="Node" parent="."]
+script = ExtResource("7_18mi5")
+max_dungeon_occ = 3
+
+[node name="Ghost" parent="Max3PerDungeon" instance=ExtResource("10_smtmw")]
+
+[node name="Unique" type="Node" parent="."]
+script = ExtResource("7_18mi5")
+max_depth = 14
+max_dungeon_occ = 1
+min_dungeon_occ = 1
+
+[node name="CapsuleOfRegen" parent="Unique" instance=ExtResource("16_r5d4u")]
+caption = "magic capsule of regen "
+spawn_cost = 4.0
+
+[node name="AmuletOfStrength" parent="Unique" instance=ExtResource("17_6i3li")]
+caption = "amulet of strength"
+
+[node name="Rare" type="Node" parent="."]
+script = ExtResource("7_18mi5")
+min_depth = 3
+max_board_occ = 1
+max_dungeon_occ = 2
+
+[node name="Hammer" parent="Rare" instance=ExtResource("18_w8s5s")]
+
+[node name="Rapier" parent="Rare" instance=ExtResource("19_u2vc1")]
+
+[node name="Razor" parent="Rare" instance=ExtResource("20_r43mm")]
+
+[node name="Saber" parent="Rare" instance=ExtResource("21_hyraw")]
+
+[node name="Sword" parent="Rare" instance=ExtResource("22_bc5m8")]
+spawn_cost = 5.0
+
+[node name="Dynamite" parent="Rare" instance=ExtResource("23_hrfvj")]
+
+[node name="RareAndDeep" type="Node" parent="."]
+script = ExtResource("7_18mi5")
+min_depth = 7
+max_dungeon_occ = 2
+
+[node name="Pacherr" parent="RareAndDeep" instance=ExtResource("24_8ja44")]
+
+[node name="Healing" type="Node" parent="."]
+script = ExtResource("7_18mi5")
+min_depth = 4
+max_board_occ = 1
+max_dungeon_occ = 3
+
+[node name="PotionOfHealing" parent="Healing" instance=ExtResource("13_3wmd5")]
+
+[node name="PotionOfRegen" parent="Healing" instance=ExtResource("14_8bfbv")]
+
+[node name="Hissing" parent="." instance=ExtResource("27_0wnww")]
+
+[connection signal="visibility_changed" from="Unique/CapsuleOfRegen" to="Unique/CapsuleOfRegen" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Unique/AmuletOfStrength" to="Unique/AmuletOfStrength" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Rare/Hammer" to="Rare/Hammer" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Rare/Rapier" to="Rare/Rapier" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Rare/Razor" to="Rare/Razor" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Rare/Saber" to="Rare/Saber" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Rare/Sword" to="Rare/Sword" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Rare/Dynamite" to="Rare/Dynamite" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Healing/PotionOfHealing" to="Healing/PotionOfHealing" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Healing/PotionOfRegen" to="Healing/PotionOfRegen" method="_on_visibility_changed" flags=18]

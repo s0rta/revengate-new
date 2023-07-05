@@ -7,6 +7,7 @@ script = ExtResource("1_0qsqn")
 char = "𝌕"
 caption = "stack of loom cards"
 spawn_cost = 1.0
+tags = Array[String](["quest-item"])
 
 [node name="Label" type="Label" parent="."]
 anchors_preset = 8

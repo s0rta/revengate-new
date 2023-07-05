@@ -150,11 +150,25 @@ func speaker_has_gifts():
 		return false
 	return len(speaker.get_items(["gift"])) > 0
 
-func speaker_give_item():
-	## pass an item from the speaker to the hero
-	var items = speaker.get_items(["gift"])
+func speaker_give_item(extra_tags=null):
+	## Pass an item from the speaker to the hero
+	## extra_tags: if supplied, the given item must have all those tags
+	var tags = ["gift"]
+	if extra_tags:
+		tags += extra_tags
+	var items = speaker.get_items(tags)
 	var item = Rand.choice(items)
 	speaker.give_item(item, Tender.hero)
+
+func speaker_give_items(extra_tags=null):
+	## Pass all gifts from the speaker to the hero
+	## extra_tags: if supplied, the given item must have all those tags
+	var tags = ["gift"]
+	if extra_tags:
+		tags += extra_tags
+	var items = speaker.get_items(tags)
+	for item in items:
+		speaker.give_item(item, Tender.hero)
 
 func hero_has_item(include_tags=null, extrude_tags=null):
 	return not Tender.hero.get_items(include_tags, extrude_tags).is_empty()

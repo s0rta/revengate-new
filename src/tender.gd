@@ -33,6 +33,10 @@ var nb_locs = null
 var hero_stats = null
 var hero_modifiers = null
 
+# inter-chapter long narrations
+var story_title = null
+var story_path = null
+
 func reset(hero_=null, hud_=null, viewport_=null):
 	hero = hero_
 	hud = hud_
@@ -42,3 +46,11 @@ func reset(hero_=null, hud_=null, viewport_=null):
 	nb_locs = null	
 	hero_stats = null
 	hero_modifiers = null
+	story_title = null
+	story_path = null
+
+	
+func pre_game(story_title_, story_path_):
+	reset()
+	story_title = story_title_
+	story_path = story_path_

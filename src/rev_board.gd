@@ -32,6 +32,7 @@ const INDEXED_TERRAINS = CONNECTOR_TERRAINS
 const FLOOR_TERRAINS = ["floor", "floor-rough", "floor-dirt"]
 
 signal new_message(message)
+signal actor_died(board, coord, tags)
 
 var terrain_names := {}  # name -> (terrain_set, terrain_id)
 
@@ -1335,8 +1336,9 @@ func _on_items_changed_at(coord):
 	else:
 		top.unshroud()
 
-func _on_actor_died(coord, actor):
+func _on_actor_died(coord, tags, actor):
 	deregister_actor(actor)
+	emit_signal("actor_died", self, coord, tags)
 	
 func add_message(actor, message):
 	if not actor.is_unexposed():

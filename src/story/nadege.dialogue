@@ -11,3 +11,23 @@ Nadège: Don't forget to equip it in the Inventory screen or you might take a be
 ~ about_mission
 Nadège: I don't know what's important about those loom cards. It's a good idea in our line of work to ask as few questions as possible.
 => END
+
+~ intro_2
+Nadège: Good job recovering those cards! There is something weird about them. 
+- Yeah, I noticed!
+	Hero: Up to card no. 87, it's a taffeta weave, then after that it's just a big mess of holes that don't mean anything.
+	Nadège: I had underestimated you! You know, if beating monsters up doesn't work out for you, you could always apprentice as a weaver.
+- Huh? What do you mean?
+	Nadège: Right here, the cards keep lifting all the edge threads. That means there would be nothing left to hold the weft threads. 
+Nadège: I will try to find out more about them before we give them back. In the meantime, I have another job for you. Someone has been discreetly acquiring rare books and we want you to find out what that is all about. They are staying a little South of here.
+Nadège: The traboule across the plaza will take you there. Here's the key. It's not very safe down there, so take this weapon too just in case.
+do checkpoint("about_lyon")
+do speaker_give_items()
+Nadège: Good luck!
+=> END
+
+~ about_lyon
+Nadège: I think it's great that we have so many hills around here. My farouvite baker is down South near the port and my farourite cheese monger is up North, just beyond the city walls.
+Nadège: No matter what order I visit them, I stay in excellent shape!
+Nadège: Where I live? That is none of your business!
+=> END

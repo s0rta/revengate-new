@@ -28,6 +28,8 @@ var board: RevBoard  # the active board
 var _seen_locs = {}  # world_locs that have been visited
 
 func _ready():
+	if Tender.story_path:
+		%StoryScreen.show_story(Tender.story_title, Tender.story_path)
 	Tender.reset(hero, hud, %Viewport)	
 	_discover_start_board()
 	hud.set_hero(hero)
@@ -55,12 +57,31 @@ func _activate_board(new_board):
 	
 	if not new_board.new_message.is_connected($HUD.add_message):
 		new_board.new_message.connect($HUD.add_message)
+	if not new_board.actor_died.is_connected($VictoryProbe.on_actor_died):
+		new_board.actor_died.connect($VictoryProbe.on_actor_died)
 	board = new_board
 	print("New active board, world loc is: %s" % new_board.world_loc_str(new_board.world_loc))
 	
 func get_board():
 	## Return the current active board
 	return board
+
+func destroy_items(items):
+	for item in items:
+		item.hide()
+		item.reparent($/root)
+		item.queue_free()
+		
+func supply_item(actor, item_path, extra_tags=[]):
+	## Supply actor with a new instance of an item. 
+	## Instantaneous: no messages nor animations.
+	## Return the item.
+	var item = load(item_path).instantiate()
+	item.hide()
+	for tag in extra_tags:
+		item.tags.append(tag)
+	actor.add_child(item)
+	return item
 
 func show_inventory_screen() -> bool:
 	## popup the inventory screen
@@ -95,10 +116,10 @@ func switch_board_at(coord):
 	$HUD.refresh_buttons_vis(null, new_pos)
 	emit_signal("board_changed", new_board)
 	
-func _on_hero_died(_coord):
+func _on_hero_died(_coord, _tags):
 	conclude_game(false)
 	
-func conclude_game(victory:=false):
+func conclude_game(game_over:=true, victory:=false):
 	## do a final bit of cleanup then show the Game Over screen
 	# compile some end-of-game stats
 	Tender.last_turn = $TurnQueue.turn
@@ -106,17 +127,22 @@ func conclude_game(victory:=false):
 	Tender.hero_stats = Tender.hero.get_base_stats()
 	Tender.hero_modifiers = Tender.hero.get_modifiers()
 	
-	$TurnQueue.shutdown()
+	if game_over:
+		$TurnQueue.shutdown()
+	else:
+		$TurnQueue.pause()
 	if hero.is_animating():
 		print("can't shutdown quite yet, hero animating...")
 		# nothing else to do: Actors free() themselves after they die
 		await hero.anims_done
 		print("hero done animating!")
-	var tree = get_tree() as SceneTree
 	if victory:
-		tree.change_scene_to_file("res://src/ui/victory_screen.tscn")
+		%VictoryScreen.popup(game_over)
+		if not game_over:
+			await %VictoryScreen.start_next_chapter
+			start_ch2()
 	else:
-		tree.change_scene_to_file("res://src/ui/game_over_screen.tscn")
+		get_tree().change_scene_to_file("res://src/ui/game_over_screen.tscn")
 
 func center_on_hero(_arg=null):
 	find_child("Viewport").center_on_coord(hero.get_cell_coord())
@@ -138,8 +164,35 @@ func show_context_menu_for(coord):
 	var acted = await %ContextMenuPopup.closed
 	return acted
 
+func start_ch2():
+	destroy_items(hero.get_items(["quest-item"]))
+	# TODO: Nadège gives key and dress sword
+	%Nadege.conversation_sect = "intro_2"
+	supply_item(%Nadege, "res://src/items/key.tscn", ["key-red", "gift"])
+	supply_item(%Nadege, "res://src/weapons/dress_sword.tscn", ["gift"])
+	
+	%BarPatron1.conversation_sect = "bloody_mary"
+	%BarPatron2.conversation_sect = "party_magic"
+
+	%BarTender.conversation_sect = "intro_2"
+	supply_item(%BarTender, "res://src/items/potion_of_booze.tscn", ["gift"])
+
+	%StoryScreen.show_story("The Sound of Satin", "res://src/story/sound_of_satin.txt")
+	hero.place(V.i(2, 2))
+	center_on_hero()
+	if $TurnQueue.is_paused():
+		$TurnQueue.resume()
+
 func test():
 	print("Testing: 1, 2... 1, 2!")
-
+	start_ch2()
+	
 func test2():
 	print("Testing: 2, 1... 2, 1!")
+
+	for actor in get_board().get_actors():
+		print("Mana burn rate for %s is %s" % [actor, actor.get_stat("mana_burn_rate")])
+		var costs = []
+		for i in 12:
+			costs.append(actor.mana_cost(i))
+		print("  mana costs: %s" % [costs])

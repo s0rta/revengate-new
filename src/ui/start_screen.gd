@@ -25,10 +25,10 @@ func _ready():
 	if not $Tabulator.getv("early-stage-disclaimer"):
 		$DisclaimerDia.popup_centered()
 		$Tabulator.setv("early-stage-disclaimer", true)
-	Tender.reset()
 
 func start_new_game():
-	get_tree().change_scene_to_file("res://src/ui/intro_screen.tscn")
+	Tender.pre_game("The Audition", "res://src/story/the_audition.txt")
+	get_tree().change_scene_to_file("res://src/main.tscn")
 	
 func _on_credits_button_pressed():
 	get_tree().change_scene_to_file("res://src/ui/credits_screen.tscn")

@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://cswkd7m5om1of"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_n8xls"]
+[ext_resource type="Script" path="res://src/weapons/weapon.gd" id="2_xsuqv"]
+[ext_resource type="AudioStream" uid="uid://d1ve3m18ud783" path="res://src/weapons/stick-hit-01.mp3" id="3_ceylp"]
+
+[node name="Broom" instance=ExtResource("1_n8xls")]
+script = ExtResource("2_xsuqv")
+damage = 2
+damage_family = 1
+is_equipped = false
+char = "𐇙"
+caption = "broom"
+
+[node name="Label" parent="." index="0"]
+offset_left = -14.0
+offset_right = 14.0
+text = "⚔"
+
+[node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
+stream = ExtResource("3_ceylp")
+volume_db = -12.0

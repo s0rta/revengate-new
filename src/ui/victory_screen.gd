@@ -15,8 +15,25 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends "res://src/ui/secondary_info_screen.gd"
+class_name VictoryScreen extends Control
 
-func _ready():
-	%GameSummaryLabel.text = Utils.make_game_summary()
+signal start_next_chapter
+
+func popup(game_over:bool):
+	%EndingLabel.visible = game_over
+	%QuitButton.visible = game_over
+	%GameOverLabel.visible = game_over
+	%VictoryLabel.visible = not game_over
+	%NextButton.visible = not game_over
+	%NextChapterLabel.visible = not game_over
+	if Tender.hero_stats:
+		%GameSummaryLabel.text = Utils.make_game_summary()
+	$VictorySound.play()
+	show()
 	
+func show_main_screen():
+	get_tree().change_scene_to_file("res://src/ui/start_screen.tscn")
+
+func _on_next_button_button_up():
+	emit_signal("start_next_chapter")
+	hide()

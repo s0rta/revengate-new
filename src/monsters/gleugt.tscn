@@ -52,6 +52,7 @@ device_of_focusing = 1
 
 [node name="Summoning" type="Node" parent="." index="10"]
 script = ExtResource("6_8h78t")
+probability = 0.04
 priority = 0.5
 
 [node name="VitalAssemblage" parent="." index="11" instance=ExtResource("7_0htct")]

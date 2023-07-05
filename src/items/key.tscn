@@ -4,7 +4,7 @@
 
 [node name="Key" type="Node2D"]
 script = ExtResource("1_h874h")
-char = "🔑"
+char = "🗝"
 caption = "key"
 
 [node name="Label" type="Label" parent="."]

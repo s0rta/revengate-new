@@ -15,26 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-## Monitor the progress of the game against quest objectives
-class_name VictoryProbe extends Node
+## Show a long narration in a modal way.
+class_name StoryScreen extends Control
 
-signal victory(game_over)
-var hero: Actor
+func show_story(title, body_path):
+	%TitleLabel.text = title
+	var body = FileAccess.open(body_path, FileAccess.READ).get_as_text()
+	%StoryLabel.text = body
+	show()
 
-func has_quest_item(actor:Actor):
-	for item in actor.get_items(["quest-item"]):
-		if item.char == "𝌕":
-			return true
-	return false
-	
-func reached_top_level(current_board:RevBoard):
-	return current_board.depth == 0
-
-func assay_victory(current_board:RevBoard):
-	if reached_top_level(current_board) and has_quest_item(hero):
-		emit_signal("victory", false)
-
-func on_actor_died(board:RevBoard, coord:Vector2i, tags:Array[String]):
-	print("an actor died! Their tags were: %s" % [tags])
-	if "quest-boss-retznac" in tags:
-		emit_signal("victory", true)
+func _on_ok_button_button_up():
+	hide()

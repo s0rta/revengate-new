@@ -83,9 +83,12 @@ const FADE_DURATION := .15
 const FADE_MODULATE := Color(.7, .7, .7, 0.0)
 const VIS_MODULATE := Color.WHITE
 
-const TAGS = ["silver", "ethereal", "undead", "gift", "broken", "lit", "booze",
+const TAGS = ["silver", "ethereal", "undead", "gift", "broken", "lit", 
+			"booze",
 			# spells
 			"vital-assemblage", "summoning", 
 			# locks
 			"key-blue", "key-red",
+			# campaigns
+			"quest-item", "quest-boss-retznac",
 			]

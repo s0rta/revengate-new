@@ -30,7 +30,7 @@ signal was_attacked(attacker)
 # health changed, either got better or worst
 signal health_changed(new_health)
 # the actor met their ultimate demise
-signal died(old_coord)
+signal died(old_coord, tags)
 # the actor moved to a new location on the current board
 signal moved(from, to)
 # the actor picked an item that used to be at `old_coord`
@@ -199,16 +199,21 @@ func get_modifiers():
 	## return a dict of all the modifiers from items and conditions combined together
 	var no_skill = Consts.SkillLevel.NEOPHYTE
 	var knows_how_to_use = func (node):
-		var skill = node.get("skill")
-		var my_skills = get_skills()
-		if skill: 
-			return my_skills.get(skill, no_skill) != no_skill
+		var skill_name = node.get("skill")
+		if skill_name:
+			return get_skill(skill_name) != Consts.SkillLevel.NEOPHYTE
 		else:
 			return true
 	return Utils.get_node_modifiers(self, knows_how_to_use)
 
 func get_skills():
+	## Return a {skill_name->level} mapping
 	return Utils.get_node_skills(self)
+	
+func get_skill(skill_name) -> Consts.SkillLevel:
+	## Return the level of a skill.
+	## Unknown skills return Consts.SkillLevel.NEOPHYTE
+	return get_skills().get(skill_name, Consts.SkillLevel.NEOPHYTE)
 
 func get_stat(stat_name, challenge=null):
 	## Return the effective stat with all the active modifiers and skills included
@@ -564,9 +569,9 @@ func update_health(hp_delta: int):
 
 func die():
 	## Animate our ultimate demise, drop our inventory, then remove ourself from this cruel world.
-	emit_signal("died", get_cell_coord())
 	if not is_hero():
 		CombatUtils.add_kill(caption)
+	emit_signal("died", get_cell_coord(), tags)
 	for item in get_items():
 		drop_item(item)
 

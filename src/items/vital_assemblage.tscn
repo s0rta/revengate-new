@@ -4,5 +4,5 @@
 
 [node name="VitalAssemblage" instance=ExtResource("1_wlvdu")]
 char = "🕜"
-caption = "an intricate clockwork mechanism"
+caption = "intricate clockwork mechanism"
 tags = Array[String](["vital-assemblage"])

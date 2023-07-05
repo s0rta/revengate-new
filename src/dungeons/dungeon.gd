@@ -25,9 +25,11 @@ var prefab_map = {Vector3i(13, 3, 0): "Er",
 					Vector3i(13, 5, 0): "Er", 
 					Vector3i(13, 6, 0): "Er", 
 					Vector3i(13, 7, 0): "Er", 
+					Vector3i(13, 8, 0): "Er", 
 				}
 
 @export var start_depth := 0
+@export var base_spawn_budget := 0
 @export var start_world_loc: Vector3i
 @export var dest_world_loc := Vector3i(3, 5, 0)
 @export var tunneling_elevation := -2  # start going horizontal once we reach that depth
@@ -45,9 +47,11 @@ static func opposite_connector(terrain):
 		return "gateway"
 
 func _ready():
-	deck_builder = find_child("DeckBuilder")
-	if deck_builder == null:
+	var deck_builders = find_children("", "DeckBuilder", false)
+	if deck_builders.is_empty():
 		deck_builder = load("res://src/default_deck_builder.tscn").instantiate()
+	else:
+		deck_builder = deck_builders[0]
 		
 	starting_board = find_child("StartingBoard")
 	if starting_board != null:
@@ -198,22 +202,25 @@ func _neighbors_for_level(depth:int, world_loc:Vector3i, prev=null):
 		recs.append(rec)
 	return recs
 
+func spawn_budget(depth, budget_multiplier):
+	return max(0, (base_spawn_budget + depth)*budget_multiplier)
+
 func populate_board(builder, depth, world_loc:Vector3i):
 	var index = builder.board.make_index()
 	
 	# Items
-	var budget = max(0, depth*1.3)
+	var budget = spawn_budget(depth, 1.3)
 	_gen_decks_and_place(builder, index, deck_builder, "Item", depth, world_loc, budget)
 		
 	# Monsters
-	budget = max(0, depth * 1.7)
+	budget = spawn_budget(depth, 1.7)
 	_gen_decks_and_place(builder, index, deck_builder, "Actor", depth, world_loc, budget)
 	
 	# Vibe
 	var extra_vibe = []
 	for actor in builder.board.get_actors():
 		extra_vibe += actor.get_vibe_cards()
-	budget = max(0, depth * 1.1)
+	budget = spawn_budget(depth, 1.1)
 	_gen_decks_and_place(builder, index, deck_builder, "Vibe", depth, world_loc, budget, extra_vibe)
 	
 func _gen_decks_and_place(board_builder, index, deck_builder, card_type, 

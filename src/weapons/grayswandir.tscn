@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2dem6s27irbs"]
+
+[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_5ndeg"]
+[ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/weapons/sword-hit-01.wav" id="2_eyubv"]
+
+[node name="Grayswandir" instance=ExtResource("1_5ndeg")]
+damage = 15
+damage_family = 2
+char = "🗡"
+caption = "Grayswandir"
+skill = "fencing"
+spawn_cost = 30.0
+tags = Array[String](["silver"])
+
+[node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
+stream = ExtResource("2_eyubv")

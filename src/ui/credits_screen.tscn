@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/ui/credits_screen.gd" id="1_oj5wt"]
 
-[node name="PrivacyScreen" type="Node"]
+[node name="CreditsScreen" type="Node"]
 script = ExtResource("1_oj5wt")
 
 [node name="Background" type="ColorRect" parent="."]

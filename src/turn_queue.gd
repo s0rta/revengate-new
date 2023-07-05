@@ -18,7 +18,9 @@
 extends Node
 
 const ACTING_DELAY = 0.1  # in seconds
-enum States {STOPPED, PROCESSING, SHUTTING_DOWN}
+enum States {STOPPED, PAUSED, PROCESSING, SHUTTING_DOWN}
+signal resumed  # processing is ready to restart after being paused
+
 var state = States.STOPPED
 
 var turn := 0
@@ -53,7 +55,19 @@ func shutdown():
 	## Typically the current actor will finish their turn before the shutdown begins.
 	state = States.SHUTTING_DOWN
 	invalidate_turn()
+
+func pause():
+	state = States.PAUSED
+	invalidate_turn()
 	
+func is_paused():
+	return state == States.PAUSED
+	
+func resume():
+	assert(state == States.PAUSED)
+	state = States.PROCESSING
+	emit_signal("resumed")
+
 func run():
 	var actors: Array
 	turn_is_valid = true
@@ -80,6 +94,8 @@ func run():
 				print("done with %s!" % actor)
 			if turn_is_valid and actor.is_animating():
 				await get_tree().create_timer(ACTING_DELAY).timeout
+		if state == States.PAUSED:
+			await resumed
 		turn += 1
 		turn_is_valid = true
 	state = States.STOPPED

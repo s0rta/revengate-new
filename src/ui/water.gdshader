@@ -34,5 +34,6 @@ void fragment() {
 	COLOR.rgb += highlightAlpha * texture(wave1, mod(highlightVector, 1.0)).rgb;
 
 	COLOR.b *= 1.4;
+	COLOR = clamp(COLOR, vec4(0.0), vec4(1.0));
 }
 

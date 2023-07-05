@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dbtuoxnl8bii3"]
+
+[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_j6nwd"]
+[ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/weapons/sword-hit-01.wav" id="2_yqiqw"]
+
+[node name="DressSword" instance=ExtResource("1_j6nwd")]
+damage = 5
+damage_family = 3
+char = "🗡"
+caption = "light dress sword"
+skill = "fencing"
+spawn_cost = 5.0
+
+[node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
+stream = ExtResource("2_yqiqw")

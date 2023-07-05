@@ -3,11 +3,17 @@
 [ext_resource type="Script" path="res://src/ui/victory_screen.gd" id="1_2odf0"]
 [ext_resource type="AudioStream" uid="uid://bukb5uav51053" path="res://assets/sounds/oh-yeah.mp3" id="2_a2cly"]
 
-[node name="VictoryScreen" type="Node"]
+[node name="VictoryScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_2odf0")
 
 [node name="Background" type="ColorRect" parent="."]
-anchors_preset = 15
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -15,7 +21,7 @@ grow_vertical = 2
 color = Color(0.0431373, 0.027451, 0, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-anchors_preset = 13
+layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
@@ -50,18 +56,24 @@ size_flags_vertical = 3
 layout_mode = 2
 
 [node name="VictoryLabel" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer2/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 1
-text = "You have made it!
+text = "You have made it! You have faced numerous monsters , found the quest item, and came back alive!"
+autowrap_mode = 2
 
-You have faced numerous monsters , found the quest item, and came back alive! In a future version of this game, a second chapter will start right after this screen, but for now, your only option is to close the game knowing that you are awesome! Or perhaps you'd like to try the first quest again..."
+[node name="EndingLabel" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+text = "Retznac vanished into oblivion leaving a thin trail of mist behind. It reminds you of the marshes around the river Rhône at sunrise."
 autowrap_mode = 2
 
 [node name="GameSummaryLabel" type="RichTextLabel" parent="VBoxContainer/ScrollContainer/MarginContainer2/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 bbcode_enabled = true
-text = "You killed:
+text = "You defeated:
 [ul]
 a cat
 a dog
@@ -69,17 +81,43 @@ a snake
 [/ul]"
 fit_content = true
 
+[node name="NextChapterLabel" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+text = "Even though you are expected to celebrate a litte bit at this point, don't be too long at it because we still need you for the next chapter of this adventure."
+autowrap_mode = 2
+
+[node name="GameOverLabel" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+text = "This time it's truly the end, at least until the next version of this game. Great job on emerging victor and thank you for playing!"
+autowrap_mode = 2
+
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
 
-[node name="OKButton" type="Button" parent="VBoxContainer/MarginContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="QuitButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Nice!"
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_a2cly")
-autoplay = true
+[node name="NextButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Next..."
 
-[connection signal="button_up" from="VBoxContainer/MarginContainer2/OKButton" to="." method="show_main_screen"]
+[node name="VictorySound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_a2cly")
+
+[connection signal="button_up" from="VBoxContainer/MarginContainer2/HBoxContainer/QuitButton" to="." method="show_main_screen"]
+[connection signal="button_up" from="VBoxContainer/MarginContainer2/HBoxContainer/NextButton" to="." method="_on_next_button_button_up"]
