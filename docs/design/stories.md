@@ -5,7 +5,7 @@ Long narrations and short stories set in the Revengate universe. See also `src/s
 
 
 ## The Audition
-[](../../src/stories/the_audition.txt)
+[moved here](../../src/stories/the_audition.txt)
 
 ## The Initiation
 
@@ -217,7 +217,7 @@ They left in silence, slowly letting the night envelope Captain Filo.
 
 
 # The Sound of Satin
-[](../../src/stories/sound_of_satin.txt)
+[moved here](../../src/stories/sound_of_satin.txt)
 
 
 # The Sands of Time

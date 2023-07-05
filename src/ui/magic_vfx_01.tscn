@@ -26,6 +26,7 @@ autostart = true
 
 [node name="Sound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_0a5el")
+volume_db = -6.0
 pitch_scale = 0.9
 autoplay = true
 

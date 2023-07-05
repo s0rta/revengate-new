@@ -580,8 +580,8 @@ func die():
 	else:
 		play_sound("DeathSound")
 		var anim = create_anim()
-		anim.tween_property($Label, "modulate", Color(.8, 0, 0, .7), .1)
-		anim.tween_property($Label, "modulate", Color(0, 0, 0, 0), .4)
+		anim.tween_property($Label, "modulate", Color(.8, 0, 0, .7), .3)
+		anim.tween_property($Label, "modulate", Color(0, 0, 0, 0), .7)
 		anim.finished.connect(self._dissipate, CONNECT_ONE_SHOT)
 
 func _learn_attack(attacker):
