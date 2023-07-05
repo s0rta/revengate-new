@@ -69,17 +69,9 @@ size_flags_vertical = 1
 text = "Retznac vanished into oblivion leaving a thin trail of mist behind. It reminds you of the marshes around the river Rhône at sunrise."
 autowrap_mode = 2
 
-[node name="GameSummaryLabel" type="RichTextLabel" parent="VBoxContainer/ScrollContainer/MarginContainer2/VBoxContainer"]
+[node name="GameSummaryLabel" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer2/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-bbcode_enabled = true
-text = "You defeated:
-[ul]
-a cat
-a dog
-a snake
-[/ul]"
-fit_content = true
 
 [node name="NextChapterLabel" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer2/VBoxContainer"]
 unique_name_in_owner = true

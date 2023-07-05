@@ -147,8 +147,9 @@ UX:
 - [x] Lyon overworld map
 
 ## v0.9
-- [ ] bug: victory screen is hard to scroll
+- [x] bug: victory screen is hard to scroll
 - [ ] bug: transient strategies are not freed after expiration
+- [ ] deck builder rules specific to debug mode
 - [x] end of game stats
 - [x] closable doors
 - [x] textual tags to categorize items and monsters

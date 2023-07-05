@@ -156,7 +156,6 @@ static func fadeout_later(node:Node, nb_secs:float, free:=true):
 		node.queue_free()
 
 static func make_game_summary():
-	print("hero is: %s" % Tender.hero)
 	var kill_summary: String
 	if Tender.kills.is_empty():
 		kill_summary = "You didn't defeat any monsters."
@@ -165,18 +164,18 @@ static func make_game_summary():
 		var categories = Tender.kills.keys()
 		categories.sort()
 		for cat in categories:
-			lines.append("%s: %s" % [cat, Tender.kills[cat]])
-		kill_summary = "[ul]%s[/ul]" % ["\n".join(lines)]
+			lines.append("🞙 %s: %s" % [cat, Tender.kills[cat]])
+		kill_summary = "\n".join(lines)
 	var stats_lines = []
 	for key in Tender.hero_stats:
 		if Tender.hero_modifiers.get(key):
-			stats_lines.append("[ul]%s:%s (%+d)[/ul]" % [key, Tender.hero_stats[key], Tender.hero_modifiers[key]])
+			stats_lines.append("🞙 %s:%s (%+d)" % [key, Tender.hero_stats[key], Tender.hero_modifiers[key]])
 		else:
-			stats_lines.append("[ul]%s:%s[/ul]" % [key, Tender.hero_stats[key]])
+			stats_lines.append("🞙 %s:%s" % [key, Tender.hero_stats[key]])
 	var stats_summary = "\n".join(stats_lines)
 	return ("Your adventure lasted %d turns and took you through %d locations.\n\n" 
-			+ "[b]Monsters defeated[/b]\n%s\n\n"
-			+ "[b]Character stats (modifiers)[/b]\n%s") % [Tender.last_turn, Tender.nb_locs, 
+			+ "Monsters defeated:\n%s\n\n"
+			+ "Character stats (modifiers):\n%s\n\n") % [Tender.last_turn, Tender.nb_locs, 
 															kill_summary, stats_summary]
 
 static func has_tags(node, tags:Array):
