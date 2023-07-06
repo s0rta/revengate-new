@@ -51,7 +51,9 @@ enum SkillLevel {
 	MYTHICAL,  # beyond the realm of mortals
 }
 
-const CORE_STATS := ["agility", "strength", "intelligence", "perception", "mana_burn_rate"] 
+const CORE_STATS := ["agility", "strength", "intelligence", "perception", 
+					"health_full", "healing_prob", 
+					"mana_burn_rate", "mana_recovery_prob"] 
 const SKILLS := ["evasion", "innate_attack", "fencing", "channeling", "device_of_focusing"]
 # TODO: should be a const, but the parser has issue with the `+` expression
 var CHALLENGES := [] + SKILLS
@@ -90,5 +92,5 @@ const TAGS = ["silver", "ethereal", "undead", "gift", "broken", "lit",
 			# locks
 			"key-blue", "key-red",
 			# campaigns
-			"quest-item", "quest-boss-retznac",
+			"quest-item", "quest-reward", "quest-boss-retznac",
 			]

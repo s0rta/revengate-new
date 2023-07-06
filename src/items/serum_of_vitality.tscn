@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://ci4jtpttskndh"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_4oqew"]
+[ext_resource type="Script" path="res://src/items/serum_of_vitality.gd" id="2_hb555"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_xsf0b"]
+
+[node name="SerumOfVitality" instance=ExtResource("1_4oqew")]
+script = ExtResource("2_hb555")
+char = "💉"
+caption = "serum of vitality"
+consumable = true
+spawn_cost = 30.0
+
+[node name="Effect" type="Node" parent="." index="1"]
+script = ExtResource("2_xsf0b")
+health_full = 10
+healing_prob = 0.05
+nb_turns = 0
+permanent = true

@@ -160,7 +160,7 @@ UX:
 
 Items:
 - [x] unique items are per-game unique, not only per-dungeon unique
-- [ ] item to increase latent healing
+- [x] item to increase latent healing
 
 Combat:
 - [x] silvered weapons

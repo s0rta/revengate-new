@@ -145,10 +145,11 @@ func checkpoint(title):
 	if speaker:
 		speaker.conversation_sect = title
 
-func speaker_has_gifts():
+func speaker_has_gifts(extra_tags:=[]):
 	if speaker == null:
 		return false
-	return len(speaker.get_items(["gift"])) > 0
+	var include_tags = ["gift"] + extra_tags
+	return len(speaker.get_items(include_tags)) > 0
 
 func speaker_give_item(extra_tags=null):
 	## Pass an item from the speaker to the hero

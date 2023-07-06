@@ -13,7 +13,11 @@ Nadège: I don't know what's important about those loom cards. It's a good idea 
 => END
 
 ~ intro_2
-Nadège: Good job recovering those cards! There is something weird about them. 
+Nadège: Good job recovering those cards! 
+if speaker_has_gifts(["quest-reward"])
+	Nadège: Take this, you've earned it!
+	do speaker_give_item(["quest-reward"])
+Nadège: There is something weird about the cards. 
 - Yeah, I noticed!
 	Hero: Up to card no. 87, it's a taffeta weave, then after that it's just a big mess of holes that don't mean anything.
 	Nadège: I had underestimated you! You know, if beating monsters up doesn't work out for you, you could always apprentice as a weaver.

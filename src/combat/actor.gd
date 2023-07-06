@@ -829,9 +829,9 @@ func normalize_health_delta(vector, h_delta):
 func activate_conditions():
 	## give all conditions and innate body repair a chance to heal us or make us suffer
 	assert(health_full != null)
-	if health < health_full and Rand.rstest(healing_prob):
+	if health < health_full and Rand.rstest(get_stat("healing_prob")):
 		regen()
-	if mana < mana_full and Rand.rstest(mana_recovery_prob):
+	if mana < mana_full and Rand.rstest(get_stat("mana_recovery_prob")):
 		refocus()
 	for cond in get_conditions():
 		if is_alive():  # there is a chance that we won't make it through all the conditions

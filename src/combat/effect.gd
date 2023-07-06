@@ -14,22 +14,30 @@
 
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
-
+@tool
 @icon("res://assets/opencliparts/flame_warning.svg")
 ## An effect that can result in a damage-over-time condition
 class_name Effect extends Node
 
+@export_group("Health Changes")
 @export var damage := 0
 # healing could also be expressed as a negative damage, but positive numbers are more intuitive
 @export var healing := 0
 @export var damage_family := Consts.DamageFamily.NONE
+
+@export_group("Stats Modifiers")
 @export var strength := 0
 @export var agility := 0
 @export var intelligence := 0
 @export var perception := 0
+@export var health_full := 0
+@export_range(0, 1) var healing_prob := 0.0
+
+@export_group("Applicability")
 @export_range(0, 1) var probability := 1.0  # chance that the effect will be applied
 @export var immediate := false
 @export var nb_turns := 1
+@export var permanent := false  # ignores immediate and damage_family
 @export var magical := false  # various effect are more powerful for magical items
 
 class Condition extends Node:
@@ -62,6 +70,15 @@ class Condition extends Node:
 		if nb_turns <= 0:
 			queue_free()
 	
+func _get_configuration_warnings():
+	var warnings = []
+	if permanent:
+		if nb_turns != 0:
+			warnings.append("Permanent effects can't specify nb_turns!")
+		if damage != 0 or healing != 0:
+			warnings.append("Permanent effects can only affect core stats, not provide damage or healing!")
+	return warnings
+
 func apply(actor):
 	## Apply the effect to `actor`. 
 	## If `probability` < 1, this could be a no-op.
@@ -69,8 +86,18 @@ func apply(actor):
 	##   at the beginning of the next turn.
 	if not Rand.rstest(probability):
 		return
-	var cond = Condition.new(damage, healing, damage_family, magical, nb_turns)
-	cond.stats_modifiers = CombatUtils.node_core_stats(self)
-	actor.add_child(cond)
-	if immediate:
-		cond.erupt()
+	var mods = CombatUtils.node_core_stats(self)
+	if permanent:
+		perma_boost(actor, mods)
+	else:
+		var cond = Condition.new(damage, healing, damage_family, magical, nb_turns)
+		cond.stats_modifiers = mods
+		actor.add_child(cond)
+		if immediate:
+			cond.erupt()
+
+func perma_boost(actor:Actor, modifiers):
+	for key in modifiers:
+		var new_val = actor.get(key) + modifiers[key]
+		actor.set(key, new_val)
+		
