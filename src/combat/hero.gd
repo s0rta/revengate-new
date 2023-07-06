@@ -112,6 +112,7 @@ func is_foe(other: Actor):
 	return ENEMY_FACTIONS.has(other.faction)
 
 func act():
+	refresh_strategies()
 	var strat = get_strategy()
 	if strat:
 		# The turn queu is supposed to await on anims_done before leting us play the next turn

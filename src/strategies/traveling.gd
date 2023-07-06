@@ -72,6 +72,10 @@ func is_valid():
 		_set_path(_make_path())
 	return path and not arrived and not unreachable
 
+func refresh(_turn):
+	if unreachable or arrived:
+		queue_free()
+
 func act():
 	print("traveling towards %s" % RevBoard.coord_str(dest))
 	if path.size():
