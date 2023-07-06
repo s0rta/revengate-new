@@ -168,7 +168,7 @@ Combat:
 
 UX:
 - [x] something more reliable than timing to synchronize fading anims
-- [ ] buttons and in-dialogues choices are bigger
+- [x] buttons and in-dialogues choices are bigger
 - [ ] tap-away dismisses long-tap options
 
 ## V0.10
