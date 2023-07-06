@@ -88,6 +88,8 @@ func gen_mandatory_deck(card_type, depth, world_loc:Vector3i):
 	for child in get_children():
 		if child is CardRule:
 			var rule = child
+			if rule.debug_only and not Utils.is_debug():
+				continue
 			for card in rule.find_children("", card_type, false):
 				var nb_occ = nb_mandatory_occ(card, rule, depth, world_loc)
 				if nb_occ:
@@ -102,6 +104,8 @@ func gen_deck(card_type, depth, world_loc:Vector3i, budget, extra_cards=[]):
 	for child in get_children():
 		if child is CardRule:
 			var rule = child
+			if rule.debug_only and not Utils.is_debug():
+				continue
 			if rule.world_loc != Consts.LOC_INVALID and rule.world_loc != world_loc:
 				continue
 			if depth < child.min_depth:

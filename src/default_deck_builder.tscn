@@ -136,6 +136,7 @@ max_dungeon_occ = 3
 script = ExtResource("7_bd8gw")
 min_dungeon_occ = 1
 world_loc = Vector3i(13, 6, 0)
+debug_only = true
 
 [node name="LoomCards" parent="TestingQuestTransitions" instance=ExtResource("11_320yy")]
 

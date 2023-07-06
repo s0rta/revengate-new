@@ -3,6 +3,5 @@
 [ext_resource type="PackedScene" uid="uid://dkjne1n771ldd" path="res://src/vibes/vibe.tscn" id="1_la1ix"]
 
 [node name="Hissing" instance=ExtResource("1_la1ix")]
-char = "🌬"
 caption = "steam hissing nearby"
 spawn_cost = 1.0

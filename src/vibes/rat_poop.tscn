@@ -3,6 +3,5 @@
 [ext_resource type="PackedScene" uid="uid://dkjne1n771ldd" path="res://src/vibes/vibe.tscn" id="1_ir1q7"]
 
 [node name="RatPoop" instance=ExtResource("1_ir1q7")]
-char = "?"
 caption = "some rodent droppings"
 spawn_cost = 1.0

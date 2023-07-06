@@ -32,6 +32,9 @@ class_name CardRule extends Node
 # the item is guarateed to be generated for a board at this location
 @export var world_loc := Consts.LOC_INVALID
 
+# the rule only applies to debug builds
+@export var debug_only := false
+
 func _get_configuration_warnings():
 	var warnings = []
 	if min_depth < 0:
