@@ -20,7 +20,6 @@ extends Control
 
 signal closed(acted:bool)
 
-var is_capturing_clicks := false
 var has_panned := false
 
 func _unhandled_input(event):
@@ -32,9 +31,12 @@ func _unhandled_input(event):
 		if not has_panned:
 			accept_event()
 			close(false)
-	if Input.is_action_pressed("pan"):
-		if event is InputEventMouseMotion:
-			has_panned = true
+	elif event is InputEventMouseButton and event.is_pressed():
+		accept_event()
+		close(false)
+	elif event.is_action_pressed("ui_cancel"):
+		accept_event()
+		close(false)
 
 func show_commands(commands, coord=null):
 	# TODO: find where to show the context menu for max visibility
