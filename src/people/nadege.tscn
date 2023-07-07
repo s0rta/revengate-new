@@ -18,6 +18,7 @@ char = "@"
 caption = "Nadège Cyrat"
 color = Color(0.368627, 0.615686, 0.87451, 1)
 conversation_file = "res://src/story/nadege.dialogue"
+conversation_sect = "intro"
 faction = 1
 
 [node name="Label" type="Label" parent="."]

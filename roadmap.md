@@ -172,6 +172,9 @@ UX:
 - [x] tap-away dismisses long-tap options
 
 ## V0.10
+- [ ] Godot 4.1
+- [ ] async preload most shaders to speedup startup
+
 Items:
 - [ ] potion of absinthe
 - [ ] "magical" tag replaces the magical flag

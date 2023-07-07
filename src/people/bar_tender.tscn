@@ -19,6 +19,7 @@ char = "@"
 caption = "Simon"
 color = Color(0.372549, 0.67451, 0.498039, 1)
 conversation_file = "res://src/story/bar_tender.dialogue"
+conversation_sect = "intro"
 faction = 1
 
 [node name="Label" type="Label" parent="."]

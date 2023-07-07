@@ -26,8 +26,11 @@ func popup(game_over:bool):
 	%VictoryLabel.visible = not game_over
 	%NextButton.visible = not game_over
 	%NextChapterLabel.visible = not game_over
+	%ScrollView.get_v_scroll_bar().value = 0
 	if Tender.hero_stats:
 		%GameSummaryLabel.text = Utils.make_game_summary()
+	else:
+		%GameSummaryLabel.text = ""
 	$VictorySound.play()
 	show()
 	

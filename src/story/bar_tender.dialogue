@@ -1,5 +1,4 @@
 ~ intro
-
 Simon: Welcome to Café Caché!
 Simon: Since this is your first time, this drink is on the house.
 do checkpoint("about_lyon")

@@ -13,7 +13,7 @@ Bar Patron: Have your heard about this latest fad, Bloody Mary?
 
 Bar Patron: Teens these days believe they can summon ghosts with candles and a mirror while reading cheesy poetry.
 
-Bar Patron: I think this story is a lot of rubbish. The ghosts are repulsed by silver, so why would they appear in a mirror of all places!?
+Bar Patron: I think this story is a lot of rubbish. Ghosts are repulsed by silver, so why would they appear in a mirror of all places!?
 do checkpoint("vampire_of_nantes")
 => END
 

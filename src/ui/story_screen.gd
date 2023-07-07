@@ -20,6 +20,7 @@ class_name StoryScreen extends Control
 
 func show_story(title, body_path):
 	%TitleLabel.text = title
+	%ScrollView.get_v_scroll_bar().value = 0
 	var body = FileAccess.open(body_path, FileAccess.READ).get_as_text()
 	%StoryLabel.text = body
 	show()

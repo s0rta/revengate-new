@@ -23,7 +23,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.701961)
 
 [node name="SpeechBackgroud" type="ColorRect" parent="Background"]
-custom_minimum_size = Vector2(0, 263)
+custom_minimum_size = Vector2(0, 312)
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -37,13 +37,11 @@ color = Color(0, 0, 0, 0.701961)
 
 [node name="Margin" type="MarginContainer" parent="Background/SpeechBackgroud"]
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -263.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 mouse_filter = 2
 
 [node name="VBox" type="VBoxContainer" parent="Background/SpeechBackgroud/Margin"]
@@ -59,16 +57,20 @@ text = "Bob Morane"
 fit_content = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SpeechBackgroud/Margin/VBox"]
-clip_contents = false
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 3.5
 horizontal_scroll_mode = 0
 
-[node name="DialogueLabel" type="RichTextLabel" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DialogueLabel" type="RichTextLabel" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 clip_contents = false
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
 theme_override_colors/default_color = Color(1, 1, 1, 1)
@@ -86,12 +88,33 @@ visible_characters_behavior = 2
 script = ExtResource("2_m6frq")
 pause_at_characters = ""
 
-[node name="ResponsesBox" type="VBoxContainer" parent="Background/SpeechBackgroud/Margin/VBox"]
+[node name="ResponsesBox" type="VBoxContainer" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ResponseTemplate" type="RichTextLabel" parent="Background/SpeechBackgroud/Margin/VBox"]
+[node name="Label" type="Label" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer/ResponsesBox"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.87451, 0.615686, 0.160784, 1)
+theme_override_font_sizes/font_size = 26
+text = "This is a response"
+
+[node name="Label2" type="Label" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer/ResponsesBox"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.87451, 0.615686, 0.160784, 1)
+theme_override_font_sizes/font_size = 26
+text = "This is a response"
+
+[node name="Label3" type="Label" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer/ResponsesBox"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.87451, 0.615686, 0.160784, 1)
+theme_override_font_sizes/font_size = 26
+text = "This is a response"
+
+[node name="ResponseTemplate1" type="RichTextLabel" parent="Background/SpeechBackgroud/Margin/VBox"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -100,6 +123,15 @@ theme_override_colors/default_color = Color(0.87451, 0.615686, 0.160784, 1)
 theme_override_font_sizes/normal_font_size = 26
 text = "This is a test"
 scroll_active = false
+
+[node name="ResponseTemplate" type="Label" parent="Background/SpeechBackgroud/Margin/VBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 0
+theme_override_colors/font_color = Color(0.87451, 0.615686, 0.160784, 1)
+theme_override_font_sizes/font_size = 26
+text = "This is a response"
 
 [node name="CloseButton" type="Button" parent="Background/SpeechBackgroud/Margin/VBox"]
 unique_name_in_owner = true
