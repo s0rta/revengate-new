@@ -10,7 +10,6 @@
 char = "@"
 caption = "Grenn Kuhn the book trader"
 color = Color(0.921569, 0.45098, 0.45098, 1)
-conversation_file = "res://src/story/card_thieves.dialogue"
 spawn_cost = 1.0
 health = 30
 strength = 40

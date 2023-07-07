@@ -105,14 +105,15 @@ text = "Welcome to Revengate!"
 
 [node name="DisclaimerDia" type="AcceptDialog" parent="."]
 title = ""
-size = Vector2i(1507, 241)
+size = Vector2i(1024, 284)
+visible = true
 borderless = true
 always_on_top = true
 dialog_text = "Hi, I'm Yannick!
 
-This is an early proof of concept of a game that I'm developing with a few friends.
+This is an early release of a game that I'm developing with a few friends.
 
-You will probably encounter a few bugs and you won't enjoy the level of polish of big studio games. 
+You will probably encounter a few bugs and you won't see the level of polish of big studio games. 
 I'm glad that you are taking the time to try my game and I hope that you will have fun playing.
 
 Enjoy!
