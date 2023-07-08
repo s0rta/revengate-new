@@ -148,9 +148,9 @@ debug_only = true
 
 [node name="Gleugt" parent="TestingQuestTransitions" instance=ExtResource("25_0idor")]
 
-[node name="VitalAssemblage" parent="TestingQuestTransitions/Gleugt" instance=ExtResource("26_s2tlo")]
-
 [node name="VitalAssemblage2" parent="TestingQuestTransitions/Gleugt" instance=ExtResource("26_s2tlo")]
+
+[node name="VitalAssemblage3" parent="TestingQuestTransitions/Gleugt" instance=ExtResource("26_s2tlo")]
 
 [node name="Retznac" parent="TestingQuestTransitions" instance=ExtResource("25_cxgj3")]
 

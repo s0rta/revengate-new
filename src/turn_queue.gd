@@ -20,6 +20,7 @@ extends Node
 const ACTING_DELAY = 0.1  # in seconds
 enum States {STOPPED, PAUSED, PROCESSING, SHUTTING_DOWN}
 signal resumed  # processing is ready to restart after being paused
+signal turn_started(turn:int)
 
 var state = States.STOPPED
 
@@ -74,6 +75,7 @@ func run():
 	state = States.PROCESSING
 	while state == States.PROCESSING:
 		print("=== Start of turn %d ===" % turn)
+		emit_signal("turn_started", turn)
 		actors = get_actors()
 		print("playing actors: %s " % [actors])
 		# 1st pass: tell all in-play objects about the start of the turn
