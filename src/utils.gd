@@ -28,6 +28,12 @@ static func ddump_event(event, node, meth_name):
 	if not event is InputEventMouseMotion:
 		print("%s.%s(%s)" % [node.name, meth_name, event])
 
+static func median(values:Array):
+	assert(not values.is_empty())
+	values = values.duplicate()
+	values.sort()
+	return values[len(values)/2]
+
 static func is_tag(str):
 	return str in Consts.TAGS
 

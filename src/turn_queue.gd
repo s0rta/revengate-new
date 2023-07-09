@@ -20,6 +20,7 @@ extends Node
 const ACTING_DELAY = 0.1  # in seconds
 enum States {STOPPED, PAUSED, PROCESSING, SHUTTING_DOWN}
 signal resumed  # processing is ready to restart after being paused
+signal done  # processing stopped
 signal turn_started(turn:int)
 
 var state = States.STOPPED
@@ -63,11 +64,20 @@ func pause():
 	
 func is_paused():
 	return state == States.PAUSED
+
+func reset():
+	## Bring the turn queue back to like it was at the start of the game
+	assert(state == States.STOPPED, "A running TurnQueue must be shutdown before you can reset it.")
+	turn = 0
+	turn_is_valid = true
 	
 func resume():
 	assert(state == States.PAUSED)
 	state = States.PROCESSING
 	emit_signal("resumed")
+
+func is_stopped():
+	return state == States.STOPPED
 
 func run():
 	var actors: Array
@@ -101,3 +111,4 @@ func run():
 		turn += 1
 		turn_is_valid = true
 	state = States.STOPPED
+	emit_signal("done")
