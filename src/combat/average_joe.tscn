@@ -1,10 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://cqkoy4vxwt5q"]
+[gd_scene load_steps=8 format=3 uid="uid://cqkoy4vxwt5q"]
 
 [ext_resource type="Script" path="res://src/combat/actor.gd" id="1_ux3dq"]
 [ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_ofe33"]
 [ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="3_wnw0k"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="4_fyul4"]
-[ext_resource type="Script" path="res://src/strategies/dueling.gd" id="5_ood5r"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="6_hl06a"]
 [ext_resource type="PackedScene" path="res://src/weapons/sword.tscn" id="7_i8fts"]
 
@@ -68,10 +67,6 @@ text = "?"
 
 [node name="Mem" type="Node" parent="."]
 script = ExtResource("4_fyul4")
-
-[node name="Dueling" type="Node" parent="."]
-script = ExtResource("5_ood5r")
-priority = 1.0
 
 [node name="SkillLevels" type="Node" parent="."]
 script = ExtResource("6_hl06a")

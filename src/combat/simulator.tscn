@@ -1,11 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://d1wjr6usat6lm"]
+[gd_scene load_steps=10 format=3 uid="uid://d1wjr6usat6lm"]
 
 [ext_resource type="Script" path="res://src/combat/simulator.gd" id="1_0qirp"]
 [ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="1_fdq17"]
 [ext_resource type="PackedScene" uid="uid://cfc3ttsrd52r" path="res://src/rev_board.tscn" id="2_r23sb"]
 [ext_resource type="PackedScene" uid="uid://cqkoy4vxwt5q" path="res://src/combat/average_joe.tscn" id="4_ijre8"]
 [ext_resource type="PackedScene" uid="uid://cx7utj7hd3ne" path="res://src/monsters/kobold.tscn" id="4_vet1w"]
-[ext_resource type="Script" path="res://src/strategies/dueling.gd" id="5_bcl6f"]
+[ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="6_24866"]
+[ext_resource type="PackedScene" uid="uid://d4f1ul2rt43ys" path="res://src/monsters/labras.tscn" id="7_yihu7"]
+[ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="8_dd6o8"]
+[ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="8_vl4qb"]
 
 [node name="Simulator" type="Node2D"]
 script = ExtResource("1_0qirp")
@@ -29,10 +32,6 @@ health = 60
 strength = 40
 agility = 52
 
-[node name="Dueling2" type="Node" parent="Board/Kobold"]
-script = ExtResource("5_bcl6f")
-priority = 1.0
-
 [node name="Kobold2" parent="Board" instance=ExtResource("4_vet1w")]
 visible = true
 position = Vector2(112, 146)
@@ -40,8 +39,20 @@ health = 60
 strength = 40
 agility = 52
 
-[node name="Dueling2" type="Node" parent="Board/Kobold2"]
-script = ExtResource("5_bcl6f")
-priority = 1.0
+[node name="ExtraStages" type="Node" parent="."]
+
+[node name="Node" type="Node" parent="ExtraStages"]
+
+[node name="Rat" parent="ExtraStages/Node" instance=ExtResource("6_24866")]
+
+[node name="Rat2" parent="ExtraStages/Node" instance=ExtResource("6_24866")]
+
+[node name="Rat3" parent="ExtraStages/Node" instance=ExtResource("6_24866")]
+
+[node name="Labras" parent="ExtraStages" instance=ExtResource("7_yihu7")]
+
+[node name="SewerOtter" parent="ExtraStages" instance=ExtResource("8_dd6o8")]
+
+[node name="Ghost" parent="ExtraStages" instance=ExtResource("8_vl4qb")]
 
 [connection signal="turn_started" from="TurnQueue" to="." method="_on_turn_queue_turn_started"]

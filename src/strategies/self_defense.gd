@@ -38,7 +38,6 @@ func is_valid():
 		return attacker.is_alive()
 
 func act() -> bool:
-	print("SelfDefence!")
 	var board = me.get_board()
 	var my_coord = me.get_cell_coord()
 	var foe_coord = attacker.get_cell_coord()

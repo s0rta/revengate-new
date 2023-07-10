@@ -323,7 +323,7 @@ func start_turn(new_turn:int):
 	# expiration of our sub-components and trigger conditions for once for each missed turn. 
 	# This might hurt!
 	
-	# FIXME: see if we have we died along the way?
+	# activate_conditions() adequately verifies if we have we died along the way...
 	var multi_step_nodes = []
 	for node in get_children():
 		if node.get("start_turn"):

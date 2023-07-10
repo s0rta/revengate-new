@@ -22,7 +22,14 @@ enum Results {VICTORY, DEFEAT, DRAW}
 
 const NB_SIMS_PER_RUN = 100
 const MAX_SIM_TURNS = 50
+const RUN_ALL_STAGES = true  # sim the first board and all the challengers in $ExtraStages
 
+# whether to let Godot start the sims in between rendering frames, gives better profiling stats
+const ASYNC_MODE = false
+
+signal sims_done  # sims completed for one stage (see RUN_ALL_STAGES)
+
+var sim_running := false
 var gladiator = null  # the actor who's fate tells us when the simulation is done
 var challengers_health_full:int
 var sim_board:RevBoard
@@ -42,11 +49,27 @@ var challengers_health_left:Dictionary
 var start_time:int
 
 func _ready():
-	run_sims()
+	for actor in get_actors():
+		_make_duelist(actor)
+		
+	if RUN_ALL_STAGES:
+		run_stages()
+	else:
+		run_sims()
 
 func _input(event):
 	if event.is_action_pressed("ui_accept"):
 		run_sims()
+	if event.is_action_pressed("right"):
+		advance_stage()
+
+func _process(_delta):
+	if ASYNC_MODE:
+		if not sim_running and remaining_sims >= 0:
+			remaining_sims -= 1
+			start_sim()
+			if remaining_sims == 0:
+				emit_signal("sims_done")
 
 func _mk_res_store(default=[]):
 	var clone = func (val):
@@ -58,6 +81,12 @@ func _mk_res_store(default=[]):
 			Results.DEFEAT:clone.call(default), 
 			Results.DRAW:clone.call(default)}
 
+func run_stages():
+	run_sims()
+	while $ExtraStages.get_child_count():
+		advance_stage()
+		run_sims()
+		
 func run_sims():
 	remaining_sims = NB_SIMS_PER_RUN
 	start_time = Time.get_ticks_msec()
@@ -68,13 +97,19 @@ func run_sims():
 	gladiator_health_left = _mk_res_store()
 	challengers_health_left = _mk_res_store()
 	
-	print("Starting a batch of %d sims..." % remaining_sims)	
-	while remaining_sims > 0:
-		remaining_sims -= 1
-		start_sim()
+	var names = $Board.get_actors().map(func (actor): return actor.name)
+	print("Starting a batch of %d sims for %s..." % [remaining_sims, ", ".join(names)])
+	
+	if ASYNC_MODE:
+		await sims_done
+	else:
+		while remaining_sims > 0:
+			remaining_sims -= 1
+			start_sim()
 	summarize_sims()
 
 func start_sim():
+	sim_running = true
 	if sim_board:
 		sim_board.queue_free()
 	sim_board = $Board.duplicate()
@@ -90,6 +125,7 @@ func start_sim():
 		actor.hit.connect(_inc_hit.bind(actor))
 		actor.missed.connect(_inc_miss.bind(actor))
 	$TurnQueue.run()
+	sim_running = false
 
 func get_board():
 	if sim_board:
@@ -103,6 +139,39 @@ func get_actors(alive:=false):
 		actors = actors.filter(func (actor): return actor.is_alive())
 	return actors
 
+func _make_duelist(actor):
+	var strat = Dueling.new(actor, 1.0)
+	actor.add_child(strat)
+
+func advance_stage():
+	## Line up the next contender(s) to fight againts the gladiator
+	var next_stage = $ExtraStages.get_child(0)
+	if next_stage == null:
+		print("No stage to advance to.")
+		return
+
+	var old_actors = $Board.get_actors()
+	var gladiator = old_actors.pop_front()
+	for actor in old_actors:
+		actor.reparent(self)
+		actor.queue_free()
+	
+	var new_actors = []
+	if next_stage is Actor:
+		new_actors.append(next_stage)
+	else:
+		for child in next_stage.get_children():
+			new_actors.append(child)
+		next_stage.reparent(self)
+		next_stage.queue_free()
+	
+	var gladiator_coord = gladiator.get_cell_coord()
+	var builder = BoardBuilder.new($Board)
+	var index = $Board.make_index()
+	for actor in new_actors:
+		_make_duelist(actor)
+		builder.place(actor, false, gladiator_coord, true, null, index)
+	
 func finalize_sim(result:Results):
 	$TurnQueue.shutdown()
 	var turn = $TurnQueue.turn
@@ -123,18 +192,25 @@ func finalize_sim(result:Results):
 
 func summarize_sims():
 	var elapsed = (Time.get_ticks_msec() - start_time) / 1000.0
-	var total = 0
-	for val in results.values():
-		total += val
-	print("Ran %d sims in %0.2f seconds" % [total, elapsed])
+	var nb_sims = Utils.sum(results.values())
+	var all_turns = Utils.sum(nb_turns)
+	print("Ran %d sims in %0.2f seconds (%0.2f turn/s)" % [nb_sims, elapsed, all_turns/elapsed])
 	print("Median encouter lasted %d turns" % Utils.median(nb_turns))
-	print("Victory: %0.2f%%" % (100.0*results[Results.VICTORY]/total))
+	print("Victory: %0.2f%%" % (100.0*results[Results.VICTORY]/nb_sims))
 	summarize_gladiator_health(Results.VICTORY)
-	print("Defeat: %0.2f%%" % (100.0*results[Results.DEFEAT]/total))
+	print("Defeat: %0.2f%%" % (100.0*results[Results.DEFEAT]/nb_sims))
 	summarize_challengers_health(Results.DEFEAT)
-	print("Draw: %0.2f%%" % (100.0*results.get(Results.DRAW, 0)/total))
+	print("Draw: %0.2f%%" % (100.0*results.get(Results.DRAW, 0)/nb_sims))
 	summarize_gladiator_health(Results.DRAW)
 	summarize_challengers_health(Results.DRAW)
+	
+	var names = nb_hits.keys()
+	names.sort()
+	for name in names:
+		var total = nb_hits[name] + nb_misses.get(name, 0)
+		var hit_rate = 100.0 * nb_hits[name] / total
+		print("%s's hit rate: %0.2f%%" % [name, hit_rate])
+	print()
 
 func summarize_gladiator_health(result:Results):
 	# Print the median gladiator health for encounters that ended in `result`

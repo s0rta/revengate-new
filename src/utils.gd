@@ -28,6 +28,12 @@ static func ddump_event(event, node, meth_name):
 	if not event is InputEventMouseMotion:
 		print("%s.%s(%s)" % [node.name, meth_name, event])
 
+static func sum(values:Array):
+	var total = 0
+	for val in values:
+		total += val
+	return total
+
 static func median(values:Array):
 	assert(not values.is_empty())
 	values = values.duplicate()
