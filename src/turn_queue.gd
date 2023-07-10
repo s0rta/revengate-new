@@ -23,8 +23,9 @@ signal resumed  # processing is ready to restart after being paused
 signal done  # processing stopped
 signal turn_started(turn:int)
 
-var state = States.STOPPED
+@export var verbose := true
 
+var state = States.STOPPED
 var turn := 0
 var turn_is_valid := true
 
@@ -84,10 +85,12 @@ func run():
 	turn_is_valid = true
 	state = States.PROCESSING
 	while state == States.PROCESSING:
-		print("=== Start of turn %d ===" % turn)
+		if verbose:
+			print("=== Start of turn %d ===" % turn)
 		emit_signal("turn_started", turn)
 		actors = get_actors()
-		print("playing actors: %s " % [actors])
+		if verbose:
+			print("playing actors: %s " % [actors])
 		# 1st pass: tell all in-play objects about the start of the turn
 		get_board().start_turn(turn)
 			
@@ -101,9 +104,11 @@ func run():
 				await actor.anims_done
 			actor.act()
 			if not actor.is_idle():
-				print("waiting for %s..." % actor)
+				if verbose:
+					print("waiting for %s..." % actor)
 				await actor.turn_done
-				print("done with %s!" % actor)
+				if verbose:
+					print("done with %s!" % actor)
 			if turn_is_valid and actor.is_animating():
 				await get_tree().create_timer(ACTING_DELAY).timeout
 		if state == States.PAUSED:

@@ -20,31 +20,55 @@ class_name Simulator extends Node2D
 
 enum Results {VICTORY, DEFEAT, DRAW}
 
-const MAX_SIM_TURNS = 30
-var remaining_sims = 100
+const NB_SIMS_PER_RUN = 100
+const MAX_SIM_TURNS = 50
 
 var gladiator = null  # the actor who's fate tells us when the simulation is done
 var challengers_health_full:int
-var nb_hits = {}  # actor->int
-var nb_misses = {}  # actor->int
 var sim_board:RevBoard
 
+var remaining_sims:int
+var nb_turns:Array[int]  # array of number of turns each simulation lasted
+var nb_hits:Dictionary  # actor->int
+var nb_misses:Dictionary  # actor->int
+
 # Results->int for all sims from the Gladiator's point of view
-var results = {Results.VICTORY:0, Results.DEFEAT:0, Results.DRAW:0}
+var results:Dictionary
 
 # Results->[pct1, ...]
-var gladiator_health_left = {Results.VICTORY:[], Results.DEFEAT:[], Results.DRAW:[]}
-var challengers_health_left = {Results.VICTORY:[], Results.DEFEAT:[], Results.DRAW:[]}
+var gladiator_health_left:Dictionary
+var challengers_health_left:Dictionary
 
-var nb_turns = []  # array of number of turns each simulation lasted
-
-
-@onready var start_time = Time.get_ticks_msec()
+var start_time:int
 
 func _ready():
 	run_sims()
 
+func _input(event):
+	if event.is_action_pressed("ui_accept"):
+		run_sims()
+
+func _mk_res_store(default=[]):
+	var clone = func (val):
+		if val is int:
+			return val
+		else:
+			return val.duplicate()
+	return {Results.VICTORY:clone.call(default), 
+			Results.DEFEAT:clone.call(default), 
+			Results.DRAW:clone.call(default)}
+
 func run_sims():
+	remaining_sims = NB_SIMS_PER_RUN
+	start_time = Time.get_ticks_msec()
+	nb_turns = []
+	nb_hits = {}
+	nb_misses = {}
+	results = _mk_res_store(0)
+	gladiator_health_left = _mk_res_store()
+	challengers_health_left = _mk_res_store()
+	
+	print("Starting a batch of %d sims..." % remaining_sims)	
 	while remaining_sims > 0:
 		remaining_sims -= 1
 		start_sim()
@@ -52,7 +76,6 @@ func run_sims():
 
 func start_sim():
 	if sim_board:
-		sim_board.reparent($/root)
 		sim_board.queue_free()
 	sim_board = $Board.duplicate()
 	add_child(sim_board)
@@ -93,11 +116,6 @@ func finalize_sim(result:Results):
 			health_tot += actor.health
 	challengers_health_left[result].append(100.0 * health_tot / challengers_health_full)
 	
-	print("Sim is over after %s turns" % turn)
-	print("hits: %s" % [nb_hits])
-	print("misses: %s" % [nb_misses])
-	print("Results: %s" % [results])
-
 	if remaining_sims > 0:
 		if not $TurnQueue.is_stopped():
 			await $TurnQueue.done
@@ -138,7 +156,6 @@ func _inc_miss(_victim, actor):
 	nb_misses[actor.name] = nb_misses.get(actor.name, 0) + 1
 
 func _on_actor_died(_coord, _tags):
-	print("Someone died...")
 	if gladiator == null or not gladiator.is_alive():
 		finalize_sim(Results.DEFEAT)
 	elif len(get_actors(true)) == 1:

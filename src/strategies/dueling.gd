@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-## Pick a random foe, fight them until either you or them dies.
+## Pick a random foe from a different faction, fight them until either you or them die.
 class_name Dueling extends Strategy
 
 var foe = null
@@ -40,7 +40,7 @@ func select_foe(actor, index:RevBoard.BoardIndex):
 	var actors = index.get_actors()
 	actors.shuffle()
 	for other in actors:
-		if other != me and other.is_alive():
+		if other != me and other.is_alive() and other.faction != me.faction:
 			foe = other
 			return 
 	foe = null  # couldn't find anyone worth fighting with
