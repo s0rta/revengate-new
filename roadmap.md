@@ -171,8 +171,12 @@ UX:
 - [x] buttons and in-dialogues choices are bigger
 - [x] tap-away dismisses long-tap options
 
+## v0.9.1
+Combat:
+- [ ] re-balance most monsters
+
 ## V0.10
-- [ ] Godot 4.1
+- [x] Godot 4.1
 - [ ] async preload most shaders to speedup startup
 
 Items:
@@ -180,6 +184,8 @@ Items:
 - [ ] "magical" tag replaces the magical flag
 
 Combat:
+- [x] Monte Carlo simulator
+  - [x] global flag to disable animations (wire inside Actor.is_unexposed())
 - [ ] TribalTerritorial uses perception rather than dist()
 - [ ] Tracking is triggered by perception
 
@@ -196,8 +202,6 @@ Combat:
 
 
 ## Ice Box: not yet scheduled for a release
-- [ ] Monte Carlo simulator
-  - [ ] global flag to disable animations (wire inside Actor.is_unexposed())
 - [ ] non-walking movement and path finding (wading, swimming, phasing)
 - [ ] Deck.peek(): select the next card, but do not remove it from the deck
 - [ ] help screen with contextual content
