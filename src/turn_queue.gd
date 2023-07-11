@@ -20,9 +20,12 @@ extends Node
 const ACTING_DELAY = 0.1  # in seconds
 enum States {STOPPED, PAUSED, PROCESSING, SHUTTING_DOWN}
 signal resumed  # processing is ready to restart after being paused
+signal done  # processing stopped
+signal turn_started(turn:int)
+
+@export var verbose := true
 
 var state = States.STOPPED
-
 var turn := 0
 var turn_is_valid := true
 
@@ -62,20 +65,32 @@ func pause():
 	
 func is_paused():
 	return state == States.PAUSED
+
+func reset():
+	## Bring the turn queue back to like it was at the start of the game
+	assert(state == States.STOPPED, "A running TurnQueue must be shutdown before you can reset it.")
+	turn = 0
+	turn_is_valid = true
 	
 func resume():
 	assert(state == States.PAUSED)
 	state = States.PROCESSING
 	emit_signal("resumed")
 
+func is_stopped():
+	return state == States.STOPPED
+
 func run():
 	var actors: Array
 	turn_is_valid = true
 	state = States.PROCESSING
 	while state == States.PROCESSING:
-		print("=== Start of turn %d ===" % turn)
+		if verbose:
+			print("=== Start of turn %d ===" % turn)
+		emit_signal("turn_started", turn)
 		actors = get_actors()
-		print("playing actors: %s " % [actors])
+		if verbose:
+			print("playing actors: %s " % [actors])
 		# 1st pass: tell all in-play objects about the start of the turn
 		get_board().start_turn(turn)
 			
@@ -89,9 +104,11 @@ func run():
 				await actor.anims_done
 			actor.act()
 			if not actor.is_idle():
-				print("waiting for %s..." % actor)
+				if verbose:
+					print("waiting for %s..." % actor)
 				await actor.turn_done
-				print("done with %s!" % actor)
+				if verbose:
+					print("done with %s!" % actor)
 			if turn_is_valid and actor.is_animating():
 				await get_tree().create_timer(ACTING_DELAY).timeout
 		if state == States.PAUSED:
@@ -99,3 +116,4 @@ func run():
 		turn += 1
 		turn_is_valid = true
 	state = States.STOPPED
+	emit_signal("done")

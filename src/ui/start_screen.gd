@@ -27,7 +27,7 @@ func _ready():
 		$Tabulator.setv("early-stage-disclaimer", true)
 
 func start_new_game():
-	Tender.pre_game("The Audition", "res://src/story/the_audition.txt")
+	Tender.pre_game("The Audition", "res://src/story/the_audition.md")
 	get_tree().change_scene_to_file("res://src/main.tscn")
 	
 func _on_credits_button_pressed():

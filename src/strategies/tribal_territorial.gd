@@ -50,7 +50,6 @@ func refresh(turn):
 					has_activated = true
 
 func is_valid():
-	print("TribalTerritorial.is_valid(): has_activated=%s" % has_activated)
 	return super() and has_activated
 
 func act() -> bool:

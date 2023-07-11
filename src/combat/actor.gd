@@ -24,7 +24,11 @@ signal state_changed(new_state)
 # the actor won't play again until the turn counter is incremented
 signal turn_done  
 # the actor is done moving, but it could move again during the current turn
-signal anims_done  
+signal anims_done
+# tried to hit `foe` but missed
+signal missed(foe)
+# successfully hit `victim` for `damage` hit points
+signal hit(victim, damage)
 # the actor was the victim of an attack
 signal was_attacked(attacker)
 # health changed, either got better or worst
@@ -37,7 +41,7 @@ signal moved(from, to)
 signal picked_item(old_coord)
 # the actor removed an item from their inventory and left it at `coord`
 signal dropped_item(coord)
-# the actor stopped automating its actions with a(some) strategy(ies),
+# the actor stopped automating their actions with a(some) strategy(ies),
 # might fire more than once per strategy
 signal strategy_expired
 
@@ -319,7 +323,7 @@ func start_turn(new_turn:int):
 	# expiration of our sub-components and trigger conditions for once for each missed turn. 
 	# This might hurt!
 	
-	# FIXME: see if we have we died along the way?
+	# activate_conditions() adequately verifies if we have we died along the way...
 	var multi_step_nodes = []
 	for node in get_children():
 		if node.get("start_turn"):
@@ -499,21 +503,14 @@ func _anim_lunge(foe):
 	return anim
 	
 func anim_miss(foe, weapon):
-	## Animate a missed strike towards `foe`, return the animation object.
+	## Animate a missed strike towards `foe`
 	play_sound("MissSound", weapon)
-
-	var anim = _anim_lunge(foe)
-	return anim
+	_anim_lunge(foe)
 
 func anim_hit(foe, weapon, damage):
-	## Animate a success strike on `foe`, return the animation object.
-	print("hit %s for %s dmg" % [foe, damage])
+	## Animate a success strike on `foe`
 	play_sound("HitSound", weapon)
-	
-	foe.update_health(-damage)
-	foe.emit_signal("was_attacked", self)
-	if not (is_unexposed() and foe.is_unexposed()):
-		_anim_lunge(foe)
+	_anim_lunge(foe)
 
 func play_sound(node_name, weapon=null):
 	## Play the most specific sound for "node_name": either from the weapon or from the actor node.
@@ -554,15 +551,13 @@ func update_health(hp_delta: int):
 	
 	health += hp_delta
 	emit_signal("health_changed", health)
-	
-	if is_unexposed():
-		return  # don't animate off-board health changes
 		
-	var anim = null
-	if hp_delta < 0:
-		_anim_health_change($DamageLabel, -hp_delta, Vector2(.25, -.5))
-	else:
-		_anim_health_change($HealingLabel, hp_delta, Vector2(.25, .5))
+	if not is_unexposed():
+		# animate visible health changes
+		if hp_delta < 0:
+			_anim_health_change($DamageLabel, -hp_delta, Vector2(.25, -.5))
+		else:
+			_anim_health_change($HealingLabel, hp_delta, Vector2(.25, .5))
 		
 	if health <= 0:
 		die()
@@ -599,6 +594,10 @@ func is_expired():
 
 func is_unexposed(index=null):
 	## Return if this actor is where the hero should could be aware of them
+	
+	# not inside a valid game
+	if Tender.hero == null:
+		return true
 	
 	# on a board other than the active one
 	var parent = get_parent()
@@ -779,14 +778,16 @@ func strike(foe:Actor, weapon):
 	## Strike foe with weapon. The strike could result in a miss. 
 	## The result is immediately visible in the world.
 	# combats works with two random rolls: to-hit then damage.
-	
+	var with_anims = not is_unexposed()
 	var crit = false
 	# to-hit
 	# pre-compute the to-hit bonnus from features
 	var hit_mod = _get_feature_modifier(foe, weapon, TO_HIT_FEATURE_MODS)
 	if stat_trial(foe.get_evasion(weapon), "agility", weapon.skill, hit_mod):
 		# Miss!
-		anim_miss(foe, weapon)
+		if with_anims:
+			anim_miss(foe, weapon)
+		emit_signal("missed", foe)
 		return false
 
 	# TODO: agility should influence the chance of a critical hit	
@@ -801,8 +802,12 @@ func strike(foe:Actor, weapon):
 	if crit:
 		damage *= CRITICAL_MULT
 	damage = foe.normalize_damage(weapon, damage)
-	CombatUtils.apply_all_effects(weapon, foe)
-	anim_hit(foe, weapon, damage)
+	foe.update_health(-damage)
+	CombatUtils.apply_all_effects(weapon, foe)	
+	emit_signal("hit", foe, damage)
+	foe.emit_signal("was_attacked", self)
+	if with_anims and not foe.is_unexposed():
+		anim_hit(foe, weapon, damage)
 	return true
 
 func normalize_damage(weapon, damage):

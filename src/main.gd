@@ -178,7 +178,7 @@ func start_ch2():
 	%BarTender.conversation_sect = "intro_2"
 	supply_item(%BarTender, "res://src/items/potion_of_booze.tscn", ["gift"])
 
-	%StoryScreen.show_story("Chapter 2: The Sound of Satin", "res://src/story/sound_of_satin.txt")
+	%StoryScreen.show_story("Chapter 2: The Sound of Satin", "res://src/story/sound_of_satin.md")
 	hero.place(V.i(2, 2))
 	center_on_hero()
 	if $TurnQueue.is_paused():

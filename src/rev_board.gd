@@ -708,6 +708,9 @@ func start_turn(new_turn:int):
 	## Mark the start a new game turn	
 	# FIXME: handle sub_nodes dissipating while we do a multi-turn update
 	for node in get_children():
+		# skip dead actors
+		if node.get("is_alive") and not node.is_alive():
+			continue
 		if node.get("start_turn"):
 			node.start_turn(new_turn)
 		elif node.get("start_new_turn"):
