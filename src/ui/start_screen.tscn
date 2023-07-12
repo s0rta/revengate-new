@@ -106,7 +106,6 @@ text = "Welcome to Revengate!"
 [node name="DisclaimerDia" type="AcceptDialog" parent="."]
 title = ""
 size = Vector2i(1024, 284)
-visible = true
 borderless = true
 always_on_top = true
 dialog_text = "Hi, I'm Yannick!
