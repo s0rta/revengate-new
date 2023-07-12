@@ -1,11 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://cqkoy4vxwt5q"]
+[gd_scene load_steps=11 format=3 uid="uid://cqkoy4vxwt5q"]
 
 [ext_resource type="Script" path="res://src/combat/actor.gd" id="1_ux3dq"]
 [ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_ofe33"]
 [ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="3_wnw0k"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="4_fyul4"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="6_hl06a"]
+[ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="7_fndha"]
 [ext_resource type="PackedScene" path="res://src/weapons/sword.tscn" id="7_i8fts"]
+[ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="7_l6u0k"]
+[ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="9_ohw41"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_00etm"]
 size = Vector2(32, 32)
@@ -75,5 +78,12 @@ fencing = 1
 [node name="Sword" parent="." instance=ExtResource("7_i8fts")]
 visible = false
 is_equipped = true
+
+[node name="Hammer" parent="." instance=ExtResource("7_fndha")]
+
+[node name="Razor" parent="." instance=ExtResource("7_l6u0k")]
+visible = false
+
+[node name="Rapier" parent="." instance=ExtResource("9_ohw41")]
 
 [connection signal="was_attacked" from="." to="." method="_learn_attack"]

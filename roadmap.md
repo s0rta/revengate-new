@@ -173,7 +173,7 @@ UX:
 
 ## v0.9.1
 Combat:
-- [ ] re-balance most monsters
+- [x] re-balance most monsters
 
 ## V0.10
 - [x] Godot 4.1

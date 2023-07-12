@@ -17,6 +17,8 @@ color = Color(0.921569, 0.415686, 0.184314, 1)
 spawn_cost = 12.0
 health = 40
 healing_prob = 0.1
+strength = 45
+agility = 45
 intelligence = 40
 perception = 45
 mana = 40
@@ -46,7 +48,7 @@ priority = 0.1
 
 [node name="SkillLevels" type="Node" parent="." index="9"]
 script = ExtResource("5_jt3dc")
-innate_attack = 2
+innate_attack = 3
 channeling = 2
 device_of_focusing = 1
 

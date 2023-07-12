@@ -12,7 +12,7 @@ color = Color(0.329412, 0.4, 0.870588, 1)
 spawn_cost = 5.0
 health = 23
 strength = 29
-agility = 52
+agility = 46
 intelligence = 30
 description = "Sewer otters probably didn't evolve in sewers, but this is where most people are likely to encounter them. They look like a very large, very ferocious otter.
 
@@ -28,7 +28,7 @@ text = "o"
 
 [node name="Claw" type="Node" parent="." index="8"]
 script = ExtResource("2_p7wm0")
-damage = 5
+damage = 6
 damage_family = 2
 
 [node name="HitSound" type="AudioStreamPlayer" parent="Claw" index="0"]

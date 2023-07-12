@@ -12,8 +12,10 @@ script = ExtResource("2_j40pw")
 char = "𝜑"
 caption = "phantruch"
 color = Color(0.603922, 0.545098, 1, 1)
-health = 60
-agility = 55
+health = 42
+healing_prob = 0.1
+strength = 58
+agility = 51
 intelligence = 30
 perception = 60
 faction = 2
@@ -27,20 +29,20 @@ text = "𝜑"
 [node name="Claw" type="Node" parent="." index="7"]
 script = ExtResource("2_2xi70")
 damage = 4
-damage_family = 2
+damage_family = 3
 
 [node name="HitSound" type="AudioStreamPlayer" parent="Claw" index="0"]
 stream = ExtResource("3_s4mxm")
 volume_db = -3.0
 pitch_scale = 1.25
 
-[node name="Claw2" type="Node" parent="." index="8"]
+[node name="Pincer" type="Node" parent="." index="8"]
 script = ExtResource("2_2xi70")
-damage = 4
+damage = 5
 damage_family = 2
-probability = 0.6
+probability = 0.5
 
-[node name="HitSound" type="AudioStreamPlayer" parent="Claw2" index="0"]
+[node name="HitSound" type="AudioStreamPlayer" parent="Pincer" index="0"]
 stream = ExtResource("3_s4mxm")
 volume_db = -3.0
 pitch_scale = 1.25

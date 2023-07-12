@@ -1,0 +1,93 @@
+[gd_scene load_steps=12 format=3 uid="uid://dq2b713n15c7h"]
+
+[ext_resource type="Script" path="res://src/combat/actor.gd" id="1_gn0qh"]
+[ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_5h58r"]
+[ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="3_lscri"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="4_ll6ef"]
+[ext_resource type="Script" path="res://src/combat/core_skills.gd" id="5_hkb8g"]
+[ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="7_w26hw"]
+[ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="8_05eqr"]
+[ext_resource type="PackedScene" uid="uid://d01nbq4dt1cs5" path="res://src/weapons/silver_saber.tscn" id="9_a8ws8"]
+[ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="9_f7fjc"]
+[ext_resource type="PackedScene" uid="uid://dj5x5c687ddyj" path="res://src/items/amulet_of_strength.tscn" id="10_ywllc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_00etm"]
+size = Vector2(32, 32)
+
+[node name="AdvancedJoe" type="Area2D"]
+visible = false
+script = ExtResource("1_gn0qh")
+char = "@"
+caption = "average joe"
+color = Color(0.741176, 0.741176, 0.741176, 1)
+health = 60
+healing_prob = 0.15
+faction = 1
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -7.5
+offset_top = -13.0
+offset_right = 7.5
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+auto_translate = false
+theme_type_variation = &"AsciiGraphics"
+theme_override_colors/font_color = Color(0.741176, 0.741176, 0.741176, 1)
+text = "@"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("RectangleShape2D_00etm")
+
+[node name="MissSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_5h58r")
+
+[node name="DeathSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_lscri")
+
+[node name="DamageLabel" type="Label" parent="."]
+visible = false
+offset_top = -9.0
+offset_right = 7.0
+offset_bottom = 14.0
+theme_override_colors/font_color = Color(0.784314, 0.227451, 0.172549, 1)
+theme_override_font_sizes/font_size = 21
+text = "?"
+
+[node name="HealingLabel" type="Label" parent="."]
+visible = false
+offset_left = -16.0
+offset_top = -27.0
+offset_right = -6.0
+offset_bottom = 3.0
+theme_override_colors/font_color = Color(0.25098, 0.780392, 0.172549, 1)
+theme_override_font_sizes/font_size = 21
+text = "?"
+
+[node name="Mem" type="Node" parent="."]
+script = ExtResource("4_ll6ef")
+
+[node name="SkillLevels" type="Node" parent="."]
+script = ExtResource("5_hkb8g")
+fencing = 1
+
+[node name="Hammer" parent="." instance=ExtResource("7_w26hw")]
+
+[node name="Razor" parent="." instance=ExtResource("8_05eqr")]
+visible = false
+
+[node name="Rapier" parent="." instance=ExtResource("9_f7fjc")]
+
+[node name="SilverSaber" parent="." instance=ExtResource("9_a8ws8")]
+is_equipped = true
+
+[node name="AmuletOfStrength" parent="." instance=ExtResource("10_ywllc")]
+
+[connection signal="was_attacked" from="." to="." method="_learn_attack"]

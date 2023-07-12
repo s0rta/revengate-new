@@ -31,7 +31,7 @@ static func node_core_stats(node):
 	return mods
 
 static func skill_modifier(level:Consts.SkillLevel):
-	return 7 * level
+	return 5 * level
 
 static func apply_all_effects(weapon, victim):
 	for node in weapon.get_children():

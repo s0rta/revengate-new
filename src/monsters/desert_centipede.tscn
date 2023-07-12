@@ -7,15 +7,15 @@
 [ext_resource type="AudioStream" uid="uid://da0cslkk526yk" path="res://src/monsters/bite-small.wav" id="5_dmajw"]
 
 [node name="DesertCentipede" instance=ExtResource("1_c2kw3")]
-visible = false
 char = "c"
 caption = "desert centipede"
 color = Color(0.92, 0.62, 0.1, 1)
 spawn_cost = 7.0
-health = 18
+health = 15
 strength = 25
-agility = 40
+agility = 44
 intelligence = 10
+resistance = 2
 bestiary_img = "res://src/monsters/desert-centipede.jpg"
 description = "The Tripolitan Desert Centipede is not the kind of bug that you can hope to crush under your boot. These distant cousins of the more common house centipede measure 1m on average and feature a very thick armored exoskeleton. 
 
@@ -30,7 +30,7 @@ script = ExtResource("2_5enhw")
 
 [node name="PoisonBite" type="Node" parent="." index="8"]
 script = ExtResource("4_s2rcw")
-damage = 8
+damage = 6
 damage_family = 3
 
 [node name="HitSound" type="AudioStreamPlayer" parent="PoisonBite" index="0"]

@@ -13,7 +13,7 @@ char = "𝜑"
 caption = "lesser phantruch"
 color = Color(0.54902, 1, 0.92549, 1)
 health = 40
-strength = 45
+strength = 52
 intelligence = 20
 perception = 60
 faction = 2
@@ -26,7 +26,7 @@ text = "𝜑"
 
 [node name="Bite" type="Node" parent="." index="7"]
 script = ExtResource("3_xu72d")
-damage = 4
+damage = 5
 damage_family = 3
 
 [node name="HitSound" type="AudioStreamPlayer" parent="Bite" index="0"]
