@@ -50,7 +50,7 @@ Additionnal sound effects CC-BY-SA Yannick Gingras:
 - ethereal-01, 02
 - razor
 - explosion-01
-- magic-01
+- magic-01, 02
 
 Particle sprites:
 CC0 by Kenney

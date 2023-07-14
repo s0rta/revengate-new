@@ -1,0 +1,118 @@
+[gd_scene load_steps=15 format=3 uid="uid://n16i04jsaieo"]
+
+[ext_resource type="Script" path="res://src/sfx/magic_sfx_02.gd" id="1_ycm2h"]
+[ext_resource type="Texture2D" uid="uid://c60y0oqwx0t6r" path="res://addons/kenney_particle_pack/star_06.png" id="2_6wivk"]
+[ext_resource type="Texture2D" uid="uid://ccvmfsha4b16v" path="res://addons/kenney_particle_pack/flare_01.png" id="3_jixdf"]
+[ext_resource type="AudioStream" uid="uid://ca0r4toptaise" path="res://src/sfx/angels_choir.mp3" id="4_63fcu"]
+
+[sub_resource type="Gradient" id="Gradient_rnw5b"]
+offsets = PackedFloat32Array(0.00617284, 0.334842, 1)
+colors = PackedColorArray(0.408167, 1, 0.33, 0.784314, 0.516667, 1, 0, 1, 0.838897, 0.838897, 0.838897, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jhwtf"]
+gradient = SubResource("Gradient_rnw5b")
+
+[sub_resource type="Curve" id="Curve_morlj"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.736402, 0.527273), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_8l6v2"]
+curve = SubResource("Curve_morlj")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6075m"]
+lifetime_randomness = 0.5
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 1.0
+emission_ring_radius = 24.0
+emission_ring_inner_radius = 8.0
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+angular_velocity_min = -60.0
+angular_velocity_max = 60.0
+orbit_velocity_min = -0.5
+orbit_velocity_max = 0.5
+radial_accel_min = 150.0
+radial_accel_max = 150.0
+scale_min = 0.2
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_8l6v2")
+color = Color(0.611765, 0.988235, 0, 0.835294)
+color_ramp = SubResource("GradientTexture1D_jhwtf")
+sub_emitter_mode = 1
+sub_emitter_frequency = 3.0
+sub_emitter_keep_velocity = true
+attractor_interaction_enabled = false
+
+[sub_resource type="Gradient" id="Gradient_gxhmg"]
+offsets = PackedFloat32Array(0.00617284, 0.334842, 1)
+colors = PackedColorArray(1, 1, 1, 0.784314, 0.610335, 0.81, 0.3969, 1, 0.838897, 0.838897, 0.838897, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_d55km"]
+gradient = SubResource("Gradient_gxhmg")
+
+[sub_resource type="Curve" id="Curve_nj7xu"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.736402, 0.527273), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_l1rcs"]
+curve = SubResource("Curve_nj7xu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_uibh5"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+angular_velocity_min = -60.0
+angular_velocity_max = 60.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+radial_accel_min = 25.0
+radial_accel_max = 75.0
+scale_min = 0.2
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_l1rcs")
+color = Color(0.988235, 0.988235, 0.988235, 0.835294)
+color_ramp = SubResource("GradientTexture1D_d55km")
+attractor_interaction_enabled = false
+
+[node name="SparkleStorm" type="Node2D"]
+script = ExtResource("1_ycm2h")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+use_parent_material = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = -96.0
+offset_right = 96.0
+offset_bottom = 96.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GreenSparkles" type="GPUParticles2D" parent="."]
+amount = 10
+sub_emitter = NodePath("../Glitters")
+process_material = SubResource("ParticleProcessMaterial_6075m")
+texture = ExtResource("2_6wivk")
+one_shot = true
+speed_scale = 1.5
+explosiveness = 0.3
+visibility_rect = Rect2(-80, -80, 160, 160)
+draw_order = 0
+
+[node name="Glitters" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 5
+process_material = SubResource("ParticleProcessMaterial_uibh5")
+texture = ExtResource("3_jixdf")
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.4
+draw_order = 2
+
+[node name="Sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_63fcu")
+pitch_scale = 1.1

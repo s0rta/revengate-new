@@ -174,18 +174,20 @@ UX:
 ## v0.9.1
 Combat:
 - [x] re-balance most monsters
+- [x] Monte Carlo simulator
+  - [x] global flag to disable animations (wire inside Actor.is_unexposed())
 
 ## V0.10
 - [x] Godot 4.1
 - [ ] async preload most shaders to speedup startup
-
+- [ ] more spells
+  - [ ] healing
+  
 Items:
 - [ ] potion of absinthe
 - [ ] "magical" tag replaces the magical flag
 
 Combat:
-- [x] Monte Carlo simulator
-  - [x] global flag to disable animations (wire inside Actor.is_unexposed())
 - [ ] TribalTerritorial uses perception rather than dist()
 - [ ] Tracking is triggered by perception
 

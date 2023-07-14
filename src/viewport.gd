@@ -77,7 +77,7 @@ func flash_coord_selection(coord:Vector2i):
 	Utils.fadeout_later(highlight, 5)
 
 func effect_at_coord(effect_name, coord:Vector2i, fadeout_secs:=0):
-	var path = "res://src/ui/%s.tscn" % effect_name
+	var path = "res://src/sfx/%s.tscn" % effect_name
 	var effect = load(path).instantiate()
 	effect.position = RevBoard.board_to_canvas(coord)
 	add_child(effect)

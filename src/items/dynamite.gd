@@ -23,9 +23,9 @@ func _dissipate():
 
 func blow_up():
 	if not is_unexposed():
-		Tender.viewport.effect_at_coord("explosion_vfx", get_cell_coord())
+		Tender.viewport.effect_at_coord("explosion_sfx", get_cell_coord())
 	splash_damage()
-		
+
 func splash_damage():
 	## Hurt everyone in the blast radius
 	var board = get_board()

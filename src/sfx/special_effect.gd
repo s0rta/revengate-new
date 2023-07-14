@@ -15,29 +15,30 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Node2D
+## A special effect with both audio and visual components
+class_name SpecialEffect extends Node2D
 
 ## should the VFX remove itself from the scene tree after flashing
 @export var auto_free := true
 
-# TODO: derive from the shader params
 const MAX_SCREEN_TIME = 5
 
-# not using TIME in the shader because we want to be able to set the effect start time 
+# not using TIME in the shader(s) because we want to be able to set the effect start time 
 # from GDScript
 var time: float
 
 func _ready():
 	time = 0
-	assert(material is ShaderMaterial)
-	material.set_shader_parameter("time", time)
-	reset_start_time()
+	if material is ShaderMaterial:
+		material.set_shader_parameter("time", time)
+		reset_start_time()
 	start_particles()
 	$Sound.play()
 
 func _process(delta):
 	time += delta
-	material.set_shader_parameter("time", time)
+	if material is ShaderMaterial:
+		material.set_shader_parameter("time", time)
 	if auto_free and time > MAX_SCREEN_TIME:
 		queue_free()
 	
