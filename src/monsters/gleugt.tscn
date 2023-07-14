@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cjoutyju3dhre"]
+[gd_scene load_steps=12 format=3 uid="uid://cjoutyju3dhre"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_dxud3"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="2_0ala4"]
@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://cuiqioehqyffe" path="res://src/items/vital_assemblage.tscn" id="7_0htct"]
 [ext_resource type="Script" path="res://src/spells/summon_phantruch.gd" id="8_mba68"]
 [ext_resource type="PackedScene" uid="uid://c18hdsjecec2" path="res://src/items/device_of_easy_focus.tscn" id="9_fjuu7"]
+[ext_resource type="Script" path="res://src/strategies/magic_healing.gd" id="10_jf8ca"]
+[ext_resource type="Script" path="res://src/spells/restore_health.gd" id="11_lae3m"]
 
 [node name="Gleugt" instance=ExtResource("1_dxud3")]
 char = "g"
@@ -63,3 +65,11 @@ priority = 0.5
 script = ExtResource("8_mba68")
 
 [node name="DeviceOfEasyFocus" parent="." index="13" instance=ExtResource("9_fjuu7")]
+
+[node name="MagicHealing" type="Node" parent="." index="14"]
+script = ExtResource("10_jf8ca")
+probability = 0.5
+priority = 0.8
+
+[node name="RestoreHealth" type="Node" parent="." index="15"]
+script = ExtResource("11_lae3m")

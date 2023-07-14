@@ -19,7 +19,7 @@
 ## This script is autoloaded at `Consts`
 extends Node
 
-const VERSION := "0.9.1"
+const VERSION := "0.9.2"
 const DEBUG = true
 
 ## The kind of damage, mostly used to compute resistances. Can apply to healing as well.
@@ -88,7 +88,7 @@ const VIS_MODULATE := Color.WHITE
 const TAGS = ["silver", "ethereal", "undead", "gift", "broken", "lit", 
 			"booze",
 			# spells
-			"vital-assemblage", "summoning", 
+			"vital-assemblage", "summoning", "healing",
 			# locks
 			"key-blue", "key-red",
 			# campaigns

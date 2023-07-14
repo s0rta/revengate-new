@@ -47,5 +47,5 @@ func cast():
 	var devices = me.get_items(["vital-assemblage"], ["broken"])
 	me.give_item(Rand.choice(devices), creature)
 	creature.show()
-	Tender.viewport.effect_at_coord("magic_vfx_01", there)
+	Tender.viewport.effect_at_coord("magic_sfx_01", there)
 	me.use_mana(mana_cost)
