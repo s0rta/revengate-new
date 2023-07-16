@@ -93,6 +93,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="GreenSparkles" type="GPUParticles2D" parent="."]
+emitting = false
 amount = 10
 sub_emitter = NodePath("../Glitters")
 process_material = SubResource("ParticleProcessMaterial_6075m")

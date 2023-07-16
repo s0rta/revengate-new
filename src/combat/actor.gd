@@ -438,6 +438,11 @@ func travel_to(there, index=null):
 		add_child(strat)
 		return true
 
+func add_strategy(strat:Strategy):
+	if strat.me != self:
+		strat.me = self
+	add_child(strat)
+
 func refresh_strategies():
 	## Ask strategie to update their awareness of the world.
 	for node in get_children():

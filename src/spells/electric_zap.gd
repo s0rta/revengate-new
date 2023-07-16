@@ -15,34 +15,27 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-## Opportunistically fight back after being attacked.
-class_name MagicHealing extends Strategy
+class_name ElectricZap extends Spell
 
-const HEALING_THRESHOLD = 5
-@export_range(0.0, 1.0) var probability = 0.1
+@export var range:= 3
+@export var base_damage := 5
+@export var stun_turns := 3
 
-var has_activated = null
-var spell = null  # selected spell, random if more than one available.
+func _ready():
+	super()
+	mana_cost = 12
+	tags.append("attack")
+	damage_family = Consts.DamageFamily.ELECTRIC
 
-func refresh(turn):
-	has_activated = Rand.rstest(probability)
+func cast_on(victim:Actor):
+	var here = me.get_cell_coord()
+	var there = victim.get_cell_coord()
+	Tender.viewport.effect_between_coords("zap_sfx", here, there)
+	var damage = victim.normalize_damage(self, base_damage)
+	victim.update_health(-damage)
+	
+	# stun!
+	var strat = Paralized.new(victim, 1.0, stun_turns)
+	victim.add_strategy(strat)
 
-func is_valid():
-	if not super():
-		return false
-	if not has_activated:
-		return false
-	if me.health >= me.health_full - HEALING_THRESHOLD:
-		return false
-	var spells = me.get_spells(["healing"])
-	spells.shuffle()
-	for sp in spells:
-		if sp.has_reqs():
-			spell = sp
-			return true
-	spell = null
-	return false
-
-func act() -> bool:
-	spell.cast()
-	return true
+	me.use_mana(mana_cost)

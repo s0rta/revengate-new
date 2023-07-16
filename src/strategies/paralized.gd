@@ -17,7 +17,7 @@
 
 ## Do nothing.
 class_name Paralized extends Strategy
-		
+
 func act():
 	print("%s is paralized and can't move!" % me)
 	return

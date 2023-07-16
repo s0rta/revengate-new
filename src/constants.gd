@@ -32,7 +32,8 @@ enum DamageFamily {
 	HEAT, 
 	ACID, 
 	POISON, 
-	CHEMICAL
+	CHEMICAL, 
+	ELECTRIC
 }
 
 ## Factions pre-define many of the allegiances and animosities
@@ -82,13 +83,13 @@ const ALL_REGIONS = [REG_NORTH, REG_SOUTH, REG_EAST, REG_WEST, REG_CENTER]
 
 # Animations and VFX
 const FADE_DURATION := .15
-const FADE_MODULATE := Color(.7, .7, .7, 0.0)
+const FADE_MODULATE := Color(.7, .7, .7, 0.4)
 const VIS_MODULATE := Color.WHITE
 
 const TAGS = ["silver", "ethereal", "undead", "gift", "broken", "lit", 
 			"booze",
 			# spells
-			"vital-assemblage", "summoning", "healing",
+			"vital-assemblage", "summoning", "healing", "attack",
 			# locks
 			"key-blue", "key-red",
 			# campaigns

@@ -49,3 +49,13 @@ func cast():
 	## Activate the spell.
 	## Must be overloaded by subclasses.
 	assert(false, "not implemented")
+
+func cast_on(actor:Actor):
+	## Activate the spell on at actor.
+	## Must be overloaded by subclasses.
+	assert(false, "not implemented")
+
+func cast_at(coord:Vector2i):
+	## Activate the spell at the given location.
+	## Must be overloaded by subclasses.
+	assert(false, "not implemented")

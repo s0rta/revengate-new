@@ -144,12 +144,6 @@ debug_only = true
 
 [node name="Saber" parent="TestingQuestTransitions" instance=ExtResource("18_0s2fs")]
 
-[node name="Outlaw" parent="TestingQuestTransitions" instance=ExtResource("12_g5w02")]
-
-[node name="Outlaw2" parent="TestingQuestTransitions" instance=ExtResource("12_g5w02")]
-
-[node name="Outlaw3" parent="TestingQuestTransitions" instance=ExtResource("12_g5w02")]
-
 [node name="Gleugt" parent="TestingQuestTransitions" instance=ExtResource("26_1p40w")]
 
 [node name="Hissing" parent="." instance=ExtResource("25_0ydwd")]

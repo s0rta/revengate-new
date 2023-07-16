@@ -23,6 +23,10 @@ class_name SpecialEffect extends Node2D
 
 const MAX_SCREEN_TIME = 5
 
+# only set on linear effects like the electric arc
+var start_coord:Vector2i
+var end_coord:Vector2i
+
 # not using TIME in the shader(s) because we want to be able to set the effect start time 
 # from GDScript
 var time: float
@@ -33,7 +37,8 @@ func _ready():
 		material.set_shader_parameter("time", time)
 		reset_start_time()
 	start_particles()
-	$Sound.play()
+	if $Sound:
+		$Sound.play()
 
 func _process(delta):
 	time += delta

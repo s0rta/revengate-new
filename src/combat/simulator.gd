@@ -20,10 +20,9 @@ class_name Simulator extends Node2D
 
 enum Results {VICTORY, DEFEAT, DRAW}
 
-const NB_SIMS_PER_RUN = 500
+const NB_SIMS_PER_RUN = 100
 const MAX_SIM_TURNS = 50
-const RUN_ALL_STAGES = false  # sim the first board and all the challengers in $ExtraStages
-const SHOW_ANIMS = false
+const RUN_ALL_STAGES = true  # sim the first board and all the challengers in $ExtraStages
 
 # whether to let Godot start the sims in between rendering frames, gives better profiling stats
 const ASYNC_MODE = false
@@ -125,8 +124,6 @@ func start_sim():
 		actor.died.connect(_on_actor_died)
 		actor.hit.connect(_inc_hit.bind(actor))
 		actor.missed.connect(_inc_miss.bind(actor))
-	if SHOW_ANIMS:
-		Tender.hero = gladiator
 	$TurnQueue.run()
 	sim_running = false
 

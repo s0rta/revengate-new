@@ -210,3 +210,7 @@ static func has_any_tags(node, tags:Array):
 		if tag in node.tags:
 			return true
 	return false
+
+static func effect_path(sfx_name):
+	## Return the path of a special effect
+	return "res://src/sfx/%s.tscn" % sfx_name

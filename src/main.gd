@@ -166,7 +166,7 @@ func show_context_menu_for(coord):
 
 func start_ch2():
 	destroy_items(hero.get_items(["quest-item"]))
-	# TODO: Nadège gives key and dress sword
+	# Nadège gives key and dress sword
 	%Nadege.conversation_sect = "intro_2"
 	supply_item(%Nadege, "res://src/items/serum_of_vitality.tscn", ["quest-reward", "gift"])
 	supply_item(%Nadege, "res://src/items/key.tscn", ["key-red", "gift"])
@@ -186,14 +186,6 @@ func start_ch2():
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	start_ch2()
 	
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-
-	for actor in get_board().get_actors():
-		print("Mana burn rate for %s is %s" % [actor, actor.get_stat("mana_burn_rate")])
-		var costs = []
-		for i in 12:
-			costs.append(actor.mana_cost(i))
-		print("  mana costs: %s" % [costs])

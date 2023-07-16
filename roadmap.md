@@ -181,8 +181,9 @@ Combat:
 - [x] Godot 4.1
 - [ ] async preload most shaders to speedup startup
 - [ ] more spells
-  - [ ] healing
-  
+  - [x] healing
+  - [ ] zap
+
 Items:
 - [ ] potion of absinthe
 - [ ] "magical" tag replaces the magical flag
