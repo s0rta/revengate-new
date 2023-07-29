@@ -18,6 +18,8 @@
 class_name RevBoard extends TileMap
 
 const TILE_SIZE = 32
+const LAYER_GEOM = 0
+const LAYER_HIGHLIGHTS = 1
 
 # clockwise around a cell starting at top left
 const ADJ_OFFSETS = [Vector2i(-1, -1), Vector2i(0, -1), Vector2i(1, -1), Vector2i(1, 0), 
@@ -1000,26 +1002,30 @@ static func man_dist(from, to):
 	## Return the Manhattan distance between to and from.
 	return abs(from.x - to.x) + abs(from.y - to.y)
 
-func paint_cell(coord, terrain_name):
-	paint_cells([coord], terrain_name)
+func paint_cell(coord, terrain_name, layer=LAYER_GEOM):
+	paint_cells([coord], terrain_name, layer)
 
-func paint_cells(coords, terrain_name):
+func paint_cells(coords, terrain_name, layer=LAYER_GEOM):
 	if terrain_name in INDEXED_TERRAINS:
 		_append_terrain_cells(coords, terrain_name)
 	var tkey = terrain_names[terrain_name]
-	set_cells_terrain_connect(0, coords, tkey[0], tkey[1])
+	set_cells_terrain_connect(layer, coords, tkey[0], tkey[1])
 
-func paint_path(path, terrain_name):
+func paint_path(path, terrain_name, layer=LAYER_GEOM):
 	assert(terrain_name not in INDEXED_TERRAINS, "indexing path terrain is not implemented")
 	var tkey = terrain_names[terrain_name]
-	set_cells_terrain_path(0, path, tkey[0], tkey[1])
+	set_cells_terrain_path(layer, path, tkey[0], tkey[1])
 
-func paint_rect(rect, terrain_name):
+func paint_rect(rect, terrain_name, layer=LAYER_GEOM):
 	var cells = []
 	for i in range(rect.size.x):
 		for j in range(rect.size.y):
 			cells.append(rect.position + V.i(i, j))
-	paint_cells(cells, terrain_name)
+	paint_cells(cells, terrain_name, layer)
+
+func clear_highlights():
+	## Remove all visible cell highlights
+	clear_layer(LAYER_HIGHLIGHTS)
 
 func toggle_door(coord:Vector2i):
 	var terrain = get_cell_terrain(coord)

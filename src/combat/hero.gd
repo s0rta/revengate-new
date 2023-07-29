@@ -111,6 +111,21 @@ func _dissipate():
 func is_foe(other: Actor):
 	return ENEMY_FACTIONS.has(other.faction)
 
+func highlight_options():
+	## Put highlight markers where one-tap actions are available
+	var board = get_board()
+	var index = board.make_index() as RevBoard.BoardIndex
+	var friend_coords = []
+	var foe_coords = []
+	for actor in index.get_actors_around_me(self):
+		if is_friend(actor) and actor.get_conversation():
+			friend_coords.append(actor.get_cell_coord())
+		elif is_foe(actor):
+			foe_coords.append(actor.get_cell_coord())
+	board.paint_cells(friend_coords, "highlight-friend", board.LAYER_HIGHLIGHTS)
+	board.paint_cells(foe_coords, "highlight-foe", board.LAYER_HIGHLIGHTS)
+	turn_done.connect(board.clear_highlights, CONNECT_ONE_SHOT)
+
 func act():
 	refresh_strategies()
 	var strat = get_strategy()
@@ -125,7 +140,8 @@ func act():
 		return acted
 	else:
 		state = States.LISTENING
-		print("hero acting...")
+		print("player acting...")
+		highlight_options()
 		await self.turn_done
 		# TODO: it would make sense to let the input handlers tell us if something 
 		#   actually happened.

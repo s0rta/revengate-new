@@ -183,6 +183,7 @@ Combat:
 - [ ] more spells
   - [x] healing
   - [ ] zap
+- [ ] healing is based on health-%, not absolute number of HPs
 
 Items:
 - [ ] potion of absinthe
@@ -192,6 +193,8 @@ Combat:
 - [ ] TribalTerritorial uses perception rather than dist()
 - [ ] Tracking is triggered by perception
 
+UI:
+- [x] highlight where you can make a one-tap action
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
@@ -218,3 +221,11 @@ Combat:
 - [ ] phantruch is destroyed if the vital assembly is broken or stolen
 - [ ] startled strategy: flee when first contact is from afar, attack when from nearby
 - [ ] upgrade DialoguePane to the latest Dialogue Manager API
+
+Performance:
+- [ ] cache stats modifiers for the whole turn (with inval on mods changing events)
+- [ ] sort strategies by priority for early exits when starting a turn
+
+Simulator:
+- [ ] simulator auto-starts an ExtraStage if the starting board is not populated
+- [ ] simulator repositions actors that are at invalid coords (out of board or inside walls)
