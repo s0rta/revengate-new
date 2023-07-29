@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bvm0q1k13gmym"]
+[gd_scene load_steps=24 format=3 uid="uid://bvm0q1k13gmym"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_oonn7"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_v4koq"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cx7utj7hd3ne" path="res://src/monsters/kobold.tscn" id="5_u3117"]
 [ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="6_urs5r"]
 [ext_resource type="Script" path="res://src/card_rule.gd" id="7_18mi5"]
+[ext_resource type="PackedScene" uid="uid://dnw86n1s88cwl" path="res://src/weapons/dagger.tscn" id="7_u30ex"]
 [ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="8_mpj13"]
 [ext_resource type="PackedScene" uid="uid://c3uuk6yfc2thp" path="res://src/monsters/sahwakoon.tscn" id="9_ucbey"]
 [ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="10_smtmw"]
@@ -35,6 +36,8 @@ script = ExtResource("1_oonn7")
 [node name="Kobold" parent="." instance=ExtResource("5_u3117")]
 
 [node name="SulantTiger" parent="." instance=ExtResource("6_urs5r")]
+
+[node name="Dagger" parent="." instance=ExtResource("7_u30ex")]
 
 [node name="Max3PerFloor" type="Node" parent="."]
 script = ExtResource("7_18mi5")
@@ -71,14 +74,18 @@ max_board_occ = 1
 max_dungeon_occ = 2
 
 [node name="Hammer" parent="Rare" instance=ExtResource("18_w8s5s")]
+range = 1
 
 [node name="Rapier" parent="Rare" instance=ExtResource("19_u2vc1")]
 
 [node name="Razor" parent="Rare" instance=ExtResource("20_r43mm")]
+range = 1
 
 [node name="Saber" parent="Rare" instance=ExtResource("21_hyraw")]
+range = 1
 
 [node name="Sword" parent="Rare" instance=ExtResource("22_bc5m8")]
+range = 1
 spawn_cost = 5.0
 
 [node name="Dynamite" parent="Rare" instance=ExtResource("23_hrfvj")]

@@ -684,6 +684,15 @@ func get_conditions():
 			conds.append(node)
 	return conds
 
+func get_max_weapon_range():
+	var max_range = 0
+	
+	for weapon in get_weapons():
+		if weapon is Weapon and weapon.range > max_range:
+			max_range = weapon.range
+	
+	return max_range
+
 func get_weapons():
 	## Return all the active weapons for the current turn.
 	## All active weapons are eligible for a strike during the turn.
@@ -785,9 +794,16 @@ func strike(foe:Actor, weapon):
 	# combats works with two random rolls: to-hit then damage.
 	var with_anims = not is_unexposed()
 	var crit = false
+	var max_weapon_range = get_max_weapon_range()
+	var foe_coord = foe.get_cell_coord()
 	# to-hit
 	# pre-compute the to-hit bonnus from features
 	var hit_mod = _get_feature_modifier(foe, weapon, TO_HIT_FEATURE_MODS)
+	
+	if Utils.has_tags(weapon, ['throwable']) and max_weapon_range > 1:
+		drop_item(weapon, foe_coord)
+		reequip_weapon(['throwable'])
+	
 	if stat_trial(foe.get_evasion(weapon), "agility", weapon.skill, hit_mod):
 		# Miss!
 		if with_anims:
@@ -868,14 +884,23 @@ func refocus(delta:=1):
 		add_message("%s seems more focused" % get_caption())
 		mana += delta
 
-func drop_item(item):
+func drop_item(item, coord = null):
 	assert(item.get_parent() == self, "must possess an item before dropping it")
 	if item.get("is_equipped") != null:
 		item.is_equipped = false
 	var board = get_board()
 	var builder = BoardBuilder.new(board)
-	var coord = builder.place(item, false, get_cell_coord(), false)
+	if not coord:
+		coord = get_cell_coord()
+	coord = builder.place(item, false, coord, false)
 	emit_signal("dropped_item", coord)
+
+func reequip_weapon(include_tags = null, exclude_tags = null):
+	var weapons = get_items(include_tags, exclude_tags) \
+					.filter(func(item): return item is Weapon)
+	
+	if weapons:
+		Rand.choice(weapons).is_equipped = true
 
 func give_item(item, actor=null):
 	## Give `item` to `actor`

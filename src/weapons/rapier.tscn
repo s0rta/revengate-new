@@ -5,6 +5,7 @@
 
 [node name="Rapier" instance=ExtResource("1_mi0cl")]
 damage = 7
+range = 1
 damage_family = 3
 char = "🗡"
 caption = "rapier"

@@ -41,20 +41,22 @@ func _unhandled_input(event):
 		print("Click at pos=%s, coord=%s" % [event.position, RevBoard.coord_str(coord)])
 
 		var other = index.actor_at(coord)
-		if RevBoard.dist(get_cell_coord(), coord) == 1:
+		var click_dist = RevBoard.dist(get_cell_coord(), coord)
+		
 
-			if other and is_foe(other):
-				attack(other)
+		if other and is_foe(other) and click_dist <= get_max_weapon_range():
+			attack(other)
+			acted = true
+		elif other:
+			if other.get_conversation():
+				acted = await $"/root/Main".commands.talk(coord)
+			else:
+				get_board().add_message(self, "%s has nothing to tell you." % other.caption)
 				acted = true
-			elif other:
-				if other.get_conversation():
-					acted = await $"/root/Main".commands.talk(coord)
-				else:
-					get_board().add_message(self, "%s has nothing to tell you." % other.caption)
-					acted = true
-			elif index.is_free(coord):
-				move_to(coord)
-				acted = true
+				
+		if index.is_free(coord) and click_dist == 1:
+			move_to(coord)
+			acted = true
 		elif board.is_walkable(coord):
 			if (other == null or not perceives(other, index)) and travel_to(coord, index):
 				# if the destination at least seems unoccupied, we start travelling there
@@ -118,9 +120,11 @@ func highlight_options():
 	var friend_coords = []
 	var foe_coords = []
 	for actor in index.get_actors_around_me(self):
-		if is_friend(actor) and actor.get_conversation():
+		if is_friend(actor) and actor.get_conversation() and actor.is_alive():
 			friend_coords.append(actor.get_cell_coord())
-		elif is_foe(actor):
+			
+	for actor in index.get_actors_in_sight(get_cell_coord(), get_max_weapon_range()):
+		if is_foe(actor) and actor.is_alive():
 			foe_coords.append(actor.get_cell_coord())
 	board.paint_cells(friend_coords, "highlight-friend", board.LAYER_HIGHLIGHTS)
 	board.paint_cells(foe_coords, "highlight-foe", board.LAYER_HIGHLIGHTS)

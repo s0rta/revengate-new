@@ -19,5 +19,6 @@
 class_name Weapon extends Item
 
 @export var damage := 1
+@export var range := 1
 @export var damage_family: Consts.DamageFamily
 @export var is_equipped := false

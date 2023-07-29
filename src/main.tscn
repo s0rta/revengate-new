@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=35 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="5_odllu"]
 [ext_resource type="Script" path="res://src/hud.gd" id="7_4dw6n"]
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="9_7u4fi"]
+[ext_resource type="PackedScene" uid="uid://dnw86n1s88cwl" path="res://src/weapons/dagger.tscn" id="9_l6mpp"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
@@ -89,6 +90,15 @@ visible = false
 visible = false
 position = Vector2(192, 256)
 
+[node name="Dagger" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_l6mpp")]
+is_equipped = true
+
+[node name="Dagger2" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_l6mpp")]
+
+[node name="Dagger3" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_l6mpp")]
+
+[node name="Dagger4" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_l6mpp")]
+
 [node name="Nadege" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("13_wcjwx")]
 unique_name_in_owner = true
 visible = true
@@ -105,9 +115,11 @@ position = Vector2(464, 48)
 
 [node name="Broom" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("14_w5yd8")]
 position = Vector2(336, 48)
+range = 1
 
 [node name="Umbrella" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("14_ih5ox")]
 position = Vector2(336, 48)
+range = 1
 
 [node name="BarPatron1" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
 unique_name_in_owner = true
