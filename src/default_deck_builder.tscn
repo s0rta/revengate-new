@@ -101,14 +101,18 @@ max_board_occ = 1
 max_dungeon_occ = 2
 
 [node name="Hammer" parent="Rare" instance=ExtResource("15_ngw60")]
+range = 1
 
 [node name="Rapier" parent="Rare" instance=ExtResource("16_ygxep")]
 
 [node name="Razor" parent="Rare" instance=ExtResource("17_4rmpd")]
+range = 1
 
 [node name="Saber" parent="Rare" instance=ExtResource("18_0s2fs")]
+range = 1
 
 [node name="Sword" parent="Rare" instance=ExtResource("19_holdq")]
+range = 1
 spawn_cost = 5.0
 
 [node name="Dynamite" parent="Rare" instance=ExtResource("20_8peit")]
@@ -139,10 +143,13 @@ debug_only = true
 [node name="LoomCards" parent="TestingQuestTransitions" instance=ExtResource("11_320yy")]
 
 [node name="Razor" parent="TestingQuestTransitions" instance=ExtResource("17_4rmpd")]
+range = 1
 
 [node name="Grayswandir" parent="TestingQuestTransitions" instance=ExtResource("24_lwi07")]
+range = 1
 
 [node name="Saber" parent="TestingQuestTransitions" instance=ExtResource("18_0s2fs")]
+range = 1
 
 [node name="Gleugt" parent="TestingQuestTransitions" instance=ExtResource("26_1p40w")]
 

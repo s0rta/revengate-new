@@ -794,15 +794,15 @@ func strike(foe:Actor, weapon):
 	# combats works with two random rolls: to-hit then damage.
 	var with_anims = not is_unexposed()
 	var crit = false
-	var max_weapon_range = get_max_weapon_range()
 	var foe_coord = foe.get_cell_coord()
 	# to-hit
 	# pre-compute the to-hit bonnus from features
 	var hit_mod = _get_feature_modifier(foe, weapon, TO_HIT_FEATURE_MODS)
 	
-	if Utils.has_tags(weapon, ['throwable']) and max_weapon_range > 1:
+	var attack_dist = RevBoard.dist(self, foe)
+	if Utils.has_tags(weapon, ["throwable"]) and attack_dist > 1:
 		drop_item(weapon, foe_coord)
-		reequip_weapon(['throwable'])
+		reequip_weapon(["throwable"])
 	
 	if stat_trial(foe.get_evasion(weapon), "agility", weapon.skill, hit_mod):
 		# Miss!
@@ -890,7 +890,7 @@ func drop_item(item, coord = null):
 		item.is_equipped = false
 	var board = get_board()
 	var builder = BoardBuilder.new(board)
-	if not coord:
+	if coord == null:
 		coord = get_cell_coord()
 	coord = builder.place(item, false, coord, false)
 	emit_signal("dropped_item", coord)

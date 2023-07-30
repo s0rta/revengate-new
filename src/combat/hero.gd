@@ -120,7 +120,7 @@ func highlight_options():
 	var friend_coords = []
 	var foe_coords = []
 	for actor in index.get_actors_around_me(self):
-		if is_friend(actor) and actor.get_conversation() and actor.is_alive():
+		if not is_foe(actor) and actor.get_conversation() and actor.is_alive():
 			friend_coords.append(actor.get_cell_coord())
 			
 	for actor in index.get_actors_in_sight(get_cell_coord(), get_max_weapon_range()):
