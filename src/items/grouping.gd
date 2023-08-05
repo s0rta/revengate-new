@@ -76,5 +76,5 @@ func get_short_desc():
 		return "%dx %s" % [size, desc]
 
 func toggle():
-	assert(false, "not implemented")
-	
+	assert(not is_empty())
+	top().toggle()

@@ -5,7 +5,9 @@
 
 [node name="Dynamite" instance=ExtResource("1_tmhdi")]
 script = ExtResource("2_qtjb3")
+fuse_nb_turns = 4
 char = "💣"
 caption = "dynamite"
 switchable = true
 spawn_cost = 4.0
+tags = Array[String](["groupable"])

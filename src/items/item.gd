@@ -119,6 +119,11 @@ func get_base_stats():
 		stats[name] = get(name)
 	return stats
 
+func add_tag(tag:String):
+	assert(Utils.is_tag(tag))
+	tags = tags.duplicate()
+	tags.append(tag)
+
 func place(coord, _immediate=null):
 	## Place the item at the specific coordinate without animations.
 	## No tests are done to see if `coord` is a suitable location.
@@ -158,8 +163,8 @@ func is_on_board():
 	return get_parent() is RevBoard
 
 func is_groupable_with(other:Item):
-	# same caption and char?
-	if char != other.char or caption != other.caption:
+	# same char and same short description?
+	if char != other.char or get_short_desc() != other.get_short_desc():
 		return false
 
 	# same tags?

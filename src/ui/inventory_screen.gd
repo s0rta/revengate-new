@@ -56,6 +56,19 @@ func close():
 	hide()
 	emit_signal("closed", acted) 
 
+func _make_from_item(item, root=null, index:=-1):
+	var row = tree_view.create_item(root, index)
+	row.set_metadata(Cols.DESC, item)
+	row.set_text(Cols.DESC, item.get_short_desc())
+	if item.get("is_equipped") != null:
+		row.add_button(Cols.EQUIP, equip_button_img)
+		if item.is_equipped:
+			row.set_button_disabled(Cols.EQUIP, 0, true)
+	if item.consumable or item.switchable:
+		row.add_button(Cols.USE, use_button_img)
+	row.add_button(Cols.DROP, drop_button_img)
+	return row
+
 func fill_actor_items(actor_:Actor):
 	actor = actor_
 	tree_view.clear()
@@ -63,16 +76,7 @@ func fill_actor_items(actor_:Actor):
 	var items = actor.get_items()
 	$EmptyLabel.visible = not items.size()
 	for item in items:
-		var row = tree_view.create_item(root)
-		row.set_metadata(Cols.DESC, item)
-		row.set_text(Cols.DESC, item.get_short_desc())
-		if item.get("is_equipped") != null:
-			row.add_button(Cols.EQUIP, equip_button_img)
-			if item.is_equipped:
-				row.set_button_disabled(Cols.EQUIP, 0, true)
-		if item.consumable or item.switchable:
-			row.add_button(Cols.USE, use_button_img)
-		row.add_button(Cols.DROP, drop_button_img)
+		var row = _make_from_item(item, root)
 
 func reset_empty_label_vis():
 	if not actor:
@@ -133,7 +137,17 @@ func _use_item(row, item):
 		actor.consume_item(item)
 	elif item.switchable:
 		item.toggle()
-		_refresh_row(row, item)
+		if item is ItemGrouping:
+			var grouping = item
+			var top_item = grouping.pop()
+			_make_from_item(top_item, null, row.get_index()+1)
+			if grouping.is_empty():
+				row.free()
+			else:
+				_refresh_row(row, item)
+		else:
+			_refresh_row(row, item)
+
 	
 func _on_tree_button_clicked(row, column, id, mouse_button_index):
 	var item = row.get_metadata(0)

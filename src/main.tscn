@@ -98,6 +98,23 @@ visible = false
 [node name="Dynamite" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" instance=ExtResource("17_ou76k")]
 visible = false
 position = Vector2(192, 256)
+skill = null
+consumable = null
+ttl = null
+
+[node name="Dynamite2" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" instance=ExtResource("17_ou76k")]
+visible = false
+position = Vector2(192, 256)
+skill = null
+consumable = null
+ttl = null
+
+[node name="Dynamite3" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" instance=ExtResource("17_ou76k")]
+visible = false
+position = Vector2(192, 256)
+skill = null
+consumable = null
+ttl = null
 
 [node name="Dagger" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_l6mpp")]
 is_equipped = true

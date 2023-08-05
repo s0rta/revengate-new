@@ -17,6 +17,8 @@
 
 extends Item
 
+@export var fuse_nb_turns := 4
+
 func _dissipate():
 	blow_up()
 	super()
@@ -44,6 +46,12 @@ func splash_damage():
 
 func toggle():
 	super()
-	tags.append("lit")
-	ttl = 4
+	add_tag("lit")
+	ttl = fuse_nb_turns
 	switchable = false
+
+func get_short_desc():
+	var desc = super()
+	if ttl > -1:
+		return "%s blows up in %d turns" % [desc, ttl]
+	return desc

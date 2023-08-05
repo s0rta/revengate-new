@@ -116,6 +116,10 @@ range = 1
 spawn_cost = 5.0
 
 [node name="Dynamite" parent="Rare" instance=ExtResource("20_8peit")]
+skill = null
+consumable = null
+ttl = null
+tags = null
 
 [node name="RareAndDeep" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
