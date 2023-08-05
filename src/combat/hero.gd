@@ -47,20 +47,23 @@ func _unhandled_input(event):
 		if other and is_foe(other) and click_dist <= get_max_weapon_range():
 			attack(other)
 			acted = true
-		elif other:
+		elif other and not is_foe(other) and click_dist <= Consts.CONVO_RANGE:
 			if other.get_conversation():
 				acted = await $"/root/Main".commands.talk(coord)
 			else:
 				get_board().add_message(self, "%s has nothing to tell you." % other.caption)
 				acted = true
-				
-		if index.is_free(coord) and click_dist == 1:
-			move_to(coord)
-			acted = true
-		elif board.is_walkable(coord):
-			if (other == null or not perceives(other, index)) and travel_to(coord, index):
-				# if the destination at least seems unoccupied, we start travelling there
-				return await act()
+		elif other and not other.is_unexposed():
+			add_message("Not sure what to do with %s" % other.get_short_desc())
+		else:
+			# no one there
+			if index.is_free(coord) and click_dist == 1:
+				move_to(coord)
+				acted = true
+			elif board.is_walkable(coord):
+				if (other == null or not perceives(other, index)) and travel_to(coord, index):
+					# if the destination at least seems unoccupied, we start travelling there
+					return await act()
 	elif event.is_action_pressed("context-menu"):
 		var coord = RevBoard.canvas_to_board(event.position)
 		acted = await $"/root/Main".show_context_menu_for(coord)
@@ -119,7 +122,7 @@ func highlight_options():
 	var index = board.make_index() as RevBoard.BoardIndex
 	var friend_coords = []
 	var foe_coords = []
-	for actor in index.get_actors_around_me(self):
+	for actor in index.get_actors_around_me(self, Consts.CONVO_RANGE):
 		if not is_foe(actor) and actor.get_conversation() and actor.is_alive():
 			friend_coords.append(actor.get_cell_coord())
 			

@@ -116,10 +116,6 @@ range = 1
 spawn_cost = 5.0
 
 [node name="Dynamite" parent="Rare" instance=ExtResource("20_8peit")]
-skill = null
-consumable = null
-ttl = null
-tags = null
 
 [node name="RareAndDeep" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -167,7 +163,6 @@ range = 1
 [connection signal="visibility_changed" from="Rare/Razor" to="Rare/Razor" method="_on_visibility_changed" flags=18]
 [connection signal="visibility_changed" from="Rare/Saber" to="Rare/Saber" method="_on_visibility_changed" flags=18]
 [connection signal="visibility_changed" from="Rare/Sword" to="Rare/Sword" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Rare/Dynamite" to="Rare/Dynamite" method="_on_visibility_changed" flags=18]
 [connection signal="visibility_changed" from="Healing/PotionOfHealing" to="Healing/PotionOfHealing" method="_on_visibility_changed" flags=18]
 [connection signal="visibility_changed" from="Healing/PotionOfRegen" to="Healing/PotionOfRegen" method="_on_visibility_changed" flags=18]
 [connection signal="visibility_changed" from="TestingQuestTransitions/Razor" to="TestingQuestTransitions/Razor" method="_on_visibility_changed" flags=18]

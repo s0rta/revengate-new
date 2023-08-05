@@ -198,6 +198,9 @@ func get_caption():
 		return caption
 	else:
 		return name
+		
+func get_short_desc():
+	return "(%s) %s" % [char, get_caption()]
 
 func get_modifiers():
 	## return a dict of all the modifiers from items and conditions combined together
@@ -638,8 +641,6 @@ func perceives(thing, index=null):
 	var there = CombatUtils.as_coord(thing)
 	if thing is Actor and thing == self:
 		return true
-	elif percep <= 0:
-		return false
 	elif not (thing is Vector2i) and board != thing.get_board():
 		return false
 
@@ -688,7 +689,7 @@ func get_max_weapon_range():
 	var max_range = 0
 	
 	for weapon in get_weapons():
-		if weapon is Weapon and weapon.range > max_range:
+		if (weapon is Weapon or weapon is InnateWeapon) and weapon.range > max_range:
 			max_range = weapon.range
 	
 	return max_range
@@ -697,9 +698,16 @@ func get_weapons():
 	## Return all the active weapons for the current turn.
 	## All active weapons are eligible for a strike during the turn.
 	## Ex.: a fast feline would return a bite and two claw weapons.
+	## Actors are only using their innate weapons when they do not have item weapons equipped.
+	var has_equipped_weapon = false
+	for node in get_children():
+		if node is Weapon and node.is_equipped:
+			has_equipped_weapon = true
+			break
+			
 	var all_weapons = []
 	for node in get_children():
-		if node is InnateWeapon:
+		if not has_equipped_weapon and node is InnateWeapon:
 			all_weapons.append(node)
 		elif node is Weapon and node.is_equipped:
 			all_weapons.append(node)
@@ -833,8 +841,7 @@ func strike(foe:Actor, weapon):
 		# re-equip from the same stack when tossing things
 		drop_item(weapon, foe_coord)
 		var next_weapon = get_compatible_item(weapon)
-		if next_weapon != null:
-			next_weapon.is_equipped = true
+		reequip_weapon_from_group(next_weapon, weapon)
 	
 	if stat_trial(foe.get_evasion(weapon), "agility", weapon.skill, hit_mod):
 		# Miss!
@@ -927,15 +934,8 @@ func drop_item(item, coord = null):
 	coord = builder.place(item, false, coord, false)
 	emit_signal("dropped_item", coord)
 
-#func reequip_weapon(include_tags = null, exclude_tags = null):
-#	var weapons = get_items(include_tags, exclude_tags) \
-#					.filter(func(item): return item is Weapon)
-#
-#	if weapons:
-#		Rand.choice(weapons).is_equipped = true
-
-func reequip_weapon_from_group(grouping:ItemGrouping, prev_weapon=null):
-	if grouping.is_empty():
+func reequip_weapon_from_group(grouping, prev_weapon=null):
+	if grouping == null or grouping is ItemGrouping and grouping.is_empty():
 		if prev_weapon != null:
 			add_message("You ran out of %s" % prev_weapon.get_short_desc())
 		else:

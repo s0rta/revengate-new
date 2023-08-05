@@ -22,7 +22,7 @@ var last_foe
 
 func select_foe(actor, index):
 	## Return a foe to attack from the current location of null if there are no suitable targets.
-	var foes = index.actor_foes(actor, 1)
+	var foes = index.actor_foes(actor, me.get_max_weapon_range())
 	if not foes.is_empty():
 		if last_foe not in foes:
 			last_foe = Rand.choice(foes)
@@ -31,18 +31,14 @@ func select_foe(actor, index):
 		return null
 		
 func act() -> bool:	
-	var hero = find_hero()
-	var board = me.get_board()
-		
-	if hero == null or board == null:
-		# we're are not in a complete scene
-		return false
-			
-	var index = board.make_index()
+	var index = me.get_board().make_index()
 	# attack if we can, move towards the hero otherwise
 	var foe = select_foe(me, index)
 	if foe:
 		var acted = await me.attack(foe)
 		return acted
 	else:
-		return me.move_toward_actor(hero)
+		var hero = Tender.hero
+		if hero:
+			return me.move_toward_actor(hero)
+	return false
