@@ -11,7 +11,7 @@ char = "🔪"
 caption = "dagger"
 skill = "fencing"
 spawn_cost = 3.0
-tags = Array[String](["throwable"])
+tags = Array[String](["throwable", "groupable"])
 
 [node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
 stream = ExtResource("2_vmlqa")

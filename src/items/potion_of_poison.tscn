@@ -8,6 +8,7 @@ char = "🍸"
 caption = "potion of poison"
 consumable = true
 spawn_cost = 1.0
+tags = Array[String](["groupable"])
 
 [node name="Effect" type="Node" parent="." index="1"]
 script = ExtResource("2_la8ey")

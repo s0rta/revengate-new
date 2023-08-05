@@ -112,6 +112,13 @@ func get_short_desc():
 	else:
 		return "%s %s" % [$Label.text, desc]
 
+func get_base_stats():
+	## Return a dictionnary of the core stats without any modifiers applied
+	var stats = {}
+	for name in Consts.ITEM_BASE_STATS:
+		stats[name] = get(name)
+	return stats
+
 func place(coord, _immediate=null):
 	## Place the item at the specific coordinate without animations.
 	## No tests are done to see if `coord` is a suitable location.
@@ -149,6 +156,25 @@ func is_on_board():
 	## Return `true` if the item is laying somewhere on the board, `false` it belongs to 
 	## an actor inventory or inaccessible for some other reason.
 	return get_parent() is RevBoard
+
+func is_groupable_with(other:Item):
+	# same caption and char?
+	if char != other.char or caption != other.caption:
+		return false
+
+	# same tags?
+	if not Utils.tags_eq(tags, other.tags):
+		return false
+
+	# same modifiers?
+	if Utils.get_node_modifiers(self) != Utils.get_node_modifiers(other):
+		return false
+
+	# same base stats?
+	if get_base_stats() != other.get_base_stats():
+		return false
+	
+	return true
 	
 func activate_on_actor(actor):
 	## activate the item on actor

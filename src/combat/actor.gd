@@ -724,14 +724,34 @@ func get_items(include_tags=null, exclude_tags=null):
 	## Return an array of the items in our inventory.
 	## include_tags: if provided, only items that have all those tags are returned.
 	## exclude_tags: if provided, only items that have none of those tags are returned.
-	var items = []
+	var loose_items = []
 	for node in get_children():
 		if node is Item:
 			if include_tags != null and not Utils.has_tags(node, include_tags):
 				continue
 			if exclude_tags != null and Utils.has_any_tags(node, exclude_tags):
 				continue
-			items.append(node)
+			loose_items.append(node)
+
+	var items = []
+	var groupings = []
+	var grouped = false
+	for item in loose_items:
+		if "groupable" in item.tags:
+			grouped = false
+			for group in groupings:
+				if item.is_groupable_with(group.top()):
+					group.add(item)
+					grouped = true
+					break
+			if not grouped:
+				var grouping = ItemGrouping.new()
+				grouping.add(item)
+				groupings.append(grouping)
+				items.append(groupings[-1])
+		else:
+			items.append(item)
+
 	return items
 
 func get_spells(include_tags=null, exclude_tags=null):

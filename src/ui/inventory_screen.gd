@@ -98,12 +98,36 @@ func _on_back_button_pressed():
 
 func _refresh_row(row, item):
 	row.set_text(Cols.DESC, item.get_short_desc())
-	var btn_disabled = not (item.consumable or item.switchable)
-	row.set_button_disabled(Cols.USE, 0, btn_disabled)
+
+	var use_disabled = not (item.consumable or item.switchable)
+	row.set_button_disabled(Cols.USE, 0, use_disabled)
+
+	var drop_disabled = not (item is ItemGrouping and not item.is_empty())
+	row.set_button_disabled(Cols.DROP, 0, drop_disabled)
+
+func _drop_item(row, item):
+	if item is ItemGrouping:
+		var grouping = item
+		item = grouping.pop()
+		if grouping.is_empty():
+			row.free()
+		else:
+			_refresh_row(row, grouping)
+	else:
+		row.free()
+	actor.drop_item(item)
 
 func _use_item(row, item):
 	if item.consumable:
-		row.free()
+		if item is ItemGrouping:
+			var grouping = item
+			item = grouping.pop()
+			if grouping.is_empty():
+				row.free()
+			else:
+				_refresh_row(row, grouping)
+		else:
+			row.free()
 		actor.consume_item(item)
 	elif item.switchable:
 		item.toggle()
@@ -113,8 +137,7 @@ func _on_tree_button_clicked(row, column, id, mouse_button_index):
 	var item = row.get_metadata(0)
 	row.set_button_disabled(column, id, true)
 	if column == Cols.DROP:
-		row.free()
-		actor.drop_item(item)
+		_drop_item(row, item)
 	elif column == Cols.EQUIP:
 		unequip_all()
 		item.is_equipped = true

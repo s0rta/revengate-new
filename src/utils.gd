@@ -214,3 +214,13 @@ static func has_any_tags(node, tags:Array):
 static func effect_path(sfx_name):
 	## Return the path of a special effect
 	return "res://src/sfx/%s.tscn" % sfx_name
+
+static func tags_eq(tags1, tags2):
+	## Return whether two Array of tags are the same.
+	if len(tags1) != len(tags2):
+		return false
+	tags1 = tags1.duplicate()
+	tags1.sort()
+	tags2 = tags2.duplicate()
+	tags2.sort()
+	return tags1 == tags2

@@ -22,3 +22,10 @@ class_name Weapon extends Item
 @export var range := 1
 @export var damage_family: Consts.DamageFamily
 @export var is_equipped := false
+
+func get_base_stats():
+	## Return a dictionnary of the core stats without any modifiers applied
+	var stats = {}
+	for name in Consts.WEAPON_BASE_STATS:
+		stats[name] = get(name)
+	return stats

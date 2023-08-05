@@ -59,6 +59,9 @@ const SKILLS := ["evasion", "innate_attack", "fencing", "channeling", "device_of
 # TODO: should be a const, but the parser has issue with the `+` expression
 var CHALLENGES := [] + SKILLS
 
+const ITEM_BASE_STATS := ["consumable", "switchable"]
+var WEAPON_BASE_STATS := ["damage", "range", "damage_family"] + ITEM_BASE_STATS
+
 # Increments for world locations
 const LOC_HIGHER = Vector3i(0, 0, 1)
 const LOC_LOWER = Vector3i(0, 0, -1)
@@ -86,8 +89,11 @@ const FADE_DURATION := .15
 const FADE_MODULATE := Color(.7, .7, .7, 0.4)
 const VIS_MODULATE := Color.WHITE
 
+# Tags must be declared here before the can be added to items and actors. 
+# This is a small safeguard against typos.
 const TAGS = ["ethereal", "undead", "gift", "broken", "lit", 
-			"booze",
+			"booze", 
+			"groupable",  # shows in "stacks" on the inventory screen
 			# spells
 			"vital-assemblage", "summoning", "healing", "attack",
 			# locks

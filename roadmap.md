@@ -183,15 +183,18 @@ Combat:
 - [ ] more spells
   - [x] healing
   - [ ] zap
-- [ ] healing is based on health-%, not absolute number of HPs
+- [ ] healing strategy is based on health-%, not absolute number of HPs
+- [ ] one-tap does not chat with foes
 
 Items:
 - [ ] potion of absinthe
 - [ ] "magical" tag replaces the magical flag
+- [ ] similar items are grouped together in the inventory screen
 
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()
 - [ ] Tracking is triggered by perception
+- [ ] damage in the message log
 
 UI:
 - [x] highlight where you can make a one-tap action
