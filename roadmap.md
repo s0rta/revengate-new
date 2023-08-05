@@ -190,6 +190,8 @@ Items:
 - [ ] potion of absinthe
 - [ ] "magical" tag replaces the magical flag
 - [ ] similar items are grouped together in the inventory screen
+  - [ ] toggle pops the item from the stack
+  - [x] drop re-equips the next item from the stack 
 
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()

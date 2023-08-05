@@ -112,6 +112,8 @@ func _drop_item(row, item):
 		if grouping.is_empty():
 			row.free()
 		else:
+			if item.get("is_equipped"):
+				grouping.is_equipped = true
 			_refresh_row(row, grouping)
 	else:
 		row.free()

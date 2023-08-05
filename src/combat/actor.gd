@@ -754,6 +754,15 @@ func get_items(include_tags=null, exclude_tags=null):
 
 	return items
 
+func get_compatible_item(ref_item:Item):
+	var items = get_items(ref_item.tags)
+	for item in items:
+		if item is ItemGrouping and ref_item.is_groupable_with(item.top()):
+			return item
+		if ref_item.is_groupable_with(item):
+			return item
+	return null
+
 func get_spells(include_tags=null, exclude_tags=null):
 	## Return an array of known spells.
 	## include_tags: if provided, only spells that have all those tags are returned.
@@ -821,8 +830,11 @@ func strike(foe:Actor, weapon):
 	
 	var attack_dist = RevBoard.dist(self, foe)
 	if Utils.has_tags(weapon, ["throwable"]) and attack_dist > 1:
+		# re-equip from the same stack when tossing things
 		drop_item(weapon, foe_coord)
-		reequip_weapon(["throwable"])
+		var next_weapon = get_compatible_item(weapon)
+		if next_weapon != null:
+			next_weapon.is_equipped = true
 	
 	if stat_trial(foe.get_evasion(weapon), "agility", weapon.skill, hit_mod):
 		# Miss!
@@ -915,12 +927,21 @@ func drop_item(item, coord = null):
 	coord = builder.place(item, false, coord, false)
 	emit_signal("dropped_item", coord)
 
-func reequip_weapon(include_tags = null, exclude_tags = null):
-	var weapons = get_items(include_tags, exclude_tags) \
-					.filter(func(item): return item is Weapon)
-	
-	if weapons:
-		Rand.choice(weapons).is_equipped = true
+#func reequip_weapon(include_tags = null, exclude_tags = null):
+#	var weapons = get_items(include_tags, exclude_tags) \
+#					.filter(func(item): return item is Weapon)
+#
+#	if weapons:
+#		Rand.choice(weapons).is_equipped = true
+
+func reequip_weapon_from_group(grouping:ItemGrouping, prev_weapon=null):
+	if grouping.is_empty():
+		if prev_weapon != null:
+			add_message("You ran out of %s" % prev_weapon.get_short_desc())
+		else:
+			add_message("You ran out of your previous weapons")
+	else:
+		grouping.is_equipped = true
 
 func give_item(item, actor=null):
 	## Give `item` to `actor`
@@ -936,7 +957,7 @@ func give_item(item, actor=null):
 	else:
 		add_message("%s gave a %s" % [self.get_caption(), item.get_short_desc()])
 		item.queue_free()
-
+	
 func pick_item(item):
 	# TODO: dist() == 1 would also work nicely
 	var item_coord = item.get_cell_coord()
