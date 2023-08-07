@@ -18,6 +18,8 @@
 char = "g"
 caption = "gleugt"
 color = Color(0.921569, 0.415686, 0.184314, 1)
+conversation_file = "res://src/story/gleugt.dialogue"
+conversation_sect = "intro"
 spawn_cost = 12.0
 health = 40
 healing_prob = 0.1

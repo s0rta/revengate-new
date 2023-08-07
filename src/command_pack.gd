@@ -82,7 +82,7 @@ class Talk extends Command:
 		var dist = board.dist(hero_coord, coord)
 		# TODO: it would make sense to have conversations further apart
 		var other = index.actor_at(coord)
-		return dist == Consts.CONVO_RANGE and other and other.get_conversation()
+		return dist <= Consts.CONVO_RANGE and other and other.get_conversation()
 		
 	func run(coord:Vector2i) -> bool:
 		var other = index.actor_at(coord)
