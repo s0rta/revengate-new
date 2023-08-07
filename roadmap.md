@@ -178,25 +178,26 @@ Combat:
   - [x] global flag to disable animations (wire inside Actor.is_unexposed())
 
 ## V0.10
-- [x] Godot 4.1
+- [ ] Godot 4.1
 - [ ] async preload most shaders to speedup startup
 - [ ] more spells
   - [x] healing
   - [ ] zap
 - [ ] healing strategy is based on health-%, not absolute number of HPs
-- [ ] one-tap does not chat with foes
+- [x] one-tap does not chat with foes
 
 Items:
 - [ ] potion of absinthe
 - [ ] "magical" tag replaces the magical flag
 - [x] similar items are grouped together in the inventory screen
   - [x] toggle pops the item from the stack
-  - [x] drop re-equips the next item from the stack 
+  - [x] drop and toss re-equips the next item from the stack 
 
 Combat:
+- [x] ranged attacks with daggers
 - [ ] TribalTerritorial uses perception rather than dist()
 - [ ] Tracking is triggered by perception
-- [ ] damage in the message log
+- [x] damage numbers in the message log
 
 UI:
 - [x] highlight where you can make a one-tap action

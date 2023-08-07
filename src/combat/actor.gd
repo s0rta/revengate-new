@@ -575,7 +575,7 @@ func die():
 	if not is_hero():
 		CombatUtils.add_kill(caption)
 	emit_signal("died", get_cell_coord(), tags)
-	for item in get_items():
+	for item in get_items(null, null, false):
 		drop_item(item)
 
 	if is_unexposed():
@@ -728,10 +728,11 @@ func get_weapons():
 		return [Rand.weighted_choice(all_weapons, weights)]
 	return active_weapons
 
-func get_items(include_tags=null, exclude_tags=null):
+func get_items(include_tags=null, exclude_tags=null, grouped=true):
 	## Return an array of the items in our inventory.
 	## include_tags: if provided, only items that have all those tags are returned.
 	## exclude_tags: if provided, only items that have none of those tags are returned.
+	## grouped: similar items are returned as one ItemGrouping
 	var loose_items = []
 	for node in get_children():
 		if node is Item:
@@ -741,18 +742,21 @@ func get_items(include_tags=null, exclude_tags=null):
 				continue
 			loose_items.append(node)
 
+	if not grouped:
+		return loose_items
+
 	var items = []
 	var groupings = []
-	var grouped = false
+	var was_grouped = false
 	for item in loose_items:
 		if "groupable" in item.tags:
-			grouped = false
+			was_grouped = false
 			for group in groupings:
 				if item.is_groupable_with(group.top()):
 					group.add(item)
-					grouped = true
+					was_grouped = true
 					break
-			if not grouped:
+			if not was_grouped:
 				var grouping = ItemGrouping.new()
 				grouping.add(item)
 				groupings.append(grouping)
@@ -865,6 +869,7 @@ func strike(foe:Actor, weapon):
 	foe.update_health(-damage)
 	CombatUtils.apply_all_effects(weapon, foe)	
 	emit_signal("hit", foe, damage)
+	add_message("%s hit %s for %d dmg" % [get_short_desc(), foe.get_short_desc(), damage])
 	foe.emit_signal("was_attacked", self)
 	if with_anims and not foe.is_unexposed():
 		anim_hit(foe, weapon, damage)
