@@ -233,3 +233,16 @@ The crowd was growing louder. Gilles was guilty and he had confessed everything.
 The pages had survived the plague years, but no one who knew how to interpret them had and for almost a century they had been waiting, gathering dust, waiting for someone who was desperate enough to find them and let light shine on their arcane words again.
 
 Gilles heard footsteps coming his way. He closed his eyes and wept softly, unsure if any of it had been worth it.
+
+
+# Bewitching Bookkeeping
+
+Le Grand Salapou was performing under the great tent. It was a filler act while the main performers were getting ready, but Benoît thought that the clown was really good. Where had the flower gone? How could anyone throw daggers at a moving target while riding a steam unicycle?
+
+Benoît was there to meet the hold man after the show. He assumed that the clown was an old man under his makeup since there had always been a Salapou Circus stopping by Lyon at least once a year for as long as he could remember, but he had never actually seen Le Grand Salapou without his (her?) makeup. 
+
+Right then, Benoît thought of himself as an informant event though deep inside he still knew that he was an accountant, the most boring job if all of Franconia. He was the auditor for several corporations and for some reason the circus was paying him when he told them about odd transactions. Benoît didn't care about the corporations, there were all objectively crooked and it as clear as ink on a ledger could be. He also didn't mind the side income, which he was expert at spending without leaving a trail.
+
+From at least three meters away, Salapou tossed a cream pie that lander square in the face of the mayor of Lyon. Benoît assumed this was all staged, but the mayor's bulging eyes and ember red forehead looked so real! The crowd was roaring in laughter. Benoît was impressed that the circus managed to coach all their extras into acting so well.
+
+Benoît usually sold his information to the ticket boy or to the lion tamer, but this time he had so juicy details about misusing the depreciation rules on durable assets, so he hoped to negotiate a raise with the clown. If that didn't work, he would probably tell a coal mining company that they still had an unpaid invoice from three years back. That one also worked almost every time.
