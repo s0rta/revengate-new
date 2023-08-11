@@ -21,6 +21,7 @@ class_name Item extends Node2D
 
 @export var char := "⚒"
 @export var caption := ""
+@export var message := ""  # shown when the item is used/consumed
 @export var skill := ""  # which proficiency can boost our stats with this item
 @export var consumable := false
 @export var switchable := false  # can you turn this item ON and OFF?
@@ -186,6 +187,8 @@ func activate_on_actor(actor):
 	for node in get_children():
 		if node is Effect:
 			node.apply(actor)
+	if message:
+		actor.add_message(message)
 	if consumable:
 		queue_free()
 

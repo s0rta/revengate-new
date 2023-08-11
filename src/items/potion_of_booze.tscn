@@ -6,6 +6,7 @@
 [node name="PotionOfBooze" instance=ExtResource("1_q2tfm")]
 char = "🍾"
 caption = "potion of booze"
+message = "What an invigorating feeling!"
 consumable = true
 spawn_cost = 3.0
 tags = Array[String](["booze", "groupable"])

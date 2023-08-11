@@ -371,12 +371,12 @@ script = ExtResource("12_yvfct")
 unique_name_in_owner = true
 visible = false
 
-[node name="MessagesPane" parent="HUD" instance=ExtResource("17_n3emp")]
-unique_name_in_owner = true
-
 [node name="InventoryScreen" parent="HUD" instance=ExtResource("12_yw3up")]
 unique_name_in_owner = true
 visible = false
+
+[node name="MessagesPane" parent="HUD" instance=ExtResource("17_n3emp")]
+unique_name_in_owner = true
 
 [node name="ActorDetailsScreen" parent="HUD" instance=ExtResource("14_yna85")]
 unique_name_in_owner = true
