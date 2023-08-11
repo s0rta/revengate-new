@@ -18,27 +18,46 @@
 ## Track the hero at every move.
 class_name Tracking extends Strategy
 
-var last_foe
+# how many turns to keep tracking an unavaiable target before giving up and 
+# trying to pick someone else.
+@export var nb_track_turns := 10
 
-func select_foe(actor, index):
+var foe
+var foe_last_seen
+
+func select_foe(actor, index:RevBoard.BoardIndex):
 	## Return a foe to attack from the current location of null if there are no suitable targets.
-	var foes = index.actor_foes(actor, me.get_max_weapon_range())
+	var max_dist = max(Actor.MAX_AWARENESS_DIST, Actor.MAX_SIGHT_DIST)
+	var foes = index.actor_foes(me, max_dist)
+	foes = foes.filter(me.perceives)
 	if not foes.is_empty():
-		if last_foe not in foes:
-			last_foe = Rand.choice(foes)
-		return last_foe
+		foe = Rand.choice(foes)
+		return foe
 	else:
 		return null
+
+func refresh(turn):
+	if foe != null:
+		if me.perceives(foe): 
+			foe_last_seen = turn
+			return
+		elif turn - foe_last_seen <= nb_track_turns:
+			# still tracking
+			return
+	# we need a new foe!
+	var index = me.get_board().make_index()
+	foe = select_foe(me, index)
+	foe_last_seen = turn
+
+func is_valid():
+	return super() and foe != null
 		
 func act() -> bool:	
-	var index = me.get_board().make_index()
-	# attack if we can, move towards the hero otherwise
-	var foe = select_foe(me, index)
-	if foe:
+	# attack if we can, move towards foe otherwise
+	var board = me.get_board()
+	if board.dist(me, foe) <= me.get_max_weapon_range():
 		var acted = await me.attack(foe)
 		return acted
 	else:
-		var hero = Tender.hero
-		if hero:
-			return me.move_toward_actor(hero)
-	return false
+		return me.move_toward_actor(foe)
+	

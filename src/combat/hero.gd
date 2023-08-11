@@ -37,6 +37,8 @@ func _unhandled_input(event):
 		print("Click at pos=%s, coord=%s" % [event.position, RevBoard.coord_str(coord)])
 
 		var other = index.actor_at(coord)
+		if other and not perceives(other):
+			other = null
 		var click_dist = RevBoard.dist(get_cell_coord(), coord)
 		
 
@@ -119,10 +121,14 @@ func highlight_options():
 	var friend_coords = []
 	var foe_coords = []
 	for actor in index.get_actors_around_me(self, Consts.CONVO_RANGE):
+		if not perceives(actor):
+			continue
 		if not is_foe(actor) and actor.get_conversation() and actor.is_alive():
 			friend_coords.append(actor.get_cell_coord())
 			
 	for actor in index.get_actors_in_sight(get_cell_coord(), get_max_weapon_range()):
+		if not perceives(actor):
+			continue
 		if is_foe(actor) and actor.is_alive():
 			foe_coords.append(actor.get_cell_coord())
 	board.paint_cells(friend_coords, "highlight-friend", board.LAYER_HIGHLIGHTS)
