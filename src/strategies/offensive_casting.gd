@@ -30,11 +30,10 @@ func refresh(turn):
 	has_activated = Rand.rstest(probability)
 	spells = me.get_spells(["attack"])
 	spells.shuffle()
-	var ranges = []
+	var ranges = [0]
 	for spell in spells:
 		ranges.append(spell.get("range"))
-	var max_range = ranges.max()  # could be null
-	
+	var max_range = ranges.max()
 	var here = me.get_cell_coord()
 	var index = me.get_board().make_index()
 	targets = index.get_actors_in_sight(here, max_range)

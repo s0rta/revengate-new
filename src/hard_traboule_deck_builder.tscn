@@ -35,7 +35,6 @@ script = ExtResource("1_phj4j")
 [node name="Max3PerFloor" type="Node" parent="."]
 script = ExtResource("7_1er0k")
 max_board_occ = 3
-min_board_occ = 1
 
 [node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_vett6")]
 
@@ -58,6 +57,7 @@ max_dungeon_occ = 2
 [node name="Dynamite" parent="Rare" instance=ExtResource("23_6bt64")]
 
 [node name="SilverSaber" parent="Rare" instance=ExtResource("13_sfc7u")]
+range = 1
 
 [node name="RareAndDeep" type="Node" parent="."]
 script = ExtResource("7_1er0k")

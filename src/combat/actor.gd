@@ -956,7 +956,7 @@ func give_item(item, actor=null):
 	if not owner:
 		owner = $root
 	item.reparent(owner)
-	item.tags.erase("gift")  # NPCs keep track of giftable inventory with the "gift" tag
+	item.remove_tag("gift")  # NPCs keep track of giftable inventory with the "gift" tag
 	if actor:
 		add_message("%s gave a %s to %s" % [self.get_caption(), item.get_short_desc(), actor.get_caption()])
 	else:

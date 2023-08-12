@@ -117,6 +117,11 @@ func is_foe(other: Actor):
 func highlight_options():
 	## Put highlight markers where one-tap actions are available
 	var board = get_board()
+	
+	# FIXME: this pre-clearing is not needed if we figuere out what prevents turn_done
+	# from firing when there is a conversation
+	board.clear_highlights()
+	
 	var index = board.make_index() as RevBoard.BoardIndex
 	var friend_coords = []
 	var foe_coords = []
@@ -133,7 +138,8 @@ func highlight_options():
 			foe_coords.append(actor.get_cell_coord())
 	board.paint_cells(friend_coords, "highlight-friend", board.LAYER_HIGHLIGHTS)
 	board.paint_cells(foe_coords, "highlight-foe", board.LAYER_HIGHLIGHTS)
-	turn_done.connect(board.clear_highlights, CONNECT_ONE_SHOT)
+	if not turn_done.is_connected(board.clear_highlights):
+		turn_done.connect(board.clear_highlights, CONNECT_ONE_SHOT)
 
 func act():
 	refresh_strategies()

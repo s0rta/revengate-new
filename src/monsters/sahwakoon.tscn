@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://c3uuk6yfc2thp"]
+[gd_scene load_steps=6 format=3 uid="uid://c3uuk6yfc2thp"]
 
 [ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_rv07l"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="2_ln6qo"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_txcrc"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="4_1esse"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="5_aibtx"]
 
 [node name="Sahwakoon" instance=ExtResource("1_rv07l")]
 char = "s"
@@ -35,3 +36,7 @@ stream = ExtResource("3_txcrc")
 [node name="Tracking" type="Node" parent="." index="9"]
 script = ExtResource("4_1esse")
 priority = 0.6
+
+[node name="Exploring" type="Node" parent="." index="11"]
+script = ExtResource("5_aibtx")
+priority = 0.2

@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://d4f1ul2rt43ys"]
+[gd_scene load_steps=6 format=3 uid="uid://d4f1ul2rt43ys"]
 
 [ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_w6y6o"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="2_okq6u"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_td7m5"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="4_6xr7i"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="5_goopt"]
 
 [node name="Labras" instance=ExtResource("1_w6y6o")]
 char = "l"
@@ -49,3 +50,7 @@ pitch_scale = 1.25
 [node name="Tracking" type="Node" parent="." index="11"]
 script = ExtResource("4_6xr7i")
 priority = 0.6
+
+[node name="Exploring" type="Node" parent="." index="12"]
+script = ExtResource("5_goopt")
+priority = 0.2

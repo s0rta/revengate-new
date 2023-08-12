@@ -125,6 +125,11 @@ func add_tag(tag:String):
 	tags = tags.duplicate()
 	tags.append(tag)
 
+func remove_tag(tag:String):
+	assert(Utils.is_tag(tag))
+	tags = tags.duplicate()
+	tags.erase(tag)
+	
 func place(coord, _immediate=null):
 	## Place the item at the specific coordinate without animations.
 	## No tests are done to see if `coord` is a suitable location.

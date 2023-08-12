@@ -37,12 +37,16 @@ script = ExtResource("1_oonn7")
 
 [node name="SulantTiger" parent="." instance=ExtResource("6_urs5r")]
 
-[node name="Dagger" parent="." instance=ExtResource("7_u30ex")]
+[node name="Max1PerFloor5PerDungeon" type="Node" parent="."]
+script = ExtResource("7_18mi5")
+max_board_occ = 1
+max_dungeon_occ = 5
+
+[node name="Dagger" parent="Max1PerFloor5PerDungeon" instance=ExtResource("7_u30ex")]
 
 [node name="Max3PerFloor" type="Node" parent="."]
 script = ExtResource("7_18mi5")
 max_board_occ = 3
-min_board_occ = 1
 
 [node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_mpj13")]
 

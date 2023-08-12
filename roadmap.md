@@ -177,30 +177,35 @@ Combat:
 - [x] Monte Carlo simulator
   - [x] global flag to disable animations (wire inside Actor.is_unexposed())
 
-## V0.10
-- [ ] Godot 4.1
-- [ ] async preload most shaders to speedup startup
-- [ ] more spells
-  - [x] healing
-  - [ ] zap
-- [ ] healing strategy is based on health-%, not absolute number of HPs
-- [x] one-tap does not chat with foes
+## v0.9.3
+UX:
+- [x] single-tap does not chat with foes
+- [x] highlight where you can make a single-tap action
 
 Items:
-- [ ] potion of absinthe
-- [ ] "magical" tag replaces the magical flag
 - [x] similar items are grouped together in the inventory screen
-  - [x] toggle pops the item from the stack
-  - [x] drop and toss re-equips the next item from the stack 
 
 Combat:
 - [x] ranged attacks with daggers
-- [ ] TribalTerritorial uses perception rather than dist()
-- [ ] Tracking is triggered by perception
+- [x] Tracking is triggered by perception
 - [x] damage numbers in the message log
+- [x] healing spell (monsters only)
 
-UI:
-- [x] highlight where you can make a one-tap action
+## V0.10
+- [ ] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
+- [ ] Godot 4.1
+- [ ] async preload most shaders to speedup startup
+- [ ] more spells
+  - [ ] zap
+- [ ] healing strategy is based on health-%, not absolute number of HPs
+
+Items:
+- [ ] gifted items stack properly with non-gifted items
+- [ ] potion of absinthe
+- [ ] "magical" tag replaces the magical flag
+
+Combat:
+- [ ] TribalTerritorial uses perception rather than dist()
 
 ## v??? – when Godot 4 enables the Android gestures recognition
 - [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]

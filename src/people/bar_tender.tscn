@@ -77,16 +77,17 @@ script = ExtResource("5_qkouh")
 
 [node name="Knife" parent="." instance=ExtResource("7_ayv21")]
 visible = false
+range = 1
 is_equipped = true
 
 [node name="PotionOfHealing" parent="." instance=ExtResource("7_wyehf")]
 visible = false
-tags = Array[String](["gift"])
+tags = Array[String](["gift", "groupable"])
 
 [node name="PotionOfBooze" parent="." instance=ExtResource("8_5um8d")]
-tags = Array[String](["booze", "gift"])
+tags = Array[String](["gift", "groupable"])
 
 [node name="PotionOfBooze2" parent="." instance=ExtResource("8_5um8d")]
-tags = Array[String](["booze", "gift"])
+tags = Array[String](["gift", "groupable"])
 
 [connection signal="was_attacked" from="." to="." method="_learn_attack"]

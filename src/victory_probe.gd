@@ -31,6 +31,8 @@ func reached_top_level(current_board:RevBoard):
 	return current_board.depth == 0
 
 func assay_victory(current_board:RevBoard):
+	if hero == null:
+		return
 	if reached_top_level(current_board) and has_quest_item(hero):
 		emit_signal("victory", false)
 

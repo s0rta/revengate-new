@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://uur5d1k2jgbo"]
+[gd_scene load_steps=8 format=3 uid="uid://uur5d1k2jgbo"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_lcl86"]
 [ext_resource type="AudioStream" uid="uid://bgsqxexnr7idh" path="res://src/monsters/ethereal-02.mp3" id="2_p2mvc"]
@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://bik2r02brd3m7" path="res://src/monsters/ethereal-01.mp3" id="4_7qnpa"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="5_taex2"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="6_chfdi"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="7_oflq2"]
 
 [node name="Ghost" instance=ExtResource("1_lcl86")]
 char = "𝔤"
@@ -43,3 +44,8 @@ innate_attack = 2
 
 [node name="Tracking" type="Node" parent="." index="9"]
 script = ExtResource("6_chfdi")
+priority = 0.6
+
+[node name="Exploring" type="Node" parent="." index="10"]
+script = ExtResource("7_oflq2")
+priority = 0.2

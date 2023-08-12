@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://ons174xuqpcw"]
+[gd_scene load_steps=6 format=3 uid="uid://ons174xuqpcw"]
 
 [ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_53w7c"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="2_p7wm0"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_2jlx8"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="4_qyvw6"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="5_6mbf4"]
 
 [node name="SewerOtter" instance=ExtResource("1_53w7c")]
 char = "o"
@@ -37,3 +38,7 @@ stream = ExtResource("3_2jlx8")
 [node name="Tracking" type="Node" parent="." index="9"]
 script = ExtResource("4_qyvw6")
 priority = 0.6
+
+[node name="Exploring" type="Node" parent="." index="11"]
+script = ExtResource("5_6mbf4")
+priority = 0.2

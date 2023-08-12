@@ -8,10 +8,10 @@
 [ext_resource type="Script" path="res://src/strategies/summoning.gd" id="6_8h78t"]
 [ext_resource type="PackedScene" uid="uid://cuiqioehqyffe" path="res://src/items/vital_assemblage.tscn" id="7_0htct"]
 [ext_resource type="Script" path="res://src/spells/summon_phantruch.gd" id="8_mba68"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="9_0e8nq"]
 [ext_resource type="PackedScene" uid="uid://c18hdsjecec2" path="res://src/items/device_of_easy_focus.tscn" id="9_fjuu7"]
 [ext_resource type="Script" path="res://src/strategies/defensive_casting.gd" id="10_sftcb"]
 [ext_resource type="Script" path="res://src/spells/restore_health.gd" id="11_lae3m"]
-[ext_resource type="Script" path="res://src/spells/electric_zap.gd" id="12_m3epd"]
 [ext_resource type="Script" path="res://src/strategies/offensive_casting.gd" id="13_hwkja"]
 
 [node name="Gleugt" instance=ExtResource("1_dxud3")]
@@ -56,7 +56,7 @@ device_of_focusing = 1
 
 [node name="Tracking" type="Node" parent="." index="9"]
 script = ExtResource("3_t3cu1")
-priority = 0.1
+priority = 0.4
 
 [node name="Summoning" type="Node" parent="." index="10"]
 script = ExtResource("6_8h78t")
@@ -73,15 +73,16 @@ script = ExtResource("13_hwkja")
 probability = 0.8
 priority = 0.95
 
-[node name="VitalAssemblage" parent="." index="13" instance=ExtResource("7_0htct")]
+[node name="Exploring" type="Node" parent="." index="13"]
+script = ExtResource("9_0e8nq")
+priority = 0.2
 
-[node name="DeviceOfEasyFocus" parent="." index="14" instance=ExtResource("9_fjuu7")]
+[node name="VitalAssemblage" parent="." index="14" instance=ExtResource("7_0htct")]
 
-[node name="SummonPhantruch" type="Node" parent="." index="15"]
+[node name="DeviceOfEasyFocus" parent="." index="15" instance=ExtResource("9_fjuu7")]
+
+[node name="SummonPhantruch" type="Node" parent="." index="16"]
 script = ExtResource("8_mba68")
 
-[node name="RestoreHealth" type="Node" parent="." index="16"]
+[node name="RestoreHealth" type="Node" parent="." index="17"]
 script = ExtResource("11_lae3m")
-
-[node name="ElectricZap" type="Node" parent="." index="17"]
-script = ExtResource("12_m3epd")

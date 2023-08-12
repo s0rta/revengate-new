@@ -57,6 +57,7 @@ func _activate_board(new_board):
 	
 	if not new_board.new_message.is_connected($HUD.add_message):
 		new_board.new_message.connect($HUD.add_message)
+	$VictoryProbe.assay_victory(new_board)
 	if not new_board.actor_died.is_connected($VictoryProbe.on_actor_died):
 		new_board.actor_died.connect($VictoryProbe.on_actor_died)
 	board = new_board

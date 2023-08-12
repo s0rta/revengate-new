@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dae5sqhh0bd65"]
+[gd_scene load_steps=6 format=3 uid="uid://dae5sqhh0bd65"]
 
 [ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_ycuvh"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="2_sdh8d"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_17f46"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="4_ydegh"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="5_87j2b"]
 
 [node name="SulantTiger" instance=ExtResource("1_ycuvh")]
 char = "f"
@@ -34,3 +35,7 @@ stream = ExtResource("3_17f46")
 [node name="Tracking" type="Node" parent="." index="9"]
 script = ExtResource("4_ydegh")
 priority = 0.6
+
+[node name="Exploring" type="Node" parent="." index="11"]
+script = ExtResource("5_87j2b")
+priority = 0.2

@@ -157,7 +157,7 @@ func speaker_give_item(extra_tags=null):
 	var tags = ["gift"]
 	if extra_tags:
 		tags += extra_tags
-	var items = speaker.get_items(tags)
+	var items = speaker.get_items(tags, [], false)
 	var item = Rand.choice(items)
 	speaker.give_item(item, Tender.hero)
 
@@ -167,7 +167,7 @@ func speaker_give_items(extra_tags=null):
 	var tags = ["gift"]
 	if extra_tags:
 		tags += extra_tags
-	var items = speaker.get_items(tags)
+	var items = speaker.get_items(tags, [], false)
 	for item in items:
 		speaker.give_item(item, Tender.hero)
 
@@ -176,7 +176,7 @@ func hero_has_item(include_tags=null, extrude_tags=null):
 
 func hero_give_item(include_tags=null, extrude_tags=null):
 	## pass an item from the hero to the speaker
-	var items = Tender.hero.get_items(include_tags, extrude_tags)
+	var items = Tender.hero.get_items(include_tags, extrude_tags, false)
 	var item = Rand.choice(items)
 	Tender.hero.give_item(item, speaker)
 
