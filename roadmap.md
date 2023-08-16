@@ -194,7 +194,7 @@ Combat:
 ## V0.10
 - [ ] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
 - [ ] bug: bar patron does not perform a party trick at the start of quest 2
-- [ ] Godot 4.1
+- [x] Godot 4.1
 - [ ] release on F-Droid
   - [ ] add meta-data dir
   - [ ] build template based on org.sajeg.fallingblocks
@@ -224,6 +224,7 @@ Story:
 - [ ] new quest: Bewitching Bookeeping
 
 ## v0.11
+- [ ] Monte Carlo simulator for DeckBuilders
 - [ ] async preload most shaders to speedup startup
 
 UX:
