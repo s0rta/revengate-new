@@ -972,6 +972,7 @@ func pick_item(item):
 		item.is_equipped = false
 	item.reparent(self)
 	emit_signal("picked_item", item_coord)
+	add_message("%s added to %s's inventory" % [item.get_short_desc(), caption])
 
 func consume_item(item: Item):
 	## activate the item and remove is from inventory

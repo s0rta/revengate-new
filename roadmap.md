@@ -203,7 +203,7 @@ Combat:
 
 UX:
 - [ ] active weapon is highlighted in a corner icon, icon is tappable for quick attack
-- [ ] message with the looted item(s)
+- [x] message with the looted item(s)
 - [ ] pan is normalized to be fairly constant no matter what the zoom level is
 - [ ] multi-turn Travel is more obvious to cancel with message and bigger abort button
 
