@@ -193,30 +193,64 @@ Combat:
 
 ## V0.10
 - [ ] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
+- [ ] bug: bar patron does not perform a party trick at the start of quest 2
 - [ ] Godot 4.1
-- [ ] async preload most shaders to speedup startup
-- [ ] more spells
-  - [ ] zap
-- [ ] healing strategy is based on health-%, not absolute number of HPs
+- [ ] release on F-Droid
+  - [ ] add meta-data dir
+  - [ ] build template based on org.sajeg.fallingblocks
+  - [ ] factor out build number from Godot settings?
+  - [ ] open inclusion request with F-Droid
+
+UX:
+- [ ] active weapon is highlighted in a corner icon, icon is tappable for quick attack
+- [ ] message with the looted item(s)
+- [ ] pan is normalized to be fairly constant no matter what the zoom level is
+- [ ] multi-turn Travel is more obvious to cancel with message and bigger abort button
 
 Items:
-- [ ] gifted items stack properly with non-gifted items
-- [ ] potion of absinthe
 - [ ] "magical" tag replaces the magical flag
+
+Monsters:
+- [ ] automaton
+- [ ] giant locust
+- [ ] yarohu
+- [ ] Le Grand Salapou
 
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()
+- [ ] healing strategy is based on health-%, not absolute number of HPs
 
-## v??? – when Godot 4 enables the Android gestures recognition
-- [ ] gesture to access non-default actions, like following stairs see [docs/gestures.md]
+Story:
+- [ ] new quest: Bewitching Bookeeping
 
-  
+## v0.11
+- [ ] async preload most shaders to speedup startup
+
+UX:
+- [ ] finalize gestures to access non-default actions, see the [gestures design notes](docs/gestures.md)
+
+Items:
+- [ ] potion of absinthe
+
+Monsters:
+- [ ] cherub
+- [ ] sentry scarab
+- [ ] nochort
+
+Combat:
+- [ ] zapping spell
+
+## v0.12
+- [ ] web export
+  - [ ] better keyboard support (ex.: ESC cancels actions)
+
 ## v1.0
-- [ ] release on F-Droid
 - [ ] saved games
 - [ ] A Fight for Fumes campaign
 - [ ] Rhymes with Remorse campaign
 
+## v1.1
+- [ ] packaging for Ubuntu
 
 ## Ice Box: not yet scheduled for a release
 - [ ] non-walking movement and path finding (wading, swimming, phasing)
