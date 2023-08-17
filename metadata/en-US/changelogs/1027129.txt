@@ -1,0 +1,5 @@
+- Highlights of tiles where single tap actions are available (attack, chat, ...)
+- Single tap on a foe never attempts to chat with them
+- Daggers can be tossed for ranged attacks (hero and monsters)
+- New spell: healing (monsters only)
+- Similar items are grouped together on the inventory screen
