@@ -98,3 +98,31 @@ def make_export_presets(c):
             parser[sect][f"keystore/{mode}_password"] = creds["password"]
 
     parser.write(open(PRESETS_PATH, "wt"), False)
+
+
+def _find_godot(context):
+    for name in ["godot4", "godot"]:
+        if context.run(f"which {name}", warn=True).return_code == 0:
+            return name
+    if "GODOT" in os.environ:
+        return os.environ["GODOT"]
+    else:
+        raise RuntimeError("Can't find Godot binary. " 
+                            "Consider linking it to `godot4` or defining "
+                            "the GODOT environment variable.")
+
+@task(make_export_presets)
+def build_android(c):
+    """ Make the two android package formats from the current sources. """
+    # Ex.: godot --export-release 'Android APK' bin/revengate.apk
+    godot = _find_godot(c)
+    
+    parser = ConfigParser()
+    parser.read(PRESETS_PATH)
+    for sect in ["preset.0", "preset.1"]:
+        name = parser[sect]["name"]
+        path = parser[sect]["export_path"]
+        assert name.lstrip('"\'').startswith("Android")
+        cmd = f"{godot} --headless --export-release {name} {path}"
+        res = c.run(cmd, echo=True)
+        assert res.return_code == 0

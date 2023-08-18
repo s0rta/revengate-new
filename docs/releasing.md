@@ -5,7 +5,6 @@ When the code gets to the point where it seems ready to publish, the following s
 
 * bump version string and version code in `src/constants.gd`
 * `git tag vX.Y.Z`
-* `invoke make-export-presets`
 * `invoke build-android`
 * try the new package: `adb install bin/revengate-x.y.z.apk`
 * `git push --tag; git push --tag public`

@@ -196,10 +196,10 @@ Combat:
 - [ ] bug: bar patron does not perform a party trick at the start of quest 2
 - [x] Godot 4.1
 - [ ] release on F-Droid
-  - [ ] add meta-data dir
-  - [ ] build template based on org.sajeg.fallingblocks
-  - [ ] factor out build number from Godot settings?
-  - [ ] open inclusion request with F-Droid
+  - [x] add meta-data dir
+  - [x] build template based on org.sajeg.fallingblocks
+  - [x] factor out build number from Godot settings?
+  - [x] open [inclusion request](https://gitlab.com/fdroid/rfp/-/issues/2513) with F-Droid
 
 UX:
 - [ ] active weapon is highlighted in a corner icon, icon is tappable for quick attack
