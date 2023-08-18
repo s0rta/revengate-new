@@ -226,6 +226,7 @@ Story:
 ## v0.11
 - [ ] Monte Carlo simulator for DeckBuilders
 - [ ] async preload most shaders to speedup startup
+- [ ] instructions on how to install all the Android dev dependencies
 
 UX:
 - [ ] finalize gestures to access non-default actions, see the [gestures design notes](docs/gestures.md)
