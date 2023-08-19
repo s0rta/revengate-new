@@ -76,12 +76,13 @@ def _get_version():
 
 
 @task
-def make_export_presets(c):
+def make_export_presets(c, signed=True):
     """ Generate a presets file that Godot can use to produce Android builds. """
     version_name, version_code = _get_version()
     parser = ConfigParser()
     parser.read(PRESETS_PATH + ".in")
-    creds = _load_credentials()
+    if signed:
+        creds = _load_credentials()
     
     for sect in ["preset.0", "preset.1"]:
         old_path = parser[sect]["export_path"]
@@ -93,9 +94,13 @@ def make_export_presets(c):
 
         # credenditals
         for mode in ["debug", "release"]:
-            parser[sect][f"keystore/{mode}"] = creds["path"]
-            parser[sect][f"keystore/{mode}_user"] = creds["user"]
-            parser[sect][f"keystore/{mode}_password"] = creds["password"]
+            if signed:
+                parser[sect]["package/signed"] = "true"
+                parser[sect][f"keystore/{mode}"] = creds["path"]
+                parser[sect][f"keystore/{mode}_user"] = creds["user"]
+                parser[sect][f"keystore/{mode}_password"] = creds["password"]
+            else:
+                parser[sect]["package/signed"] = "false"
 
     parser.write(open(PRESETS_PATH, "wt"), False)
 
