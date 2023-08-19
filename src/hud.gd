@@ -25,6 +25,7 @@ var hero: Actor
 @onready var cheats_box = find_child("CheatsMargin")
 @onready var dialogue_pane = %DialoguePane
 @onready var actor_details_screen = %ActorDetailsScreen
+var quick_attack_cmd : CommandPack.Command 
 
 func _ready():
 	# only show the testing UI on debug builds
@@ -40,6 +41,9 @@ func set_hero(hero_):
 	hero.moved.connect(refresh_buttons_vis)
 	refresh_hps()
 	refresh_buttons_vis(null, hero.get_cell_coord())
+	
+	var index = hero.get_board().make_index()
+	quick_attack_cmd = CommandPack.QuickAttack.new(index)
 
 func refresh_hps(_new_health=null):
 	# TODO: bold animation when dead
@@ -115,9 +119,23 @@ func refresh_input_enabled(enabled):
 			child.disabled = not enabled
 
 func _on_hero_state_changed(new_state):
+	if hero == null:
+		# not fully initialized, can't do anything too fancy yet
+		return
 	refresh_input_enabled(new_state == Actor.States.LISTENING)
-
+	if new_state == Actor.States.LISTENING:
+		quick_attack_cmd.refresh(hero.get_board().make_index())
+		var here = hero.get_cell_coord()
+		%QuickAttackButton.disabled = not quick_attack_cmd.is_valid_for_hero_at(here)
+	else:
+		%QuickAttackButton.disabled = true
 
 func _on_city_map_button_pressed():
 	var board = Tender.hero.get_board()
 	%CityMapScreen.popup(board.world_loc)
+
+
+func _on_quick_attack_button_button_up():
+	print("Attacking someone else real quick...")
+	if quick_attack_cmd.run_at_hero(hero.get_cell_coord()):
+		hero.finalize_turn()

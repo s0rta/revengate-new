@@ -593,16 +593,20 @@ class BoardIndex extends RefCounted:
 		if _metrics.has(key):
 			_metrics.erase(key)
 
-	func get_actors_in_sight(from, max_radius, include_center=false):
+	func get_actors_in_sight(from, max_radius, include_center=false, only_alive=true):
 		## Return a list of actors that are visible from `from`
 		var actors = []
+		var actor = null
 		for coord in _coord_to_actor:
 			if board.dist(from, coord) > max_radius:
 				continue
 			if coord == from and not include_center:
 				continue
+			actor = _coord_to_actor[coord]
+			if only_alive and not actor.is_alive:
+				continue
 			if has_los(from, coord):
-				actors.append(_coord_to_actor[coord])
+				actors.append(actor)
 		return actors
 
 	func ddump():

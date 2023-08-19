@@ -32,6 +32,9 @@ class Command extends RefCounted:
 		else:
 			index = Tender.hero.get_board().make_index()
 
+	func refresh(index_:RevBoard.BoardIndex):
+		index = index_
+
 	func is_valid_for(coord:Vector2i):
 		assert(false, "Not implemented")
 
@@ -43,6 +46,7 @@ class Command extends RefCounted:
 		return false
 
 	func run_at_hero(coord:Vector2i) -> bool:
+		# TODO: we might as well get the hero coord from the Tender and receive no args
 		assert(false, "Not implemented")
 		return false
 
@@ -56,16 +60,50 @@ class Attack extends Command:
 		super(index_)
 
 	func is_valid_for(coord:Vector2i):
+		var attack_range = Tender.hero.get_max_weapon_range()
 		var board = Tender.hero.get_board()
 		if not board.is_on_board(coord):
 			return false
 		var hero_coord = Tender.hero.get_cell_coord()
 		var dist = board.dist(hero_coord, coord)
-		return dist == 1 and index.actor_at(coord)
+		return dist <= attack_range and index.actor_at(coord)
 		
 	func run(coord:Vector2i) -> bool:
 		var victim = index.actor_at(coord)
 		await Tender.hero.attack(victim)
+		return true
+
+class QuickAttack extends Command:
+	var nearby_foe = null
+	var attack_range:int
+
+	func _init(index_=null):
+		is_action = true
+		caption = "QuickAttack"
+		super(index_)
+
+	func is_valid_for_hero_at(coord:Vector2i):
+		var board = Tender.hero.get_board()
+		var hero = Tender.hero as Actor
+		attack_range = hero.get_max_weapon_range()
+		var actors = index.get_actors_in_sight(hero.get_cell_coord(), attack_range)
+		actors.shuffle()
+		for actor in actors:
+			if hero.is_foe(actor):
+				nearby_foe = actor
+				return true
+		return false
+		
+	func run_at_hero(coord:Vector2i) -> bool:
+		var board = Tender.hero.get_board()
+		var foe = null
+		var fact = Tender.hero.mem.recall("attacked")
+		if (fact and fact.foe and fact.foe.is_alive()
+				and board.dist(Tender.hero, fact.foe) <= attack_range):
+			foe = fact.foe
+		else:
+			foe = nearby_foe
+		Tender.hero.attack(foe)
 		return true
 
 class Talk extends Command:

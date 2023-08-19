@@ -37,3 +37,4 @@ Those are the most obvious inneficiencies and hard to use workflows as of v0.9.3
 * 1 no way to exit the game without killing it
   - 1 add a quit button on the home screen
 * ? the multi-branching traboules can easilly lead you too deep into the wrong branch
+* ? it's possible to scroll the whole map out of the viewport in a way that makes it confusing to bring back

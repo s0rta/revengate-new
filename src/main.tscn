@@ -180,79 +180,84 @@ layout_mode = 2
 focus_mode = 0
 text = "Inventory"
 
-[node name="RGroup" type="HBoxContainer" parent="HUD"]
+[node name="RGroup" type="VBoxContainer" parent="HUD"]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -310.0
-offset_top = -218.0
+offset_left = -155.0
+offset_top = -206.0
 grow_horizontal = 0
 grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="DebugButtons" type="HBoxContainer" parent="HUD/RGroup"]
+layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 2
 
-[node name="CheatsMargin" type="MarginContainer" parent="HUD/RGroup"]
+[node name="CheatsMargin" type="MarginContainer" parent="HUD/RGroup/DebugButtons"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
 
-[node name="CheatsBar" type="VBoxContainer" parent="HUD/RGroup/CheatsMargin"]
+[node name="CheatsBar" type="VBoxContainer" parent="HUD/RGroup/DebugButtons/CheatsMargin"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="TeleportButton" type="Button" parent="HUD/RGroup/CheatsMargin/CheatsBar"]
+[node name="TeleportButton" type="Button" parent="HUD/RGroup/DebugButtons/CheatsMargin/CheatsBar"]
 modulate = Color(1, 1, 1, 0.5)
 layout_mode = 2
 focus_mode = 0
 text = "Teleport"
 
-[node name="InspectButton" type="Button" parent="HUD/RGroup/CheatsMargin/CheatsBar"]
+[node name="InspectButton" type="Button" parent="HUD/RGroup/DebugButtons/CheatsMargin/CheatsBar"]
 modulate = Color(1, 1, 1, 0.5)
 layout_mode = 2
 focus_mode = 0
 text = "Inspect"
 
-[node name="RMargin" type="MarginContainer" parent="HUD/RGroup"]
+[node name="RMargin" type="MarginContainer" parent="HUD/RGroup/DebugButtons"]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 8
 
-[node name="RButtonBar" type="VBoxContainer" parent="HUD/RGroup/RMargin"]
+[node name="RButtonBar" type="VBoxContainer" parent="HUD/RGroup/DebugButtons/RMargin"]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="TestButton" type="Button" parent="HUD/RGroup/RMargin/RButtonBar"]
+[node name="TestButton" type="Button" parent="HUD/RGroup/DebugButtons/RMargin/RButtonBar"]
 modulate = Color(1, 1, 1, 0.501961)
 layout_mode = 2
 focus_mode = 0
 text = "Test 1"
 
-[node name="TestButton2" type="Button" parent="HUD/RGroup/RMargin/RButtonBar"]
+[node name="TestButton2" type="Button" parent="HUD/RGroup/DebugButtons/RMargin/RButtonBar"]
 modulate = Color(1, 1, 1, 0.5)
 layout_mode = 2
 focus_mode = 0
 text = "Test 2"
 
-[node name="ShowCheatsButton" type="Button" parent="HUD/RGroup/RMargin/RButtonBar"]
+[node name="ShowCheatsButton" type="Button" parent="HUD/RGroup/DebugButtons/RMargin/RButtonBar"]
 modulate = Color(1, 1, 1, 0.5)
 layout_mode = 2
 focus_mode = 0
 text = "Cheats"
 
-[node name="StatusBar" type="HBoxContainer" parent="HUD/RGroup/RMargin/RButtonBar"]
+[node name="MarginContainer" type="MarginContainer" parent="HUD/RGroup"]
 layout_mode = 2
 
-[node name="HealthLabel" type="Label" parent="HUD/RGroup/RMargin/RButtonBar/StatusBar"]
+[node name="QuickAttackButton" type="Button" parent="HUD/RGroup/MarginContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Health: "
-
-[node name="HPLabel" type="Label" parent="HUD/RGroup/RMargin/RButtonBar/StatusBar"]
-layout_mode = 2
-text = "???"
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_font_sizes/font_size = 42
+text = "🗡️"
 
 [node name="TopRightMargin" type="MarginContainer" parent="HUD"]
 anchors_preset = 1
@@ -264,10 +269,13 @@ grow_horizontal = 0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HUD/TopRightMargin"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/TopRightMargin"]
 layout_mode = 2
 
-[node name="CancelButton" type="Button" parent="HUD/TopRightMargin/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/TopRightMargin/VBoxContainer"]
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="HUD/TopRightMargin/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -275,24 +283,35 @@ size_flags_horizontal = 4
 focus_mode = 0
 text = "⮿"
 
-[node name="CityMapButton" type="Button" parent="HUD/TopRightMargin/HBoxContainer"]
+[node name="CityMapButton" type="Button" parent="HUD/TopRightMargin/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 text = "🗺"
 
-[node name="InspectButton" type="Button" parent="HUD/TopRightMargin/HBoxContainer"]
+[node name="InspectButton" type="Button" parent="HUD/TopRightMargin/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 text = "🔍"
 
-[node name="ShowMessagesButton" type="Button" parent="HUD/TopRightMargin/HBoxContainer"]
+[node name="ShowMessagesButton" type="Button" parent="HUD/TopRightMargin/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 text = "📖"
+
+[node name="StatusBar" type="HBoxContainer" parent="HUD/TopRightMargin/VBoxContainer"]
+layout_mode = 2
+
+[node name="HealthLabel" type="Label" parent="HUD/TopRightMargin/VBoxContainer/StatusBar"]
+layout_mode = 2
+text = "Health: "
+
+[node name="HPLabel" type="Label" parent="HUD/TopRightMargin/VBoxContainer/StatusBar"]
+layout_mode = 2
+text = "???"
 
 [node name="ActionLabel" type="Label" parent="HUD"]
 unique_name_in_owner = true
@@ -391,15 +410,16 @@ script = ExtResource("41_hgs5k")
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/LootButton" to="BoardArea/GestureSurveyor" method="start_loot"]
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/InventoryButton" to="BoardArea/GestureSurveyor" method="show_inventory"]
-[connection signal="button_up" from="HUD/RGroup/CheatsMargin/CheatsBar/TeleportButton" to="HUD/CheatsSurveyor" method="start_teleport_to"]
-[connection signal="button_up" from="HUD/RGroup/CheatsMargin/CheatsBar/InspectButton" to="HUD/CheatsSurveyor" method="start_inspect_at"]
-[connection signal="button_up" from="HUD/RGroup/RMargin/RButtonBar/TestButton" to="." method="test"]
-[connection signal="button_up" from="HUD/RGroup/RMargin/RButtonBar/TestButton2" to="." method="test2"]
-[connection signal="button_up" from="HUD/RGroup/RMargin/RButtonBar/ShowCheatsButton" to="HUD" method="toggle_cheats_box"]
-[connection signal="button_up" from="HUD/TopRightMargin/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
-[connection signal="button_up" from="HUD/TopRightMargin/HBoxContainer/CityMapButton" to="HUD" method="_on_city_map_button_pressed"]
-[connection signal="button_up" from="HUD/TopRightMargin/HBoxContainer/InspectButton" to="BoardArea/GestureSurveyor" method="start_inspect_at"]
-[connection signal="button_up" from="HUD/TopRightMargin/HBoxContainer/ShowMessagesButton" to="HUD/MessagesScreen" method="popup"]
+[connection signal="button_up" from="HUD/RGroup/DebugButtons/CheatsMargin/CheatsBar/TeleportButton" to="HUD/CheatsSurveyor" method="start_teleport_to"]
+[connection signal="button_up" from="HUD/RGroup/DebugButtons/CheatsMargin/CheatsBar/InspectButton" to="HUD/CheatsSurveyor" method="start_inspect_at"]
+[connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/TestButton" to="." method="test"]
+[connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/TestButton2" to="." method="test2"]
+[connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/ShowCheatsButton" to="HUD" method="toggle_cheats_box"]
+[connection signal="button_up" from="HUD/RGroup/MarginContainer/QuickAttackButton" to="HUD" method="_on_quick_attack_button_button_up"]
+[connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
+[connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/CityMapButton" to="HUD" method="_on_city_map_button_pressed"]
+[connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/InspectButton" to="BoardArea/GestureSurveyor" method="start_inspect_at"]
+[connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/ShowMessagesButton" to="HUD/MessagesScreen" method="popup"]
 [connection signal="action_complete" from="HUD/CheatsSurveyor" to="HUD" method="hide_action_label"]
 [connection signal="action_started" from="HUD/CheatsSurveyor" to="HUD" method="show_action_label"]
 [connection signal="victory" from="VictoryProbe" to="." method="conclude_game" binds= [true]]

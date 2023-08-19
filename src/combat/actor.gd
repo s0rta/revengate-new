@@ -833,6 +833,8 @@ func strike(foe:Actor, weapon):
 	## Strike foe with weapon. The strike could result in a miss. 
 	## The result is immediately visible in the world.
 	# combats works with two random rolls: to-hit then damage.
+	$Mem.learn("attacked", current_turn, Memory.Importance.TRIVIAL, {"foe": foe})
+
 	var with_anims = not is_unexposed()
 	var crit = false
 	var foe_coord = foe.get_cell_coord()
