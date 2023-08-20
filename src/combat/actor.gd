@@ -41,6 +41,8 @@ signal moved(from, to)
 signal picked_item(old_coord)
 # the actor removed an item from their inventory and left it at `coord`
 signal dropped_item(coord)
+# the actor's active weapon(s) changed
+signal changed_weapons()
 # the actor stopped automating their actions with a(some) strategy(ies),
 # might fire more than once per strategy
 signal strategy_expired
@@ -930,10 +932,22 @@ func refocus(delta:=1):
 		add_message("%s seems more focused" % get_caption())
 		mana += delta
 
-func drop_item(item, coord = null):
+func equip_item(item:Item, exclusive=true):
+	## Equip the item (typically a weapon). 
+	## If `exclusive`, all other items are deequipped first
+	assert(item.get_parent() == self, "Must own an item before it can be equipped.")
+	if exclusive:
+		for other in get_items(null, null, false):
+			if other.get("is_equipped") != null:
+				other.is_equipped = false
+	item.is_equipped = true
+	emit_signal("changed_weapons")
+
+func drop_item(item, coord=null):
 	assert(item.get_parent() == self, "must possess an item before dropping it")
-	if item.get("is_equipped") != null:
+	if item.get("is_equipped"):
 		item.is_equipped = false
+		emit_signal("changed_weapons")
 	var board = get_board()
 	var builder = BoardBuilder.new(board)
 	if coord == null:
@@ -948,7 +962,7 @@ func reequip_weapon_from_group(grouping, prev_weapon=null):
 		else:
 			add_message("You ran out of your previous weapons")
 	else:
-		grouping.is_equipped = true
+		equip_item(grouping)
 
 func give_item(item, actor=null):
 	## Give `item` to `actor`

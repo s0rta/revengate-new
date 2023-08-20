@@ -403,6 +403,7 @@ script = ExtResource("41_hgs5k")
 
 [connection signal="action_complete" from="BoardArea/GestureSurveyor" to="HUD" method="hide_action_label"]
 [connection signal="action_started" from="BoardArea/GestureSurveyor" to="HUD" method="show_action_label"]
+[connection signal="changed_weapons" from="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" to="HUD" method="_on_hero_changed_weapons"]
 [connection signal="dropped_item" from="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" to="HUD" method="update_states_at"]
 [connection signal="picked_item" from="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" to="HUD" method="update_states_at"]
 [connection signal="state_changed" from="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" to="HUD" method="_on_hero_state_changed"]
