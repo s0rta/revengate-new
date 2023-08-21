@@ -769,13 +769,23 @@ func get_items(include_tags=null, exclude_tags=null, grouped=true):
 	return items
 
 func get_compatible_item(ref_item:Item):
-	var items = get_items(ref_item.tags)
+	## Return an arbitrary item that can be groupped with `ref_item` (same inventory slot).
+	## Return `null` if `ref_item` is the only one of its kind in the actor's inventory.
+	var items = get_items(ref_item.tags, null, false)
 	for item in items:
-		if item is ItemGrouping and ref_item.is_groupable_with(item.top()):
-			return item
-		if ref_item.is_groupable_with(item):
+		if item != ref_item and ref_item.is_groupable_with(item):
 			return item
 	return null
+
+func get_compatible_items(ref_item:Item):
+	## Return an Array of items that can be groupped with `ref_item` (same inventory slot).
+	## The array can be empty.
+	var items = get_items(ref_item.tags, null, false)
+	var compats = []
+	for item in items:
+		if item != ref_item and ref_item.is_groupable_with(item):
+			compats.append(item)
+	return compats
 
 func get_spells(include_tags=null, exclude_tags=null):
 	## Return an array of known spells.
@@ -932,10 +942,11 @@ func refocus(delta:=1):
 		add_message("%s seems more focused" % get_caption())
 		mana += delta
 
-func equip_item(item:Item, exclusive=true):
+func equip_item(item, exclusive=true):
 	## Equip the item (typically a weapon). 
 	## If `exclusive`, all other items are deequipped first
-	assert(item.get_parent() == self, "Must own an item before it can be equipped.")
+	if item is Node:
+		assert(item.get_parent() == self, "Must own an item before it can be equipped.")
 	if exclusive:
 		for other in get_items(null, null, false):
 			if other.get("is_equipped") != null:
