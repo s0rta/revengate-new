@@ -20,7 +20,7 @@
 extends Node
 
 const VERSION := "0.9.4"
-const VERSION_CODE := 1027130
+const VERSION_CODE := 1027131
 const DEBUG = true
 
 ## The kind of damage, mostly used to compute resistances. Can apply to healing as well.
