@@ -105,6 +105,29 @@ def make_export_presets(c, signed=True):
     parser.write(open(PRESETS_PATH, "wt"), False)
 
 
+@task
+def make_fdroid_presets(c, godot_src_dir):
+    """ Generate a presets file that Godot can use to produce unsigned Android builds for F-Droid. """
+    version_name, version_code = _get_version()
+    parser = ConfigParser()
+    parser.read(PRESETS_PATH + ".in")
+    templates = os.path.join(godot_src_dir, "bin", "android_release.apk")
+    
+    for sect in ["preset.0", "preset.1"]:
+        old_path = parser[sect]["export_path"]
+        parser[sect]["export_path"] = _make_path(old_path, version_name)
+
+    for sect in ["preset.0.options", "preset.1.options"]:
+        parser[sect]["version/code"] = str(version_code)
+        parser[sect]["version/name"] = f'"{version_name}"'
+        parser[sect]["custom_template/release"] = f'"{templates}"'
+        parser[sect]["package/signed"] = "false"
+        parser[sect]["gradle_build/use_gradle_build"] = "false"
+        parser[sect]["gradle_build/min_sdk"] = '""'
+
+    parser.write(open(PRESETS_PATH, "wt"), False)
+
+
 def _find_godot(context):
     for name in ["godot4", "godot"]:
         if context.run(f"which {name}", warn=True).return_code == 0:
