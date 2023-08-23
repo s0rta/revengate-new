@@ -6,7 +6,7 @@ from invoke import task
 CONSTANTS_PATH = "src/constants.gd"
 PRESETS_PATH = "export_presets.cfg"
 CREDS_PATH = ".godot/export_credentials.cfg"
-
+GODOT_SETTINGS = os.path.expanduser("~/.config/godot/editor_settings-4.tres")
 
 def is_newer(fname, ref):
     """ Return whether fname is newer than file at ref. """
@@ -154,3 +154,17 @@ def build_android(c):
         cmd = f"{godot} --headless --export-release {name} {path}"
         res = c.run(cmd, echo=True)
         assert res.return_code == 0
+
+
+@task 
+def configure_android_sdk(c, sdk_path):
+    """Save the path to the Android SDK in the Godot settings"""
+    # Doing this here because the path is full of '/' chars and that confuses sed
+    assert os.path.isdir(sdk_path)
+    # can't use ConfigParser for this one becase the tres dialect is weird
+    new_lines = []
+    for line in open(GODOT_SETTINGS, "rt"):
+        if line.startswith("export/android/android_sdk_path"):
+            line = f'export/android/android_sdk_path = "{sdk_path}"\n'
+        new_lines.append(line)
+    open(GODOT_SETTINGS, "wt").writelines(new_lines)
