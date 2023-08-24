@@ -70,7 +70,7 @@ def _get_version():
         if line.startswith("const VERSION_CODE"):
             version_code = line.strip().split(" ")[-1]
         elif line.startswith("const VERSION"):
-            version_name = line.strip().split(" ")[-1]
+            version_name = line.strip().split(" ")[-1].strip('"')
     assert version_name and version_code
     return version_name, version_code
 
