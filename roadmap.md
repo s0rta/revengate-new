@@ -245,7 +245,7 @@ Combat:
 ## v0.12
 - [ ] web export
   - [ ] better keyboard support (ex.: ESC cancels actions)
-
+  
 ## v1.0
 - [ ] saved games
 - [ ] A Fight for Fumes campaign
@@ -268,6 +268,8 @@ Combat:
 - [ ] phantruch is destroyed if the vital assembly is broken or stolen
 - [ ] startled strategy: flee when first contact is from afar, attack when from nearby
 - [ ] upgrade DialoguePane to the latest Dialogue Manager API
+- [ ] F-Droid [Reproducible Builds](https://f-droid.org/docs/Reproducible_Builds/)
+- [ ] document the build process
 
 Performance:
 - [ ] cache stats modifiers for the whole turn (with inval on mods changing events)
