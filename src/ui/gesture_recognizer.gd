@@ -21,10 +21,12 @@ signal capture_stopped(success, position)
 signal action_started(message)
 signal action_complete
 
-const POS_EPSILON = 2.0  # positions that far apart are considered to be the same
+# positions are considered the same unless at least that far apart
+const POS_EPSILON = 2.0  
 
 @onready var viewport: SubViewport = find_child("Viewport")
 var is_capturing_clicks := false
+var is_panning := false
 var has_panned := false
 var was_long_tap := false
 
@@ -109,11 +111,13 @@ func _gui_input(event):
 			touches_pos[index] = event.position
 			nb_touching = len(touches_pos)
 			if nb_touching == 1:
+				is_panning = false
 				has_panned = false
 		else:  # release
 			touches_pos.erase(index)
 			nb_touching = len(touches_pos)
 			if nb_touching == 0:
+				is_panning = false
 				if not has_panned: 
 					# FIXME: only fire if hero is accepting
 					if $LongTapTimer.time_left == 0:
@@ -129,10 +133,12 @@ func _gui_input(event):
 		if index == null:
 			index = 0
 		var info = _mt_info(index, event.position)
-		if not info.center_eq:
+		if is_panning or not info.center_eq:
+			is_panning = true
 			has_panned = true
 			var camera = viewport.get_camera_2d()
-			camera.offset -= event.relative
+			camera.offset -= ((info.center_new - info.center_old) * viewport.zoom)
+			touches_pos[index] = event.position
 		if not info.avg_dist_eq:
 			var factor = 1+(info.avg_dist_old - info.avg_dist_new) / info.avg_dist_old
 			# re-zoom
