@@ -204,7 +204,7 @@ Combat:
 UX:
 - [ ] active weapon is highlighted in a corner icon, icon is tappable for quick attack
 - [x] message with the looted item(s)
-- [ ] pan is normalized to be fairly constant no matter what the zoom level is
+- [x] pan is normalized to be fairly constant no matter what the zoom level is
 - [ ] multi-turn Travel is more obvious to cancel with message and bigger abort button
 
 Items:
@@ -270,6 +270,7 @@ Combat:
 - [ ] upgrade DialoguePane to the latest Dialogue Manager API
 - [ ] F-Droid [Reproducible Builds](https://f-droid.org/docs/Reproducible_Builds/)
 - [ ] document the build process
+- [ ] bug: two finger pan is really choppy when the fingers are too close to one another
 
 Performance:
 - [ ] cache stats modifiers for the whole turn (with inval on mods changing events)
