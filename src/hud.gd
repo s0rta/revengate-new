@@ -44,6 +44,17 @@ func set_hero(hero_):
 	
 	var index = hero.get_board().make_index()
 	quick_attack_cmd = CommandPack.QuickAttack.new(index)
+	_set_quick_attack_icon()
+	
+func _set_quick_attack_icon():
+	var weapons = hero.get_weapons()
+	assert(len(weapons) == 1, "Dual weilding is not implemented for QuickAttack button style")
+	var weapon = weapons[0]
+	%QuickAttackButton.text = weapon.char
+	if "groupable" in weapon.tags:
+		var nb = len(hero.get_compatible_items(weapon))
+		if nb >= 1:
+			%QuickAttackButton.text += "x%d" % (nb+1)
 
 func refresh_hps(_new_health=null):
 	# TODO: bold animation when dead
@@ -139,3 +150,7 @@ func _on_quick_attack_button_button_up():
 	print("Attacking someone else real quick...")
 	if quick_attack_cmd.run_at_hero(hero.get_cell_coord()):
 		hero.finalize_turn()
+
+
+func _on_hero_changed_weapons():
+	_set_quick_attack_icon()

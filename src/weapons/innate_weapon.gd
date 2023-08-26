@@ -20,6 +20,7 @@
 @icon("res://assets/opencliparts/cayenne.svg")
 class_name InnateWeapon extends Node
 
+@export var char := "🥊"
 @export var damage := 1
 @export var damage_family: Consts.DamageFamily
 @export var range := 1

@@ -33,6 +33,7 @@ fencing = 1
 
 [node name="Punch" type="Node" parent="." index="8"]
 script = ExtResource("5_n8dxk")
+char = "👊"
 damage_family = 1
 
 [node name="HitSound" type="AudioStreamPlayer" parent="Punch" index="0"]
