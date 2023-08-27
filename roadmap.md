@@ -202,10 +202,10 @@ Combat:
   - [x] open [inclusion request](https://gitlab.com/fdroid/rfp/-/issues/2513) with F-Droid
 
 UX:
-- [ ] active weapon is highlighted in a corner icon, icon is tappable for quick attack
+- [x] active weapon is highlighted in a corner icon, icon is tappable for quick attack
 - [x] message with the looted item(s)
 - [x] pan is normalized to be fairly constant no matter what the zoom level is
-- [ ] multi-turn Travel is more obvious to cancel with message and bigger abort button
+- [x] multi-turn Travel is more obvious to cancel with message and bigger abort button
 
 Items:
 - [ ] "magical" tag replaces the magical flag

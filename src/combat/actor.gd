@@ -1012,10 +1012,14 @@ func consume_item(item: Item):
 		item.reparent($/root)
 	add_message("%s used a %s" % [get_caption(), item.get_short_desc()])
 	
-func add_message(message):
+func add_message(text:String, 
+				level:Consts.MessageLevels=Consts.MessageLevels.INFO, 
+				tags:Array[String]=[]):
 	## Try to add a message to the message window. 
-	## The visibility of the message depends on us being visible to the Hero 
+	## The visibility of the message depends on us being visible to the Hero
+	if level == null:
+		level = Consts.MessageLevels.INFO
 	var board = get_board()
 	if board != null:
-		board.add_message(self, message)
+		board.add_message(self, text, level, tags)
 		

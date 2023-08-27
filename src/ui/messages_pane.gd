@@ -24,10 +24,12 @@ const MAX_MESSAGES = 10
 func _ready():
 	%MessageTemplate.hide()
 	
-func add_message(text):
+func add_message(text, level:Consts.MessageLevels, tags:=[]):
 	_trim_old_messages()
 	var label = %MessageTemplate.duplicate()
 	label.text = text
+	if level >= Consts.MessageLevels.WARNING:
+		label.modulate = Color.RED
 	%MessagesBox.add_child(label)
 	label.show()
 	var timer = get_tree().create_timer(DECAY_SECS)

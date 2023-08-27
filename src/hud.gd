@@ -93,6 +93,7 @@ func refresh_buttons_vis(_old_coord, hero_coord):
 
 func refresh_cancel_button_vis():
 	%CancelButton.visible = hero.has_strategy(true)
+	%CancelButton2.visible = hero.has_strategy(true)
 
 func _on_stairs_button_pressed():
 	var event = InputEventAction.new()
@@ -110,13 +111,23 @@ func show_action_label(text):
 func hide_action_label():
 	$ActionLabel.hide()
 
-func add_message(text):
-	%MessagesPane.add_message(text)
-	%MessagesScreen.add_message(text)
+func add_message(text:String, 
+				level:Consts.MessageLevels, 
+				tags:Array[String]):
+	if "strategy" in tags:
+		if %ProminentMsgLabel.text.is_empty():
+			%ProminentMsgLabel.text = text
+		else:
+			%ProminentMsgLabel.text = "%s\n%s" % [%ProminentMsgLabel.text, text]
+		%ProminentMsgLabel.show()
+	else:
+		%MessagesPane.add_message(text, level, tags)
+		%MessagesScreen.add_message(text, level, tags)
 
 func refresh_input_enabled(enabled):
 	if enabled:
 		%WaitingLabel.hide()
+		%ProminentMsgLabel.hide()
 	else:
 		%WaitingLabel.show()
 
@@ -133,6 +144,8 @@ func _on_hero_state_changed(new_state):
 	if hero == null:
 		# not fully initialized, can't do anything too fancy yet
 		return
+	if new_state != Actor.States.IDLE:
+		%ProminentMsgLabel.text = ""
 	refresh_input_enabled(new_state == Actor.States.LISTENING)
 	if new_state == Actor.States.LISTENING:
 		quick_attack_cmd.refresh(hero.get_board().make_index())

@@ -33,7 +33,7 @@ const INDEXED_TERRAINS = CONNECTOR_TERRAINS
 # plain floor without other features
 const FLOOR_TERRAINS = ["floor", "floor-rough", "floor-dirt"]
 
-signal new_message(message)
+signal new_message(message, level, tags)
 signal actor_died(board, coord, tags)
 
 var terrain_names := {}  # name -> (terrain_set, terrain_id)
@@ -1353,9 +1353,13 @@ func _on_actor_died(coord, tags, actor):
 	deregister_actor(actor)
 	emit_signal("actor_died", self, coord, tags)
 	
-func add_message(actor, message):
+func add_message(actor, text:String, 
+				level:Consts.MessageLevels=Consts.MessageLevels.INFO, 
+				tags:Array[String]=[]):
+	if level == null:
+		level = Consts.MessageLevels.INFO
 	if not actor.is_unexposed():
-		emit_signal("new_message", message)
+		emit_signal("new_message", text, level, tags)
 
 func ddump_connector(coord:Vector2i):
 	var info = {"near_coord": coord}

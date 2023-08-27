@@ -53,6 +53,12 @@ enum SkillLevel {
 	MYTHICAL,  # beyond the realm of mortals
 }
 
+enum MessageLevels {
+	INFO,  # regular game progress
+	WARNING,  # you should probably change your strategy after seeing this
+	CRITICAL  # you could die within 5 turns
+}
+
 const CORE_STATS := ["agility", "strength", "intelligence", "perception", 
 					"health_full", "healing_prob", 
 					"mana_burn_rate", "mana_recovery_prob"] 
@@ -104,6 +110,7 @@ const TAGS = ["ethereal", "undead", "gift", "broken", "lit",
 			# campaigns
 			"quest-item", "quest-reward", "quest-boss-retznac",
 			# weapons
-			"silver", "throwable"
+			"silver", "throwable", 
+			# messages
+			"strategy"
 			]
-
