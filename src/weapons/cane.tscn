@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8frbdj65suee"]
+
+[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_fs4fu"]
+[ext_resource type="AudioStream" uid="uid://d1ve3m18ud783" path="res://src/weapons/stick-hit-01.mp3" id="2_8sfxs"]
+
+[node name="Cane" instance=ExtResource("1_fs4fu")]
+damage = 5
+range = 1
+damage_family = 1
+char = "¬"
+caption = "cane"
+spawn_cost = 3.0
+
+[node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
+stream = ExtResource("2_8sfxs")
