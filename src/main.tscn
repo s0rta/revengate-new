@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=34 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -31,6 +31,7 @@
 [ext_resource type="PackedScene" uid="uid://bb5upsioptfc4" path="res://src/ui/context_menu_popup.tscn" id="25_n5bfn"]
 [ext_resource type="PackedScene" uid="uid://bgntr3w6l7kt0" path="res://src/ui/story_screen.tscn" id="28_7kpa3"]
 [ext_resource type="PackedScene" uid="uid://cqxv2e1rn7uqx" path="res://src/ui/victory_screen.tscn" id="30_mq8w4"]
+[ext_resource type="Script" path="res://src/combat/sentiment_table.gd" id="33_yhbe0"]
 [ext_resource type="Script" path="res://src/command_pack.gd" id="41_hgs5k"]
 
 [node name="Main" type="Node2D"]
@@ -373,6 +374,7 @@ visible = false
 
 [node name="MessagesPane" parent="HUD" instance=ExtResource("17_n3emp")]
 unique_name_in_owner = true
+metadata/_edit_lock_ = true
 
 [node name="ActorDetailsScreen" parent="HUD" instance=ExtResource("14_yna85")]
 unique_name_in_owner = true
@@ -408,6 +410,9 @@ script = ExtResource("14_ulj2m")
 [node name="CommandPack" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("41_hgs5k")
+
+[node name="SentimentTable" type="Node" parent="."]
+script = ExtResource("33_yhbe0")
 
 [connection signal="action_complete" from="BoardArea/GestureSurveyor" to="HUD" method="hide_action_label"]
 [connection signal="action_started" from="BoardArea/GestureSurveyor" to="HUD" method="show_action_label"]

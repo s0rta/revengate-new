@@ -42,7 +42,8 @@ enum Factions {
 	NONE,
 	LUX_CO,
 	BEASTS, 
-	OUTLAWS
+	OUTLAWS, 
+	CIRCUS
 }
 
 enum SkillLevel {

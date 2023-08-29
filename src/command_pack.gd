@@ -98,7 +98,7 @@ class QuickAttack extends Command:
 		var board = Tender.hero.get_board()
 		var foe = null
 		var fact = Tender.hero.mem.recall("attacked")
-		if (fact and fact.foe and fact.foe.is_alive()
+		if (fact and fact.foe != null and fact.foe.is_alive()
 				and board.dist(Tender.hero, fact.foe) <= attack_range):
 			foe = fact.foe
 		else:
@@ -177,7 +177,7 @@ class Inspect extends Command:
 			messages.append("There is nothing %s" % here_str)
 
 		for msg in messages:
-			Tender.hud.add_message(msg)
+			Tender.hero.add_message(msg)
 		
 		return false
 

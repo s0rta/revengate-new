@@ -30,7 +30,7 @@ var _seen_locs = {}  # world_locs that have been visited
 func _ready():
 	if Tender.story_path:
 		%StoryScreen.show_story(Tender.story_title, Tender.story_path)
-	Tender.reset(hero, hud, %Viewport)	
+	Tender.reset(hero, hud, %Viewport, $SentimentTable)	
 	_discover_start_board()
 	hud.set_hero(hero)
 	$VictoryProbe.hero = hero
@@ -187,6 +187,18 @@ func start_ch2():
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
+	
+	var hero = Tender.hero
+	for other in hero.get_board().get_actors():
+		print("How %s feels about %s" % [hero.get_short_desc(), other.get_short_desc()])
+		print("  Sentiment: %s" % $SentimentTable.get_sentiment(hero, other))
+		print("  Neutral? %s" % $SentimentTable.is_neutral(hero, other))
+		print("  Friend? %s" % $SentimentTable.is_friend(hero, other))
+		print("  Foe? %s" % $SentimentTable.is_foe(hero, other))	
+	$SentimentTable.ddump()
 		
 func test2():
 	print("Testing: 2, 1... 2, 1!")
+
+	$SentimentTable.set_sentiment(Tender.hero, Consts.Factions.BEASTS, 1)
+	

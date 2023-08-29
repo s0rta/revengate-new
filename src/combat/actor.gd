@@ -622,15 +622,21 @@ func is_unexposed(index=null):
 
 func is_friend(other: Actor):
 	## Return whether `self` has positive sentiment towards `other`
-	return faction != Consts.Factions.NONE and faction == other.faction
+	if not Tender.sentiments:
+		return false
+	return Tender.sentiments.is_friend(self, other)
 	
 func is_foe(other: Actor):
 	## Return whether `self` has negative sentiment towards `other`
-	return faction != Consts.Factions.LUX_CO and other.faction == Consts.Factions.LUX_CO
+	if not Tender.sentiments:
+		return false
+	return Tender.sentiments.is_foe(self, other)
 	
-func is_impartial(other: Actor):
+func is_neutral(other: Actor):
 	## Return whether `self` has neutral sentiment towards `other`
-	return !is_friend(other) and !is_foe(other)
+	if not Tender.sentiments:
+		return true
+	return Tender.sentiments.is_neutral(self, other)
 
 func perceives(thing, index=null):
 	## Return whether we can perceive `thing`

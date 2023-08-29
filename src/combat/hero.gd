@@ -18,8 +18,6 @@
 @tool
 class_name Hero extends Actor
 
-const ENEMY_FACTIONS = [Consts.Factions.BEASTS, Consts.Factions.OUTLAWS]
-
 func _ready():
 	state = States.LISTENING
 
@@ -110,9 +108,6 @@ func _unhandled_input(event):
 
 func _dissipate():
 	pass  # the hero sticks around so we can disect him/her for the end-of-game stats
-
-func is_foe(other: Actor):
-	return ENEMY_FACTIONS.has(other.faction)
 
 func highlight_options():
 	## Put highlight markers where one-tap actions are available

@@ -160,3 +160,19 @@ The pacherr band is less strict with their demands. They will happily take the h
 No mater how we do it, we win by securing all the required funds. If we went out of our way, Beaudelaire can reward us with an assassin's fountain pen (a double reservoir device that can both write and discretely delivers a substance into someone's glass). If our actions align with Beaudelaire's worldview, he will also reward us with a signed copy of one of his poems.
 
 The manuscript, signed poems, and other written pages are fragile and easily damaged.
+
+
+## Bewitching Bookkeeping
+2023-08-26
+
+An accountant's spying sideline threatens to expose the underground work of a brilliant chemist. Lux Co. sends us to "reason" with the informant.
+
+People:
+- Benoît: the spy/accountant
+- François Emmanuel Verguin: a chemist with a sophisticated home laboratory
+- Le Grand Salapou: head of the Salapou circus network and underground information broker
+
+Story elements:
+- Verguin runs his home lab with supplies stolen from his day job
+- Benoît is hoping to sell information about accounting irregularities that the discovered while auditing local companies
+- Lux Co. recognises Verguin's valuable contributions to chemistry and hopes to keep his employer's records free from too much scrutiny

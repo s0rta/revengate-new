@@ -105,11 +105,11 @@ func toggle_cheats_box():
 	cheats_box.visible = not cheats_box.visible
 
 func show_action_label(text):
-	$ActionLabel.text = text
-	$ActionLabel.show()
+	%ActionLabel.text = text
+	%ActionLabel.show()
 	
 func hide_action_label():
-	$ActionLabel.hide()
+	%ActionLabel.hide()
 
 func add_message(text:String, 
 				level:Consts.MessageLevels, 
