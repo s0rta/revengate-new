@@ -35,7 +35,7 @@ func _unhandled_input(event):
 		print("Click at pos=%s, coord=%s" % [event.position, RevBoard.coord_str(coord)])
 
 		var other = index.actor_at(coord)
-		if other and not perceives(other):
+		if other and not perceives(other) or other == self:
 			other = null
 		var click_dist = RevBoard.dist(get_cell_coord(), coord)
 		

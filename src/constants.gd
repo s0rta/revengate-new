@@ -109,7 +109,7 @@ const TAGS = ["ethereal", "undead", "gift", "broken", "lit",
 			# locks
 			"key-blue", "key-red",
 			# campaigns
-			"quest-item", "quest-reward", "quest-boss-retznac",
+			"quest-item", "quest-reward", "quest-boss-retznac", "quest-boss-salapou",
 			# weapons
 			"silver", "throwable", 
 			# messages

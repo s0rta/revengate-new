@@ -168,3 +168,29 @@ def configure_android_sdk(c, sdk_path):
             line = f'export/android/android_sdk_path = "{sdk_path}"\n'
         new_lines.append(line)
     open(GODOT_SETTINGS, "wt").writelines(new_lines)
+
+
+@task
+def migrate_legacy_asset(c, old_path, new_path):
+    """ Move an asset from the legacy Python codebase to the new Godot one, 
+    leave a symlink in the old location. """
+    print(f"migrate_legacy_asset: {old_path=} {new_path=}")
+    assert old_path != new_path
+    assert os.path.isfile(old_path) and not os.path.islink(old_path)
+    assert not os.path.isabs(old_path)
+    basedir, fname = os.path.split(old_path)
+    if not new_path:
+        new_path = fname
+    elif os.path.isdir(new_path):
+        new_path = os.path.join(new_path, fname)
+    assert not os.path.isabs(new_path)
+    if os.path.isfile(new_path):
+        assert os.path.islink(new_path)
+        os.unlink(new_path)
+    
+    c.run(f"git mv {old_path} {new_path}")
+    os.chdir(basedir)
+    depth = len(basedir.split(os.path.sep))
+    rel_new = os.path.join(*[".."]*depth, new_path)
+    os.symlink(rel_new, fname)
+    c.run(f"git add {fname}")
