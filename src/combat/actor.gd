@@ -638,12 +638,17 @@ func is_neutral(other: Actor):
 		return true
 	return Tender.sentiments.is_neutral(self, other)
 
-func perceives(thing, index=null):
-	## Return whether we can perceive `thing`
+func get_perception_ranges():
+	## Return a Dictionary with details of various perception ranges
 	var percep = get_stat("perception")
 	var min = 1
-	var sight_dist = max(min, MAX_SIGHT_DIST / 100.0 * percep)
-	var aware_dist = max(min, MAX_AWARENESS_DIST / 100.0 * percep)
+	return {"sight": max(min, MAX_SIGHT_DIST / 100.0 * percep),
+			"aware": max(min, MAX_AWARENESS_DIST / 100.0 * percep), 
+			"feel": min}
+
+func perceives(thing, index=null):
+	## Return whether we can perceive `thing`
+	var ranges = get_perception_ranges()
 	var board = get_board()
 	var here = get_cell_coord()
 	var there = CombatUtils.as_coord(thing)
@@ -653,19 +658,29 @@ func perceives(thing, index=null):
 		return false
 
 	var dist = board.dist(self, there)
-	if dist > sight_dist:
+	if dist > ranges.sight:
 		return false
-	elif dist <= min:
+	elif dist <= ranges.feel:
 		return true
-	elif dist <= aware_dist:
+	elif dist <= ranges.aware:
 		# no sight needed if you are close enough to smell/hear/feel them
-		if board.path_potential(here, there, aware_dist):
+		if board.path_potential(here, there, ranges.aware):
 			return true
 	# In sight-only range: perceived when there is a clear line of sight
 	if index == null:
 		return board.line_of_sight(self, thing) != null
 	else:
 		return index.has_los(self, thing)
+
+func perceives_free(coord:Vector2i, index:RevBoard.BoardIndex):
+	## Return whether we think that `coord` is walkable and unoccupied.
+	var board = index.board
+	if not board.is_walkable(coord):
+		return false
+	var actor = index.actor_at(coord)
+	if actor != null and perceives(coord, index):
+		return false
+	return true
 
 func get_conversation():
 	## Return a {res:..., sect:...} dict or null if the actor has nothing to say

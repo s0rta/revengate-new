@@ -1223,16 +1223,9 @@ func path_potential(start, dest, max_dist=null, index=null):
 
 func path_perceived(start, dest, pov_actor:Actor, max_dist=null, index=null):
 	## Return an Array of coordinates from `start` to `dest` as seen by `pov_actor`.
-	# make a killer pred
 	if index == null:
 		index = make_index()
-	var pred = func(coord):
-		if not is_walkable(coord):
-			return false
-		var actor = index.actor_at(coord)
-		if actor != null and pov_actor.perceives(actor, index):
-			return false
-		return is_walkable(coord)
+	var pred = pov_actor.perceives_free.bind(index)
 	var metrics = astar_metrics(start, dest, true, max_dist, pred, index)
 	return metrics.path()
 
@@ -1268,11 +1261,17 @@ func line_of_sight(coord1, coord2):
 			return null
 	return steps
 
-func get_actors():
+func get_actors(include_tags=null, exclude_tags=null):
 	## Return an array of actors presently on this board.
+	## include_tags: if provided, only actors that have all those tags are returned.
+	## exclude_tags: if provided, only actors that have none of those tags are returned.
 	var actors = []
 	for node in get_children():
 		if node is Actor:
+			if include_tags != null and not Utils.has_tags(node, include_tags):
+				continue
+			if exclude_tags != null and Utils.has_any_tags(node, exclude_tags):
+				continue
 			actors.append(node)
 	return actors
 

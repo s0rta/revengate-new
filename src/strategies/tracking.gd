@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-## Track the hero at every move.
+## Track an enemy at every move.
 class_name Tracking extends Strategy
 
 # how many turns to keep tracking an unavaiable target before giving up and 

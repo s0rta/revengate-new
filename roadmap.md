@@ -192,6 +192,7 @@ Combat:
 - [x] healing spell (monsters only)
 
 ## V0.10
+- [ ] bug: Tracking does not reset foe after a change of global sentiments
 - [ ] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
 - [ ] bug: bar patron does not perform a party trick at the start of quest 2
 - [x] Godot 4.1
