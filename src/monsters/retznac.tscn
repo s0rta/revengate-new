@@ -34,7 +34,10 @@ text = "𝓡"
 
 [node name="Tracking" type="Node" parent="." index="7"]
 script = ExtResource("4_s3hbp")
+nb_track_turns = null
 priority = 0.1
+ttl = null
+cancellable = null
 
 [node name="SkillLevels" type="Node" parent="." index="8"]
 script = ExtResource("5_vgonj")
