@@ -22,8 +22,9 @@ class_name Guarding extends Strategy
 @export var client_tags:Array[String]
 
 var client  # Actor
+var foe  # Actor
 var waypoint  # Vector2i
-var waypoint_path
+var path
 var index
 var guard_radius:int
 
@@ -32,7 +33,7 @@ func _ready():
 	Utils.assert_all_tags(client_tags)
 
 func refresh(turn):	
-	waypoint_path = null
+	path = null
 	var ranges = me.get_perception_ranges()
 	guard_radius = ranges.aware
 	var here = me.get_cell_coord()
@@ -51,8 +52,12 @@ func refresh(turn):
 			return
 		client = Rand.choice(actors)
 
-	var client_coord = client.get_cell_coord()
+	if _can_retaliate():
+		# will fight back
+		return 
 	
+	# can we get closer to the client?
+	var client_coord = client.get_cell_coord()	
 	if waypoint != null and not _valid_waypoint(waypoint, client_coord):
 		waypoint = null
 		
@@ -69,7 +74,7 @@ func refresh(turn):
 		assert(not coords.is_empty(), 
 				"What the hell, client is reachable but no free coords nearby??")
 		waypoint = Rand.choice(coords)
-		waypoint_path = metrics.path(waypoint)
+		path = metrics.path(waypoint)
 
 func _mk_walkable_pred(client_coord, index):
 	## Return a coord filter based on our perception.
@@ -87,17 +92,51 @@ func _valid_waypoint(waypoint, client_coord):
 		return false
 	if not me.perceives_free(waypoint, index):
 		return false
-	waypoint_path = board.path_perceived(me.get_cell_coord(), waypoint, me, null, index)
-	return waypoint_path != null
+	path = board.path_perceived(me.get_cell_coord(), waypoint, me, true, null, index)
+	return path != null
+
+func _can_retaliate():
+	var fact = client.mem.recall("was_attacked")
+	if fact and fact.attacker and fact.attacker.is_alive():
+		var range = me.get_max_weapon_range()
+		if index.board.dist(me, fact.attacker) <= range:
+			foe = fact.attacker
+			return true
+		var here = me.get_cell_coord()
+		var there = fact.attacker.get_cell_coord()
+		# FIXME: must look for a free destination since we know foe is there
+		path = index.board.path_perceived(here, there, me, false, null, index)
+		if path != null:
+			foe = fact.attacker
+			return true
+	foe = null
+	return false
 
 func is_valid():
-	return super() and client != null and waypoint != null
+	if not super():
+		return false
+	if client == null:
+		return false
+	if foe != null or waypoint != null:
+		return true
+	else:
+		return false
 	
 func act() -> bool:	
 	var msg = "%s is guarging %s" % [me.get_short_desc(), client.get_short_desc()]
 	print(msg)
 	me.add_message(msg)
-	print("Client is at %s, going to %s" % [RevBoard.coord_str(client.get_cell_coord()), RevBoard.coord_str(waypoint)])
 
-	me.move_to(_path_next(waypoint_path))
+	# Retaliate
+	if foe != null:
+		var range = me.get_max_weapon_range()
+		if index.board.dist(me, foe) <= range:
+			me.attack(foe)
+			return true
+		
+	# Get closer
+	var there = _path_next(path)
+	print("Client is at %s, going to %s" % [RevBoard.coord_str(client.get_cell_coord()), RevBoard.coord_str(there)])
+
+	me.move_to(there)
 	return true

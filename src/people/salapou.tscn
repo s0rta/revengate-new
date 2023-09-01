@@ -33,4 +33,7 @@ priority = 0.9
 
 [node name="Exploring" type="Node" parent="." index="9"]
 script = ExtResource("4_rc8re")
+hug_walls = null
 priority = 0.1
+ttl = null
+cancellable = null

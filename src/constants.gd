@@ -96,7 +96,7 @@ const CONVO_RANGE = 2
 
 # Animations and VFX
 const FADE_DURATION := .15
-const FADE_MODULATE := Color(.7, .7, .7, 0.0)
+const FADE_MODULATE := Color(.7, .7, .7, 0.4)
 const VIS_MODULATE := Color.WHITE
 
 # Tags must be declared here before the can be added to items and actors. 

@@ -1221,12 +1221,12 @@ func path_potential(start, dest, max_dist=null, index=null):
 	var metrics = astar_metrics(start, dest, false, max_dist, is_walkable, index)
 	return metrics.path()
 
-func path_perceived(start, dest, pov_actor:Actor, max_dist=null, index=null):
+func path_perceived(start, dest, pov_actor:Actor, free_dest:=true, max_dist=null, index=null):
 	## Return an Array of coordinates from `start` to `dest` as seen by `pov_actor`.
 	if index == null:
 		index = make_index()
 	var pred = pov_actor.perceives_free.bind(index)
-	var metrics = astar_metrics(start, dest, true, max_dist, pred, index)
+	var metrics = astar_metrics(start, dest, free_dest, max_dist, pred, index)
 	return metrics.path()
 
 func is_cell_unexposed(coord):

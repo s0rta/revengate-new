@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://c8vcdsslc86r2"]
+[gd_scene load_steps=6 format=3 uid="uid://c8vcdsslc86r2"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_5owqs"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="2_0h2dr"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="3_thfpw"]
 [ext_resource type="Script" path="res://src/strategies/guarding.gd" id="4_ql55k"]
+[ext_resource type="PackedScene" uid="uid://cswkd7m5om1of" path="res://src/weapons/broom.tscn" id="5_chmd2"]
 
 [node name="Automaton" instance=ExtResource("1_5owqs")]
 char = "A"
@@ -34,3 +35,7 @@ client_tags = Array[String](["quest-boss-salapou"])
 priority = 0.8
 ttl = null
 cancellable = null
+
+[node name="Broom" parent="." index="10" instance=ExtResource("5_chmd2")]
+range = 1
+is_equipped = true
