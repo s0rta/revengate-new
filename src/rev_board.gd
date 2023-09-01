@@ -603,7 +603,7 @@ class BoardIndex extends RefCounted:
 			if coord == from and not include_center:
 				continue
 			actor = _coord_to_actor[coord]
-			if only_alive and not actor.is_alive:
+			if only_alive and not actor.is_alive():
 				continue
 			if has_los(from, coord):
 				actors.append(actor)

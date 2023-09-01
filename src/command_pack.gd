@@ -98,7 +98,7 @@ class QuickAttack extends Command:
 		var board = Tender.hero.get_board()
 		var foe = null
 		var fact = Tender.hero.mem.recall("attacked")
-		if (fact and fact.foe and fact.foe.is_alive()
+		if (fact and fact.foe != null and fact.foe.is_alive()
 				and board.dist(Tender.hero, fact.foe) <= attack_range):
 			foe = fact.foe
 		else:
