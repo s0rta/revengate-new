@@ -4,6 +4,7 @@ Release Procedure
 When the code gets to the point where it seems ready to publish, the following steps should be undertaken.
 
 * bump version string and version code in `src/constants.gd`
+* put the release notes in `metadata/en-US/changelogs/`
 * `git tag vX.Y.Z`
 * `invoke build-android`
 * try the new package: `adb install bin/revengate-x.y.z.apk`

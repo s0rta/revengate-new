@@ -1,0 +1,2 @@
+- quick attack button
+- added F-Droid packaging hooks
