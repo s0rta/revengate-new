@@ -123,12 +123,8 @@ func is_valid():
 		return false
 	
 func act() -> bool:	
-	var msg = "%s is guarging %s" % [me.get_short_desc(), client.get_short_desc()]
-	print(msg)
-	me.add_message(msg)
-
-	# Retaliate
 	if foe != null:
+		# Retaliate
 		var range = me.get_max_weapon_range()
 		if index.board.dist(me, foe) <= range:
 			me.attack(foe)
@@ -136,7 +132,5 @@ func act() -> bool:
 		
 	# Get closer
 	var there = _path_next(path)
-	print("Client is at %s, going to %s" % [RevBoard.coord_str(client.get_cell_coord()), RevBoard.coord_str(there)])
-
 	me.move_to(there)
 	return true
