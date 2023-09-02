@@ -4,6 +4,8 @@ Revengate Style Guide
 ## coding conventions
 * follow the GDScript style guidelines published by Godot
 * max line length is 88
+* facts and signals use underscores to join words
+* tags use dashes
 
 ## common prefixes
 * gen: generate, for things with a random component

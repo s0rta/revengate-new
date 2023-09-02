@@ -109,7 +109,7 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 @export_file("*.png", "*.jpg", "*.jpeg") var bestiary_img
 @export_multiline var description
 
-@onready var mem = $Mem
+@onready var mem: Memory = $Mem
 var state = States.IDLE:
 	set(new_state):
 		state = new_state

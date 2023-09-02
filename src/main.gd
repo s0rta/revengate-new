@@ -189,13 +189,7 @@ func test():
 	print("Testing: 1, 2... 1, 2!")
 	
 	var hero = Tender.hero
-	for other in hero.get_board().get_actors():
-		print("How %s feels about %s" % [hero.get_short_desc(), other.get_short_desc()])
-		print("  Sentiment: %s" % $SentimentTable.get_sentiment(hero, other))
-		print("  Neutral? %s" % $SentimentTable.is_neutral(hero, other))
-		print("  Friend? %s" % $SentimentTable.is_friend(hero, other))
-		print("  Foe? %s" % $SentimentTable.is_foe(hero, other))	
-	$SentimentTable.ddump()
+	print(hero.mem._facts)
 		
 func test2():
 	print("Testing: 2, 1... 2, 1!")

@@ -5,10 +5,11 @@
 
 [node name="Knife" instance=ExtResource("1_44kv4")]
 damage = 4
+range = 1
 damage_family = 2
-skill = "fencing"
 char = "🔪"
 caption = "knife"
+skill = "fencing"
 spawn_cost = 1.0
 
 [node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
