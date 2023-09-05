@@ -167,8 +167,29 @@ func show_context_menu_for(coord):
 
 func start_ch2():
 	destroy_items(hero.get_items(["quest-item"]))
-	# Nadège gives key and dress sword
+	# Nadège gives key and combat cane
 	%Nadege.conversation_sect = "intro_2"
+	supply_item(%Nadege, "res://src/items/serum_of_vitality.tscn", ["quest-reward", "gift"])
+	supply_item(%Nadege, "res://src/items/key.tscn", ["key-blue", "gift"])
+	supply_item(%Nadege, "res://src/weapons/weighted_cane.tscn", ["gift"])
+	
+	%BarPatron1.conversation_sect = "automata"
+	%BarPatron2.conversation_sect = "resistances"
+
+	%BarTender.conversation_sect = "intro_2"
+	supply_item(%BarTender, "res://src/items/potion_of_booze.tscn", ["gift"])
+
+	%StoryScreen.show_story("Chapter 2: Bewitching Bookkeeping", 
+							"res://src/story/bewitching_bookkeeping.md")
+	hero.place(V.i(2, 2))
+	center_on_hero()
+	if $TurnQueue.is_paused():
+		$TurnQueue.resume()
+
+func start_ch3():
+#	destroy_items(hero.get_items(["quest-item"]))
+	# Nadège gives key and dress sword
+	%Nadege.conversation_sect = "intro_3"
 	supply_item(%Nadege, "res://src/items/serum_of_vitality.tscn", ["quest-reward", "gift"])
 	supply_item(%Nadege, "res://src/items/key.tscn", ["key-red", "gift"])
 	supply_item(%Nadege, "res://src/weapons/dress_sword.tscn", ["gift"])
@@ -176,10 +197,11 @@ func start_ch2():
 	%BarPatron1.conversation_sect = "bloody_mary"
 	%BarPatron2.conversation_sect = "party_magic"
 
-	%BarTender.conversation_sect = "intro_2"
+	%BarTender.conversation_sect = "intro_3"
 	supply_item(%BarTender, "res://src/items/potion_of_booze.tscn", ["gift"])
 
-	%StoryScreen.show_story("Chapter 2: The Sound of Satin", "res://src/story/sound_of_satin.md")
+	%StoryScreen.show_story("Chapter 3: The Sound of Satin", 
+							"res://src/story/sound_of_satin.md")
 	hero.place(V.i(2, 2))
 	center_on_hero()
 	if $TurnQueue.is_paused():
@@ -193,6 +215,6 @@ func test():
 		
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-
-	$SentimentTable.set_sentiment(Tender.hero, Consts.Factions.BEASTS, 1)
+	start_ch2()
+#	$SentimentTable.set_sentiment(Tender.hero, Consts.Factions.BEASTS, 1)
 	
