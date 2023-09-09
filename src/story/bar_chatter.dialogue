@@ -14,6 +14,15 @@ Bar Patron: We've made amazing progress with automation since we harnessed steam
 Bar Patron: This is a task that requires knowing about the variations in your ingredients that a machine just cannot emulate. Some people seem to think that automata are magically imbued with inteligence.
 
 Bar Patron: I think this belief is a lot of rubbish! Automata are not phantruch. Jacques Vaucanson designed the first automata and we know how much of a fan he was of perforated cylinders. I bet they are still using those cylinders to carry their instructions.
+do checkpoint("secret_societies")
+=> END
+
+~ secret_societies
+Bar Patron: Secret societies in Lyon? I hope you realize the irony of asking a question like that in a place called Café Caché that is hidden in a back alley.
+
+Bar Patron: The city census puts their official number at 700. I think this view is a lot of rubbish.
+
+Bar Patron: That would be counting knight templar orders and each massonic temple separately. What's so secret about field armies who have marched in the open on foreign land?
 => END
 
 ~ bloody_mary
