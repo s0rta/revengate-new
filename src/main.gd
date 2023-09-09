@@ -190,7 +190,7 @@ func start_ch3():
 #	destroy_items(hero.get_items(["quest-item"]))
 	# Nadège gives key and dress sword
 	%Nadege.conversation_sect = "intro_3"
-	supply_item(%Nadege, "res://src/items/serum_of_vitality.tscn", ["quest-reward", "gift"])
+	supply_item(%Nadege, "res://src/items/serum_of_agility.tscn", ["quest-reward", "gift"])
 	supply_item(%Nadege, "res://src/items/key.tscn", ["key-red", "gift"])
 	supply_item(%Nadege, "res://src/weapons/dress_sword.tscn", ["gift"])
 	

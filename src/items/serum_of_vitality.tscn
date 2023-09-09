@@ -1,11 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://ci4jtpttskndh"]
 
 [ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_4oqew"]
-[ext_resource type="Script" path="res://src/items/serum_of_vitality.gd" id="2_hb555"]
+[ext_resource type="Script" path="res://src/items/serum.gd" id="2_aey4v"]
 [ext_resource type="Script" path="res://src/combat/effect.gd" id="2_xsf0b"]
 
 [node name="SerumOfVitality" instance=ExtResource("1_4oqew")]
-script = ExtResource("2_hb555")
+script = ExtResource("2_aey4v")
 char = "💉"
 caption = "serum of vitality"
 consumable = true
