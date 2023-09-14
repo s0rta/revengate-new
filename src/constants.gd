@@ -90,6 +90,11 @@ const REGION_CHARS = {"C": REG_CENTER,
 						"S": REG_SOUTH, 
 						"E": REG_EAST, 
 						"W": REG_WEST}
+const REGION_NAMES = {"center": REG_CENTER, 
+						"north": REG_NORTH, 
+						"south": REG_SOUTH, 
+						"east": REG_EAST, 
+						"west": REG_WEST}
 const ALL_REGIONS = [REG_NORTH, REG_SOUTH, REG_EAST, REG_WEST, REG_CENTER]
 
 const CONVO_RANGE = 2
@@ -113,5 +118,8 @@ const TAGS = ["ethereal", "undead", "gift", "broken", "lit",
 			# weapons
 			"silver", "throwable", 
 			# messages
-			"strategy"
+			"strategy",
+			# progen placement constraints
+			"spawn-north", "spawn-south", "spawn-west", "spawn-east", 
+			"spawn-center", "spawn-distant", 
 			]

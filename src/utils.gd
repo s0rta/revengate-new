@@ -211,6 +211,44 @@ static func has_any_tags(node, tags:Array):
 			return true
 	return false
 
+static func add_tag(node, tag:String):
+	## Add a tag from to a node
+	assert(is_tag(tag))
+	# The `tags` array is shared across all instance of the same node type at 
+	# creation. We have to make a copy to prevent all the other nodes from 
+	# receiving the new tag as well.
+	node.tags = node.tags.duplicate()
+	node.tags.append(tag)
+
+static func remove_tag(node, tag:String):
+	assert(is_tag(tag))
+	# The `tags` array is shared across all instance of the same node type at 
+	# creation. We have to make a copy to prevent all the other nodes from 
+	# also losing the removed tag.
+	node.tags = node.tags.duplicate()
+	node.tags.erase(tag)
+
+static func has_spawn_tags(node):
+	## Return whether `node` has spawn constraint tags
+	var tags = node.get("tags")
+	if tags == null:
+		return false
+	for tag in tags:
+		if tag.begins_with("spawn"):
+			return true
+	return false
+
+static func spawn_tags(node):
+	## Return spawn constraint tags for `node`
+	var spawn_tags = []
+	var tags = node.get("tags")
+	if tags == null:
+		return []
+	for tag in tags:
+		if tag.begins_with("spawn"):
+			spawn_tags.append(tag)
+	return spawn_tags	
+
 static func effect_path(sfx_name):
 	## Return the path of a special effect
 	return "res://src/sfx/%s.tscn" % sfx_name

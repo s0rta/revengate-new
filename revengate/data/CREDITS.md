@@ -1,14 +1,14 @@
 Lead coding: Yannick Gingras
 
 Additionnal coding: 
-- Nicole Schwartz
+- JT Wright
 - Ryan Prior
+- Nicole Schwartz
 - Steve Smith
+- Angel Hudgins
 - Josephine Maya Simple
 - Victor Hunt
 - Chris J. Wallace
-- Angel Hudgins
-- JT Wright
 - Rodrigo Espinosa de los Monteros
 
 2D tiles: CC0, released by the Craw Stone Soup team
@@ -57,3 +57,5 @@ CC0 by Kenney
 https://www.kenney.nl/
 
 The historical map of Lyon in 1855 is Public Domain, digitize by Archives Municipales de Lyon.
+
+Revengate is made with the Godot game engine.

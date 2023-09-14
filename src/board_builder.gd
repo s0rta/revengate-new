@@ -39,6 +39,13 @@ func _init(board:RevBoard, rect=null):
 func has_rooms():
 	## Return whether this builder is aware of rooms.
 	return not rooms.is_empty()
+	
+func is_in_room(coord:Vector2i):
+	## Return whether `coord` is inside one of the rooms known by this builder.
+	for room in rooms:
+		if room.has_point(coord):
+			return true
+	return false
 
 func add_room(rect: Rect2i, walls=true):
 	rooms.append(rect)
@@ -326,14 +333,28 @@ func connect_rooms(room1, room2):
 	board.paint_path(cells, floor_terrain)
 
 func place(thing, in_room:=true, coord=null, free:bool=true, bbox=null, index=null):
-	## Put `thing` on the on a board cell, return where it was placed.
+	## Put `thing` on a board cell, return where it was placed.
 	## Fallback to nearby cells if needed.
 	## If coord is not provided, a random position is selected.
 	## No animations are performed.
 	# TODO: exposing `immediate` would be a good idea
 	var cell: Vector2i  # wrestling the type system into allowing null
+	var spawn_tags = Utils.spawn_tags(thing)
 	if coord is Vector2i:
+		if in_room:
+			assert(is_in_room(coord), 
+					("The supplied `coord` is not in a room. Pass coord=null if "
+					+ "you want the builder to find a suitable in-room location."))
 		cell = Vector2i(coord.x, coord.y)
+	elif not spawn_tags.is_empty():
+		assert(not in_room, "In-room placement is not implemented for spawn tag constraints.")
+		assert(len(spawn_tags) == 1, 
+				"Support for multiple spawn constraint tags is not implemented")
+		var tag = spawn_tags[0]
+		var region = Consts.REGION_NAMES[tag.split("-")[-1]]
+		# not passing a pred since seeing if the cell is free comes later
+		cell = random_coord_in_region(region)
+		Utils.remove_tag(thing, tag)
 	elif in_room:
 		cell = Rand.coord_in_rect(Rand.choice(rooms))
 	else:

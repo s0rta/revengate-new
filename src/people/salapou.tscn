@@ -14,13 +14,14 @@ strength = 45
 agility = 55
 intelligence = 65
 perception = 55
-tags = Array[String](["quest-boss-salapou"])
+tags = Array[String](["quest-boss-salapou", "spawn-north"])
 faction = 4
 bestiary_img = "res://src/people/salapou.png"
 description = "Le Grand Salapou is the owner of the Salapou Traveling Circus. He is an exceptional actor and an ace of sleight of hand."
 
 [node name="Label" parent="." index="0"]
-theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
+theme_override_colors/font_color = Color(0.85098, 0.823529, 0.0941176, 1)
+text = "@"
 
 [node name="Umbrella" parent="." index="7" instance=ExtResource("2_3hlu4")]
 visible = false
