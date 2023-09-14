@@ -91,12 +91,6 @@ func reset_buttons_vis():
 		if item.get("is_equipped") != null:
 			row.set_button_disabled(Cols.EQUIP, 0, item.is_equipped)
 
-func unequip_all():
-	for row in tree_view.get_root().get_children():
-		var item = row.get_metadata(0)
-		if item.get("is_equipped") != null:
-			item.is_equipped = false	
-
 func _on_back_button_pressed():
 	close()
 
@@ -155,8 +149,7 @@ func _on_tree_button_clicked(row, column, id, mouse_button_index):
 	if column == Cols.DROP:
 		_drop_item(row, item)
 	elif column == Cols.EQUIP:
-		unequip_all()
-		item.is_equipped = true
+		Tender.hero.equip_item(item)
 		reset_buttons_vis()
 	elif column == Cols.USE:
 		_use_item(row, item)

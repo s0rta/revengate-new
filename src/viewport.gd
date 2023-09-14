@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
+## A sub-class of viewport that makes it easy to remap game commands to the 
+## zoomed and panned game board.
 extends SubViewport
 
 var zoom := 1.0:
@@ -36,6 +38,10 @@ func pos_to_local(pos):
 	var transform = get_final_transform().affine_inverse()
 	return pos * transform + offset
 
+func global_pos_to_board_coord(pos):
+	## Convert a screen pixel `pos` into a Board tile `coord`.
+	return RevBoard.canvas_to_board(pos_to_local(pos))
+
 func zoom_in(factor:=1.05):
 	## Increase magnification
 	zoom *= factor
@@ -44,31 +50,23 @@ func zoom_out(factor:=1.05):
 	## Decrease magnification
 	zoom /= factor
 
-func global_pos_to_board_coord(pos):
-	## Convert a screen pixel `pos` into a Board tile `coord`.
-	return RevBoard.canvas_to_board(pos_to_local(pos))
-
 func inject_event(event, manual_xform=true):
 	## Send an input even to our descendent nodes.
 	## manual_xform: compute reposition manually, useful for custom event types that 
 	##   Viewport.push_event() doen't know how to tranform.
-	var offset = get_camera_2d().offset
 	if manual_xform and event.get("position"):
 		# TODO: we might be able to use InputEvent.xformed_by()
 		#   - use pos_to_local()
-		var transform = get_final_transform().affine_inverse()
-		event.position = event.position * transform + offset
+		event.position = pos_to_local(event.position)
 	elif event is InputEventMouseButton:
-		event.position -= offset
+		event.position -= get_camera_2d().offset
 	push_unhandled_input(event, not manual_xform)
 
 func center_on_coord(coord):
 	## move the camera to be directly above `coord`
 	var pos = RevBoard.board_to_canvas(coord)
-	var transform = get_final_transform().affine_inverse()
 	var camera = get_camera_2d()
-	
-	camera.offset = pos - size/2.0*transform
+	camera.offset = pos_to_local(pos - size/2.0)
 	
 func flash_coord_selection(coord:Vector2i):
 	var highlight = load("res://src/ui/cell_highlight.tscn").instantiate()

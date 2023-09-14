@@ -100,3 +100,11 @@ func find_hero():
 				break
 		node = node.get_parent()
 	return hero
+
+func _path_next(path):
+	## Return the next place to move along a path
+	var here = me.get_cell_coord()
+	for step in path:
+		if step != here:
+			return step
+	return null

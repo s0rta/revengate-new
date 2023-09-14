@@ -38,9 +38,10 @@ func trim_old_messages():
 	for i in range(extra):
 		%ListView.remove_item(0)
 	
-func add_message(message:String):
-	print(message)
-	%ListView.add_item(message)
+func add_message(text:String, 
+				level:Consts.MessageLevels, 
+				tags:Array[String]):
+	%ListView.add_item(text)
 	trim_old_messages()
 
 func _on_back_button_pressed():

@@ -19,5 +19,7 @@
 class_name Paralized extends Strategy
 
 func act():
-	print("%s is paralized and can't move!" % me)
+	if me == Tender.hero:
+		var msg = "%s is paralized and can't move!" % [me.get_short_desc()]
+		me.add_message(msg, Consts.MessageLevels.INFO, ["strategy"])
 	return

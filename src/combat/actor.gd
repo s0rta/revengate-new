@@ -41,6 +41,8 @@ signal moved(from, to)
 signal picked_item(old_coord)
 # the actor removed an item from their inventory and left it at `coord`
 signal dropped_item(coord)
+# the actor's active weapon(s) changed
+signal changed_weapons()
 # the actor stopped automating their actions with a(some) strategy(ies),
 # might fire more than once per strategy
 signal strategy_expired
@@ -107,7 +109,7 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 @export_file("*.png", "*.jpg", "*.jpeg") var bestiary_img
 @export_multiline var description
 
-@onready var mem = $Mem
+@onready var mem: Memory = $Mem
 var state = States.IDLE:
 	set(new_state):
 		state = new_state
@@ -433,7 +435,7 @@ func travel_to(there, index=null):
 	##   return `false` if the journey is not possible.
 	## Depending on where we are in the turn logic, the caller might need to call `stop_listening()` 
 	## for the travelling strategy to kick in, otherwise, it will only be active on the next turn.
-	var path = get_board().path_perceived(get_cell_coord(), there, self, null, index)
+	var path = get_board().path_perceived(get_cell_coord(), there, self, true, null, index)
 	if path == null or path.size() == 0:
 		return false
 	else:
@@ -620,22 +622,33 @@ func is_unexposed(index=null):
 
 func is_friend(other: Actor):
 	## Return whether `self` has positive sentiment towards `other`
-	return faction != Consts.Factions.NONE and faction == other.faction
+	if not Tender.sentiments:
+		return false
+	return Tender.sentiments.is_friend(self, other)
 	
 func is_foe(other: Actor):
 	## Return whether `self` has negative sentiment towards `other`
-	return faction != Consts.Factions.LUX_CO and other.faction == Consts.Factions.LUX_CO
+	if not Tender.sentiments:
+		return false
+	return Tender.sentiments.is_foe(self, other)
 	
-func is_impartial(other: Actor):
+func is_neutral(other: Actor):
 	## Return whether `self` has neutral sentiment towards `other`
-	return !is_friend(other) and !is_foe(other)
+	if not Tender.sentiments:
+		return true
+	return Tender.sentiments.is_neutral(self, other)
+
+func get_perception_ranges():
+	## Return a Dictionary with details of various perception ranges
+	var percep = get_stat("perception")
+	var min = 1
+	return {"sight": max(min, MAX_SIGHT_DIST / 100.0 * percep),
+			"aware": max(min, MAX_AWARENESS_DIST / 100.0 * percep), 
+			"feel": min}
 
 func perceives(thing, index=null):
 	## Return whether we can perceive `thing`
-	var percep = get_stat("perception")
-	var min = 1
-	var sight_dist = max(min, MAX_SIGHT_DIST / 100.0 * percep)
-	var aware_dist = max(min, MAX_AWARENESS_DIST / 100.0 * percep)
+	var ranges = get_perception_ranges()
 	var board = get_board()
 	var here = get_cell_coord()
 	var there = CombatUtils.as_coord(thing)
@@ -645,19 +658,29 @@ func perceives(thing, index=null):
 		return false
 
 	var dist = board.dist(self, there)
-	if dist > sight_dist:
+	if dist > ranges.sight:
 		return false
-	elif dist <= min:
+	elif dist <= ranges.feel:
 		return true
-	elif dist <= aware_dist:
+	elif dist <= ranges.aware:
 		# no sight needed if you are close enough to smell/hear/feel them
-		if board.path_potential(here, there, aware_dist):
+		if board.path_potential(here, there, ranges.aware):
 			return true
 	# In sight-only range: perceived when there is a clear line of sight
 	if index == null:
 		return board.line_of_sight(self, thing) != null
 	else:
 		return index.has_los(self, thing)
+
+func perceives_free(coord:Vector2i, index:RevBoard.BoardIndex):
+	## Return whether we think that `coord` is walkable and unoccupied.
+	var board = index.board
+	if not board.is_walkable(coord):
+		return false
+	var actor = index.actor_at(coord)
+	if actor != null and perceives(coord, index):
+		return false
+	return true
 
 func get_conversation():
 	## Return a {res:..., sect:...} dict or null if the actor has nothing to say
@@ -767,13 +790,23 @@ func get_items(include_tags=null, exclude_tags=null, grouped=true):
 	return items
 
 func get_compatible_item(ref_item:Item):
-	var items = get_items(ref_item.tags)
+	## Return an arbitrary item that can be groupped with `ref_item` (same inventory slot).
+	## Return `null` if `ref_item` is the only one of its kind in the actor's inventory.
+	var items = get_items(ref_item.tags, null, false)
 	for item in items:
-		if item is ItemGrouping and ref_item.is_groupable_with(item.top()):
-			return item
-		if ref_item.is_groupable_with(item):
+		if item != ref_item and ref_item.is_groupable_with(item):
 			return item
 	return null
+
+func get_compatible_items(ref_item:Item):
+	## Return an Array of items that can be groupped with `ref_item` (same inventory slot).
+	## The array can be empty.
+	var items = get_items(ref_item.tags, null, false)
+	var compats = []
+	for item in items:
+		if item != ref_item and ref_item.is_groupable_with(item):
+			compats.append(item)
+	return compats
 
 func get_spells(include_tags=null, exclude_tags=null):
 	## Return an array of known spells.
@@ -930,10 +963,23 @@ func refocus(delta:=1):
 		add_message("%s seems more focused" % get_caption())
 		mana += delta
 
-func drop_item(item, coord = null):
+func equip_item(item, exclusive=true):
+	## Equip the item (typically a weapon). 
+	## If `exclusive`, all other items are deequipped first
+	if item is Node:
+		assert(item.get_parent() == self, "Must own an item before it can be equipped.")
+	if exclusive:
+		for other in get_items(null, null, false):
+			if other.get("is_equipped") != null:
+				other.is_equipped = false
+	item.is_equipped = true
+	emit_signal("changed_weapons")
+
+func drop_item(item, coord=null):
 	assert(item.get_parent() == self, "must possess an item before dropping it")
-	if item.get("is_equipped") != null:
+	if item.get("is_equipped"):
 		item.is_equipped = false
+		emit_signal("changed_weapons")
 	var board = get_board()
 	var builder = BoardBuilder.new(board)
 	if coord == null:
@@ -948,7 +994,7 @@ func reequip_weapon_from_group(grouping, prev_weapon=null):
 		else:
 			add_message("You ran out of your previous weapons")
 	else:
-		grouping.is_equipped = true
+		equip_item(grouping)
 
 func give_item(item, actor=null):
 	## Give `item` to `actor`
@@ -987,10 +1033,14 @@ func consume_item(item: Item):
 		item.reparent($/root)
 	add_message("%s used a %s" % [get_caption(), item.get_short_desc()])
 	
-func add_message(message):
+func add_message(text:String, 
+				level:Consts.MessageLevels=Consts.MessageLevels.INFO, 
+				tags:Array[String]=[]):
 	## Try to add a message to the message window. 
-	## The visibility of the message depends on us being visible to the Hero 
+	## The visibility of the message depends on us being visible to the Hero
+	if level == null:
+		level = Consts.MessageLevels.INFO
 	var board = get_board()
 	if board != null:
-		board.add_message(self, message)
+		board.add_message(self, text, level, tags)
 		

@@ -54,7 +54,7 @@ func act() -> bool:
 	
 	var path = _get_path(my_coord, waypoint)
 	if path and len(path) >= 2:
-		return me.move_to(path[1])
+		return me.move_to(_path_next(path))
 	else:
 		nb_travel_attempts += 1
 		return false

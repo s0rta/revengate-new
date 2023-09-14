@@ -192,20 +192,22 @@ Combat:
 - [x] healing spell (monsters only)
 
 ## V0.10
+- [ ] bug: Tracking does not reset foe after a change of global sentiments
 - [ ] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
 - [ ] bug: bar patron does not perform a party trick at the start of quest 2
 - [x] Godot 4.1
-- [ ] release on F-Droid
+- [x] release on F-Droid
   - [x] add meta-data dir
   - [x] build template based on org.sajeg.fallingblocks
   - [x] factor out build number from Godot settings?
   - [x] open [inclusion request](https://gitlab.com/fdroid/rfp/-/issues/2513) with F-Droid
 
 UX:
-- [ ] active weapon is highlighted in a corner icon, icon is tappable for quick attack
+- [ ] health bar than turns red when low on HPs
+- [x] active weapon is highlighted in a corner icon, icon is tappable for quick attack
 - [x] message with the looted item(s)
-- [ ] pan is normalized to be fairly constant no matter what the zoom level is
-- [ ] multi-turn Travel is more obvious to cancel with message and bigger abort button
+- [x] pan is normalized to be fairly constant no matter what the zoom level is
+- [x] multi-turn Travel is more obvious to cancel with message and bigger abort button
 
 Items:
 - [ ] "magical" tag replaces the magical flag
@@ -270,6 +272,7 @@ Combat:
 - [ ] upgrade DialoguePane to the latest Dialogue Manager API
 - [ ] F-Droid [Reproducible Builds](https://f-droid.org/docs/Reproducible_Builds/)
 - [ ] document the build process
+- [ ] bug: two finger pan is really choppy when the fingers are too close to one another
 
 Performance:
 - [ ] cache stats modifiers for the whole turn (with inval on mods changing events)

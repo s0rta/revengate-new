@@ -33,7 +33,7 @@ const INDEXED_TERRAINS = CONNECTOR_TERRAINS
 # plain floor without other features
 const FLOOR_TERRAINS = ["floor", "floor-rough", "floor-dirt"]
 
-signal new_message(message)
+signal new_message(message, level, tags)
 signal actor_died(board, coord, tags)
 
 var terrain_names := {}  # name -> (terrain_set, terrain_id)
@@ -1221,19 +1221,12 @@ func path_potential(start, dest, max_dist=null, index=null):
 	var metrics = astar_metrics(start, dest, false, max_dist, is_walkable, index)
 	return metrics.path()
 
-func path_perceived(start, dest, pov_actor:Actor, max_dist=null, index=null):
+func path_perceived(start, dest, pov_actor:Actor, free_dest:=true, max_dist=null, index=null):
 	## Return an Array of coordinates from `start` to `dest` as seen by `pov_actor`.
-	# make a killer pred
 	if index == null:
 		index = make_index()
-	var pred = func(coord):
-		if not is_walkable(coord):
-			return false
-		var actor = index.actor_at(coord)
-		if actor != null and pov_actor.perceives(actor, index):
-			return false
-		return is_walkable(coord)
-	var metrics = astar_metrics(start, dest, true, max_dist, pred, index)
+	var pred = pov_actor.perceives_free.bind(index)
+	var metrics = astar_metrics(start, dest, free_dest, max_dist, pred, index)
 	return metrics.path()
 
 func is_cell_unexposed(coord):
@@ -1268,11 +1261,17 @@ func line_of_sight(coord1, coord2):
 			return null
 	return steps
 
-func get_actors():
+func get_actors(include_tags=null, exclude_tags=null):
 	## Return an array of actors presently on this board.
+	## include_tags: if provided, only actors that have all those tags are returned.
+	## exclude_tags: if provided, only actors that have none of those tags are returned.
 	var actors = []
 	for node in get_children():
 		if node is Actor:
+			if include_tags != null and not Utils.has_tags(node, include_tags):
+				continue
+			if exclude_tags != null and Utils.has_any_tags(node, exclude_tags):
+				continue
 			actors.append(node)
 	return actors
 
@@ -1353,9 +1352,13 @@ func _on_actor_died(coord, tags, actor):
 	deregister_actor(actor)
 	emit_signal("actor_died", self, coord, tags)
 	
-func add_message(actor, message):
+func add_message(actor, text:String, 
+				level:Consts.MessageLevels=Consts.MessageLevels.INFO, 
+				tags:Array[String]=[]):
+	if level == null:
+		level = Consts.MessageLevels.INFO
 	if not actor.is_unexposed():
-		emit_signal("new_message", message)
+		emit_signal("new_message", text, level, tags)
 
 func ddump_connector(coord:Vector2i):
 	var info = {"near_coord": coord}

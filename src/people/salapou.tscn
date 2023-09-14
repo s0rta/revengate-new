@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://cpjfi7f2jww5a"]
+
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_xboc2"]
+[ext_resource type="PackedScene" uid="uid://c71npa04ilk1k" path="res://src/weapons/umbrella.tscn" id="2_3hlu4"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="3_i84nx"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="4_rc8re"]
+
+[node name="Salapou" instance=ExtResource("1_xboc2")]
+char = "@"
+caption = "Le Grand Salapou"
+color = Color(0.85098, 0.823529, 0.0941176, 1)
+spawn_cost = 20.0
+strength = 45
+agility = 55
+intelligence = 65
+perception = 55
+tags = Array[String](["quest-boss-salapou", "spawn-north"])
+faction = 4
+bestiary_img = "res://src/people/salapou.png"
+description = "Le Grand Salapou is the owner of the Salapou Traveling Circus. He is an exceptional actor and an ace of sleight of hand."
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.85098, 0.823529, 0.0941176, 1)
+text = "@"
+
+[node name="Umbrella" parent="." index="7" instance=ExtResource("2_3hlu4")]
+visible = false
+range = 1
+is_equipped = true
+
+[node name="SelfDefense" type="Node" parent="." index="8"]
+script = ExtResource("3_i84nx")
+priority = 0.9
+
+[node name="Exploring" type="Node" parent="." index="9"]
+script = ExtResource("4_rc8re")
+hug_walls = null
+priority = 0.1
+ttl = null
+cancellable = null

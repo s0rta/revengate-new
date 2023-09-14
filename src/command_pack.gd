@@ -177,7 +177,7 @@ class Inspect extends Command:
 			messages.append("There is nothing %s" % here_str)
 
 		for msg in messages:
-			Tender.hud.add_message(msg)
+			Tender.hero.add_message(msg)
 		
 		return false
 

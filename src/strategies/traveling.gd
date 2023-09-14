@@ -77,8 +77,13 @@ func refresh(_turn):
 		queue_free()
 
 func act():
-	print("traveling towards %s" % RevBoard.coord_str(dest))
-	if path.size():
+	var nb_steps = path.size()
+	if nb_steps:
+		var msg = "%s is travelling towards location." % me.get_short_desc()
+		if nb_steps > 1:
+			msg += " Arriving in %d turn(s)." % (nb_steps - 1)
+		me.add_message(msg, Consts.MessageLevels.INFO, ["strategy"])
+
 		var there = path[0]
 		if there == dest:
 			arrived = true

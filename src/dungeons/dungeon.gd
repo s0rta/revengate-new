@@ -223,27 +223,45 @@ func populate_board(builder, depth, world_loc:Vector3i):
 	budget = spawn_budget(depth, 1.1)
 	_gen_decks_and_place(builder, index, deck_builder, "Vibe", depth, world_loc, budget, extra_vibe)
 	
+
+func _gen_decks_and_draw(board_builder, index, deck_builder, card_type, 
+							depth, world_loc, budget, 
+							extra_cards=[]):
+	## Generate the two decks for the card_type, draw from them as long as budget allows.
+	## Return the drawn cards.  The caller is responsible for placing the cards on the board.
+	
+	# mandatory cards
+	var cards = []
+	var deck = deck_builder.gen_mandatory_deck(card_type, depth, world_loc)
+	while not deck.is_empty():
+		cards.append(deck.draw())
+		budget -= cards[-1].spawn_cost
+
+	# optional cards, if we have any spawning budget left
+	deck = deck_builder.gen_deck(card_type, depth, world_loc, budget, extra_cards)
+	while not deck.is_empty() and budget > 0:
+		cards.append(deck.draw())
+		budget -= cards[-1].spawn_cost
+	return cards
+
 func _gen_decks_and_place(board_builder, index, deck_builder, card_type, 
 							depth, world_loc, budget, 
 							extra_cards=[]):
 	## Generate the two decks for the card_type, draw from them as long as budget allows, 
 	## and place everything on the board.
-	# mandatory cards
-	var deck = deck_builder.gen_mandatory_deck(card_type, depth, world_loc)
-	while not deck.is_empty():
-		budget -= _place_card(deck.draw(), board_builder, index)
-
-	# optional cards, if we have any spawning budget left
-	deck = deck_builder.gen_deck(card_type, depth, world_loc, budget, extra_cards)
-	while not deck.is_empty() and budget > 0:
-		budget -= _place_card(deck.draw(), board_builder, index)
+	var cards = _gen_decks_and_draw(board_builder, index, deck_builder, card_type, 
+									depth, world_loc, budget, extra_cards)
+	for card in cards:
+		_place_card(card, board_builder, index)
 
 func _place_card(card, builder, index=null):
 	## Instantiate a card and place in in a free spot on the board.
 	## Return the spawn_cost of the placed card.
+	# FIXME: handle placement constraints
 	var instance = card.duplicate()
 	instance.show()
-	builder.place(instance, builder.has_rooms(), null, true, null, index)
+	
+	builder.place(instance, false, null, true, null, index)
 	return card.spawn_cost
 
 func _get_conn_target_recs(board:RevBoard):

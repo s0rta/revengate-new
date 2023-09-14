@@ -60,7 +60,7 @@ func activate():
 	## The Vibe just got noticed, so make that obvious
 	if caption.is_empty():
 		return  # turns out this vibe is really subtle...
-	Tender.hud.add_message("You notice %s" % get_short_desc())
+	Tender.hero.add_message("You notice %s" % get_short_desc())
 	
 func is_unexposed(index=null):
 	## Return if this vibe is where the hero should could be aware of them

@@ -121,14 +121,10 @@ func get_base_stats():
 	return stats
 
 func add_tag(tag:String):
-	assert(Utils.is_tag(tag))
-	tags = tags.duplicate()
-	tags.append(tag)
+	Utils.add_tag(self, tag)
 
 func remove_tag(tag:String):
-	assert(Utils.is_tag(tag))
-	tags = tags.duplicate()
-	tags.erase(tag)
+	Utils.remove_tag(self, tag)
 	
 func place(coord, _immediate=null):
 	## Place the item at the specific coordinate without animations.

@@ -42,6 +42,7 @@ func finalize_static_board(board:RevBoard):
 	board.scan_terrain()
 	board.world_loc = start_world_loc
 	board.lock(V.i(20, 8), "key-red")
+	board.lock(V.i(3, 15), "key-blue")
 	
 	for coord in board.get_connectors():
 		if not board.get_connection(coord):  # we only add data to the unconnected coords

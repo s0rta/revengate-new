@@ -42,7 +42,8 @@ enum Factions {
 	NONE,
 	LUX_CO,
 	BEASTS, 
-	OUTLAWS
+	OUTLAWS, 
+	CIRCUS
 }
 
 enum SkillLevel {
@@ -51,6 +52,12 @@ enum SkillLevel {
 	PROFICIENT, 
 	EXPERT, 
 	MYTHICAL,  # beyond the realm of mortals
+}
+
+enum MessageLevels {
+	INFO,  # regular game progress
+	WARNING,  # you should probably change your strategy after seeing this
+	CRITICAL  # you could die within 5 turns
 }
 
 const CORE_STATS := ["agility", "strength", "intelligence", "perception", 
@@ -83,13 +90,18 @@ const REGION_CHARS = {"C": REG_CENTER,
 						"S": REG_SOUTH, 
 						"E": REG_EAST, 
 						"W": REG_WEST}
+const REGION_NAMES = {"center": REG_CENTER, 
+						"north": REG_NORTH, 
+						"south": REG_SOUTH, 
+						"east": REG_EAST, 
+						"west": REG_WEST}
 const ALL_REGIONS = [REG_NORTH, REG_SOUTH, REG_EAST, REG_WEST, REG_CENTER]
 
 const CONVO_RANGE = 2
 
 # Animations and VFX
 const FADE_DURATION := .15
-const FADE_MODULATE := Color(.7, .7, .7, 0.0)
+const FADE_MODULATE := Color(.7, .7, .7, 0.4)
 const VIS_MODULATE := Color.WHITE
 
 # Tags must be declared here before the can be added to items and actors. 
@@ -102,8 +114,12 @@ const TAGS = ["ethereal", "undead", "gift", "broken", "lit",
 			# locks
 			"key-blue", "key-red",
 			# campaigns
-			"quest-item", "quest-reward", "quest-boss-retznac",
+			"quest-item", "quest-reward", "quest-boss-retznac", "quest-boss-salapou",
 			# weapons
-			"silver", "throwable"
+			"silver", "throwable", 
+			# messages
+			"strategy",
+			# progen placement constraints
+			"spawn-north", "spawn-south", "spawn-west", "spawn-east", 
+			"spawn-center", "spawn-distant", 
 			]
-

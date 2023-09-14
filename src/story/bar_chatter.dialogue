@@ -8,6 +8,23 @@ Bar Patron: They say you can still hear them wail inside the wells of the Saint 
 Bar Patron: I think this story is a lot of rubbish. The ghosts over there 've got to be Roman for sure.
 => END
 
+~ automata
+Bar Patron: We've made amazing progress with automation since we harnessed steam, but you still can't automate the making of a good cocktail. 
+
+Bar Patron: This is a task that requires knowing about the variations in your ingredients that a machine just cannot emulate. Some people seem to think that automata are magically imbued with inteligence.
+
+Bar Patron: I think this belief is a lot of rubbish! Automata are not phantruch. Jacques Vaucanson designed the first automata and we know how much of a fan he was of perforated cylinders. I bet they are still using those cylinders to carry their instructions.
+do checkpoint("secret_societies")
+=> END
+
+~ secret_societies
+Bar Patron: Secret societies in Lyon? I hope you realize the irony of asking a question like that in a place called Café Caché that is hidden in a back alley.
+
+Bar Patron: The city census puts their official number at 700. I think this view is a lot of rubbish.
+
+Bar Patron: That would be counting knight templar orders and each massonic temple separately. What's so secret about field armies who have marched in the open on foreign land?
+=> END
+
 ~ bloody_mary
 Bar Patron: Have your heard about this latest fad, Bloody Mary?
 
@@ -48,5 +65,25 @@ Bar Patron: I'm not sure why they say that when it's obviously not true. I even 
 	Bar Patron: Pretty cool, right?
 - Err, no. Look's like you've had enough already.
 	Bar Patron: Fine!
+do checkpoint("privacy")
+=> END
+
+~ resistances
+Bar Patron: Nom d'un rat! Is that blood on your sleeve from annoying our friend the barber as much as you are annoyging me right now?
+
+if not hero_has_item(["booze"])
+	Bar Patron: Go find a fresh shirt, this is a café, not a butcher shop.
+	do checkpoint("privacy")
+	=> END
+	
+Bar Patron: Anyway, if you bring me another drink I can tell you a few tricks about traversing in the traboules without looking like you wasted the last bottle of Pinot in town by spilling it on yourself.
+- Sure! 
+	do hero_give_item(["booze"])
+	Bar Patron: That's kind of you. 
+	Bar Patron: Some of the fauna down there is covered by a hard shell, think sahwakoons and desert centipedes. It's really hard to cut through those, so it's best to poke or smash this kind of beasts.
+	Bar Patron: You know you are supposed to poke with a rapier rather than slicing, right?
+- Err, no. Look's like you've had enough already.
+	Bar Patron: Fine!
+
 do checkpoint("privacy")
 => END

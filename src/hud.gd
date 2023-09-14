@@ -44,6 +44,17 @@ func set_hero(hero_):
 	
 	var index = hero.get_board().make_index()
 	quick_attack_cmd = CommandPack.QuickAttack.new(index)
+	_set_quick_attack_icon()
+	
+func _set_quick_attack_icon():
+	var weapons = hero.get_weapons()
+	assert(len(weapons) == 1, "Dual weilding is not implemented for QuickAttack button style")
+	var weapon = weapons[0]
+	%QuickAttackButton.text = weapon.char
+	if "groupable" in weapon.tags:
+		var nb = len(hero.get_compatible_items(weapon))
+		if nb >= 1:
+			%QuickAttackButton.text += "x%d" % (nb+1)
 
 func refresh_hps(_new_health=null):
 	# TODO: bold animation when dead
@@ -82,6 +93,7 @@ func refresh_buttons_vis(_old_coord, hero_coord):
 
 func refresh_cancel_button_vis():
 	%CancelButton.visible = hero.has_strategy(true)
+	%CancelButton2.visible = hero.has_strategy(true)
 
 func _on_stairs_button_pressed():
 	var event = InputEventAction.new()
@@ -93,19 +105,29 @@ func toggle_cheats_box():
 	cheats_box.visible = not cheats_box.visible
 
 func show_action_label(text):
-	$ActionLabel.text = text
-	$ActionLabel.show()
+	%ActionLabel.text = text
+	%ActionLabel.show()
 	
 func hide_action_label():
-	$ActionLabel.hide()
+	%ActionLabel.hide()
 
-func add_message(text):
-	%MessagesPane.add_message(text)
-	%MessagesScreen.add_message(text)
+func add_message(text:String, 
+				level:Consts.MessageLevels, 
+				tags:Array[String]):
+	if "strategy" in tags:
+		if %ProminentMsgLabel.text.is_empty():
+			%ProminentMsgLabel.text = text
+		else:
+			%ProminentMsgLabel.text = "%s\n%s" % [%ProminentMsgLabel.text, text]
+		%ProminentMsgLabel.show()
+	else:
+		%MessagesPane.add_message(text, level, tags)
+		%MessagesScreen.add_message(text, level, tags)
 
 func refresh_input_enabled(enabled):
 	if enabled:
 		%WaitingLabel.hide()
+		%ProminentMsgLabel.hide()
 	else:
 		%WaitingLabel.show()
 
@@ -122,6 +144,8 @@ func _on_hero_state_changed(new_state):
 	if hero == null:
 		# not fully initialized, can't do anything too fancy yet
 		return
+	if new_state != Actor.States.IDLE:
+		%ProminentMsgLabel.text = ""
 	refresh_input_enabled(new_state == Actor.States.LISTENING)
 	if new_state == Actor.States.LISTENING:
 		quick_attack_cmd.refresh(hero.get_board().make_index())
@@ -139,3 +163,7 @@ func _on_quick_attack_button_button_up():
 	print("Attacking someone else real quick...")
 	if quick_attack_cmd.run_at_hero(hero.get_cell_coord()):
 		hero.finalize_turn()
+
+
+func _on_hero_changed_weapons():
+	_set_quick_attack_icon()

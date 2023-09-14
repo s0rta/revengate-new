@@ -8,6 +8,13 @@ Simon: You are welcome back anytime, but please remember: we like to keep a low 
 
 ~ intro_2
 Simon: Welcome back to Café Caché!
+Simon: I've heard the tales of your exploits and I'm rather impressed. Here, your next drink is on the house!
+do checkpoint("about_lyon")
+do speaker_give_item()
+=> END
+
+~ intro_3
+Simon: Welcome back to Café Caché!
 Simon: My good man, you look incredibly weary. Here, take this and hopefully it will bring back your contagious enthusiasm.
 do checkpoint("about_lyon")
 do speaker_give_item()

@@ -26,6 +26,7 @@ var hero = null
 var hud = null
 var viewport = null
 var kills := {}
+var sentiments = null  # SentimentTable
 
 # End of game stats
 var last_turn = null
@@ -37,11 +38,12 @@ var hero_modifiers = null
 var story_title = null
 var story_path = null
 
-func reset(hero_=null, hud_=null, viewport_=null):
+func reset(hero_=null, hud_=null, viewport_=null, sentiments_=null):
 	hero = hero_
 	hud = hud_
 	viewport = viewport_
 	kills = {}
+	sentiments = sentiments_
 	last_turn = null
 	nb_locs = null	
 	hero_stats = null

@@ -56,7 +56,10 @@ device_of_focusing = 1
 
 [node name="Tracking" type="Node" parent="." index="9"]
 script = ExtResource("3_t3cu1")
+nb_track_turns = null
 priority = 0.4
+ttl = null
+cancellable = null
 
 [node name="Summoning" type="Node" parent="." index="10"]
 script = ExtResource("6_8h78t")
