@@ -620,23 +620,30 @@ func is_unexposed(index=null):
 
 	return false
 
+func was_offended_by(other: Actor):
+	## Return whether we recall `other` doing anything to piss us off
+	# FIXME: factor out the memories of offecive actions
+	return mem.recall_any(["was_attacked"], current_turn) != null
+
 func is_friend(other: Actor):
 	## Return whether `self` has positive sentiment towards `other`
 	if not Tender.sentiments:
 		return false
-	return Tender.sentiments.is_friend(self, other)
+	return Tender.sentiments.is_friend(self, other) and not was_offended_by(other)
 	
 func is_foe(other: Actor):
 	## Return whether `self` has negative sentiment towards `other`
-	if not Tender.sentiments:
+	if Tender.sentiments:
+		return Tender.sentiments.is_foe(self, other) or was_offended_by(other)
+	else:
 		return false
-	return Tender.sentiments.is_foe(self, other)
 	
 func is_neutral(other: Actor):
 	## Return whether `self` has neutral sentiment towards `other`
-	if not Tender.sentiments:
+	if Tender.sentiments:
+		return Tender.sentiments.is_neutral(self, other) and not was_offended_by(other)
+	else:
 		return true
-	return Tender.sentiments.is_neutral(self, other)
 
 func get_perception_ranges():
 	## Return a Dictionary with details of various perception ranges

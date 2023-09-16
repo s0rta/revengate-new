@@ -77,9 +77,15 @@ func gc(current_turn):
 func recall(event, current_turn=null):
 	## Return the latest fact about `event` or `null` if nothing is known about `event`
 	## `current_turn`: if provided, only facts that are still relevant are considered.
+	return recall_any([event], current_turn)
+
+func recall_any(events:Array[String], current_turn=null):
+	## Return the latest fact about any of the `events` 
+	## Return `null` if nothing is known about `events`
+	## `current_turn`: if provided, only facts that are still relevant are considered.
 	for i in _facts.size():
 		var fact = _facts[-i-1]
-		if fact.event == event:
+		if fact.event in events:
 			if current_turn:
 				if is_relevant(fact, current_turn):
 					return fact
@@ -87,7 +93,7 @@ func recall(event, current_turn=null):
 				return fact
 	return null
 
-func recall_all(event, current_turn):
+func recall_all(event, current_turn=null):
 	## Return all the known facts about `event` in reverse chronological order
 	## `current_turn`: if provided, only facts that are still relevant are considered.
 	var facts = []
