@@ -224,7 +224,7 @@ func populate_board(builder, depth, world_loc:Vector3i):
 	_gen_decks_and_place(builder, index, deck_builder, "Vibe", depth, world_loc, budget, extra_vibe)
 	
 
-func _gen_decks_and_draw(board_builder, index, deck_builder, card_type, 
+func _gen_decks_and_draw(board_builder:BoardBuilder, index, deck_builder, card_type, 
 							depth, world_loc, budget, 
 							extra_cards=[]):
 	## Generate the two decks for the card_type, draw from them as long as budget allows.
@@ -244,25 +244,36 @@ func _gen_decks_and_draw(board_builder, index, deck_builder, card_type,
 		budget -= cards[-1].spawn_cost
 	return cards
 
-func _gen_decks_and_place(board_builder, index, deck_builder, card_type, 
+func _gen_decks_and_place(board_builder:BoardBuilder, index, deck_builder, card_type, 
 							depth, world_loc, budget, 
 							extra_cards=[]):
 	## Generate the two decks for the card_type, draw from them as long as budget allows, 
 	## and place everything on the board.
 	var cards = _gen_decks_and_draw(board_builder, index, deck_builder, card_type, 
 									depth, world_loc, budget, extra_cards)
+	
+	var distant_cards = []
 	for card in cards:
-		_place_card(card, board_builder, index)
+		if Utils.has_tags(card, ["spawn-distant"]):
+			distant_cards.append(card)
+		else:
+			_place_card(card, board_builder, null, index)
+	if not distant_cards.is_empty():
+		var free_pred = board_builder.board.is_walkable
+		var coords = board_builder.random_distant_coords(len(distant_cards), null, free_pred)
+		
+		for i in len(distant_cards):
+			_place_card(distant_cards[i], board_builder, coords[i], index, ["spawn-distant"])
 
-func _place_card(card, builder, index=null):
+func _place_card(card, builder:BoardBuilder, where=null, index=null, rm_tags=[]):
 	## Instantiate a card and place in in a free spot on the board.
-	## Return the spawn_cost of the placed card.
+	## `where`: if supplied, try to place the card there, fallback nearby if needed.
 	# FIXME: handle placement constraints
 	var instance = card.duplicate()
+	for tag in rm_tags:
+		Utils.remove_tag(instance, tag)
+	builder.place(instance, false, where, true, null, index)
 	instance.show()
-	
-	builder.place(instance, false, null, true, null, index)
-	return card.spawn_cost
 
 func _get_conn_target_recs(board:RevBoard):
 	## Return an array of connection targets from a board (actual or implied)

@@ -20,6 +20,7 @@ char = "@"
 caption = "Benoît"
 color = Color(0.768627, 0.443137, 0.270588, 1)
 health = 20
+tags = Array[String](["spawn-distant"])
 
 [node name="Label" type="Label" parent="."]
 anchors_preset = 15
@@ -34,7 +35,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 auto_translate = false
 theme_type_variation = &"AsciiGraphics"
-theme_override_colors/font_color = Color(0.521569, 0.407843, 0.105882, 1)
+theme_override_colors/font_color = Color(0.768627, 0.443137, 0.270588, 1)
 text = "@"
 horizontal_alignment = 1
 vertical_alignment = 1
