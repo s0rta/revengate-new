@@ -31,7 +31,7 @@ func refresh(turn):
 		tested_for_turn = fact.turn
 		has_activated = Rand.rstest(probability)
 		# TODO: give up if foe is too far or long enough has passed since the attack
-		attacker = fact.attacker
+		attacker = fact.by
 
 func is_valid():
 	if not super():

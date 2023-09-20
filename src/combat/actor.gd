@@ -591,7 +591,7 @@ func die():
 
 func _learn_attack(attacker):
 	## Remember who just hit us.
-	$Mem.learn("was_attacked", current_turn, Memory.Importance.NOTABLE, {"attacker": attacker})
+	$Mem.learn("was_attacked", current_turn, Memory.Importance.NOTABLE, {"by": attacker})
 
 func is_alive():
 	return health > 0
@@ -622,8 +622,8 @@ func is_unexposed(index=null):
 
 func was_offended_by(other: Actor):
 	## Return whether we recall `other` doing anything to piss us off
-	# FIXME: factor out the memories of offecive actions
-	return mem.recall_any(["was_attacked"], current_turn) != null
+	var by_other = func (fact): return fact.by == other
+	return mem.recall_any(Consts.OFFENSIVE_EVENTS, current_turn, by_other) != null
 
 func is_friend(other: Actor):
 	## Return whether `self` has positive sentiment towards `other`

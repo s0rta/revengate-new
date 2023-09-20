@@ -32,7 +32,7 @@ func refresh(turn_):
 		var fact = me.mem.recall('was_attacked')
 		if fact != null:
 			has_yeilded = true
-			attacker = fact.attacker
+			attacker = fact.by
 
 func is_valid():
 	return super() and has_yeilded

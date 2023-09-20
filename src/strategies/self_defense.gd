@@ -24,7 +24,7 @@ func refresh(turn):
 	var fact = me.mem.recall("was_attacked")
 	if fact != null:
 		# TODO: give up if foe is too far or long enough has passed since the attack
-		attacker = fact.attacker
+		attacker = fact.by
 	else:
 		attacker = null
 

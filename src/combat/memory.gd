@@ -74,21 +74,26 @@ func gc(current_turn):
 			new_facts.append(fact)
 	_facts = new_facts
 	
-func recall(event, current_turn=null):
+func recall(event, current_turn=null, valid_pred=null):
 	## Return the latest fact about `event` or `null` if nothing is known about `event`
 	## `current_turn`: if provided, only facts that are still relevant are considered.
-	return recall_any([event], current_turn)
+	## `valid_pred`: only facts that are true with this callable are considered.
+	return recall_any([event], current_turn, valid_pred)
 
-func recall_any(events:Array[String], current_turn=null):
+func recall_any(events:Array[String], current_turn=null, valid_pred=null):
 	## Return the latest fact about any of the `events` 
 	## Return `null` if nothing is known about `events`
 	## `current_turn`: if provided, only facts that are still relevant are considered.
+	## `valid_pred`: only facts that are true with this callable are considered.
 	for i in _facts.size():
 		var fact = _facts[-i-1]
 		if fact.event in events:
 			if current_turn:
 				if is_relevant(fact, current_turn):
-					return fact
+					if valid_pred == null:
+						return fact
+					elif valid_pred.call(fact):
+						return fact
 			else:
 				return fact
 	return null

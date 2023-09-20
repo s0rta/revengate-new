@@ -123,3 +123,5 @@ const TAGS = ["ethereal", "undead", "gift", "broken", "lit",
 			"spawn-north", "spawn-south", "spawn-west", "spawn-east", 
 			"spawn-center", "spawn-distant", 
 			]
+
+const OFFENSIVE_EVENTS:Array[String] = ["was_attacked", "was_insulted", "was_threatened"]
