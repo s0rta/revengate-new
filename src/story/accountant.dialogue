@@ -1,0 +1,6 @@
+~ intro
+Benoît: What the hell do you want?
+- I want you to turn around right now!
+	do speaker_learns("was_insulted")
+	Benoît: I'll show you how to mind your own business!
+=> END

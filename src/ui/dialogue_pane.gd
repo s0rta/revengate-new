@@ -145,6 +145,13 @@ func checkpoint(title):
 	if speaker:
 		speaker.conversation_sect = title
 
+func speaker_learns(event_name, importance:=Memory.Importance.NOTABLE, by_hero=true):
+	## Add a fact to the speaker's memory
+	var data = null
+	if by_hero:
+		data = {"by":Tender.hero}
+	speaker.mem.learn(event_name, speaker.current_turn, importance, data)
+
 func speaker_has_gifts(extra_tags:=[]):
 	if speaker == null:
 		return false

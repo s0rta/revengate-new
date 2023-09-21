@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bnkru322lrpkq"]
+[gd_scene load_steps=12 format=3 uid="uid://bnkru322lrpkq"]
 
 [ext_resource type="Script" path="res://src/combat/actor.gd" id="1_trohj"]
 [ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_cs2je"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="5_k34p8"]
 [ext_resource type="Script" path="res://src/strategies/seeking.gd" id="8_7of60"]
 [ext_resource type="PackedScene" uid="uid://vd7cxhh4pocv" path="res://src/items/ledger.tscn" id="9_5l0h0"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="9_ieguc"]
 [ext_resource type="Script" path="res://src/strategies/yeilding.gd" id="9_jbshk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_00etm"]
@@ -19,6 +20,7 @@ script = ExtResource("1_trohj")
 char = "@"
 caption = "Benoît"
 color = Color(0.768627, 0.443137, 0.270588, 1)
+conversation_file = "res://src/story/accountant.dialogue"
 health = 20
 tags = Array[String](["spawn-distant"])
 
@@ -77,7 +79,7 @@ is_equipped = true
 
 [node name="SelfDefense" type="Node" parent="."]
 script = ExtResource("5_k34p8")
-priority = 0.5
+priority = 0.8
 
 [node name="Seeking" type="Node" parent="."]
 script = ExtResource("8_7of60")
@@ -89,6 +91,10 @@ priority = 0.6
 [node name="Yeilding" type="Node" parent="."]
 script = ExtResource("9_jbshk")
 fact_name = "accountant_yeilded"
+priority = 0.9
+
+[node name="Tracking" type="Node" parent="."]
+script = ExtResource("9_ieguc")
 priority = 0.7
 
 [node name="Ledger2" parent="." instance=ExtResource("9_5l0h0")]

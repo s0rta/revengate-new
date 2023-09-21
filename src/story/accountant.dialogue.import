@@ -1,0 +1,14 @@
+[remap]
+
+importer="dialogue_manager_compiler_6"
+type="Resource"
+uid="uid://bxnmf1yxj2u8q"
+path="res://.godot/imported/accountant.dialogue-ebb08b8756186761211f0e0470a7dacb.tres"
+
+[deps]
+
+source_file="res://src/story/accountant.dialogue"
+dest_files=["res://.godot/imported/accountant.dialogue-ebb08b8756186761211f0e0470a7dacb.tres"]
+
+[params]
+
