@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://bvbyl05ombdxa"]
+
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_rl1x2"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="2_4v2f3"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="3_f8e7u"]
+[ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="4_2ay8k"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="4_k7uip"]
+
+[node name="Yarohu" instance=ExtResource("1_rl1x2")]
+char = "y"
+caption = "yarohu"
+color = Color(0.996078, 0.282353, 0.219608, 1)
+spawn_cost = 10.0
+faction = 4
+bestiary_img = "res://src/monsters/yarohu.jpg"
+description = "A friendly looking frog abomination."
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.996078, 0.282353, 0.219608, 1)
+text = "y"
+
+[node name="SelfDefense" type="Node" parent="." index="7"]
+script = ExtResource("2_4v2f3")
+priority = 0.9
+
+[node name="Tracking" type="Node" parent="." index="8"]
+script = ExtResource("3_f8e7u")
+nb_track_turns = null
+priority = 0.6
+ttl = null
+cancellable = null
+
+[node name="Exploring" type="Node" parent="." index="9"]
+script = ExtResource("4_k7uip")
+priority = 0.5
+
+[node name="Claw" type="Node" parent="." index="10"]
+script = ExtResource("4_2ay8k")
+damage = 5
+damage_family = 3
