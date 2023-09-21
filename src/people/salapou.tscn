@@ -1,14 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://cpjfi7f2jww5a"]
+[gd_scene load_steps=6 format=3 uid="uid://cpjfi7f2jww5a"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_xboc2"]
 [ext_resource type="PackedScene" uid="uid://c71npa04ilk1k" path="res://src/weapons/umbrella.tscn" id="2_3hlu4"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="3_i84nx"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="4_rc8re"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="5_lrisf"]
 
 [node name="Salapou" instance=ExtResource("1_xboc2")]
 char = "@"
 caption = "Le Grand Salapou"
 color = Color(0.85098, 0.823529, 0.0941176, 1)
+conversation_file = "res://src/story/salapou.dialogue"
+conversation_sect = "intro"
 spawn_cost = 20.0
 strength = 45
 agility = 55
@@ -38,3 +41,7 @@ hug_walls = null
 priority = 0.1
 ttl = null
 cancellable = null
+
+[node name="Tracking" type="Node" parent="." index="10"]
+script = ExtResource("5_lrisf")
+priority = 0.7

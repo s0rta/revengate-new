@@ -1,0 +1,24 @@
+~ intro
+
+Salapou: May I help you, young one?
+- I'm a big fan of yours. How do you do the trick with the knives?
+	=> knives
+- I want you to turn around right now!
+	do speaker_learns("was_insulted")
+	do set_global_sentiment(-1)
+	do checkpoint("angry")
+	Salapou: It is a beauty of Franconia that everyone is entitled to their own opinions, but I'm afraid your are infringing on my personal space right now.
+=> END
+
+~ knives
+do checkpoint("gimmespace")
+Salapou: I'm glad you liked the performance. I'm afraid that it's years of practice that got me there. There are no shortcuts to get achieve expert showmanship, but perhaps you could start with some simpler card tricks.
+=> END
+
+~ gimmespace
+Salapou: I'm glad you enjoyed our shows, but I have to go somewhere else now. Have an excellent afternoon, young one.
+=> END
+
+~ angry
+Salapou: Perhaps you are the one who should turn around. I would advise that you would do so rather promptly.
+=> END

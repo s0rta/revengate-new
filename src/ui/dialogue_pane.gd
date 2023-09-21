@@ -21,6 +21,7 @@
 class_name DialoguePane extends Control
 
 signal closed(acted:bool)
+signal new_sentiment(faction_a, faction_b, value:int)
 
 var dia_res: DialogueResource
 var temp_game_states := []
@@ -190,3 +191,6 @@ func hero_give_item(include_tags=null, extrude_tags=null):
 func show_message(message):
 	Tender.hero.add_message(message)
 
+func set_global_sentiment(value:int):
+	## Change the sentiment between the speaker's faction and the hero's faction.
+	Tender.sentiments.set_sentiment(speaker.faction, Tender.hero.faction, value)
