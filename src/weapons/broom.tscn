@@ -7,6 +7,7 @@
 [node name="Broom" instance=ExtResource("1_n8xls")]
 script = ExtResource("2_xsuqv")
 damage = 2
+range = 1
 damage_family = 1
 is_equipped = false
 char = "𐇙"

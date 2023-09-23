@@ -102,7 +102,6 @@ position = Vector2(464, 48)
 
 [node name="Broom" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("14_w5yd8")]
 position = Vector2(336, 48)
-range = 1
 
 [node name="Umbrella" parent="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard" instance=ExtResource("14_ih5ox")]
 position = Vector2(336, 48)
@@ -149,7 +148,6 @@ unique_name_in_owner = true
 script = ExtResource("7_4dw6n")
 
 [node name="LMargin" type="MarginContainer" parent="HUD"]
-visible = false
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0

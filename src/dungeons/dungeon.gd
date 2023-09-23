@@ -261,7 +261,8 @@ func _gen_decks_and_place(board_builder:BoardBuilder, index, deck_builder, card_
 	if not distant_cards.is_empty():
 		var free_pred = board_builder.board.is_walkable
 		var coords = board_builder.random_distant_coords(len(distant_cards), null, free_pred)
-		
+		distant_cards.shuffle()
+
 		for i in len(distant_cards):
 			_place_card(distant_cards[i], board_builder, coords[i], index, ["spawn-distant"])
 
