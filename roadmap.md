@@ -204,11 +204,18 @@ Combat:
 
 UX:
 - [ ] bug: Android font renders accented chars differently than the same letter withtout accent
+- [ ] bug: center on hero after victory is not working
 - [ ] health bar than turns red when low on HPs
+- [ ] remove the beta desclaimer
 - [x] active weapon is highlighted in a corner icon, icon is tappable for quick attack
 - [x] message with the looted item(s)
 - [x] pan is normalized to be fairly constant no matter what the zoom level is
 - [x] multi-turn Travel is more obvious to cancel with message and bigger abort button
+- [ ] better description on F-Droid
+
+New Quest – Bewitching Bookeeping:
+- [ ] victory screen should not mention a quest item
+- [x] variable quest rewards
 
 Items:
 - [ ] "magical" tag replaces the magical flag
@@ -222,9 +229,7 @@ Monsters:
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()
 - [ ] healing strategy is based on health-%, not absolute number of HPs
-
-Story:
-- [ ] new quest: Bewitching Bookeeping
+- [ ] fail if meeting happened?
 
 ## v0.11
 - [ ] Monte Carlo simulator for DeckBuilders

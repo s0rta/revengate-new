@@ -15,7 +15,7 @@ Nadège: I don't know what's important about those loom cards. It's a good idea 
 Nadège: Good job recovering those cards! 
 if speaker_has_gifts(["quest-reward"])
 	Nadège: Take this, you've earned it!
-	do speaker_give_item(["quest-reward"])
+	do speaker_give_items(["quest-reward"])
 Nadège: There is something weird about the cards. 
 - Yeah, I noticed!
 	Hero: Up to card no. 87, it's a taffeta weave, then after that it's just a big mess of holes that don't mean anything.
@@ -36,7 +36,7 @@ Nadège: Good luck!
 Nadège: Good job talking to that accontant! 
 if speaker_has_gifts(["quest-reward"])
 	Nadège: Take this, you've earned it!
-	do speaker_give_item(["quest-reward"])
+	do speaker_give_items(["quest-reward"])
 Nadège: I have another job for you. Someone has been discreetly acquiring rare books and we want you to find out what that is all about. They are staying a little South of here.
 Nadège: The traboule across the plaza will take you there. Here's the key. It's not very safe down there, so take this weapon too just in case.
 # TODO follow up on the cards

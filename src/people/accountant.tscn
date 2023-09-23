@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://bnkru322lrpkq"]
 
-[ext_resource type="Script" path="res://src/combat/actor.gd" id="1_trohj"]
+[ext_resource type="Script" path="res://src/people/accountant.gd" id="1_8svk0"]
 [ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_cs2je"]
 [ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="3_u6tcd"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="4_lbjrc"]
@@ -16,11 +16,12 @@ size = Vector2(32, 32)
 
 [node name="Accountant" type="Area2D"]
 visible = false
-script = ExtResource("1_trohj")
+script = ExtResource("1_8svk0")
 char = "@"
 caption = "Benoît"
 color = Color(0.768627, 0.443137, 0.270588, 1)
 conversation_file = "res://src/story/accountant.dialogue"
+conversation_sect = "intro"
 health = 20
 tags = Array[String](["spawn-distant"])
 

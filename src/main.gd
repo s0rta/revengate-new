@@ -141,7 +141,13 @@ func conclude_game(game_over:=true, victory:=false):
 		%VictoryScreen.popup(game_over)
 		if not game_over:
 			await %VictoryScreen.start_next_chapter
-			start_ch2()
+			Tender.chapter += 1
+			if Tender.chapter == 2:
+				start_ch2()
+			elif Tender.chapter == 3:
+				start_ch3()
+			else:
+				assert(false, "We don't have a quest for chapter %s" % Tender.chapter)
 	else:
 		get_tree().change_scene_to_file("res://src/ui/game_over_screen.tscn")
 
@@ -182,15 +188,23 @@ func start_ch2():
 	%StoryScreen.show_story("Chapter 2: Bewitching Bookkeeping", 
 							"res://src/story/bewitching_bookkeeping.md")
 	hero.place(V.i(2, 2))
+
+	# FIXME: buggy!
 	center_on_hero()
+	
 	if $TurnQueue.is_paused():
 		$TurnQueue.resume()
 
 func start_ch3():
-#	destroy_items(hero.get_items(["quest-item"]))
+	var mem = Tender.hero.mem
 	# Nadège gives key and dress sword
 	%Nadege.conversation_sect = "intro_3"
-	supply_item(%Nadege, "res://src/items/serum_of_agility.tscn", ["quest-reward", "gift"])
+	if mem.recall("accountant_died"):
+		supply_item(%Nadege, "res://src/items/potion_of_regen.tscn", ["quest-reward", "gift"])
+		supply_item(%Nadege, "res://src/items/potion_of_healing.tscn", ["quest-reward", "gift"])
+		supply_item(%Nadege, "res://src/items/dynamite.tscn", ["quest-reward", "gift"])
+	else:
+		supply_item(%Nadege, "res://src/items/serum_of_agility.tscn", ["quest-rzeward", "gift"])
 	supply_item(%Nadege, "res://src/items/key.tscn", ["key-red", "gift"])
 	supply_item(%Nadege, "res://src/weapons/dress_sword.tscn", ["gift"])
 	
@@ -198,7 +212,7 @@ func start_ch3():
 	%BarPatron2.conversation_sect = "party_magic"
 
 	%BarTender.conversation_sect = "intro_3"
-	supply_item(%BarTender, "res://src/items/potion_of_booze.tscn", ["gift"])
+	supply_item(%BarTender, "res://src/items/potion_of_healing.tscn", ["gift"])
 
 	%StoryScreen.show_story("Chapter 3: The Sound of Satin", 
 							"res://src/story/sound_of_satin.md")
@@ -212,9 +226,23 @@ func test():
 	
 	var hero = Tender.hero
 	print(hero.mem._facts)
+
+	for actor in get_board().get_actors():
+		print("%s's memory" % [actor.get_short_desc()])
+		print(actor.mem._facts)
+
 		
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-	start_ch2()
+
 #	$SentimentTable.set_sentiment(Tender.hero, Consts.Factions.BEASTS, 1)
+	$SentimentTable.ddump()
+
+	for actor in get_board().get_actors():
+		print("How hero feels about %s" % [actor.get_short_desc()])
+		print("  Is friend: %s" % Tender.hero.is_friend(actor))
+		print("  Is neutral: %s" % Tender.hero.is_neutral(actor))
+		print("  Is foe: %s" % Tender.hero.is_foe(actor))
 	
+
+

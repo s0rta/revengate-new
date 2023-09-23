@@ -33,8 +33,12 @@ func reached_top_level(current_board:RevBoard):
 func assay_victory(current_board:RevBoard):
 	if hero == null:
 		return
-	if reached_top_level(current_board) and has_quest_item(hero):
-		emit_signal("victory", false)
+	if reached_top_level(current_board):
+		var mem = Tender.hero.mem
+		if (has_quest_item(hero) 
+				or mem.recall("accountant_yeilded") != null 
+				or mem.recall("accountant_died") != null):
+			emit_signal("victory", false)
 
 func on_actor_died(board:RevBoard, coord:Vector2i, tags:Array[String]):
 	print("an actor died! Their tags were: %s" % [tags])

@@ -27,6 +27,7 @@ var hud = null
 var viewport = null
 var kills := {}
 var sentiments = null  # SentimentTable
+var chapter := 0
 
 # End of game stats
 var last_turn = null
@@ -42,6 +43,7 @@ func reset(hero_=null, hud_=null, viewport_=null, sentiments_=null):
 	hero = hero_
 	hud = hud_
 	viewport = viewport_
+	chapter = 1
 	kills = {}
 	sentiments = sentiments_
 	last_turn = null
@@ -50,7 +52,6 @@ func reset(hero_=null, hud_=null, viewport_=null, sentiments_=null):
 	hero_modifiers = null
 	story_title = null
 	story_path = null
-
 	
 func pre_game(story_title_, story_path_):
 	reset()
