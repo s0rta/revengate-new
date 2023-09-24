@@ -203,7 +203,7 @@ Combat:
   - [x] open [inclusion request](https://gitlab.com/fdroid/rfp/-/issues/2513) with F-Droid
 
 UX:
-- [ ] bug: Android font renders accented chars differently than the same letter withtout accent
+- [x] bug: Android font renders accented chars differently than the same letter withtout accent
 - [x] bug: center on hero after victory is not working
 - [ ] health bar than turns red when low on HPs
 - [ ] remove the beta desclaimer
