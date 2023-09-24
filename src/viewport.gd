@@ -32,9 +32,11 @@ func _ready():
 		size_2d_override = size
 	size_2d_override_stretch = true
 
-func pos_to_local(pos):
+func pos_to_local(pos, apply_camera:=true):
 	## Convert a screen pixel `pos` into to a local pixel `pos`
-	var offset = get_camera_2d().offset
+	var offset = Vector2.ZERO
+	if apply_camera:
+		offset = get_camera_2d().offset
 	var transform = get_final_transform().affine_inverse()
 	return pos * transform + offset
 
@@ -66,7 +68,7 @@ func center_on_coord(coord):
 	## move the camera to be directly above `coord`
 	var pos = RevBoard.board_to_canvas(coord)
 	var camera = get_camera_2d()
-	camera.offset = pos_to_local(pos - size/2.0)
+	camera.offset = pos - pos_to_local(size/2.0, false)
 	
 func flash_coord_selection(coord:Vector2i):
 	var highlight = load("res://src/ui/cell_highlight.tscn").instantiate()

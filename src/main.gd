@@ -152,7 +152,7 @@ func conclude_game(game_over:=true, victory:=false):
 		get_tree().change_scene_to_file("res://src/ui/game_over_screen.tscn")
 
 func center_on_hero(_arg=null):
-	find_child("Viewport").center_on_coord(hero.get_cell_coord())
+	%Viewport.center_on_coord(hero.get_cell_coord())
 
 func _input(_event):
 	if Input.is_action_just_pressed("test-2"):

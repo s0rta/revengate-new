@@ -132,5 +132,6 @@ func act() -> bool:
 		
 	# Get closer
 	var there = _path_next(path)
-	me.move_to(there)
+	if there != null:
+		me.move_to(there)
 	return true

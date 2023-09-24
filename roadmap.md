@@ -204,7 +204,7 @@ Combat:
 
 UX:
 - [ ] bug: Android font renders accented chars differently than the same letter withtout accent
-- [ ] bug: center on hero after victory is not working
+- [x] bug: center on hero after victory is not working
 - [ ] health bar than turns red when low on HPs
 - [ ] remove the beta desclaimer
 - [x] active weapon is highlighted in a corner icon, icon is tappable for quick attack
