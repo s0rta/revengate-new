@@ -1,21 +1,13 @@
-[gd_scene load_steps=17 format=3 uid="uid://d1wjr6usat6lm"]
+[gd_scene load_steps=9 format=3 uid="uid://d1wjr6usat6lm"]
 
 [ext_resource type="Script" path="res://src/combat/simulator.gd" id="1_0qirp"]
 [ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="1_fdq17"]
 [ext_resource type="PackedScene" uid="uid://cfc3ttsrd52r" path="res://src/rev_board.tscn" id="2_r23sb"]
-[ext_resource type="PackedScene" uid="uid://cqkoy4vxwt5q" path="res://src/combat/average_joe.tscn" id="5_tx25w"]
+[ext_resource type="PackedScene" uid="uid://dq2b713n15c7h" path="res://src/combat/advanced_joe.tscn" id="4_l8kup"]
+[ext_resource type="PackedScene" uid="uid://cpjfi7f2jww5a" path="res://src/people/salapou.tscn" id="6_2g26o"]
 [ext_resource type="PackedScene" uid="uid://d8jxxkoa4b00" path="res://src/people/outlaw.tscn" id="6_n5g3r"]
-[ext_resource type="PackedScene" uid="uid://d4f1ul2rt43ys" path="res://src/monsters/labras.tscn" id="7_yihu7"]
-[ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="8_dd6o8"]
-[ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="8_vl4qb"]
-[ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="9_5g1gn"]
-[ext_resource type="PackedScene" uid="uid://c3uuk6yfc2thp" path="res://src/monsters/sahwakoon.tscn" id="10_tikr2"]
-[ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="11_lu3sg"]
-[ext_resource type="PackedScene" uid="uid://cbpo1nvheopyj" path="res://src/monsters/retznac.tscn" id="12_e5br1"]
-[ext_resource type="PackedScene" uid="uid://d4adacidkburg" path="res://src/monsters/phantruch-lesser.tscn" id="13_0qu1q"]
-[ext_resource type="PackedScene" uid="uid://bq44ya251uwp0" path="res://src/monsters/phantruch-higher.tscn" id="14_u53t8"]
-[ext_resource type="PackedScene" uid="uid://cjoutyju3dhre" path="res://src/monsters/gleugt.tscn" id="15_yg7uv"]
-[ext_resource type="PackedScene" uid="uid://b26vqfk7j6un7" path="res://src/monsters/desert_centipede.tscn" id="16_ug7mc"]
+[ext_resource type="PackedScene" uid="uid://c8vcdsslc86r2" path="res://src/monsters/automaton.tscn" id="8_jg733"]
+[ext_resource type="PackedScene" uid="uid://bvbyl05ombdxa" path="res://src/monsters/yarohu.tscn" id="9_6i3yv"]
 
 [node name="Simulator" type="Node2D"]
 script = ExtResource("1_0qirp")
@@ -26,62 +18,24 @@ verbose = false
 [node name="Board" parent="." instance=ExtResource("2_r23sb")]
 layer_0/tile_data = PackedInt32Array(0, 0, 3, 9, 0, 3, 8, 196608, 3, 7, 131072, 3, 6, 196608, 3, 5, 0, 3, 4, 0, 3, 3, 0, 3, 2, 131072, 3, 1, 131072, 3, 524297, 131072, 3, 458761, 131072, 3, 393225, 196608, 3, 327689, 0, 3, 262153, 196608, 3, 196617, 0, 3, 131081, 0, 3, 65545, 65536, 3, 524288, 131072, 3, 524289, 196608, 3, 524290, 131072, 3, 524291, 65536, 3, 524292, 196608, 3, 524293, 65536, 3, 524294, 196608, 3, 524295, 0, 3, 524296, 0, 3, 65536, 65536, 3, 131072, 196608, 3, 196608, 196608, 3, 262144, 0, 3, 327680, 0, 3, 393216, 0, 3, 458752, 196608, 3, 196613, 196608, 3, 196612, 65536, 3, 327685, 131072, 3, 262149, 196608, 2, 262148, 65536, 2, 327684, 65536, 3, 458760, 131072, 2, 393224, 0, 2, 327688, 0, 2, 262152, 65536, 2, 196616, 196608, 2, 131080, 65536, 2, 65544, 65536, 2, 458759, 65536, 2, 393223, 0, 2, 327687, 65536, 2, 262151, 0, 2, 196615, 196608, 2, 131079, 0, 2, 65543, 196608, 2, 458758, 0, 2, 393222, 196608, 2, 327686, 196608, 3, 262150, 196608, 3, 196614, 196608, 3, 131078, 0, 2, 65542, 131072, 2, 458757, 196608, 2, 393221, 196608, 2, 131077, 131072, 2, 65541, 131072, 2, 458756, 131072, 2, 393220, 131072, 2, 131076, 196608, 2, 65540, 196608, 2, 458755, 65536, 2, 393219, 196608, 2, 327683, 196608, 2, 262147, 65536, 2, 196611, 196608, 2, 131075, 196608, 2, 65539, 0, 2, 458754, 131072, 2, 393218, 65536, 2, 327682, 65536, 2, 262146, 196608, 2, 196610, 131072, 2, 131074, 196608, 2, 65538, 0, 2, 458753, 65536, 2, 393217, 131072, 2, 327681, 131072, 2, 262145, 196608, 2, 196609, 0, 2, 131073, 0, 2, 65537, 196608, 2)
 
-[node name="AverageJoe" parent="Board" instance=ExtResource("5_tx25w")]
+[node name="AdvancedJoe" parent="Board" instance=ExtResource("4_l8kup")]
 visible = true
-position = Vector2(80, 79)
+position = Vector2(83, 82)
 
 [node name="Outlaw" parent="Board" instance=ExtResource("6_n5g3r")]
 visible = true
 position = Vector2(112, 39)
 
-[node name="Outlaw2" parent="Board" instance=ExtResource("6_n5g3r")]
-visible = true
-position = Vector2(48, 111)
-
-[node name="Outlaw3" parent="Board" instance=ExtResource("6_n5g3r")]
-visible = true
-position = Vector2(112, 111)
-
 [node name="ExtraStages" type="Node" parent="."]
 
 [node name="Node" type="Node" parent="ExtraStages"]
 
-[node name="Outlaw" parent="ExtraStages/Node" instance=ExtResource("6_n5g3r")]
+[node name="Salapou" parent="ExtraStages/Node" instance=ExtResource("6_2g26o")]
 
-[node name="Outlaw2" parent="ExtraStages/Node" instance=ExtResource("6_n5g3r")]
+[node name="Yarohu" parent="ExtraStages/Node" instance=ExtResource("9_6i3yv")]
 
-[node name="Outlaw3" parent="ExtraStages/Node" instance=ExtResource("6_n5g3r")]
+[node name="Automaton" parent="ExtraStages/Node" instance=ExtResource("8_jg733")]
 
-[node name="Ghost" parent="ExtraStages" instance=ExtResource("8_vl4qb")]
-
-[node name="Labras" parent="ExtraStages" instance=ExtResource("7_yihu7")]
-position = Vector2(80, 80)
-
-[node name="SewerOtter" parent="ExtraStages" instance=ExtResource("8_dd6o8")]
-position = Vector2(48, 49)
-
-[node name="SulantTiger" parent="ExtraStages" instance=ExtResource("9_5g1gn")]
-position = Vector2(48, 49)
-
-[node name="Sahwakoon" parent="ExtraStages" instance=ExtResource("10_tikr2")]
-position = Vector2(48, 49)
-
-[node name="Pacherr" parent="ExtraStages" instance=ExtResource("11_lu3sg")]
-position = Vector2(48, 49)
-
-[node name="DesertCentipede" parent="ExtraStages" instance=ExtResource("16_ug7mc")]
-position = Vector2(48, 49)
-
-[node name="Retznac" parent="ExtraStages" instance=ExtResource("12_e5br1")]
-position = Vector2(48, 49)
-
-[node name="PhantruchLesser" parent="ExtraStages" instance=ExtResource("13_0qu1q")]
-position = Vector2(48, 49)
-
-[node name="PhantruchHigher" parent="ExtraStages" instance=ExtResource("14_u53t8")]
-position = Vector2(48, 49)
-
-[node name="Gleugt" parent="ExtraStages" instance=ExtResource("15_yg7uv")]
-position = Vector2(48, 49)
+[node name="Automaton2" parent="ExtraStages/Node" instance=ExtResource("8_jg733")]
 
 [connection signal="turn_started" from="TurnQueue" to="." method="_on_turn_queue_turn_started"]

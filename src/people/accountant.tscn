@@ -22,7 +22,8 @@ caption = "Benoît"
 color = Color(0.768627, 0.443137, 0.270588, 1)
 conversation_file = "res://src/story/accountant.dialogue"
 conversation_sect = "intro"
-health = 20
+health = 30
+agility = 44
 tags = Array[String](["spawn-distant"])
 
 [node name="Label" type="Label" parent="."]

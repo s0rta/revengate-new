@@ -77,12 +77,15 @@ fencing = 1
 
 [node name="Sword" parent="." instance=ExtResource("7_i8fts")]
 visible = false
+range = 1
 is_equipped = true
 
 [node name="Hammer" parent="." instance=ExtResource("7_fndha")]
+range = 1
 
 [node name="Razor" parent="." instance=ExtResource("7_l6u0k")]
 visible = false
+range = 1
 
 [node name="Rapier" parent="." instance=ExtResource("9_ohw41")]
 

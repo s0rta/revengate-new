@@ -63,7 +63,7 @@ enum MessageLevels {
 const CORE_STATS := ["agility", "strength", "intelligence", "perception", 
 					"health_full", "healing_prob", 
 					"mana_burn_rate", "mana_recovery_prob"] 
-const SKILLS := ["evasion", "innate_attack", "fencing", "channeling", "device_of_focusing"]
+const SKILLS := ["evasion", "innate_attack", "fencing", "channeling", "device_of_focusing", "polearm"]
 # TODO: should be a const, but the parser has issue with the `+` expression
 var CHALLENGES := [] + SKILLS
 

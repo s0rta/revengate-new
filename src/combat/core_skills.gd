@@ -18,8 +18,14 @@
 ## Modifies the skills of an actor
 class_name SkillLevels extends Node
 
+# Note, if you add something here, make sure to also add it to Consts.SKILLS
 @export var evasion: Consts.SkillLevel = Consts.SkillLevel.NEOPHYTE
 @export var fencing: Consts.SkillLevel = Consts.SkillLevel.NEOPHYTE
 @export var innate_attack: Consts.SkillLevel = Consts.SkillLevel.NEOPHYTE
 @export var channeling: Consts.SkillLevel = Consts.SkillLevel.NEOPHYTE
 @export var device_of_focusing: Consts.SkillLevel = Consts.SkillLevel.NEOPHYTE
+@export var polearm: Consts.SkillLevel = Consts.SkillLevel.NEOPHYTE
+
+func _ready() :
+	for skill in Consts.SKILLS:
+		assert(get(skill) != null, "Skill %s is not an attribute of SkillLevels" % skill)

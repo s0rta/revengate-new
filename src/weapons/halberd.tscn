@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://bsrluqcixi630"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_ncut5"]
+[ext_resource type="Script" path="res://src/weapons/weapon.gd" id="2_n0e1y"]
+[ext_resource type="AudioStream" uid="uid://d1ve3m18ud783" path="res://src/weapons/stick-hit-01.mp3" id="3_o7fvc"]
+
+[node name="Halberd" instance=ExtResource("1_ncut5")]
+script = ExtResource("2_n0e1y")
+damage = 7
+range = 1
+damage_family = 3
+is_equipped = false
+char = "🝐"
+caption = "halberd"
+skill = "polearm"
+
+[node name="Label" parent="." index="0"]
+offset_left = -14.0
+offset_right = 14.0
+text = "⚔"
+
+[node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
+stream = ExtResource("3_o7fvc")
+volume_db = -12.0
