@@ -1,16 +1,21 @@
-[gd_scene load_steps=6 format=3 uid="uid://bvbyl05ombdxa"]
+[gd_scene load_steps=7 format=3 uid="uid://bvbyl05ombdxa"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_rl1x2"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="2_4v2f3"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="3_f8e7u"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="4_2ay8k"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="4_k7uip"]
+[ext_resource type="Script" path="res://src/combat/core_skills.gd" id="6_5giyv"]
 
 [node name="Yarohu" instance=ExtResource("1_rl1x2")]
 char = "y"
 caption = "yarohu"
 color = Color(0.996078, 0.282353, 0.219608, 1)
 spawn_cost = 10.0
+health = 35
+strength = 55
+agility = 45
+resistance = 6
 faction = 4
 bestiary_img = "res://src/monsters/yarohu.jpg"
 description = "A friendly looking frog abomination."
@@ -36,5 +41,9 @@ priority = 0.5
 
 [node name="Claw" type="Node" parent="." index="10"]
 script = ExtResource("4_2ay8k")
-damage = 5
+damage = 6
 damage_family = 3
+
+[node name="SkillLevels" type="Node" parent="." index="11"]
+script = ExtResource("6_5giyv")
+innate_attack = 2

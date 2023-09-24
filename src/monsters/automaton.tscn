@@ -1,22 +1,28 @@
-[gd_scene load_steps=6 format=3 uid="uid://c8vcdsslc86r2"]
+[gd_scene load_steps=7 format=3 uid="uid://c8vcdsslc86r2"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_5owqs"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="2_0h2dr"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="3_thfpw"]
 [ext_resource type="Script" path="res://src/strategies/guarding.gd" id="4_ql55k"]
-[ext_resource type="PackedScene" uid="uid://cswkd7m5om1of" path="res://src/weapons/broom.tscn" id="5_chmd2"]
+[ext_resource type="PackedScene" uid="uid://bsrluqcixi630" path="res://src/weapons/halberd.tscn" id="5_w245s"]
+[ext_resource type="Script" path="res://src/combat/core_skills.gd" id="6_xab7h"]
 
 [node name="Automaton" instance=ExtResource("1_5owqs")]
 char = "A"
 caption = "automaton"
 color = Color(0.823529, 0.364706, 0.14902, 1)
 spawn_cost = 10.0
+health = 44
+strength = 56
+agility = 45
+resistance = 2
 faction = 4
 bestiary_img = "res://src/monsters/automaton.png"
 description = "Clockwork automata are some of the most complex arrangement of gears and springs you can find around Franconia. They diligently execute simple instructions as long as they keep ticking."
 
 [node name="Label" parent="." index="0"]
-theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
+theme_override_colors/font_color = Color(0.823529, 0.364706, 0.14902, 1)
+text = "A"
 
 [node name="SelfDefense" type="Node" parent="." index="7"]
 script = ExtResource("2_0h2dr")
@@ -36,6 +42,9 @@ priority = 0.8
 ttl = null
 cancellable = null
 
-[node name="Broom" parent="." index="10" instance=ExtResource("5_chmd2")]
-range = 1
+[node name="Halberd" parent="." index="10" instance=ExtResource("5_w245s")]
 is_equipped = true
+
+[node name="SkillLevels" type="Node" parent="." index="11"]
+script = ExtResource("6_xab7h")
+polearm = 1

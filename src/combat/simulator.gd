@@ -20,11 +20,12 @@ class_name Simulator extends Node2D
 
 enum Results {VICTORY, DEFEAT, DRAW}
 
-const NB_SIMS_PER_RUN = 100
+const NB_SIMS_PER_RUN = 200
 const MAX_SIM_TURNS = 50
 const RUN_ALL_STAGES = true  # sim the first board and all the challengers in $ExtraStages
 
 # whether to let Godot start the sims in between rendering frames, gives better profiling stats
+# FIXME: Stats output is broken in when ASYNC_MODE is true
 const ASYNC_MODE = false
 
 signal sims_done  # sims completed for one stage (see RUN_ALL_STAGES)
@@ -102,6 +103,7 @@ func run_sims():
 	
 	if ASYNC_MODE:
 		await sims_done
+		print("Finished sims for %s" % [", ".join(names)])
 	else:
 		while remaining_sims > 0:
 			remaining_sims -= 1
