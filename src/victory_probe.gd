@@ -18,7 +18,7 @@
 ## Monitor the progress of the game against quest objectives
 class_name VictoryProbe extends Node
 
-signal victory(game_over)
+signal end_of_chapter(victory, game_over)
 var hero: Actor
 
 func has_quest_item(actor:Actor):
@@ -38,9 +38,11 @@ func assay_victory(current_board:RevBoard):
 		if (has_quest_item(hero) 
 				or mem.recall("accountant_yeilded") != null 
 				or mem.recall("accountant_died") != null):
-			emit_signal("victory", false)
+			end_of_chapter.emit(true, false)
+		elif mem.recall("accountant_met_salapou") != null:
+			end_of_chapter.emit(false, false)
 
 func on_actor_died(board:RevBoard, coord:Vector2i, tags:Array[String]):
 	print("an actor died! Their tags were: %s" % [tags])
 	if "quest-boss-retznac" in tags:
-		emit_signal("victory", true)
+		end_of_chapter.emit(true, true)

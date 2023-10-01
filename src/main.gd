@@ -164,7 +164,7 @@ func switch_board_at(coord):
 	emit_signal("board_changed", new_board)
 	
 func _on_hero_died(_coord, _tags):
-	conclude_game(true, false)
+	conclude_game(false, true)
 
 func _compile_hero_stats():
 	## Compile the hero part of the game stats.
@@ -175,7 +175,7 @@ func _compile_hero_stats():
 	Tender.hero_modifiers = Tender.hero.get_modifiers()
 
 
-func conclude_game(game_over:=true, victory:=false):
+func conclude_game(victory:bool, game_over:bool):
 	## do a final bit of cleanup then show the Game Over screen
 	_compile_hero_stats()
 	var last_quest = Tender.chapter == len(quests)
