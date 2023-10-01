@@ -97,91 +97,13 @@ Engines and Empires: free! https://www.drivethrurpg.com/product/329066/Engines--
 ## Other Steampunk inspiration
 * how clockworks work: https://ciechanow.ski/mechanical-watch/
 
-## Credit
+## Maps
 * Map based on Europe's map by u/CroBorn
 https://azgaar.github.io/Fantasy-Map-Generator/?maplink=https://dl.dropbox.com/s/lhtikydmyedu8kp/Europe%20Jul19%2013-07.map?dl=0
+* 1860 Europe by /u/KnowledgeSpecial8516/ : https://drive.google.com/file/d/1F-Co-6bxmERjPEdLvLIjmDndtjUb4O3L/view
+* other possibly useful maps: https://cartographyassets.com/asset-category/specific-assets/azgaars-generator
 
-## Character Archetypes
-* The Innocent
--- Goal: To be happy
--- Flaws: Too trusting
--- Skill: Open minded
-
-* The Orphan
--- Goal: To belong
--- Flaws: Cynical
--- Skill: Open, realistic
-
-* The Hero
--- Goal: To belong
--- Flaws: Need to fight
--- Skill: Courage
-
-* The Care Giver
--- Goal: To help others
--- Flaws: Martyrdom
--- Skill: Compassion
-
-* The Explorer
--- Goal: A full life
--- Flaws: Wandering
--- Skill: Autonomy
-
-* The Rebel
--- Goal: Change norms
--- Flaws: Crime
--- Skill: Wild freedom
-
-* The Lover
--- Goal: Relationship
--- Flaws: Pleasing all
--- Skill: Friendship
-
-* The Creator
--- Goal: Realizing a vision
--- Flaws: Perfectionism
--- Skill: Imagination
-
-* The Jester
--- Goal: Lighten up
--- Flaws: Wasting time
--- Skill: Humour
-
-* The Sage
--- Goal: Wisdom
--- Flaws: No action
--- Skill: Intelligence
-
-* The Magician
--- Goal: Transforming
--- Flaws: Egostistical
--- Skill: Win/wins
-
-* The Ruler
--- Goal: Prosperity
--- Flaws: Authoritarian
--- Skill: Leadeaship
-
-
-Ref.: https://www.reddit.com/r/coolguides/comments/k34rl0/the_12_archetypes_by_carl_jung/
-
-
-## Classification of Game Aesthetics
-By Hunicke, LeBlanc, and Zubek
-
-1. Sensation
-Game as sense-pleasure
-2. Fantasy
-Game as make-believe
-3. Narrative
-Game as drama
-4. Challenge
-Game as obstacle course
-5. Fellowship
-Game as social framework
-6. Discovery
-Game as uncharted territory
-7. Expression
-Game as self-discovery
-8. Submission
-Game as pastime
+## Procedural Generation
+* various topics: https://procgen.space/resources
+* how to join two prefabs: https://en.wikipedia.org/wiki/Minimum_cut
+* many map making techniques illustrated: https://www.gridsagegames.com/blog/2014/06/procedural-map-generation/

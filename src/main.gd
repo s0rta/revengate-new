@@ -26,10 +26,45 @@ signal board_changed(new_board)
 @onready var commands = $CommandPack
 var board: RevBoard  # the active board
 var _seen_locs = {}  # world_locs that have been visited
+var quests = []  # int -> Quest
+
+class Quest:
+	var no: int
+	var title: String
+	var setup_func  # Callabel, optionnal
+	var intro_path: String
+	var win_msg: String
+	var fail_msg: String
+
+	func _init(no_, title_, intro_path_, win_msg_, setup_func_=null, fail_msg_=""):
+		no = no_
+		title = title_
+		intro_path = intro_path_
+		win_msg = win_msg_
+		fail_msg = fail_msg_
+		setup_func = setup_func_
+
 
 func _ready():
-	if Tender.story_path:
-		%StoryScreen.show_story(Tender.story_title, Tender.story_path)
+	# Quests
+	quests = [Quest.new(1, "The Audition", 
+							"res://src/story/the_audition.md", 
+							"You recovered the stolen loom cards."), 
+				Quest.new(2, "Bewitching Bookkeeping", 
+						"res://src/story/bewitching_bookkeeping.md", 
+						"You prevented Benoît the accountant from exposing Frank Verguin's home lab.", 
+						start_ch2, 
+						"You didn't stop Benoît the accountant from selling his information."), 
+				Quest.new(3, "The Sound of Satin", 
+						"res://src/story/sound_of_satin.md", 
+						("You killed Retznac the vampire. " 
+							+ "Retznac vanished into oblivion leaving a thin trail of mist behind. "
+							+ "It reminds you of the marshes around the river Rhône at sunrise."), 
+						start_ch3)]
+
+	# FIXME: skip the story in stand-alone mode
+	%StoryScreen.show_story(quests[0].title, quests[0].intro_path)
+	
 	Tender.reset(hero, hud, %Viewport, $SentimentTable)	
 	_discover_start_board()
 	hud.set_hero(hero)
@@ -37,8 +72,16 @@ func _ready():
 	hero.died.connect(_on_hero_died)
 	board_changed.connect($TurnQueue.invalidate_turn)
 	board_changed.connect(center_on_hero)
-	await $TurnQueue.run()
+	await $TurnQueue.run()	
 	
+func _input(_event):
+	if Input.is_action_just_pressed("test-2"):
+		test2()
+		$/root.set_input_as_handled()
+	elif Input.is_action_just_pressed("test"):
+		test()
+		$/root.set_input_as_handled()
+
 func _discover_start_board():
 	## Find the board that the game should start with
 	for dungeon in dungeons_cont.find_children("", "Dungeon", false, false):
@@ -66,6 +109,9 @@ func _activate_board(new_board):
 func get_board():
 	## Return the current active board
 	return board
+
+func get_quest():
+	return quests[Tender.chapter - 1]
 
 func destroy_items(items):
 	for item in items:
@@ -118,15 +164,22 @@ func switch_board_at(coord):
 	emit_signal("board_changed", new_board)
 	
 func _on_hero_died(_coord, _tags):
-	conclude_game(false)
-	
-func conclude_game(game_over:=true, victory:=false):
-	## do a final bit of cleanup then show the Game Over screen
-	# compile some end-of-game stats
+	conclude_game(true, false)
+
+func _compile_hero_stats():
+	## Compile the hero part of the game stats.
+	## For the kills, see Utils.make_game_summary()
 	Tender.last_turn = $TurnQueue.turn
 	Tender.nb_locs = _seen_locs.size()
 	Tender.hero_stats = Tender.hero.get_base_stats()
 	Tender.hero_modifiers = Tender.hero.get_modifiers()
+
+
+func conclude_game(game_over:=true, victory:=false):
+	## do a final bit of cleanup then show the Game Over screen
+	_compile_hero_stats()
+	var last_quest = Tender.chapter == len(quests)
+	var quest = get_quest()
 	
 	if game_over:
 		$TurnQueue.shutdown()
@@ -137,30 +190,17 @@ func conclude_game(game_over:=true, victory:=false):
 		# nothing else to do: Actors free() themselves after they die
 		await hero.anims_done
 		print("hero done animating!")
-	if victory:
-		%VictoryScreen.popup(game_over)
-		if not game_over:
-			await %VictoryScreen.start_next_chapter
-			Tender.chapter += 1
-			if Tender.chapter == 2:
-				start_ch2()
-			elif Tender.chapter == 3:
-				start_ch3()
-			else:
-				assert(false, "We don't have a quest for chapter %s" % Tender.chapter)
-	else:
-		get_tree().change_scene_to_file("res://src/ui/game_over_screen.tscn")
+
+	%EndOfChapterScreen.popup(quest, victory, game_over)
+	if not game_over:
+		await %EndOfChapterScreen.start_next_chapter
+		Tender.chapter += 1
+		quest = get_quest()
+		assert(quest.setup_func is Callable, "We don't have a setup function for chapter %s" % Tender.chapter)
+		quest.setup_func.call()
 
 func center_on_hero(_arg=null):
 	%Viewport.center_on_coord(hero.get_cell_coord())
-
-func _input(_event):
-	if Input.is_action_just_pressed("test-2"):
-		test2()
-		$/root.set_input_as_handled()
-	elif Input.is_action_just_pressed("test"):
-		test()
-		$/root.set_input_as_handled()
 
 func _on_cancel_button_pressed():
 	hero.cancel_strategies()
@@ -188,10 +228,7 @@ func start_ch2():
 	%StoryScreen.show_story("Chapter 2: Bewitching Bookkeeping", 
 							"res://src/story/bewitching_bookkeeping.md")
 	hero.place(V.i(2, 2))
-
-	# FIXME: buggy!
 	center_on_hero()
-	
 	if $TurnQueue.is_paused():
 		$TurnQueue.resume()
 
@@ -203,8 +240,8 @@ func start_ch3():
 		supply_item(%Nadege, "res://src/items/potion_of_regen.tscn", ["quest-reward", "gift"])
 		supply_item(%Nadege, "res://src/items/potion_of_healing.tscn", ["quest-reward", "gift"])
 		supply_item(%Nadege, "res://src/items/dynamite.tscn", ["quest-reward", "gift"])
-	else:
-		supply_item(%Nadege, "res://src/items/serum_of_agility.tscn", ["quest-rzeward", "gift"])
+	elif mem.recall("accountant_yeilded"):
+		supply_item(%Nadege, "res://src/items/serum_of_agility.tscn", ["quest-reward", "gift"])
 	supply_item(%Nadege, "res://src/items/key.tscn", ["key-red", "gift"])
 	supply_item(%Nadege, "res://src/weapons/dress_sword.tscn", ["gift"])
 	
@@ -221,17 +258,14 @@ func start_ch3():
 	if $TurnQueue.is_paused():
 		$TurnQueue.resume()
 
+
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	
-	var hero = Tender.hero
-	print(hero.mem._facts)
 
-	for actor in get_board().get_actors():
-		print("%s's memory" % [actor.get_short_desc()])
-		print(actor.mem._facts)
+	_compile_hero_stats()	
+	%EndOfChapterScreen.popup(quests[Tender.chapter], true, true)
 
-		
+
 func test2():
 	print("Testing: 2, 1... 2, 1!")
 
@@ -243,6 +277,3 @@ func test2():
 		print("  Is friend: %s" % Tender.hero.is_friend(actor))
 		print("  Is neutral: %s" % Tender.hero.is_neutral(actor))
 		print("  Is foe: %s" % Tender.hero.is_foe(actor))
-	
-
-

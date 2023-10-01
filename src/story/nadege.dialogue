@@ -33,16 +33,28 @@ Nadège: Good luck!
 => END 
 
 ~ intro_3
-Nadège: Good job talking to that accontant! 
+if event_happened("accountant_met_salapou")
+	Nadège: So they've met after all. Damn!
+	Nadège: It's too early to predict the long term consequece that this will have on the developement of chemistry, but it can't be good.
+	Nadège: I hope you can do better than that next time.
+elif event_happened("accountant_died")
+	Nadège: I think you went a little too rough on the accountant, but at least we don't have to worry about him exposing Frank Verguin.
+else  # beat him up just hard enough
+	Nadège: Good job talking to that accontant!
 if speaker_has_gifts(["quest-reward"])
 	Nadège: Take this, you've earned it!
 	do speaker_give_items(["quest-reward"])
 Nadège: I have another job for you. Someone has been discreetly acquiring rare books and we want you to find out what that is all about. They are staying a little South of here.
 Nadège: The traboule across the plaza will take you there. Here's the key. It's not very safe down there, so take this weapon too just in case.
-# TODO follow up on the cards
-do checkpoint("about_lyon")
+do checkpoint("cards_followup")
 do speaker_give_items()
 Nadège: Good luck!
+=> END
+
+~ cards_followup
+Nadège: I talked to a Canut smuggler, he thinks the loom cards you recovered are a coded message. A modified loom would be able to run those an print the decoded message. The problem is we need the cypher card to decode anything.
+Nadège: Someone is trying to be very secretive. Whatever this is about, it can't be good.
+do checkpoint("about_lyon")
 => END
 
 ~ about_lyon

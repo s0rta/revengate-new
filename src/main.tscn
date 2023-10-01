@@ -30,7 +30,7 @@
 [ext_resource type="PackedScene" uid="uid://cf0kj6qn7a40s" path="res://src/ui/city_map_screen.tscn" id="23_aomab"]
 [ext_resource type="PackedScene" uid="uid://bb5upsioptfc4" path="res://src/ui/context_menu_popup.tscn" id="25_n5bfn"]
 [ext_resource type="PackedScene" uid="uid://bgntr3w6l7kt0" path="res://src/ui/story_screen.tscn" id="28_7kpa3"]
-[ext_resource type="PackedScene" uid="uid://cqxv2e1rn7uqx" path="res://src/ui/victory_screen.tscn" id="30_mq8w4"]
+[ext_resource type="PackedScene" uid="uid://dpgcrubb5v6p7" path="res://src/ui/end_of_chapter_screen.tscn" id="30_5u5si"]
 [ext_resource type="Script" path="res://src/combat/sentiment_table.gd" id="33_yhbe0"]
 [ext_resource type="Script" path="res://src/command_pack.gd" id="41_hgs5k"]
 
@@ -396,7 +396,7 @@ visible = false
 unique_name_in_owner = true
 visible = false
 
-[node name="VictoryScreen" parent="HUD" instance=ExtResource("30_mq8w4")]
+[node name="EndOfChapterScreen" parent="HUD" instance=ExtResource("30_5u5si")]
 unique_name_in_owner = true
 visible = false
 

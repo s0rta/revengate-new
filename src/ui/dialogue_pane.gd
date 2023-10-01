@@ -146,6 +146,11 @@ func checkpoint(title):
 	if speaker:
 		speaker.conversation_sect = title
 
+func event_happened(event) -> bool:
+	## Return whether something has already happend from the point of view of the hero.
+	var hero = Tender.hero
+	return hero.mem.recall(event, hero.current_turn) != null
+
 func speaker_learns(event_name, importance:=Memory.Importance.NOTABLE, by_hero=true):
 	var data = null
 	## Add a fact to the speaker's memory
@@ -153,7 +158,7 @@ func speaker_learns(event_name, importance:=Memory.Importance.NOTABLE, by_hero=t
 		data = {"by":Tender.hero}
 	speaker.mem.learn(event_name, speaker.current_turn, importance, data)
 
-func speaker_has_gifts(extra_tags:=[]):
+func speaker_has_gifts(extra_tags:=[]) -> bool:
 	if speaker == null:
 		return false
 	var include_tags = ["gift"] + extra_tags
@@ -179,7 +184,7 @@ func speaker_give_items(extra_tags=null):
 	for item in items:
 		speaker.give_item(item, Tender.hero)
 
-func hero_has_item(include_tags=null, extrude_tags=null):
+func hero_has_item(include_tags=null, extrude_tags=null) -> bool:
 	return not Tender.hero.get_items(include_tags, extrude_tags).is_empty()
 
 func hero_give_item(include_tags=null, extrude_tags=null):

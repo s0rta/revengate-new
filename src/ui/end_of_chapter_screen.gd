@@ -15,23 +15,44 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-class_name VictoryScreen extends Control
+class_name EndOfChapterScreen extends Control
 
 signal start_next_chapter
 
-func popup(game_over:bool):
-	%EndingLabel.visible = game_over
+func popup(quest, victory:bool, game_over:bool):
 	%QuitButton.visible = game_over
-	%GameOverLabel.visible = game_over
-	%VictoryLabel.visible = not game_over
 	%NextButton.visible = not game_over
-	%NextChapterLabel.visible = not game_over
+	if victory:
+		%Title.text = "Victory!"
+		%QuitButton.text = "Nice!"
+	elif game_over:
+		%Title.text = "Game Over!"
+		%QuitButton.text = "Next..."
+	else:
+		%Title.text = "Failed!"
+	%OutcomeLabel.text = ["You failed!", "You have made it!"][int(victory)]
+	if victory:
+		%MoreOutcomeLabel.text = quest.win_msg
+	elif quest.fail_msg:
+		%MoreOutcomeLabel.text = quest.fail_msg
+	else:
+		%MoreOutcomeLabel.text = ""
+	%MoreOutcomeLabel.visible = not %MoreOutcomeLabel.text.is_empty()
+		
+	%NextChapterLabel.visible = victory and not game_over
+	%ConqueredLabel.visible = victory and game_over
+	%TryAgainLabel.visible = not victory and game_over
+	%QuitButton.visible = game_over
+	%NextButton.visible = not game_over
 	%ScrollView.get_v_scroll_bar().value = 0
 	if Tender.hero_stats:
 		%GameSummaryLabel.text = Utils.make_game_summary()
 	else:
 		%GameSummaryLabel.text = ""
-	$VictorySound.play()
+	if victory:
+		$WinSound.play()
+	else:
+		$FailSound.play()
 	show()
 	
 func show_main_screen():

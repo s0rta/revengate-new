@@ -205,6 +205,7 @@ Combat:
 UX:
 - [x] bug: Android font renders accented chars differently than the same letter withtout accent
 - [x] bug: center on hero after victory is not working
+- [ ] bug: crash when restarting after death
 - [ ] health bar than turns red when low on HPs
 - [ ] remove the beta desclaimer
 - [x] active weapon is highlighted in a corner icon, icon is tappable for quick attack
@@ -216,15 +217,16 @@ UX:
 New Quest – Bewitching Bookeeping:
 - [ ] victory screen should not mention a quest item
 - [x] variable quest rewards
+- [ ] surface level dungeon to push the encounter further away
 
 Items:
 - [ ] "magical" tag replaces the magical flag
 
 Monsters:
-- [ ] automaton
+- [x] automaton
 - [ ] giant locust
-- [ ] yarohu
-- [ ] Le Grand Salapou
+- [x] yarohu
+- [x] Le Grand Salapou
 
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()
@@ -263,6 +265,7 @@ Combat:
 - [ ] packaging for Ubuntu
 
 ## Ice Box: not yet scheduled for a release
+- [ ] bug: story screen does not capture keyboard input
 - [ ] non-walking movement and path finding (wading, swimming, phasing)
 - [ ] Deck.peek(): select the next card, but do not remove it from the deck
 - [ ] help screen with contextual content

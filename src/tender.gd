@@ -27,7 +27,7 @@ var hud = null
 var viewport = null
 var kills := {}
 var sentiments = null  # SentimentTable
-var chapter := 0
+var chapter := 0  # 1-indexed
 
 # End of game stats
 var last_turn = null

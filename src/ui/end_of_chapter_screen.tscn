@@ -1,16 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqxv2e1rn7uqx"]
+[gd_scene load_steps=4 format=3 uid="uid://dpgcrubb5v6p7"]
 
-[ext_resource type="Script" path="res://src/ui/victory_screen.gd" id="1_2odf0"]
-[ext_resource type="AudioStream" uid="uid://bukb5uav51053" path="res://assets/sounds/oh-yeah.mp3" id="2_a2cly"]
+[ext_resource type="Script" path="res://src/ui/end_of_chapter_screen.gd" id="1_sghvv"]
+[ext_resource type="AudioStream" uid="uid://bukb5uav51053" path="res://assets/sounds/oh-yeah.mp3" id="2_ehnbq"]
+[ext_resource type="AudioStream" uid="uid://blug0xhroe52t" path="res://src/ui/game-over.mp3" id="3_44dsr"]
 
-[node name="VictoryScreen" type="Control"]
+[node name="EndOfChapterScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_2odf0")
+script = ExtResource("1_sghvv")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 0
@@ -35,6 +36,7 @@ layout_mode = 2
 theme_type_variation = &"BigMarging"
 
 [node name="Title" type="Label" parent="VBoxContainer/MarginContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
@@ -56,18 +58,17 @@ size_flags_vertical = 3
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollView/MarginContainer2"]
 layout_mode = 2
 
-[node name="VictoryLabel" type="Label" parent="VBoxContainer/ScrollView/MarginContainer2/VBoxContainer"]
+[node name="OutcomeLabel" type="Label" parent="VBoxContainer/ScrollView/MarginContainer2/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 1
-text = "You have made it! You have faced numerous monsters , found the quest item, and came back alive!"
+text = "You have made it!"
 autowrap_mode = 2
 
-[node name="EndingLabel" type="Label" parent="VBoxContainer/ScrollView/MarginContainer2/VBoxContainer"]
+[node name="MoreOutcomeLabel" type="Label" parent="VBoxContainer/ScrollView/MarginContainer2/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 1
-text = "Retznac vanished into oblivion leaving a thin trail of mist behind. It reminds you of the marshes around the river Rhône at sunrise."
 autowrap_mode = 2
 
 [node name="GameSummaryLabel" type="Label" parent="VBoxContainer/ScrollView/MarginContainer2/VBoxContainer"]
@@ -81,11 +82,18 @@ size_flags_vertical = 1
 text = "Even though you are expected to celebrate a litte bit at this point, don't be too long at it because we still need you for the next chapter of this adventure."
 autowrap_mode = 2
 
-[node name="GameOverLabel" type="Label" parent="VBoxContainer/ScrollView/MarginContainer2/VBoxContainer"]
+[node name="ConqueredLabel" type="Label" parent="VBoxContainer/ScrollView/MarginContainer2/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 1
 text = "This time it's truly the end, at least until the next version of this game. Great job on emerging victor and thank you for playing!"
+autowrap_mode = 2
+
+[node name="TryAgainLabel" type="Label" parent="VBoxContainer/ScrollView/MarginContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+text = "Maybe you'll get luckier next time. Or perhaps you will slowdown and be more strategic. After all, Revengate is not Quake."
 autowrap_mode = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
@@ -109,8 +117,11 @@ size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Next..."
 
-[node name="VictorySound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_a2cly")
+[node name="WinSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_ehnbq")
+
+[node name="FailSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_44dsr")
 
 [connection signal="button_up" from="VBoxContainer/MarginContainer2/HBoxContainer/QuitButton" to="." method="show_main_screen"]
 [connection signal="button_up" from="VBoxContainer/MarginContainer2/HBoxContainer/NextButton" to="." method="_on_next_button_button_up"]
