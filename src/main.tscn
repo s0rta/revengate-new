@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=35 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://dscrig88vn02j" path="res://src/people/bar_patron.tscn" id="15_mexm3"]
 [ext_resource type="PackedScene" uid="uid://cl6ylq5q74oxy" path="res://src/ui/messages_pane.tscn" id="17_n3emp"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="17_ou76k"]
+[ext_resource type="Script" path="res://src/dungeons/trois_gaules_surface.gd" id="18_qey18"]
 [ext_resource type="PackedScene" uid="uid://cd6ngrhhgito0" path="res://src/ui/dialogue_pane.tscn" id="18_vtucs"]
 [ext_resource type="PackedScene" uid="uid://bvm0q1k13gmym" path="res://src/easy_traboule_deck_builder.tscn" id="19_2as3h"]
 [ext_resource type="PackedScene" uid="uid://dab6wiatrc0m6" path="res://src/hard_traboule_deck_builder.tscn" id="20_4ntfa"]
@@ -140,6 +141,13 @@ start_world_loc = Vector3i(13, 5, -1)
 dest_world_loc = Vector3i(13, 8, 0)
 
 [node name="DeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Traboule2" instance=ExtResource("20_4ntfa")]
+
+[node name="TroisGaulesSurface" type="Node" parent="BoardArea/GestureSurveyor/Viewport"]
+script = ExtResource("18_qey18")
+start_depth = 1
+base_spawn_budget = 10
+start_world_loc = Vector3i(12, 5, 0)
+dest_world_loc = Vector3i(10, 4, 0)
 
 [node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]
 

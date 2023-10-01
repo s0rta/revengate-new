@@ -19,7 +19,8 @@ class_name LyonSurface extends Dungeon
 
 const STARTING_CONN_TARGETS = {
 		Vector2i(5, 3): {"dungeon": "Traboule1"}, 
-		Vector2i(21, 7): {"dungeon": "Traboule2"}
+		Vector2i(21, 7): {"dungeon": "Traboule2"}, 
+		Vector2i(0, 15): {"dungeon": "TroisGaulesSurface"}
 	}
 
 func dungeon_for_loc(world_loc:Vector3i):

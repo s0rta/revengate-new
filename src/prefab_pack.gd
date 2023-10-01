@@ -19,10 +19,11 @@
 class_name PrefabPack extends RefCounted
 
 # {char -> fab_class}
-const _fab_chars := {"r": RiverFab}
+const _fab_chars := {"r": RiverFab, 
+					"p": PassageFab}
 
 class Prefab extends RefCounted:
-	var builder
+	var builder: BoardBuilder
 	var rect:Rect2i  # The bigger rect that the region is computed against
 	var region
 	var fab_rect:Rect2i  # The smaller rect that will be populated by this PreFab
@@ -133,6 +134,24 @@ class RiverFab extends Prefab:
 				else:
 					builder.board.erase_cell(0, coord)
 
+class PassageFab extends Prefab:
+	func _init(builder, rect, region):
+		super(builder, rect, region)
+		caption = "passage"
+
+	func fill():
+		var where = null
+		assert(region != Consts.REG_CENTER, 
+				"PassageFab only supports peripheral connectors for now.")
+		where = Rand.coord_on_rect_perim(builder.rect, region)
+			
+		builder.board.paint_cell(where, "gateway")
+		var new_world_loc = Vector3i(region.x, region.y, 0) + builder.board.world_loc
+		var rec = {"dungeon": "TroisGaulesSurface", 
+				"world_loc": new_world_loc, 
+				"depth": builder.board.depth + 1}
+		builder.board.set_cell_rec(where, "conn_target", rec)
+
 static func parse_fabstr(fabstr:String, builder:BoardBuilder, rect=null):
 	## Return a list of prefab instances for fabstr.
 	if fabstr.is_empty():
@@ -167,7 +186,7 @@ static func fabs_untouched_rect(fabs):
 		var frect = fab.get_untouched_rect()
 		if frect == null:
 			continue
-		if rect == null or rect.encolses(frect):
+		if rect == null or rect.encloses(frect):
 			rect = frect
 	return rect
 
