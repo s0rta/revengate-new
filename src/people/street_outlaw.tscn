@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://en0lj3ytrbjm"]
+
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_iqi4g"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_yw2a0"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="3_dnoql"]
+[ext_resource type="PackedScene" path="res://src/weapons/sword.tscn" id="4_ldw78"]
+[ext_resource type="Script" path="res://src/combat/core_skills.gd" id="5_07k66"]
+
+[node name="Outlaw" instance=ExtResource("1_iqi4g")]
+char = "@"
+caption = "Outlaw"
+color = Color(0.921569, 0.45098, 0.45098, 1)
+spawn_cost = 10.0
+health = 23
+strength = 42
+agility = 47
+intelligence = 45
+faction = 3
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.45098, 0.45098, 1)
+text = "@"
+
+[node name="Tracking" type="Node" parent="." index="7"]
+script = ExtResource("2_yw2a0")
+priority = 0.5
+
+[node name="SelfDefense" type="Node" parent="." index="8"]
+script = ExtResource("3_dnoql")
+priority = 0.9
+
+[node name="Sword" parent="." index="9" instance=ExtResource("4_ldw78")]
+visible = false
+range = 1
+is_equipped = true
+
+[node name="SkillLevels" type="Node" parent="." index="10"]
+script = ExtResource("5_07k66")
+fencing = 2

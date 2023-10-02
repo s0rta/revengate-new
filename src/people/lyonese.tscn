@@ -1,0 +1,88 @@
+[gd_scene load_steps=9 format=3 uid="uid://b4dfdfio2fsma"]
+
+[ext_resource type="Script" path="res://src/combat/actor.gd" id="1_uu5qk"]
+[ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_jguxk"]
+[ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="3_g67f5"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="4_qsfx3"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="5_hqpr7"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="6_yoeb7"]
+[ext_resource type="PackedScene" uid="uid://c8frbdj65suee" path="res://src/weapons/cane.tscn" id="7_1r2hn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_00etm"]
+size = Vector2(32, 32)
+
+[node name="Lyonese" type="Area2D"]
+visible = false
+script = ExtResource("1_uu5qk")
+char = "@"
+caption = "Lyonese"
+color = Color(0.733333, 0.615686, 0.819608, 1)
+conversation_file = "res://src/story/street_chatter.dialogue"
+conversation_sect = "intro"
+spawn_cost = 4.0
+health = 30
+strength = 45
+agility = 47
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -7.5
+offset_top = -13.0
+offset_right = 7.5
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+auto_translate = false
+theme_type_variation = &"AsciiGraphics"
+theme_override_colors/font_color = Color(0.670588, 0.670588, 0.670588, 1)
+text = "@"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("RectangleShape2D_00etm")
+
+[node name="MissSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_jguxk")
+
+[node name="DeathSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_g67f5")
+
+[node name="DamageLabel" type="Label" parent="."]
+visible = false
+offset_top = -9.0
+offset_right = 7.0
+offset_bottom = 14.0
+theme_override_colors/font_color = Color(0.784314, 0.227451, 0.172549, 1)
+theme_override_font_sizes/font_size = 21
+text = "?"
+
+[node name="HealingLabel" type="Label" parent="."]
+visible = false
+offset_left = -16.0
+offset_top = -27.0
+offset_right = -6.0
+offset_bottom = 3.0
+theme_override_colors/font_color = Color(0.25098, 0.780392, 0.172549, 1)
+theme_override_font_sizes/font_size = 21
+text = "?"
+
+[node name="Mem" type="Node" parent="."]
+script = ExtResource("4_qsfx3")
+
+[node name="SelfDefense" type="Node" parent="."]
+script = ExtResource("5_hqpr7")
+priority = 0.7
+
+[node name="Exploring" type="Node" parent="."]
+script = ExtResource("6_yoeb7")
+priority = 0.4
+
+[node name="Cane" parent="." instance=ExtResource("7_1r2hn")]
+is_equipped = true
+
+[connection signal="was_attacked" from="." to="." method="_learn_attack"]

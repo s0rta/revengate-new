@@ -1,0 +1,14 @@
+[remap]
+
+importer="dialogue_manager_compiler_6"
+type="Resource"
+uid="uid://ukt7wyt3brtx"
+path="res://.godot/imported/street_chatter.dialogue-c078d3b61eb020ca2b89118b4f139246.tres"
+
+[deps]
+
+source_file="res://src/story/street_chatter.dialogue"
+dest_files=["res://.godot/imported/street_chatter.dialogue-c078d3b61eb020ca2b89118b4f139246.tres"]
+
+[params]
+

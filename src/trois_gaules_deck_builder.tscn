@@ -1,0 +1,59 @@
+[gd_scene load_steps=13 format=3 uid="uid://bnbtimmwf4woe"]
+
+[ext_resource type="Script" path="res://src/deck_builder.gd" id="1_gqi5c"]
+[ext_resource type="Script" path="res://src/card_rule.gd" id="2_ktv76"]
+[ext_resource type="PackedScene" uid="uid://cpjfi7f2jww5a" path="res://src/people/salapou.tscn" id="3_ovo0l"]
+[ext_resource type="PackedScene" uid="uid://bnkru322lrpkq" path="res://src/people/accountant.tscn" id="4_nh7cg"]
+[ext_resource type="PackedScene" uid="uid://c8vcdsslc86r2" path="res://src/monsters/automaton.tscn" id="5_n0hai"]
+[ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="6_hqcnm"]
+[ext_resource type="PackedScene" uid="uid://bvbyl05ombdxa" path="res://src/monsters/yarohu.tscn" id="7_ltn2i"]
+[ext_resource type="PackedScene" uid="uid://en0lj3ytrbjm" path="res://src/people/street_outlaw.tscn" id="8_5vl31"]
+[ext_resource type="PackedScene" uid="uid://dc0rcsweguq63" path="res://src/people/petty_thief.tscn" id="9_15m00"]
+[ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="10_6v1jq"]
+[ext_resource type="PackedScene" uid="uid://dtmgeu15pl21o" path="res://src/people/tourist.tscn" id="10_xeej0"]
+[ext_resource type="PackedScene" uid="uid://b4dfdfio2fsma" path="res://src/people/lyonese.tscn" id="11_qwldy"]
+
+[node name="TroisGaulesBuilder" type="Node"]
+script = ExtResource("1_gqi5c")
+
+[node name="Quest2Board" type="Node" parent="."]
+script = ExtResource("2_ktv76")
+min_dungeon_occ = 1
+world_loc = Vector3i(10, 4, 0)
+
+[node name="Salapou" parent="Quest2Board" instance=ExtResource("3_ovo0l")]
+
+[node name="Accountant" parent="Quest2Board" instance=ExtResource("4_nh7cg")]
+spawn_cost = 1.0
+
+[node name="Automaton" parent="Quest2Board" instance=ExtResource("5_n0hai")]
+
+[node name="Automaton2" parent="Quest2Board" instance=ExtResource("5_n0hai")]
+
+[node name="SulantTiger" parent="Quest2Board" instance=ExtResource("6_hqcnm")]
+faction = 4
+
+[node name="Yarohu" parent="Quest2Board" instance=ExtResource("7_ltn2i")]
+
+[node name="Max1PerDungeon" type="Node" parent="."]
+script = ExtResource("2_ktv76")
+max_dungeon_occ = 1
+
+[node name="Outlaw" parent="Max1PerDungeon" instance=ExtResource("8_5vl31")]
+
+[node name="Infrequent" type="Node" parent="."]
+script = ExtResource("2_ktv76")
+max_board_occ = 1
+max_dungeon_occ = 2
+
+[node name="PettyThief" parent="Infrequent" instance=ExtResource("9_15m00")]
+
+[node name="Tourist" parent="Infrequent" instance=ExtResource("10_xeej0")]
+
+[node name="Frequent" type="Node" parent="."]
+script = ExtResource("2_ktv76")
+max_board_occ = 2
+
+[node name="Rat" parent="Frequent" instance=ExtResource("10_6v1jq")]
+
+[node name="Lyonese" parent="Frequent" instance=ExtResource("11_qwldy")]

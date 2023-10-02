@@ -1,0 +1,14 @@
+[remap]
+
+importer="dialogue_manager_compiler_6"
+type="Resource"
+uid="uid://bcmcodqu4mik1"
+path="res://.godot/imported/tourist_chatter.dialogue-fa9dff0e1176bcdddc437fbb78333514.tres"
+
+[deps]
+
+source_file="res://src/story/tourist_chatter.dialogue"
+dest_files=["res://.godot/imported/tourist_chatter.dialogue-fa9dff0e1176bcdddc437fbb78333514.tres"]
+
+[params]
+
