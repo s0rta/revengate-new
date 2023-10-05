@@ -169,9 +169,23 @@ func _loc_elev(world_loc):
 		return elev_to_start
 	else:
 		return elev_to_dest
+
+func _conn_rec_for_loc(new_loc:Vector3i, cur_loc:Vector3i, prev_loc, depth:int):
+	## Return a conn_target record for a new location
+	var far_depth:int
+	if new_loc == prev_loc:
+		far_depth = depth - 1
+	else:
+		far_depth = depth + 1
+	var near_terrain = _neighbor_connector_terrain(cur_loc, new_loc)
+	var rec = {"world_loc":new_loc, "depth":far_depth, "near_terrain":near_terrain}
+	var dungeon = dungeon_for_loc(new_loc)
+	if dungeon != null:
+		rec.dungeon = dungeon
+	return rec
 	
 func _neighbors_for_level(depth:int, world_loc:Vector3i, prev=null):
-	## Return an array of world locations a new level should be connect to
+	## Return an array of conn_target records that a new level should be connect to
 	var elev = _loc_elev(world_loc)
 	var locs = []
 	if _is_aligned(world_loc, start_world_loc) or _is_aligned(world_loc, dest_world_loc):
@@ -193,15 +207,7 @@ func _neighbors_for_level(depth:int, world_loc:Vector3i, prev=null):
 	var recs = []  # same record we attach to the cell: {"world_loc":..., "depth":...}
 	var far_depth = null
 	for loc in locs:
-		if loc == prev:
-			far_depth = depth - 1
-		else:
-			far_depth = depth + 1
-		var near_terrain = _neighbor_connector_terrain(world_loc, loc)
-		var rec = {"world_loc":loc, "depth":far_depth, "near_terrain":near_terrain}
-		var dungeon = dungeon_for_loc(loc)
-		if dungeon != null:
-			rec.dungeon = dungeon
+		var rec = _conn_rec_for_loc(loc, world_loc, prev, depth)
 		recs.append(rec)
 	return recs
 

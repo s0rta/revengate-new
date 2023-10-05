@@ -217,14 +217,13 @@ UX:
 New Quest – Bewitching Bookeeping:
 - [ ] victory screen should not mention a quest item
 - [x] variable quest rewards
-- [ ] surface level dungeon to push the encounter further away
+- [x] surface level dungeon to push the encounter further away
 
 Items:
 - [ ] "magical" tag replaces the magical flag
 
 Monsters:
 - [x] automaton
-- [ ] giant locust
 - [x] yarohu
 - [x] Le Grand Salapou
 
@@ -248,6 +247,7 @@ Monsters:
 - [ ] cherub
 - [ ] sentry scarab
 - [ ] nochort
+- [ ] giant locust
 
 Combat:
 - [ ] zapping spell

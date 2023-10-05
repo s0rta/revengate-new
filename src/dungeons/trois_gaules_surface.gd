@@ -22,3 +22,17 @@ class_name TroisGaulesSurface extends LyonSurface
 func dungeon_for_loc(world_loc:Vector3i):
 	## Return the name of the dungeon where `world_loc` belongs or null is it's part of the current dungeon
 	return null
+
+func _neighbors_for_level(depth:int, world_loc:Vector3i, prev=null):
+	# FIXME: put the logic for sideway gateways towards destination here rather than in prefabs
+	#        Traboules do most of that, we can factor of some of their implementation
+	var locs = []
+
+	if prev != null:
+		locs.append(prev)
+
+	var recs = []
+	for loc in locs:
+		var rec = _conn_rec_for_loc(loc, world_loc, prev, depth)
+		recs.append(rec)
+	return recs
