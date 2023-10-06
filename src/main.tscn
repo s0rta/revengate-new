@@ -432,6 +432,7 @@ script = ExtResource("33_yhbe0")
 [connection signal="picked_item" from="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" to="HUD" method="update_states_at"]
 [connection signal="state_changed" from="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" to="HUD" method="_on_hero_state_changed"]
 [connection signal="strategy_expired" from="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" to="HUD" method="refresh_cancel_button_vis"]
+[connection signal="was_attacked" from="BoardArea/GestureSurveyor/Viewport/LyonSurface/StartingBoard/Hero" to="HUD" method="_on_hero_was_attacked"]
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/LootButton" to="BoardArea/GestureSurveyor" method="start_loot"]
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/InventoryButton" to="BoardArea/GestureSurveyor" method="show_inventory"]

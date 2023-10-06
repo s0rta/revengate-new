@@ -167,3 +167,7 @@ func _on_quick_attack_button_button_up():
 
 func _on_hero_changed_weapons():
 	_set_quick_attack_icon()
+
+
+func _on_hero_was_attacked(attacker):
+	refresh_cancel_button_vis()
