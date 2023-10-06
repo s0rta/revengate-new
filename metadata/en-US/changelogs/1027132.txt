@@ -1,0 +1,14 @@
+New quest: Bewitching Bookkeeping
+Minor quest failures are no longer game-over conditions; you can continue, but you don't get any quest rewards.
+
+Bugfixes:
+- accented characters now use the same font as regular text
+
+Combat:
+- new monsters: automaton and yarohu
+- new weapons: cane and weighted cane
+
+UX:
+- new quick attack button (bottom right)
+- it's now easier to cancel a multi-turn travel command
+- dragging the map follows your finger at all zoom level

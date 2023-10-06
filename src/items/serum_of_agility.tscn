@@ -7,7 +7,7 @@
 [node name="SerumOfAgility" instance=ExtResource("1_2ify7")]
 script = ExtResource("2_sp2yn")
 char = "💉"
-caption = "serum of vitality"
+caption = "serum of agility"
 consumable = true
 spawn_cost = 30.0
 

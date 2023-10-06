@@ -19,8 +19,8 @@
 ## This script is autoloaded at `Consts`
 extends Node
 
-const VERSION := "0.9.4"
-const VERSION_CODE := 1027131
+const VERSION := "0.10.0"
+const VERSION_CODE := 1027132
 const DEBUG = true
 
 ## The kind of damage, mostly used to compute resistances. Can apply to healing as well.
@@ -102,7 +102,7 @@ const CONVO_RANGE = 2
 
 # Animations and VFX
 const FADE_DURATION := .15
-const FADE_MODULATE := Color(.7, .7, .7, 0.4)
+const FADE_MODULATE := Color(.7, .7, .7, 0.0)
 const VIS_MODULATE := Color.WHITE
 
 # Tags must be declared here before the can be added to items and actors. 
