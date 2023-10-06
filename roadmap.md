@@ -194,7 +194,7 @@ Combat:
 ## V0.10
 - [x] bug: Tracking does not reset foe after a change of global sentiments
 - [ ] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
-- [ ] bug: bar patron does not perform a party trick at the start of quest 2
+- [x] bug: bar patron does not perform a party trick at the start of quest 2
 - [x] Godot 4.1
 - [x] release on F-Droid
   - [x] add meta-data dir
@@ -215,7 +215,7 @@ UX:
 - [ ] better description on F-Droid
 
 New Quest – Bewitching Bookeeping:
-- [ ] victory screen should not mention a quest item
+- [x] victory screen should not mention a quest item
 - [x] variable quest rewards
 - [x] surface level dungeon to push the encounter further away
 
