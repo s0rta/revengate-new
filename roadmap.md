@@ -192,8 +192,8 @@ Combat:
 - [x] healing spell (monsters only)
 
 ## V0.10
+- [x] bug: cancel button for Travelling stays visible when path is blocked
 - [x] bug: Tracking does not reset foe after a change of global sentiments
-- [ ] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
 - [x] bug: bar patron does not perform a party trick at the start of quest 2
 - [x] Godot 4.1
 - [x] release on F-Droid
@@ -206,8 +206,6 @@ UX:
 - [x] bug: Android font renders accented chars differently than the same letter withtout accent
 - [x] bug: center on hero after victory is not working
 - [x] bug: crash when restarting after death
-- [ ] health bar than turns red when low on HPs
-- [ ] remove the beta desclaimer
 - [x] active weapon is highlighted in a corner icon, icon is tappable for quick attack
 - [x] message with the looted item(s)
 - [x] pan is normalized to be fairly constant no matter what the zoom level is
@@ -219,28 +217,27 @@ New Quest – Bewitching Bookeeping:
 - [x] variable quest rewards
 - [x] surface level dungeon to push the encounter further away
 
-Items:
-- [ ] "magical" tag replaces the magical flag
-
 Monsters:
 - [x] automaton
 - [x] yarohu
 - [x] Le Grand Salapou
 
 Combat:
-- [ ] TribalTerritorial uses perception rather than dist()
-- [ ] healing strategy is based on health-%, not absolute number of HPs
 - [x] fail if meeting happened
 
 ## v0.11
+- [ ] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
 - [ ] Monte Carlo simulator for DeckBuilders
 - [ ] async preload most shaders to speedup startup
 - [ ] instructions on how to install all the Android dev dependencies
 
 UX:
 - [ ] finalize gestures to access non-default actions, see the [gestures design notes](docs/gestures.md)
+- [ ] health bar than turns red when low on HPs
+- [ ] remove the beta desclaimer
 
 Items:
+- [ ] "magical" tag replaces the magical flag
 - [ ] potion of absinthe
 
 Monsters:
@@ -250,6 +247,9 @@ Monsters:
 - [ ] giant locust
 
 Combat:
+- [ ] quick attack button is easier to enable (ex: has_offended a target)
+- [ ] TribalTerritorial uses perception rather than dist()
+- [ ] healing strategy is based on health-%, not absolute number of HPs
 - [ ] zapping spell
 
 ## v0.12

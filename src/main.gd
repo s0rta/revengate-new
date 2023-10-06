@@ -236,12 +236,13 @@ func start_ch3():
 	var mem = Tender.hero.mem
 	# Nadège gives key and dress sword
 	%Nadege.conversation_sect = "intro_3"
-	if mem.recall("accountant_died"):
-		supply_item(%Nadege, "res://src/items/potion_of_regen.tscn", ["quest-reward", "gift"])
-		supply_item(%Nadege, "res://src/items/potion_of_healing.tscn", ["quest-reward", "gift"])
-		supply_item(%Nadege, "res://src/items/dynamite.tscn", ["quest-reward", "gift"])
-	elif mem.recall("accountant_yeilded"):
-		supply_item(%Nadege, "res://src/items/serum_of_agility.tscn", ["quest-reward", "gift"])
+	if not mem.recall("accountant_met_salapou"):
+		if mem.recall("accountant_died"):
+			supply_item(%Nadege, "res://src/items/potion_of_regen.tscn", ["quest-reward", "gift"])
+			supply_item(%Nadege, "res://src/items/potion_of_healing.tscn", ["quest-reward", "gift"])
+			supply_item(%Nadege, "res://src/items/dynamite.tscn", ["quest-reward", "gift"])
+		elif mem.recall("accountant_yeilded"):
+			supply_item(%Nadege, "res://src/items/serum_of_agility.tscn", ["quest-reward", "gift"])
 	supply_item(%Nadege, "res://src/items/key.tscn", ["key-red", "gift"])
 	supply_item(%Nadege, "res://src/weapons/dress_sword.tscn", ["gift"])
 	
@@ -261,15 +262,14 @@ func start_ch3():
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-
-	_compile_hero_stats()	
-	%EndOfChapterScreen.popup(quests[Tender.chapter], true, true)
+#	$SentimentTable.set_sentiment(Tender.hero, Consts.Factions.BEASTS, 1)
+	print("Hero has booze?")
+	print(Tender.hero.get_items(["booze"]))
 
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
 
-#	$SentimentTable.set_sentiment(Tender.hero, Consts.Factions.BEASTS, 1)
 	$SentimentTable.ddump()
 
 	for actor in get_board().get_actors():
