@@ -205,7 +205,7 @@ Combat:
 UX:
 - [x] bug: Android font renders accented chars differently than the same letter withtout accent
 - [x] bug: center on hero after victory is not working
-- [ ] bug: crash when restarting after death
+- [x] bug: crash when restarting after death
 - [ ] health bar than turns red when low on HPs
 - [ ] remove the beta desclaimer
 - [x] active weapon is highlighted in a corner icon, icon is tappable for quick attack
