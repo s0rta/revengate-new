@@ -212,7 +212,7 @@ UX:
 - [x] message with the looted item(s)
 - [x] pan is normalized to be fairly constant no matter what the zoom level is
 - [x] multi-turn Travel is more obvious to cancel with message and bigger abort button
-- [ ] better description on F-Droid
+- [x] better description on F-Droid
 
 New Quest – Bewitching Bookeeping:
 - [x] victory screen should not mention a quest item
@@ -230,7 +230,7 @@ Monsters:
 Combat:
 - [ ] TribalTerritorial uses perception rather than dist()
 - [ ] healing strategy is based on health-%, not absolute number of HPs
-- [ ] fail if meeting happened?
+- [x] fail if meeting happened
 
 ## v0.11
 - [ ] Monte Carlo simulator for DeckBuilders
