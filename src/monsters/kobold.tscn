@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cx7utj7hd3ne"]
+[gd_scene load_steps=6 format=3 uid="uid://cx7utj7hd3ne"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_khagu"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_l03ql"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="3_8hon4"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="4_v6p64"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="5_odghx"]
 
 [node name="Kobold" instance=ExtResource("1_khagu")]
 char = "k"
@@ -30,3 +31,8 @@ script = ExtResource("3_8hon4")
 
 [node name="SelfDefense" type="Node" parent="." index="9"]
 script = ExtResource("4_v6p64")
+priority = 0.8
+
+[node name="Exploring" type="Node" parent="." index="10"]
+script = ExtResource("5_odghx")
+priority = 0.5

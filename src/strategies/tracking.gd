@@ -37,7 +37,7 @@ func select_foe(actor, index:RevBoard.BoardIndex):
 		return null
 
 func refresh(turn):
-	if foe != null:
+	if foe != null and me.is_foe(foe):
 		if me.perceives(foe): 
 			foe_last_seen = turn
 			return
