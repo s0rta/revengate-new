@@ -227,18 +227,28 @@ Combat:
 
 ## v0.11
 - [ ] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
+- [ ] upgrade the DialogueManager plug-in
 - [ ] Monte Carlo simulator for DeckBuilders
 - [ ] async preload most shaders to speedup startup
 - [ ] instructions on how to install all the Android dev dependencies
+- [ ] church prefab
 
 UX:
+- [ ] single-tap on distant actor pops a context action menu (ex.: get closer, inspect, ...)
 - [ ] finalize gestures to access non-default actions, see the [gestures design notes](docs/gestures.md)
 - [ ] health bar than turns red when low on HPs
 - [ ] remove the beta desclaimer
+- [ ] QuickAttack available on friendly actors that you recall attacking previously
+- [ ] flash message on why a strategy got cancelled
 
 Items:
+- [ ] items stats and long description is available from the inventory screen
 - [ ] "magical" tag replaces the magical flag
-- [ ] potion of absinthe
+- [ ] top hat (🎩)
+- [ ] carrot (🥕)
+
+Weapons:
+- [ ] axe (𝇤)
 
 Monsters:
 - [ ] cherub
@@ -282,6 +292,7 @@ Combat:
 - [ ] F-Droid [Reproducible Builds](https://f-droid.org/docs/Reproducible_Builds/)
 - [ ] document the build process
 - [ ] bug: two finger pan is really choppy when the fingers are too close to one another
+- [ ] potion of absinthe
 
 Performance:
 - [ ] cache stats modifiers for the whole turn (with inval on mods changing events)
