@@ -1,8 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://3x0k7pngq4l3"]
+[gd_scene load_steps=2 format=3 uid="uid://3x0k7pngq4l3"]
 
 [ext_resource type="Script" path="res://src/ui/start_screen.gd" id="1_krfjq"]
-[ext_resource type="Theme" uid="uid://3araln1iald0" path="res://src/ui/theme.tres" id="2_ct6s0"]
-[ext_resource type="Script" path="res://src/tabulator.gd" id="3_jig7u"]
 
 [node name="StartScreen" type="Node"]
 script = ExtResource("1_krfjq")
@@ -85,41 +83,6 @@ text = "version "
 unique_name_in_owner = true
 layout_mode = 2
 text = "???"
-
-[node name="MarginContainer" type="MarginContainer" parent="."]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -341.5
-offset_right = 341.5
-offset_bottom = 86.0
-grow_horizontal = 2
-theme = ExtResource("2_ct6s0")
-theme_type_variation = &"BigMarging"
-
-[node name="Title" type="Label" parent="MarginContainer"]
-visible = false
-layout_mode = 2
-theme_type_variation = &"TitleLabel"
-text = "Welcome to Revengate!"
-
-[node name="DisclaimerDia" type="AcceptDialog" parent="."]
-title = ""
-size = Vector2i(1024, 284)
-borderless = true
-always_on_top = true
-dialog_text = "Hi, I'm Yannick!
-
-This is an early release of a game that I'm developing with a few friends.
-
-You will probably encounter a few bugs and you won't see the level of polish of big studio games. 
-I'm glad that you are taking the time to try my game and I hope that you will have fun playing.
-
-Enjoy!
-"
-
-[node name="Tabulator" type="Node" parent="."]
-script = ExtResource("3_jig7u")
 
 [connection signal="button_up" from="NewGameButton" to="." method="start_new_game"]
 [connection signal="button_up" from="HBoxContainer2/CreditsButton" to="." method="_on_credits_button_pressed"]

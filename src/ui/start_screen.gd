@@ -22,9 +22,6 @@ func _ready():
 	vers_lbl.text = Consts.VERSION
 	if Utils.is_debug():
 		vers_lbl.text += " debug"
-	if not $Tabulator.getv("early-stage-disclaimer"):
-		$DisclaimerDia.popup_centered()
-		$Tabulator.setv("early-stage-disclaimer", true)
 	Tender.reset()
 
 func start_new_game():
