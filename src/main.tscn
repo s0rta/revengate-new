@@ -113,6 +113,7 @@ range = 1
 unique_name_in_owner = true
 visible = true
 position = Vector2(112, 272)
+caption = "Robert"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "ghosts"
 
@@ -120,6 +121,7 @@ conversation_sect = "ghosts"
 unique_name_in_owner = true
 visible = true
 position = Vector2(112, 208)
+caption = "Mathieu"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "privacy"
 

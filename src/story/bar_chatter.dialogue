@@ -1,89 +1,89 @@
 ~ ghosts
-Bar Patron: The cloud patterns of the absinthe when it louches can tell whole stories.
+{{speaker_name}}: The cloud patterns of the absinthe when it louches can tell whole stories.
 
-Bar Patron: Back when François the First changed his mind about making Lyon the capital of Franconia, half a dozen young ladies jumped into the river Saône to drown in sorrow.
+{{speaker_name}}: Back when François the First changed his mind about making Lyon the capital of Franconia, half a dozen young ladies jumped into the river Saône to drown in sorrow.
 
-Bar Patron: They say you can still hear them wail inside the wells of the Saint Jean neighbouhoods. 
+{{speaker_name}}: They say you can still hear them wail inside the wells of the Saint Jean neighbouhoods. 
 
-Bar Patron: I think this story is a lot of rubbish. The ghosts over there 've got to be Roman for sure.
+{{speaker_name}}: I think this story is a lot of rubbish. The ghosts over there 've got to be Roman for sure.
 => END
 
 ~ automata
-Bar Patron: We've made amazing progress with automation since we harnessed steam, but you still can't automate the making of a good cocktail. 
+{{speaker_name}}: We've made amazing progress with automation since we harnessed steam, but you still can't automate the making of a good cocktail. 
 
-Bar Patron: This is a task that requires knowing about the variations in your ingredients that a machine just cannot emulate. Some people seem to think that automata are magically imbued with inteligence.
+{{speaker_name}}: This is a task that requires knowing about the variations in your ingredients that a machine just cannot emulate. Some people seem to think that automata are magically imbued with inteligence.
 
-Bar Patron: I think this belief is a lot of rubbish! Automata are not phantruch. Jacques Vaucanson designed the first automata and we know how much of a fan he was of perforated cylinders. I bet they are still using those cylinders to carry their instructions.
+{{speaker_name}}: I think this belief is a lot of rubbish! Automata are not phantruch. Jacques Vaucanson designed the first automata and we know how much of a fan he was of perforated cylinders. I bet they are still using those cylinders to carry their instructions.
 do checkpoint("secret_societies")
 => END
 
 ~ secret_societies
-Bar Patron: Secret societies in Lyon? I hope you realize the irony of asking a question like that in a place called Café Caché that is hidden in a back alley.
+{{speaker_name}}: Secret societies in Lyon? I hope you realize the irony of asking a question like that in a place called Café Caché that is hidden in a back alley.
 
-Bar Patron: The city census puts their official number at 700. I think this view is a lot of rubbish.
+{{speaker_name}}: The city census puts their official number at 700. I think this view is a lot of rubbish.
 
-Bar Patron: That would be counting knight templar orders and each massonic temple separately. What's so secret about field armies who have marched in the open on foreign land?
+{{speaker_name}}: That would be counting knight templar orders and each massonic temple separately. What's so secret about field armies who have marched in the open on foreign land?
 => END
 
 ~ bloody_mary
-Bar Patron: Have your heard about this latest fad, Bloody Mary?
+{{speaker_name}}: Have your heard about this latest fad, Bloody Mary?
 
-Bar Patron: Teens these days believe they can summon ghosts with candles and a mirror while reading cheesy poetry.
+{{speaker_name}}: Teens these days believe they can summon ghosts with candles and a mirror while reading cheesy poetry.
 
-Bar Patron: I think this story is a lot of rubbish. Ghosts are repulsed by silver, so why would they appear in a mirror of all places!?
+{{speaker_name}}: I think this story is a lot of rubbish. Ghosts are repulsed by silver, so why would they appear in a mirror of all places!?
 do checkpoint("vampire_of_nantes")
 => END
 
 ~ vampire_of_nantes
-Bar Patron: My grand pop uses to tell us the story of the Vampire of Nantes.
+{{speaker_name}}: My grand pop uses to tell us the story of the Vampire of Nantes.
 
-Bar Patron: Back when he was a lad, maybe around 430AP, they found over a dozen dead travellers in the woods around Nantes. That happend over the course of two or three years.
+{{speaker_name}}: Back when he was a lad, maybe around 430AP, they found over a dozen dead travellers in the woods around Nantes. That happend over the course of two or three years.
 
-Bar Patron: The bodies were always white as undyed silk, very stiff, and hardly decomposed. Completely drained of their blood, that's what Grand Pop said. He even stumpled upon one himself while going fishing! At least that's what he said...
+{{speaker_name}}: The bodies were always white as undyed silk, very stiff, and hardly decomposed. Completely drained of their blood, that's what Grand Pop said. He even stumpled upon one himself while going fishing! At least that's what he said...
 
-Bar Patron: I think this story is a lot of rubbish. Vampires can't cross open water, so why would one hang around a city full of rivers like Nantes?
+{{speaker_name}}: I think this story is a lot of rubbish. Vampires can't cross open water, so why would one hang around a city full of rivers like Nantes?
 => END
 
 ~ privacy
-Bar Patron: You can bring me another Cognac if you can stomach the outrageous price they sell the stuff for these days.
+{{speaker_name}}: You can bring me another Cognac if you can stomach the outrageous price they sell the stuff for these days.
 
-Bar Patron: Otherwise, I will mind my own business and I would appreciate if you did the same.
+{{speaker_name}}: Otherwise, I will mind my own business and I would appreciate if you did the same.
 => END
 
 ~ party_magic
-Bar Patron: If you ask a priest, he will tell you that magic dissapeard during the great plague.
+{{speaker_name}}: If you ask a priest, he will tell you that magic dissapeard during the great plague.
 
 if not hero_has_item(["booze"])
-	Bar Patron: They think they know everything.
+	{{speaker_name}}: They think they know everything.
 	do checkpoint("privacy")
 	=> END
 
-Bar Patron: I'm not sure why they say that when it's obviously not true. I even know a few tricks myself. I'll show you if you bring me another drink.
+{{speaker_name}}: I'm not sure why they say that when it's obviously not true. I even know a few tricks myself. I'll show you if you bring me another drink.
 - Sure! 
 	do hero_give_item(["booze"])
 	do show_message("You notice the ashtray floating a few centimeters above the table.")
-	Bar Patron: Pretty cool, right?
+	{{speaker_name}}: Pretty cool, right?
 - Err, no. Look's like you've had enough already.
-	Bar Patron: Fine!
+	{{speaker_name}}: Fine!
 do checkpoint("privacy")
 => END
 
 ~ resistances
-Bar Patron: Nom d'un rat! Is that blood on your sleeve from annoying our friend the barber as much as you are annoyging me right now?
+{{speaker_name}}: Nom d'un rat! Is that blood on your sleeve from annoying our friend the barber as much as you are annoyging me right now?
 
 if not hero_has_item(["booze"])
-	Bar Patron: Go find a fresh shirt, this is a café, not a butcher shop.
+	{{speaker_name}}: Go find a fresh shirt, this is a café, not a butcher shop.
 	do checkpoint("privacy")
 	=> END
 	
-Bar Patron: Anyway, if you bring me another drink I can tell you a few tricks about traversing in the traboules without looking like you wasted the last bottle of Pinot in town by spilling it on yourself.
+{{speaker_name}}: Anyway, if you bring me another drink I can tell you a few tricks about traversing in the traboules without looking like you wasted the last bottle of Pinot in town by spilling it on yourself.
 - Sure! 
 	do hero_give_item(["booze"])
-	Bar Patron: That's kind of you. 
-	Bar Patron: Some of the fauna down there is covered by a hard shell, think sahwakoons and desert centipedes. It's really hard to cut through those, so it's best to poke or smash this kind of beasts.
-	Bar Patron: You know you are supposed to poke with a rapier rather than slicing, right?
+	{{speaker_name}}: That's kind of you. 
+	{{speaker_name}}: Some of the fauna down there is covered by a hard shell, think sahwakoons and desert centipedes. It's really hard to cut through those, so it's best to poke or smash this kind of beasts.
+	{{speaker_name}}: You know you are supposed to poke with a rapier rather than slicing, right?
 - Err, no. Look's like you've had enough already.
-	Bar Patron: Fine!
+	{{speaker_name}}: Fine!
 
 do checkpoint("privacy")
 => END

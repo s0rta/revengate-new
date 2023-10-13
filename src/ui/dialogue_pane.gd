@@ -25,14 +25,15 @@ signal new_sentiment(faction_a, faction_b, value:int)
 
 var dia_res: DialogueResource
 var temp_game_states := []
-var is_waiting_for_input := false  # FIXME: useless? 
 var speaker = null
+var speaker_name: String:
+	get:
+		return speaker.caption
 
 var dialogue_line: DialogueLine:
 	get:
 		return dialogue_line
 	set(next_dialogue_line):
-		is_waiting_for_input = false
 		if not next_dialogue_line:
 			close()
 			return
@@ -63,9 +64,6 @@ var dialogue_line: DialogueLine:
 		if not dialogue_line.text.is_empty():
 			%DialogueLabel.type_out()
 			await %DialogueLabel.finished_typing
-		
-		# Wait for input
-		is_waiting_for_input = true
 
 func _unhandled_input(event):
 	# Consume all keyboard input while the balloon is visible
@@ -82,7 +80,6 @@ func _is_left_released(event):
 func start(dia_res_: DialogueResource, title: String, speaker_=null, extra_game_states: Array = []):
 	## Start a dialogue sequence
 	temp_game_states = extra_game_states + [self]
-	is_waiting_for_input = false
 	dia_res = dia_res_
 	speaker = speaker_
 	# TODO: blank out everything before showing
@@ -111,7 +108,6 @@ func _on_response_gui_input(event, option_idx):
 		next(dialogue_line.responses[option_idx].next_id)
 
 func _on_background_gui_input(event):
-#	Utils.ddump_event(event, self, "_on_background_gui_input")
 	# Consume all input while the balloon is visible
 	if visible:
 		accept_event()
@@ -119,10 +115,7 @@ func _on_background_gui_input(event):
 			advance()
 
 func finish_typing():
-	# TODO: also call the remaining in-line mutations.
-	%DialogueLabel.visible_ratio = 1.0
-	%DialogueLabel.has_finished = true
-	%DialogueLabel.is_typing = false
+	%DialogueLabel.skip_typing()
 	%DialogueLabel.emit_signal("finished_typing")
 	
 func has_options():
