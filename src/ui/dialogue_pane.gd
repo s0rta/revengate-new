@@ -25,7 +25,7 @@ signal new_sentiment(faction_a, faction_b, value:int)
 
 var dia_res: DialogueResource
 var temp_game_states := []
-var is_waiting_for_input := false
+var is_waiting_for_input := false  # FIXME: useless? 
 var speaker = null
 
 var dialogue_line: DialogueLine:
@@ -39,11 +39,10 @@ var dialogue_line: DialogueLine:
 		
 		# Remove any previous responses
 		for node in %ResponsesBox.get_children():
+			node.hide()
 			node.queue_free()
 		
 		dialogue_line = next_dialogue_line
-		
-#		%SpeakerLabel.visible = not dialogue_line.character.is_empty()
 		%SpeakerLabel.text = dialogue_line.character
 		%DialogueLabel.dialogue_line = dialogue_line
 
@@ -68,11 +67,7 @@ var dialogue_line: DialogueLine:
 		# Wait for input
 		is_waiting_for_input = true
 
-#func _gui_input(event):
-#	Utils.ddump_event(event, self, "_gui_input")
-
 func _unhandled_input(event):
-#	Utils.ddump_event(event, self, "_unhandled_input")
 	# Consume all keyboard input while the balloon is visible
 	# TODO: handle ui_cancel and ui_accept keys
 	if visible and event is InputEventKey:

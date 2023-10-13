@@ -227,7 +227,7 @@ Combat:
 
 ## v0.11
 - [ ] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
-- [ ] upgrade the DialogueManager plug-in
+- [x] upgrade the DialogueManager plug-in
 - [ ] Monte Carlo simulator for DeckBuilders
 - [ ] async preload most shaders to speedup startup
 - [ ] instructions on how to install all the Android dev dependencies
@@ -265,6 +265,7 @@ Combat:
 ## v0.12
 - [ ] web export
   - [ ] better keyboard support (ex.: ESC cancels actions)
+- [ ] random interlude stories
   
 ## v1.0
 - [ ] saved games

@@ -1,6 +1,6 @@
 [remap]
 
-importer="dialogue_manager_compiler_6"
+importer="dialogue_manager_compiler_9"
 type="Resource"
 uid="uid://b5gf31jh48tu4"
 path="res://.godot/imported/gleugt.dialogue-814aa7b5c59fcbd8cc83fa2720068398.tres"
@@ -12,3 +12,4 @@ dest_files=["res://.godot/imported/gleugt.dialogue-814aa7b5c59fcbd8cc83fa2720068
 
 [params]
 
+defaults=true

@@ -1,6 +1,6 @@
 [remap]
 
-importer="dialogue_manager_compiler_6"
+importer="dialogue_manager_compiler_9"
 type="Resource"
 uid="uid://cb55skfxsfapp"
 path="res://.godot/imported/narrations.dialogue-60aeb3cb7ab02d2eea39a25805491f03.tres"
@@ -12,3 +12,4 @@ dest_files=["res://.godot/imported/narrations.dialogue-60aeb3cb7ab02d2eea39a2580
 
 [params]
 
+defaults=true

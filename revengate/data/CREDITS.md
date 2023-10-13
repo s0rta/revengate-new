@@ -11,6 +11,8 @@ Additionnal coding:
 - Chris J. Wallace
 - Rodrigo Espinosa de los Monteros
 
+DialogueManager plugin: MIT license by Nathan Hoad
+
 2D tiles: CC0, released by the Craw Stone Soup team
 https://opengameart.org/content/dungeon-crawl-32x32-tiles
 https://github.com/crawl/tiles/tree/master/releases
