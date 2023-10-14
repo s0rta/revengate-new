@@ -240,7 +240,7 @@ UX:
 - [ ] health bar than turns red when low on HPs
 - [x] remove the beta desclaimer
 - [x] QuickAttack available on friendly actors that you recall attacking previously
-- [ ] flash message on why a strategy got cancelled
+- [x] flash message on why a strategy got cancelled
 
 Items:
 - [ ] items stats and long description is available from the inventory screen

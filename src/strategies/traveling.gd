@@ -35,13 +35,18 @@ func _init(dest_: Vector2i, path_=null, actor=null, priority_=null, ttl_=null):
 	# We have to get a new path at the start of each turn since things might have move around 
 	# quite a bit.
 	me.turn_done.connect(_expire_path)
-	me.was_attacked.connect(_invalidate, CONNECT_ONE_SHOT)
+	me.was_attacked.connect(_on_being_attacked, CONNECT_ONE_SHOT)
 
 func _invalidate(_arg):
 	unreachable = true
 	if me:
 		me.emit_signal("strategy_expired")
-			
+
+func _on_being_attacked(_arg):
+	if is_valid() and me == Tender.hero:
+		me.add_message("Stop traveling: under attack!", Consts.MessageLevels.CRITICAL)
+	_invalidate(_arg)
+
 func _set_path(path_):
 	if path_:
 		assert(path_[-1] == dest, "Path must lead to the destination")
