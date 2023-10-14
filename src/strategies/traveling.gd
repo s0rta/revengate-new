@@ -43,8 +43,8 @@ func _invalidate(_arg):
 		me.emit_signal("strategy_expired")
 
 func _on_being_attacked(_arg):
-	if is_valid() and me == Tender.hero:
-		me.add_message("Stop traveling: under attack!", Consts.MessageLevels.CRITICAL)
+	if is_valid():
+		add_hero_message("Stopped traveling: under attack!", Consts.MessageLevels.CRITICAL)
 	_invalidate(_arg)
 
 func _set_path(path_):
@@ -60,7 +60,10 @@ func _make_path():
 	assert(board, "Traveling only works on scenes with a board")
 	var path_ = board.path_perceived(me.get_cell_coord(), dest, me)
 	if path_ == null:
-		unreachable = true
+		if not arrived and not unreachable:
+			add_hero_message("Stopped traveling: destination unreachable.", 
+							Consts.MessageLevels.CRITICAL)
+		_invalidate(null)
 	return path_
 
 func _expire_path():

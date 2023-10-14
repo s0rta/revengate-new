@@ -101,6 +101,13 @@ func find_hero():
 		node = node.get_parent()
 	return hero
 
+func add_hero_message(text:String, 
+				level:Consts.MessageLevels=Consts.MessageLevels.INFO, 
+				tags:Array[String]=[]):
+	## Add a message if `me` is the hero.
+	if me == Tender.hero:
+		me.add_message(text, level, tags)
+
 func _path_next(path):
 	## Return the next place to move along a path
 	var here = me.get_cell_coord()
