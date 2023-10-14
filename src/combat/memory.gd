@@ -102,8 +102,8 @@ func recall_all(event, current_turn=null):
 	## Return all the known facts about `event` in reverse chronological order
 	## `current_turn`: if provided, only facts that are still relevant are considered.
 	var facts = []
-	for i in range(-1, -(_facts.size()+1)):
-		var fact = _facts[i]
+	for i in _facts.size():
+		var fact = _facts[-i-1]
 		if fact.event == event:
 			if current_turn:
 				if is_relevant(fact, current_turn):

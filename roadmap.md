@@ -238,7 +238,7 @@ UX:
 - [ ] finalize gestures to access non-default actions, see the [gestures design notes](docs/gestures.md)
 - [ ] health bar than turns red when low on HPs
 - [x] remove the beta desclaimer
-- [ ] QuickAttack available on friendly actors that you recall attacking previously
+- [x] QuickAttack available on friendly actors that you recall attacking previously
 - [ ] flash message on why a strategy got cancelled
 
 Items:

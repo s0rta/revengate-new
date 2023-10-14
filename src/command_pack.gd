@@ -82,14 +82,24 @@ class QuickAttack extends Command:
 		caption = "QuickAttack"
 		super(index_)
 
+	func _get_prior_victims():
+		## Return an array of actors we've attacked previously
+		var facts = Tender.hero.mem.recall_all("attacked", Tender.hero.current_turn)
+		var victims = {}
+		for fact in facts:
+			if not victims.has(fact.foe):
+				victims[fact.foe] = true
+		return victims.keys()
+
 	func is_valid_for_hero_at(coord:Vector2i):
 		var board = Tender.hero.get_board()
 		var hero = Tender.hero as Actor
 		attack_range = hero.get_max_weapon_range()
 		var actors = index.get_actors_in_sight(hero.get_cell_coord(), attack_range)
 		actors.shuffle()
+		var victims = _get_prior_victims()
 		for actor in actors:
-			if hero.is_foe(actor):
+			if hero.is_foe(actor) or actor in victims:
 				nearby_foe = actor
 				return true
 		return false
