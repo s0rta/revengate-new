@@ -17,6 +17,8 @@
 
 extends Node
 
+const CRIT_HEALTH = 20  # as a percent of health_full
+
 var hero: Actor
 # TODO: use unique %name to simplify some of those
 @onready var loot_button = find_child("LootButton")
@@ -59,6 +61,14 @@ func _set_quick_attack_icon():
 func refresh_hps(_new_health=null):
 	# TODO: bold animation when dead
 	hplabel.text = "%2d" % hero.health
+	var health_pct = 100.0 * hero.health / Tender.hero.health_full
+	%HealthBar.value = health_pct
+	if health_pct <= CRIT_HEALTH:
+		%HealthBar.modulate = Color.RED
+	elif health_pct > 100:
+		%HealthBar.modulate = Color.GREEN_YELLOW
+	else:
+		%HealthBar.modulate = Color.WHITE
 
 func _refresh_lbar_commands(hero_coord, index):
 	## Remove commands that are no longer valid from the lbar and add the newly valid ones.

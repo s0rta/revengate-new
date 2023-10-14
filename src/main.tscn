@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=38 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -35,6 +35,15 @@
 [ext_resource type="PackedScene" uid="uid://dpgcrubb5v6p7" path="res://src/ui/end_of_chapter_screen.tscn" id="30_5u5si"]
 [ext_resource type="Script" path="res://src/combat/sentiment_table.gd" id="33_yhbe0"]
 [ext_resource type="Script" path="res://src/command_pack.gd" id="41_hgs5k"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_q8b5c"]
+color = Color(0.5, 0.5, 0.5, 0.5)
+thickness = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iqgbw"]
+bg_color = Color(0.960784, 0.843137, 0.505882, 1)
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_58o83")
@@ -315,14 +324,28 @@ size_flags_horizontal = 4
 focus_mode = 0
 text = "📖"
 
-[node name="StatusBar" type="HBoxContainer" parent="HUD/TopRightMargin/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/TopRightMargin/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="HealthBar" type="ProgressBar" parent="HUD/TopRightMargin/VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/outline_size = 2
+theme_override_styles/background = SubResource("StyleBoxLine_q8b5c")
+theme_override_styles/fill = SubResource("StyleBoxFlat_iqgbw")
+value = 30.0
+rounded = true
+show_percentage = false
+
+[node name="StatusBar" type="HBoxContainer" parent="HUD/TopRightMargin/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HealthLabel" type="Label" parent="HUD/TopRightMargin/VBoxContainer/StatusBar"]
+[node name="HealthLabel" type="Label" parent="HUD/TopRightMargin/VBoxContainer/VBoxContainer/StatusBar"]
 layout_mode = 2
 text = "Health: "
 
-[node name="HPLabel" type="Label" parent="HUD/TopRightMargin/VBoxContainer/StatusBar"]
+[node name="HPLabel" type="Label" parent="HUD/TopRightMargin/VBoxContainer/VBoxContainer/StatusBar"]
 layout_mode = 2
 text = "???"
 
