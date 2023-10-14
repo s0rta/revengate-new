@@ -227,6 +227,7 @@ Combat:
 
 ## v0.11
 - [ ] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
+- [x] F6 on Main scene does not show the story screen
 - [x] upgrade the DialogueManager plug-in
 - [ ] Monte Carlo simulator for DeckBuilders
 - [ ] async preload most shaders to speedup startup
@@ -257,7 +258,7 @@ Monsters:
 - [ ] giant locust
 
 Combat:
-- [ ] quick attack button is easier to enable (ex: has_offended a target)
+- [x] quick attack button is easier to enable (ex: has_offended a target)
 - [ ] TribalTerritorial uses perception rather than dist()
 - [ ] healing strategy is based on health-%, not absolute number of HPs
 - [ ] zapping spell
@@ -294,6 +295,8 @@ Combat:
 - [ ] document the build process
 - [ ] bug: two finger pan is really choppy when the fingers are too close to one another
 - [ ] potion of absinthe
+- [ ] Benoît roams after the meeting and after yielding
+- [ ] Salapou can steal your items
 
 Performance:
 - [ ] cache stats modifiers for the whole turn (with inval on mods changing events)
@@ -302,3 +305,6 @@ Performance:
 Simulator:
 - [ ] simulator auto-starts an ExtraStage if the starting board is not populated
 - [ ] simulator repositions actors that are at invalid coords (out of board or inside walls)
+
+Magic:
+- [ ] spells check the Aether level of the location

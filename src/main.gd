@@ -62,9 +62,6 @@ func _ready():
 							+ "It reminds you of the marshes around the river Rhône at sunrise."), 
 						start_ch3)]
 
-	# FIXME: skip the story in stand-alone mode
-	%StoryScreen.show_story(quests[0].title, quests[0].intro_path)
-	
 	Tender.reset(hero, hud, %Viewport, $SentimentTable)	
 	_discover_start_board()
 	hud.set_hero(hero)
@@ -72,6 +69,8 @@ func _ready():
 	hero.died.connect(_on_hero_died)
 	board_changed.connect($TurnQueue.invalidate_turn)
 	board_changed.connect(center_on_hero)
+	if Tender.full_game:
+		%StoryScreen.show_story(quests[0].title, quests[0].intro_path)
 	await $TurnQueue.run()	
 	
 func _input(_event):

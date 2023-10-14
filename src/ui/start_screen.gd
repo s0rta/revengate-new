@@ -23,6 +23,7 @@ func _ready():
 	if Utils.is_debug():
 		vers_lbl.text += " debug"
 	Tender.reset()
+	Tender.full_game = true
 
 func start_new_game():
 	get_tree().change_scene_to_file("res://src/main.tscn")

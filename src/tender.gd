@@ -22,6 +22,7 @@
 ## were used to keep the steam engine running properly, like coal, water, shovels, and tools.
 extends Node
 
+var full_game := false  # are we running the whole game or just an individual scene?
 var hero = null
 var hud = null
 var viewport = null
