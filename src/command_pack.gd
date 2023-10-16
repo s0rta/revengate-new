@@ -193,7 +193,7 @@ class Inspect extends Command:
 
 class TravelTo extends Command:
 	func _init(index_=null):
-		is_action = false
+		is_action = true
 		caption = "Travel To"
 		super(index_)
 
@@ -202,6 +202,7 @@ class TravelTo extends Command:
 		if not board.is_on_board(coord):
 			return false
 		var hero_coord = Tender.hero.get_cell_coord()
+		# FIXME: should use board.path_perceived()
 		return index.is_free(coord) and board.path(hero_coord, coord)
 		
 	func run(coord:Vector2i) -> bool:
@@ -210,6 +211,30 @@ class TravelTo extends Command:
 		else:
 			# didn't work, probably because the path is blocked
 			return false
+
+class GetCloser extends Command:
+	var other
+	var path
+	func _init(index_=null):
+		is_action = true
+		caption = "Get Closer"
+		super(index_)
+
+	func is_valid_for(coord:Vector2i):
+		other = index.actor_at(coord)
+		if other == null:
+			return false
+		var board = Tender.hero.get_board()
+		var hero_coord = Tender.hero.get_cell_coord()
+		if board.dist(hero_coord, coord) <= 1:
+			return false
+		path = board.path_perceived(hero_coord, coord, Tender.hero, false, null, index)
+		return path != null
+		
+	func run(coord:Vector2i) -> bool:
+		var strat = Approaching.new(other, path, Tender.hero, 0.9)
+		Tender.hero.add_strategy(strat)
+		return await Tender.hero.act()
 		
 class DoorHandler extends Command:
 	var door_at = null
@@ -280,7 +305,7 @@ class OpenDoor extends DoorHandler:
 		return true
 		
 func _ready():
-	_cmd_classes = [Attack, Talk, TravelTo, Inspect, CloseDoor, OpenDoor]
+	_cmd_classes = [Attack, Talk, TravelTo, GetCloser, Inspect, CloseDoor, OpenDoor]
 
 func commands_for(coord, hero_pov:=false, index=null):
 	## Return a list of valid coordinates for `coord`
