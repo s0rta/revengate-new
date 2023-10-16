@@ -140,7 +140,7 @@ func act():
 	refresh_strategies()
 	var strat = get_strategy()
 	if strat:
-		# The turn queu is supposed to await on anims_done before leting us play the next turn
+		# The turn queue is supposed to await on anims_done before leting us play the next turn
 		assert(not is_animating())
 
 		print("Hero turn automated by %s" % [strat])

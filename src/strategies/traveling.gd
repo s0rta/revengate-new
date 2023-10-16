@@ -23,6 +23,8 @@ var path
 var arrived = false
 var unreachable := false  # have we failed to find a valid path?
 var updated := false  # have we refreshed the internal data this turn?
+var free_dest := true  # does the destination have to be free?
+var dest_str := "destination"
 
 func _init(dest_: Vector2i, path_=null, actor=null, priority_=null, ttl_=null):
 	super(actor, priority_, ttl_)
@@ -37,7 +39,7 @@ func _init(dest_: Vector2i, path_=null, actor=null, priority_=null, ttl_=null):
 	me.turn_done.connect(_expire_path)
 	me.was_attacked.connect(_on_being_attacked, CONNECT_ONE_SHOT)
 
-func _invalidate(_arg):
+func _invalidate(_arg=null):
 	unreachable = true
 	if me:
 		me.emit_signal("strategy_expired")
@@ -58,12 +60,12 @@ func _set_path(path_):
 func _make_path():
 	var board = me.get_board()
 	assert(board, "Traveling only works on scenes with a board")
-	var path_ = board.path_perceived(me.get_cell_coord(), dest, me)
+	var path_ = board.path_perceived(me.get_cell_coord(), dest, me, free_dest)
 	if path_ == null:
 		if not arrived and not unreachable:
-			add_hero_message("Stopped traveling: destination unreachable.", 
+			add_hero_message("Stopped traveling: %s unreachable." % dest_str, 
 							Consts.MessageLevels.CRITICAL)
-		_invalidate(null)
+		_invalidate()
 	return path_
 
 func _expire_path():
@@ -84,17 +86,20 @@ func refresh(_turn):
 	if unreachable or arrived:
 		queue_free()
 
+func _turns_left():
+	return path.size()
+
 func act():
-	var nb_steps = path.size()
+	var nb_steps = _turns_left()
 	if nb_steps:
-		var msg = "%s is travelling towards location." % me.get_short_desc()
+		var msg = "%s is travelling towards %s." % [me.get_short_desc(), dest_str]
 		if nb_steps > 1:
 			msg += " Arriving in %d turn(s)." % (nb_steps - 1)
-		me.add_message(msg, Consts.MessageLevels.INFO, ["strategy"])
+		add_hero_message(msg, Consts.MessageLevels.INFO, ["strategy"])
 
-		var there = path[0]
-		if there == dest:
+		if nb_steps <= 1:
 			arrived = true
+		var there = path[0]
 		return me.move_to(there)
 	else:
 		return null

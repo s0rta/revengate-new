@@ -261,18 +261,13 @@ func start_ch3():
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-#	$SentimentTable.set_sentiment(Tender.hero, Consts.Factions.BEASTS, 1)
-	print("Hero has booze?")
-	print(Tender.hero.get_items(["booze"]))
 
+	var strat = Approaching.new(%Nadege, null, Tender.hero, 0.9)
+	Tender.hero.add_strategy(strat)
+	Tender.hero.act()
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
 
-	$SentimentTable.ddump()
-
-	for actor in get_board().get_actors():
-		print("How hero feels about %s" % [actor.get_short_desc()])
-		print("  Is friend: %s" % Tender.hero.is_friend(actor))
-		print("  Is neutral: %s" % Tender.hero.is_neutral(actor))
-		print("  Is foe: %s" % Tender.hero.is_foe(actor))
+	%Nadege.update_health(-100)
+	

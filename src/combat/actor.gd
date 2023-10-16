@@ -655,6 +655,8 @@ func get_perception_ranges():
 
 func perceives(thing, index=null):
 	## Return whether we can perceive `thing`
+	if thing == null:
+		return false  # something that used to exist but died or got consumed
 	var ranges = get_perception_ranges()
 	var board = get_board()
 	var here = get_cell_coord()
@@ -723,6 +725,14 @@ func get_max_weapon_range():
 			max_range = weapon.range
 	
 	return max_range
+
+func get_max_action_range(other:Actor):
+	## Return how close you have to be to perform any action with `other`
+	var weapon_range = get_max_weapon_range()
+	if other.get_conversation():
+		return max(Consts.CONVO_RANGE, weapon_range)
+	else:
+		return weapon_range
 
 func get_weapons():
 	## Return all the active weapons for the current turn.

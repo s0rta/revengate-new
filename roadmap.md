@@ -192,7 +192,7 @@ Combat:
 - [x] healing spell (monsters only)
 
 ## V0.10
-- [x] bug: cancel button for Travelling stays visible when path is blocked
+- [x] bug: cancel button for Traveling stays visible when path is blocked
 - [x] bug: Tracking does not reset foe after a change of global sentiments
 - [x] bug: bar patron does not perform a party trick at the start of quest 2
 - [x] Godot 4.1
@@ -236,6 +236,7 @@ Combat:
 
 UX:
 - [ ] single-tap on distant actor pops a context action menu (ex.: get closer, inspect, ...)
+  - [ ] GetCloser command (based on Traveling)
 - [ ] finalize gestures to access non-default actions, see the [gestures design notes](docs/gestures.md)
 - [x] health bar than turns red when low on HPs
 - [x] remove the beta desclaimer
