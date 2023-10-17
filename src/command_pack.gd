@@ -23,6 +23,7 @@ var _cmd_classes = []  # all sub-classes of Command must be added to this list
 ## A game command
 class Command extends RefCounted:
 	var is_action: bool
+	var is_default := false  # is this command what you'd get from a single tap?
 	var caption: String
 	var index: RevBoard.BoardIndex
 
@@ -31,6 +32,12 @@ class Command extends RefCounted:
 			index = index_
 		else:
 			index = Tender.hero.get_board().make_index()
+
+	func get_caption():
+		if is_default:
+			return caption + " (👆)"
+		else:
+			return caption
 
 	func refresh(index_:RevBoard.BoardIndex):
 		index = index_
@@ -66,7 +73,9 @@ class Attack extends Command:
 			return false
 		var hero_coord = Tender.hero.get_cell_coord()
 		var dist = board.dist(hero_coord, coord)
-		return dist <= attack_range and index.actor_at(coord)
+		var other = index.actor_at(coord)
+		is_default = other != null and Tender.hero.is_foe(other)		
+		return dist <= attack_range and other != null
 		
 	func run(coord:Vector2i) -> bool:
 		var victim = index.actor_at(coord)
@@ -130,6 +139,7 @@ class Talk extends Command:
 		var dist = board.dist(hero_coord, coord)
 		# TODO: it would make sense to have conversations further apart
 		var other = index.actor_at(coord)
+		is_default = not Tender.hero.is_foe(other)		
 		return dist <= Consts.CONVO_RANGE and other and other.get_conversation()
 		
 	func run(coord:Vector2i) -> bool:

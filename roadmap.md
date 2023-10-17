@@ -237,7 +237,7 @@ Combat:
 UX:
 - [x] single-tap on distant actor pops a context action menu (ex.: get closer, inspect, ...)
   - [x] GetCloser command (based on Traveling)
-- [ ] finalize gestures to access non-default actions, see the [gestures design notes](docs/gestures.md)
+- [x] finalize gestures to access non-default actions, see the [gestures design notes](docs/gestures.md)
 - [x] health bar than turns red when low on HPs
 - [x] remove the beta desclaimer
 - [x] QuickAttack available on friendly actors that you recall attacking previously

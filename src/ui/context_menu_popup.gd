@@ -43,7 +43,7 @@ func show_commands(commands, coord=null):
 	for cmd in commands:
 		# TODO: use CommandButton
 		var button = Button.new()
-		button.text = cmd.caption
+		button.text = cmd.get_caption()
 		if cmd.is_action:
 			button.theme_type_variation = "ActionBtn"
 		button.pressed.connect(run_command.bind(cmd, coord))
