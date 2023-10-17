@@ -245,7 +245,7 @@ UX:
 
 Items:
 - [ ] items stats and long description is available from the inventory screen
-- [ ] "magical" tag replaces the magical flag
+- [x] "magical" tag replaces the magical flag
 - [ ] top hat (🎩)
 - [ ] carrot (🥕)
 

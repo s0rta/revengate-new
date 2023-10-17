@@ -16,3 +16,4 @@ script = ExtResource("3_g8jfb")
 agility = 2
 nb_turns = 0
 permanent = true
+tags = null

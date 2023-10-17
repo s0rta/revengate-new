@@ -11,4 +11,4 @@ consumable = true
 script = ExtResource("2_qi62v")
 healing = 3
 nb_turns = 8
-magical = true
+tags = Array[String](["magical"])

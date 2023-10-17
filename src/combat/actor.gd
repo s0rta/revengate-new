@@ -940,7 +940,7 @@ func normalize_health_delta(vector, h_delta):
 	h_delta = h_delta * get_resist_mult(vector) as int
 	
 	# check for overhealing
-	if not vector.magical and health + h_delta > health_full:
+	if not Utils.has_tags(vector, ["magical"]) and health + h_delta > health_full:
 		return health_full - health
 	
 	if h_delta > 0:

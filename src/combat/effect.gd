@@ -38,21 +38,24 @@ class_name Effect extends Node
 @export var immediate := false
 @export var nb_turns := 1
 @export var permanent := false  # ignores immediate and damage_family
-@export var magical := false  # various effect are more powerful for magical items
+
+@export_group("Tagging")
+@export var tags:Array[String]
+
 
 class Condition extends Node:
 	var damage: int
 	var healing: int
 	var damage_family: Consts.DamageFamily
-	var magical: bool
 	var nb_turns: int
 	var stats_modifiers: Dictionary
+	var tags:Array[String]
 
-	func _init(damage_, healing_, damage_family_, magical_, nb_turns_):
+	func _init(damage_, healing_, damage_family_, tags_:Array[String], nb_turns_):
 		damage = damage_
 		healing = healing_
 		damage_family = damage_family_
-		magical = magical_
+		tags = tags_.duplicate()
 		nb_turns = nb_turns_
 		
 	func erupt():
@@ -90,7 +93,7 @@ func apply(actor):
 	if permanent:
 		perma_boost(actor, mods)
 	else:
-		var cond = Condition.new(damage, healing, damage_family, magical, nb_turns)
+		var cond = Condition.new(damage, healing, damage_family, tags, nb_turns)
 		cond.stats_modifiers = mods
 		actor.add_child(cond)
 		if immediate:

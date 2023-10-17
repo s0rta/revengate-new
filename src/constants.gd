@@ -109,6 +109,7 @@ const VIS_MODULATE := Color.WHITE
 # This is a small safeguard against typos.
 const TAGS = ["ethereal", "undead", "gift", "broken", "lit", 
 			"booze", 
+			"magical",  # magical effects and items are often more potent
 			"groupable",  # shows in "stacks" on the inventory screen
 			# spells
 			"vital-assemblage", "summoning", "healing", "attack",
