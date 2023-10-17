@@ -260,7 +260,7 @@ Monsters:
 
 Combat:
 - [x] quick attack button is easier to enable (ex: has_offended a target)
-- [ ] TribalTerritorial uses perception rather than dist()
+- [x] TribalTerritorial uses perception rather than dist()
 - [ ] healing strategy is based on health-%, not absolute number of HPs
 - [ ] zapping spell
 

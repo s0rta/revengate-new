@@ -37,7 +37,8 @@ func refresh(turn):
 		if actor == me:
 			continue
 		if _is_like_me(actor) and board.dist(me, actor) <= INFLUENCE_RADIUS:
-			nb_supporters += 1
+			if me.perceives(actor):
+				nb_supporters += 1
 	
 	var pers_space_radius = (nb_supporters - 1) * 3
 	if pers_space_radius > 0:
