@@ -553,6 +553,11 @@ func _anim_health_change(label_, number, direction:Vector2):
 	var timer := get_tree().create_timer(.25)
 	timer.timeout.connect(anim2.play)
 
+func get_health_ratio() -> float:
+	## Return a number in 0..inf (typically in 0..1) reprensenting our current 
+	## fraction of health_full.
+	return 1.0 * health / health_full
+
 func update_health(hp_delta: int):
 	## Update our health and animate the event.
 	## Return the animation.

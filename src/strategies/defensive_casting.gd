@@ -18,7 +18,7 @@
 ## Opportunistically fight back after being attacked.
 class_name DefensiveCasting extends Strategy
 
-const HEALING_THRESHOLD = 5
+const HEALING_THRESHOLD = .3  # fraction of missing health needed to consider healing spells
 @export_range(0.0, 1.0) var probability = 0.1
 
 var has_activated = null
@@ -32,7 +32,7 @@ func is_valid():
 		return false
 	if not has_activated:
 		return false
-	if me.health >= me.health_full - HEALING_THRESHOLD:
+	if me.get_health_ratio() > 1.0 - HEALING_THRESHOLD:
 		return false
 	var spells = me.get_spells(["healing"])
 	spells.shuffle()
