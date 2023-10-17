@@ -215,6 +215,7 @@ class TravelTo extends Command:
 class GetCloser extends Command:
 	var other
 	var path
+	var dist
 	func _init(index_=null):
 		is_action = true
 		caption = "Get Closer"
@@ -226,15 +227,20 @@ class GetCloser extends Command:
 			return false
 		var board = Tender.hero.get_board()
 		var hero_coord = Tender.hero.get_cell_coord()
-		if board.dist(hero_coord, coord) <= 1:
+		dist = board.dist(hero_coord, coord)
+		if dist <= 1:
 			return false
 		path = board.path_perceived(hero_coord, coord, Tender.hero, false, null, index)
 		return path != null
 		
 	func run(coord:Vector2i) -> bool:
-		var strat = Approaching.new(other, path, Tender.hero, 0.9)
-		Tender.hero.add_strategy(strat)
-		return await Tender.hero.act()
+		if dist > Tender.hero.get_max_action_range(other):
+			var strat = Approaching.new(other, path, Tender.hero, 0.9)
+			Tender.hero.add_strategy(strat)
+			return await Tender.hero.act()
+		else:
+			Tender.hero.move_toward_actor(other)
+			return true
 		
 class DoorHandler extends Command:
 	var door_at = null

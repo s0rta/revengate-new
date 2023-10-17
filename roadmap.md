@@ -235,8 +235,8 @@ Combat:
 - [ ] church prefab
 
 UX:
-- [ ] single-tap on distant actor pops a context action menu (ex.: get closer, inspect, ...)
-  - [ ] GetCloser command (based on Traveling)
+- [x] single-tap on distant actor pops a context action menu (ex.: get closer, inspect, ...)
+  - [x] GetCloser command (based on Traveling)
 - [ ] finalize gestures to access non-default actions, see the [gestures design notes](docs/gestures.md)
 - [x] health bar than turns red when low on HPs
 - [x] remove the beta desclaimer
