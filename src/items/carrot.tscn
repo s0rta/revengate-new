@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://chpblbtevaa13"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_lg04w"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_2ktei"]
+
+[node name="Carrot" instance=ExtResource("1_lg04w")]
+char = "🥕"
+caption = "carrot"
+consumable = true
+spawn_cost = 2.0
+tags = Array[String](["groupable"])
+
+[node name="HealingEffect" type="Node" parent="." index="1"]
+script = ExtResource("2_2ktei")
+healing = 5
+immediate = true
+
+[node name="VisionEffect" type="Node" parent="." index="2"]
+script = ExtResource("2_2ktei")
+perception = 7
+immediate = true
+nb_turns = 30

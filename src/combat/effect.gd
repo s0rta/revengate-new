@@ -64,8 +64,9 @@ class Condition extends Node:
 		assert(actor is Actor, "Conditions can only erupt after being attached to an actor")
 		# TODO: there could be a case for randomizing the damage from conditions
 		var h_delta = healing - damage
-		h_delta = actor.normalize_health_delta(self, h_delta)
-		actor.update_health(h_delta)
+		if h_delta != 0:
+			h_delta = actor.normalize_health_delta(self, h_delta)
+			actor.update_health(h_delta)
 		decay()
 		
 	func decay():

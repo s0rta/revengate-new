@@ -247,7 +247,7 @@ Items:
 - [ ] items stats and long description is available from the inventory screen
 - [x] "magical" tag replaces the magical flag
 - [ ] top hat (🎩)
-- [ ] carrot (🥕)
+- [x] carrot (🥕)
 
 Weapons:
 - [ ] axe (𝇤)
