@@ -204,6 +204,9 @@ func center_on_hero(_arg=null):
 func _on_cancel_button_pressed():
 	hero.cancel_strategies()
 
+func _on_turn_started(_turn):
+	get_board().clear_highlights()
+
 func show_context_menu_for(coord):
 	var cmds = commands.commands_for(coord)
 	%ContextMenuPopup.show_commands(cmds, coord)
@@ -270,4 +273,3 @@ func test2():
 	print("Testing: 2, 1... 2, 1!")
 
 	%Nadege.update_health(-100)
-	

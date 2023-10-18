@@ -226,7 +226,7 @@ Combat:
 - [x] fail if meeting happened
 
 ## v0.11
-- [ ] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
+- [x] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
 - [x] F6 on Main scene does not show the story screen
 - [x] upgrade the DialogueManager plug-in
 - [ ] Monte Carlo simulator for DeckBuilders
