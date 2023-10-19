@@ -20,7 +20,8 @@ class_name PrefabPack extends RefCounted
 
 # {char -> fab_class}
 const _fab_chars := {"r": RiverFab, 
-					"p": PassageFab}
+					"p": PassageFab, 
+					"c": ChurchFab}
 
 class Prefab extends RefCounted:
 	var builder: BoardBuilder
@@ -151,6 +152,62 @@ class PassageFab extends Prefab:
 				"world_loc": new_world_loc, 
 				"depth": builder.board.depth + 1}
 		builder.board.set_cell_rec(where, "conn_target", rec)
+
+	func get_untouched_rect():
+		# this fab is unobtrusive enough to not modify the drawing area
+		return rect
+		
+class ChurchFab extends Prefab:
+	# the wall outside the church
+	var wall_path = V.arr_i([[5, 13], [4, 13], [4, 12], [2, 12], [2, 10], [4, 10], 
+							[4, 4], [5, 4], [5, 3], [6, 3], [6, 2],
+							[7, 2], [7, 3], [8, 3], [8, 4], [9, 4], 
+							[9, 10], [11, 10], [11, 12], [9, 12], [9, 13], [7, 13]])
+
+	func _init(builder, rect, region):
+		super(builder, rect, region)
+		caption = "church"
+		fab_rect = Rect2i(0, 0, 14, 16)
+		var wiggle_room = rect.size - fab_rect.size
+		fab_rect.position = rect.position
+		assert(rect.encloses(fab_rect))
+		# TODO: transpose if needed to match the long side of the region
+		if region == Consts.REG_NORTH:
+			fab_rect.position.x += randi_range(0, wiggle_room.x - 1)
+		elif region == Consts.REG_SOUTH:
+			fab_rect.position.y += wiggle_room.y			
+			fab_rect.position.x += randi_range(0, wiggle_room.x - 1)
+		elif region == Consts.REG_WEST:
+			fab_rect.position.y += randi_range(0, wiggle_room.y - 1)
+		elif region == Consts.REG_EAST:
+			fab_rect.position.x += wiggle_room.x			
+			fab_rect.position.y += randi_range(0, wiggle_room.y - 1)
+		else:
+			assert(false, "Not implemented!")
+			
+		for i in len(wall_path):
+			wall_path[i] += fab_rect.position
+		
+	func fill():
+		var board = builder.board
+		board.paint_path(wall_path, "wall")
+		
+	func get_untouched_rect():
+		var wiggle_room = rect.size - fab_rect.size
+		if region == Consts.REG_NORTH:
+			return Rect2i(rect.position.x, rect.position.y + fab_rect.size.y, 
+							rect.size.x, wiggle_room.y)
+		elif region == Consts.REG_SOUTH:
+			return Rect2i(rect.position.x, rect.position.y, 
+							rect.size.x, wiggle_room.y)
+		elif region == Consts.REG_WEST:
+			return Rect2i(rect.position.x + fab_rect.size.x, rect.position.y, 
+							wiggle_room.x, rect.size.y)
+		elif region == Consts.REG_EAST:
+			return Rect2i(rect.position.x, rect.position.y, 
+							wiggle_room.x, rect.size.y)
+		else:
+			assert(false, "Not implemented!")
 
 static func parse_fabstr(fabstr:String, builder:BoardBuilder, rect=null):
 	## Return a list of prefab instances for fabstr.

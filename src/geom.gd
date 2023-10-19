@@ -20,10 +20,10 @@ class_name Geom extends Node
 
 const CENTRAL_REGION_MARGIN := 0.25  # ration of coords that are on each side of the central region	
 
-static func rect_perim(rect: Rect2i) -> Array:
+static func rect_perim(rect: Rect2i) -> Array[Vector2i]:
 	## Return all the coordinates making the inner perimeter of a rectangle.
 	## The coordinates are returned clockfise starting at rect.position.
-	var coords = []
+	var coords:Array[Vector2i] = []
 	for i in range(rect.size.x):
 		coords.append(rect.position + V.i(i, 0))
 	for j in range(1, rect.size.y):
@@ -138,3 +138,27 @@ static func region_outside_rect(rect:Rect2i, region:Vector2i):
 		return Rect2i(rect.position, size)
 	else:
 		assert(false, "Invalid region: %s" % region)
+
+static func interpolate_path(path:Array[Vector2i]) -> Array[Vector2i]:
+	## Return an array of coords that connect all the elements of `path`. 
+	## The Manhattan dist between successive coords will always be 1 (no diagonals). 
+	## Elements of path are included.
+	var coords:Array[Vector2i] = [path[0]]
+	var dir
+	var diff
+	for i in range(1, len(path)):
+		var prev = coords[-1]
+		if prev.x != path[i].x:
+			diff = path[i].x - prev.x
+			dir = sign(diff)
+			for k in abs(diff) - 1:
+				coords.append(coords[-1] + Vector2i.RIGHT * dir)
+			if prev.y != path[i].y:
+				coords.append(coords[-1] + Vector2i.RIGHT * dir)
+		if prev.y != path[i].y:
+			diff = path[i].y - prev.y
+			dir = sign(diff)
+			for k in abs(diff) - 1:
+				coords.append(coords[-1] + Vector2i.DOWN * dir)
+		coords.append(path[i])
+	return coords

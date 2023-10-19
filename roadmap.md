@@ -227,12 +227,15 @@ Combat:
 
 ## v0.11
 - [x] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
+- [ ] bug: Travelling and Approaching are not invalidated uppon changing board
+- [ ] bug: gateways on Lyon can end up in the river
 - [x] F6 on Main scene does not show the story screen
 - [x] upgrade the DialogueManager plug-in
 - [ ] Monte Carlo simulator for DeckBuilders
 - [ ] async preload most shaders to speedup startup
 - [ ] instructions on how to install all the Android dev dependencies
-- [ ] church prefab
+- [x] church prefab
+  - [ ] vibes inside the church
 
 UX:
 - [x] single-tap on distant actor pops a context action menu (ex.: get closer, inspect, ...)
@@ -268,7 +271,8 @@ Combat:
 - [ ] web export
   - [ ] better keyboard support (ex.: ESC cancels actions)
 - [ ] random interlude stories
-  
+- [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
+
 ## v1.0
 - [ ] saved games
 - [ ] A Fight for Fumes campaign

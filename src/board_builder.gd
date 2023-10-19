@@ -322,7 +322,7 @@ func connect_rooms(room1, room2):
 	var v_sign = v.sign()
 	
 	# make an elbow
-	var cells = []
+	var cells:Array[Vector2i] = []
 	if v.x:
 		for i in range(0, v.x, v_sign.x):
 			cells.append(c1 + V.i(i, 0))

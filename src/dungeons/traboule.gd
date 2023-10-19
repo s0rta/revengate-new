@@ -35,7 +35,12 @@ func make_builder(board, rect):
 
 func fill_new_board(builder, depth, world_loc, size):
 	## put the main geometry on a freshly created board, except for connectors
-	var outer_rect = Rect2i(Vector2i.ZERO, size)
+	var orig_rect = builder.rect
+	var outer_rect = builder.rect
+	
+	var unfabbed_rect = add_loc_prefabs(builder, world_loc)
+	if unfabbed_rect != null:
+		outer_rect = unfabbed_rect
 
 	if _lvl_is_maze(depth, world_loc):
 		assert(builder.rect.size % 2 == Vector2i.ONE, "maze levels should have odd sizes")
@@ -46,6 +51,7 @@ func fill_new_board(builder, depth, world_loc, size):
 	else:
 		builder.board.paint_rect(outer_rect, builder.clear_terrain)
 		builder.gen_rooms(randi_range(3, 6))
+	builder.rect = orig_rect
 
 func _lvl_is_maze(depth:int, world_loc:Vector3i):
 	## Return whether the next board be a maze?

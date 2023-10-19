@@ -19,18 +19,18 @@
 ## A collection of boards with similar attributes
 class_name Dungeon extends Node
 
-const DEF_SIZE = Vector2i(23, 15)
 var prefab_map = {Vector3i(13, 3, 0): "Er", 
 					Vector3i(13, 4, 0): "Er", 
 					Vector3i(13, 5, 0): "Er", 
 					Vector3i(13, 6, 0): "Er", 
 					Vector3i(13, 7, 0): "Er", 
 					Vector3i(13, 8, 0): "Er", 
-					Vector3i(12, 5, 0): "Wp",
+					Vector3i(12, 5, 0): "WpEc",
 					Vector3i(11, 5, 0): "Wp",
 					Vector3i(10, 5, 0): "NpSr"
 				}
 
+@export var default_board_size := Vector2i(23, 15)
 @export var start_depth := 0
 @export var base_spawn_budget := 0
 @export var start_world_loc: Vector3i
@@ -98,7 +98,7 @@ func fill_new_board(builder, depth, world_loc, size):
 	assert(false, "must be overridden by sub classes of Dungeon")
 	
 
-func build_board(depth, world_loc:Vector3i, size:Vector2i=DEF_SIZE, prev_loc=null, neighbors=null):
+func build_board(depth, world_loc:Vector3i, size:Vector2i=default_board_size, prev_loc=null, neighbors=null):
 	## Make a new board with fresh terrain, monsters, and items.
 	var scene = load("res://src/rev_board.tscn") as PackedScene
 	var new_board = scene.instantiate() as RevBoard
@@ -113,6 +113,7 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=DEF_SIZE, prev_loc=nul
 	if neighbors == null:
 		neighbors = _neighbors_for_level(depth, world_loc, prev_loc)
 	add_connectors(builder, neighbors)
+
 	populate_board(builder, depth, world_loc)
 	return new_board
 
@@ -303,7 +304,7 @@ func _get_conn_target_recs(board:RevBoard):
 
 func regen(board:RevBoard):
 	## Replace board with a freshly generated one
-	var size = DEF_SIZE
+	var size = default_board_size
 	var neighbors = _get_conn_target_recs(board)
 	var new_board = build_board(board.depth, board.world_loc, size, null, neighbors)
 
@@ -340,7 +341,7 @@ func new_board_for_target(old_board, conn_target):
 		dungeon = self
 	assert(dungeon != null, "Dungeon can't be found for conn_target: %s" % conn_target)
 	var new_loc = conn_target.world_loc
-	var new_board = dungeon.build_board(conn_target.depth, new_loc, dungeon.DEF_SIZE, old_board.world_loc)
+	var new_board = dungeon.build_board(conn_target.depth, new_loc, dungeon.default_board_size, old_board.world_loc)
 	return new_board
  
 func add_loc_prefabs(builder, world_loc:Vector3i):

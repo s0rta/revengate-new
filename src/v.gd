@@ -25,3 +25,9 @@ static func i(x, y=null) -> Vector2i:
 		y = x[1]
 		x = x[0]
 	return Vector2i(x, y)
+
+static func arr_i(pairs:Array[Array]) -> Array[Vector2i]:
+	var vects:Array[Vector2i] = []
+	for pair in pairs:
+		vects.append(Vector2i(pair[0], pair[1]))
+	return vects

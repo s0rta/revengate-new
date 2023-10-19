@@ -70,7 +70,8 @@ func finalize_static_board(board:RevBoard):
 
 func fill_new_board(builder:BoardBuilder, depth, world_loc, size):
 	## put the main geometry on a freshly created board, except for connectors
-	var outer_rect = Rect2i(Vector2i.ZERO, size)
+	var orig_rect = builder.rect
+	var outer_rect = builder.rect
 
 	builder.board.paint_rect(outer_rect, builder.clear_terrain)
 	builder.board.paint_path(Geom.rect_perim(outer_rect), "wall")
@@ -78,11 +79,12 @@ func fill_new_board(builder:BoardBuilder, depth, world_loc, size):
 	if unfabbed_rect != null:
 		outer_rect = unfabbed_rect
 	
+	# houses are rooms, they have a 1-tile gap all around to make the Lyon surface feel open
 	builder.rect = Geom.inner_rect(outer_rect, 1)
 	builder.gen_rooms(randi_range(3, 6), false)
 	builder.open_rooms()
 	
-	builder.rect = outer_rect
+	builder.rect = orig_rect
 	
 func add_connectors(builder:BoardBuilder, neighbors):
 	## place stairs and other cross-board connectors on a board
@@ -94,6 +96,7 @@ func add_connectors(builder:BoardBuilder, neighbors):
 		if region == null:
 			coord = builder.random_floor_cell()
 		elif terrain == "gateway" and region != Consts.REG_CENTER:
+			# FIXME: this could end up in the river
 			coord = Rand.coord_on_rect_perim(builder.rect, region)
 		else:
 			coord = builder.random_coord_in_region(region, board.is_floor)

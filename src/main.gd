@@ -265,11 +265,5 @@ func start_ch3():
 func test():
 	print("Testing: 1, 2... 1, 2!")
 
-	var strat = Approaching.new(%Nadege, null, Tender.hero, 0.9)
-	Tender.hero.add_strategy(strat)
-	Tender.hero.act()
-
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-
-	%Nadege.update_health(-100)
