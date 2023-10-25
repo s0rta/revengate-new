@@ -20,6 +20,10 @@ class_name Traboule extends Dungeon
 const FIRST_MAZE = 6
 const ALL_MAZES = 13
 
+@export var start_world_loc: Vector3i
+@export var dest_world_loc: Vector3i
+@export var tunneling_elevation := -2  # start going horizontal once we reach that depth
+
 func dungeon_for_loc(world_loc:Vector3i):
 	## Return the name of the dungeon where `world_loc` belongs or null is it's part of the current dungeon
 	if world_loc.z >= 0:
@@ -55,7 +59,7 @@ func fill_new_board(builder, depth, world_loc, size):
 
 func _lvl_is_maze(depth:int, world_loc:Vector3i):
 	## Return whether the next board be a maze?
-	if _loc_elev(world_loc) == tunneling_elevation:
+	if world_loc.z == tunneling_elevation:
 		return true
 	else:
 		return Rand.linear_prob_test(depth, FIRST_MAZE-1, ALL_MAZES)
@@ -87,6 +91,31 @@ func _nb_stairs(conn_targets):
 		if rec.near_terrain in RevBoard.STAIRS_TERRAINS:
 			nb += 1
 	return nb
+
+func _neighbors_for_level(depth:int, world_loc:Vector3i, prev=null):
+	## Return an array of conn_target records that a new level should be connect to
+	var elev = world_loc.z
+	var locs = []
+	if _is_aligned(world_loc, start_world_loc) or _is_aligned(world_loc, dest_world_loc):
+		locs.append(world_loc + Consts.LOC_LOWER)
+		if world_loc.z < 0:
+			locs.append(world_loc + Consts.LOC_HIGHER)
+	if elev == tunneling_elevation:
+		var dest_delta = dest_world_loc - world_loc
+		var side_steps = []
+		if dest_delta.x:
+			side_steps.append(world_loc + sign(dest_delta.x) * Consts.LOC_EAST)
+		if dest_delta.y:
+			side_steps.append(world_loc + sign(dest_delta.y) * Consts.LOC_SOUTH)
+		if not side_steps.is_empty():
+			locs.append(Rand.choice(side_steps))
+	if prev != null and prev not in locs:
+		locs.append(prev)
+		
+	# same record we attach to the cell: {"world_loc":..., "depth":...}
+	var mk_rec = _conn_rec_for_loc.bind(world_loc, prev, depth)
+	var recs = locs.map(mk_rec)
+	return recs
 
 func add_connectors(builder:BoardBuilder, neighbors):
 	## place stairs and other cross-board connectors on a board

@@ -33,9 +33,6 @@ var prefab_map = {Vector3i(13, 3, 0): "Er",
 @export var default_board_size := Vector2i(23, 15)
 @export var start_depth := 0
 @export var base_spawn_budget := 0
-@export var start_world_loc: Vector3i
-@export var dest_world_loc := Vector3i(3, 5, 0)
-@export var tunneling_elevation := -2  # start going horizontal once we reach that depth
 var deck_builder: DeckBuilder
 var starting_board: RevBoard
 
@@ -163,21 +160,13 @@ func _neighbor_connector_terrain(near_loc:Vector3i, far_loc:Vector3i):
 	else:
 		return "gateway"
 	
-func _loc_elev(world_loc):
-	var elev_to_start = (world_loc - start_world_loc).z
-	var elev_to_dest = (world_loc - dest_world_loc).z
-	if abs(elev_to_start) < abs(elev_to_dest):
-		return elev_to_start
-	else:
-		return elev_to_dest
-
-func _conn_rec_for_loc(new_loc:Vector3i, cur_loc:Vector3i, prev_loc, depth:int):
+func _conn_rec_for_loc(new_loc:Vector3i, cur_loc:Vector3i, prev_loc, cur_depth:int):
 	## Return a conn_target record for a new location
 	var far_depth:int
 	if new_loc == prev_loc:
-		far_depth = depth - 1
+		far_depth = cur_depth - 1
 	else:
-		far_depth = depth + 1
+		far_depth = cur_depth + 1
 	var near_terrain = _neighbor_connector_terrain(cur_loc, new_loc)
 	var rec = {"world_loc":new_loc, "depth":far_depth, "near_terrain":near_terrain}
 	var dungeon = dungeon_for_loc(new_loc)
@@ -187,29 +176,13 @@ func _conn_rec_for_loc(new_loc:Vector3i, cur_loc:Vector3i, prev_loc, depth:int):
 	
 func _neighbors_for_level(depth:int, world_loc:Vector3i, prev=null):
 	## Return an array of conn_target records that a new level should be connect to
-	var elev = _loc_elev(world_loc)
 	var locs = []
-	if _is_aligned(world_loc, start_world_loc) or _is_aligned(world_loc, dest_world_loc):
-		locs.append(world_loc + Consts.LOC_LOWER)
-		if world_loc.z < 0:
-			locs.append(world_loc + Consts.LOC_HIGHER)
-	if elev == tunneling_elevation:
-		var dest_delta = dest_world_loc - world_loc
-		var side_steps = []
-		if dest_delta.x:
-			side_steps.append(world_loc + sign(dest_delta.x) * Consts.LOC_EAST)
-		if dest_delta.y:
-			side_steps.append(world_loc + sign(dest_delta.y) * Consts.LOC_SOUTH)
-		if not side_steps.is_empty():
-			locs.append(Rand.choice(side_steps))
-	if prev != null and prev not in locs:
+	if prev != null:
 		locs.append(prev)
 		
-	var recs = []  # same record we attach to the cell: {"world_loc":..., "depth":...}
-	var far_depth = null
-	for loc in locs:
-		var rec = _conn_rec_for_loc(loc, world_loc, prev, depth)
-		recs.append(rec)
+	# same record we attach to the cell: {"world_loc":..., "depth":...}
+	var mk_rec = _conn_rec_for_loc.bind(world_loc, prev, depth)
+	var recs = locs.map(mk_rec)
 	return recs
 
 func spawn_budget(depth, budget_multiplier):

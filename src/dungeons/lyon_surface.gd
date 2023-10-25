@@ -17,6 +17,7 @@
 
 class_name LyonSurface extends Dungeon
 
+const START_LOC = Vector3i(13, 5, 0)
 const STARTING_CONN_TARGETS = {
 		Vector2i(5, 3): {"dungeon": "Traboule1"}, 
 		Vector2i(21, 7): {"dungeon": "Traboule2"}, 
@@ -41,7 +42,7 @@ func finalize_static_board(board:RevBoard):
 	## do a bit of cleanup to make a static board fit in the dungeon
 	# FIXME: a few of those can go with the parent class
 	board.scan_terrain()
-	board.world_loc = start_world_loc
+	board.world_loc = START_LOC
 	board.lock(V.i(20, 8), "key-red")
 	board.lock(V.i(3, 15), "key-blue")
 	

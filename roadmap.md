@@ -228,7 +228,7 @@ Combat:
 ## v0.11
 - [x] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
 - [ ] bug: Travelling and Approaching are not invalidated uppon changing board
-- [ ] bug: gateways on Lyon can end up in the river
+- [ ] bug: gateways on Lyon Surface can end up in the river
 - [x] F6 on Main scene does not show the story screen
 - [x] upgrade the DialogueManager plug-in
 - [ ] Monte Carlo simulator for DeckBuilders
@@ -236,6 +236,7 @@ Combat:
 - [ ] instructions on how to install all the Android dev dependencies
 - [x] church prefab
   - [ ] vibes inside the church
+  - [ ] crypt under the church
 
 UX:
 - [x] single-tap on distant actor pops a context action menu (ex.: get closer, inspect, ...)
@@ -256,7 +257,7 @@ Weapons:
 - [ ] axe (𝇤)
 
 Monsters:
-- [ ] cherub
+- [ ] cherub (𝒜, 𝓒, 𝔠, 𝖈, 𝕔)
 - [ ] sentry scarab
 - [ ] nochort
 - [ ] giant locust

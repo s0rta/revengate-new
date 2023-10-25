@@ -18,6 +18,8 @@
 
 class_name TroisGaulesSurface extends LyonSurface
 
+@export var start_world_loc: Vector3i
+@export var dest_world_loc: Vector3i
 
 func dungeon_for_loc(world_loc:Vector3i):
 	## Return the name of the dungeon where `world_loc` belongs or null is it's part of the current dungeon
