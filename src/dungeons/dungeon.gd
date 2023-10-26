@@ -138,9 +138,13 @@ func add_connectors(builder:BoardBuilder, neighbors):
 
 	var board = builder.board as RevBoard
 	for rec in neighbors:
-		var region = _region_for_loc(board.world_loc, rec.world_loc)
+		var coord
 		var terrain = _neighbor_connector_terrain(board.world_loc, rec.world_loc)
-		var coord = builder.random_coord_in_region(region, board.is_floor)
+		var region = _region_for_loc(board.world_loc, rec.world_loc)
+		if region == null:
+			coord = builder.random_floor_cell()
+		else:
+			coord = builder.random_coord_in_region(region, board.is_floor)
 		board.paint_cell(coord, terrain)
 		board.set_cell_rec(coord, "conn_target", rec)
 

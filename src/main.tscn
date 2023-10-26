@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=39 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -29,6 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://bnbtimmwf4woe" path="res://src/trois_gaules_deck_builder.tscn" id="19_fpjoi"]
 [ext_resource type="PackedScene" uid="uid://dab6wiatrc0m6" path="res://src/hard_traboule_deck_builder.tscn" id="20_4ntfa"]
 [ext_resource type="PackedScene" uid="uid://b0n7osww35hyh" path="res://src/ui/narration_pane.tscn" id="20_21sjb"]
+[ext_resource type="Script" path="res://src/dungeons/crypt.gd" id="20_f773d"]
 [ext_resource type="PackedScene" uid="uid://cf0kj6qn7a40s" path="res://src/ui/city_map_screen.tscn" id="23_aomab"]
 [ext_resource type="PackedScene" uid="uid://bb5upsioptfc4" path="res://src/ui/context_menu_popup.tscn" id="25_n5bfn"]
 [ext_resource type="PackedScene" uid="uid://bgntr3w6l7kt0" path="res://src/ui/story_screen.tscn" id="28_7kpa3"]
@@ -161,6 +162,12 @@ start_depth = 1
 base_spawn_budget = 10
 
 [node name="TroisGaulesBuilder" parent="BoardArea/GestureSurveyor/Viewport/TroisGaulesSurface" instance=ExtResource("19_fpjoi")]
+
+[node name="Crypt" type="Node" parent="BoardArea/GestureSurveyor/Viewport"]
+script = ExtResource("20_f773d")
+default_board_size = Vector2i(32, 15)
+start_depth = 2
+base_spawn_budget = 10
 
 [node name="TurnQueue" parent="." instance=ExtResource("5_odllu")]
 

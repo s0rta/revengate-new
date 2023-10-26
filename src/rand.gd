@@ -93,7 +93,25 @@ static func biased_choice(seq:Array, bias, biased_elem=null):
 	# weighted indexing with a random val
 	var val = randf_range(0, tot)
 	return seq[cum_weights.bsearch(val) - 1]
-	
+
+static func rect(rects, valid_pred=null):
+	## Return the index of one of the rectangle in `rects`.
+	## valid_pred: if provided, only rectangle that are true for it are considered.
+	## The selection is biased towards selecting larger rectangles.
+	## Return `null` if no element in `rects` is valid.
+	var areas = []
+	var indices = []
+	var size:Vector2i
+	for i in rects.size():
+		size = rects[i].size
+		if valid_pred != null and not valid_pred.call(rects[i]):
+			continue  # ignore invalid rectangles
+		indices.append(i)
+		areas.append(rects[i].get_area())
+	if indices.is_empty():
+		return null
+	return Rand.weighted_choice(indices, areas)
+
 static func coord_in_rect(rect:Rect2i):
 	var offset = Vector2i(randi_range(0, rect.size.x-1), 
 						randi_range(0, rect.size.y-1))

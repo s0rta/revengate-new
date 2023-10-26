@@ -34,6 +34,9 @@ static func rect_perim(rect: Rect2i) -> Array[Vector2i]:
 		coords.append(rect.position + V.i(0, j))
 	return coords
 
+static func rect_area(rect: Rect2i) -> int:
+	return rect.get_area()
+
 static func inner_rect(rect:Rect2i, margin=0):
 	## Return a Rect2i that is one tile inside `rect`
 	## margin: if >0, that many tiles separate the outer rect perimiter tiles from the inner rect.
@@ -162,3 +165,10 @@ static func interpolate_path(path:Array[Vector2i]) -> Array[Vector2i]:
 				coords.append(coords[-1] + Vector2i.DOWN * dir)
 		coords.append(path[i])
 	return coords
+
+static func move_path(path:Array[Vector2i], offset:Vector2i) -> Array[Vector2i]:
+	## Return a new path that corresponds to `path` translated by `offset`
+	var new_path:Array[Vector2i] = []
+	for coord in path:
+		new_path.append(coord + offset)
+	return new_path

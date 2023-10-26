@@ -230,21 +230,14 @@ func gen_rooms(nb_rooms:int, add_corridors:=true):
 	var size = null
 	var indices = null
 	var is_full := false
+	var _large_enough = func(rect):
+		return max(rect.size.x, rect.size.y) >= MIN_PART_SIZE
+		
 	while not is_full and partitions.size() < nb_rooms and nb_iter < 10:
-		areas = []
-		indices = []
-		for i in partitions.size():
-			size = partitions[i].size
-			if max(size.x, size.y) < MIN_PART_SIZE:
-				continue  # ignore tiny partitions
-			indices.append(i)
-			areas.append(partitions[i].get_area())
-		if indices.is_empty():
+		var index = Rand.rect(partitions, _large_enough)
+		if index == null:
 			is_full = true
 			break
-			
-		# favor splitting the big partitions first
-		var index = Rand.weighted_choice(indices, areas)
 		var sub_parts = Rand.split_rect(partitions[index],
 			Rand.Orientation.LONG_SIDE,
 			ROOM_PAD,
@@ -258,7 +251,7 @@ func gen_rooms(nb_rooms:int, add_corridors:=true):
 	if add_corridors:
 		for i in rooms.size()-1:
 			connect_rooms(rooms[i], rooms[i+1])
-	# not using rooms.size() because we might have started with existing rooms
+	# not using rooms.size() because there might have been existing room before we started
 	return partitions.size()
 
 func open_rooms():
