@@ -18,24 +18,17 @@
 
 class_name TroisGaulesSurface extends LyonSurface
 
-const CRYPT_START_LOCS = [Vector3i(12, 5, 0)]
-
 @export var start_world_loc: Vector3i
 @export var dest_world_loc: Vector3i
 
 func dungeon_for_loc(world_loc:Vector3i):
 	## Return the name of the dungeon where `world_loc` belongs or null is it's part of the current dungeon
-	for crypt_loc in CRYPT_START_LOCS:
-		if _is_aligned(crypt_loc, world_loc):
-			return "Crypt"
 	return null
 
 func _neighbors_for_level(depth:int, world_loc:Vector3i, prev=null):
 	# FIXME: put the logic for sideway gateways towards destination here rather than in prefabs
 	#        Traboules do most of that, we can factor of some of their implementation
 	var locs = []
-	if world_loc in CRYPT_START_LOCS:
-		locs.append(world_loc + Consts.LOC_LOWER)
 	if prev != null:
 		locs.append(prev)
 

@@ -163,6 +163,7 @@ class ChurchFab extends Prefab:
 							[4, 4], [5, 4], [5, 3], [6, 3], [6, 2],
 							[7, 2], [7, 3], [8, 3], [8, 4], [9, 4], 
 							[9, 10], [11, 10], [11, 12], [9, 12], [9, 13], [7, 13]])
+	var tower_cores = V.arr_i([[3, 11], [10, 11]])
 
 	func _init(builder, rect, region):
 		super(builder, rect, region)
@@ -191,6 +192,15 @@ class ChurchFab extends Prefab:
 	func fill():
 		var board = builder.board
 		board.paint_path(wall_path, "wall")
+		_add_stairs(fab_rect.position + Rand.choice(tower_cores))
+		
+	func _add_stairs(where):
+		builder.board.paint_cell(where, "stairs-down")
+		var new_world_loc = builder.board.world_loc + Consts.LOC_LOWER
+		var rec = {"dungeon": "Crypt", 
+				"world_loc": new_world_loc, 
+				"depth": builder.board.depth + 1}
+		builder.board.set_cell_rec(where, "conn_target", rec)
 		
 	func get_untouched_rect():
 		var wiggle_room = rect.size - fab_rect.size
