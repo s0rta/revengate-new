@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://dnekf8fb50ge"]
+
+[ext_resource type="Script" path="res://src/deck_builder_sim.gd" id="1_c3005"]
+[ext_resource type="PackedScene" uid="uid://bvm0q1k13gmym" path="res://src/easy_traboule_deck_builder.tscn" id="2_ie7jc"]
+
+[node name="DeckBuilderSim" type="Node"]
+script = ExtResource("1_c3005")
+
+[node name="DeckBuilder" parent="." instance=ExtResource("2_ie7jc")]

@@ -39,6 +39,20 @@ static func median(values:Array):
 	values = values.duplicate()
 	values.sort()
 	return values[len(values)/2]
+	
+static func percentile_breakdown(values:Array, k_nums:Array):
+	## Returns elements of values based on k_nums percentiles in values
+	## ex: k_nums could be [25, 50, 75], returns the p25, p50(median), and p75
+	## elements of values 
+	assert(not values.is_empty())
+	var percentiles = []
+	values = values.duplicate()
+	values.sort()
+	
+	for k_num in k_nums:
+		percentiles.append(values[(len(values) * k_num) / 100])
+		
+	return percentiles	
 
 static func is_tag(str):
 	return str in Consts.TAGS

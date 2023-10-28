@@ -33,8 +33,6 @@ script = ExtResource("1_oonn7")
 
 [node name="DesertCentipede" parent="." instance=ExtResource("4_de7ji")]
 
-[node name="Kobold" parent="." instance=ExtResource("5_u3117")]
-
 [node name="SulantTiger" parent="." instance=ExtResource("6_urs5r")]
 
 [node name="Max1PerFloor5PerDungeon" type="Node" parent="."]
@@ -52,11 +50,18 @@ max_board_occ = 3
 
 [node name="Sahwakoon" parent="Max3PerFloor" instance=ExtResource("9_ucbey")]
 
-[node name="Max3PerDungeon" type="Node" parent="."]
+[node name="Max3PerDungeonAndLate" type="Node" parent="."]
 script = ExtResource("7_18mi5")
+min_depth = 6
 max_dungeon_occ = 3
 
-[node name="Ghost" parent="Max3PerDungeon" instance=ExtResource("10_smtmw")]
+[node name="Ghost" parent="Max3PerDungeonAndLate" instance=ExtResource("10_smtmw")]
+
+[node name="Max10PerDungeon" type="Node" parent="."]
+script = ExtResource("7_18mi5")
+max_dungeon_occ = 10
+
+[node name="Kobold" parent="Max10PerDungeon" instance=ExtResource("5_u3117")]
 
 [node name="Unique" type="Node" parent="."]
 script = ExtResource("7_18mi5")
