@@ -28,6 +28,7 @@ var clear_terrain = "rock"
 var floor_terrain = "floor"
 var wall_terrain = "wall"
 var rooms = []  # array of Rect2i, there may be walls along the perimeter
+var fabs = []  # prefabs that were placed on the level
 
 func _init(board:RevBoard, rect=null):
 	self.board = board

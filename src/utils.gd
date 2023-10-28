@@ -47,6 +47,23 @@ static func assert_all_tags(strings:Array):
 	for str in strings:
 		assert(is_tag(str), "%s is not a valid tag name" % str)
 
+static func filter_nodes_by_type(nodes, type_name):
+	## Return a sub-list of `nodes` that are chidren of `type_name`
+	# The ugly cascading if's is because node.get_class() and node.is_class() only return the 
+	# built-in classes, they completely ignore the part of the hierarchy that is defined in 
+	# GDScript. When selecting a subset of a node's children, Node.get_children() is better and 
+	# it can adequately find nodes by their GDScript class_name.
+	var right_type = func (node):
+		if type_name == "Actor":
+			return node is Actor
+		elif type_name == "Item":
+			return node is Item
+		elif type_name == "Vibe":
+			return node is Vibe
+		else:
+			assert(false, "Filtering by type '%s' is not implemented!" % [type_name])
+	return nodes.filter(right_type)
+
 static func _combine_modifiers(main_mods, sub_mods):
 	## Combine all the values of `sub_mods` into `main_mods. Changes are done in-place.
 	if sub_mods == null:

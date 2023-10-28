@@ -75,7 +75,7 @@ func nb_mandatory_occ(card, rule, depth, world_loc:Vector3i):
 	var nb_occ = max(0, rule.min_board_occ, dungeon_deficit)
 	return nb_occ
 
-func gen_mandatory_deck(card_type, depth, world_loc:Vector3i):
+func gen_mandatory_deck(card_type, depth, world_loc:Vector3i, extra_cards=[]):
 	## Return a deck of cards that must be fully distributed before any draw is
 	##   done from the regular deck.
 	## The mandatory deck is probabilistic and the order of cards is random.
@@ -95,6 +95,8 @@ func gen_mandatory_deck(card_type, depth, world_loc:Vector3i):
 				if nb_occ:
 					set_hold(card, nb_occ)
 					deck.add_card(card, nb_occ)
+	for card in extra_cards:
+		deck.add_card(card)
 	deck.normalize()
 	return deck
 

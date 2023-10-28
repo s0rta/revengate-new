@@ -195,37 +195,50 @@ func spawn_budget(depth, budget_multiplier):
 func populate_board(builder, depth, world_loc:Vector3i):
 	var index = builder.board.make_index()
 	
+	# fab contributions
+	var fab_mandatory_cards = []
+	var fab_optional_cards = []
+	for fab in builder.fabs:
+		fab_mandatory_cards += fab.get_mandatory_cards()
+		fab_optional_cards += fab.get_optional_cards()
+	
 	# Items
 	var budget = spawn_budget(depth, 1.3)
-	_gen_decks_and_place(builder, index, deck_builder, "Item", depth, world_loc, budget)
+	_gen_decks_and_place(builder, index, deck_builder, "Item", depth, world_loc, budget, 
+						Utils.filter_nodes_by_type(fab_mandatory_cards, "Item"), 
+						Utils.filter_nodes_by_type(fab_optional_cards, "Item"))
 		
 	# Monsters
 	budget = spawn_budget(depth, 1.7)
-	_gen_decks_and_place(builder, index, deck_builder, "Actor", depth, world_loc, budget)
+	_gen_decks_and_place(builder, index, deck_builder, "Actor", depth, world_loc, budget, 
+						Utils.filter_nodes_by_type(fab_mandatory_cards, "Actor"), 
+						Utils.filter_nodes_by_type(fab_optional_cards, "Actor"))
 	
 	# Vibe
 	var extra_vibe = []
 	for actor in builder.board.get_actors():
 		extra_vibe += actor.get_vibe_cards()
 	budget = spawn_budget(depth, 1.1)
-	_gen_decks_and_place(builder, index, deck_builder, "Vibe", depth, world_loc, budget, extra_vibe)
+	_gen_decks_and_place(builder, index, deck_builder, "Vibe", depth, world_loc, budget, 
+						Utils.filter_nodes_by_type(fab_mandatory_cards, "Vibe"), 
+						Utils.filter_nodes_by_type(fab_optional_cards, "Vibe") + extra_vibe)
 	
 
 func _gen_decks_and_draw(board_builder:BoardBuilder, index, deck_builder, card_type, 
 							depth, world_loc, budget, 
-							extra_cards=[]):
+							extra_mandatory_cards=[], extra_optional_cards=[]):
 	## Generate the two decks for the card_type, draw from them as long as budget allows.
 	## Return the drawn cards.  The caller is responsible for placing the cards on the board.
+	var cards = []
 	
 	# mandatory cards
-	var cards = []
-	var deck = deck_builder.gen_mandatory_deck(card_type, depth, world_loc)
+	var deck = deck_builder.gen_mandatory_deck(card_type, depth, world_loc, extra_mandatory_cards)
 	while not deck.is_empty():
 		cards.append(deck.draw())
 		budget -= cards[-1].spawn_cost
 
 	# optional cards, if we have any spawning budget left
-	deck = deck_builder.gen_deck(card_type, depth, world_loc, budget, extra_cards)
+	deck = deck_builder.gen_deck(card_type, depth, world_loc, budget, extra_optional_cards)
 	while not deck.is_empty() and budget > 0:
 		cards.append(deck.draw())
 		budget -= cards[-1].spawn_cost
@@ -233,12 +246,13 @@ func _gen_decks_and_draw(board_builder:BoardBuilder, index, deck_builder, card_t
 
 func _gen_decks_and_place(board_builder:BoardBuilder, index, deck_builder, card_type, 
 							depth, world_loc, budget, 
-							extra_cards=[]):
+							extra_mandatory_cards=[], extra_optional_cards=[]):
 	## Generate the two decks for the card_type, draw from them as long as budget allows, 
 	## and place everything on the board.
 	var cards = _gen_decks_and_draw(board_builder, index, deck_builder, card_type, 
-									depth, world_loc, budget, extra_cards)
-	
+									depth, world_loc, budget, 
+									extra_mandatory_cards, extra_optional_cards)
+	# place distant cards first, then the ones without placement constraints
 	var distant_cards = []
 	for card in cards:
 		if Utils.has_tags(card, ["spawn-distant"]):
@@ -329,8 +343,9 @@ func add_loc_prefabs(builder, world_loc:Vector3i):
 	var fabs = PrefabPack.parse_fabstr(prefab_map[world_loc], builder)
 	if fabs == null:
 		return null
-	for fab in PrefabPack.parse_fabstr(prefab_map[world_loc], builder):
+	for fab in fabs:
 		fab.fill()
+	builder.fabs += fabs		
 	var rect = PrefabPack.fabs_untouched_rect(fabs)
 	return rect
-	
+

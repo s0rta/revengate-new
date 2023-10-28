@@ -29,6 +29,8 @@ class Prefab extends RefCounted:
 	var region
 	var fab_rect:Rect2i  # The smaller rect that will be populated by this PreFab
 	var caption:String  # What is this prefab all about? For debug purposes only.
+	var mandatory_card_paths = []
+	var optional_card_paths = []
 	
 	func _init(builder_, rect_, region_=null):
 		builder = builder_
@@ -52,6 +54,19 @@ class Prefab extends RefCounted:
 		if region == null or region == Consts.REG_CENTER:
 			return null
 		return Geom.region_outside_rect(rect, region)
+
+	func _instantiate_card(path):
+		return load(path).instantiate()
+
+	func get_mandatory_cards():
+		## Return cards that should be drawn when populating the board where this PreFab is placed.
+		return mandatory_card_paths.map(_instantiate_card)
+
+	func get_optional_cards():
+		## Return cards that should be added to the probabilistic decks when populating the board
+		## where this PreFab is placed.
+		return optional_card_paths.map(_instantiate_card)
+
 	
 class RiverFab extends Prefab:
 	var span:int  # average distance between river banks
@@ -172,6 +187,10 @@ class ChurchFab extends Prefab:
 		var wiggle_room = rect.size - fab_rect.size
 		fab_rect.position = rect.position
 		assert(rect.encloses(fab_rect))
+		
+		mandatory_card_paths.append("res://src/monsters/retznac.tscn")
+		optional_card_paths.append("res://src/items/amulet_of_strength.tscn")
+		
 		# TODO: transpose if needed to match the long side of the region
 		if region == Consts.REG_NORTH:
 			fab_rect.position.x += randi_range(0, wiggle_room.x - 1)
