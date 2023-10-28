@@ -28,6 +28,7 @@ class_name Item extends Node2D
 
 # TODO: "spawn" sounds more like something that applies to living things...
 @export var spawn_cost := 0.0
+@export var spawn_rect:Rect2i
 @export var ttl := -1
 @export var tags:Array[String]
 var depleted := false

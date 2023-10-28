@@ -252,7 +252,7 @@ func _gen_decks_and_place(board_builder:BoardBuilder, index, deck_builder, card_
 	var cards = _gen_decks_and_draw(board_builder, index, deck_builder, card_type, 
 									depth, world_loc, budget, 
 									extra_mandatory_cards, extra_optional_cards)
-	# place distant cards first, then the ones without placement constraints
+	# place distant cards in a sperarate pass once we've found them all
 	var distant_cards = []
 	for card in cards:
 		if Utils.has_tags(card, ["spawn-distant"]):
@@ -274,6 +274,10 @@ func _place_card(card, builder:BoardBuilder, where=null, index=null, rm_tags=[])
 	var instance = card.duplicate()
 	for tag in rm_tags:
 		Utils.remove_tag(instance, tag)
+	if where == null:
+		var spawn_rect = instance.get("spawn_rect")
+		if spawn_rect != null and spawn_rect.has_area():
+			where = Rand.coord_in_rect(spawn_rect)
 	builder.place(instance, false, where, true, null, index)
 	instance.show()
 

@@ -84,6 +84,7 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 
 @export_group("Procedural Generation")
 @export var spawn_cost:float   # in [0..100] for normal cases
+@export var spawn_rect:Rect2i
 
 # core combat attributes
 @export_group("Combat")

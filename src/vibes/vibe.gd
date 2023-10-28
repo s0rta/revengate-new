@@ -22,6 +22,7 @@ class_name Vibe extends Node2D
 @export var char := ""
 @export var caption := ""
 @export var spawn_cost := 0.0
+@export var spawn_rect:Rect2i
 @export var tags:Array[String]
 
 var shrouded := false  # partially or completely obscured

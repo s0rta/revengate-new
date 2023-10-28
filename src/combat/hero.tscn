@@ -13,6 +13,7 @@ script = ExtResource("2_jrjv3")
 char = "@"
 caption = "hero"
 color = Color(1, 1, 1, 1)
+spawn_rect = null
 healing_prob = 0.1
 faction = 1
 

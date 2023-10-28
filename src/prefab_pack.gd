@@ -29,6 +29,8 @@ class Prefab extends RefCounted:
 	var region
 	var fab_rect:Rect2i  # The smaller rect that will be populated by this PreFab
 	var caption:String  # What is this prefab all about? For debug purposes only.
+	
+	# TODO: we should store instances instead so fabs can modify them
 	var mandatory_card_paths = []
 	var optional_card_paths = []
 	
@@ -179,6 +181,7 @@ class ChurchFab extends Prefab:
 							[7, 2], [7, 3], [8, 3], [8, 4], [9, 4], 
 							[9, 10], [11, 10], [11, 12], [9, 12], [9, 13], [7, 13]])
 	var tower_cores = V.arr_i([[3, 11], [10, 11]])
+	var nave:Rect2i
 
 	func _init(builder, rect, region):
 		super(builder, rect, region)
@@ -205,8 +208,9 @@ class ChurchFab extends Prefab:
 		else:
 			assert(false, "Not implemented!")
 			
-		for i in len(wall_path):
-			wall_path[i] += fab_rect.position
+		wall_path = Geom.move_path(wall_path, fab_rect.position)
+		nave = Geom.inner_rect(fab_rect, 4)
+		nave.size.y += 4
 		
 	func fill():
 		var board = builder.board
@@ -237,6 +241,20 @@ class ChurchFab extends Prefab:
 							wiggle_room.x, rect.size.y)
 		else:
 			assert(false, "Not implemented!")
+	
+	func _spawn_in_nave(cards):
+		## Move the spawn rect of all cards to be inside the church nave.
+		for card in cards:
+			if card.get("spawn_rect") != null:
+				card.spawn_rect = nave
+		return cards		
+
+	func get_mandatory_cards():
+		return _spawn_in_nave(super())
+
+	func get_optional_cards():
+		return _spawn_in_nave(super())
+
 
 static func parse_fabstr(fabstr:String, builder:BoardBuilder, rect=null):
 	## Return a list of prefab instances for fabstr.
