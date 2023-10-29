@@ -34,17 +34,17 @@ script = ExtResource("6_3136s")
 probability = 0.5
 priority = 0.9
 
-[node name="Bite" type="Node" parent="." index="11"]
+[node name="TribalTerritorial" type="Node" parent="." index="11"]
+script = ExtResource("6_larah")
+priority = 0.8
+
+[node name="Bite" type="Node" parent="." index="12"]
 script = ExtResource("3_6ex08")
 damage = 2
 damage_family = 3
 
 [node name="HitSound" type="AudioStreamPlayer" parent="Bite" index="0"]
 stream = ExtResource("4_suc3h")
-
-[node name="TribalTerritorial" type="Node" parent="." index="12"]
-script = ExtResource("6_larah")
-priority = 0.8
 
 [node name="RatPoop" parent="." index="13" instance=ExtResource("7_kqkal")]
 

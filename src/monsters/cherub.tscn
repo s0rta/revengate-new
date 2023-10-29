@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=3 uid="uid://0yvvkfod7748"]
+
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_ojldm"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_domgc"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="3_qpsgw"]
+[ext_resource type="Script" path="res://src/combat/core_skills.gd" id="4_s5t1x"]
+[ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="5_fud0b"]
+[ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="6_7xbfp"]
+
+[node name="Cherub" instance=ExtResource("1_ojldm")]
+char = "𝒜"
+caption = "cherub"
+spawn_cost = 15.0
+health = 60
+healing_prob = 0.15
+strength = 55
+agility = 52
+intelligence = 70
+perception = 60
+faction = 5
+bestiary_img = "res://src/monsters/cherub.jpg"
+description = "Cherubim are minor angelic beings."
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
+text = "𝒜"
+
+[node name="Tracking" type="Node" parent="." index="7"]
+script = ExtResource("2_domgc")
+priority = 0.7
+
+[node name="Exploring" type="Node" parent="." index="8"]
+script = ExtResource("3_qpsgw")
+priority = 0.4
+
+[node name="SkillLevels" type="Node" parent="." index="9"]
+script = ExtResource("4_s5t1x")
+innate_attack = 4
+channeling = 4
+
+[node name="Claw" type="Node" parent="." index="10"]
+script = ExtResource("5_fud0b")
+damage = 9
+damage_family = 2
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Claw" index="0"]
+stream = ExtResource("6_7xbfp")
+
+[node name="Claw2" type="Node" parent="." index="11"]
+script = ExtResource("5_fud0b")
+damage = 9
+damage_family = 2
+probability = 0.3
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Claw2" index="0"]
+stream = ExtResource("6_7xbfp")

@@ -262,13 +262,15 @@ Vibe:
 
 Weapons:
 - [ ] axe (𝇤)
+- [x] Mjölnir
 
 Monsters:
-- [ ] cherub (𝒜, 𝓒, 𝔠, 𝖈, 𝕔)
-- [ ] skeleton (𝖘, 𝔰) https://en.wikipedia.org/wiki/File:Nuremberg_chronicles_-_Dance_of_Death_(CCLXIIIIv).jpg
+- [x] cherub (𝒜, 𝓒, 𝔠, 𝖈, 𝕔)
+- [x] skeleton (𝖘, 𝔰)
 - [ ] sentry scarab
 - [ ] nochort
 - [ ] giant locust
+- [x] plasus rat
 
 Combat:
 - [x] quick attack button is easier to enable (ex: has_offended a target)
@@ -281,6 +283,7 @@ Combat:
   - [ ] better keyboard support (ex.: ESC cancels actions)
 - [ ] random interlude stories
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
+- [ ] plasus rats have a more aggressive version of TribalTerritorial
 
 ## v1.0
 - [ ] saved games

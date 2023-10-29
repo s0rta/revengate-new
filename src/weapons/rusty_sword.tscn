@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://d0mhuir1pm4wo"]
+
+[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_xs8yb"]
+[ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/weapons/sword-hit-01.wav" id="2_634fp"]
+
+[node name="RustySword" instance=ExtResource("1_xs8yb")]
+damage = 5
+range = 1
+damage_family = 2
+char = "🗡"
+caption = "rusty long sword"
+skill = "fencing"
+
+[node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
+stream = ExtResource("2_634fp")

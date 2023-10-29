@@ -1,0 +1,48 @@
+[gd_scene load_steps=9 format=3 uid="uid://hynfsvr45204"]
+
+[ext_resource type="Script" path="res://src/deck_builder.gd" id="1_0ct5b"]
+[ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="2_kjc0p"]
+[ext_resource type="Script" path="res://src/card_rule.gd" id="2_p183e"]
+[ext_resource type="PackedScene" uid="uid://b6fcsa8psp63y" path="res://src/monsters/skeleton.tscn" id="5_00grc"]
+[ext_resource type="PackedScene" uid="uid://j6l7bxwn04uw" path="res://src/monsters/plasus_rat.tscn" id="5_e27ml"]
+[ext_resource type="PackedScene" uid="uid://0yvvkfod7748" path="res://src/monsters/cherub.tscn" id="6_2qcbt"]
+[ext_resource type="PackedScene" uid="uid://cmc47ywu2frcl" path="res://src/weapons/mjolnir.tscn" id="8_b4cid"]
+[ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="12_xxt6x"]
+
+[node name="CryptDeckBuilder" type="Node"]
+script = ExtResource("1_0ct5b")
+
+[node name="Ghost" parent="." instance=ExtResource("2_kjc0p")]
+
+[node name="Max5PerBoardEarly" type="Node" parent="."]
+script = ExtResource("2_p183e")
+max_depth = 6
+max_board_occ = 5
+
+[node name="Rat" parent="Max5PerBoardEarly" instance=ExtResource("12_xxt6x")]
+
+[node name="PlasusRat" parent="Max5PerBoardEarly" instance=ExtResource("5_e27ml")]
+
+[node name="Deep" type="Node" parent="."]
+script = ExtResource("2_p183e")
+min_depth = 5
+
+[node name="Skeleton" parent="Deep" instance=ExtResource("5_00grc")]
+
+[node name="RareAndDeep" type="Node" parent="."]
+script = ExtResource("2_p183e")
+min_depth = 7
+max_depth = 11
+max_board_occ = 1
+max_dungeon_occ = 2
+min_dungeon_occ = 1
+
+[node name="Cherub" parent="RareAndDeep" instance=ExtResource("6_2qcbt")]
+
+[node name="QuestGoal" type="Node" parent="."]
+script = ExtResource("2_p183e")
+min_depth = 12
+max_depth = 15
+max_dungeon_occ = 1
+
+[node name="Mjolnir" parent="QuestGoal" instance=ExtResource("8_b4cid")]

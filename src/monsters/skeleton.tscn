@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://b6fcsa8psp63y"]
+
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_ok30j"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_6n4q5"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="3_o2krq"]
+[ext_resource type="PackedScene" uid="uid://d0mhuir1pm4wo" path="res://src/weapons/rusty_sword.tscn" id="4_1prqp"]
+
+[node name="Skeleton" instance=ExtResource("1_ok30j")]
+char = "𝔰"
+caption = "skeleton"
+spawn_cost = 5.0
+health = 40
+strength = 40
+agility = 48
+perception = 40
+resistance = 3
+tags = Array[String](["undead"])
+faction = 2
+bestiary_img = "res://src/monsters/skeleton.png"
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
+text = "𝔰"
+
+[node name="Tracking" type="Node" parent="." index="7"]
+script = ExtResource("2_6n4q5")
+priority = 0.7
+
+[node name="Exploring" type="Node" parent="." index="8"]
+script = ExtResource("3_o2krq")
+priority = 0.4
+
+[node name="RustySword" parent="." index="9" instance=ExtResource("4_1prqp")]
+is_equipped = true

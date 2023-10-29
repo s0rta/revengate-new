@@ -5,6 +5,7 @@
 
 [node name="SilverSaber" instance=ExtResource("1_f546q")]
 damage = 9
+range = 1
 damage_family = 2
 char = "🗡"
 caption = "ornate saber"

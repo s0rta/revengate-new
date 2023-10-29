@@ -34,7 +34,8 @@ enum DamageFamily {
 	ACID, 
 	POISON, 
 	CHEMICAL, 
-	ELECTRIC
+	ELECTRIC, 
+	MICROBIAL
 }
 
 ## Factions pre-define many of the allegiances and animosities
@@ -43,7 +44,8 @@ enum Factions {
 	LUX_CO,
 	BEASTS, 
 	OUTLAWS, 
-	CIRCUS
+	CIRCUS,
+	CELESTIALS
 }
 
 enum SkillLevel {

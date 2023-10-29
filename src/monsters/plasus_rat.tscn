@@ -1,0 +1,62 @@
+[gd_scene load_steps=9 format=3 uid="uid://j6l7bxwn04uw"]
+
+[ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_6au0k"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="2_x3n4j"]
+[ext_resource type="Script" path="res://src/strategies/flight_or_fight.gd" id="3_twahn"]
+[ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="4_fpob4"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="4_s27cy"]
+[ext_resource type="AudioStream" uid="uid://da0cslkk526yk" path="res://src/monsters/bite-small.wav" id="5_gr1tg"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="6_hdt8x"]
+[ext_resource type="PackedScene" uid="uid://y1ws81ictm30" path="res://src/vibes/rat_poop.tscn" id="7_erwq1"]
+
+[node name="PlasusRat" instance=ExtResource("1_6au0k")]
+char = "r"
+caption = "plasus rat"
+color = Color(0.65098, 0.321569, 0.0196078, 1)
+spawn_cost = 5.0
+health = 15
+strength = 26
+agility = 47
+intelligence = 17
+resistance = 7
+description = "Plasus rats look like common rats, but they have a stubbier face, roughly like a gerbil's. They commonly carry infectious diseases and are immune to most poisons. They are also roughly the size of a house cat."
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.65098, 0.321569, 0.0196078, 1)
+text = "r"
+
+[node name="SkillLevels" parent="." index="7"]
+evasion = 1
+
+[node name="Exploring" type="Node" parent="." index="8"]
+script = ExtResource("2_x3n4j")
+hug_walls = true
+priority = 0.2
+
+[node name="FlightOrFight" type="Node" parent="." index="10"]
+script = ExtResource("3_twahn")
+probability = 0.5
+priority = 0.9
+
+[node name="Tracking" type="Node" parent="." index="11"]
+script = ExtResource("4_s27cy")
+priority = 0.7
+
+[node name="Bite" type="Node" parent="." index="12"]
+script = ExtResource("4_fpob4")
+damage = 5
+damage_family = 3
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Bite" index="0"]
+stream = ExtResource("5_gr1tg")
+
+[node name="Infection" type="Node" parent="Bite" index="1"]
+script = ExtResource("6_hdt8x")
+damage = 1
+damage_family = 10
+probability = 0.2
+nb_turns = 10
+
+[node name="RatPoop" parent="." index="13" instance=ExtResource("7_erwq1")]
+
+[node name="RatPoop2" parent="." index="14" instance=ExtResource("7_erwq1")]
