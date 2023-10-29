@@ -1,0 +1,15 @@
+[remap]
+
+importer="dialogue_manager_compiler_9"
+type="Resource"
+uid="uid://nhhpoxdi7jiw"
+path="res://.godot/imported/priest.dialogue-00cc93b0c0c94fe5a980845bd3e900ab.tres"
+
+[deps]
+
+source_file="res://src/story/priest.dialogue"
+dest_files=["res://.godot/imported/priest.dialogue-00cc93b0c0c94fe5a980845bd3e900ab.tres"]
+
+[params]
+
+defaults=true

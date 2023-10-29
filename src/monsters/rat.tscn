@@ -47,3 +47,5 @@ script = ExtResource("6_larah")
 priority = 0.8
 
 [node name="RatPoop" parent="." index="13" instance=ExtResource("7_kqkal")]
+
+[node name="RatPoop2" parent="." index="14" instance=ExtResource("7_kqkal")]

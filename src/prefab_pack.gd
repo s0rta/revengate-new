@@ -191,8 +191,16 @@ class ChurchFab extends Prefab:
 		fab_rect.position = rect.position
 		assert(rect.encloses(fab_rect))
 		
-		mandatory_card_paths.append("res://src/monsters/retznac.tscn")
-		optional_card_paths.append("res://src/items/amulet_of_strength.tscn")
+		mandatory_card_paths.append("res://src/vibes/altar.tscn")
+		mandatory_card_paths.append("res://src/vibes/cross.tscn")
+		mandatory_card_paths.append("res://src/people/priest.tscn")
+
+		optional_card_paths.append("res://src/vibes/fancy_cross.tscn")
+		optional_card_paths.append("res://src/vibes/incense.tscn")
+		optional_card_paths.append("res://src/vibes/incense.tscn")
+		optional_card_paths.append("res://src/vibes/candles.tscn")
+		optional_card_paths.append("res://src/vibes/candles.tscn")
+		optional_card_paths.append("res://src/vibes/stained_glass.tscn")
 		
 		# TODO: transpose if needed to match the long side of the region
 		if region == Consts.REG_NORTH:
@@ -210,7 +218,7 @@ class ChurchFab extends Prefab:
 			
 		wall_path = Geom.move_path(wall_path, fab_rect.position)
 		nave = Geom.inner_rect(fab_rect, 4)
-		nave.size.y += 4
+		nave.size.y += 3
 		
 	func fill():
 		var board = builder.board

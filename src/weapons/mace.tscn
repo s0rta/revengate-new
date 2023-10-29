@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://immvec50lanj"]
+
+[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_fg38i"]
+[ext_resource type="AudioStream" uid="uid://evhtpi4fygok" path="res://src/weapons/hammer-01.mp3" id="2_euik7"]
+
+[node name="Mace" instance=ExtResource("1_fg38i")]
+damage = 7
+range = 1
+damage_family = 1
+char = "🔨"
+caption = "mace"
+spawn_cost = 1.0
+
+[node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
+stream = ExtResource("2_euik7")

@@ -229,14 +229,15 @@ Combat:
 - [x] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
 - [ ] bug: Travelling and Approaching are not invalidated uppon changing board
 - [ ] bug: gateways on Lyon Surface can end up in the river
+- [ ] bug: GetCloser can pick paths that cut LOS, which aborts the command since the target is not unperceived
 - [x] F6 on Main scene does not show the story screen
 - [x] upgrade the DialogueManager plug-in
-- [ ] Monte Carlo simulator for DeckBuilders
+- [x] Monte Carlo simulator for DeckBuilders
 - [ ] async preload most shaders to speedup startup
 - [ ] instructions on how to install all the Android dev dependencies
 - [x] church prefab
-  - [ ] vibes inside the church
-  - [ ] crypt under the church
+  - [x] vibes inside the church
+  - [x] crypt under the church
 
 UX:
 - [x] single-tap on distant actor pops a context action menu (ex.: get closer, inspect, ...)
@@ -253,11 +254,18 @@ Items:
 - [ ] top hat (🎩)
 - [x] carrot (🥕)
 
+Vibe:
+- [x] candles (🕯)
+- [x] incense 
+- [x] cross (☨, ♰, ♱, ✟, 🕈, 🕆)
+- [x] altar (ꟷ, 𝌁, ⚎)
+
 Weapons:
 - [ ] axe (𝇤)
 
 Monsters:
 - [ ] cherub (𝒜, 𝓒, 𝔠, 𝖈, 𝕔)
+- [ ] skeleton (𝖘, 𝔰) https://en.wikipedia.org/wiki/File:Nuremberg_chronicles_-_Dance_of_Death_(CCLXIIIIv).jpg
 - [ ] sentry scarab
 - [ ] nochort
 - [ ] giant locust

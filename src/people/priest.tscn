@@ -1,0 +1,87 @@
+[gd_scene load_steps=9 format=3 uid="uid://dwqdexpkjxsvq"]
+
+[ext_resource type="Script" path="res://src/combat/actor.gd" id="1_7npyr"]
+[ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_dcew3"]
+[ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="3_gn4t3"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="4_jom36"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="5_x060c"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="6_8i5j0"]
+[ext_resource type="PackedScene" uid="uid://immvec50lanj" path="res://src/weapons/mace.tscn" id="7_c6h4i"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_00etm"]
+size = Vector2(32, 32)
+
+[node name="Priest" type="Area2D"]
+visible = false
+script = ExtResource("1_7npyr")
+char = "@"
+caption = "Priest"
+color = Color(0.666667, 0.831373, 0.215686, 1)
+conversation_file = "res://src/story/priest.dialogue"
+conversation_sect = "intro"
+spawn_cost = 10.0
+strength = 47
+agility = 47
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -7.5
+offset_top = -13.0
+offset_right = 7.5
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+auto_translate = false
+theme_type_variation = &"AsciiGraphics"
+theme_override_colors/font_color = Color(0.666667, 0.831373, 0.215686, 1)
+text = "@"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("RectangleShape2D_00etm")
+
+[node name="MissSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_dcew3")
+
+[node name="DeathSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_gn4t3")
+
+[node name="DamageLabel" type="Label" parent="."]
+visible = false
+offset_top = -9.0
+offset_right = 7.0
+offset_bottom = 14.0
+theme_override_colors/font_color = Color(0.784314, 0.227451, 0.172549, 1)
+theme_override_font_sizes/font_size = 21
+text = "?"
+
+[node name="HealingLabel" type="Label" parent="."]
+visible = false
+offset_left = -16.0
+offset_top = -27.0
+offset_right = -6.0
+offset_bottom = 3.0
+theme_override_colors/font_color = Color(0.25098, 0.780392, 0.172549, 1)
+theme_override_font_sizes/font_size = 21
+text = "?"
+
+[node name="Mem" type="Node" parent="."]
+script = ExtResource("4_jom36")
+
+[node name="SelfDefense" type="Node" parent="."]
+script = ExtResource("5_x060c")
+priority = 0.7
+
+[node name="Exploring" type="Node" parent="."]
+script = ExtResource("6_8i5j0")
+priority = 0.4
+
+[node name="Mace" parent="." instance=ExtResource("7_c6h4i")]
+is_equipped = true
+
+[connection signal="was_attacked" from="." to="." method="_learn_attack"]

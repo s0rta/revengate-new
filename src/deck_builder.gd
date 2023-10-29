@@ -115,6 +115,7 @@ func gen_deck(card_type, depth, world_loc:Vector3i, budget, extra_cards=[]):
 			if child.max_depth != -1 and depth > child.max_depth:
 				continue
 			_add_all_cards(deck, _get_cards(rule, card_type), depth, world_loc, budget, rule)
-	_add_all_cards(deck, extra_cards, depth, world_loc, budget)
+	for card in extra_cards:
+		deck.add_card(card)
 	deck.normalize()
 	return deck

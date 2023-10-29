@@ -35,29 +35,22 @@
 script = ExtResource("1_yitoo")
 
 [node name="SewerOtter" parent="." instance=ExtResource("2_i1rpj")]
-spawn_rect = null
 
 [node name="Labras" parent="." instance=ExtResource("3_tqdik")]
-spawn_rect = null
 
 [node name="DesertCentipede" parent="." instance=ExtResource("4_m33kh")]
-spawn_rect = null
 
 [node name="Kobold" parent="." instance=ExtResource("5_yqsgm")]
-spawn_rect = null
 
 [node name="SulantTiger" parent="." instance=ExtResource("6_da4pf")]
-spawn_rect = null
 
 [node name="Max3PerFloor" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
 max_board_occ = 3
 
 [node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_eau7g")]
-spawn_rect = null
 
 [node name="Sahwakoon" parent="Max3PerFloor" instance=ExtResource("9_s5p53")]
-spawn_rect = null
 
 [node name="Quest1Goals" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -66,12 +59,10 @@ min_dungeon_occ = 1
 world_loc = Vector3i(11, 4, 0)
 
 [node name="Outlaw1" parent="Quest1Goals" instance=ExtResource("12_g5w02")]
-spawn_rect = null
 
 [node name="LoomCards" parent="Quest1Goals/Outlaw1" instance=ExtResource("11_320yy")]
 
 [node name="Outlaw2" parent="Quest1Goals" instance=ExtResource("12_g5w02")]
-spawn_rect = null
 
 [node name="PotionOfHealing" parent="Quest1Goals/Outlaw2" instance=ExtResource("22_bxpqo")]
 visible = false
@@ -80,7 +71,6 @@ visible = false
 visible = false
 
 [node name="Outlaw3" parent="Quest1Goals" instance=ExtResource("12_g5w02")]
-spawn_rect = null
 
 [node name="PotionOfPoison" parent="Quest1Goals/Outlaw3" instance=ExtResource("15_0p6sp")]
 
@@ -91,10 +81,8 @@ min_dungeon_occ = 1
 world_loc = Vector3i(13, 8, 0)
 
 [node name="Retznac" parent="Quest2Goals" instance=ExtResource("25_cxgj3")]
-spawn_rect = null
 
 [node name="Grenn" parent="Quest2Goals" instance=ExtResource("16_s7e88")]
-spawn_rect = null
 
 [node name="Book" parent="Quest2Goals" instance=ExtResource("17_3gl0d")]
 char = "📗"
@@ -139,7 +127,6 @@ min_depth = 7
 max_dungeon_occ = 2
 
 [node name="Pacherr" parent="RareAndDeep" instance=ExtResource("21_2o5vb")]
-spawn_rect = null
 
 [node name="Healing" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -169,10 +156,8 @@ range = 1
 range = 1
 
 [node name="Gleugt" parent="TestingQuestTransitions" instance=ExtResource("26_1p40w")]
-spawn_rect = null
 
 [node name="Kobold" parent="TestingQuestTransitions" instance=ExtResource("5_yqsgm")]
-spawn_rect = null
 
 [node name="LoomCards" parent="TestingQuestTransitions/Kobold" instance=ExtResource("11_320yy")]
 
