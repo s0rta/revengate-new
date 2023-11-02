@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bnbtimmwf4woe"]
+[gd_scene load_steps=15 format=3 uid="uid://bnbtimmwf4woe"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_gqi5c"]
 [ext_resource type="Script" path="res://src/card_rule.gd" id="2_ktv76"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="6_hqcnm"]
 [ext_resource type="PackedScene" uid="uid://bvbyl05ombdxa" path="res://src/monsters/yarohu.tscn" id="7_ltn2i"]
 [ext_resource type="PackedScene" uid="uid://en0lj3ytrbjm" path="res://src/people/street_outlaw.tscn" id="8_5vl31"]
+[ext_resource type="PackedScene" uid="uid://b1elqic8grhvb" path="res://src/monsters/nochort.tscn" id="9_7av4t"]
 [ext_resource type="PackedScene" uid="uid://dc0rcsweguq63" path="res://src/people/petty_thief.tscn" id="9_15m00"]
 [ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="10_6v1jq"]
 [ext_resource type="PackedScene" uid="uid://dtmgeu15pl21o" path="res://src/people/tourist.tscn" id="10_xeej0"]
@@ -41,6 +42,8 @@ script = ExtResource("2_ktv76")
 max_dungeon_occ = 1
 
 [node name="Outlaw" parent="Max1PerDungeon" instance=ExtResource("8_5vl31")]
+
+[node name="Nochort" parent="Max1PerDungeon" instance=ExtResource("9_7av4t")]
 
 [node name="Infrequent" type="Node" parent="."]
 script = ExtResource("2_ktv76")
