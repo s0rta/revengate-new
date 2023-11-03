@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://dqkhlt4d3sbqn"]
+
+[ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_iwdy1"]
+[ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="2_2lblm"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_xoebo"]
+[ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_m5ni7"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="3_ptvuu"]
+
+[node name="SentryScarab" instance=ExtResource("1_iwdy1")]
+char = "š"
+caption = "sentry scarab"
+color = Color(0.0666667, 0.388235, 0.670588, 1)
+spawn_cost = 5.0
+health = 20
+strength = 35
+agility = 52
+intelligence = 38
+perception = 40
+resistance = 2
+bestiary_img = "res://src/monsters/sentry-scarab.png"
+description = "Sentry Scarabs are very large insects, measuring up to 75 cm in length. They have vestigial wings, but due to their weight, they are incapable of flight. They can however flap their wings to produce some wind or to moderately break a fall.
+
+Like regular scarabs, they tend to display elaborate patterns and flashy colours on their body, including metallic and iridescent light effects. Sentry scarabs have a high mental capacity for insects due to their large head size. They can be trained.
+"
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.0666667, 0.388235, 0.670588, 1)
+text = "š"
+
+[node name="Tracking" type="Node" parent="." index="9"]
+script = ExtResource("2_xoebo")
+priority = 0.6
+
+[node name="Exploring" type="Node" parent="." index="10"]
+script = ExtResource("3_ptvuu")
+priority = 0.2
+
+[node name="Pincer" type="Node" parent="." index="11"]
+script = ExtResource("2_2lblm")
+damage = 3
+damage_family = 3
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Pincer" index="0"]
+stream = ExtResource("3_m5ni7")
+volume_db = -3.0
+pitch_scale = 1.25
+
+[node name="Pincer2" type="Node" parent="." index="12"]
+script = ExtResource("2_2lblm")
+damage = 3
+damage_family = 3
+probability = 0.4
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Pincer2" index="0"]
+stream = ExtResource("3_m5ni7")
+volume_db = -3.0
+pitch_scale = 1.25

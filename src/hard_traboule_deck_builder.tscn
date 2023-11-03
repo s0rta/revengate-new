@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dab6wiatrc0m6"]
+[gd_scene load_steps=20 format=3 uid="uid://dab6wiatrc0m6"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_phj4j"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_3bv6l"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cx7utj7hd3ne" path="res://src/monsters/kobold.tscn" id="5_b1bqf"]
 [ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="6_auslx"]
 [ext_resource type="Script" path="res://src/card_rule.gd" id="7_1er0k"]
+[ext_resource type="PackedScene" uid="uid://dqkhlt4d3sbqn" path="res://src/monsters/sentry_scarab.tscn" id="7_d5hsq"]
 [ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="8_vett6"]
 [ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="10_w0tqq"]
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="13_eq3ao"]
@@ -31,6 +32,8 @@ script = ExtResource("1_phj4j")
 [node name="Kobold" parent="." instance=ExtResource("5_b1bqf")]
 
 [node name="SulantTiger" parent="." instance=ExtResource("6_auslx")]
+
+[node name="SentryScarab" parent="." instance=ExtResource("7_d5hsq")]
 
 [node name="Max3PerFloor" type="Node" parent="."]
 script = ExtResource("7_1er0k")
@@ -57,7 +60,6 @@ max_dungeon_occ = 2
 [node name="Dynamite" parent="Rare" instance=ExtResource("23_6bt64")]
 
 [node name="SilverSaber" parent="Rare" instance=ExtResource("13_sfc7u")]
-range = 1
 
 [node name="RareAndDeep" type="Node" parent="."]
 script = ExtResource("7_1er0k")

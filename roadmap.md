@@ -267,8 +267,8 @@ Weapons:
 Monsters:
 - [x] cherub (𝒜, 𝓒, 𝔠, 𝖈, 𝕔)
 - [x] skeleton (𝖘, 𝔰)
-- [ ] sentry scarab
-- [ ] nochort
+- [x] sentry scarab
+- [x] nochort
 - [ ] giant locust
 - [x] plasus rat
 
