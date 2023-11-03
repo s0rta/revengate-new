@@ -9,7 +9,7 @@
 [node name="SentryScarab" instance=ExtResource("1_iwdy1")]
 char = "š"
 caption = "sentry scarab"
-color = Color(0.0666667, 0.388235, 0.670588, 1)
+color = Color(0.0784314, 0.45098, 0.780392, 1)
 spawn_cost = 5.0
 health = 20
 strength = 35

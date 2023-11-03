@@ -353,7 +353,7 @@ Illustration: Jason Teves
 
 The Algerian giant locust is a large insect that looks like a cross between a wood wasp and a grasshopper. A single one of them poses little threat on its own, but they tend to come in very large numbers. 
 
-The insect is about 30 cm to 40 cm long from head to tail. They have sharp protruding mandibles, two pars of shorter front legs, and one pair of powerful long back legs that allow the insect to jump with great speed. The abdomen is on a separate body segment and ends with a long pointy stinger. The body is sparsely covered in long hair. Most of the body has stripes of dark green and a beautiful iridescent blue. The wings fold neatly backwards when the creature is not in flight. 
+The insect is about 30 cm to 40 cm long from head to tail. They have sharp protruding mandibles, two pairs of shorter front legs, and one pair of powerful long back legs that allow the insect to jump with great speed. The abdomen is on a separate body segment and ends with a long pointy stinger. The body is sparsely covered in long hair. Most of the body has stripes of dark green and a beautiful iridescent blue. The wings fold neatly backwards when the creature is not in flight. 
 
 The mandibles deliver cutting attacks and are strong enough to cut through leather or to work through a wooden door over the course of a few hours. The stinger delivers a strong venom that causes intense pain. Repeated strings will eventually paralyze a human. The insect produces enough venom to string about three times per day. 
 

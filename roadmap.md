@@ -269,7 +269,7 @@ Monsters:
 - [x] skeleton (𝖘, 𝔰)
 - [x] sentry scarab
 - [x] nochort
-- [ ] giant locust
+- [x] giant locust
 - [x] plasus rat
 
 Combat:

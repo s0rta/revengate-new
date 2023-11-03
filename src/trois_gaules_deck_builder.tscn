@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bnbtimmwf4woe"]
+[gd_scene load_steps=16 format=3 uid="uid://bnbtimmwf4woe"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_gqi5c"]
 [ext_resource type="Script" path="res://src/card_rule.gd" id="2_ktv76"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dtmgeu15pl21o" path="res://src/people/tourist.tscn" id="10_xeej0"]
 [ext_resource type="PackedScene" uid="uid://chpblbtevaa13" path="res://src/items/carrot.tscn" id="11_gnuqb"]
 [ext_resource type="PackedScene" uid="uid://b4dfdfio2fsma" path="res://src/people/lyonese.tscn" id="11_qwldy"]
+[ext_resource type="PackedScene" uid="uid://db6sjyoaw3ms2" path="res://src/monsters/giant_locust.tscn" id="13_veiw4"]
 
 [node name="TroisGaulesBuilder" type="Node"]
 script = ExtResource("1_gqi5c")
@@ -55,6 +56,8 @@ max_dungeon_occ = 2
 [node name="Tourist" parent="Infrequent" instance=ExtResource("10_xeej0")]
 
 [node name="Carrot" parent="Infrequent" instance=ExtResource("11_gnuqb")]
+
+[node name="GiantLocust" parent="Infrequent" instance=ExtResource("13_veiw4")]
 
 [node name="Frequent" type="Node" parent="."]
 script = ExtResource("2_ktv76")

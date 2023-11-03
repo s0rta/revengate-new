@@ -30,6 +30,7 @@ var _defaults := {Consts.Factions.BEASTS: -1}
 						[Consts.Factions.LUX_CO, Consts.Factions.OUTLAWS]: -1, 
 						[Consts.Factions.BEASTS, Consts.Factions.OUTLAWS]: 0, 
 						[Consts.Factions.BEASTS, Consts.Factions.CIRCUS]: 0, 
+						[Consts.Factions.BEASTS, Consts.Factions.NONE]: 0, 
 					}
 
 func _ready():
