@@ -26,7 +26,7 @@ var start_time: int
 
 func _ready():
 	#find deck builders
-	var deck_builders = find_children('', 'DeckBuilder', false, false)
+	var deck_builders = find_children("", "DeckBuilder", false, false)
 	
 	# int -> [all_sims_counter, sim_counters]
 	var per_depth_stats = {}
@@ -42,7 +42,7 @@ func _ready():
 		
 		for depth in range(1, max_sim_depth + 1):
 			var budget = spawn_budget(depth, Dungeon.MONSTER_MULTIPLIER)
-			var deck = builder.gen_deck('Actor', depth, Consts.LOC_INVALID, budget)
+			var deck = builder.gen_deck("Actor", depth, Consts.LOC_INVALID, budget)
 			
 			sim_counter = {}
 			if not per_depth_stats.has(depth):
@@ -64,7 +64,7 @@ func _ready():
 	
 	var elapsed = (Time.get_ticks_msec() - start_time) / 1000.0
 	
-	print("Time elapsed: %f | Number of decks per second: %f"%[elapsed, (nb_sims * max_sim_depth) / elapsed])
+	print("Time elapsed: %.1fs | Decks per second: %.2f d/s"%[elapsed, (nb_sims * max_sim_depth) / elapsed])
 	for depth in range(1, max_sim_depth + 1):
 		print("Summary of depth %d"% [depth])
 		var all_sims_counter = per_depth_stats[depth][0]
@@ -84,7 +84,7 @@ func sumarize_sims(all_sims_counter, sim_counters, all_keys):
 			occ.append(counter.get(key, 0))
 
 
-		if(all_sims_counter.get(key, false)):
+		if all_sims_counter.get(key, false):
 			var percentiles = Utils.percentile_breakdown(occ, k_nums)
 
 			var summary = ""
@@ -101,8 +101,6 @@ func inc_occ(counter, key):
 		counter[key] = 1
 	else:
 		counter[key] += 1
-
-
 
 func spawn_budget(depth, budget_multiplier):
 	return max(0, (base_spawn_budget + depth)*budget_multiplier)
