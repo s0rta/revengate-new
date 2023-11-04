@@ -226,6 +226,7 @@ Combat:
 - [x] fail if meeting happened
 
 ## v0.11
+- [ ] bug: min_board_occ ignored in deck builder
 - [ ] bug: Dungeon.populate_board() is not restricted to floor tiles
 - [ ] bug: Dungeon.populate_board() is not restricted to free tiles for monsters
 - [ ] bug: can chat across a closed door
@@ -274,7 +275,7 @@ Monsters:
 - [x] nochort
 - [x] giant locust
   - [x] swarming
-  - [ ] poison
+  - [x] poison
 - [x] plasus rat
 
 Combat:

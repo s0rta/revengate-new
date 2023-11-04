@@ -18,7 +18,7 @@ strength = 25
 agility = 45
 intelligence = 20
 bestiary_img = "res://src/monsters/giant-locust.jpg"
-description = "The Algerian giant locust is a large insect that looks like a cross between a wood wasp and a grasshopper. The insect is about 30 cm to 40 cm long from head to tail."
+description = "The Algerian giant locust is a large insect that looks like a cross between a wood wasp and a grasshopper. The insect is about 30 cm to 40 cm long from head to tail. The sting is poisonous and being stung several times can cause strong dizziness."
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.0666667, 0.388235, 0.670588, 1)
@@ -59,7 +59,9 @@ pitch_scale = 1.25
 
 [node name="Poison" type="Node" parent="Stinger" index="1"]
 script = ExtResource("6_58sdh")
-damage = 2
+damage = 1
 damage_family = 7
+agility = -2
+perception = -4
 probability = 0.5
-nb_turns = 3
+nb_turns = 5
