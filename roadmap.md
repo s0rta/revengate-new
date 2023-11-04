@@ -226,6 +226,9 @@ Combat:
 - [x] fail if meeting happened
 
 ## v0.11
+- [ ] bug: Dungeon.populate_board() is not restricted to floor tiles
+- [ ] bug: Dungeon.populate_board() is not restricted to free tiles for monsters
+- [ ] bug: can chat across a closed door
 - [x] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
 - [ ] bug: Travelling and Approaching are not invalidated uppon changing board
 - [ ] bug: gateways on Lyon Surface can end up in the river
@@ -270,6 +273,8 @@ Monsters:
 - [x] sentry scarab
 - [x] nochort
 - [x] giant locust
+  - [x] swarming
+  - [ ] poison
 - [x] plasus rat
 
 Combat:
@@ -284,6 +289,8 @@ Combat:
 - [ ] random interlude stories
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
+- [ ] Tracking keeps moving towards the last place where they saw their prey after it becomes unperceived
+
 
 ## v1.0
 - [ ] saved games

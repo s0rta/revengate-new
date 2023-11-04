@@ -37,6 +37,8 @@
 [node name="DeckBuilder" type="Node"]
 script = ExtResource("1_yitoo")
 
+[node name="Hissing" parent="." instance=ExtResource("25_0ydwd")]
+
 [node name="SewerOtter" parent="." instance=ExtResource("2_i1rpj")]
 
 [node name="Labras" parent="." instance=ExtResource("3_tqdik")]
@@ -174,9 +176,13 @@ position = Vector2(631, 437)
 
 [node name="SentryScarab" parent="TestingQuestTransitions" instance=ExtResource("31_aksig")]
 
-[node name="GiantLocust" parent="TestingQuestTransitions" instance=ExtResource("32_wgbwd")]
+[node name="SwarmTest" type="Node" parent="."]
+script = ExtResource("7_bd8gw")
+min_dungeon_occ = 6
+world_loc = Vector3i(13, 6, 0)
+debug_only = true
 
-[node name="Hissing" parent="." instance=ExtResource("25_0ydwd")]
+[node name="GiantLocust" parent="SwarmTest" instance=ExtResource("32_wgbwd")]
 
 [connection signal="visibility_changed" from="Quest1Goals/Outlaw2/PotionOfHealing" to="Quest1Goals/Outlaw2/PotionOfHealing" method="_on_visibility_changed" flags=18]
 [connection signal="visibility_changed" from="Quest1Goals/Outlaw2/PotionOfRegen" to="Quest1Goals/Outlaw2/PotionOfRegen" method="_on_visibility_changed" flags=18]

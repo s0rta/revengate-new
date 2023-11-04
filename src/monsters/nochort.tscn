@@ -24,7 +24,8 @@ They are employed by many organizations because of their great loyalty. They are
 "
 
 [node name="Label" parent="." index="0"]
-theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
+theme_override_colors/font_color = Color(0.458824, 0.227451, 0.109804, 1)
+text = "N"
 
 [node name="Exploring" type="Node" parent="." index="7"]
 script = ExtResource("2_ne3yr")

@@ -1,10 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://dnekf8fb50ge"]
+[gd_scene load_steps=5 format=3 uid="uid://dnekf8fb50ge"]
 
 [ext_resource type="Script" path="res://src/deck_builder_sim.gd" id="1_c3005"]
 [ext_resource type="PackedScene" uid="uid://hynfsvr45204" path="res://src/crypt_deck_builder.tscn" id="2_ee8rm"]
+[ext_resource type="PackedScene" uid="uid://bvm0q1k13gmym" path="res://src/easy_traboule_deck_builder.tscn" id="2_vtj4q"]
+[ext_resource type="PackedScene" uid="uid://dab6wiatrc0m6" path="res://src/hard_traboule_deck_builder.tscn" id="3_0mfiq"]
 
 [node name="DeckBuilderSim" type="Node"]
 script = ExtResource("1_c3005")
 base_spawn_budget = 8
 
+[node name="EasyTrabouleDeckBuilder" parent="." instance=ExtResource("2_vtj4q")]
+
 [node name="CryptDeckBuilder" parent="." instance=ExtResource("2_ee8rm")]
+
+[node name="HardTrabouleDeckBuilder" parent="." instance=ExtResource("3_0mfiq")]

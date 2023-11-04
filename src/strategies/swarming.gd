@@ -24,12 +24,12 @@ const REQ_NB_PEERS = 4  # number of nearby peers to be considered part of the sw
 var has_activated: bool
 var next_move: Vector2i
 
-func _nb_peers_at(coord, board, index):
+func _nb_peers_at(coord, radius, board, index):
 	var nb_peers = 0
 	for actor in index.get_actors():
 		if actor == me:
 			continue
-		if CombatUtils.are_peers(me, actor) and board.dist(me, coord) <= INFLUENCE_RADIUS:
+		if CombatUtils.are_peers(me, actor) and board.dist(me, coord) <= radius:
 			if me.perceives(actor):
 				nb_peers += 1
 	return nb_peers
@@ -40,36 +40,66 @@ func refresh(turn):
 	var index = board.make_index()
 	var here = me.get_cell_coord()
 	
-	var nb_peers = _nb_peers_at(here, board, index)	
+	var is_peer = CombatUtils.are_peers.bind(me)
+	var peers = index.get_actors().filter(is_peer)
+	
+	print("Refreshing Swarming for %s" % [me])
+	
+	print("  %d peers here" % len(peers))
+	
+	var in_radius = peers.filter(func (actor): return board.dist(me, actor) <= INFLUENCE_RADIUS)
+	print("  %d nearby peers" % len(in_radius))
+
+	var unperc_all = peers.filter(func (actor): return not me.perceives(actor))
+	# FIXME: sometimes has some duplicates??
+	var perc_all = peers.filter(func (actor): return me.perceives(actor))
+	var unperc_in_radius = in_radius.filter(func (actor): return not me.perceives(actor))
+
+	print("  %d peers unperceived" % len(unperc_all))
+	print("  %d nearby peers unperceived" % len(unperc_in_radius))
+
+	
+	var nb_peers = _nb_peers_at(here, INFLUENCE_RADIUS, board, index)	
 	if nb_peers >= REQ_NB_PEERS:
 		# already swarming, nothing to do
 		
 		# DEBUG
-		print("Already swarming!")
+		print("  Already swarming!")
 		
-		return false
+		return
 		
 	# see if any legal move could get us closer to swarming
 	var moves = []
-	for adj in board.adjacents(here):  # only returns legal moves by default
-		# FIXME: how many peers can we reach with those moves?
-		if _nb_peers_at(adj, board, index) > nb_peers:
-			moves.append(adj)
 	
-	if not moves.is_empty():
-		has_activated = true
-		next_move = Rand.choice(moves)
+	if not perc_all.is_empty():
+	
+		var dist_here = board.dist.bind(here)
+		var cur_dist = 1.0 * Utils.sum(perc_all.map(dist_here)) / len(perc_all)
 		
-		# DEBUG
-		print("Approaching the swarm: %s -> %s" % [board.coord_str(here), board.coord_str(next_move)])
+		for adj in board.adjacents(here, true, true, null, index):  # only returns legal moves
+			dist_here = board.dist.bind(adj)
+			var new_dist = 1.0 * Utils.sum(perc_all.map(dist_here)) / len(perc_all)
+			if new_dist < cur_dist:
+				moves.append(adj)
+		
+		if not moves.is_empty():
+			has_activated = true
+			next_move = Rand.choice(moves)
+			
+			# DEBUG
+			print("  perceived peers are at: %s" % [perc_all.map(func (actor): return board.coord_str(actor.get_cell_coord()))])
+			print("  Approaching the swarm: %s -> %s" % [board.coord_str(here), board.coord_str(next_move)])
+		else:
+			print("  No way to get swarming: avg dist stays the same everywhere")
 
 		
 	else:
 		# DEBUG
-		print("No way to get swarming")
+		print("  No way to get swarming: no visible peers")
 
 
 func is_valid():
+	var here = me.get_cell_coord()
 	return super() and has_activated
 
 func act() -> bool:

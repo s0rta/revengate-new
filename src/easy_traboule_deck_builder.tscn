@@ -24,7 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="24_8ja44"]
 [ext_resource type="PackedScene" uid="uid://cmshyslfrv0du" path="res://src/vibes/hissing.tscn" id="27_0wnww"]
 
-[node name="DeckBuilder" type="Node"]
+[node name="EasyTrabouleDeckBuilder" type="Node"]
 script = ExtResource("1_oonn7")
 
 [node name="SewerOtter" parent="." instance=ExtResource("2_v4koq")]
