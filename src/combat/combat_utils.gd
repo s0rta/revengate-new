@@ -52,3 +52,11 @@ static func add_kill(actor_type):
 	if not Tender.kills.has(actor_type):
 		Tender.kills[actor_type] = 0
 	Tender.kills[actor_type] += 1
+
+static func are_peers(actor_a, actor_b):
+	## Return if two actors are similar enough to be considerer "related" or "peers".
+	# This currently a very rough approximation that is prone to false positives. 
+	# Using classifier tags would be more robust.
+	return (actor_b != actor_a 
+			and actor_b.char == actor_a.char 
+			and actor_b.faction == actor_a.faction)

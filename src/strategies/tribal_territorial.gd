@@ -24,9 +24,6 @@ const INFLUENCE_RADIUS = 5
 var has_activated := false
 var intruder: Actor
 
-func _is_like_me(other):
-	return other != me and other.char == me.char and other.faction == me.faction
-
 func refresh(turn):
 	has_activated = false
 	var board = me.get_board()
@@ -36,10 +33,11 @@ func refresh(turn):
 	for actor in index.get_actors():
 		if actor == me:
 			continue
-		if _is_like_me(actor) and board.dist(me, actor) <= INFLUENCE_RADIUS:
+		if CombatUtils.are_peers(me, actor) and board.dist(me, actor) <= INFLUENCE_RADIUS:
 			if me.perceives(actor):
 				nb_supporters += 1
 	
+	# your personal space increases the more supporters you have
 	var pers_space_radius = (nb_supporters - 1) * 3
 	if pers_space_radius > 0:
 		var intruder_dist = INF
