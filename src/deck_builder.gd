@@ -77,8 +77,8 @@ func nb_mandatory_occ(card, rule, depth, world_loc:Vector3i):
 
 func gen_mandatory_deck(card_type, depth, world_loc:Vector3i, extra_cards=[]):
 	## Return a deck of cards that must be fully distributed before any draw is
-	##   done from the regular deck.
-	## The mandatory deck is probabilistic and the order of cards is random.
+	##   done from the regular probabilistic deck.
+	## The mandatory deck is shuffled and the order of cards is random.
 	## Return an empty deck if there are no mandatory cards for the level.
 	## Mandatory distribution rules take precedence over spawn_cost and budget is therefore ignored.
 	var tally = tally_draw.bind(true)
@@ -100,7 +100,11 @@ func gen_mandatory_deck(card_type, depth, world_loc:Vector3i, extra_cards=[]):
 	deck.normalize()
 	return deck
 
-func gen_deck(card_type, depth, world_loc:Vector3i, budget, extra_cards=[]):
+func gen_prob_deck(card_type, depth, world_loc:Vector3i, budget, extra_cards=[]):
+	## Return a probabilist deck of cards for a new board.
+	## The deck is shuffled and will return cards in a random order. 
+	## There are typically more cards than the spawn budget for the board and the caller has to 
+	## keep track of the value of the drawn cards to decide when to stop taking from the deck.
 	var deck = Deck.new(null, tally_draw)
 	_add_all_cards(deck, _get_cards(self, card_type), depth, world_loc, budget)
 	for child in get_children():

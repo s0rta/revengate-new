@@ -23,6 +23,7 @@ const nb_sims = 1000
 @export var base_spawn_budget := 0
 
 var start_time: int
+var all_keys: Dictionary
 
 func _ready():
 	#find deck builders
@@ -30,19 +31,16 @@ func _ready():
 	
 	# int -> [all_sims_counter, sim_counters]
 	var per_depth_stats = {}
-	var all_keys = {}
+	all_keys = {}
 	
 	var sim_counter
 	
 	start_time = Time.get_ticks_msec()
 	for i in nb_sims:
-
-		
 		var builder = deck_builders[0].duplicate() as DeckBuilder
 		
 		for depth in range(1, max_sim_depth + 1):
 			var budget = spawn_budget(depth, Dungeon.MONSTER_MULTIPLIER)
-			var deck = builder.gen_deck("Actor", depth, Consts.LOC_INVALID, budget)
 			
 			sim_counter = {}
 			if not per_depth_stats.has(depth):
@@ -51,20 +49,16 @@ func _ready():
 			var all_sims_counter = per_depth_stats[depth][0]
 			var sim_counters = per_depth_stats[depth][1]
 			
-			while not deck.is_empty() and budget > 0:
-				var card = deck.draw()
-				var key = [card.caption.to_lower(), card.get_short_desc()] 
-				all_keys[key] = true
-				budget -= card.spawn_cost
-				
-				inc_occ(all_sims_counter, key)
-				inc_occ(sim_counter, key)
+			var deck = builder.gen_mandatory_deck("Actor", depth, Consts.LOC_INVALID)
+			budget = draw_and_tally(deck, budget, all_sims_counter, sim_counter, true)
+			deck = builder.gen_prob_deck("Actor", depth, Consts.LOC_INVALID, budget)
+			budget = draw_and_tally(deck, budget, all_sims_counter, sim_counter, true)
 				
 			sim_counters.append(sim_counter)
 	
 	var elapsed = (Time.get_ticks_msec() - start_time) / 1000.0
 	
-	print("Time elapsed: %.1fs | Decks per second: %.2f d/s"%[elapsed, (nb_sims * max_sim_depth) / elapsed])
+	print("Time elapsed: %.1fs | Decks per second: %.2f d/s"%[elapsed, (nb_sims * max_sim_depth * 2) / elapsed])
 	for depth in range(1, max_sim_depth + 1):
 		print("Summary of depth %d"% [depth])
 		var all_sims_counter = per_depth_stats[depth][0]
@@ -72,7 +66,23 @@ func _ready():
 		
 		sumarize_sims(all_sims_counter, sim_counters, all_keys.keys())
 	
-	
+
+func draw_and_tally(deck, budget, all_sims_counter, sim_counter, strict_budget):
+	## Get all the cards we can from `deck` and record what cards were drawn.
+	## `strict_budget`: stop drawing as soon as we went over `budget`.
+	while not deck.is_empty():
+		if strict_budget and budget <= 0:
+			break
+		var card = deck.draw()
+		var key = [card.caption.to_lower(), card.get_short_desc()] 
+		all_keys[key] = true
+		budget -= card.spawn_cost
+		
+		inc_occ(all_sims_counter, key)
+		inc_occ(sim_counter, key)
+	return budget
+
+
 func sumarize_sims(all_sims_counter, sim_counters, all_keys):
 	var total_cards = Utils.sum(all_sims_counter.values())
 	all_keys.sort()
@@ -83,12 +93,11 @@ func sumarize_sims(all_sims_counter, sim_counters, all_keys):
 		for counter in sim_counters:
 			occ.append(counter.get(key, 0))
 
-
 		if all_sims_counter.get(key, false):
 			var percentiles = Utils.percentile_breakdown(occ, k_nums)
 
 			var summary = ""
-			summary += "%20s: %5.2f%% |"% [key[1], (1.0 * all_sims_counter.get(key, 0) / total_cards) * 100]
+			summary += "%27s: %5.2f%% |"% [key[1], (1.0 * all_sims_counter.get(key, 0) / total_cards) * 100]
 			for i in len(k_nums):
 				summary += " p%d: %d"%[k_nums[i], percentiles[i]]
 

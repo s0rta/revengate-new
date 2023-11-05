@@ -243,7 +243,7 @@ func _gen_decks_and_draw(board_builder:BoardBuilder, index, deck_builder, card_t
 		budget -= cards[-1].spawn_cost
 
 	# optional cards, if we have any spawning budget left
-	deck = deck_builder.gen_deck(card_type, depth, world_loc, budget, extra_optional_cards)
+	deck = deck_builder.gen_prob_deck(card_type, depth, world_loc, budget, extra_optional_cards)
 	while not deck.is_empty() and budget > 0:
 		cards.append(deck.draw())
 		budget -= cards[-1].spawn_cost
