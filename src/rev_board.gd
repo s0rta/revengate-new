@@ -799,7 +799,10 @@ func get_cell_by_terrain(terrain_name):
 
 func get_cell_terrain(coord):
 	var data = get_cell_tile_data(0, coord) as TileData
-	return tile_set.get_terrain_name(data.terrain_set, data.terrain)
+	if data == null:
+		return null
+	else:
+		return tile_set.get_terrain_name(data.terrain_set, data.terrain)
 	
 func is_on_board(coord):
 	## Return whether the coord is strictly contained inside the game board.

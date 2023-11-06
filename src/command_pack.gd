@@ -140,7 +140,10 @@ class Talk extends Command:
 		# TODO: it would make sense to have conversations further apart
 		var other = index.actor_at(coord)
 		is_default = other != null and not Tender.hero.is_foe(other)		
-		return dist <= Consts.CONVO_RANGE and other and other.get_conversation()
+		return (dist <= Consts.CONVO_RANGE 
+				and other 
+				and other.get_conversation() 
+				and Tender.hero.perceives(other))
 		
 	func run(coord:Vector2i) -> bool:
 		var other = index.actor_at(coord)

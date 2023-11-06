@@ -226,9 +226,7 @@ Combat:
 - [x] fail if meeting happened
 
 ## v0.11
-- [ ] bug: Dungeon.populate_board() is not restricted to floor tiles
-- [ ] bug: Dungeon.populate_board() is not restricted to free tiles for monsters
-- [ ] bug: can chat across a closed door
+- [x] bug: can chat across a closed door
 - [x] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
 - [ ] bug: Travelling and Approaching are not invalidated uppon changing board
 - [ ] bug: gateways on Lyon Surface can end up in the river
@@ -237,7 +235,6 @@ Combat:
 - [x] upgrade the DialogueManager plug-in
 - [x] Monte Carlo simulator for DeckBuilders
 - [ ] async preload most shaders to speedup startup
-- [ ] instructions on how to install all the Android dev dependencies
 - [x] church prefab
   - [x] vibes inside the church
   - [x] crypt under the church
@@ -264,7 +261,6 @@ Vibe:
 - [x] altar (ꟷ, 𝌁, ⚎)
 
 Weapons:
-- [ ] axe (𝇤)
 - [x] Mjölnir
 
 Monsters:
@@ -281,7 +277,6 @@ Combat:
 - [x] quick attack button is easier to enable (ex: has_offended a target)
 - [x] TribalTerritorial uses perception rather than dist()
 - [x] healing strategy is based on health-%, not absolute number of HPs
-- [ ] zapping spell
 
 ## v0.12
 - [ ] web export
@@ -290,6 +285,13 @@ Combat:
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
 - [ ] Tracking keeps moving towards the last place where they saw their prey after it becomes unperceived
+- [ ] instructions on how to install all the Android dev dependencies
+
+Weapons:
+- [ ] axe (𝇤)
+
+Combat:
+- [ ] zapping spell
 
 
 ## v1.0
