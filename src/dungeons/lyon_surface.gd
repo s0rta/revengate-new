@@ -75,7 +75,7 @@ func fill_new_board(builder:BoardBuilder, depth, world_loc, size):
 	var outer_rect = builder.rect
 
 	builder.board.paint_rect(outer_rect, builder.clear_terrain)
-	builder.board.paint_path(Geom.rect_perim(outer_rect), "wall")
+	builder.board.paint_path(Geom.rect_perim(outer_rect), builder.wall_terrain)
 	var unfabbed_rect = add_loc_prefabs(builder, world_loc)
 	if unfabbed_rect != null:
 		outer_rect = unfabbed_rect
@@ -97,8 +97,11 @@ func add_connectors(builder:BoardBuilder, neighbors):
 		if region == null:
 			coord = builder.random_floor_cell()
 		elif terrain == "gateway" and region != Consts.REG_CENTER:
-			# FIXME: this could end up in the river
-			coord = Rand.coord_on_rect_perim(builder.rect, region)
+			# TODO: also exclude the corners, diagonal entrances look off
+			var is_wall = board.is_terrain.bind(builder.wall_terrain)
+			var coords = Geom.rect_perim(builder.rect, region).filter(is_wall)
+			assert(not coords.is_empty(), "There is no wall to punch the gateway through.")
+			coord = Rand.choice(coords)
 		else:
 			coord = builder.random_coord_in_region(region, board.is_floor)
 		board.paint_cells([coord], terrain)

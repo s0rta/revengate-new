@@ -20,18 +20,30 @@ class_name Geom extends Node
 
 const CENTRAL_REGION_MARGIN := 0.25  # ration of coords that are on each side of the central region	
 
-static func rect_perim(rect: Rect2i) -> Array[Vector2i]:
+static func rect_perim(rect: Rect2i, region=null) -> Array[Vector2i]:
 	## Return all the coordinates making the inner perimeter of a rectangle.
 	## The coordinates are returned clockfise starting at rect.position.
+	## region: one of Consts.REG_*, if supplied, only coords from this side are included.
+	##         Which region a corner falls into is arbitrary. Each corner is only part 
+	##         of a single region.
+	
+	if region != null:
+		assert(region != Consts.REG_CENTER, 
+				"REG_CENTER does not intersect with the perimeter of the rectable.")
+	
 	var coords:Array[Vector2i] = []
-	for i in range(rect.size.x):
-		coords.append(rect.position + V.i(i, 0))
-	for j in range(1, rect.size.y):
-		coords.append(rect.position + V.i(rect.size.x-1, j))
-	for i in range(rect.size.x-2, 0, -1):
-		coords.append(rect.position + V.i(i, rect.size.y-1))
-	for j in range(rect.size.y-1, 0, -1):
-		coords.append(rect.position + V.i(0, j))
+	if region == null or region == Consts.REG_NORTH:
+		for i in range(rect.size.x):
+			coords.append(rect.position + V.i(i, 0))
+	if region == null or region == Consts.REG_EAST:
+		for j in range(1, rect.size.y):
+			coords.append(rect.position + V.i(rect.size.x-1, j))
+	if region == null or region == Consts.REG_SOUTH:
+		for i in range(rect.size.x-2, 0, -1):
+			coords.append(rect.position + V.i(i, rect.size.y-1))
+	if region == null or region == Consts.REG_WEST:
+		for j in range(rect.size.y-1, 0, -1):
+			coords.append(rect.position + V.i(0, j))
 	return coords
 
 static func rect_area(rect: Rect2i) -> int:

@@ -25,10 +25,12 @@ var unreachable := false  # have we failed to find a valid path?
 var updated := false  # have we refreshed the internal data this turn?
 var free_dest := true  # does the destination have to be free?
 var dest_str := "destination"
+var board
 
 func _init(dest_: Vector2i, path_=null, actor=null, priority_=null, ttl_=null):
 	super(actor, priority_, ttl_)
 	dest = dest_
+	board = me.get_board()
 	cancellable = true
 	if path_:
 		# not setting null paths; we try to generate a new one before deciding if the strategy
@@ -83,6 +85,8 @@ func is_valid():
 	return path and not arrived and not unreachable
 
 func refresh(_turn):
+	if board != me.get_board():
+		_invalidate()
 	if unreachable or arrived:
 		queue_free()
 

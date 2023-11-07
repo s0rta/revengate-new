@@ -878,9 +878,17 @@ func is_connector(coord:Vector2i):
 	var terrain = get_cell_terrain(coord)
 	return CONNECTOR_TERRAINS.has(terrain) 
 
+func is_terrain(coord, terrain):
+	## Return whether the cell terrain name at `coord` is of `terrain`.
+	return get_cell_terrain(coord) == terrain
+	
+func is_any_terrains(coord, terrains):
+	## Return whether the cell terrain name at `coord` is any of `terrain`.
+	return get_cell_terrain(coord) in terrains
+	
 func is_floor(coord:Vector2i):
 	## Return whether a cell is a plain floor tile (no stairs or doors or anything fancy).
-	return get_cell_terrain(coord) in FLOOR_TERRAINS
+	return is_any_terrains(coord, FLOOR_TERRAINS)
 
 func is_locked(coord:Vector2i):
 	if get_cell_terrain(coord) == "door-closed":

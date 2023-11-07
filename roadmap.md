@@ -228,13 +228,12 @@ Combat:
 ## v0.11
 - [x] bug: can chat across a closed door
 - [x] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
-- [ ] bug: Travelling and Approaching are not invalidated uppon changing board
-- [ ] bug: gateways on Lyon Surface can end up in the river
+- [x] bug: Travelling and Approaching are not invalidated uppon changing board
+- [x] bug: gateways on Lyon Surface can end up in the river
 - [ ] bug: GetCloser can pick paths that cut LOS, which aborts the command since the target is not unperceived
 - [x] F6 on Main scene does not show the story screen
 - [x] upgrade the DialogueManager plug-in
 - [x] Monte Carlo simulator for DeckBuilders
-- [ ] async preload most shaders to speedup startup
 - [x] church prefab
   - [x] vibes inside the church
   - [x] crypt under the church
@@ -249,9 +248,7 @@ UX:
 - [x] flash message on why a strategy got cancelled
 
 Items:
-- [ ] items stats and long description is available from the inventory screen
 - [x] "magical" tag replaces the magical flag
-- [ ] top hat (🎩)
 - [x] carrot (🥕)
 
 Vibe:
@@ -286,6 +283,11 @@ Combat:
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
 - [ ] Tracking keeps moving towards the last place where they saw their prey after it becomes unperceived
 - [ ] instructions on how to install all the Android dev dependencies
+- [ ] async preload most shaders to speedup startup
+
+Items:
+- [ ] items stats and long description is available from the inventory screen
+- [ ] top hat (🎩)
 
 Weapons:
 - [ ] axe (𝇤)
