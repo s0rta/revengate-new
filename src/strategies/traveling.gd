@@ -24,6 +24,7 @@ var arrived = false
 var unreachable := false  # have we failed to find a valid path?
 var updated := false  # have we refreshed the internal data this turn?
 var free_dest := true  # does the destination have to be free?
+var keep_los := false  # do we need to keep a line of sight on dest?
 var dest_str := "destination"
 var board
 
@@ -62,7 +63,12 @@ func _set_path(path_):
 func _make_path():
 	var board = me.get_board()
 	assert(board, "Traveling only works on scenes with a board")
-	var path_ = board.path_perceived(me.get_cell_coord(), dest, me, free_dest)
+	var path_func
+	if keep_los:
+		path_func = board.path_perceived_los
+	else:
+		path_func = board.path_perceived	
+	var path_ = path_func.call(me.get_cell_coord(), dest, me, free_dest)
 	if path_ == null:
 		if not arrived and not unreachable:
 			add_hero_message("Stopped traveling: %s unreachable." % dest_str, 

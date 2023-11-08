@@ -219,7 +219,7 @@ class TravelTo extends Command:
 		return index.is_free(coord) and board.path(hero_coord, coord)
 		
 	func run(coord:Vector2i) -> bool:
-		if Tender.hero.travel_to(coord):
+		if Tender.hero.travel_to(coord, index):
 			return Tender.hero.act()
 		else:
 			# didn't work, probably because the path is blocked
@@ -243,7 +243,7 @@ class GetCloser extends Command:
 		dist = board.dist(hero_coord, coord)
 		if dist <= 1:
 			return false
-		path = board.path_perceived(hero_coord, coord, Tender.hero, false, null, index)
+		path = board.path_perceived_los(hero_coord, coord, Tender.hero, false, null, index)
 		return path != null
 		
 	func run(coord:Vector2i) -> bool:

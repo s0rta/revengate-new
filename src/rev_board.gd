@@ -1242,6 +1242,16 @@ func path_perceived(start, dest, pov_actor:Actor, free_dest:=true, max_dist=null
 	var metrics = astar_metrics(start, dest, free_dest, max_dist, pred, index)
 	return metrics.path()
 
+func path_perceived_los(start, dest, pov_actor:Actor, free_dest:=true, max_dist=null, index=null):
+	## Return an Array of coordinates from `start` to `dest` as seen by `pov_actor` 
+	## that maintains a line-of-sight to the destination.
+	if index == null:
+		index = make_index()
+	var pred = func (coord):
+		return pov_actor.perceives_free(coord, index) and index.has_los(coord, dest)
+	var metrics = astar_metrics(start, dest, free_dest, max_dist, pred, index)
+	return metrics.path()
+
 func is_cell_unexposed(coord):
 	## Return whether the hero can perceive the cell at coord
 	if not visible:

@@ -230,7 +230,7 @@ Combat:
 - [x] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
 - [x] bug: Travelling and Approaching are not invalidated uppon changing board
 - [x] bug: gateways on Lyon Surface can end up in the river
-- [ ] bug: GetCloser can pick paths that cut LOS, which aborts the command since the target is not unperceived
+- [x] bug: GetCloser can pick paths that cut LOS, which aborts the command since the target is not unperceived
 - [x] F6 on Main scene does not show the story screen
 - [x] upgrade the DialogueManager plug-in
 - [x] Monte Carlo simulator for DeckBuilders
@@ -284,6 +284,7 @@ Combat:
 - [ ] Tracking keeps moving towards the last place where they saw their prey after it becomes unperceived
 - [ ] instructions on how to install all the Android dev dependencies
 - [ ] async preload most shaders to speedup startup
+- [ ] TravelTo uses a cached `path_perceived()`
 
 Items:
 - [ ] items stats and long description is available from the inventory screen

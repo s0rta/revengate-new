@@ -25,6 +25,7 @@ func _init(other_:Actor, path_=null, actor=null, priority_=null, ttl_=null):
 	var dest_ = other.get_cell_coord()
 	super(dest_, path_, actor, priority_, ttl_)
 	free_dest = false
+	keep_los = true
 	dest_str = other.get_short_desc()
 
 func _turns_left():
