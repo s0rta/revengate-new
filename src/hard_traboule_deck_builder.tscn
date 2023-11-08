@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dab6wiatrc0m6"]
+[gd_scene load_steps=21 format=3 uid="uid://dab6wiatrc0m6"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_phj4j"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_3bv6l"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="14_cxrka"]
 [ext_resource type="PackedScene" uid="uid://c7fgdridawfb3" path="res://src/items/magic_capsule_of_regen.tscn" id="16_ap6xo"]
 [ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="19_n7j36"]
+[ext_resource type="PackedScene" uid="uid://db6sjyoaw3ms2" path="res://src/monsters/giant_locust.tscn" id="20_3j7oh"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="23_6bt64"]
 [ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="24_3pef4"]
 [ext_resource type="PackedScene" uid="uid://cjoutyju3dhre" path="res://src/monsters/gleugt.tscn" id="25_8ffwd"]
@@ -83,6 +84,14 @@ caption = "magic capsule of regen "
 spawn_cost = 4.0
 
 [node name="Hissing" parent="." instance=ExtResource("27_8pr1w")]
+
+[node name="SwarmingFloors" type="Node" parent="."]
+script = ExtResource("7_1er0k")
+min_depth = 4
+max_depth = 7
+min_board_occ = 3
+
+[node name="GiantLocust" parent="SwarmingFloors" instance=ExtResource("20_3j7oh")]
 
 [connection signal="visibility_changed" from="Rare/Rapier" to="Rare/Rapier" method="_on_visibility_changed" flags=18]
 [connection signal="visibility_changed" from="Rare/Dynamite" to="Rare/Dynamite" method="_on_visibility_changed" flags=18]

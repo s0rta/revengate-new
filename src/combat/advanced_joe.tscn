@@ -89,7 +89,6 @@ range = 1
 is_equipped = true
 
 [node name="SilverSaber" parent="." instance=ExtResource("9_a8ws8")]
-range = 1
 
 [node name="AmuletOfStrength" parent="." instance=ExtResource("10_ywllc")]
 

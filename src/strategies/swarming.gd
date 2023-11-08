@@ -20,6 +20,7 @@ class_name Swarming extends Strategy
 
 const INFLUENCE_RADIUS = 4
 const REQ_NB_PEERS = 4  # number of nearby peers to be considered part of the swarm
+const VERBOSE := false  # are we printing lots of debug info?
 
 var has_activated: bool
 var next_move: Vector2i
@@ -42,30 +43,23 @@ func refresh(turn):
 	
 	var is_peer = CombatUtils.are_peers.bind(me)
 	var peers = index.get_actors().filter(is_peer)
-	
-	print("Refreshing Swarming for %s" % [me])
-	
-	print("  %d peers here" % len(peers))
-	
-	var in_radius = peers.filter(func (actor): return board.dist(me, actor) <= INFLUENCE_RADIUS)
-	print("  %d nearby peers" % len(in_radius))
-
-	var unperc_all = peers.filter(func (actor): return not me.perceives(actor))
-	# FIXME: sometimes has some duplicates??
 	var perc_all = peers.filter(func (actor): return me.perceives(actor))
-	var unperc_in_radius = in_radius.filter(func (actor): return not me.perceives(actor))
-
-	print("  %d peers unperceived" % len(unperc_all))
-	print("  %d nearby peers unperceived" % len(unperc_in_radius))
+	
+	if VERBOSE:
+		print("Refreshing Swarming for %s" % [me])
+		print("  %d peers here" % len(peers))
+		var unperc_all = peers.filter(func (actor): return not me.perceives(actor))
+		var in_radius = peers.filter(func (actor): return board.dist(me, actor) <= INFLUENCE_RADIUS)
+		var unperc_in_radius = in_radius.filter(func (actor): return not me.perceives(actor))
+		print("  %d peers unperceived" % len(unperc_all))
+		print("  %d nearby peers unperceived" % len(unperc_in_radius))
 
 	
 	var nb_peers = _nb_peers_at(here, INFLUENCE_RADIUS, board, index)	
 	if nb_peers >= REQ_NB_PEERS:
-		# already swarming, nothing to do
-		
-		# DEBUG
-		print("  Already swarming!")
-		
+		# already swarming, nothing to do	
+		if VERBOSE:
+			print("  Already swarming!")
 		return
 		
 	# see if any legal move could get us closer to swarming
@@ -86,15 +80,14 @@ func refresh(turn):
 			has_activated = true
 			next_move = Rand.choice(moves)
 			
-			# DEBUG
-			print("  perceived peers are at: %s" % [perc_all.map(func (actor): return board.coord_str(actor.get_cell_coord()))])
-			print("  Approaching the swarm: %s -> %s" % [board.coord_str(here), board.coord_str(next_move)])
-		else:
+			if VERBOSE:
+				print("  perceived peers are at: %s" % [perc_all.map(func (actor): return board.coord_str(actor.get_cell_coord()))])
+				print("  Approaching the swarm: %s -> %s" % [board.coord_str(here), board.coord_str(next_move)])
+		elif VERBOSE:
 			print("  No way to get swarming: avg dist stays the same everywhere")
 
 		
-	else:
-		# DEBUG
+	elif VERBOSE:
 		print("  No way to get swarming: no visible peers")
 
 

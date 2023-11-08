@@ -11,7 +11,7 @@
 char = "𝒜"
 caption = "cherub"
 spawn_cost = 15.0
-health = 60
+health = 40
 healing_prob = 0.15
 strength = 55
 agility = 52

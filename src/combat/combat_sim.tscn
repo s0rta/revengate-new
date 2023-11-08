@@ -1,13 +1,19 @@
-[gd_scene load_steps=9 format=3 uid="uid://d1wjr6usat6lm"]
+[gd_scene load_steps=15 format=3 uid="uid://d1wjr6usat6lm"]
 
-[ext_resource type="Script" path="res://src/combat/simulator.gd" id="1_0qirp"]
+[ext_resource type="Script" path="res://src/combat/combat_sim.gd" id="1_0qirp"]
 [ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="1_fdq17"]
 [ext_resource type="PackedScene" uid="uid://cfc3ttsrd52r" path="res://src/rev_board.tscn" id="2_r23sb"]
 [ext_resource type="PackedScene" uid="uid://dq2b713n15c7h" path="res://src/combat/advanced_joe.tscn" id="4_l8kup"]
-[ext_resource type="PackedScene" uid="uid://cpjfi7f2jww5a" path="res://src/people/salapou.tscn" id="6_2g26o"]
+[ext_resource type="PackedScene" uid="uid://cx7utj7hd3ne" path="res://src/monsters/kobold.tscn" id="6_3iqgc"]
 [ext_resource type="PackedScene" uid="uid://d8jxxkoa4b00" path="res://src/people/outlaw.tscn" id="6_n5g3r"]
-[ext_resource type="PackedScene" uid="uid://c8vcdsslc86r2" path="res://src/monsters/automaton.tscn" id="8_jg733"]
-[ext_resource type="PackedScene" uid="uid://bvbyl05ombdxa" path="res://src/monsters/yarohu.tscn" id="9_6i3yv"]
+[ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="7_yr6jo"]
+[ext_resource type="PackedScene" uid="uid://db6sjyoaw3ms2" path="res://src/monsters/giant_locust.tscn" id="8_ebv6h"]
+[ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="8_fioq3"]
+[ext_resource type="PackedScene" uid="uid://b6fcsa8psp63y" path="res://src/monsters/skeleton.tscn" id="9_y1k4w"]
+[ext_resource type="PackedScene" uid="uid://0yvvkfod7748" path="res://src/monsters/cherub.tscn" id="10_uwghh"]
+[ext_resource type="PackedScene" uid="uid://dqkhlt4d3sbqn" path="res://src/monsters/sentry_scarab.tscn" id="11_lqufv"]
+[ext_resource type="PackedScene" uid="uid://b1elqic8grhvb" path="res://src/monsters/nochort.tscn" id="13_0h27e"]
+[ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="14_oso5y"]
 
 [node name="Simulator" type="Node2D"]
 script = ExtResource("1_0qirp")
@@ -28,14 +34,28 @@ position = Vector2(112, 39)
 
 [node name="ExtraStages" type="Node" parent="."]
 
+[node name="Kobold" parent="ExtraStages" instance=ExtResource("6_3iqgc")]
+
+[node name="SulantTiger" parent="ExtraStages" instance=ExtResource("7_yr6jo")]
+
+[node name="Ghost" parent="ExtraStages" instance=ExtResource("8_fioq3")]
+
+[node name="Skeleton" parent="ExtraStages" instance=ExtResource("9_y1k4w")]
+
+[node name="Cherub" parent="ExtraStages" instance=ExtResource("10_uwghh")]
+
+[node name="SentryScarab" parent="ExtraStages" instance=ExtResource("11_lqufv")]
+
 [node name="Node" type="Node" parent="ExtraStages"]
 
-[node name="Salapou" parent="ExtraStages/Node" instance=ExtResource("6_2g26o")]
+[node name="GiantLocust" parent="ExtraStages/Node" instance=ExtResource("8_ebv6h")]
 
-[node name="Yarohu" parent="ExtraStages/Node" instance=ExtResource("9_6i3yv")]
+[node name="GiantLocust2" parent="ExtraStages/Node" instance=ExtResource("8_ebv6h")]
 
-[node name="Automaton" parent="ExtraStages/Node" instance=ExtResource("8_jg733")]
+[node name="GiantLocust3" parent="ExtraStages/Node" instance=ExtResource("8_ebv6h")]
 
-[node name="Automaton2" parent="ExtraStages/Node" instance=ExtResource("8_jg733")]
+[node name="Nochort" parent="ExtraStages" instance=ExtResource("13_0h27e")]
+
+[node name="Pacherr" parent="ExtraStages" instance=ExtResource("14_oso5y")]
 
 [connection signal="turn_started" from="TurnQueue" to="." method="_on_turn_queue_turn_started"]

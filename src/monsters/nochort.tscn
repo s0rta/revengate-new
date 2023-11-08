@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://b1elqic8grhvb"]
+[gd_scene load_steps=6 format=3 uid="uid://b1elqic8grhvb"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_n3mxu"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="2_38j73"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="2_ne3yr"]
 [ext_resource type="PackedScene" uid="uid://bsrluqcixi630" path="res://src/weapons/halberd.tscn" id="3_le5yd"]
+[ext_resource type="Script" path="res://src/combat/core_skills.gd" id="5_e13qm"]
 
 [node name="Nochort" instance=ExtResource("1_n3mxu")]
 char = "N"
@@ -11,10 +12,10 @@ caption = "nochort"
 color = Color(0.458824, 0.227451, 0.109804, 1)
 conversation_file = "res://src/story/nochort.dialogue"
 spawn_cost = 12.0
-health = 60
+health = 58
 healing_prob = 0.07
 strength = 65
-agility = 45
+agility = 47
 intelligence = 47
 perception = 55
 bestiary_img = "res://src/monsters/nochort.png"
@@ -37,3 +38,7 @@ priority = 0.8
 
 [node name="Halberd" parent="." index="9" instance=ExtResource("3_le5yd")]
 is_equipped = true
+
+[node name="SkillLevels" type="Node" parent="." index="10"]
+script = ExtResource("5_e13qm")
+polearm = 2

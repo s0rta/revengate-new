@@ -19,7 +19,7 @@
 ## This script is autoloaded at `Consts`
 extends Node
 
-const VERSION := "0.10.0"
+const VERSION := "0.10.9"
 const VERSION_CODE := 1027132
 const DEBUG = true
 
