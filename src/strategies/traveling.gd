@@ -24,7 +24,7 @@ var arrived = false
 var unreachable := false  # have we failed to find a valid path?
 var updated := false  # have we refreshed the internal data this turn?
 var free_dest := true  # does the destination have to be free?
-var keep_los := false  # do we need to keep a line of sight on dest?
+var perceivable := false  # are we only considering perceibable tiles?
 var dest_str := "destination"
 var board
 
@@ -64,8 +64,8 @@ func _make_path():
 	var board = me.get_board()
 	assert(board, "Traveling only works on scenes with a board")
 	var path_func
-	if keep_los:
-		path_func = board.path_perceived_los
+	if perceivable:
+		path_func = board.path_perceived_strict
 	else:
 		path_func = board.path_perceived	
 	var path_ = path_func.call(me.get_cell_coord(), dest, me, free_dest)

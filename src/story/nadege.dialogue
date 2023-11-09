@@ -1,6 +1,6 @@
 ~ intro
 Nadège: So you are the new guy? I have a job for you.
-Nadège: A stack of loom punch cards (𝌕) was stolen a few days ago and we have a lead on where the thieves are hiding. It's a gated neighborhood a few blocks NW of here, there is a discrete way in with the traboule around the corner.
+Nadège: A stack of loom punch cards (𝌕) was stolen a few days ago and we have a lead on where the thieves are hiding. It's a gated neighborhood a few blocks Northwest of here, there is a discrete way in with the traboule around the corner.
 Nadège: Take this, just in case you need to defend yourself.
 do checkpoint("about_mission")
 do speaker_give_item()
@@ -25,7 +25,7 @@ Nadège: There is something weird about the cards.
 Nadège: I will try to find out more about them before we give them back. In the meantime, I have another job for you.
 Nadège: François-Emmanuel Verguin, Frank for friends, is a brilliant chemist who's been running a home lab. It turns out that most of his lab is built with supplies that he "borrowed" from his day job at the Vitriolerie chemical plant.
 Nadège: It looks like an accountant has decided to put a lot of scrutiny into the Vitriolerie and that is sure to expose what Frank Verguin is doing. Since we strongly believe that Verguin's research is good for Franconia, we want you to go have a chat with Benoît, the accountant.
-Nadège: Last we heard, he was on his way to meet with Le Grand Salapou a few blocks East of here, probably to sell him some information. You can easily get there with the side passage just South of the café. You might need the key if the gate is still closed.
+Nadège: Last we heard, he was on his way to meet with Le Grand Salapou a few blocks West of here, probably to sell him some information. You can easily get there with the side passage just South of the café. You might need the key if the gate is still closed.
 Nadège: Do your best to prevent that meeting from happening. Here, take this in case you need to add a little "convincing" to your conversation with Benoît.
 do checkpoint("about_lyon")
 do speaker_give_items()
