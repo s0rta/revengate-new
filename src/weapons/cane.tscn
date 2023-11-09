@@ -13,3 +13,4 @@ spawn_cost = 3.0
 
 [node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
 stream = ExtResource("2_8sfxs")
+volume_db = -15.0
