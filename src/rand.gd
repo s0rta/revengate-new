@@ -175,19 +175,24 @@ static func split_rect(rect:Rect2i, orientation, pad=0, min_side=1):
 	elif orientation == Orientation.VERTICAL:
 		metric = rect.size.y
 		
-	assert(metric >= min_metric)
-	var boundary = randi_range(min_side, metric - min_side - pad - 1)
+	assert(metric >= min_metric, 
+			"%s is too small to be split with min_side=%s and pad=%s" % [rect, min_side, pad])
+
+	# a line just beyond the first partition
+	var boundary = randi_range(min_side, metric - min_side - pad)
 	
-	var br1 = null  # bottom-right of first partition
+	var r1size = null  # size of the first rect
+	var r2size = null  # size of the second rect
 	var tl2 = null  # top-left of second partition
 	if orientation == Orientation.HORIZONTAL:
-		br1 = rect.position + V.i(boundary, rect.size.y - 1)
-		tl2 = rect.position + V.i(boundary + pad + 1, 0)
+		r1size = V.i(boundary, rect.size.y)
+		r2size = V.i(metric - boundary - pad, rect.size.y)
+		tl2 = rect.position + V.i(boundary + pad, 0)
 	elif orientation == Orientation.VERTICAL:
-		br1 = rect.position + V.i(rect.size.x - 1, boundary)
-		tl2 = rect.position + V.i(0, boundary + pad + 1)
+		r1size = V.i(rect.size.x, boundary)
+		r2size = V.i(rect.size.x, metric - boundary - pad)
+		tl2 = rect.position + V.i(0, boundary + pad)
 	else: 
 		return null
-	return [Rect2i(rect.position, br1 - rect.position + Vector2i.ONE), 
-			Rect2i(tl2, rect.end - tl2)]  # rect.end is outside the rect!
-
+	return [Rect2i(rect.position, r1size), 
+			Rect2i(tl2, r2size)]

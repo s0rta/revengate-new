@@ -20,6 +20,13 @@ class_name Geom extends Node
 
 const CENTRAL_REGION_MARGIN := 0.25  # ration of coords that are on each side of the central region	
 
+# Some notes on Rect2i when working with tiles:
+# - `rect.end` is *outside* the rect, it's *not* the bottom right corner
+# ex.: Rect2i(0, 0, 4, 4).end => V.i(4, 4)  # br here is V.i(3, 3)
+# - `rect.has_point(p)` includes the whole rect. The Godot docs suggets otherwise, but it's because
+#    they consider the bottom and right edges to be the ones that line up with `rect.end`.
+# ex.: Rect2i(0, 0, 4, 4).has_point(V.i(3, 3)) => true
+
 static func rect_perim(rect: Rect2i, region=null) -> Array[Vector2i]:
 	## Return all the coordinates making the inner perimeter of a rectangle.
 	## The coordinates are returned clockfise starting at rect.position.

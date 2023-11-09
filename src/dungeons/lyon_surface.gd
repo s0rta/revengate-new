@@ -23,6 +23,9 @@ const STARTING_CONN_TARGETS = {
 		Vector2i(21, 7): {"dungeon": "Traboule2"}, 
 		Vector2i(0, 15): {"dungeon": "TroisGaulesSurface"}
 	}
+	
+@export var min_houses := 3
+@export var max_houses := 6
 
 func dungeon_for_loc(world_loc:Vector3i):
 	## Return the name of the dungeon where `world_loc` belongs or null is it's part of the current dungeon
@@ -82,7 +85,7 @@ func fill_new_board(builder:BoardBuilder, depth, world_loc, size):
 	
 	# houses are rooms, they have a 1-tile gap all around to make the Lyon surface feel open
 	builder.rect = Geom.inner_rect(outer_rect, 1)
-	builder.gen_rooms(randi_range(3, 6), false)
+	builder.gen_rooms(randi_range(min_houses, max_houses), false)
 	builder.open_rooms()
 	
 	builder.rect = orig_rect
