@@ -224,8 +224,11 @@ Monsters:
 
 Combat:
 - [x] fail if meeting happened
-
+  
 ## v0.11
+- [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
+- [x] bug: attack markers stays on after killing a monster
+- [ ] bug: victory screen flashes if exiting the last dungeon without killing Retznac
 - [x] bug: can chat across a closed door
 - [x] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
 - [x] bug: Travelling and Approaching are not invalidated uppon changing board

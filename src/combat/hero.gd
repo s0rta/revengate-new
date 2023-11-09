@@ -126,8 +126,8 @@ func highlight_options():
 		var there = actor.get_cell_coord()
 		if cmd.is_valid_for(there) and cmd.is_default:
 			friend_coords.append(there)
+			
 	cmd = CommandPack.Attack.new(index)
-	
 	for actor in index.get_actors():
 		var there = actor.get_cell_coord()
 		if cmd.is_valid_for(there) and cmd.is_default:
