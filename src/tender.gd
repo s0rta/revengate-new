@@ -28,7 +28,7 @@ var hud = null
 var viewport = null
 var kills := {}
 var sentiments = null  # SentimentTable
-var chapter := 0  # 1-indexed
+var quest = null  # a Main.Quest instance
 
 # End of game stats
 var last_turn = null
@@ -44,7 +44,7 @@ func reset(hero_=null, hud_=null, viewport_=null, sentiments_=null):
 	hero = hero_
 	hud = hud_
 	viewport = viewport_
-	chapter = 1
+	quest = null
 	kills = {}
 	sentiments = sentiments_
 	last_turn = null

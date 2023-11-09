@@ -33,17 +33,22 @@ class Quest:
 	var title: String
 	var setup_func  # Callabel, optionnal
 	var intro_path: String
+	var win_events_any: Array[String]  # any of those events is a victory
+	var fail_events_any: Array[String]  # any of those events is a makes you fail the quest
 	var win_msg: String
 	var fail_msg: String
 
-	func _init(no_, title_, intro_path_, win_msg_, setup_func_=null, fail_msg_=""):
+	func _init(no_, title_, intro_path_, win_msg_, setup_func_=null, 
+				win_event_any_:Array[String]=[], 
+				fail_event_any_:Array[String]=[], fail_msg_=""):
 		no = no_
 		title = title_
 		intro_path = intro_path_
 		win_msg = win_msg_
-		fail_msg = fail_msg_
 		setup_func = setup_func_
-
+		win_events_any = win_event_any_
+		fail_events_any = fail_event_any_
+		fail_msg = fail_msg_
 
 func _ready():
 	# Quests
@@ -54,6 +59,8 @@ func _ready():
 						"res://src/story/bewitching_bookkeeping.md", 
 						"You prevented Benoît the accountant from exposing Frank Verguin's home lab.", 
 						start_ch2, 
+						["accountant_yeilded", "accountant_died"],
+						["accountant_met_salapou"],
 						"You didn't stop Benoît the accountant from selling his information."), 
 				Quest.new(3, "The Sound of Satin", 
 						"res://src/story/sound_of_satin.md", 
@@ -63,6 +70,7 @@ func _ready():
 						start_ch3)]
 
 	Tender.reset(hero, hud, %Viewport, $SentimentTable)	
+	Tender.quest = quests[0]
 	_discover_start_board()
 	hud.set_hero(hero)
 	$VictoryProbe.hero = hero
@@ -108,9 +116,6 @@ func _activate_board(new_board):
 func get_board():
 	## Return the current active board
 	return board
-
-func get_quest():
-	return quests[Tender.chapter - 1]
 
 func destroy_items(items):
 	for item in items:
@@ -177,8 +182,7 @@ func _compile_hero_stats():
 func conclude_game(victory:bool, game_over:bool):
 	## do a final bit of cleanup then show the Game Over screen
 	_compile_hero_stats()
-	var last_quest = Tender.chapter == len(quests)
-	var quest = get_quest()
+	var last_quest = Tender.quest
 	
 	if game_over:
 		$TurnQueue.shutdown()
@@ -190,12 +194,12 @@ func conclude_game(victory:bool, game_over:bool):
 		await hero.anims_done
 		print("hero done animating!")
 
-	%EndOfChapterScreen.popup(quest, victory, game_over)
+	%EndOfChapterScreen.popup(Tender.quest, victory, game_over)
 	if not game_over:
 		await %EndOfChapterScreen.start_next_chapter
-		Tender.chapter += 1
-		quest = get_quest()
-		assert(quest.setup_func is Callable, "We don't have a setup function for chapter %s" % Tender.chapter)
+		var quest = quests[Tender.quest.no]  # No starts at 1, so this is advancing.
+		Tender.quest = quest
+		assert(quest.setup_func is Callable, "We don't have a setup function for chapter %s" % quest.no)
 		quest.setup_func.call()
 
 func center_on_hero(_arg=null):
@@ -237,6 +241,7 @@ func start_ch2():
 func start_ch3():
 	var mem = Tender.hero.mem
 	# Nadège gives key and dress sword
+	destroy_items(%Nadege.get_items(["quest-reward"]))
 	%Nadege.conversation_sect = "intro_3"
 	if not mem.recall("accountant_met_salapou"):
 		if mem.recall("accountant_died"):

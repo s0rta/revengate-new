@@ -107,6 +107,7 @@ class QuickAttack extends Command:
 		var hero = Tender.hero as Actor
 		attack_range = hero.get_max_weapon_range()
 		var actors = index.get_actors_in_sight(hero.get_cell_coord(), attack_range)
+		actors = actors.filter(func(actor): return actor.is_alive())
 		actors.shuffle()
 		var victims = _get_prior_victims()
 		for actor in actors:
@@ -143,7 +144,8 @@ class Talk extends Command:
 		var other = index.actor_at(coord)
 		is_default = other != null and not Tender.hero.is_foe(other)		
 		return (dist <= Consts.CONVO_RANGE 
-				and other 
+				and other
+				and other.is_alive()
 				and other.get_conversation() 
 				and Tender.hero.perceives(other))
 		

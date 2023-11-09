@@ -228,7 +228,7 @@ Combat:
 ## v0.11
 - [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
 - [x] bug: attack markers stays on after killing a monster
-- [ ] bug: victory screen flashes if exiting the last dungeon without killing Retznac
+- [x] bug: victory screen flashes if exiting the last dungeon without killing Retznac
 - [x] bug: can chat across a closed door
 - [x] bug: highlights are not immediately cleared if you TravelTo right after a dialogue
 - [x] bug: Travelling and Approaching are not invalidated uppon changing board
@@ -279,6 +279,7 @@ Combat:
 - [x] healing strategy is based on health-%, not absolute number of HPs
 
 ## v0.12
+- [ ] Seeking is easier to resolve even is the target keeps moving
 - [ ] web export
   - [ ] better keyboard support (ex.: ESC cancels actions)
 - [ ] random interlude stories
