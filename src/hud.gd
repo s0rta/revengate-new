@@ -48,7 +48,7 @@ func set_hero(hero_):
 	quick_attack_cmd = CommandPack.QuickAttack.new(index)
 	_set_quick_attack_icon()
 	
-func _set_quick_attack_icon():
+func _set_quick_attack_icon(_arg=null):
 	var weapons = hero.get_weapons()
 	assert(len(weapons) == 1, "Dual weilding is not implemented for QuickAttack button style")
 	var weapon = weapons[0]
