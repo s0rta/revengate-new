@@ -226,7 +226,6 @@ Combat:
 - [x] fail if meeting happened
   
 ## v0.11
-- [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
 - [x] bug: attack markers stays on after killing a monster
 - [x] bug: victory screen flashes if exiting the last dungeon without killing Retznac
 - [x] bug: can chat across a closed door
@@ -279,6 +278,7 @@ Combat:
 - [x] healing strategy is based on health-%, not absolute number of HPs
 
 ## v0.12
+- [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
 - [ ] Seeking is easier to resolve even is the target keeps moving
 - [ ] web export
   - [ ] better keyboard support (ex.: ESC cancels actions)

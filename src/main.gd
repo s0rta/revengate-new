@@ -270,6 +270,5 @@ func start_ch3():
 func test():
 	print("Testing: 1, 2... 1, 2!")
 
-
 func test2():
 	print("Testing: 2, 1... 2, 1!")

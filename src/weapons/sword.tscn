@@ -1,14 +1,15 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://h7s2p8mgm387"]
 
 [ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_xs8yb"]
 [ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/weapons/sword-hit-01.wav" id="2_634fp"]
 
 [node name="Sword" instance=ExtResource("1_xs8yb")]
 damage = 6
+range = 1
 damage_family = 2
-skill = "fencing"
 char = "🗡"
 caption = "sword"
+skill = "fencing"
 
 [node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
 stream = ExtResource("2_634fp")

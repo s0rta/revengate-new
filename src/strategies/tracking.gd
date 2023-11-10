@@ -43,7 +43,6 @@ func refresh(turn):
 			return
 		elif turn - foe_last_seen <= nb_track_turns:
 			# still tracking
-			print("Tracking: prey is unperceived, but we are not giving up yet...")
 			return
 	# we need a new foe!
 	var index = me.get_board().make_index()
