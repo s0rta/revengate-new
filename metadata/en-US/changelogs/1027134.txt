@@ -1,0 +1,18 @@
+Daggers have a longer range.
+New building: church.
+New dungeon: crypt under the church.
+New weapon: Mjölnir.
+New monsters: cherub (not friendly), skeleton, sentry scarab, nochort, plasus rat, Algerian giant locust.
+New monster strategy: swarming.
+New item: carrot.
+
+Bug fixes:
+- can no longer chat across walls and closed doors;
+- more consistent clearing of action highlight markers (the red and green squares around actors);
+- monster strategies now obey perception (with select rare exceptions).
+
+User Experience:
+- single tap on distant actors pop a context menu: (get closer, inspect, ...);
+- added a health bar;
+- flash a message on with the reason why a travel command aborted (path block, under attack, ...);
+- Quick Attack button is available as soon as you've attacked someone in range, even a friendly actor. 
