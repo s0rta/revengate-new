@@ -22,6 +22,29 @@ static func is_debug() -> bool:
 	## Return whether we are in debug mode
 	return Consts.DEBUG and OS.is_debug_build()
 
+static func dstr_node(node:Node) -> String:
+	## Return a string summary of a hiarchy of a node's children
+	var lines = []
+	var prefix = node.get_path().get_concatenated_names()
+	for child in node.find_children("", "Node", true, false):
+		var node_str = child.get_path().get_concatenated_names().replace(prefix, ".")
+		node_str += " owner=%s" % [child.get_owner()]
+		lines.append(node_str)
+	lines.append("")
+	return "\n".join(lines)
+	
+static func dlog_node(node:Node, path:String):
+	## Log basic infos about all the nodes in a tree to a file.
+	FileAccess.open(path, FileAccess.WRITE).store_string(Utils.dstr_node(node))
+
+static func dstr_properties(obj:Object) -> String:
+	var lines = []
+	for prop in obj.get_property_list():
+		lines.append("%s" % [prop])
+		lines.append("    %s" % [obj.get(prop.name)])
+	lines.append("")
+	return "\n".join(lines)
+
 static func ddump_event(event, node, meth_name):
 	## Print a trace that event was received by node.meth_name(). 
 	## Note all events are printed, only those with high debug-value.

@@ -26,6 +26,8 @@ Revengate Style Guide
 * actor: any character, includes monsters and hero
 * h_delta: a health delta, the generic version of damage (<0) or healing (>0)
 * ddump: debug dump – print a lot of info about an object to the termimal or to a file
+* dstr: debug string – get a debug representation of an object as a string
+* dlog: debug log – write the debug representation of an object to a file
 * make_: prefix for deterministic generation
 * gen_: prefix for pseudo-random procedural generation
 
