@@ -32,7 +32,7 @@ func start_teleport_to():
 	if vals[0]:
 		var viewport = $/root/Main.find_child("Viewport")
 		var coord = viewport.global_pos_to_board_coord(vals[1])
-		get_parent().hero.place(coord, true)
+		Tender.hero.place(coord, true)
 	is_capturing = false
 
 func start_inspect_at():

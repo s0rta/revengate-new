@@ -20,8 +20,6 @@ extends Node2D
 # The hero moved to a different level, the UI and turn logic are affected and must be notified
 signal board_changed(new_board)
 
-@onready var hero:Actor = find_child("Hero")
-@onready var hud = $HUD
 @onready var dungeons_cont: Node = %Viewport  # all dungeons must be direct descendent of this node
 @onready var commands = $CommandPack
 var board: RevBoard  # the active board
@@ -69,18 +67,21 @@ func _ready():
 							+ "It reminds you of the marshes around the river Rhône at sunrise."), 
 						start_ch3)]
 
-	Tender.reset(hero, hud, %Viewport, $SentimentTable)	
+	Tender.reset(%Hero, %HUD, %Viewport, $SentimentTable)	
 	Tender.quest = quests[0]
 	_discover_start_board()
-	hud.set_hero(hero)
-	$VictoryProbe.hero = hero
-	hero.died.connect(_on_hero_died)
+	watch_hero(%Hero)
 	board_changed.connect($TurnQueue.invalidate_turn)
 	board_changed.connect(center_on_hero)
 	if Tender.full_game:
 		%StoryScreen.show_story(quests[0].title, quests[0].intro_path)
 	await $TurnQueue.run()	
-	
+
+func watch_hero(hero:Actor):
+	## Connect the relevant signals on a new hero
+	%HUD.watch_hero()
+	hero.died.connect(_on_hero_died)
+
 func _input(_event):
 	if Input.is_action_just_pressed("test-2"):
 		test2()
@@ -137,7 +138,7 @@ func supply_item(actor, item_path, extra_tags=[]):
 func show_inventory_screen() -> bool:
 	## popup the inventory screen
 	## return if something considered a turn action happened while it was open
-	%InventoryScreen.fill_actor_items(hero)
+	%InventoryScreen.fill_actor_items(Tender.hero)
 	%InventoryScreen.popup()
 	var acted = await %InventoryScreen.closed
 	return acted
@@ -163,8 +164,9 @@ func switch_board_at(coord):
 	
 	var builder = BoardBuilder.new(new_board)
 	var index = new_board.make_index()
-	var new_pos = builder.place(hero, builder.has_rooms(), conn.far_coord, true, null, index)
-	$HUD.refresh_buttons_vis(null, new_pos)
+	var new_pos = builder.place(Tender.hero, builder.has_rooms(), 
+								conn.far_coord, true, null, index)
+	%HUD.refresh_buttons_vis(null, new_pos)
 	emit_signal("board_changed", new_board)
 	
 func _on_hero_died(_coord, _tags):
@@ -178,7 +180,6 @@ func _compile_hero_stats():
 	Tender.hero_stats = Tender.hero.get_base_stats()
 	Tender.hero_modifiers = Tender.hero.get_modifiers()
 
-
 func conclude_game(victory:bool, game_over:bool):
 	## do a final bit of cleanup then show the Game Over screen
 	_compile_hero_stats()
@@ -188,10 +189,10 @@ func conclude_game(victory:bool, game_over:bool):
 		$TurnQueue.shutdown()
 	else:
 		$TurnQueue.pause()
-	if hero.is_animating():
+	if Tender.hero.is_animating():
 		print("can't shutdown quite yet, hero animating...")
 		# nothing else to do: Actors free() themselves after they die
-		await hero.anims_done
+		await Tender.hero.anims_done
 		print("hero done animating!")
 
 	%EndOfChapterScreen.popup(Tender.quest, victory, game_over)
@@ -203,10 +204,11 @@ func conclude_game(victory:bool, game_over:bool):
 		quest.setup_func.call()
 
 func center_on_hero(_arg=null):
-	%Viewport.center_on_coord(hero.get_cell_coord())
+	var hero_coord = Tender.hero.get_cell_coord()
+	%Viewport.center_on_coord(hero_coord)
 
 func _on_cancel_button_pressed():
-	hero.cancel_strategies()
+	Tender.hero.cancel_strategies()
 
 func _on_turn_started(_turn):
 	get_board().clear_highlights()
@@ -218,6 +220,7 @@ func show_context_menu_for(coord):
 	return acted
 
 func start_ch2():
+	var hero = Tender.hero
 	destroy_items(hero.get_items(["quest-item"]))
 	# Nadège gives key and combat cane
 	%Nadege.conversation_sect = "intro_2"
@@ -261,14 +264,22 @@ func start_ch3():
 
 	%StoryScreen.show_story("Chapter 3: The Sound of Satin", 
 							"res://src/story/sound_of_satin.md")
-	hero.place(V.i(2, 2))
+	Tender.hero.place(V.i(2, 2))
 	center_on_hero()
 	if $TurnQueue.is_paused():
 		$TurnQueue.resume()
-
-
+		
 func test():
 	print("Testing: 1, 2... 1, 2!")
 
+	var bundle = SaveBundle.new()
+	var board = %LyonSurface.find_children("", "RevBoard", false, false)[1]
+	bundle.save(board)
+
 func test2():
 	print("Testing: 2, 1... 2, 1!")
+	# load
+	var board = SaveBundle.load()
+	%LyonSurface.add_child(board)
+	Tender.hero = board.find_child("Hero")
+	_activate_board(board)

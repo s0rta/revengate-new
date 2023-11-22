@@ -19,7 +19,6 @@ extends Node
 
 const CRIT_HEALTH = 20  # as a percent of health_full
 
-var hero: Actor
 # TODO: use unique %name to simplify some of those
 @onready var loot_button = find_child("LootButton")
 @onready var stairs_button = find_child("StairsButton")
@@ -37,31 +36,43 @@ func _ready():
 		if node is Button:
 			node.visible = is_debug
 
-func set_hero(hero_):
-	hero = hero_
-	hero.health_changed.connect(refresh_hps)
+func watch_hero(hero:Actor=null):
+	## Connect UI elements like the health-bar to keep track of `hero`.
+	if hero == null:
+		if Tender.hero != null:
+			hero = Tender.hero
+		else:
+			return  # not much we can do under a hero has been initialized
 	hero.moved.connect(refresh_buttons_vis)
+	hero.changed_weapons.connect(_on_hero_changed_weapons)
+	hero.dropped_item.connect(_set_quick_attack_icon)
+	hero.dropped_item.connect(update_states_at)
+	hero.picked_item.connect(_set_quick_attack_icon)
+	hero.picked_item.connect(update_states_at)
+	hero.state_changed.connect(_on_hero_state_changed)
+	hero.strategy_expired.connect(refresh_cancel_button_vis)
+	hero.health_changed.connect(refresh_hps)
 	refresh_hps()
 	refresh_buttons_vis(null, hero.get_cell_coord())
 	
 	var index = hero.get_board().make_index()
 	quick_attack_cmd = CommandPack.QuickAttack.new(index)
 	_set_quick_attack_icon()
-	
+
 func _set_quick_attack_icon(_arg=null):
-	var weapons = hero.get_weapons()
+	var weapons = Tender.hero.get_weapons()
 	assert(len(weapons) == 1, "Dual weilding is not implemented for QuickAttack button style")
 	var weapon = weapons[0]
 	%QuickAttackButton.text = weapon.char
 	if "groupable" in weapon.tags:
-		var nb = len(hero.get_compatible_items(weapon))
+		var nb = len(Tender.hero.get_compatible_items(weapon))
 		if nb >= 1:
 			%QuickAttackButton.text += "x%d" % (nb+1)
 
 func refresh_hps(_new_health=null):
 	# TODO: bold animation when dead
-	hplabel.text = "%2d" % hero.health
-	var health_pct = 100.0 * hero.health / Tender.hero.health_full
+	hplabel.text = "%2d" % Tender.hero.health
+	var health_pct = 100.0 * Tender.hero.health / Tender.hero.health_full
 	%HealthBar.value = health_pct
 	if health_pct <= CRIT_HEALTH:
 		%HealthBar.modulate = Color.RED
@@ -82,7 +93,7 @@ func _refresh_lbar_commands(hero_coord, index):
 
 func update_states_at(hero_coord):
 	## Refresh internal states by taking into account a recent change at `hero_coord`
-	var board = hero.get_board()
+	var board = Tender.hero.get_board()
 	%CityMapButton.visible = board.world_loc != Consts.LOC_INVALID and board.world_loc.z >= 0
 	if board.is_connector(hero_coord):
 		stairs_button.visible = true
@@ -102,8 +113,9 @@ func refresh_buttons_vis(_old_coord, hero_coord):
 	update_states_at(hero_coord)
 
 func refresh_cancel_button_vis():
-	%CancelButton.visible = hero.has_strategy(true)
-	%CancelButton2.visible = hero.has_strategy(true)
+	var has_strat = Tender.hero.has_strategy(true)
+	%CancelButton.visible = has_strat
+	%CancelButton2.visible = has_strat
 
 func _on_stairs_button_pressed():
 	var event = InputEventAction.new()
@@ -151,15 +163,15 @@ func refresh_input_enabled(enabled):
 			child.disabled = not enabled
 
 func _on_hero_state_changed(new_state):
-	if hero == null:
+	if Tender.hero == null:
 		# not fully initialized, can't do anything too fancy yet
 		return
 	if new_state != Actor.States.IDLE:
 		%ProminentMsgLabel.text = ""
 	refresh_input_enabled(new_state == Actor.States.LISTENING)
 	if new_state == Actor.States.LISTENING:
-		quick_attack_cmd.refresh(hero.get_board().make_index())
-		var here = hero.get_cell_coord()
+		quick_attack_cmd.refresh(Tender.hero.get_board().make_index())
+		var here = Tender.hero.get_cell_coord()
 		%QuickAttackButton.disabled = not quick_attack_cmd.is_valid_for_hero_at(here)
 	else:
 		%QuickAttackButton.disabled = true
@@ -168,12 +180,10 @@ func _on_city_map_button_pressed():
 	var board = Tender.hero.get_board()
 	%CityMapScreen.popup(board.world_loc)
 
-
 func _on_quick_attack_button_button_up():
 	print("Attacking someone else real quick...")
-	if quick_attack_cmd.run_at_hero(hero.get_cell_coord()):
-		hero.finalize_turn()
-
+	if quick_attack_cmd.run_at_hero(Tender.hero.get_cell_coord()):
+		Tender.hero.finalize_turn()
 
 func _on_hero_changed_weapons():
 	_set_quick_attack_icon()

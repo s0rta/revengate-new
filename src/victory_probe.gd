@@ -19,7 +19,6 @@
 class_name VictoryProbe extends Node
 
 signal end_of_chapter(victory, game_over)
-var hero: Actor
 
 func has_quest_item(actor:Actor):
 	for item in actor.get_items(["quest-item"]):
@@ -31,6 +30,7 @@ func reached_top_level(current_board:RevBoard):
 	return current_board.depth == 0
 
 func assay_victory(current_board:RevBoard):
+	var hero = Tender.hero
 	if hero == null:
 		return
 	if reached_top_level(current_board):

@@ -87,19 +87,14 @@ func act() -> bool:
 
 func find_hero():
 	## Return a reference to the Hero if it can be found.
-	## There can't be a reference to the Hero if it just died or if we are running 
+	## There might not be a reference to the Hero if it just died or if we are running 
 	## a simulation without any Hero.
-	# TODO: it would make sense to store a ref to the Hero somewhere to speed this up.
-	var node = me.get_parent()
-	var hero = null
-	while not hero and node and node.name != "root":
-		for sub_node in node.get_children():
-			# FIXME: do something more robust
-			if sub_node.name == "Hero":
-				hero = sub_node
-				break
-		node = node.get_parent()
-	return hero
+	var board = me.get_parent()
+	var hero = Tender.hero
+	if hero != null and hero.is_alive() and hero.get_parent() == board:
+		return hero
+	else:
+		return null
 
 func add_hero_message(text:String, 
 				level:Consts.MessageLevels=Consts.MessageLevels.INFO, 
