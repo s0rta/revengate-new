@@ -24,7 +24,7 @@ func _ready():
 func _unhandled_input(event):
 	if state != States.LISTENING:
 		return
-	var acted = false
+	var acted = false  # TODO: set the `has_acted` member directly
 	var move = null
 	state = States.ACTING
 	
@@ -102,8 +102,10 @@ func _unhandled_input(event):
 				print("Can't move to %s" % board.coord_str(dest))
 
 	if acted:
+		has_acted = true
 		finalize_turn()
 	else:
+		# NOT calling finalize_turn() to let the player provide more input during this turn
 		state = States.LISTENING
 
 func _dissipate():
@@ -137,7 +139,8 @@ func highlight_options():
 	if not turn_done.is_connected(board.clear_highlights):
 		turn_done.connect(board.clear_highlights, CONNECT_ONE_SHOT)
 
-func act():
+func act() -> void:
+	has_acted = false
 	refresh_strategies()
 	var strat = get_strategy()
 	if strat:
@@ -146,14 +149,11 @@ func act():
 
 		print("Hero turn automated by %s" % [strat])
 		state = States.ACTING
-		var acted = strat.act()
+		has_acted = strat.act()
 		finalize_turn()
-		return acted
 	else:
 		state = States.LISTENING
 		print("player acting...")
 		highlight_options()
+		# _unhandled_input() or the selected Command must set has_acted and call finalize_turn()
 		await self.turn_done
-		# TODO: it would make sense to let the input handlers tell us if something 
-		#   actually happened.
-		return true

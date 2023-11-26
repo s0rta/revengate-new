@@ -30,8 +30,8 @@ func is_valid():
 
 func act() -> bool:	
 	if me.get_board().dist(me, foe) == 1:
-		var acted = await me.attack(foe)
-		return acted
+		await me.attack(foe)
+		return true
 	else:
 		return me.move_toward_actor(foe)
 

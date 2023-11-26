@@ -42,7 +42,7 @@ func act() -> bool:
 	var my_coord = me.get_cell_coord()
 	var foe_coord = attacker.get_cell_coord()
 	if board.dist(my_coord, foe_coord) == 1:
-		var acted = await me.attack(attacker)
-		return acted
+		await me.attack(attacker)
+		return true  # it costs you your turn to attack whether you land a hit or not
 	else:
 		return me.move_toward_actor(attacker)

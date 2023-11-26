@@ -60,7 +60,7 @@ func act() -> bool:
 
 	# attack if we can, move towards the intruder otherwise
 	if board.dist(me, intruder) == 1:
-		var acted = await me.attack(intruder)
-		return acted
+		await me.attack(intruder)
+		return true
 	else:
 		return me.move_toward_actor(intruder)

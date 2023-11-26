@@ -36,6 +36,6 @@ func on_button_up():
 	
 	var acted = cmd.run_at_hero(coord)
 	if acted:
-		Tender.hero.finalize_turn()
+		Tender.hero.finalize_turn(acted)
 	if not cmd.is_valid_for_hero_at(coord):
 		queue_free()

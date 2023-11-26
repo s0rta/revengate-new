@@ -56,7 +56,7 @@ func act() -> bool:
 	# attack if we can, move towards foe otherwise
 	var board = me.get_board()
 	if board.dist(me, foe) <= me.get_max_weapon_range():
-		var acted = await me.attack(foe)
-		return acted
+		await me.attack(foe)
+		return true
 	else:
 		return me.move_toward_actor(foe)

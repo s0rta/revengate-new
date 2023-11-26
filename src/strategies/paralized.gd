@@ -22,4 +22,4 @@ func act():
 	if me == Tender.hero:
 		var msg = "%s is paralized and can't move!" % [me.get_short_desc()]
 		me.add_message(msg, Consts.MessageLevels.INFO, ["strategy"])
-	return
+	return true  # one rare case of a non-deliberate action costing you your turn

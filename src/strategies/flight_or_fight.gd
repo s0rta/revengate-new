@@ -56,17 +56,18 @@ func act() -> bool:
 	elems.sort()
 	if not elems.is_empty() and elems[-1][0] > cur_dist:
 		var dest = elems[-1][-1]
-		return me.move_to(dest)
+		me.move_to(dest)
+		return true
 	elif cur_dist == 1:  # TODO: use our attack range instead of 1
 		# Bully is within range
-		var acted = await me.attack(attacker)
-		return acted
+		await me.attack(attacker)
+		return true
 	else:
 		# no good spots to move, bully is too far, just panic and attack anyone within reach
 		var actors = index.get_actors_around_me(me)
 		if not actors.is_empty():
 			var victim = Rand.choice(actors)
-			var acted = await me.attack(victim)
-			return acted
+			await me.attack(victim)
+			return true
 			
-		return false
+		return false  # we ended up not being able to do anything

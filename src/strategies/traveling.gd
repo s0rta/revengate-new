@@ -110,6 +110,7 @@ func act():
 		if nb_steps <= 1:
 			arrived = true
 		var there = path[0]
-		return me.move_to(there)
+		me.move_to(there)
+		return true
 	else:
-		return null
+		return false

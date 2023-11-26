@@ -80,7 +80,8 @@ func cancel():
 
 func act() -> bool:
 	## Try to do the action for the turn. 
-	## Return if the action could be undertaken.
+	## Return if the undertaken action costed a turn (most deliberate actions do,
+	## regardless of success).
 	## This method must be overloaded by sub-classes.
 	assert(false, "act() must be re-implemented by subclasses")
 	return false

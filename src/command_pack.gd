@@ -286,7 +286,7 @@ class DoorHandler extends Command:
 		board.toggle_door(coord)
 		return true
 
-	func run_at_hero(coord:Vector2i):
+	func run_at_hero(coord:Vector2i) -> bool:
 		return run(door_at)	
 
 class CloseDoor extends DoorHandler:

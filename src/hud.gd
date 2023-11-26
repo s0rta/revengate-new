@@ -183,7 +183,7 @@ func _on_city_map_button_pressed():
 func _on_quick_attack_button_button_up():
 	print("Attacking someone else real quick...")
 	if quick_attack_cmd.run_at_hero(Tender.hero.get_cell_coord()):
-		Tender.hero.finalize_turn()
+		Tender.hero.finalize_turn(true)
 
 func _on_hero_changed_weapons():
 	_set_quick_attack_icon()

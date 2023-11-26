@@ -117,10 +117,11 @@ var state = States.IDLE:
 		emit_signal("state_changed", new_state)
 
 # Turn logic: when possible, use `state`, await on `turn_done()` and ttl/decay rather than
-# relying on specific turn number values.
+# relying on specific turn numbers.
 var current_turn: int
 var conditions_turn: int
 var acted_turn: int
+var has_acted: bool
 
 var _anims := []  # all turn-blocking anims
 var shrouded := false
@@ -178,23 +179,30 @@ func is_listening() -> bool:
 	return state == States.LISTENING
 	
 func stop_listening():
+	## Stop waiting for player input without signaling.
+	## To make the TurnQueue move passed this actor, cancel_action() is probably 
+	## what you are looking for.
 	assert(is_listening())
 	state = States.IDLE
 
-func act():
+func cancel_action():
+	## Stop doing whatever we are doing and mark us as having played this turn.
+	# As long as `has_acted` has been properly set by any action code invoked since the 
+	# beginning of the turn, we don't have any cleanup to do besides ending our turn.
+	finalize_turn()
+
+func act() -> void:
 	## Do the action for this turn (might include passing).
-	## Return if an action happened. This does not influence turn logic, but it migh
-	##   influence visuals.
+	## `acted_turn` will be set to the current turn if the action costed the turn (most actions do).
 	## The Hero overloads this method to select the action based on player input.
+	has_acted = false
 	state = States.ACTING
 	refresh_strategies()
 	var strat = get_strategy()
-	if not strat:
-		finalize_turn()
-		return false
-	var acted = await strat.act()
+	if strat:
+		has_acted = await strat.act()
 	finalize_turn()
-	return acted
+	return
 
 func get_caption():
 	if caption:
@@ -336,6 +344,9 @@ func start_turn(new_turn:int):
 			node.start_turn(new_turn)
 		elif node.get("start_new_turn"):
 			multi_step_nodes.append(node)
+
+	# Process one conditions event per turn, skip everything if we've already seen new_turn, 
+	# which might happen if the TurnQueue has been paused and restarted in the middle of a turn.
 	for i in new_turn - current_turn:
 		activate_conditions()
 		for node in multi_step_nodes:
@@ -344,9 +355,12 @@ func start_turn(new_turn:int):
 			node.start_new_turn()
 	current_turn = new_turn
 
-func finalize_turn():
+func finalize_turn(acted=null):
+	## Cleanup internal state, pass the control back to the TurnQueue.
+	## `acted`: if provided, overrides `has_acted` to decide if our actions costed a turn.
 	state = States.IDLE
-	acted_turn = current_turn
+	if acted != false and (acted or has_acted):
+		acted_turn = current_turn
 	emit_signal("turn_done")
 
 func reset_dest(inval_dest=null):
@@ -389,13 +403,13 @@ func shroud(animate=true):
 func unshroud(animate=true):
 	Utils.unshroud_node(self, animate)
 
-func move_by(cell_vect: Vector2i):
+func move_by(cell_vect: Vector2i) -> void:
 	## Move by the specified number of tiles from the current position. 
-	## The move is animated, return the animation.
+	## The move is animated.
 	var new_pos = RevBoard.canvas_to_board(position) + cell_vect
-	return move_to(new_pos)
+	move_to(new_pos)
 	
-func move_to(board_coord):
+func move_to(board_coord) -> void:
 	## Move to the specified board coordinate in number of tiles from the 
 	## origin. 
 	## The move is animated.
@@ -419,15 +433,15 @@ func move_to(board_coord):
 		# We emit before the end of the animation, which allows for more
 		# overlap between our active turn and other visual changes.
 		emit_signal("moved", old_coord, board_coord)
-	return true
 
-func move_toward_actor(actor):
+func move_toward_actor(actor) -> bool:
 	## Try to take one step toward `actor`, return true if it worked.
 	var here = get_cell_coord()
 	var there = actor.get_cell_coord()
 	var path = get_board().path(here, there, false)
 	if path != null and len(path) >= 2:
-		return move_to(path[1])
+		move_to(path[1])
+		return true
 	else:
 		return false
 
@@ -870,8 +884,9 @@ func _get_feature_modifier(foe, weapon, feature_table):
 			mod += feature_mods.get(weapon_tag, 0)
 	return mod
 	
-func attack(foe):
+func attack(foe) -> bool:
 	## A full multi-strike attack on foe.
+	## Return whether at least one strike has landed as a hit.
 	## Sentiment and range are not checked, the caller is responsible for 
 	## performing those tests.
 	var has_hit = false

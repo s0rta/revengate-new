@@ -19,6 +19,7 @@ extends Node
 
 const ACTING_DELAY = 0.1  # in seconds
 enum States {STOPPED, PAUSED, PROCESSING, SHUTTING_DOWN}
+signal paused  # all the in-fligh actions are done, not doing anything until resume is requested
 signal resumed  # processing is ready to restart after being paused
 signal done  # processing stopped
 signal turn_started(turn:int)
@@ -28,6 +29,7 @@ signal turn_started(turn:int)
 var state = States.STOPPED
 var turn := 0
 var turn_is_valid := true
+var current_actor
 
 # TODO: an explicit ref to Main would be cleaner
 func get_board():
@@ -59,8 +61,13 @@ func shutdown():
 	state = States.SHUTTING_DOWN
 	invalidate_turn()
 
-func pause():
+func pause(immediate=true):
+	## Stop new actors from taking their turn. 
+	## The current actor might still finish their turn if they have started.
+	## The turn counter is not advanced.
 	state = States.PAUSED
+	if immediate and current_actor and not current_actor.is_idle():
+		current_actor.cancel_action()
 	invalidate_turn()
 	
 func is_paused():
@@ -85,6 +92,7 @@ func run():
 	turn_is_valid = true
 	state = States.PROCESSING
 	while state == States.PROCESSING:
+		current_actor = null
 		if verbose:
 			print("=== Start of turn %d ===" % turn)
 		emit_signal("turn_started", turn)
@@ -92,6 +100,8 @@ func run():
 		if verbose:
 			print("playing actors: %s " % [actors])
 		# 1st pass: tell all in-play objects about the start of the turn
+		#   boards and actors know how to skip conditions for a turn they have already seen, 
+		#   so restarting an in-progress turn (perhaps from restoring a saved game) is safe.
 		get_board().start_turn(turn)
 			
 		# 2rd pass: actions
@@ -100,6 +110,13 @@ func run():
 				break
 			if actor == null or not actor.is_alive():  # died from conditions
 				continue
+			if actor.acted_turn >= turn:
+				# this actor has already played, the in-progress turn must have 
+				# been restored and resumed.
+				if verbose:
+					print("skipping %s who has already acted this turn" % actor)
+				continue
+			current_actor = actor
 			if actor.is_animating():  # still moving from previous turn, let's wait a bit
 				await actor.anims_done
 			actor.act()
@@ -112,8 +129,12 @@ func run():
 			if turn_is_valid and actor.is_animating():
 				await get_tree().create_timer(ACTING_DELAY).timeout
 		if state == States.PAUSED:
+			print("TurnQueue is paused, not advancing turn")
+			paused.emit()
 			await resumed
-		turn += 1
+		else:
+			turn += 1
 		turn_is_valid = true
+	current_actor = null
 	state = States.STOPPED
 	emit_signal("done")
