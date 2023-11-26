@@ -274,8 +274,9 @@ func start_ch3():
 
 func capture_game():
 	## Record the current state of the game and save it to a file.
-	$TurnQueue.shutdown()
-	await $TurnQueue.done
+	$TurnQueue.pause()
+	if not $TurnQueue.is_paused():
+		await $TurnQueue.paused
 	var bundle = SaveBundle.new()
 	var board = %LyonSurface.find_children("", "RevBoard", false, false)[1]
 	bundle.save(board, $TurnQueue.turn)

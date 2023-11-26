@@ -36,18 +36,17 @@ const FLOOR_TERRAINS = ["floor", "floor-rough", "floor-dirt"]
 signal new_message(message, level, tags)
 signal actor_died(board, coord, tags)
 
-var terrain_names := {}  # name -> (terrain_set, terrain_id)
-
+@export_group("Internals")
 # approximate topological distance to the starting board, used for spawning difficulty
-var depth := 0  
-
-var world_loc: Vector3i  # relative positioning of this board in the world
-
+@export var depth := 0  
+@export var world_loc: Vector3i  # relative positioning of this board in the world
 # per-cell custom data, unlike the per-tile data provided by TileMap
-var _cell_records := {}  # (x, y) -> {'rec_name' -> {...}}
+@export var _cell_records := {}  # (x, y) -> {'rec_name' -> {...}}
 
-var _cells_by_terrain := {}  # terrain_name -> array of coords
-var current_turn := 0
+@export var _cells_by_terrain := {}  # terrain_name -> array of coords
+@export var current_turn := 0
+
+var terrain_names := {}  # name -> (terrain_set, terrain_id)
 
 
 ## PriorityQueue based on distance: dequeing is always with the 

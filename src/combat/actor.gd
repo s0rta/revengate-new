@@ -104,11 +104,19 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 
 @export var faction := Consts.Factions.NONE
 
-
 # bestiary entry
 @export_group("Bestiary")
 @export_file("*.png", "*.jpg", "*.jpeg") var bestiary_img
 @export_multiline var description
+
+# Those are not meant to be customized in the editor, but they exported anyway to 
+# make the object save better
+@export_group("Internals")
+# Turn logic: when possible, use `state`, await on `turn_done()` and ttl/decay rather than
+# relying on specific turn numbers.
+@export var current_turn: int
+@export var conditions_turn: int
+@export var acted_turn: int
 
 @onready var mem: Memory = $Mem
 var state = States.IDLE:
@@ -116,13 +124,7 @@ var state = States.IDLE:
 		state = new_state
 		emit_signal("state_changed", new_state)
 
-# Turn logic: when possible, use `state`, await on `turn_done()` and ttl/decay rather than
-# relying on specific turn numbers.
-var current_turn: int
-var conditions_turn: int
-var acted_turn: int
-var has_acted: bool
-
+var has_acted: bool  # reset at the start of every turn
 var _anims := []  # all turn-blocking anims
 var shrouded := false
 var _shroud_anim = null
