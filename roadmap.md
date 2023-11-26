@@ -239,6 +239,9 @@ Combat:
 - [x] church prefab
   - [x] vibes inside the church
   - [x] crypt under the church
+- [x] upgrade DialoguePane to the latest Dialogue Manager API
+- [x] document the build process
+- [/] bug: two finger pan is really choppy when the fingers are too close to one another
 
 UX:
 - [x] single-tap on distant actor pops a context action menu (ex.: get closer, inspect, ...)
@@ -254,6 +257,7 @@ Items:
 - [x] carrot (🥕)
 
 Vibe:
+- [x] pre-fabs can inject rules in the deck generator after the geometry pass of a new board
 - [x] candles (🕯)
 - [x] incense 
 - [x] cross (☨, ♰, ♱, ✟, 🕈, 🕆)
@@ -278,10 +282,15 @@ Combat:
 - [x] healing strategy is based on health-%, not absolute number of HPs
 
 ## v0.12
+- [ ] bug: cross-board connectors should never be in corners
+- [ ] play time (screen time) on victory screen 
+- [ ] saved games
+  - [ ] starting inventory is not resurected upon restore
 - [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
 - [ ] Seeking is easier to resolve even is the target keeps moving
 - [ ] web export
   - [ ] better keyboard support (ex.: ESC cancels actions)
+  - [ ] bug: story screen does not capture keyboard input
 - [ ] random interlude stories
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
@@ -289,6 +298,9 @@ Combat:
 - [ ] instructions on how to install all the Android dev dependencies
 - [ ] async preload most shaders to speedup startup
 - [ ] TravelTo uses a cached `path_perceived()`
+- [ ] Benoît roams after the meeting and after yielding
+- [ ] Salapou can steal your items
+- [ ] silence a few warnings
 
 Items:
 - [ ] items stats and long description is available from the inventory screen
@@ -302,7 +314,6 @@ Combat:
 
 
 ## v1.0
-- [ ] saved games
 - [ ] A Fight for Fumes campaign
 - [ ] Rhymes with Remorse campaign
 
@@ -310,12 +321,10 @@ Combat:
 - [ ] packaging for Ubuntu
 
 ## Ice Box: not yet scheduled for a release
-- [ ] bug: story screen does not capture keyboard input
 - [ ] non-walking movement and path finding (wading, swimming, phasing)
 - [ ] Deck.peek(): select the next card, but do not remove it from the deck
 - [ ] help screen with contextual content
 - [ ] on-screen joystick
-- [ ] pre-fabs can inject rules in the deck generator after the geometry pass of a new board
 - [ ] auto-pan to hero when he gets close to the egde of the screen
 - [ ] VFX: edge of water reflections 
 - [ ] items long descriptions
@@ -323,13 +332,8 @@ Combat:
 - [ ] Strategy.refresh() updates the internal index
 - [ ] phantruch is destroyed if the vital assembly is broken or stolen
 - [ ] startled strategy: flee when first contact is from afar, attack when from nearby
-- [ ] upgrade DialoguePane to the latest Dialogue Manager API
 - [ ] F-Droid [Reproducible Builds](https://f-droid.org/docs/Reproducible_Builds/)
-- [ ] document the build process
-- [ ] bug: two finger pan is really choppy when the fingers are too close to one another
 - [ ] potion of absinthe
-- [ ] Benoît roams after the meeting and after yielding
-- [ ] Salapou can steal your items
 
 Performance:
 - [ ] cache stats modifiers for the whole turn (with inval on mods changing events)
