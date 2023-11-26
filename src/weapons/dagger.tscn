@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dnw86n1s88cwl"]
 
-[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_oxhaa"]
+[ext_resource type="PackedScene" uid="uid://bydn4y4xyqw65" path="res://src/weapons/weapon.tscn" id="1_oxhaa"]
 [ext_resource type="AudioStream" uid="uid://khahrhqgm3fu" path="res://src/weapons/sword-hit-02.wav" id="2_vmlqa"]
 
 [node name="Dagger" instance=ExtResource("1_oxhaa")]

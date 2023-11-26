@@ -22,20 +22,24 @@ static func is_debug() -> bool:
 	## Return whether we are in debug mode
 	return Consts.DEBUG and OS.is_debug_build()
 
-static func dstr_node(node:Node) -> String:
+static func dstr_node(node:Node, show_owner:=true) -> String:
 	## Return a string summary of a hiarchy of a node's children
 	var lines = []
 	var prefix = node.get_path().get_concatenated_names()
 	for child in node.find_children("", "Node", true, false):
 		var node_str = child.get_path().get_concatenated_names().replace(prefix, ".")
-		node_str += " owner=%s" % [child.get_owner()]
+		if node_str.is_empty():
+			node_str = child.name
+		if show_owner:
+			node_str += " owner=%s" % [child.get_owner()]
 		lines.append(node_str)
 	lines.append("")
 	return "\n".join(lines)
 	
-static func dlog_node(node:Node, path:String):
+static func dlog_node(node:Node, path:String, show_owner:=false):
 	## Log basic infos about all the nodes in a tree to a file.
-	FileAccess.open(path, FileAccess.WRITE).store_string(Utils.dstr_node(node))
+	var node_str = Utils.dstr_node(node, show_owner)
+	FileAccess.open(path, FileAccess.WRITE).store_string(node_str)
 
 static func dstr_properties(obj:Object) -> String:
 	var lines = []

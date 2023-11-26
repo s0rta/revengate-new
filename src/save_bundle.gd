@@ -23,31 +23,42 @@ const SAVE_FILE = "main_scene.tres"
 const VERBOSE := true
 
 @export var version := Consts.VERSION
+@export var turn:int
 @export var scene:PackedScene
 
-func _ensure_dir(dir=SAVE_DIR):
+var root:Node  # the root passed to save()
+
+static func _ensure_dir(dir=SAVE_DIR):
 	var da = DirAccess.open("user://")
 	if not da.dir_exists(dir):
 		da.make_dir(dir)
 
-
-func save(root:Node):
-	## Save the subtree starting at `root`. This does not need to be the game root.
+static func save(root:Node, turn:int, path=null):
+	## Save a game. 
+	## The whole subtree starting at `root` is saved. 
+	## This does not need to be the game root.
 	## Any nodes of the saved sub-tree might have its `owner` changed as a side-effect 
 	## of calling this method.
-	_ensure_dir()
-	var path = SAVE_DIR + SAVE_FILE
+	## Return the new SaveBundle resource after saving it to disk.
+	var bundle = SaveBundle.new()
+	bundle.turn = turn
+
+	bundle._ensure_dir()
+	if path == null:
+		path = SAVE_DIR + SAVE_FILE
 
 	for child in root.find_children("", "Node", true, false):
-		child.owner = root
+		if child.owner == null:
+			child.owner = root
 
 	if VERBOSE:
 		Utils.dlog_node(root, path + ".pre")
 	
-	scene = PackedScene.new()
-	scene.pack(root)
-	var ret_code = ResourceSaver.save(self, path)
+	bundle.scene = PackedScene.new()
+	bundle.scene.pack(root)
+	var ret_code = ResourceSaver.save(bundle, path)
 	assert(ret_code == OK)
+	return bundle
 
 static func load(path=null):
 	## Load a saved game and return the root `Node` of the scene.
@@ -57,10 +68,16 @@ static func load(path=null):
 		path = SAVE_DIR + SAVE_FILE
 
 	# TODO: verify that the version is compatible with the current game
-	var bundle = load(path)
-	var root = bundle.scene.instantiate()
+	var bundle = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE)
+	bundle.root = bundle.scene.instantiate()
 
 	if VERBOSE:
-		Utils.dlog_node(root, path + ".post")
+		# FIXME: paths are unreadable until we add the scene to the tree
+		Utils.dlog_node(bundle.root, path + ".post")
 
-	return root	
+	return bundle
+
+func dlog_root(suffix=".log"):
+	# FIXME: save the path on the bundle
+	var path = SAVE_DIR + SAVE_FILE
+	Utils.dlog_node(root, path + suffix)

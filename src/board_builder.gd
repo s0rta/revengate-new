@@ -373,13 +373,16 @@ func place(thing, in_room:=true, coord=null, free:bool=true, bbox=null, index=nu
 	if thing is Node:
 		var parent = thing.get_parent()
 		if parent and parent != board:
-			parent.remove_child(thing)
-			if thing is Actor and parent is RevBoard:
-				parent.deregister_actor(thing)
-		if not parent or parent != board:
+			thing.reparent(board)
+			if thing is Actor:
+				if parent is RevBoard:
+					parent.deregister_actor(thing)
+				board.register_actor(thing)
+		elif not parent:
 			board.add_child(thing)
 			if thing is Actor:
 				board.register_actor(thing)
+		thing.owner = board
 
 	# do the actual coord update	
 	thing.place(cell, true)

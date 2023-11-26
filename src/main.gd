@@ -36,9 +36,9 @@ class Quest:
 	var win_msg: String
 	var fail_msg: String
 
-	func _init(no_, title_, intro_path_, win_msg_, setup_func_=null, 
-				win_event_any_:Array[String]=[], 
-				fail_event_any_:Array[String]=[], fail_msg_=""):
+	func _init(no_, title_, intro_path_, win_msg_, setup_func_=null,
+		win_event_any_:Array[String]=[],
+		fail_event_any_:Array[String]=[], fail_msg_=""):
 		no = no_
 		title = title_
 		intro_path = intro_path_
@@ -50,24 +50,24 @@ class Quest:
 
 func _ready():
 	# Quests
-	quests = [Quest.new(1, "The Audition", 
-							"res://src/story/the_audition.md", 
-							"You recovered the stolen loom cards."), 
-				Quest.new(2, "Bewitching Bookkeeping", 
-						"res://src/story/bewitching_bookkeeping.md", 
-						"You prevented Benoît the accountant from exposing Frank Verguin's home lab.", 
-						start_ch2, 
-						["accountant_yeilded", "accountant_died"],
-						["accountant_met_salapou"],
-						"You didn't stop Benoît the accountant from selling his information."), 
-				Quest.new(3, "The Sound of Satin", 
-						"res://src/story/sound_of_satin.md", 
-						("You killed Retznac the vampire. " 
-							+ "Retznac vanished into oblivion leaving a thin trail of mist behind. "
-							+ "It reminds you of the marshes around the river Rhône at sunrise."), 
-						start_ch3)]
+	quests = [Quest.new(1, "The Audition",
+		"res://src/story/the_audition.md",
+		"You recovered the stolen loom cards."),
+		Quest.new(2, "Bewitching Bookkeeping",
+			"res://src/story/bewitching_bookkeeping.md",
+			"You prevented Benoît the accountant from exposing Frank Verguin's home lab.",
+			start_ch2,
+			["accountant_yeilded", "accountant_died"],
+			["accountant_met_salapou"],
+			"You didn't stop Benoît the accountant from selling his information."),
+		Quest.new(3, "The Sound of Satin",
+			"res://src/story/sound_of_satin.md",
+			("You killed Retznac the vampire. "
+				+ "Retznac vanished into oblivion leaving a thin trail of mist behind. "
+				+ "It reminds you of the marshes around the river Rhône at sunrise."),
+			start_ch3)]
 
-	Tender.reset(%Hero, %HUD, %Viewport, $SentimentTable)	
+	Tender.reset(%Hero, %HUD, %Viewport, $SentimentTable)
 	Tender.quest = quests[0]
 	_discover_start_board()
 	watch_hero(%Hero)
@@ -75,12 +75,7 @@ func _ready():
 	board_changed.connect(center_on_hero)
 	if Tender.full_game:
 		%StoryScreen.show_story(quests[0].title, quests[0].intro_path)
-	await $TurnQueue.run()	
-
-func watch_hero(hero:Actor):
-	## Connect the relevant signals on a new hero
-	%HUD.watch_hero()
-	hero.died.connect(_on_hero_died)
+	await $TurnQueue.run()
 
 func _input(_event):
 	if Input.is_action_just_pressed("test-2"):
@@ -113,7 +108,13 @@ func _activate_board(new_board):
 		new_board.actor_died.connect($VictoryProbe.on_actor_died)
 	board = new_board
 	print("New active board, world loc is: %s" % new_board.world_loc_str(new_board.world_loc))
-	
+
+func watch_hero(hero:Actor):
+	## Connect the relevant signals on a new hero
+	Tender.hero = hero
+	%HUD.watch_hero(hero)
+	hero.died.connect(_on_hero_died)
+
 func get_board():
 	## Return the current active board
 	return board
@@ -164,8 +165,8 @@ func switch_board_at(coord):
 	
 	var builder = BoardBuilder.new(new_board)
 	var index = new_board.make_index()
-	var new_pos = builder.place(Tender.hero, builder.has_rooms(), 
-								conn.far_coord, true, null, index)
+	var new_pos = builder.place(Tender.hero, builder.has_rooms(),
+		conn.far_coord, true, null, index)
 	%HUD.refresh_buttons_vis(null, new_pos)
 	emit_signal("board_changed", new_board)
 	
@@ -213,7 +214,9 @@ func _on_cancel_button_pressed():
 func _on_turn_started(_turn):
 	get_board().clear_highlights()
 
-func show_context_menu_for(coord):
+func show_context_menu_for(coord) -> bool:
+	## Show a list of context-specific actions.
+	## Return if any of the actions taken costed a turn.
 	var cmds = commands.commands_for(coord)
 	%ContextMenuPopup.show_commands(cmds, coord)
 	var acted = await %ContextMenuPopup.closed
@@ -234,8 +237,8 @@ func start_ch2():
 	%BarTender.conversation_sect = "intro_2"
 	supply_item(%BarTender, "res://src/items/potion_of_booze.tscn", ["gift"])
 
-	%StoryScreen.show_story("Chapter 2: Bewitching Bookkeeping", 
-							"res://src/story/bewitching_bookkeeping.md")
+	%StoryScreen.show_story("Chapter 2: Bewitching Bookkeeping",
+		"res://src/story/bewitching_bookkeeping.md")
 	hero.place(V.i(2, 2))
 	center_on_hero()
 	if $TurnQueue.is_paused():
@@ -262,24 +265,58 @@ func start_ch3():
 	%BarTender.conversation_sect = "intro_3"
 	supply_item(%BarTender, "res://src/items/potion_of_healing.tscn", ["gift"])
 
-	%StoryScreen.show_story("Chapter 3: The Sound of Satin", 
-							"res://src/story/sound_of_satin.md")
+	%StoryScreen.show_story("Chapter 3: The Sound of Satin",
+		"res://src/story/sound_of_satin.md")
 	Tender.hero.place(V.i(2, 2))
 	center_on_hero()
 	if $TurnQueue.is_paused():
 		$TurnQueue.resume()
+
+func capture_game():
+	## Record the current state of the game and save it to a file.
+	$TurnQueue.shutdown()
+	await $TurnQueue.done
+	var bundle = SaveBundle.new()
+	var board = %LyonSurface.find_children("", "RevBoard", false, false)[1]
+	bundle.save(board, $TurnQueue.turn)
+	await $TurnQueue.run()  # might be better to send this to the background
+	
+func restore_game():
+	## Load a saved game and register it with all UI components
+	
+	print("Shutting down the queue...")
+	$TurnQueue.shutdown()
+	await $TurnQueue.done
+	print("Shutting down the queue: done!")
+
+	var bundle = SaveBundle.load()
+	var board = bundle.root
+
+	$TurnQueue.reset()
+	$TurnQueue.turn = bundle.turn
+
+	print("Got the bundle loaded!")
+
+	%LyonSurface.add_child(board)
+	bundle.dlog_root(".final")
+	watch_hero(board.find_child("Hero"))
+	_activate_board(board)
+
+	print("Restarting the queue...")
+	await $TurnQueue.run()  # might be better to send this to the background
+	print("Restarting the queue: done!")
+
 		
 func test():
 	print("Testing: 1, 2... 1, 2!")
 
-	var bundle = SaveBundle.new()
-	var board = %LyonSurface.find_children("", "RevBoard", false, false)[1]
-	bundle.save(board)
+	capture_game()
+	print("Done saving!")
+
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-	# load
-	var board = SaveBundle.load()
-	%LyonSurface.add_child(board)
-	Tender.hero = board.find_child("Hero")
-	_activate_board(board)
+
+	restore_game()
+	print("Done restoring!")
+
