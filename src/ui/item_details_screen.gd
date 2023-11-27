@@ -51,3 +51,7 @@ func fill_with(item):
 	else:
 		%DescLabel.text = "???"
 	
+
+func _on_padding_gui_input(event):
+	if event is InputEventScreenTouch or event is InputEventMouseButton:
+		close()
