@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://brwk3ae5bwevg"]
+[gd_scene load_steps=3 format=3 uid="uid://brwk3ae5bwevg"]
 
 [ext_resource type="Script" path="res://src/ui/inventory_screen.gd" id="1_i77qu"]
+[ext_resource type="PackedScene" uid="uid://ckb0ee8kavbjo" path="res://src/ui/item_details_screen.tscn" id="2_ebjmw"]
 
 [node name="InventoryScreen" type="Control"]
 layout_mode = 3
@@ -35,6 +36,7 @@ text = "Inventory"
 horizontal_alignment = 1
 
 [node name="Tree" type="Tree" parent="VBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 432)
 layout_mode = 2
 size_flags_vertical = 3
@@ -86,5 +88,10 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Inventory is empty!"
 
+[node name="ItemDetailsScreen" parent="." instance=ExtResource("2_ebjmw")]
+visible = false
+layout_mode = 1
+
 [connection signal="button_clicked" from="VBoxContainer/Tree" to="." method="_on_tree_button_clicked"]
+[connection signal="item_selected" from="VBoxContainer/Tree" to="." method="_on_tree_item_selected"]
 [connection signal="button_up" from="VBoxContainer/MarginContainer/BackButton" to="." method="_on_back_button_pressed"]

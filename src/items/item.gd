@@ -21,6 +21,8 @@ class_name Item extends Node2D
 
 @export var char := "⚒"
 @export var caption := ""
+@export_multiline var desc_simple := ""
+@export_multiline var desc_detailed := ""
 @export var message := ""  # shown when the item is used/consumed
 @export var skill := ""  # which proficiency can boost our stats with this item
 @export var consumable := false
@@ -113,6 +115,30 @@ func get_short_desc():
 		return "%s %s (%s)" % [$Label.text, desc, ", ".join(qualifiers)]
 	else:
 		return "%s %s" % [$Label.text, desc]
+
+func get_long_desc(perception):
+	const perfect_perception = 75
+	const inept_perception = 20
+	const empty_desc = "???"
+	var is_perfect_perception = perception >= perfect_perception
+	var complete_desc
+	
+	if perception <= inept_perception:
+		return empty_desc
+	elif is_perfect_perception and not desc_detailed.is_empty():
+		complete_desc = desc_detailed
+	elif not desc_simple.is_empty():
+		complete_desc = desc_simple
+	else:
+		complete_desc = empty_desc
+	
+	if is_perfect_perception:
+		var stats = get_base_stats()
+		if stats.has('damage'):
+			complete_desc += "\nDamage: %d" % [stats.damage]
+		if stats.get('range', 0) > 1:
+			complete_desc += "\nRange: %d" % [stats.range] 
+	return complete_desc
 
 func get_base_stats():
 	## Return a dictionnary of the core stats without any modifiers applied

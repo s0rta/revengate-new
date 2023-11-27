@@ -155,3 +155,11 @@ func _on_tree_button_clicked(row, column, id, mouse_button_index):
 		_use_item(row, item)
 	acted = true
 	emit_signal("inventory_changed")
+
+
+func _on_tree_item_selected():
+	var row = %Tree.get_selected()
+	var item = row.get_metadata(0)
+	$ItemDetailsScreen.fill_with(item)
+	$ItemDetailsScreen.popup()
+	%Tree.deselect_all()

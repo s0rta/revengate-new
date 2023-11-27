@@ -75,6 +75,10 @@ func get_short_desc():
 	else:
 		return "%dx %s" % [size, desc]
 
+func get_long_desc(perception):
+	assert(not is_empty())
+	return top().get_long_desc(perception)
+	
 func toggle():
 	assert(not is_empty())
 	top().toggle()
