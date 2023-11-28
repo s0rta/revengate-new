@@ -254,10 +254,10 @@ class GetCloser extends Command:
 		if dist > Tender.hero.get_max_action_range(other):
 			var strat = Approaching.new(other, path, Tender.hero, 0.9)
 			Tender.hero.add_strategy(strat)
-			return await Tender.hero.act()
+			await Tender.hero.act()
 		else:
 			Tender.hero.move_toward_actor(other)
-			return true
+		return true
 		
 class DoorHandler extends Command:
 	var door_at = null

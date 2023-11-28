@@ -44,12 +44,12 @@ class_name Effect extends Node
 
 
 class Condition extends Node:
-	var damage: int
-	var healing: int
-	var damage_family: Consts.DamageFamily
-	var nb_turns: int
-	var stats_modifiers: Dictionary
-	var tags:Array[String]
+	@export var damage: int
+	@export var healing: int
+	@export var damage_family: Consts.DamageFamily
+	@export var nb_turns: int
+	@export var stats_modifiers: Dictionary
+	@export var tags:Array[String]
 
 	func _init(damage_, healing_, damage_family_, tags_:Array[String], nb_turns_):
 		damage = damage_
