@@ -20,7 +20,7 @@ extends Node2D
 # The hero moved to a different level, the UI and turn logic are affected and must be notified
 signal board_changed(new_board)
 
-@onready var dungeons_cont: Node = %Viewport  # all dungeons must be direct descendent of this node
+@onready var dungeons_cont: Node = %Dungeons  # all dungeons must be direct descendent of this node
 @onready var commands = $CommandPack
 var board: RevBoard  # the active board
 var _seen_locs = {}  # world_locs that have been visited
@@ -278,8 +278,8 @@ func capture_game():
 	if not $TurnQueue.is_paused():
 		await $TurnQueue.paused
 	var bundle = SaveBundle.new()
-	var board = %LyonSurface.find_children("", "RevBoard", false, false)[1]
-	bundle.save(board, $TurnQueue.turn)
+	var dungeons = dungeons_cont
+	bundle.save(dungeons, $TurnQueue.turn)
 	await $TurnQueue.run()  # might be better to send this to the background
 	
 func restore_game():
@@ -287,21 +287,35 @@ func restore_game():
 	
 	print("Shutting down the queue...")
 	$TurnQueue.shutdown()
-	await $TurnQueue.done
+	if not Tender.hero.is_idle():
+		Tender.hero.cancel_action()
+	if not $TurnQueue.is_stopped():
+		await $TurnQueue.done
 	print("Shutting down the queue: done!")
 
 	var bundle = SaveBundle.load()
-	var board = bundle.root
+	var dungeons = bundle.root
 
 	$TurnQueue.reset()
 	$TurnQueue.turn = bundle.turn
 
 	print("Got the bundle loaded!")
 
-	%LyonSurface.add_child(board)
+	dungeons_cont.add_sibling(dungeons)
+	dungeons_cont.reparent($"/root")
+	
+	for board in dungeons_cont.find_children("", "RevBoard"):
+		board.set_active(false)
+	dungeons_cont.queue_free()
+	dungeons_cont = dungeons
+	
 	bundle.dlog_root(".final")
-	watch_hero(board.find_child("Hero"))
-	_activate_board(board)
+	watch_hero(dungeons.find_child("Hero"))
+
+	for board in dungeons_cont.find_children("", "RevBoard"):
+		if board.is_active():
+			_activate_board(board)
+			break
 
 	print("Restarting the queue...")
 	await $TurnQueue.run()  # might be better to send this to the background

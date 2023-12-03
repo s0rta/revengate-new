@@ -282,6 +282,8 @@ Combat:
 - [x] healing strategy is based on health-%, not absolute number of HPs
 
 ## v0.12
+- [ ] submit to the Godot showreel (before dec 17)
+- [ ] submit to the [Game Dev World Championship](https://thegdwc.com/) (before dec 31)
 - [ ] bug: cross-board connectors should never be in corners
 - [ ] play time (screen time) on victory screen 
 - [ ] saved games

@@ -107,7 +107,6 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=default_board_size, pr
 	new_board.depth = depth
 	new_board.world_loc = world_loc
 	add_child(new_board)
-	new_board.owner = self
 	new_board.clear()	
 
 	var builder = make_builder(new_board, Rect2i(Vector2i.ZERO, size))

@@ -47,15 +47,26 @@ static func save(root:Node, turn:int, path=null):
 	if path == null:
 		path = SAVE_DIR + SAVE_FILE
 
+	if VERBOSE:
+		Utils.dlog_node(root, path + ".zero", true)
+
+	var seen = {root:true}
 	for child in root.find_children("", "Node", true, false):
-		if child.owner == null:
+		seen[child] = true
+		if not seen.has(child.owner) or child.owner is RevBoard:
 			child.owner = root
 
 	if VERBOSE:
-		Utils.dlog_node(root, path + ".pre")
+		Utils.dlog_node(root, path + ".pre", false)
 	
 	bundle.scene = PackedScene.new()
 	bundle.scene.pack(root)
+
+	if VERBOSE:
+		# This .tscn can be loaded in the editor to easily debug what the saved 
+		# scene tree looks like.
+		ResourceSaver.save(bundle.scene, path.replace(".tres", ".tscn"))
+
 	var ret_code = ResourceSaver.save(bundle, path)
 	assert(ret_code == OK)
 	return bundle
