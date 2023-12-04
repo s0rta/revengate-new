@@ -26,6 +26,11 @@ const VERBOSE := true
 @export var turn:int
 @export var scene:PackedScene
 
+@export var kills:Dictionary
+@export var sentiments:SentimentTable
+#var quest = null  # a Main.Quest instance
+
+
 var path:String  # where the Bundle should be serialized
 var root:Node  # the root passed to save()
 
@@ -34,7 +39,7 @@ static func _ensure_dir(dir=SAVE_DIR):
 	if not da.dir_exists(dir):
 		da.make_dir(dir)
 
-static func save(root:Node, turn:int, path=null):
+static func save(root:Node, turn:int, kills:Dictionary, sentiments:SentimentTable):
 	## Save a game. 
 	## The whole subtree starting at `root` is saved. 
 	## This does not need to be the game root.
@@ -43,10 +48,11 @@ static func save(root:Node, turn:int, path=null):
 	## Return the new SaveBundle resource after saving it to disk.
 	var bundle = SaveBundle.new()
 	bundle.turn = turn
+	bundle.kills = kills
+	bundle.sentiments = sentiments
 
 	bundle._ensure_dir()
-	if path == null:
-		path = SAVE_DIR + SAVE_FILE
+	var path = SAVE_DIR + SAVE_FILE
 	bundle.path = path
 
 	if VERBOSE:

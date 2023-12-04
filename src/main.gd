@@ -67,7 +67,8 @@ func _ready():
 				+ "It reminds you of the marshes around the river Rhône at sunrise."),
 			start_ch3)]
 
-	Tender.reset(%Hero, %HUD, %Viewport, $SentimentTable)
+	var sentiments = SentimentTable.new()
+	Tender.reset(%Hero, %HUD, %Viewport, sentiments)
 	Tender.quest = quests[0]
 	_discover_start_board()
 	watch_hero(%Hero)
@@ -279,7 +280,8 @@ func capture_game():
 		await $TurnQueue.paused
 	var bundle = SaveBundle.new()
 	var dungeons = dungeons_cont
-	bundle.save(dungeons, $TurnQueue.turn)
+	
+	bundle.save(dungeons, $TurnQueue.turn, Tender.kills, Tender.sentiments)
 	await $TurnQueue.run()  # might be better to send this to the background
 	
 func restore_game():
@@ -311,6 +313,8 @@ func restore_game():
 	
 	bundle.dlog_root(".final")
 	watch_hero(dungeons.find_child("Hero"))
+	Tender.kills = bundle.kills
+	Tender.sentiment = bundle.sentiments
 
 	for board in dungeons_cont.find_children("", "RevBoard"):
 		if board.is_active():

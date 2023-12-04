@@ -18,7 +18,7 @@
 ## Store and lookup for cross-faction and cross-actor sentiments. 
 ## Cross-faction sentiments are symetrical.
 ## Per-actor sentiments are not supported.
-class_name SentimentTable extends Node
+class_name SentimentTable extends Resource
 
 const OPINION_THRESHOLD = 0.25  # must be that far from 0 to not be neutral
 

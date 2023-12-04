@@ -597,6 +597,7 @@ func update_health(hp_delta: int):
 func die():
 	## Animate our ultimate demise, drop our inventory, then remove ourself from this cruel world.
 	if not is_hero():
+		# any death is attributed to the Hero
 		CombatUtils.add_kill(caption)
 	emit_signal("died", get_cell_coord(), tags)
 	for item in get_items(null, null, false):
