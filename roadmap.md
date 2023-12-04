@@ -304,6 +304,9 @@ Combat:
 - [ ] Salapou can steal your items
 - [ ] silence a few warnings
 
+UX:
+- [ ] more margins around buttons to prevent mis-taps
+
 Items:
 - [ ] items stats and long description is available from the inventory screen
 - [ ] top hat (🎩)

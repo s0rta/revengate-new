@@ -80,6 +80,7 @@ static func load(path=null):
 
 	# TODO: verify that the version is compatible with the current game
 	var bundle = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE)
+	# TODO: gentle degredation if the save does not have a scene?
 	bundle.root = bundle.scene.instantiate()
 
 	if VERBOSE:
@@ -88,7 +89,17 @@ static func load(path=null):
 
 	return bundle
 
+static func has_file():
+	## Return whether a save file exists
+	var da = DirAccess.open("user://")
+	if not da.dir_exists(SAVE_DIR):
+		return false
+	else:
+		var path = SAVE_DIR + SAVE_FILE
+		return da.file_exists(path)
+
 func dlog_root(suffix=".log"):
 	# FIXME: save the path on the bundle
 	var path = SAVE_DIR + SAVE_FILE
 	Utils.dlog_node(root, path + suffix)
+

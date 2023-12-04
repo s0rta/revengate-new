@@ -18,16 +18,28 @@
 extends Node
 
 func _ready():
-	var vers_lbl = find_child("VersionLabel")
-	vers_lbl.text = Consts.VERSION
+	%VersionLabel.text = Consts.VERSION
 	if Utils.is_debug():
-		vers_lbl.text += " debug"
+		%VersionLabel.text += " debug"
 	Tender.reset()
 	Tender.full_game = true
+	
+	%ResumeButton.visible = SaveBundle.has_file()
 
 func start_new_game():
 	get_tree().change_scene_to_file("res://src/main.tscn")
 	
+func resume_game():
+	# make sure the version is the same
+	var bundle = SaveBundle.load() as SaveBundle
+	if bundle.version != Consts.VERSION:
+		%BadSaveVersionDiag.popup_centered()
+		await %BadSaveVersionDiag.confirmed
+		print("Looks like we can proceed...")
+		# FIXME: hide the diag on accept
+	# if so, put the data in the tender, then change scene
+	pass # Replace with function body.
+
 func _on_credits_button_pressed():
 	get_tree().change_scene_to_file("res://src/ui/credits_screen.tscn")
 
@@ -36,3 +48,7 @@ func _on_license_button_pressed():
 
 func _on_privacy_button_pressed():
 	get_tree().change_scene_to_file("res://src/ui/privacy_screen.tscn")
+
+
+func _on_bad_save_version_diag_canceled():
+	%BadSaveVersionDiag.confirmed.emit()
