@@ -107,9 +107,19 @@ always_on_top = true
 extend_to_title = true
 min_size = Vector2i(720, 0)
 ok_button_text = "Got it!"
-dialog_text = "The gave version you are running is different than the one used to save the game. We are going to try to load the saved game, but this might fail. 
+dialog_text = "The saved game is from a different version of the game. Loading it might not work."
+dialog_autowrap = true
 
-If the game crashes after loading, you should select \"New Game!\" rather than \"Resume\" next time."
+[node name="CantLoadDiag" type="AcceptDialog" parent="."]
+unique_name_in_owner = true
+title = "Incompatible Save File"
+initial_position = 1
+size = Vector2i(720, 250)
+always_on_top = true
+extend_to_title = true
+min_size = Vector2i(720, 0)
+ok_button_text = "Got It!"
+dialog_text = "Failed to load the saved game. Starting a new game seems to be your only option."
 dialog_autowrap = true
 
 [connection signal="button_up" from="VBoxContainer/NewGameButton" to="." method="start_new_game"]
@@ -118,3 +128,4 @@ dialog_autowrap = true
 [connection signal="button_up" from="HBoxContainer2/LicenseButton" to="." method="_on_license_button_pressed"]
 [connection signal="button_up" from="HBoxContainer2/PrivacyButton" to="." method="_on_privacy_button_pressed"]
 [connection signal="canceled" from="BadSaveVersionDiag" to="." method="_on_bad_save_version_diag_canceled"]
+[connection signal="canceled" from="CantLoadDiag" to="." method="_on_cant_load_diag_canceled"]

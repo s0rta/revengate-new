@@ -17,6 +17,12 @@
 
 extends Node
 
+const BAD_VERS_MSG = ("The game version you are running (v%s) is different than the one used "
+						+ "to save the game (v%s). We are going to try to load and convert the "
+						+ "saved game, but this might fail. "
+						+ "\n\nIf the game crashes after loading, you should select 'New Game!' "
+						+ "rather than 'Resume' next time.")
+
 func _ready():
 	%VersionLabel.text = Consts.VERSION
 	if Utils.is_debug():
@@ -30,15 +36,24 @@ func start_new_game():
 	get_tree().change_scene_to_file("res://src/main.tscn")
 	
 func resume_game():
-	# make sure the version is the same
-	var bundle = SaveBundle.load() as SaveBundle
+	var bundle = SaveBundle.load(false) as SaveBundle
+	if bundle == null:
+		%CantLoadDiag.popup_centered()
+		await %CantLoadDiag.confirmed
+		return
+		
 	if bundle.version != Consts.VERSION:
+		%BadSaveVersionDiag.set_text(BAD_VERS_MSG % [Consts.VERSION, bundle.version])
 		%BadSaveVersionDiag.popup_centered()
 		await %BadSaveVersionDiag.confirmed
 		print("Looks like we can proceed...")
-		# FIXME: hide the diag on accept
-	# if so, put the data in the tender, then change scene
-	pass # Replace with function body.
+
+	if bundle.unpack() == null:
+		%CantLoadDiag.popup_centered()
+		await %CantLoadDiag.confirmed
+		return
+
+	# TODO: put the data in the tender, then change scene
 
 func _on_credits_button_pressed():
 	get_tree().change_scene_to_file("res://src/ui/credits_screen.tscn")
@@ -49,6 +64,8 @@ func _on_license_button_pressed():
 func _on_privacy_button_pressed():
 	get_tree().change_scene_to_file("res://src/ui/privacy_screen.tscn")
 
-
 func _on_bad_save_version_diag_canceled():
 	%BadSaveVersionDiag.confirmed.emit()
+
+func _on_cant_load_diag_canceled():
+	%CantLoadDiag.confirmed.emit()

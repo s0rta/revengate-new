@@ -26,6 +26,7 @@ const VERBOSE := true
 @export var turn:int
 @export var scene:PackedScene
 
+var path:String  # where the Bundle should be serialized
 var root:Node  # the root passed to save()
 
 static func _ensure_dir(dir=SAVE_DIR):
@@ -46,6 +47,7 @@ static func save(root:Node, turn:int, path=null):
 	bundle._ensure_dir()
 	if path == null:
 		path = SAVE_DIR + SAVE_FILE
+	bundle.path = path
 
 	if VERBOSE:
 		Utils.dlog_node(root, path + ".zero", true)
@@ -71,21 +73,21 @@ static func save(root:Node, turn:int, path=null):
 	assert(ret_code == OK)
 	return bundle
 
-static func load(path=null):
+static func load(unpack:=false) -> SaveBundle:
 	## Load a saved game and return the root `Node` of the scene.
 	## This only turns the file into game objects. It's up to the caller to register 
 	## those objects with the game loop and with the UI.
-	if path == null:
-		path = SAVE_DIR + SAVE_FILE
+	var path = SAVE_DIR + SAVE_FILE
 
-	# TODO: verify that the version is compatible with the current game
 	var bundle = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE)
-	# TODO: gentle degredation if the save does not have a scene?
-	bundle.root = bundle.scene.instantiate()
+	if bundle == null:
+		# loading failed and it's really hard to convert the Godot errors into something that 
+		# would make sense to the player
+		return null
+	bundle.path = path
 
-	if VERBOSE:
-		# FIXME: paths are unreadable until we add the scene to the tree
-		Utils.dlog_node(bundle.root, path + ".post")
+	if unpack:
+		bundle.unpack()
 
 	return bundle
 
@@ -99,7 +101,16 @@ static func has_file():
 		return da.file_exists(path)
 
 func dlog_root(suffix=".log"):
-	# FIXME: save the path on the bundle
-	var path = SAVE_DIR + SAVE_FILE
 	Utils.dlog_node(root, path + suffix)
+	
+func unpack() -> Node:
+	## Instantiate the root of the saved scene.
+	## Return the root.
+	root = scene.instantiate()
 
+	if VERBOSE:
+		# FIXME: this is of limited use at unpacking time since node paths will 
+		#   be empty until we add the scene to a tree
+		Utils.dlog_node(root, path + ".post")
+
+	return root
