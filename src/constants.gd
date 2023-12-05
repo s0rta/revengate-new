@@ -126,6 +126,8 @@ const TAGS = ["ethereal", "undead", "gift", "broken", "lit",
 			# progen placement constraints
 			"spawn-north", "spawn-south", "spawn-west", "spawn-east", 
 			"spawn-center", "spawn-distant", 
+			# quest IDs
+			"quest-lost-cards", "quest-stop-accountant", "quest-face-retznac",
 			]
 
 const OFFENSIVE_EVENTS:Array[String] = ["was_attacked", "was_insulted", "was_threatened"]

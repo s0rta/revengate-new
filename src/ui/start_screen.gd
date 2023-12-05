@@ -53,7 +53,8 @@ func resume_game():
 		await %CantLoadDiag.confirmed
 		return
 
-	# TODO: put the data in the tender, then change scene
+	Tender.save_bunle = bundle
+	get_tree().change_scene_to_file("res://src/main.tscn")
 
 func _on_credits_button_pressed():
 	get_tree().change_scene_to_file("res://src/ui/credits_screen.tscn")

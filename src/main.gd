@@ -27,7 +27,7 @@ var _seen_locs = {}  # world_locs that have been visited
 var quests = []  # int -> Quest
 
 class Quest:
-	var no: int
+	var tag: String
 	var title: String
 	var setup_func  # Callabel, optionnal
 	var intro_path: String
@@ -36,10 +36,11 @@ class Quest:
 	var win_msg: String
 	var fail_msg: String
 
-	func _init(no_, title_, intro_path_, win_msg_, setup_func_=null,
-		win_event_any_:Array[String]=[],
-		fail_event_any_:Array[String]=[], fail_msg_=""):
-		no = no_
+	func _init(tag_, title_, intro_path_, win_msg_, setup_func_=null,
+			win_event_any_:Array[String]=[],
+			fail_event_any_:Array[String]=[], fail_msg_=""):
+		assert(Utils.is_tag(tag_))
+		tag = tag_
 		title = title_
 		intro_path = intro_path_
 		win_msg = win_msg_
@@ -50,32 +51,37 @@ class Quest:
 
 func _ready():
 	# Quests
-	quests = [Quest.new(1, "The Audition",
+	quests = [Quest.new("quest-lost-cards", "The Audition",
 		"res://src/story/the_audition.md",
 		"You recovered the stolen loom cards."),
-		Quest.new(2, "Bewitching Bookkeeping",
+		Quest.new("quest-stop-accountant", "Bewitching Bookkeeping",
 			"res://src/story/bewitching_bookkeeping.md",
 			"You prevented Benoît the accountant from exposing Frank Verguin's home lab.",
 			start_ch2,
 			["accountant_yeilded", "accountant_died"],
 			["accountant_met_salapou"],
 			"You didn't stop Benoît the accountant from selling his information."),
-		Quest.new(3, "The Sound of Satin",
+		Quest.new("quest-face-retznac", "The Sound of Satin",
 			"res://src/story/sound_of_satin.md",
 			("You killed Retznac the vampire. "
 				+ "Retznac vanished into oblivion leaving a thin trail of mist behind. "
 				+ "It reminds you of the marshes around the river Rhône at sunrise."),
 			start_ch3)]
 
-	var sentiments = SentimentTable.new()
-	Tender.reset(%Hero, %HUD, %Viewport, sentiments)
-	Tender.quest = quests[0]
-	_discover_start_board()
-	watch_hero(%Hero)
 	board_changed.connect($TurnQueue.invalidate_turn)
 	board_changed.connect(center_on_hero)
-	if Tender.full_game:
-		%StoryScreen.show_story(quests[0].title, quests[0].intro_path)
+
+	if Tender.save_bunle:
+		restore_game(Tender.save_bunle)
+		Tender.save_bunle = null
+	else:
+		var sentiments = SentimentTable.new()
+		Tender.reset(%Hero, %HUD, %Viewport, sentiments)
+		Tender.quest = quests[0]
+		_discover_start_board()
+		watch_hero(%Hero)
+		if Tender.full_game:
+			%StoryScreen.show_story(quests[0].title, quests[0].intro_path)
 	await $TurnQueue.run()
 
 func _input(_event):
@@ -182,6 +188,23 @@ func _compile_hero_stats():
 	Tender.hero_stats = Tender.hero.get_base_stats()
 	Tender.hero_modifiers = Tender.hero.get_modifiers()
 
+func _quest_by_tag(quest_tag):
+	assert(Utils.is_tag(quest_tag))
+	var nb_quests = len(quests)
+	for quest in quests:
+		if quest.tag == quest_tag:
+			return quest
+	return null
+	
+func _next_quest(quest_tag):
+	## Return the next quest if it exists, null otherwise (end of game or invalid tag)
+	assert(Utils.is_tag(quest_tag))
+	var nb_quests = len(quests)
+	for i in nb_quests - 1:
+		if quests[i].tag == quest_tag:
+			return quests[i+1]
+	return null
+
 func conclude_game(victory:bool, game_over:bool):
 	## do a final bit of cleanup then show the Game Over screen
 	_compile_hero_stats()
@@ -200,9 +223,9 @@ func conclude_game(victory:bool, game_over:bool):
 	%EndOfChapterScreen.popup(Tender.quest, victory, game_over)
 	if not game_over:
 		await %EndOfChapterScreen.start_next_chapter
-		var quest = quests[Tender.quest.no]  # No starts at 1, so this is advancing.
+		var quest = _next_quest(Tender.quest.tag)
 		Tender.quest = quest
-		assert(quest.setup_func is Callable, "We don't have a setup function for chapter %s" % quest.no)
+		assert(quest.setup_func is Callable, "We don't have a setup function for chapter %s" % quest.tag)
 		quest.setup_func.call()
 
 func center_on_hero(_arg=null):
@@ -281,27 +304,16 @@ func capture_game():
 	var bundle = SaveBundle.new()
 	var dungeons = dungeons_cont
 	
-	bundle.save(dungeons, $TurnQueue.turn, Tender.kills, Tender.sentiments)
+	bundle.save(dungeons, $TurnQueue.turn, Tender.kills, Tender.sentiments, 
+				Tender.quest.tag)
 	await $TurnQueue.run()  # might be better to send this to the background
 	
-func restore_game():
+func restore_game(bundle=null):
 	## Load a saved game and register it with all UI components
-	
-	print("Shutting down the queue...")
-	$TurnQueue.shutdown()
-	if not Tender.hero.is_idle():
-		Tender.hero.cancel_action()
-	if not $TurnQueue.is_stopped():
-		await $TurnQueue.done
-	print("Shutting down the queue: done!")
-
-	var bundle = SaveBundle.load()
+	if bundle == null:
+		bundle = SaveBundle.load(true)
+		print("Got the bundle loaded!")
 	var dungeons = bundle.root
-
-	$TurnQueue.reset()
-	$TurnQueue.turn = bundle.turn
-
-	print("Got the bundle loaded!")
 
 	dungeons_cont.add_sibling(dungeons)
 	dungeons_cont.reparent($"/root")
@@ -314,17 +326,29 @@ func restore_game():
 	bundle.dlog_root(".final")
 	watch_hero(dungeons.find_child("Hero"))
 	Tender.kills = bundle.kills
-	Tender.sentiment = bundle.sentiments
+	Tender.sentiments = bundle.sentiments
+	Tender.quest = _quest_by_tag(bundle.quest_tag)
 
 	for board in dungeons_cont.find_children("", "RevBoard"):
 		if board.is_active():
 			_activate_board(board)
 			break
 
+func replace_with_saved_game():
+	## Replace the current game with one from a saved file
+	print("Shutting down the queue...")
+	$TurnQueue.shutdown()
+	if not Tender.hero.is_idle():
+		Tender.hero.cancel_action()
+	if not $TurnQueue.is_stopped():
+		await $TurnQueue.done
+	print("Shutting down the queue: done!")
+
+	restore_game()
+
 	print("Restarting the queue...")
 	await $TurnQueue.run()  # might be better to send this to the background
 	print("Restarting the queue: done!")
-
 		
 func test():
 	print("Testing: 1, 2... 1, 2!")

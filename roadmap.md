@@ -287,6 +287,8 @@ Combat:
 - [ ] bug: cross-board connectors should never be in corners
 - [ ] play time (screen time) on victory screen 
 - [ ] saved games
+  - [x] restore workflow on start screen
+  - [ ] periodic auto-saves
   - [ ] starting inventory is not resurected upon restore
 - [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
 - [ ] Seeking is easier to resolve even is the target keeps moving

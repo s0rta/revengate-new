@@ -23,6 +23,7 @@
 extends Node
 
 var full_game := false  # are we running the whole game or just an individual scene?
+var save_bunle = null  # saved game to use rather than the starting board
 var hero = null
 var hud = null
 var viewport = null
