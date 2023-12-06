@@ -45,6 +45,7 @@ signal actor_died(board, coord, tags)
 
 @export var _cells_by_terrain := {}  # terrain_name -> array of coords
 @export var current_turn := 0
+@export var board_id:int
 
 var terrain_names := {}  # name -> (terrain_set, terrain_id)
 
@@ -648,6 +649,8 @@ static func canvas_to_board_str(cpos):
 	return coord_str(canvas_to_board(cpos))
 
 func _ready():
+	if not board_id:
+		board_id = ResourceUID.create_id()
 	detect_terrain_names()
 	detect_actors()
 	reset_visibility(get_items() + get_actors() + get_vibes())
@@ -814,12 +817,15 @@ func add_connection(near_coord, far_board, far_coord=null):
 	## Connections has a near (self) and a far side (far_board). This method makes the
 	## connection bi-directional.
 	## Return the near-side of the connection
-	# TODO: connect the resource path, not the board, since that will serialize better
 	if far_coord == null:
 		far_coord = far_board.get_connector_for_loc(world_loc)
-	var near_conn = {"far_board": far_board, "far_coord": far_coord}
+	var near_conn = {"far_board_id": far_board.board_id, 
+					"far_coord": far_coord, 
+					"far_loc": far_board.world_loc}
 	set_cell_rec(near_coord, "connection", near_conn)
-	far_board.set_cell_rec(far_coord, "connection", {"far_board": self, "far_coord": near_coord})
+	far_board.set_cell_rec(far_coord, "connection", {"far_board_id": board_id, 
+													"far_coord": near_coord, 
+													"far_loc": world_loc})
 	clear_cell_rec(near_coord, "conn_target")
 	far_board.clear_cell_rec(far_coord, "conn_target")
 	return near_conn
@@ -841,7 +847,7 @@ func get_connector_for_loc(world_loc:Vector3i):
 	for coord in get_connectors():
 		var loc = get_cell_rec_val(coord, "conn_target", "world_loc")
 		if loc == null:
-			loc = get_cell_rec_val(coord, "connection", "far_board").world_loc
+			loc = get_cell_rec_val(coord, "connection", "far_loc")
 		if loc == world_loc:
 			return coord
 	return null
@@ -855,12 +861,12 @@ func get_connector_terrains():
 	return terrains
 
 func get_neighbors():
-	## Return an array of `world_loc` that we should this board will eventually connect to.
+	## Return an array of `world_loc` that this board will eventually connect to.
 	var neighbors = []
 	for coord in get_connectors():
 		var conn = get_connection(coord)
 		if conn != null:
-			neighbors.append(conn.far_board.world_loc)
+			neighbors.append(conn.far_loc)
 		else:
 			neighbors.append(get_cell_rec_val(coord, "conn_target", "world_loc"))
 	return neighbors

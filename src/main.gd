@@ -23,6 +23,8 @@ signal board_changed(new_board)
 @onready var dungeons_cont: Node = %Dungeons  # all dungeons must be direct descendent of this node
 @onready var commands = $CommandPack
 var board: RevBoard  # the active board
+
+# FIXME: should go in the save file
 var _seen_locs = {}  # world_locs that have been visited
 var quests = []  # int -> Quest
 
@@ -157,19 +159,19 @@ func switch_board_at(coord):
 	## If the destination does not exist yet, create and link it with the current board.
 	var old_board = get_board()
 	assert(old_board.is_connector(coord), "can only switch board at a connector cell")
+	var old_dungeon = old_board.get_dungeon()
 	var new_board = null
 	var conn = old_board.get_connection(coord)
 	if conn:
-		new_board = conn.far_board
+		new_board = old_dungeon.get_board_by_id(conn.far_board_id)
 	else:
 		var conn_target = old_board.get_cell_rec(coord, "conn_target")
-		var old_dungeon = old_board.get_dungeon()
 		new_board = old_dungeon.new_board_for_target(old_board, conn_target)
 
 		# connect the outgoing connector with the incomming one
 		conn = old_board.add_connection(coord, new_board)
 	_activate_board(new_board)
-	
+		
 	var builder = BoardBuilder.new(new_board)
 	var index = new_board.make_index()
 	var new_pos = builder.place(Tender.hero, builder.has_rooms(),
@@ -304,9 +306,10 @@ func capture_game():
 	var bundle = SaveBundle.new()
 	var dungeons = dungeons_cont
 	
+	print("Saving at turn %d" % $TurnQueue.turn)
 	bundle.save(dungeons, $TurnQueue.turn, Tender.kills, Tender.sentiments, 
 				Tender.quest.tag)
-	await $TurnQueue.run()  # might be better to send this to the background
+	await $TurnQueue.resume()  # might be better to send this to the background
 	
 func restore_game(bundle=null):
 	## Load a saved game and register it with all UI components
@@ -328,6 +331,7 @@ func restore_game(bundle=null):
 	Tender.kills = bundle.kills
 	Tender.sentiments = bundle.sentiments
 	Tender.quest = _quest_by_tag(bundle.quest_tag)
+	$TurnQueue.turn = bundle.turn
 
 	for board in dungeons_cont.find_children("", "RevBoard"):
 		if board.is_active():
@@ -349,13 +353,16 @@ func replace_with_saved_game():
 	print("Restarting the queue...")
 	await $TurnQueue.run()  # might be better to send this to the background
 	print("Restarting the queue: done!")
-		
+
+func _on_turn_queue_turn_finished(turn):
+	print("Turn %d is done." % turn)
+	capture_game()
+
 func test():
 	print("Testing: 1, 2... 1, 2!")
 
 	capture_game()
 	print("Done saving!")
-
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")

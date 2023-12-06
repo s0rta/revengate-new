@@ -90,7 +90,27 @@ func find_dungeon(name):
 	var node = get_parent().find_child(name, false, false)
 	assert(node is Dungeon, "%s is not a Dungeon" % name)
 	return node
-	
+
+func get_board_by_id(board_id, all_dungeons=true):
+	## Return the board with the given id or null if the board can't be found.
+	## `all_dungeons`: if true, search all sibling Dungeons as well
+	for board in find_children("", "RevBoard", false, false):
+		if board.board_id == board_id:
+			return board
+			
+	if not all_dungeons:
+		return null
+		
+	var board = null
+	for child in get_parent().find_children("", "Dungeon", false, false):
+		if child == self:
+			continue
+		board = child.get_board_by_id(board_id, false)
+		if board != null:
+			return board
+	return null
+		
+
 func finalize_static_board(board:RevBoard):
 	## do a bit of cleanup to make a static board fit in the dungeon
 	assert(false, "must be overridden by sub classes of Dungeon")
@@ -107,7 +127,7 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=default_board_size, pr
 	new_board.depth = depth
 	new_board.world_loc = world_loc
 	add_child(new_board)
-	new_board.clear()	
+	new_board.clear()
 
 	var builder = make_builder(new_board, Rect2i(Vector2i.ZERO, size))
 	fill_new_board(builder, depth, world_loc, size)
@@ -296,9 +316,10 @@ func _get_conn_target_recs(board:RevBoard):
 			recs.append(rec)
 		else:
 			rec = board.get_cell_rec(coord, "connection")
+			var far_board = get_board_by_id(rec.far_board_id)
 			var terrain = board.get_cell_terrain(coord)
-			recs.append({"world_loc":rec.far_board.world_loc, 
-						"depth":rec.far_board.depth, 
+			recs.append({"world_loc":rec.far_loc, 
+						"depth":far_board.depth,
 						"near_terrain":terrain})
 	return recs
 

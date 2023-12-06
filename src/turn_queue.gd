@@ -23,6 +23,7 @@ signal paused  # all the in-fligh actions are done, not doing anything until res
 signal resumed  # processing is ready to restart after being paused
 signal done  # processing stopped
 signal turn_started(turn:int)
+signal turn_finished(turn:int)
 
 @export var verbose := true
 
@@ -128,12 +129,14 @@ func run():
 					print("done with %s!" % actor)
 			if turn_is_valid and actor.is_animating():
 				await get_tree().create_timer(ACTING_DELAY).timeout
+		var last_turn = turn
+		if turn_is_valid:
+			turn += 1
+		turn_finished.emit(last_turn)
 		if state == States.PAUSED:
 			print("TurnQueue is paused, not advancing turn")
 			paused.emit()
 			await resumed
-		else:
-			turn += 1
 		turn_is_valid = true
 	current_actor = null
 	state = States.STOPPED

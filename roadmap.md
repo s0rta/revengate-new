@@ -288,7 +288,9 @@ Combat:
 - [ ] play time (screen time) on victory screen 
 - [ ] saved games
   - [x] restore workflow on start screen
-  - [ ] periodic auto-saves
+  - [x] periodic auto-saves
+  - [ ] seen_locs are saved
+  - [ ] anims are flushed when restoring
   - [ ] starting inventory is not resurected upon restore
 - [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
 - [ ] Seeking is easier to resolve even is the target keeps moving
