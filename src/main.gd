@@ -326,7 +326,8 @@ func restore_game(bundle=null):
 	dungeons_cont.queue_free()
 	dungeons_cont = dungeons
 	
-	bundle.dlog_root(".final")
+	if bundle.VERBOSE:
+		bundle.dlog_root(".final")
 	watch_hero(dungeons.find_child("Hero"))
 	Tender.kills = bundle.kills
 	Tender.sentiments = bundle.sentiments
@@ -335,6 +336,8 @@ func restore_game(bundle=null):
 
 	for board in dungeons_cont.find_children("", "RevBoard"):
 		if board.is_active():
+			for actor in board.find_children("", "Actor", false, false):
+				actor.place(actor.get_cell_coord())
 			_activate_board(board)
 			break
 

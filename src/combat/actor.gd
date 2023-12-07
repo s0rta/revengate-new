@@ -118,6 +118,9 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 @export var conditions_turn: int
 @export var acted_turn: int
 
+# keep track of where we are going while animations are running 
+@export var dest:Vector2i = Consts.COORD_INVALID
+
 @onready var mem: Memory = $Mem
 var state = States.IDLE:
 	set(new_state):
@@ -128,7 +131,6 @@ var has_acted: bool  # reset at the start of every turn
 var _anims := []  # all turn-blocking anims
 var shrouded := false
 var _shroud_anim = null
-var dest  # keep track of where we are going while animations are running 
 
 
 func _get_configuration_warnings():
@@ -164,7 +166,7 @@ func ddump():
 
 func ddump_pos():
 	print("Officially at %s" % RevBoard.coord_str(get_cell_coord()))
-	if dest:
+	if dest and dest != Consts.COORD_INVALID:
 		print("  going to %s" % RevBoard.coord_str(dest))
 	print("  is_animating: %s nb_anims:%d" % [is_animating(), len(_anims)])
 	var fcoord = Vector2(1.0 * position.x / RevBoard.TILE_SIZE, 
@@ -365,15 +367,15 @@ func finalize_turn(acted=null):
 		acted_turn = current_turn
 	emit_signal("turn_done")
 
-func reset_dest(inval_dest=null):
-	if dest and dest == inval_dest:
-		dest = null
+func reset_dest(former_dest=null):
+	if dest and dest == former_dest:
+		dest = Consts.COORD_INVALID
 
 func get_cell_coord():
 	## Return the board position occupied by the actor.
 	## If the actor is currently moving, return where it's expected to be at the
 	## end of the turn.
-	if dest != null:
+	if dest != Consts.COORD_INVALID:
 		return dest
 	else:
 		return RevBoard.canvas_to_board(position)

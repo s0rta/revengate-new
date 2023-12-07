@@ -290,7 +290,8 @@ Combat:
   - [x] restore workflow on start screen
   - [x] periodic auto-saves
   - [ ] seen_locs are saved
-  - [ ] anims are flushed when restoring
+  - [x] anims are flushed when restoring
+  - [ ] flying HP labels are not saved
   - [ ] starting inventory is not resurected upon restore
 - [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
 - [ ] Seeking is easier to resolve even is the target keeps moving
