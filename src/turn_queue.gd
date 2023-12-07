@@ -29,7 +29,8 @@ signal turn_finished(turn:int)
 
 var state = States.STOPPED
 var turn := 0
-var turn_is_valid := true
+var process_actions := true
+var advance_turn := true
 var current_actor
 
 # TODO: an explicit ref to Main would be cleaner
@@ -48,29 +49,38 @@ func get_actors():
 		if node.is_alive():
 			actors.append(node)
 	return actors
-		
-func invalidate_turn(_arg=null):
-	## Mark the current turn as impossible to complete, skip to the next turn as soon as possible.
+
+func skip_turn(immediate=true):
+	## Skip to the next turn as soon as possible.
 	## Turns can become invalid for many reasons. For example if the Hero gets on a new level with 
 	## a whole cast of actors, it does not make sense to finish the old turn with only actors from 
 	## the previous level.
-	turn_is_valid = false
+	process_actions = false
+	advance_turn = true
+	if immediate and current_actor and not current_actor.is_idle():
+		current_actor.cancel_action()
+	
+func abort_turn(immediate=true):
+	## Stop new actors from taking their turn. The turn will the redone from the start.
+	## This is useful for saving games at a known point after a turn has started.
+	process_actions = false
+	advance_turn = false
+	if immediate and current_actor and not current_actor.is_idle():
+		current_actor.cancel_action()
 
 func shutdown():
 	## Stop processing turns as soon as possible. 
 	## Typically the current actor will finish their turn before the shutdown begins.
 	state = States.SHUTTING_DOWN
-	invalidate_turn()
+	skip_turn()
 
 func pause(immediate=true):
 	## Stop new actors from taking their turn. 
 	## The current actor might still finish their turn if they have started.
 	## The turn counter is not advanced.
 	state = States.PAUSED
-	if immediate and current_actor and not current_actor.is_idle():
-		current_actor.cancel_action()
-	invalidate_turn()
-	
+	abort_turn(immediate)	
+
 func is_paused():
 	return state == States.PAUSED
 
@@ -78,7 +88,6 @@ func reset():
 	## Bring the turn queue back to like it was at the start of the game
 	assert(state == States.STOPPED, "A running TurnQueue must be shutdown before you can reset it.")
 	turn = 0
-	turn_is_valid = true
 	
 func resume():
 	assert(state == States.PAUSED)
@@ -89,10 +98,12 @@ func is_stopped():
 	return state == States.STOPPED
 
 func run():
+	assert(is_stopped(), "This TurnQueue is already running in a different thread.")
 	var actors: Array
-	turn_is_valid = true
 	state = States.PROCESSING
 	while state == States.PROCESSING:
+		process_actions = true
+		advance_turn = true
 		current_actor = null
 		if verbose:
 			print("=== Start of turn %d ===" % turn)
@@ -107,7 +118,7 @@ func run():
 			
 		# 2rd pass: actions
 		for actor in actors:
-			if not turn_is_valid:
+			if not process_actions:
 				break
 			if actor == null or not actor.is_alive():  # died from conditions
 				continue
@@ -127,17 +138,16 @@ func run():
 				await actor.turn_done
 				if verbose:
 					print("done with %s!" % actor)
-			if turn_is_valid and actor.is_animating():
+			if process_actions and actor.is_animating():
 				await get_tree().create_timer(ACTING_DELAY).timeout
 		var last_turn = turn
-		if turn_is_valid:
+		if advance_turn:
 			turn += 1
 		turn_finished.emit(last_turn)
 		if state == States.PAUSED:
 			print("TurnQueue is paused, not advancing turn")
 			paused.emit()
 			await resumed
-		turn_is_valid = true
 	current_actor = null
 	state = States.STOPPED
 	emit_signal("done")

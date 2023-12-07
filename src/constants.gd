@@ -72,6 +72,8 @@ var CHALLENGES := [] + SKILLS
 const ITEM_BASE_STATS := ["consumable", "switchable"]
 var WEAPON_BASE_STATS := ["damage", "range", "damage_family"] + ITEM_BASE_STATS
 
+const COORD_INVALID = Vector2i(-1, -1)
+
 # Increments for world locations
 const LOC_HIGHER = Vector3i(0, 0, 1)
 const LOC_LOWER = Vector3i(0, 0, -1)

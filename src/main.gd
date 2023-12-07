@@ -70,8 +70,7 @@ func _ready():
 				+ "It reminds you of the marshes around the river Rhône at sunrise."),
 			start_ch3)]
 
-	board_changed.connect($TurnQueue.invalidate_turn)
-	board_changed.connect(center_on_hero)
+	board_changed.connect(_on_board_changed)
 
 	if Tender.save_bunle:
 		restore_game(Tender.save_bunle)
@@ -93,6 +92,10 @@ func _input(_event):
 	elif Input.is_action_just_pressed("test"):
 		test()
 		$/root.set_input_as_handled()
+
+func _on_board_changed(_arg):
+	$TurnQueue.skip_turn(false)
+	center_on_hero()
 
 func _discover_start_board():
 	## Find the board that the game should start with
@@ -177,7 +180,7 @@ func switch_board_at(coord):
 	var new_pos = builder.place(Tender.hero, builder.has_rooms(),
 		conn.far_coord, true, null, index)
 	%HUD.refresh_buttons_vis(null, new_pos)
-	emit_signal("board_changed", new_board)
+	board_changed.emit(new_board)
 	
 func _on_hero_died(_coord, _tags):
 	conclude_game(false, true)
@@ -230,7 +233,7 @@ func conclude_game(victory:bool, game_over:bool):
 		assert(quest.setup_func is Callable, "We don't have a setup function for chapter %s" % quest.tag)
 		quest.setup_func.call()
 
-func center_on_hero(_arg=null):
+func center_on_hero():
 	var hero_coord = Tender.hero.get_cell_coord()
 	%Viewport.center_on_coord(hero_coord)
 
