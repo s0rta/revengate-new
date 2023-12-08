@@ -212,6 +212,7 @@ func conclude_game(victory:bool, game_over:bool):
 	var last_quest = Tender.quest
 	
 	if game_over:
+		SaveBundle.remove()
 		$TurnQueue.shutdown()
 	else:
 		$TurnQueue.pause()
@@ -238,6 +239,11 @@ func _on_cancel_button_pressed():
 
 func _on_turn_started(_turn):
 	get_board().clear_highlights()
+
+func _on_turn_finished(turn):
+	print("Turn %d is done." % turn)
+	if Tender.hero and Tender.hero.is_alive():
+		capture_game()
 
 func show_context_menu_for(coord) -> bool:
 	## Show a list of context-specific actions.
@@ -359,10 +365,6 @@ func replace_with_saved_game():
 	print("Restarting the queue...")
 	await $TurnQueue.run()  # might be better to send this to the background
 	print("Restarting the queue: done!")
-
-func _on_turn_queue_turn_finished(turn):
-	print("Turn %d is done." % turn)
-	capture_game()
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
