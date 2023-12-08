@@ -324,6 +324,7 @@ func restore_game(bundle=null):
 	var dungeons = bundle.root
 
 	dungeons_cont.add_sibling(dungeons)
+	get_tree().call_group("no-save", "queue_free")
 	dungeons_cont.reparent($"/root")
 	
 	for board in dungeons_cont.find_children("", "RevBoard"):

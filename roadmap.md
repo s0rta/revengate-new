@@ -292,7 +292,7 @@ Combat:
   - [x] periodic auto-saves
   - [x] seen_locs are saved
   - [x] anims are flushed when restoring
-  - [ ] flying HP labels are not saved
+  - [x] flying HP labels are not saved
   - [ ] starting inventory is not resurected upon restore
 - [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
 - [ ] Seeking is easier to resolve even is the target keeps moving

@@ -557,6 +557,7 @@ func _anim_health_change(label_, number, direction:Vector2):
 	if is_unexposed():
 		return
 	var label = label_.duplicate()
+	label.add_to_group("no-save", true)
 	add_child(label)
 	label.text = "%d" % number
 	label.visible = true
