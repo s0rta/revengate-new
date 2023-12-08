@@ -245,7 +245,8 @@ static func make_game_summary():
 	var stats_summary = "\n".join(stats_lines)
 	return ("Your adventure lasted %d turns and took you through %d locations.\n\n" 
 			+ "Monsters defeated:\n%s\n\n"
-			+ "Character stats (modifiers):\n%s\n\n") % [Tender.last_turn, Tender.nb_locs, 
+			+ "Character stats (modifiers):\n%s\n\n") % [Tender.last_turn, 
+															Tender.seen_locs.size(), 
 															kill_summary, stats_summary]
 
 static func has_tags(node, tags:Array):

@@ -23,10 +23,7 @@ signal board_changed(new_board)
 @onready var dungeons_cont: Node = %Dungeons  # all dungeons must be direct descendent of this node
 @onready var commands = $CommandPack
 var board: RevBoard  # the active board
-
-# FIXME: should go in the save file
-var _seen_locs = {}  # world_locs that have been visited
-var quests = []  # int -> Quest
+var quests = []
 
 class Quest:
 	var tag: String
@@ -111,7 +108,7 @@ func _activate_board(new_board):
 		board.set_active(false)
 	new_board.start_turn($TurnQueue.turn)  # catch up with conditions and decay
 	new_board.set_active(true)
-	_seen_locs[new_board.world_loc] = true
+	Tender.seen_locs[new_board.world_loc] = true
 	
 	if not new_board.new_message.is_connected($HUD.add_message):
 		new_board.new_message.connect($HUD.add_message)
@@ -189,7 +186,6 @@ func _compile_hero_stats():
 	## Compile the hero part of the game stats.
 	## For the kills, see Utils.make_game_summary()
 	Tender.last_turn = $TurnQueue.turn
-	Tender.nb_locs = _seen_locs.size()
 	Tender.hero_stats = Tender.hero.get_base_stats()
 	Tender.hero_modifiers = Tender.hero.get_modifiers()
 
@@ -311,7 +307,7 @@ func capture_game():
 	
 	print("Saving at turn %d" % $TurnQueue.turn)
 	bundle.save(dungeons, $TurnQueue.turn, Tender.kills, Tender.sentiments, 
-				Tender.quest.tag)
+				Tender.quest.tag, Tender.seen_locs.keys())
 	await $TurnQueue.resume()  # might be better to send this to the background
 	
 func restore_game(bundle=null):
@@ -335,6 +331,10 @@ func restore_game(bundle=null):
 	Tender.kills = bundle.kills
 	Tender.sentiments = bundle.sentiments
 	Tender.quest = _quest_by_tag(bundle.quest_tag)
+	Tender.seen_locs.clear()
+	Tender.viewport = %Viewport
+	for loc in bundle.seen_locs:
+		Tender.seen_locs[loc] = true
 	$TurnQueue.turn = bundle.turn
 
 	for board in dungeons_cont.find_children("", "RevBoard"):

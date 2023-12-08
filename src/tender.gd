@@ -33,7 +33,7 @@ var quest = null  # a Main.Quest instance
 
 # End of game stats
 var last_turn = null
-var nb_locs = null
+var seen_locs := {}
 var hero_stats = null
 var hero_modifiers = null
 
@@ -49,7 +49,7 @@ func reset(hero_=null, hud_=null, viewport_=null, sentiments_=null):
 	kills = {}
 	sentiments = sentiments_
 	last_turn = null
-	nb_locs = null	
+	seen_locs.clear()	
 	hero_stats = null
 	hero_modifiers = null
 	story_title = null

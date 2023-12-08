@@ -285,11 +285,12 @@ Combat:
 - [ ] submit to the Godot showreel (before dec 17)
 - [ ] submit to the [Game Dev World Championship](https://thegdwc.com/) (before dec 31)
 - [ ] bug: cross-board connectors should never be in corners
+- [ ] bug: TurnQueue is spinning hot on GameOver
 - [ ] play time (screen time) on victory screen 
 - [ ] saved games
   - [x] restore workflow on start screen
   - [x] periodic auto-saves
-  - [ ] seen_locs are saved
+  - [x] seen_locs are saved
   - [x] anims are flushed when restoring
   - [ ] flying HP labels are not saved
   - [ ] starting inventory is not resurected upon restore

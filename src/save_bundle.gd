@@ -20,7 +20,7 @@ class_name SaveBundle extends Resource
 
 const SAVE_DIR = "user://saved-games/"
 const SAVE_FILE = "main_scene.tres"
-const VERBOSE := true
+const VERBOSE := false
 
 @export var version := Consts.VERSION
 @export var turn:int
@@ -29,6 +29,7 @@ const VERBOSE := true
 @export var kills:Dictionary
 @export var sentiments:SentimentTable
 @export var quest_tag: String
+@export var seen_locs: Array
 
 var path:String  # where the Bundle should be serialized
 var root:Node  # the root passed to save()
@@ -39,7 +40,8 @@ static func _ensure_dir(dir=SAVE_DIR):
 		da.make_dir(dir)
 
 static func save(root:Node, turn:int, kills:Dictionary, 
-				sentiments:SentimentTable, quest_tag:String):
+				sentiments:SentimentTable, quest_tag:String, 
+				seen_locs:Array):
 	## Save a game. 
 	## The whole subtree starting at `root` is saved. 
 	## This does not need to be the game root.
@@ -51,6 +53,7 @@ static func save(root:Node, turn:int, kills:Dictionary,
 	bundle.kills = kills
 	bundle.sentiments = sentiments
 	bundle.quest_tag = quest_tag
+	bundle.seen_locs = seen_locs
 
 	bundle._ensure_dir()
 	var path = SAVE_DIR + SAVE_FILE
