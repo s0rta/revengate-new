@@ -14,7 +14,7 @@ config/name="Revengate"
 config/description="A steampunk roguelike for Android."
 run/main_scene="res://src/ui/start_screen.tscn"
 config/use_custom_user_dir=true
-config/features=PackedStringArray("4.1")
+config/features=PackedStringArray("4.2")
 boot_splash/image="res://assets/splash-screen.png"
 config/icon="res://assets/launch-icon.png"
 

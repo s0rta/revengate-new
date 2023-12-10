@@ -6,8 +6,8 @@
 [ext_resource type="FontVariation" uid="uid://crtqckgwsuhhq" path="res://assets/fonts/system_with_emojis.tres" id="3_sym2b"]
 
 [sub_resource type="FontVariation" id="FontVariation_ifbsj"]
-base_font = ExtResource("1_1u55p")
 fallbacks = Array[Font]([ExtResource("2_dl3k4")])
+base_font = ExtResource("1_1u55p")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mjio8"]
 content_margin_left = 4.0
