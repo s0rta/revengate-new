@@ -41,9 +41,11 @@ func make_builder(board, rect):
 	builder.wall_terrain = "wall"	
 	return builder
 
-func finalize_static_board(board:RevBoard):
+func finalize_static_board() -> RevBoard:
 	## do a bit of cleanup to make a static board fit in the dungeon
 	# FIXME: a few of those can go with the parent class
+	starting_board = find_child("StartingBoard")
+	var board = starting_board
 	board.scan_terrain()
 	board.world_loc = START_LOC
 	board.lock(V.i(20, 8), "key-red")
@@ -70,7 +72,11 @@ func finalize_static_board(board:RevBoard):
 			if not STARTING_CONN_TARGETS.has(coord):
 				rec.dungeon = dungeon_for_loc(rec.world_loc)
 			board.set_cell_rec(coord, "conn_target", rec)
-	board.ddump_connectors()
+			
+	for actor in board.find_children("", "Actor", false, false):
+		actor.spawn()
+
+	return board
 
 func fill_new_board(builder:BoardBuilder, depth, world_loc, size):
 	## put the main geometry on a freshly created board, except for connectors

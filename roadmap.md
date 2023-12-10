@@ -286,6 +286,7 @@ Combat:
 - [ ] submit to the [Game Dev World Championship](https://thegdwc.com/) (before dec 31)
 - [ ] bug: cross-board connectors should never be in corners
 - [x] bug: TurnQueue is spinning hot on GameOver
+- [ ] bug: city outlaws are neutral
 - [ ] play time (screen time) on victory screen 
 - [ ] saved games
   - [x] restore workflow on start screen
@@ -293,7 +294,8 @@ Combat:
   - [x] seen_locs are saved
   - [x] anims are flushed when restoring
   - [x] flying HP labels are not saved
-  - [ ] starting inventory is not resurected upon restore
+  - [x] starting inventory is not resurected upon restore
+  - [ ] action highlights are refreshed properly (mem looks at id rather than references?)
 - [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
 - [ ] Seeking is easier to resolve even is the target keeps moving
 - [ ] web export

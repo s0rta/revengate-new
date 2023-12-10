@@ -97,8 +97,9 @@ func _on_board_changed(_arg):
 func _discover_start_board():
 	## Find the board that the game should start with
 	for dungeon in dungeons_cont.find_children("", "Dungeon", false, false):
-		if dungeon.starting_board != null:
-			_activate_board(dungeon.starting_board)
+		if dungeon.has_starting_board():
+			var start_board = dungeon.finalize_static_board()
+			_activate_board(start_board)
 			break
 	assert(board != null, "Could not find a starting board!")
 	
@@ -332,9 +333,12 @@ func restore_game(bundle=null):
 	dungeons_cont.queue_free()
 	dungeons_cont = dungeons
 	
+	bundle.restore_actors()
+	
 	if bundle.VERBOSE:
 		bundle.dlog_root(".final")
-	watch_hero(dungeons.find_child("Hero"))
+	var hero = dungeons.find_child("Hero")	
+	watch_hero(hero)
 	Tender.kills = bundle.kills
 	Tender.sentiments = bundle.sentiments
 	Tender.quest = _quest_by_tag(bundle.quest_tag)
@@ -378,4 +382,3 @@ func test2():
 
 	restore_game()
 	print("Done restoring!")
-

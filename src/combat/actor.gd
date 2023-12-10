@@ -208,6 +208,26 @@ func act() -> void:
 	finalize_turn()
 	return
 
+func spawn():
+	## Mark sub-nodes to make then properly save and restore.
+	## This should be called exactly once after a newly created actor has been added to a board.
+	for item in get_items([], [], false):
+		var copy = item.duplicate()
+		copy.owner = null
+		add_child(copy)
+		item.reparent($"/root")
+		item.queue_free()
+
+func restore():
+	## Filter sub-node and keep only the ones that should be restored.
+	## This should be called exactly once per actor after a reloaded game has 
+	## been added to the scene tree.
+	for item in get_items([], [], false):
+		print("%s owner=%s" % [item.get_short_desc(), item.owner])
+		if item.owner == self:
+			item.reparent($"/root")
+			item.queue_free()
+
 func get_caption():
 	if caption:
 		return caption
@@ -1044,7 +1064,6 @@ func give_item(item, actor=null):
 	## Give `item` to `actor`
 	## If actor is not provided, the item is simply destroyed.
 	assert(item.get_parent() == self, "must possess an item before giving it away")
-	var owner = actor
 	if not owner:
 		owner = $root
 	item.reparent(owner)

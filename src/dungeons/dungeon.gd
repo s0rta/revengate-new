@@ -57,10 +57,9 @@ func _ready():
 		deck_builder = load("res://src/default_deck_builder.tscn").instantiate()
 	else:
 		deck_builder = deck_builders[0]
-		
-	starting_board = find_child("StartingBoard")
-	if starting_board != null:
-		finalize_static_board(starting_board)
+
+func has_starting_board():
+	return find_child("StartingBoard") != null
 
 func dungeon_for_loc(world_loc:Vector3i):
 	## Return the name of the dungeon where `world_loc` belongs or null is it's part of the current dungeon
@@ -109,11 +108,11 @@ func get_board_by_id(board_id, all_dungeons=true):
 		if board != null:
 			return board
 	return null
-		
 
-func finalize_static_board(board:RevBoard):
+func finalize_static_board() -> RevBoard:
 	## do a bit of cleanup to make a static board fit in the dungeon
 	assert(false, "must be overridden by sub classes of Dungeon")
+	return null
 
 func fill_new_board(builder, depth, world_loc, size):
 	## put the main geometry on a freshly created board, except for connectors
@@ -304,6 +303,8 @@ func _place_card(card, builder:BoardBuilder, where=null, index=null, rm_tags=[])
 		if spawn_rect != null and spawn_rect.has_area():
 			where = Rand.coord_in_rect(spawn_rect)
 	builder.place(instance, false, where, true, null, index)
+	if instance.get("spawn"):
+		instance.spawn()
 	instance.show()
 
 func _get_conn_target_recs(board:RevBoard):

@@ -131,3 +131,10 @@ func unpack() -> Node:
 		Utils.dlog_node(root, path + ".post")
 
 	return root
+
+func restore_actors():
+	## Do a bit if sub-node cleanup on all actors.
+	for board in root.find_children("", "RevBoard", true, false):
+		for actor in board.find_children("", "Actor", false, false):
+			actor.restore()
+			
