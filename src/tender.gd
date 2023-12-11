@@ -36,6 +36,7 @@ var last_turn = null
 var seen_locs := {}
 var hero_stats = null
 var hero_modifiers = null
+var play_secs := 0.0
 
 # inter-chapter long narrations
 var story_title = null
@@ -52,6 +53,7 @@ func reset(hero_=null, hud_=null, viewport_=null, sentiments_=null):
 	seen_locs.clear()	
 	hero_stats = null
 	hero_modifiers = null
+	play_secs = 0.0
 	story_title = null
 	story_path = null
 	

@@ -225,6 +225,18 @@ static func fadeout_later(node:Node, nb_secs:float, free:=true):
 	if free:
 		node.queue_free()
 
+static func time_str(seconds:float):
+	var hours = seconds / 3600
+	var minutes = fmod(seconds, 3600) / 60
+	var only_seconds = fmod(seconds, 60)
+	var parts = []
+	if hours >= 1:
+		parts.append("%d hours" % hours)
+	if hours >= 1 or minutes >= 1:
+		parts.append("%d minutes" % minutes)
+	parts.append("%.1f seconds" % only_seconds)
+	return " ".join(parts)
+
 static func make_game_summary():
 	var kill_summary: String
 	if Tender.kills.is_empty():
@@ -244,9 +256,11 @@ static func make_game_summary():
 			stats_lines.append("🞙 %s:%s" % [key, Tender.hero_stats[key]])
 	var stats_summary = "\n".join(stats_lines)
 	return ("Your adventure lasted %d turns and took you through %d locations.\n\n" 
+			+ "You played this game for %s.\n\n"
 			+ "Monsters defeated:\n%s\n\n"
 			+ "Character stats (modifiers):\n%s\n\n") % [Tender.last_turn, 
 															Tender.seen_locs.size(), 
+															time_str(Tender.play_secs),
 															kill_summary, stats_summary]
 
 static func has_tags(node, tags:Array):

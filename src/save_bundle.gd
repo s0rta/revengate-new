@@ -30,6 +30,7 @@ const VERBOSE := false
 @export var sentiments:SentimentTable
 @export var quest_tag: String
 @export var seen_locs: Array
+@export var play_secs: float
 
 var path:String  # where the Bundle should be serialized
 var root:Node  # the root passed to save()
@@ -41,7 +42,7 @@ static func _ensure_dir(dir=SAVE_DIR):
 
 static func save(root:Node, turn:int, kills:Dictionary, 
 				sentiments:SentimentTable, quest_tag:String, 
-				seen_locs:Array):
+				seen_locs:Array, play_secs:float):
 	## Save a game. 
 	## The whole subtree starting at `root` is saved. 
 	## This does not need to be the game root.
@@ -54,6 +55,7 @@ static func save(root:Node, turn:int, kills:Dictionary,
 	bundle.sentiments = sentiments
 	bundle.quest_tag = quest_tag
 	bundle.seen_locs = seen_locs
+	bundle.play_secs = play_secs
 
 	bundle._ensure_dir()
 	var path = SAVE_DIR + SAVE_FILE

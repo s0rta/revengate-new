@@ -82,6 +82,9 @@ func _ready():
 			%StoryScreen.show_story(quests[0].title, quests[0].intro_path)
 	await $TurnQueue.run()
 
+func _process(delta):
+	Tender.play_secs += delta
+
 func _input(_event):
 	if Input.is_action_just_pressed("test-2"):
 		test2()
@@ -314,7 +317,7 @@ func capture_game():
 	
 	print("Saving at turn %d" % $TurnQueue.turn)
 	bundle.save(dungeons, $TurnQueue.turn, Tender.kills, Tender.sentiments, 
-				Tender.quest.tag, Tender.seen_locs.keys())
+				Tender.quest.tag, Tender.seen_locs.keys(), Tender.play_secs)
 	await $TurnQueue.resume()  # might be better to send this to the background
 	
 func restore_game(bundle=null):
@@ -343,6 +346,7 @@ func restore_game(bundle=null):
 	Tender.sentiments = bundle.sentiments
 	Tender.quest = _quest_by_tag(bundle.quest_tag)
 	Tender.seen_locs.clear()
+	Tender.play_secs = bundle.play_secs
 	Tender.viewport = %Viewport
 	for loc in bundle.seen_locs:
 		Tender.seen_locs[loc] = true

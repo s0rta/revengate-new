@@ -1365,10 +1365,8 @@ func _on_actor_moved(from, to):
 		var things = [index.top_item_at(from), index.top_item_at(to)] + get_actors() \
 					+ index.vibes_at(from) + index.vibes_at(to)
 		update_all_shrouding(things, index)
-		var vibes = index.vibes_at(to)
-		if vibes:
-			for vibe in vibes:
-				vibe.activate()
+		for vibe in index.vibes_at(to):
+			vibe.activate()
 	else:
 		if Tender.hero.perceives(from, index):
 			update_shrouding_at(from, index)
