@@ -1335,32 +1335,45 @@ func reset_visibility(things:Array, index=null):
 		else:
 			thing.unshroud(true)
 
-func update_shrouding(things, index=null):
+func update_all_shrouding(things, index=null):
 	## Shroud or reveal things that have changed perceptibility. 
 	## The change is animated. For an instantaneous change, consider reset_visibility().
 	## nulls are silently ignored.
 	for thing in things:
 		if thing == null:
 			continue
-		if thing.should_shroud(index):
+		var shroud_it = thing.should_shroud(index)
+	
+		if shroud_it:
 			thing.shroud()
 		else:
 			thing.unshroud()
+
+func update_shrouding_at(where, index:BoardIndex):
+	## Shroud or reveal things that have changed perceptibility at a given coord.
+	## See update_all_shrouding() for more details.
+	var things = [index.actor_at(where), index.top_item_at(where)] + index.vibes_at(where)
+	update_all_shrouding(things, index)
 	
 func _on_actor_moved(from, to):
 	## fade in and out the visibility of items being stepped on/off.
 	var index = make_index()
-	assert(index.actor_at(to)!=null, 
-			"The signal seems to have fired before an actor set their dest to %s" % coord_str(to))
-	
-	var things = [index.top_item_at(from), index.top_item_at(to)] + get_actors()
-	update_shrouding(things, index)
+	#assert(index.actor_at(to)!=null, 
+			#"The signal seems to have fired before an actor set their dest to %s" % coord_str(to))
 
 	if index.actor_at(to) == Tender.hero:
+		var things = [index.top_item_at(from), index.top_item_at(to)] + get_actors() \
+					+ index.vibes_at(from) + index.vibes_at(to)
+		update_all_shrouding(things, index)
 		var vibes = index.vibes_at(to)
 		if vibes:
 			for vibe in vibes:
 				vibe.activate()
+	else:
+		if Tender.hero.perceives(from, index):
+			update_shrouding_at(from, index)
+		if Tender.hero.perceives(to, index):
+			update_shrouding_at(to, index)
 
 func _on_items_changed_at(coord):
 	var index = make_index() as BoardIndex

@@ -17,7 +17,10 @@
 
 extends Node
 
-const ACTING_DELAY = 0.1  # in seconds
+# headstart that an actor has to begin their animation before the next actor starts 
+# moving, in seconds
+const MAX_ACTING_DELAY = 0.1
+
 enum States {STOPPED, PAUSED, PROCESSING, SHUTTING_DOWN}
 signal paused  # all the in-fligh actions are done, not doing anything until resume is requested
 signal resumed  # processing is ready to restart after being paused
@@ -115,7 +118,12 @@ func run():
 		#   boards and actors know how to skip conditions for a turn they have already seen, 
 		#   so restarting an in-progress turn (perhaps from restoring a saved game) is safe.
 		get_board().start_turn(turn)
-			
+		
+		var visible_actors = 0
+		for actor in actors:
+			if actor.is_alive() and not actor.is_unexposed():
+				visible_actors += 1
+
 		# 2rd pass: actions
 		for actor in actors:
 			if not process_actions:
@@ -129,17 +137,27 @@ func run():
 					print("skipping %s who has already acted this turn" % actor)
 				continue
 			current_actor = actor
+			
+			var start_wait = Time.get_ticks_msec()
 			if actor.is_animating():  # still moving from previous turn, let's wait a bit
 				await actor.anims_done
+				var elapsed = (Time.get_ticks_msec() - start_wait) / 1000.0
+				if verbose:
+					print("Had to wait %s on %s before starting its action" % [elapsed, actor])
+				
+			var start_act = Time.get_ticks_msec()
 			actor.act()
 			if not actor.is_idle():
 				if verbose:
 					print("waiting for %s..." % actor)
 				await actor.turn_done
-				if verbose:
-					print("done with %s!" % actor)
+
+			if verbose:
+				var elapsed = (Time.get_ticks_msec() - start_act) / 1000.0
+				print("%s acted for %s" % [actor, elapsed])
 			if process_actions and actor.is_animating():
-				await get_tree().create_timer(ACTING_DELAY).timeout
+				var delay = min(2.0 * MAX_ACTING_DELAY / visible_actors, MAX_ACTING_DELAY)
+				await get_tree().create_timer(delay).timeout
 		var last_turn = turn
 		if advance_turn:
 			turn += 1

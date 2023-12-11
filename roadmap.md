@@ -287,6 +287,7 @@ Combat:
 - [ ] bug: cross-board connectors should never be in corners
 - [x] bug: TurnQueue is spinning hot on GameOver
 - [ ] bug: city outlaws are neutral
+- [x] faster move animations when there are many visible actors
 - [ ] play time (screen time) on victory screen 
 - [ ] saved games
   - [x] restore workflow on start screen
@@ -297,6 +298,7 @@ Combat:
   - [x] starting inventory is not resurected upon restore
   - [ ] action highlights are refreshed properly (mem looks at id rather than references?)
 - [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
+      - RevBoard._on_actor_moved() called with `to` != actor.dest
 - [ ] Seeking is easier to resolve even is the target keeps moving
 - [ ] web export
   - [ ] better keyboard support (ex.: ESC cancels actions)
