@@ -297,7 +297,7 @@ Combat:
   - [x] flying HP labels are not saved
   - [x] starting inventory is not resurected upon restore
   - [ ] action highlights are refreshed properly (mem looks at id rather than references?)
-  - [ ] quest setup functs discover NPCs rather than using static refs
+  - [x] quest setup functs discover NPCs rather than using static refs
 - [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
       - RevBoard._on_actor_moved() called with `to` != actor.dest
 - [ ] Seeking is easier to resolve even is the target keeps moving

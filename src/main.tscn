@@ -105,12 +105,10 @@ position = Vector2(112, 48)
 [node name="Broom" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("14_w5yd8")]
 
 [node name="Nadege" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_wcjwx")]
-unique_name_in_owner = true
 visible = true
 position = Vector2(48, 80)
 
 [node name="BarTender" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_x3gva")]
-unique_name_in_owner = true
 visible = true
 position = Vector2(48, 240)
 
@@ -126,7 +124,6 @@ position = Vector2(336, 48)
 range = 1
 
 [node name="BarPatron1" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
-unique_name_in_owner = true
 visible = true
 position = Vector2(112, 272)
 caption = "Robert"
@@ -134,7 +131,6 @@ conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "ghosts"
 
 [node name="BarPatron2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
-unique_name_in_owner = true
 visible = true
 position = Vector2(112, 208)
 caption = "Mathieu"

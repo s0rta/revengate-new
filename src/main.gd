@@ -24,6 +24,7 @@ signal board_changed(new_board)
 @onready var commands = $CommandPack
 var board: RevBoard  # the active board
 var quests = []
+var npcs = {}
 
 class Quest:
 	var tag: String
@@ -77,6 +78,7 @@ func _ready():
 		Tender.reset(%Hero, %HUD, %Viewport, sentiments)
 		Tender.quest = quests[0]
 		_discover_start_board()
+		_discover_npcs()
 		watch_hero(%Hero)
 		if Tender.full_game:
 			%StoryScreen.show_story(quests[0].title, quests[0].intro_path)
@@ -96,6 +98,12 @@ func _input(_event):
 func _on_board_changed(_arg):
 	$TurnQueue.skip_turn(false)
 	center_on_hero()
+
+func _discover_npcs():
+	npcs.nadege = dungeons_cont.find_child("Nadege")
+	npcs.bar_patron_1 = dungeons_cont.find_child("BarPatron1")
+	npcs.bar_patron_2 = dungeons_cont.find_child("BarPatron2")
+	npcs.bar_tender = dungeons_cont.find_child("BarTender")
 
 func _discover_start_board():
 	## Find the board that the game should start with
@@ -261,16 +269,16 @@ func start_ch2():
 	var hero = Tender.hero
 	destroy_items(hero.get_items(["quest-item"]))
 	# Nadège gives key and combat cane
-	%Nadege.conversation_sect = "intro_2"
-	supply_item(%Nadege, "res://src/items/serum_of_vitality.tscn", ["quest-reward", "gift"])
-	supply_item(%Nadege, "res://src/items/key.tscn", ["key-blue", "gift"])
-	supply_item(%Nadege, "res://src/weapons/weighted_cane.tscn", ["gift"])
+	npcs.nadege.conversation_sect = "intro_2"
+	supply_item(npcs.nadege, "res://src/items/serum_of_vitality.tscn", ["quest-reward", "gift"])
+	supply_item(npcs.nadege, "res://src/items/key.tscn", ["key-blue", "gift"])
+	supply_item(npcs.nadege, "res://src/weapons/weighted_cane.tscn", ["gift"])
 	
-	%BarPatron1.conversation_sect = "automata"
-	%BarPatron2.conversation_sect = "resistances"
+	npcs.bar_patron_1.conversation_sect = "automata"
+	npcs.bar_patron_2.conversation_sect = "resistances"
 
-	%BarTender.conversation_sect = "intro_2"
-	supply_item(%BarTender, "res://src/items/potion_of_booze.tscn", ["gift"])
+	npcs.bar_tender.conversation_sect = "intro_2"
+	supply_item(npcs.bar_tender, "res://src/items/potion_of_booze.tscn", ["gift"])
 
 	%StoryScreen.show_story("Chapter 2: Bewitching Bookkeeping",
 		"res://src/story/bewitching_bookkeeping.md")
@@ -282,23 +290,23 @@ func start_ch2():
 func start_ch3():
 	var mem = Tender.hero.mem
 	# Nadège gives key and dress sword
-	destroy_items(%Nadege.get_items(["quest-reward"]))
-	%Nadege.conversation_sect = "intro_3"
+	destroy_items(npcs.nadege.get_items(["quest-reward"]))
+	npcs.nadege.conversation_sect = "intro_3"
 	if not mem.recall("accountant_met_salapou"):
 		if mem.recall("accountant_died"):
-			supply_item(%Nadege, "res://src/items/potion_of_regen.tscn", ["quest-reward", "gift"])
-			supply_item(%Nadege, "res://src/items/potion_of_healing.tscn", ["quest-reward", "gift"])
-			supply_item(%Nadege, "res://src/items/dynamite.tscn", ["quest-reward", "gift"])
+			supply_item(npcs.nadege, "res://src/items/potion_of_regen.tscn", ["quest-reward", "gift"])
+			supply_item(npcs.nadege, "res://src/items/potion_of_healing.tscn", ["quest-reward", "gift"])
+			supply_item(npcs.nadege, "res://src/items/dynamite.tscn", ["quest-reward", "gift"])
 		elif mem.recall("accountant_yeilded"):
-			supply_item(%Nadege, "res://src/items/serum_of_agility.tscn", ["quest-reward", "gift"])
-	supply_item(%Nadege, "res://src/items/key.tscn", ["key-red", "gift"])
-	supply_item(%Nadege, "res://src/weapons/dress_sword.tscn", ["gift"])
+			supply_item(npcs.nadege, "res://src/items/serum_of_agility.tscn", ["quest-reward", "gift"])
+	supply_item(npcs.nadege, "res://src/items/key.tscn", ["key-red", "gift"])
+	supply_item(npcs.nadege, "res://src/weapons/dress_sword.tscn", ["gift"])
 	
-	%BarPatron1.conversation_sect = "bloody_mary"
-	%BarPatron2.conversation_sect = "party_magic"
+	npcs.bar_patron_1.conversation_sect = "bloody_mary"
+	npcs.bar_patron_2.conversation_sect = "party_magic"
 
-	%BarTender.conversation_sect = "intro_3"
-	supply_item(%BarTender, "res://src/items/potion_of_healing.tscn", ["gift"])
+	npcs.bar_tender.conversation_sect = "intro_3"
+	supply_item(npcs.bar_tender, "res://src/items/potion_of_healing.tscn", ["gift"])
 
 	%StoryScreen.show_story("Chapter 3: The Sound of Satin",
 		"res://src/story/sound_of_satin.md")
@@ -337,6 +345,7 @@ func restore_game(bundle=null):
 	dungeons_cont = dungeons
 	
 	bundle.restore_actors()
+	_discover_npcs()
 	
 	if bundle.VERBOSE:
 		bundle.dlog_root(".final")
