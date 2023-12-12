@@ -89,7 +89,8 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 # core combat attributes
 @export_group("Combat")
 @export var health := 50
-@onready var health_full = health  # health can only go above this level in exceptional cases
+# health can only go above this level in exceptional cases, -1 to auto-set to `health`
+@export var health_full := -1 
 @export_range(0.0, 1.0) var healing_prob := 0.05  # %chance to heal at any given turn
 @export var strength := 50
 @export var agility := 50
@@ -216,6 +217,8 @@ func act() -> void:
 func spawn():
 	## Mark sub-nodes to make then properly save and restore.
 	## This should be called exactly once after a newly created actor has been added to a board.
+	if health_full <= 0:
+		health_full = health
 	for item in get_items([], [], false):
 		var copy = item.duplicate()
 		copy.owner = null
@@ -1069,9 +1072,10 @@ func give_item(item, actor=null):
 	## Give `item` to `actor`
 	## If actor is not provided, the item is simply destroyed.
 	assert(item.get_parent() == self, "must possess an item before giving it away")
-	if not owner:
-		owner = $root
-	item.reparent(owner)
+	var new_parent = actor
+	if not new_parent:
+		new_parent = $root
+	item.reparent(new_parent)
 	item.remove_tag("gift")  # NPCs keep track of giftable inventory with the "gift" tag
 	if actor:
 		add_message("%s gave a %s to %s" % [self.get_caption(), item.get_short_desc(), actor.get_caption()])
