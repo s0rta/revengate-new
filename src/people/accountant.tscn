@@ -1,9 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://bnkru322lrpkq"]
+[gd_scene load_steps=11 format=3 uid="uid://bnkru322lrpkq"]
 
 [ext_resource type="Script" path="res://src/people/accountant.gd" id="1_8svk0"]
 [ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_cs2je"]
 [ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="3_u6tcd"]
-[ext_resource type="Script" path="res://src/combat/memory.gd" id="4_lbjrc"]
 [ext_resource type="PackedScene" uid="uid://c8frbdj65suee" path="res://src/weapons/cane.tscn" id="5_7n1rh"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="5_k34p8"]
 [ext_resource type="Script" path="res://src/strategies/seeking.gd" id="8_7of60"]
@@ -72,9 +71,6 @@ offset_bottom = 3.0
 theme_override_colors/font_color = Color(0.25098, 0.780392, 0.172549, 1)
 theme_override_font_sizes/font_size = 21
 text = "?"
-
-[node name="Mem" type="Node" parent="."]
-script = ExtResource("4_lbjrc")
 
 [node name="Cane" parent="." instance=ExtResource("5_7n1rh")]
 is_equipped = true

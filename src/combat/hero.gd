@@ -19,6 +19,7 @@
 class_name Hero extends Actor
 
 func _ready():
+	super()
 	state = States.LISTENING
 
 func _unhandled_input(event):

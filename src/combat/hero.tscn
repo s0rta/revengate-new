@@ -15,6 +15,7 @@ caption = "hero"
 color = Color(1, 1, 1, 1)
 healing_prob = 0.1
 faction = 1
+mem = null
 
 [node name="Label" parent="." index="0"]
 offset_left = 0.0
@@ -27,11 +28,11 @@ text = "@"
 [node name="MissSound" parent="." index="2"]
 stream = ExtResource("4_y2iie")
 
-[node name="SkillLevels" type="Node" parent="." index="7"]
+[node name="SkillLevels" type="Node" parent="." index="6"]
 script = ExtResource("6_6imm7")
 fencing = 1
 
-[node name="Punch" type="Node" parent="." index="8"]
+[node name="Punch" type="Node" parent="." index="7"]
 script = ExtResource("5_n8dxk")
 char = "👊"
 damage_family = 1

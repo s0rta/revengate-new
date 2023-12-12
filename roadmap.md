@@ -298,6 +298,11 @@ Combat:
   - [x] starting inventory is not resurected upon restore
   - [ ] action highlights are refreshed properly (mem looks at id rather than references?)
   - [x] quest setup functs discover NPCs rather than using static refs
+  - [ ] cross-actor references are preserved in restored Actor.mem
+  - [ ] gifts are preserved when restoring a saved game
+  - [ ] health-bar max resets on restore
+  - [ ] conversation checkpoints are preserved on save
+  - [ ] center on Hero when restoring a game
 - [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
       - RevBoard._on_actor_moved() called with `to` != actor.dest
 - [ ] Seeking is easier to resolve even is the target keeps moving

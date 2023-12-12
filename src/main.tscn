@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=46 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -9,19 +9,20 @@
 [ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="5_odllu"]
 [ext_resource type="Script" path="res://src/hud.gd" id="7_4dw6n"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="7_eg4si"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="7_nbfvd"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
 [ext_resource type="Script" path="res://src/dungeons/traboule.gd" id="13_u4fm7"]
-[ext_resource type="PackedScene" uid="uid://ptaq5gcssl32" path="res://src/people/nadege.tscn" id="13_wcjwx"]
-[ext_resource type="PackedScene" uid="uid://goqt5kdryn0c" path="res://src/people/michel.tscn" id="13_ymwa7"]
+[ext_resource type="PackedScene" uid="uid://ee6oms8ixjh" path="res://src/people/nadege.tscn" id="13_wcjwx"]
+[ext_resource type="PackedScene" uid="uid://3d0xpwofsr0e" path="res://src/people/michel.tscn" id="13_ymwa7"]
 [ext_resource type="PackedScene" uid="uid://dkjne1n771ldd" path="res://src/vibes/vibe.tscn" id="14_621w4"]
 [ext_resource type="PackedScene" uid="uid://c71npa04ilk1k" path="res://src/weapons/umbrella.tscn" id="14_ih5ox"]
 [ext_resource type="Script" path="res://src/victory_probe.gd" id="14_ulj2m"]
 [ext_resource type="PackedScene" uid="uid://cswkd7m5om1of" path="res://src/weapons/broom.tscn" id="14_w5yd8"]
-[ext_resource type="PackedScene" uid="uid://dxk8rrdv6fb1e" path="res://src/people/bar_tender.tscn" id="14_x3gva"]
+[ext_resource type="PackedScene" uid="uid://n2rvggkhsnhx" path="res://src/people/bar_tender.tscn" id="14_x3gva"]
 [ext_resource type="PackedScene" uid="uid://cgdqkl167nhyj" path="res://src/ui/actor_details_screen.tscn" id="14_yna85"]
-[ext_resource type="PackedScene" uid="uid://dscrig88vn02j" path="res://src/people/bar_patron.tscn" id="15_mexm3"]
+[ext_resource type="PackedScene" uid="uid://xj173wp8xock" path="res://src/people/bar_patron.tscn" id="15_mexm3"]
 [ext_resource type="PackedScene" uid="uid://cl6ylq5q74oxy" path="res://src/ui/messages_pane.tscn" id="17_n3emp"]
 [ext_resource type="Script" path="res://src/dungeons/trois_gaules_surface.gd" id="18_qey18"]
 [ext_resource type="PackedScene" uid="uid://cd6ngrhhgito0" path="res://src/ui/dialogue_pane.tscn" id="18_vtucs"]
@@ -36,6 +37,30 @@
 [ext_resource type="PackedScene" uid="uid://bgntr3w6l7kt0" path="res://src/ui/story_screen.tscn" id="28_7kpa3"]
 [ext_resource type="PackedScene" uid="uid://dpgcrubb5v6p7" path="res://src/ui/end_of_chapter_screen.tscn" id="30_5u5si"]
 [ext_resource type="Script" path="res://src/command_pack.gd" id="41_hgs5k"]
+
+[sub_resource type="Resource" id="Resource_7gsj3"]
+script = ExtResource("7_nbfvd")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_45y0r"]
+script = ExtResource("7_nbfvd")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_svdmg"]
+script = ExtResource("7_nbfvd")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_tdvsr"]
+script = ExtResource("7_nbfvd")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_tmb6n"]
+script = ExtResource("7_nbfvd")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_hfpoa"]
+script = ExtResource("7_nbfvd")
+_facts = []
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_q8b5c"]
 color = Color(0.5, 0.5, 0.5, 0.5)
@@ -99,6 +124,7 @@ layer_0/tile_data = PackedInt32Array(0, 262144, 3, 1, 458752, 3, 2, 327680, 3, 3
 unique_name_in_owner = true
 visible = true
 position = Vector2(112, 48)
+mem = SubResource("Resource_7gsj3")
 
 [node name="DynaMain" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("7_eg4si")]
 
@@ -107,14 +133,17 @@ position = Vector2(112, 48)
 [node name="Nadege" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_wcjwx")]
 visible = true
 position = Vector2(48, 80)
+mem = SubResource("Resource_45y0r")
 
 [node name="BarTender" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_x3gva")]
 visible = true
 position = Vector2(48, 240)
+mem = SubResource("Resource_svdmg")
 
 [node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_ymwa7")]
 visible = true
 position = Vector2(464, 48)
+mem = SubResource("Resource_tdvsr")
 
 [node name="Broom" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_w5yd8")]
 position = Vector2(336, 48)
@@ -129,6 +158,7 @@ position = Vector2(112, 272)
 caption = "Robert"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "ghosts"
+mem = SubResource("Resource_tmb6n")
 
 [node name="BarPatron2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
 visible = true
@@ -136,6 +166,7 @@ position = Vector2(112, 208)
 caption = "Mathieu"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "privacy"
+mem = SubResource("Resource_hfpoa")
 
 [node name="Smell" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_621w4")]
 position = Vector2(80, 48)

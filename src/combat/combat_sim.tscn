@@ -1,13 +1,34 @@
-[gd_scene load_steps=9 format=3 uid="uid://d1wjr6usat6lm"]
+[gd_scene load_steps=15 format=3 uid="uid://d1wjr6usat6lm"]
 
 [ext_resource type="Script" path="res://src/combat/combat_sim.gd" id="1_0qirp"]
 [ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="1_fdq17"]
 [ext_resource type="PackedScene" uid="uid://cfc3ttsrd52r" path="res://src/rev_board.tscn" id="2_r23sb"]
-[ext_resource type="PackedScene" uid="uid://dq2b713n15c7h" path="res://src/combat/advanced_joe.tscn" id="4_l8kup"]
+[ext_resource type="PackedScene" uid="uid://cy4viyhan31e6" path="res://src/combat/advanced_joe.tscn" id="4_l8kup"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="5_57flp"]
 [ext_resource type="PackedScene" uid="uid://cx7utj7hd3ne" path="res://src/monsters/kobold.tscn" id="6_3iqgc"]
 [ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="6_b7d4m"]
 [ext_resource type="PackedScene" uid="uid://d8jxxkoa4b00" path="res://src/people/outlaw.tscn" id="6_n5g3r"]
 [ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="7_yr6jo"]
+
+[sub_resource type="Resource" id="Resource_511rn"]
+script = ExtResource("5_57flp")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_yturu"]
+script = ExtResource("5_57flp")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_qp4nx"]
+script = ExtResource("5_57flp")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_hpiot"]
+script = ExtResource("5_57flp")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_3tl6n"]
+script = ExtResource("5_57flp")
+_facts = []
 
 [node name="Simulator" type="Node2D"]
 script = ExtResource("1_0qirp")
@@ -22,17 +43,22 @@ layer_0/tile_data = PackedInt32Array(0, 0, 3, 1, 131072, 3, 2, 131072, 3, 3, 0, 
 [node name="AdvancedJoe" parent="Board" instance=ExtResource("4_l8kup")]
 visible = true
 position = Vector2(83, 82)
+mem = SubResource("Resource_511rn")
 
 [node name="Outlaw" parent="Board" instance=ExtResource("6_n5g3r")]
 visible = true
 position = Vector2(112, 39)
+mem = SubResource("Resource_yturu")
 
 [node name="ExtraStages" type="Node" parent="."]
 
 [node name="Rat" parent="ExtraStages" instance=ExtResource("6_b7d4m")]
+mem = SubResource("Resource_qp4nx")
 
 [node name="Kobold" parent="ExtraStages" instance=ExtResource("6_3iqgc")]
+mem = SubResource("Resource_hpiot")
 
 [node name="SulantTiger" parent="ExtraStages" instance=ExtResource("7_yr6jo")]
+mem = SubResource("Resource_3tl6n")
 
 [connection signal="turn_started" from="TurnQueue" to="." method="_on_turn_queue_turn_started"]

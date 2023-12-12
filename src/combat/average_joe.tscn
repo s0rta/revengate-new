@@ -1,92 +1,36 @@
-[gd_scene load_steps=11 format=3 uid="uid://cqkoy4vxwt5q"]
+[gd_scene load_steps=8 format=3 uid="uid://0gaj2tewokuf"]
 
-[ext_resource type="Script" path="res://src/combat/actor.gd" id="1_ux3dq"]
-[ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_ofe33"]
-[ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="3_wnw0k"]
-[ext_resource type="Script" path="res://src/combat/memory.gd" id="4_fyul4"]
-[ext_resource type="Script" path="res://src/combat/core_skills.gd" id="6_hl06a"]
-[ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="7_fndha"]
-[ext_resource type="PackedScene" path="res://src/weapons/sword.tscn" id="7_i8fts"]
-[ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="7_l6u0k"]
-[ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="9_ohw41"]
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_tewlf"]
+[ext_resource type="Script" path="res://src/combat/core_skills.gd" id="2_vujjt"]
+[ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="4_h7r22"]
+[ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="5_bujhj"]
+[ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="6_gkfh3"]
+[ext_resource type="PackedScene" uid="uid://d01nbq4dt1cs5" path="res://src/weapons/silver_saber.tscn" id="6_h40fk"]
+[ext_resource type="PackedScene" uid="uid://dj5x5c687ddyj" path="res://src/items/amulet_of_strength.tscn" id="7_d3vsa"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_00etm"]
-size = Vector2(32, 32)
-
-[node name="AverageJoe" type="Area2D"]
-visible = false
-script = ExtResource("1_ux3dq")
+[node name="AdvancedJoe" instance=ExtResource("1_tewlf")]
 char = "@"
 caption = "average joe"
 color = Color(0.741176, 0.741176, 0.741176, 1)
+health = 60
+healing_prob = 0.15
 faction = 1
 
-[node name="Label" type="Label" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -7.5
-offset_top = -13.0
-offset_right = 7.5
-offset_bottom = 13.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-auto_translate = false
-theme_type_variation = &"AsciiGraphics"
-theme_override_colors/font_color = Color(0.741176, 0.741176, 0.741176, 1)
-text = "@"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-shape = SubResource("RectangleShape2D_00etm")
-
-[node name="MissSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_ofe33")
-
-[node name="DeathSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_wnw0k")
-
-[node name="DamageLabel" type="Label" parent="."]
-visible = false
-offset_top = -9.0
-offset_right = 7.0
-offset_bottom = 14.0
-theme_override_colors/font_color = Color(0.784314, 0.227451, 0.172549, 1)
-theme_override_font_sizes/font_size = 21
-text = "?"
-
-[node name="HealingLabel" type="Label" parent="."]
-visible = false
-offset_left = -16.0
-offset_top = -27.0
-offset_right = -6.0
-offset_bottom = 3.0
-theme_override_colors/font_color = Color(0.25098, 0.780392, 0.172549, 1)
-theme_override_font_sizes/font_size = 21
-text = "?"
-
-[node name="Mem" type="Node" parent="."]
-script = ExtResource("4_fyul4")
-
-[node name="SkillLevels" type="Node" parent="."]
-script = ExtResource("6_hl06a")
+[node name="SkillLevels" type="Node" parent="." index="6"]
+script = ExtResource("2_vujjt")
 fencing = 1
 
-[node name="Sword" parent="." instance=ExtResource("7_i8fts")]
+[node name="Hammer" parent="." index="7" instance=ExtResource("4_h7r22")]
+
+[node name="Razor" parent="." index="8" instance=ExtResource("5_bujhj")]
 visible = false
-range = 1
+
+[node name="Rapier" parent="." index="9" instance=ExtResource("6_gkfh3")]
 is_equipped = true
 
-[node name="Hammer" parent="." instance=ExtResource("7_fndha")]
-range = 1
+[node name="SilverSaber" parent="." index="10" instance=ExtResource("6_h40fk")]
 
-[node name="Razor" parent="." instance=ExtResource("7_l6u0k")]
-visible = false
-range = 1
-
-[node name="Rapier" parent="." instance=ExtResource("9_ohw41")]
-
-[connection signal="was_attacked" from="." to="." method="_learn_attack"]
+[node name="AmuletOfStrength" parent="." index="11" instance=ExtResource("7_d3vsa")]

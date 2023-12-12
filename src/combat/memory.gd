@@ -20,7 +20,7 @@
 ## Termilogy:
 ##   - event: a string key to reference something that happened
 ##   - fact: a dict containing the `event` plus some extra data
-class_name Memory extends Node
+class_name Memory extends Resource
 
 enum Importance {
 	TRIVIAL,      # probably won't remember it happened after 50 turns
@@ -39,7 +39,8 @@ const RELEVANCE_AGE = {
 	Importance.CRUCIAL: INF, 
 }
 
-var _facts = []
+@export_group("Internals")
+@export var _facts := []
 
 func learn(event:String, turn, importance:=Importance.NOTABLE, data=null):
 	## Store a recollection of `event`.

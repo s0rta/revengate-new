@@ -1,20 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://dxk8rrdv6fb1e"]
+[gd_scene load_steps=6 format=3 uid="uid://n2rvggkhsnhx"]
 
-[ext_resource type="Script" path="res://src/combat/actor.gd" id="1_wqixm"]
-[ext_resource type="AudioStream" uid="uid://cd74o6qfpaee2" path="res://src/combat/miss.wav" id="2_jac18"]
-[ext_resource type="AudioStream" uid="uid://cq81uh35i7klc" path="res://src/combat/death.wav" id="3_7rrp4"]
-[ext_resource type="Script" path="res://src/combat/memory.gd" id="4_6hcbr"]
-[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="5_qkouh"]
-[ext_resource type="PackedScene" uid="uid://d8ovanvojd5g" path="res://src/weapons/knife.tscn" id="7_ayv21"]
-[ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="7_wyehf"]
-[ext_resource type="PackedScene" uid="uid://lpworv1rq2g3" path="res://src/items/potion_of_booze.tscn" id="8_5um8d"]
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_n644y"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="2_fn0uo"]
+[ext_resource type="PackedScene" uid="uid://d8ovanvojd5g" path="res://src/weapons/knife.tscn" id="3_dvmxw"]
+[ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="4_sk6hr"]
+[ext_resource type="PackedScene" uid="uid://lpworv1rq2g3" path="res://src/items/potion_of_booze.tscn" id="5_7i1k5"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_00etm"]
-size = Vector2(32, 32)
-
-[node name="BarTender" type="Area2D"]
-visible = false
-script = ExtResource("1_wqixm")
+[node name="BarTender" instance=ExtResource("1_n644y")]
 char = "@"
 caption = "Simon"
 color = Color(0.372549, 0.67451, 0.498039, 1)
@@ -22,71 +14,19 @@ conversation_file = "res://src/story/bar_tender.dialogue"
 conversation_sect = "intro"
 faction = 1
 
-[node name="Label" type="Label" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -7.5
-offset_top = -13.0
-offset_right = 7.5
-offset_bottom = 13.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-auto_translate = false
-theme_type_variation = &"AsciiGraphics"
-theme_override_colors/font_color = Color(0.372549, 0.67451, 0.498039, 1)
-text = "@"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="SelfDefense" type="Node" parent="." index="6"]
+script = ExtResource("2_fn0uo")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-shape = SubResource("RectangleShape2D_00etm")
-
-[node name="MissSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_jac18")
-
-[node name="DeathSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_7rrp4")
-
-[node name="DamageLabel" type="Label" parent="."]
-visible = false
-offset_top = -9.0
-offset_right = 7.0
-offset_bottom = 14.0
-theme_override_colors/font_color = Color(0.784314, 0.227451, 0.172549, 1)
-theme_override_font_sizes/font_size = 21
-text = "?"
-
-[node name="HealingLabel" type="Label" parent="."]
-visible = false
-offset_left = -16.0
-offset_top = -27.0
-offset_right = -6.0
-offset_bottom = 3.0
-theme_override_colors/font_color = Color(0.25098, 0.780392, 0.172549, 1)
-theme_override_font_sizes/font_size = 21
-text = "?"
-
-[node name="Mem" type="Node" parent="."]
-script = ExtResource("4_6hcbr")
-
-[node name="SelfDefense" type="Node" parent="."]
-script = ExtResource("5_qkouh")
-
-[node name="Knife" parent="." instance=ExtResource("7_ayv21")]
+[node name="Knife" parent="." index="7" instance=ExtResource("3_dvmxw")]
 visible = false
 is_equipped = true
 
-[node name="PotionOfHealing" parent="." instance=ExtResource("7_wyehf")]
+[node name="PotionOfHealing" parent="." index="8" instance=ExtResource("4_sk6hr")]
 visible = false
 tags = Array[String](["gift", "groupable"])
 
-[node name="PotionOfBooze" parent="." instance=ExtResource("8_5um8d")]
+[node name="PotionOfBooze" parent="." index="9" instance=ExtResource("5_7i1k5")]
 tags = Array[String](["gift", "groupable", "booze"])
 
-[node name="PotionOfBooze2" parent="." instance=ExtResource("8_5um8d")]
+[node name="PotionOfBooze2" parent="." index="10" instance=ExtResource("5_7i1k5")]
 tags = Array[String](["gift", "groupable", "booze"])
-
-[connection signal="was_attacked" from="." to="." method="_learn_attack"]

@@ -121,7 +121,9 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 # keep track of where we are going while animations are running 
 @export var dest:Vector2i = Consts.COORD_INVALID
 
-@onready var mem: Memory = $Mem
+@export_group("Internals")
+@export var mem: Memory
+
 var state = States.IDLE:
 	set(new_state):
 		state = new_state
@@ -145,6 +147,9 @@ func _ready():
 	$Label.add_theme_color_override("font_color", color)
 	Utils.assert_all_tags(tags)
 	Utils.hide_unplaced(self)
+	if mem == null:
+		mem = Memory.new()
+	assert(mem != null)
 
 func _to_string():
 	var parent = get_parent()
@@ -637,7 +642,7 @@ func die():
 
 func _learn_attack(attacker):
 	## Remember who just hit us.
-	$Mem.learn("was_attacked", current_turn, Memory.Importance.NOTABLE, {"by": attacker})
+	mem.learn("was_attacked", current_turn, Memory.Importance.NOTABLE, {"by": attacker})
 
 func is_alive():
 	return health > 0
@@ -930,7 +935,7 @@ func strike(foe:Actor, weapon):
 	## Strike foe with weapon. The strike could result in a miss. 
 	## The result is immediately visible in the world.
 	# combats works with two random rolls: to-hit then damage.
-	$Mem.learn("attacked", current_turn, Memory.Importance.TRIVIAL, {"foe": foe})
+	mem.learn("attacked", current_turn, Memory.Importance.TRIVIAL, {"foe": foe})
 
 	var with_anims = not is_unexposed()
 	var crit = false
