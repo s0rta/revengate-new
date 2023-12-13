@@ -390,6 +390,7 @@ class BoardIndex extends RefCounted:
 
 	var _coord_to_actor := {}
 	var _actor_to_coord := {}
+	var _actor_by_id := {}
 	
 	# items can be stacked, so we store them in an array
 	# the top of the stack is at the end (index=-1)
@@ -437,6 +438,7 @@ class BoardIndex extends RefCounted:
 		var coord = actor.get_cell_coord()
 		_coord_to_actor[coord] = actor
 		_actor_to_coord[actor] = coord
+		_actor_by_id[actor.actor_id] = actor
 
 	func has_item(item):
 		return _item_to_coord.has(item)
@@ -461,6 +463,7 @@ class BoardIndex extends RefCounted:
 		var coord = _actor_to_coord[actor]
 		_actor_to_coord.erase(actor)
 		_coord_to_actor.erase(coord)
+		_actor_by_id.erase(actor.actor_id)
 
 	func refresh_actor(actor, strict:=true):
 		## Refresh the coordiates of `actor` in the index.
@@ -516,6 +519,10 @@ class BoardIndex extends RefCounted:
 	func is_free(coord):
 		## Return whether a cell is both walkable and unoccuppied.
 		return board.is_walkable(coord) and not is_occupied(coord)
+
+	func actor_by_id(actor_id:int):
+		## Return the actor with id `actor_id` or `null` if no such actor in on this board.
+		return _actor_by_id.get(actor_id)
 
 	func actor_at(coord:Vector2i):
 		## Return the actor occupying `coord` or null if there is no one there.

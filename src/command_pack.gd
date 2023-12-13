@@ -111,20 +111,22 @@ class QuickAttack extends Command:
 		actors.shuffle()
 		var victims = _get_prior_victims()
 		for actor in actors:
-			if hero.is_foe(actor) or actor in victims:
+			if hero.is_foe(actor) or actor.actor_id in victims:
 				nearby_foe = actor
 				return true
 		return false
 		
 	func run_at_hero(coord:Vector2i) -> bool:
 		var board = Tender.hero.get_board()
-		var foe = null
+		var foe = nearby_foe
+		
+		# try to go again on the last actor we attacked if possible
 		var fact = Tender.hero.mem.recall("attacked")
-		if (fact and fact.foe != null and fact.foe.is_alive()
-				and board.dist(Tender.hero, fact.foe) <= attack_range):
-			foe = fact.foe
-		else:
-			foe = nearby_foe
+		if fact:
+			var last_foe = index.actor_by_id(fact.foe)
+			if last_foe.is_alive() and board.dist(Tender.hero, last_foe) <= attack_range:
+				foe = last_foe
+
 		Tender.hero.attack(foe)
 		return true
 

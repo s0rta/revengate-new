@@ -21,22 +21,25 @@ class_name FlightOrFight extends Strategy
 
 var tested_for_turn = null
 var has_activated = null
+var attacker_id = null
 var attacker = null
 
 func refresh(turn):
 	var fact = me.mem.recall("was_attacked")
 	if fact == null:
-		attacker = null
+		attacker_id = null
 	elif fact.turn != tested_for_turn:  # only refresh on new facts
 		tested_for_turn = fact.turn
 		has_activated = Rand.rstest(probability)
 		# TODO: give up if foe is too far or long enough has passed since the attack
-		attacker = fact.by
+		attacker_id = fact.by
 
 func is_valid():
-	if not super():
+	if not super() or not has_activated:
 		return false
-	return has_activated and attacker != null and attacker.is_alive()
+	var index = me.get_board().make_index()
+	attacker = index.actor_by_id(attacker_id)
+	return attacker != null and attacker.is_alive()
 
 func act() -> bool:
 	print("Flight or Fighting")

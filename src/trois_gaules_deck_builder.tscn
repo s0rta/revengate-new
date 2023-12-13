@@ -1,10 +1,10 @@
-[gd_scene load_steps=29 format=3 uid="uid://bnbtimmwf4woe"]
+[gd_scene load_steps=30 format=3 uid="uid://bnbtimmwf4woe"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_gqi5c"]
 [ext_resource type="Script" path="res://src/card_rule.gd" id="2_ktv76"]
 [ext_resource type="PackedScene" uid="uid://cpjfi7f2jww5a" path="res://src/people/salapou.tscn" id="3_ovo0l"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="4_111fo"]
-[ext_resource type="PackedScene" uid="uid://bnkru322lrpkq" path="res://src/people/accountant.tscn" id="4_nh7cg"]
+[ext_resource type="PackedScene" uid="uid://cx2577omrgup0" path="res://src/people/accountant.tscn" id="4_nh7cg"]
 [ext_resource type="PackedScene" uid="uid://c8vcdsslc86r2" path="res://src/monsters/automaton.tscn" id="5_n0hai"]
 [ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="6_hqcnm"]
 [ext_resource type="PackedScene" uid="uid://bvbyl05ombdxa" path="res://src/monsters/yarohu.tscn" id="7_ltn2i"]
@@ -18,6 +18,11 @@
 [ext_resource type="PackedScene" uid="uid://db6sjyoaw3ms2" path="res://src/monsters/giant_locust.tscn" id="13_veiw4"]
 
 [sub_resource type="Resource" id="Resource_hh4m1"]
+script = ExtResource("4_111fo")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_ovmtc"]
+resource_local_to_scene = true
 script = ExtResource("4_111fo")
 _facts = []
 
@@ -78,6 +83,7 @@ mem = SubResource("Resource_hh4m1")
 
 [node name="Accountant" parent="Quest2Board" instance=ExtResource("4_nh7cg")]
 spawn_cost = 1.0
+mem = SubResource("Resource_ovmtc")
 
 [node name="Automaton" parent="Quest2Board" instance=ExtResource("5_n0hai")]
 mem = SubResource("Resource_0nw1w")

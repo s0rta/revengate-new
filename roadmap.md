@@ -298,8 +298,8 @@ Combat:
   - [x] starting inventory is not resurected upon restore
   - [ ] action highlights are refreshed properly (mem looks at id rather than references?)
   - [x] quest setup functs discover NPCs rather than using static refs
-  - [ ] cross-actor references are preserved in restored Actor.mem
-  - [ ] gifts are preserved when restoring a saved game
+  - [x] cross-actor references are preserved in restored Actor.mem
+  - [x] gifts are preserved when restoring a saved game
   - [x] health-full is persisted
   - [ ] conversation checkpoints are preserved on save
   - [ ] center on Hero when restoring a game

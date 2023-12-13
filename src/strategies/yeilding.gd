@@ -1,4 +1,4 @@
-# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -21,7 +21,7 @@ class_name Yeilding extends Strategy
 @export var fact_name: String
 @export_range(0.0, 1.0) var yeild_health_percentage = 0.3 
 
-var attacker: Actor
+var attacker_id: int
 var turn: int
 var has_yeilded = false
 
@@ -32,17 +32,15 @@ func refresh(turn_):
 		var fact = me.mem.recall('was_attacked')
 		if fact != null:
 			has_yeilded = true
-			attacker = fact.by
+			attacker_id = fact.by
 
 func is_valid():
 	return super() and has_yeilded
 		
 func act() -> bool:	
 	# Record that we have yeilded
-	Tender.hero.mem.learn(fact_name, turn, Memory.Importance.CRUCIAL, {"attacker": attacker})
+	Tender.hero.mem.learn(fact_name, turn, Memory.Importance.CRUCIAL, {"attacker": attacker_id})
 	var board = me.get_board()
-	me.add_message("%s throws their arms in the air, saying 'I give up!'"%me.get_short_desc(),
+	me.add_message("%s throws their arms in the air, saying 'I give up!'" % me.get_short_desc(),
 					Consts.MessageLevels.WARNING)
 	return true
-
-

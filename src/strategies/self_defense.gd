@@ -18,24 +18,28 @@
 ## Opportunistically fight back after being attacked.
 class_name SelfDefense extends Strategy
 
+var attacker_id = null
 var attacker = null
 
 func refresh(turn):
 	var fact = me.mem.recall("was_attacked")
 	if fact != null:
 		# TODO: give up if foe is too far or long enough has passed since the attack
-		attacker = fact.by
+		#   the fact will expire in memory, but that fells rather slow
+		attacker_id = fact.by
 	else:
-		attacker = null
+		attacker_id = null
 
 func is_valid():
 	if not super():
 		return false
 
-	if not attacker:
+	if not attacker_id:
 		return false
 	else:
-		return attacker.is_alive()
+		var index = me.get_board().make_index()
+		attacker = index.actor_by_id(attacker_id)
+		return attacker != null and attacker.is_alive()
 
 func act() -> bool:
 	var board = me.get_board()

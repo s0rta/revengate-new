@@ -124,6 +124,7 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 
 @export_group("Internals")
 @export var mem: Memory
+@export var actor_id := 0
 
 var state = States.IDLE:
 	set(new_state):
@@ -219,6 +220,8 @@ func spawn():
 	## This should be called exactly once after a newly created actor has been added to a board.
 	if health_full <= 0:
 		health_full = health
+	if not actor_id:
+		actor_id = ResourceUID.create_id()
 	for item in get_items([], [], false):
 		var copy = item.duplicate()
 		copy.owner = null
@@ -645,7 +648,8 @@ func die():
 
 func _learn_attack(attacker):
 	## Remember who just hit us.
-	mem.learn("was_attacked", current_turn, Memory.Importance.NOTABLE, {"by": attacker})
+	mem.learn("was_attacked", current_turn, Memory.Importance.NOTABLE, 
+			{"by": attacker.actor_id})
 
 func is_alive():
 	return health > 0
@@ -676,7 +680,7 @@ func is_unexposed(index=null):
 
 func was_offended_by(other: Actor):
 	## Return whether we recall `other` doing anything to piss us off
-	var by_other = func (fact): return fact.by == other
+	var by_other = func (fact): return fact.by == other.actor_id
 	return mem.recall_any(Consts.OFFENSIVE_EVENTS, current_turn, by_other) != null
 
 func is_friend(other: Actor):
@@ -938,7 +942,8 @@ func strike(foe:Actor, weapon):
 	## Strike foe with weapon. The strike could result in a miss. 
 	## The result is immediately visible in the world.
 	# combats works with two random rolls: to-hit then damage.
-	mem.learn("attacked", current_turn, Memory.Importance.TRIVIAL, {"foe": foe})
+	mem.learn("attacked", current_turn, Memory.Importance.TRIVIAL, 
+			{"foe": foe.actor_id})
 
 	var with_anims = not is_unexposed()
 	var crit = false

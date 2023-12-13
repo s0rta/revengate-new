@@ -96,20 +96,22 @@ func _valid_waypoint(waypoint, client_coord):
 	return path != null
 
 func _can_retaliate():
+	foe = null
 	var fact = client.mem.recall("was_attacked")
-	if fact and fact.by and fact.by.is_alive():
+	if fact == null:
+		return false
+	var index = me.get_board().make_index()
+	foe = index.actor_by_id(fact.by)
+	if foe.is_alive():
 		var range = me.get_max_weapon_range()
-		if index.board.dist(me, fact.by) <= range:
-			foe = fact.by
+		if index.board.dist(me, foe) <= range:
 			return true
 		var here = me.get_cell_coord()
-		var there = fact.by.get_cell_coord()
-		# FIXME: must look for a free destination since we know foe is there
+		var there = foe.get_cell_coord()
 		path = index.board.path_perceived(here, there, me, false, null, index)
 		if path != null:
-			foe = fact.by
 			return true
-	foe = null
+	foe = null  # can't do anything about this one, forgetting about them for now
 	return false
 
 func is_valid():
