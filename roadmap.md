@@ -303,6 +303,7 @@ Combat:
   - [x] health-full is persisted
   - [ ] conversation checkpoints are preserved on save
   - [ ] center on Hero when restoring a game
+  - [ ] cheat to disable auto-saving
 - [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
       - RevBoard._on_actor_moved() called with `to` != actor.dest
 - [ ] Seeking is easier to resolve even is the target keeps moving

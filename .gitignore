@@ -10,6 +10,7 @@ dist
 bin
 .buildozer
 .direnv
+tmp
 
 # Godot auto generated files
 .godot/
