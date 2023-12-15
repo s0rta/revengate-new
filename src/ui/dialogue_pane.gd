@@ -22,6 +22,7 @@ class_name DialoguePane extends Control
 
 signal closed(acted:bool)
 signal new_sentiment(faction_a, faction_b, value:int)
+signal quest_activated()
 
 var dia_res: DialogueResource
 var temp_game_states := []
@@ -187,3 +188,9 @@ func show_message(message):
 func set_global_sentiment(value:int):
 	## Change the sentiment between the speaker's faction and the hero's faction.
 	Tender.sentiments.set_sentiment(speaker.faction, Tender.hero.faction, value)
+
+func activate_quest():
+	## Mark the current quest as active, this will update the quest log
+	Tender.quest.is_active = true
+	quest_activated.emit()
+	

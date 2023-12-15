@@ -29,32 +29,39 @@ var npcs = {}
 class Quest:
 	var tag: String
 	var title: String
+	var summary: String
 	var setup_func  # Callabel, optionnal
 	var intro_path: String
+	var is_active: bool
 	var win_events_any: Array[String]  # any of those events is a victory
 	var fail_events_any: Array[String]  # any of those events is a makes you fail the quest
 	var win_msg: String
 	var fail_msg: String
 
-	func _init(tag_, title_, intro_path_, win_msg_, setup_func_=null,
+	func _init(tag_, title_, summary_, intro_path_, win_msg_, setup_func_=null,
 			win_event_any_:Array[String]=[],
 			fail_event_any_:Array[String]=[], fail_msg_=""):
 		assert(Utils.is_tag(tag_))
 		tag = tag_
 		title = title_
+		summary = summary_
 		intro_path = intro_path_
 		win_msg = win_msg_
 		setup_func = setup_func_
 		win_events_any = win_event_any_
 		fail_events_any = fail_event_any_
 		fail_msg = fail_msg_
+		is_active = false
 
 func _ready():
 	# Quests
-	quests = [Quest.new("quest-lost-cards", "The Audition",
-		"res://src/story/the_audition.md",
-		"You recovered the stolen loom cards."),
+	quests = [
+		Quest.new("quest-lost-cards", "The Audition",
+			"Go retrieve the lost loom cards, they will be found north west of the Café Caché",
+			"res://src/story/the_audition.md",
+			"You recovered the stolen loom cards."),
 		Quest.new("quest-stop-accountant", "Bewitching Bookkeeping",
+			"Stop Benoît the accountant from meeting with Salapou. They're supposed to meet a few blocks west of here.",
 			"res://src/story/bewitching_bookkeeping.md",
 			"You prevented Benoît the accountant from exposing Frank Verguin's home lab.",
 			start_ch2,
@@ -62,11 +69,13 @@ func _ready():
 			["accountant_met_salapou"],
 			"You didn't stop Benoît the accountant from selling his information."),
 		Quest.new("quest-face-retznac", "The Sound of Satin",
+			"Find what the book collector is up to by chasing him down the traboule. The entrance is across the main plaza.",
 			"res://src/story/sound_of_satin.md",
 			("You killed Retznac the vampire. "
 				+ "Retznac vanished into oblivion leaving a thin trail of mist behind. "
 				+ "It reminds you of the marshes around the river Rhône at sunrise."),
-			start_ch3)]
+			start_ch3)
+		]
 
 	board_changed.connect(_on_board_changed)
 

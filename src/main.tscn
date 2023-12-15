@@ -367,6 +367,14 @@ size_flags_horizontal = 4
 focus_mode = 0
 text = "🔍"
 
+[node name="ShowQuestLogButton" type="Button" parent="HUD/TopRightMargin/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+disabled = true
+text = "🎩"
+
 [node name="ShowMessagesButton" type="Button" parent="HUD/TopRightMargin/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -512,8 +520,10 @@ script = ExtResource("41_hgs5k")
 [connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/CityMapButton" to="HUD" method="_on_city_map_button_pressed"]
 [connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/InspectButton" to="BoardArea/GestureSurveyor" method="start_inspect_at"]
+[connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/ShowQuestLogButton" to="HUD" method="_on_show_quest_log_button_button_up"]
 [connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/ShowMessagesButton" to="HUD/MessagesScreen" method="popup"]
 [connection signal="button_up" from="HUD/CenterBox/CancelButton2" to="." method="_on_cancel_button_pressed"]
 [connection signal="action_complete" from="HUD/CheatsSurveyor" to="HUD" method="hide_action_label"]
 [connection signal="action_started" from="HUD/CheatsSurveyor" to="HUD" method="show_action_label"]
+[connection signal="quest_activated" from="HUD/DialoguePane" to="HUD" method="_on_dialogue_pane_quest_activated"]
 [connection signal="end_of_chapter" from="VictoryProbe" to="." method="conclude_game"]

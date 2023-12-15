@@ -2,6 +2,7 @@
 Nadège: So you are the new guy? I have a job for you.
 Nadège: A stack of loom punch cards (𝌕) was stolen a few days ago and we have a lead on where the thieves are hiding. It's a gated neighborhood a few blocks Northwest of here, there is a discrete way in with the traboule around the corner.
 Nadège: Take this, just in case you need to defend yourself.
+do activate_quest()
 do checkpoint("about_mission")
 do speaker_give_item()
 Nadège: Don't forget to equip it in the Inventory screen or you might take a beating.
@@ -27,6 +28,7 @@ Nadège: François-Emmanuel Verguin, Frank for friends, is a brilliant chemist w
 Nadège: It looks like an accountant has decided to put a lot of scrutiny into the Vitriolerie and that is sure to expose what Frank Verguin is doing. Since we strongly believe that Verguin's research is good for Franconia, we want you to go have a chat with Benoît, the accountant.
 Nadège: Last we heard, he was on his way to meet with Le Grand Salapou a few blocks West of here, probably to sell him some information. You can easily get there with the side passage just South of the café. You might need the key if the gate is still closed.
 Nadège: Do your best to prevent that meeting from happening. Here, take this in case you need to add a little "convincing" to your conversation with Benoît.
+do activate_quest()
 do checkpoint("about_lyon")
 do speaker_give_items()
 Nadège: Good luck!
@@ -46,6 +48,7 @@ if speaker_has_gifts(["quest-reward"])
 	do speaker_give_items(["quest-reward"])
 Nadège: I have another job for you. Someone has been discreetly acquiring rare books and we want you to find out what that is all about. They are staying a little South of here.
 Nadège: The traboule across the plaza will take you there. Here's the key. It's not very safe down there, so take this weapon too just in case.
+do activate_quest()
 do checkpoint("cards_followup")
 do speaker_give_items()
 Nadège: Good luck!
