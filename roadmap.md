@@ -301,7 +301,7 @@ Combat:
   - [x] cross-actor references are preserved in restored Actor.mem
   - [x] gifts are preserved when restoring a saved game
   - [x] health-full is persisted
-  - [ ] conversation checkpoints are preserved on save
+  - [x] conversation checkpoints are preserved on save
   - [ ] center on Hero when restoring a game
   - [ ] cheat to disable auto-saving
 - [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android

@@ -357,6 +357,7 @@ func restore_game(bundle=null):
 	Tender.seen_locs.clear()
 	Tender.play_secs = bundle.play_secs
 	Tender.viewport = %Viewport
+	Tender.hud = $HUD
 	for loc in bundle.seen_locs:
 		Tender.seen_locs[loc] = true
 	$TurnQueue.turn = bundle.turn
@@ -387,11 +388,5 @@ func replace_with_saved_game():
 func test():
 	print("Testing: 1, 2... 1, 2!")
 
-	capture_game()
-	print("Done saving!")
-
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-
-	restore_game()
-	print("Done restoring!")
