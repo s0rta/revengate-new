@@ -290,6 +290,8 @@ Combat:
   - [x] save quest activation status in SaveBundle
 - [x] faster move animations when there are many visible actors
 - [x] play time (screen time) on victory screen 
+- [ ] bug: sewer otter attacks everyone
+- [ ] bug: self defence does not expire when attacker dies
 - [ ] saved games
   - [x] restore workflow on start screen
   - [x] periodic auto-saves
@@ -305,7 +307,7 @@ Combat:
   - [x] conversation checkpoints are preserved on save
   - [ ] center on Hero when restoring a game
   - [ ] cheat to disable auto-saving
-- [ ] bug: Exploring fails to update `me.dest` when running the live debugger on Android
+- [x] bug: Exploring fails to update `me.dest` when running the live debugger on Android
       - RevBoard._on_actor_moved() called with `to` != actor.dest
 - [ ] Seeking is easier to resolve even is the target keeps moving
 - [ ] web export

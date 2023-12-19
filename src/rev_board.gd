@@ -1365,8 +1365,8 @@ func update_shrouding_at(where, index:BoardIndex):
 func _on_actor_moved(from, to):
 	## fade in and out the visibility of items being stepped on/off.
 	var index = make_index()
-	#assert(index.actor_at(to)!=null, 
-			#"The signal seems to have fired before an actor set their dest to %s" % coord_str(to))
+	assert(index.actor_at(to)!=null, 
+			"The signal seems to have fired before an actor set their dest to %s" % coord_str(to))
 
 	if index.actor_at(to) == Tender.hero:
 		var things = [index.top_item_at(from), index.top_item_at(to)] + get_actors() \

@@ -399,7 +399,7 @@ func finalize_turn(acted=null):
 	emit_signal("turn_done")
 
 func reset_dest(former_dest=null):
-	if dest and dest == former_dest:
+	if former_dest == null or dest == former_dest:
 		dest = Consts.COORD_INVALID
 
 func get_cell_coord():
@@ -450,7 +450,7 @@ func move_to(board_coord) -> void:
 	## The move is animated.
 	# only animating if the player would see it
 	if is_unexposed() and get_board().is_cell_unexposed(board_coord):
-		place(board_coord)
+		place(board_coord, true)
 	else:
 		# FIXME: kill() the previous anim if it's not done
 		assert(not is_animating(), "reset_dest won't work if we start moving before the previous move is over")
