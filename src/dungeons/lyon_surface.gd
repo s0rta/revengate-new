@@ -106,9 +106,9 @@ func add_connectors(builder:BoardBuilder, neighbors):
 		if region == null:
 			coord = builder.random_floor_cell()
 		elif terrain == "gateway" and region != Consts.REG_CENTER:
-			# TODO: also exclude the corners, diagonal entrances look off
 			var is_wall = board.is_terrain.bind(builder.wall_terrain)
-			var coords = Geom.rect_perim(builder.rect, region).filter(is_wall)
+			var not_corner = func (coord): return not Geom.is_corner(coord, builder.rect)
+			var coords = Geom.rect_perim(builder.rect, region).filter(is_wall).filter(not_corner)
 			assert(not coords.is_empty(), "There is no wall to punch the gateway through.")
 			coord = Rand.choice(coords)
 		else:

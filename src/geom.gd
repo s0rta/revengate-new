@@ -27,6 +27,13 @@ const CENTRAL_REGION_MARGIN := 0.25  # ration of coords that are on each side of
 #    they consider the bottom and right edges to be the ones that line up with `rect.end`.
 # ex.: Rect2i(0, 0, 4, 4).has_point(V.i(3, 3)) => true
 
+static func is_corner(coord:Vector2i, rect: Rect2i):
+	## Return whether `coord` is one of the four corners of `rect`
+	if coord.x in [rect.position.x, rect.end.x - 1]:
+		if coord.y in [rect.position.y, rect.end.y - 1]:
+			return true
+	return false
+
 static func rect_perim(rect: Rect2i, region=null) -> Array[Vector2i]:
 	## Return all the coordinates making the inner perimeter of a rectangle.
 	## The coordinates are returned clockfise starting at rect.position.

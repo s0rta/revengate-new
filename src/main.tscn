@@ -109,11 +109,6 @@ unique_name_in_owner = true
 [node name="LyonSurface" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Dungeons"]
 unique_name_in_owner = true
 script = ExtResource("4_asi7v")
-min_houses = null
-max_houses = null
-default_board_size = null
-start_depth = null
-base_spawn_budget = null
 
 [node name="StartingBoard" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface" instance=ExtResource("3_vl15m")]
 unique_name_in_owner = true

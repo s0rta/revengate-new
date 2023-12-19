@@ -118,7 +118,7 @@ static func coord_in_rect(rect:Rect2i):
 	return rect.position + offset
 
 static func coord_on_rect_perim(rect: Rect2i, region=null):
-	## Return a coordinate along the perimeter of `rect`. Corners are excluted.
+	## Return a coordinate along the perimeter of `rect`. Corners are excluded.
 	## region: if supplied, only this side is considered.
 	if region == null or region == Consts.REG_CENTER:
 		region = choice([Consts.REG_NORTH, Consts.REG_SOUTH, Consts.REG_WEST, Consts.REG_EAST])

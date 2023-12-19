@@ -284,9 +284,8 @@ Combat:
 ## v0.12
 - [x] submit to the Godot showreel (before dec 17)
 - [ ] submit to the [Game Dev World Championship](https://thegdwc.com/) (before dec 31)
-- [ ] bug: cross-board connectors should never be in corners
+- [x] bug: cross-board connectors should never be in corners
 - [x] bug: TurnQueue is spinning hot on GameOver
-- [ ] bug: city outlaws are neutral
 - [x] quest summary
   - [x] save quest activation status in SaveBundle
 - [x] faster move animations when there are many visible actors
@@ -328,7 +327,6 @@ UX:
 
 Items:
 - [ ] items stats and long description is available from the inventory screen
-- [ ] top hat (🎩)
 
 Weapons:
 - [ ] axe (𝇤)

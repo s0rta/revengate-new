@@ -130,8 +130,7 @@ mem = SubResource("Resource_yav2i")
 [node name="Frequent" type="Node" parent="."]
 script = ExtResource("2_ktv76")
 max_board_occ = 2
-min_board_occ = 5
-debug_only = true
+min_board_occ = 1
 
 [node name="Rat" parent="Frequent" instance=ExtResource("10_6v1jq")]
 mem = SubResource("Resource_jtimj")
