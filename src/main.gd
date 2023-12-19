@@ -293,6 +293,7 @@ func start_ch2():
 		"res://src/story/bewitching_bookkeeping.md")
 	hero.place(V.i(2, 2))
 	center_on_hero()
+	Tender.hero.highlight_options()
 	if $TurnQueue.is_paused():
 		$TurnQueue.resume()
 
@@ -321,6 +322,7 @@ func start_ch3():
 		"res://src/story/sound_of_satin.md")
 	Tender.hero.place(V.i(2, 2))
 	center_on_hero()
+	Tender.hero.highlight_options()
 	if $TurnQueue.is_paused():
 		$TurnQueue.resume()
 
@@ -334,7 +336,8 @@ func capture_game():
 	
 	print("Saving at turn %d" % $TurnQueue.turn)
 	bundle.save(dungeons, $TurnQueue.turn, Tender.kills, Tender.sentiments, 
-				Tender.quest.tag, Tender.seen_locs.keys(), Tender.play_secs)
+				Tender.quest.tag, Tender.quest.is_active,
+				Tender.seen_locs.keys(), Tender.play_secs)
 	await $TurnQueue.resume()  # might be better to send this to the background
 	
 func restore_game(bundle=null):
@@ -359,16 +362,17 @@ func restore_game(bundle=null):
 	if bundle.VERBOSE:
 		bundle.dlog_root(".final")
 	var hero = dungeons.find_child("Hero")	
-	watch_hero(hero)
 	Tender.kills = bundle.kills
 	Tender.sentiments = bundle.sentiments
 	Tender.quest = _quest_by_tag(bundle.quest_tag)
+	Tender.quest.is_active = bundle.quest_is_active
 	Tender.seen_locs.clear()
 	Tender.play_secs = bundle.play_secs
 	Tender.viewport = %Viewport
 	Tender.hud = $HUD
 	for loc in bundle.seen_locs:
 		Tender.seen_locs[loc] = true
+	watch_hero(hero)
 	$TurnQueue.turn = bundle.turn
 
 	for board in dungeons_cont.find_children("", "RevBoard"):

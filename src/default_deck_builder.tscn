@@ -1,8 +1,9 @@
-[gd_scene load_steps=35 format=3 uid="uid://c185mr0bu3u3w"]
+[gd_scene load_steps=55 format=3 uid="uid://c185mr0bu3u3w"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_yitoo"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_i1rpj"]
 [ext_resource type="PackedScene" uid="uid://d4f1ul2rt43ys" path="res://src/monsters/labras.tscn" id="3_tqdik"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="4_kpuol"]
 [ext_resource type="PackedScene" uid="uid://b26vqfk7j6un7" path="res://src/monsters/desert_centipede.tscn" id="4_m33kh"]
 [ext_resource type="PackedScene" uid="uid://cx7utj7hd3ne" path="res://src/monsters/kobold.tscn" id="5_yqsgm"]
 [ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="6_da4pf"]
@@ -35,28 +36,130 @@
 [ext_resource type="PackedScene" uid="uid://db6sjyoaw3ms2" path="res://src/monsters/giant_locust.tscn" id="32_wgbwd"]
 [ext_resource type="PackedScene" uid="uid://dnw86n1s88cwl" path="res://src/weapons/dagger.tscn" id="34_657w5"]
 
+[sub_resource type="Resource" id="Resource_v0b0i"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_s3xhm"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_54crc"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_hkqm6"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_ukqh8"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_58sqy"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_v8uhu"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_nmve0"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_88qut"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_u01tk"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_d1oex"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_ayrts"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_omuge"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_sw2wi"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_c3vjx"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_03k6w"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_bq5vr"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_ic7uf"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_fxw2u"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
 [node name="DeckBuilder" type="Node"]
 script = ExtResource("1_yitoo")
 
 [node name="Hissing" parent="." instance=ExtResource("25_0ydwd")]
 
 [node name="SewerOtter" parent="." instance=ExtResource("2_i1rpj")]
+mem = SubResource("Resource_v0b0i")
 
 [node name="Labras" parent="." instance=ExtResource("3_tqdik")]
+mem = SubResource("Resource_s3xhm")
 
 [node name="DesertCentipede" parent="." instance=ExtResource("4_m33kh")]
+mem = SubResource("Resource_54crc")
 
 [node name="Kobold" parent="." instance=ExtResource("5_yqsgm")]
+mem = SubResource("Resource_hkqm6")
 
 [node name="SulantTiger" parent="." instance=ExtResource("6_da4pf")]
+mem = SubResource("Resource_ukqh8")
 
 [node name="Max3PerFloor" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
 max_board_occ = 3
 
 [node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_eau7g")]
+mem = SubResource("Resource_58sqy")
 
 [node name="Sahwakoon" parent="Max3PerFloor" instance=ExtResource("9_s5p53")]
+mem = SubResource("Resource_v8uhu")
 
 [node name="Quest1Goals" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -65,10 +168,12 @@ min_dungeon_occ = 1
 world_loc = Vector3i(11, 4, 0)
 
 [node name="Outlaw1" parent="Quest1Goals" instance=ExtResource("12_g5w02")]
+mem = SubResource("Resource_nmve0")
 
 [node name="LoomCards" parent="Quest1Goals/Outlaw1" instance=ExtResource("11_320yy")]
 
 [node name="Outlaw2" parent="Quest1Goals" instance=ExtResource("12_g5w02")]
+mem = SubResource("Resource_88qut")
 
 [node name="PotionOfHealing" parent="Quest1Goals/Outlaw2" instance=ExtResource("22_bxpqo")]
 visible = false
@@ -77,6 +182,7 @@ visible = false
 visible = false
 
 [node name="Outlaw3" parent="Quest1Goals" instance=ExtResource("12_g5w02")]
+mem = SubResource("Resource_u01tk")
 
 [node name="PotionOfPoison" parent="Quest1Goals/Outlaw3" instance=ExtResource("15_0p6sp")]
 
@@ -87,8 +193,10 @@ min_dungeon_occ = 1
 world_loc = Vector3i(13, 8, 0)
 
 [node name="Retznac" parent="Quest2Goals" instance=ExtResource("25_cxgj3")]
+mem = SubResource("Resource_d1oex")
 
 [node name="Grenn" parent="Quest2Goals" instance=ExtResource("16_s7e88")]
+mem = SubResource("Resource_ayrts")
 
 [node name="Book" parent="Quest2Goals" instance=ExtResource("17_3gl0d")]
 char = "📗"
@@ -129,6 +237,7 @@ min_depth = 7
 max_dungeon_occ = 2
 
 [node name="Pacherr" parent="RareAndDeep" instance=ExtResource("21_2o5vb")]
+mem = SubResource("Resource_omuge")
 
 [node name="Healing" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -155,8 +264,10 @@ debug_only = true
 [node name="Saber" parent="TestingQuestTransitions" instance=ExtResource("18_0s2fs")]
 
 [node name="Gleugt" parent="TestingQuestTransitions" instance=ExtResource("26_1p40w")]
+mem = SubResource("Resource_sw2wi")
 
 [node name="Kobold" parent="TestingQuestTransitions" instance=ExtResource("5_yqsgm")]
+mem = SubResource("Resource_c3vjx")
 
 [node name="LoomCards" parent="TestingQuestTransitions/Kobold" instance=ExtResource("11_320yy")]
 
@@ -167,10 +278,13 @@ position = Vector2(631, 437)
 position = Vector2(631, 437)
 
 [node name="Nochort" parent="TestingQuestTransitions" instance=ExtResource("30_54kmj")]
+mem = SubResource("Resource_03k6w")
 
 [node name="SentryScarab" parent="TestingQuestTransitions" instance=ExtResource("31_aksig")]
+mem = SubResource("Resource_bq5vr")
 
 [node name="DesertCentipede" parent="TestingQuestTransitions" instance=ExtResource("4_m33kh")]
+mem = SubResource("Resource_ic7uf")
 
 [node name="SwarmTest" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -179,17 +293,18 @@ world_loc = Vector3i(13, 6, 0)
 debug_only = true
 
 [node name="GiantLocust" parent="SwarmTest" instance=ExtResource("32_wgbwd")]
+mem = SubResource("Resource_fxw2u")
 
 [node name="Dagger" parent="SwarmTest" instance=ExtResource("34_657w5")]
 
-[connection signal="visibility_changed" from="Quest1Goals/Outlaw2/PotionOfHealing" to="Quest1Goals/Outlaw2/PotionOfHealing" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Quest1Goals/Outlaw2/PotionOfRegen" to="Quest1Goals/Outlaw2/PotionOfRegen" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Quest1Goals/Outlaw3/PotionOfPoison" to="Quest1Goals/Outlaw3/PotionOfPoison" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Rare/Hammer" to="Rare/Hammer" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Rare/Rapier" to="Rare/Rapier" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Rare/Razor" to="Rare/Razor" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Rare/Saber" to="Rare/Saber" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Rare/Sword" to="Rare/Sword" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Healing/PotionOfHealing" to="Healing/PotionOfHealing" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Healing/PotionOfRegen" to="Healing/PotionOfRegen" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="TestingQuestTransitions/Razor" to="TestingQuestTransitions/Razor" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Quest1Goals/Outlaw2/PotionOfHealing" to="Quest1Goals/Outlaw2/PotionOfHealing" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Quest1Goals/Outlaw2/PotionOfRegen" to="Quest1Goals/Outlaw2/PotionOfRegen" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Quest1Goals/Outlaw3/PotionOfPoison" to="Quest1Goals/Outlaw3/PotionOfPoison" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Rare/Hammer" to="Rare/Hammer" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Rare/Rapier" to="Rare/Rapier" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Rare/Razor" to="Rare/Razor" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Rare/Saber" to="Rare/Saber" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Rare/Sword" to="Rare/Sword" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Healing/PotionOfHealing" to="Healing/PotionOfHealing" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Healing/PotionOfRegen" to="Healing/PotionOfRegen" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="TestingQuestTransitions/Razor" to="TestingQuestTransitions/Razor" method="_on_visibility_changed"]

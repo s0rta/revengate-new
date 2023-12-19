@@ -95,7 +95,7 @@ func update_states_at(hero_coord):
 	## Refresh internal states by taking into account a recent change at `hero_coord`
 	var board = Tender.hero.get_board()
 	%CityMapButton.visible = board.world_loc != Consts.LOC_INVALID and board.world_loc.z >= 0
-	%ShowQuestLogButton.disabled = not Tender.quest.is_active
+	refresh_quest_btn()
 	if board.is_connector(hero_coord):
 		stairs_button.visible = true
 		if "gateway" == board.get_cell_terrain(hero_coord):
@@ -117,6 +117,9 @@ func refresh_cancel_button_vis():
 	var has_strat = Tender.hero.has_strategy(true)
 	%CancelButton.visible = has_strat
 	%CancelButton2.visible = has_strat
+
+func refresh_quest_btn():
+	%ShowQuestLogButton.disabled = not Tender.quest.is_active
 
 func _on_stairs_button_pressed():
 	var event = InputEventAction.new()
@@ -189,13 +192,11 @@ func _on_quick_attack_button_button_up():
 func _on_hero_changed_weapons():
 	_set_quick_attack_icon()
 
-
 func _on_show_quest_log_button_button_up():
 	if not Tender.quest.is_active:
 		print("Quest is inactive")
 	else:
 		Tender.hero.add_message(Tender.quest.summary, Memory.Importance.CRUCIAL)
 
-
 func _on_dialogue_pane_quest_activated():
-	%ShowQuestLogButton.disabled = not Tender.quest.is_active
+	refresh_quest_btn()

@@ -38,15 +38,18 @@ _facts = []
 script = ExtResource("4_111fo")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_2dq4t"]
+[sub_resource type="Resource" id="Resource_fu0ta"]
+resource_local_to_scene = true
 script = ExtResource("4_111fo")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_kx0bx"]
+[sub_resource type="Resource" id="Resource_blo6h"]
+resource_local_to_scene = true
 script = ExtResource("4_111fo")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_5cmah"]
+[sub_resource type="Resource" id="Resource_h5hmq"]
+resource_local_to_scene = true
 script = ExtResource("4_111fo")
 _facts = []
 
@@ -96,17 +99,17 @@ faction = 4
 mem = SubResource("Resource_5fp0k")
 
 [node name="Yarohu" parent="Quest2Board" instance=ExtResource("7_ltn2i")]
-mem = SubResource("Resource_2dq4t")
+mem = SubResource("Resource_fu0ta")
 
 [node name="Max1PerDungeon" type="Node" parent="."]
 script = ExtResource("2_ktv76")
 max_dungeon_occ = 1
 
 [node name="Outlaw" parent="Max1PerDungeon" instance=ExtResource("8_5vl31")]
-mem = SubResource("Resource_kx0bx")
+mem = SubResource("Resource_blo6h")
 
 [node name="Nochort" parent="Max1PerDungeon" instance=ExtResource("9_7av4t")]
-mem = SubResource("Resource_5cmah")
+mem = SubResource("Resource_h5hmq")
 
 [node name="Infrequent" type="Node" parent="."]
 script = ExtResource("2_ktv76")
@@ -128,6 +131,7 @@ mem = SubResource("Resource_yav2i")
 script = ExtResource("2_ktv76")
 max_board_occ = 2
 min_board_occ = 5
+debug_only = true
 
 [node name="Rat" parent="Frequent" instance=ExtResource("10_6v1jq")]
 mem = SubResource("Resource_jtimj")

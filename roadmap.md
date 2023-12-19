@@ -282,13 +282,15 @@ Combat:
 - [x] healing strategy is based on health-%, not absolute number of HPs
 
 ## v0.12
-- [ ] submit to the Godot showreel (before dec 17)
+- [x] submit to the Godot showreel (before dec 17)
 - [ ] submit to the [Game Dev World Championship](https://thegdwc.com/) (before dec 31)
 - [ ] bug: cross-board connectors should never be in corners
 - [x] bug: TurnQueue is spinning hot on GameOver
 - [ ] bug: city outlaws are neutral
+- [x] quest summary
+  - [x] save quest activation status in SaveBundle
 - [x] faster move animations when there are many visible actors
-- [x] play time (screen time) on victory screen
+- [x] play time (screen time) on victory screen 
 - [ ] saved games
   - [x] restore workflow on start screen
   - [x] periodic auto-saves
@@ -296,7 +298,7 @@ Combat:
   - [x] anims are flushed when restoring
   - [x] flying HP labels are not saved
   - [x] starting inventory is not resurected upon restore
-  - [ ] action highlights are refreshed properly (mem looks at id rather than references?)
+  - [x] action highlights are refreshed properly (mem looks at id rather than references?)
   - [x] quest setup functs discover NPCs rather than using static refs
   - [x] cross-actor references are preserved in restored Actor.mem
   - [x] gifts are preserved when restoring a saved game

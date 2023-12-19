@@ -29,6 +29,7 @@ const VERBOSE := false
 @export var kills:Dictionary
 @export var sentiments:SentimentTable
 @export var quest_tag: String
+@export var quest_is_active: bool
 @export var seen_locs: Array
 @export var play_secs: float
 
@@ -41,7 +42,7 @@ static func _ensure_dir(dir=SAVE_DIR):
 		da.make_dir(dir)
 
 static func save(root:Node, turn:int, kills:Dictionary, 
-				sentiments:SentimentTable, quest_tag:String, 
+				sentiments:SentimentTable, quest_tag:String, quest_is_active:bool,
 				seen_locs:Array, play_secs:float):
 	## Save a game. 
 	## The whole subtree starting at `root` is saved. 
@@ -54,6 +55,7 @@ static func save(root:Node, turn:int, kills:Dictionary,
 	bundle.kills = kills
 	bundle.sentiments = sentiments
 	bundle.quest_tag = quest_tag
+	bundle.quest_is_active = quest_is_active
 	bundle.seen_locs = seen_locs
 	bundle.play_secs = play_secs
 
