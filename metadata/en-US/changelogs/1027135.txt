@@ -1,0 +1,6 @@
+Games are auto-saved and can be restored from the start screen.
+Items descriptions are available with tap in the inventory screen.
+Faster move animations on crowded levels.
+Quest summary with the top hat (🎩) button.
+Play time on victory screen
+Can no longer throw daggers through walls.

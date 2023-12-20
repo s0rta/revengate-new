@@ -281,9 +281,9 @@ Combat:
 - [x] TribalTerritorial uses perception rather than dist()
 - [x] healing strategy is based on health-%, not absolute number of HPs
 
-## v0.12
-- [x] submit to the Godot showreel (before dec 17)
+## v0.11.1
 - [ ] submit to the [Game Dev World Championship](https://thegdwc.com/) (before dec 31)
+- [x] submit to the Godot showreel (before dec 17)
 - [x] bug: daggers can shoot through walls
 - [x] bug: saved game is not deleted on victory
 - [x] bug: cross-board connectors should never be in corners
@@ -292,10 +292,8 @@ Combat:
   - [x] save quest activation status in SaveBundle
 - [x] faster move animations when there are many visible actors
 - [x] play time (screen time) on victory screen 
-- [ ] bug: sewer otter attacks everyone
-- [ ] bug: self defence does not expire when attacker dies
 - [x] "here" -> "Café Caché" for quest 3 summary
-- [ ] saved games
+- [x] saved games
   - [x] restore workflow on start screen
   - [x] periodic auto-saves
   - [x] seen_locs are saved
@@ -308,30 +306,38 @@ Combat:
   - [x] gifts are preserved when restoring a saved game
   - [x] health-full is persisted
   - [x] conversation checkpoints are preserved on save
-  - [ ] center on Hero when restoring a game
-  - [ ] cheat to disable auto-saving
 - [x] bug: Exploring fails to update `me.dest` when running the live debugger on Android
       - RevBoard._on_actor_moved() called with `to` != actor.dest
-- [ ] Seeking is easier to resolve even is the target keeps moving
+
+Items:
+- [x] items stats and long description is available from the inventory screen
+
+## v0.12
+- [ ] bug: sewer otter attacks everyone?
+- [ ] bug: self defence does not expire when attacker dies
+- [ ] improved saved games
+  - [ ] center on Hero when restoring a game
+  - [ ] cheat to disable auto-saving
 - [ ] web export
   - [ ] better keyboard support (ex.: ESC cancels actions)
   - [ ] bug: story screen does not capture keyboard input
 - [ ] random interlude stories
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
-- [ ] plasus rats have a more aggressive version of TribalTerritorial
-- [ ] Tracking keeps moving towards the last place where they saw their prey after it becomes unperceived
 - [ ] instructions on how to install all the Android dev dependencies
 - [ ] async preload most shaders to speedup startup
-- [ ] TravelTo uses a cached `path_perceived()`
-- [ ] Benoît roams after the meeting and after yielding
-- [ ] Salapou can steal your items
 - [ ] silence a few warnings
 
-UX:
-- [ ] more margins around buttons to prevent mis-taps
+Strategies:
+- [ ] Benoît roams after the meeting and after yielding
+- [ ] Seeking is easier to resolve even is the target keeps moving
+- [ ] TravelTo uses a cached `path_perceived()`
+- [ ] plasus rats have a more aggressive version of TribalTerritorial
+- [ ] Tracking keeps moving towards the last place where they saw their prey after it becomes unperceived
 
-Items:
-- [ ] items stats and long description is available from the inventory screen
+UX:
+- [ ] quick attack button is too small with half width emojis like the broom
+- [ ] make it easier to scroll the inventory without poping the items description
+- [ ] more margins around buttons to prevent mis-taps
 
 Weapons:
 - [ ] axe (𝇤)
@@ -339,12 +345,6 @@ Weapons:
 Combat:
 - [ ] zapping spell
 
-
-## Next Release
-
-UX:
-- [ ] quick attack button is too small with half width emojis like the broom
-- [ ] make it easier to scroll the inventory without poping the items description
 
 ## v1.0
 - [ ] A Fight for Fumes campaign
@@ -367,6 +367,7 @@ UX:
 - [ ] startled strategy: flee when first contact is from afar, attack when from nearby
 - [ ] F-Droid [Reproducible Builds](https://f-droid.org/docs/Reproducible_Builds/)
 - [ ] potion of absinthe
+- [ ] Salapou can steal your items
 
 Performance:
 - [ ] cache stats modifiers for the whole turn (with inval on mods changing events)

@@ -1,10 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://ons174xuqpcw"]
+[gd_scene load_steps=8 format=3 uid="uid://ons174xuqpcw"]
 
 [ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_53w7c"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="2_3jhvx"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="2_p7wm0"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_2jlx8"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="4_qyvw6"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="5_6mbf4"]
+
+[sub_resource type="Resource" id="Resource_3u8o3"]
+resource_local_to_scene = true
+script = ExtResource("2_3jhvx")
+_facts = []
 
 [node name="SewerOtter" instance=ExtResource("1_53w7c")]
 char = "o"
@@ -22,6 +28,7 @@ They can be as long as 2m, but most specimens are 1.5m long. The head has a long
 Sewer otters are most commonly seen dripping with mud. Several diseased patches of skin are likely to be missing hair. 
 
 They are very good swimmers and can stay underwater for up to 10 minutes. They have been seen dragging preys with them to drown them."
+mem = SubResource("Resource_3u8o3")
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.329412, 0.4, 0.870588, 1)
@@ -39,6 +46,6 @@ stream = ExtResource("3_2jlx8")
 script = ExtResource("4_qyvw6")
 priority = 0.6
 
-[node name="Exploring" type="Node" parent="." index="11"]
+[node name="Exploring" type="Node" parent="." index="10"]
 script = ExtResource("5_6mbf4")
 priority = 0.2

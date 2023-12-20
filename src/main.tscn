@@ -123,8 +123,6 @@ mem = SubResource("Resource_7gsj3")
 
 [node name="DynaMain" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("7_eg4si")]
 
-[node name="Broom" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("14_w5yd8")]
-
 [node name="Nadege" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_wcjwx")]
 visible = true
 position = Vector2(48, 80)

@@ -107,6 +107,7 @@ static func load(unpack:=false) -> SaveBundle:
 
 static func remove():
 	## Delete the saved game at the default path
+	## Silently do nothing if there is no saved game file.
 	if has_file():
 		var da = DirAccess.open("user://")
 		var path = SAVE_DIR + SAVE_FILE

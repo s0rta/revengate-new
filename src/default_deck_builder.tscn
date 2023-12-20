@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://c185mr0bu3u3w"]
+[gd_scene load_steps=50 format=3 uid="uid://c185mr0bu3u3w"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_yitoo"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_i1rpj"]
@@ -28,13 +28,9 @@
 [ext_resource type="PackedScene" uid="uid://b2dem6s27irbs" path="res://src/weapons/grayswandir.tscn" id="24_lwi07"]
 [ext_resource type="PackedScene" uid="uid://cmshyslfrv0du" path="res://src/vibes/hissing.tscn" id="25_0ydwd"]
 [ext_resource type="PackedScene" uid="uid://cbpo1nvheopyj" path="res://src/monsters/retznac.tscn" id="25_cxgj3"]
-[ext_resource type="PackedScene" uid="uid://cjoutyju3dhre" path="res://src/monsters/gleugt.tscn" id="26_1p40w"]
 [ext_resource type="PackedScene" uid="uid://c8frbdj65suee" path="res://src/weapons/cane.tscn" id="27_5htvc"]
 [ext_resource type="PackedScene" uid="uid://drnpu2dw1i4nn" path="res://src/weapons/weighted_cane.tscn" id="28_0tyeq"]
-[ext_resource type="PackedScene" uid="uid://b1elqic8grhvb" path="res://src/monsters/nochort.tscn" id="30_54kmj"]
 [ext_resource type="PackedScene" uid="uid://dqkhlt4d3sbqn" path="res://src/monsters/sentry_scarab.tscn" id="31_aksig"]
-[ext_resource type="PackedScene" uid="uid://db6sjyoaw3ms2" path="res://src/monsters/giant_locust.tscn" id="32_wgbwd"]
-[ext_resource type="PackedScene" uid="uid://dnw86n1s88cwl" path="res://src/weapons/dagger.tscn" id="34_657w5"]
 
 [sub_resource type="Resource" id="Resource_v0b0i"]
 resource_local_to_scene = true
@@ -101,17 +97,7 @@ resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_sw2wi"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
 [sub_resource type="Resource" id="Resource_c3vjx"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_03k6w"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
@@ -126,7 +112,12 @@ resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_fxw2u"]
+[sub_resource type="Resource" id="Resource_kw848"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_7dw8r"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
@@ -263,9 +254,6 @@ debug_only = true
 
 [node name="Saber" parent="TestingQuestTransitions" instance=ExtResource("18_0s2fs")]
 
-[node name="Gleugt" parent="TestingQuestTransitions" instance=ExtResource("26_1p40w")]
-mem = SubResource("Resource_sw2wi")
-
 [node name="Kobold" parent="TestingQuestTransitions" instance=ExtResource("5_yqsgm")]
 mem = SubResource("Resource_c3vjx")
 
@@ -277,25 +265,20 @@ position = Vector2(631, 437)
 [node name="WeightedCane" parent="TestingQuestTransitions" instance=ExtResource("28_0tyeq")]
 position = Vector2(631, 437)
 
-[node name="Nochort" parent="TestingQuestTransitions" instance=ExtResource("30_54kmj")]
-mem = SubResource("Resource_03k6w")
-
 [node name="SentryScarab" parent="TestingQuestTransitions" instance=ExtResource("31_aksig")]
 mem = SubResource("Resource_bq5vr")
 
 [node name="DesertCentipede" parent="TestingQuestTransitions" instance=ExtResource("4_m33kh")]
 mem = SubResource("Resource_ic7uf")
 
-[node name="SwarmTest" type="Node" parent="."]
-script = ExtResource("7_bd8gw")
-min_dungeon_occ = 6
-world_loc = Vector3i(13, 6, 0)
-debug_only = true
+[node name="SewerOtter" parent="TestingQuestTransitions" instance=ExtResource("2_i1rpj")]
+mem = SubResource("Resource_kw848")
 
-[node name="GiantLocust" parent="SwarmTest" instance=ExtResource("32_wgbwd")]
-mem = SubResource("Resource_fxw2u")
+[node name="SulantTiger" parent="TestingQuestTransitions" instance=ExtResource("6_da4pf")]
+mem = SubResource("Resource_7dw8r")
 
-[node name="Dagger" parent="SwarmTest" instance=ExtResource("34_657w5")]
+[node name="SulantTiger2" parent="TestingQuestTransitions" instance=ExtResource("6_da4pf")]
+mem = SubResource("Resource_7dw8r")
 
 [connection signal="visibility_changed" from="Quest1Goals/Outlaw2/PotionOfHealing" to="Quest1Goals/Outlaw2/PotionOfHealing" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Quest1Goals/Outlaw2/PotionOfRegen" to="Quest1Goals/Outlaw2/PotionOfRegen" method="_on_visibility_changed"]

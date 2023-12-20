@@ -1,10 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://dae5sqhh0bd65"]
+[gd_scene load_steps=8 format=3 uid="uid://dae5sqhh0bd65"]
 
 [ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_ycuvh"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="2_rwxmw"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="2_sdh8d"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_17f46"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="4_ydegh"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="5_87j2b"]
+
+[sub_resource type="Resource" id="Resource_8igp8"]
+resource_local_to_scene = true
+script = ExtResource("2_rwxmw")
+_facts = []
 
 [node name="SulantTiger" instance=ExtResource("1_ycuvh")]
 char = "f"
@@ -19,6 +25,7 @@ bestiary_img = "res://src/monsters/sulant-tiger.png"
 description = "Sulant tigers have the general shape and size of a Bengal tiger, but they are all light brown with light green stripes. Their backs have spines like those of porcupines and their tail is twice as long as that of a Bengal tiger.
 
 Sulant tigers use their tails as monkeys do to grab objects or the limbs of unsuspecting adventurers who venture too close."
+mem = SubResource("Resource_8igp8")
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.341176, 0.686275, 0.215686, 1)
@@ -36,6 +43,6 @@ stream = ExtResource("3_17f46")
 script = ExtResource("4_ydegh")
 priority = 0.6
 
-[node name="Exploring" type="Node" parent="." index="11"]
+[node name="Exploring" type="Node" parent="." index="10"]
 script = ExtResource("5_87j2b")
 priority = 0.2
