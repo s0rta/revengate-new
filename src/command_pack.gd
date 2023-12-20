@@ -73,11 +73,13 @@ class Attack extends Command:
 			return false
 		var hero_coord = Tender.hero.get_cell_coord()
 		var dist = board.dist(hero_coord, coord)
+		if dist > attack_range or not index.has_los(hero_coord, coord):
+			return false
 		var other = index.actor_at(coord)
 		if other == null or other.is_dead() or not Tender.hero.perceives(other):
 			return false
 		is_default = other != null and Tender.hero.is_foe(other)		
-		return dist <= attack_range
+		return true
 		
 	func run(coord:Vector2i) -> bool:
 		var victim = index.actor_at(coord)

@@ -284,6 +284,8 @@ Combat:
 ## v0.12
 - [x] submit to the Godot showreel (before dec 17)
 - [ ] submit to the [Game Dev World Championship](https://thegdwc.com/) (before dec 31)
+- [x] bug: daggers can shoot through walls
+- [ ] bug: saved game is not deleted on victory
 - [x] bug: cross-board connectors should never be in corners
 - [x] bug: TurnQueue is spinning hot on GameOver
 - [x] quest summary
@@ -292,6 +294,7 @@ Combat:
 - [x] play time (screen time) on victory screen 
 - [ ] bug: sewer otter attacks everyone
 - [ ] bug: self defence does not expire when attacker dies
+- [ ] "here" -> "Café Caché" for quest 3 summary
 - [ ] saved games
   - [x] restore workflow on start screen
   - [x] periodic auto-saves
@@ -336,6 +339,12 @@ Weapons:
 Combat:
 - [ ] zapping spell
 
+
+## Next Release
+
+UX:
+- [ ] quick attack button is too small with half width emojis like the broom
+- [ ] make it easier to scroll the inventory without poping the items description
 
 ## v1.0
 - [ ] A Fight for Fumes campaign
