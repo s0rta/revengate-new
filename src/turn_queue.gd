@@ -71,11 +71,11 @@ func abort_turn(immediate=true):
 	if immediate and current_actor and not current_actor.is_idle():
 		current_actor.cancel_action()
 
-func shutdown():
+func shutdown(immediate:=false):
 	## Stop processing turns as soon as possible. 
 	## Typically the current actor will finish their turn before the shutdown begins.
 	state = States.SHUTTING_DOWN
-	skip_turn()
+	skip_turn(immediate)
 
 func pause(immediate=true):
 	## Stop new actors from taking their turn. 
@@ -168,4 +168,4 @@ func run():
 			await resumed
 	current_actor = null
 	state = States.STOPPED
-	emit_signal("done")
+	done.emit()

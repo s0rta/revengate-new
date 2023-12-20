@@ -23,6 +23,7 @@ signal board_changed(new_board)
 @onready var dungeons_cont: Node = %Dungeons  # all dungeons must be direct descendent of this node
 @onready var commands = $CommandPack
 var board: RevBoard  # the active board
+var active := true  # becomes false when the run is over
 var quests = []
 var npcs = {}
 
@@ -61,7 +62,7 @@ func _ready():
 			"res://src/story/the_audition.md",
 			"You recovered the stolen loom cards."),
 		Quest.new("quest-stop-accountant", "Bewitching Bookkeeping",
-			"Stop Benoît the accountant from meeting with Salapou. They're supposed to meet a few blocks west of here.",
+			"Stop Benoît the accountant from meeting with Salapou. They're supposed to meet a few blocks west of the café.",
 			"res://src/story/bewitching_bookkeeping.md",
 			"You prevented Benoît the accountant from exposing Frank Verguin's home lab.",
 			start_ch2,
@@ -233,8 +234,9 @@ func conclude_game(victory:bool, game_over:bool):
 	var last_quest = Tender.quest
 	
 	if game_over:
-		SaveBundle.remove()
+		active = false
 		$TurnQueue.shutdown()
+		SaveBundle.remove()		
 	else:
 		$TurnQueue.pause()
 	if Tender.hero.is_animating():
@@ -263,7 +265,7 @@ func _on_turn_started(_turn):
 
 func _on_turn_finished(turn):
 	print("Turn %d is done." % turn)
-	if Tender.hero and Tender.hero.is_alive():
+	if active and Tender.hero and Tender.hero.is_alive():
 		capture_game()
 
 func show_context_menu_for(coord) -> bool:

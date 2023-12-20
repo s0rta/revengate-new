@@ -285,7 +285,7 @@ Combat:
 - [x] submit to the Godot showreel (before dec 17)
 - [ ] submit to the [Game Dev World Championship](https://thegdwc.com/) (before dec 31)
 - [x] bug: daggers can shoot through walls
-- [ ] bug: saved game is not deleted on victory
+- [x] bug: saved game is not deleted on victory
 - [x] bug: cross-board connectors should never be in corners
 - [x] bug: TurnQueue is spinning hot on GameOver
 - [x] quest summary
@@ -294,7 +294,7 @@ Combat:
 - [x] play time (screen time) on victory screen 
 - [ ] bug: sewer otter attacks everyone
 - [ ] bug: self defence does not expire when attacker dies
-- [ ] "here" -> "Café Caché" for quest 3 summary
+- [x] "here" -> "Café Caché" for quest 3 summary
 - [ ] saved games
   - [x] restore workflow on start screen
   - [x] periodic auto-saves
