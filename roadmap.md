@@ -284,8 +284,8 @@ Combat:
 ## v0.11.1
 - [ ] submit to the [Game Dev World Championship](https://thegdwc.com/) (before dec 31)
 - [x] submit to the Godot showreel (before dec 17)
+- [ ] update the F-Droid recipe with latest compatible Godot
 - [x] bug: daggers can shoot through walls
-- [x] bug: saved game is not deleted on victory
 - [x] bug: cross-board connectors should never be in corners
 - [x] bug: TurnQueue is spinning hot on GameOver
 - [x] quest summary
@@ -321,6 +321,7 @@ Items:
 - [ ] web export
   - [ ] better keyboard support (ex.: ESC cancels actions)
   - [ ] bug: story screen does not capture keyboard input
+  - [ ] save to local storage?
 - [ ] random interlude stories
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] instructions on how to install all the Android dev dependencies
@@ -334,10 +335,17 @@ Strategies:
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
 - [ ] Tracking keeps moving towards the last place where they saw their prey after it becomes unperceived
 
+Items:
+- [ ] fuzzy stats on low perception (#7)
+- [ ] long descriptions for most items (#7)
+
 UX:
 - [ ] quick attack button is too small with half width emojis like the broom
 - [ ] make it easier to scroll the inventory without poping the items description
 - [ ] more margins around buttons to prevent mis-taps
+- [ ] clickable links on the 3 start screen popup (#12)
+- [ ] button to go back to main menu (#10)
+- [ ] long press popup as soon as the timeout has elapsed (#4)
 
 Weapons:
 - [ ] axe (𝇤)
