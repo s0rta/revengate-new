@@ -284,7 +284,7 @@ Combat:
 ## v0.11.1
 - [ ] submit to the [Game Dev World Championship](https://thegdwc.com/) (before dec 31)
 - [x] submit to the Godot showreel (before dec 17)
-- [ ] update the F-Droid recipe with latest compatible Godot
+- [x] update the F-Droid recipe with latest compatible Godot
 - [x] bug: daggers can shoot through walls
 - [x] bug: cross-board connectors should never be in corners
 - [x] bug: TurnQueue is spinning hot on GameOver
@@ -315,6 +315,7 @@ Items:
 ## v0.12
 - [ ] bug: sewer otter attacks everyone?
 - [ ] bug: self defence does not expire when attacker dies
+- [ ] F-Droid has animated water
 - [ ] improved saved games
   - [ ] center on Hero when restoring a game
   - [ ] cheat to disable auto-saving
