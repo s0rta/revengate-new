@@ -400,8 +400,14 @@ func replace_with_saved_game():
 	await $TurnQueue.run()  # might be better to send this to the background
 	print("Restarting the queue: done!")
 
+func abort_run():
+	## Abandon the current run, go back to Main Screen
+	## The save file, if present, is kept.
+	get_tree().change_scene_to_file("res://src/ui/start_screen.tscn")
+
 func test():
 	print("Testing: 1, 2... 1, 2!")
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
+

@@ -282,7 +282,7 @@ Combat:
 - [x] healing strategy is based on health-%, not absolute number of HPs
 
 ## v0.11.1
-- [ ] submit to the [Game Dev World Championship](https://thegdwc.com/) (before dec 31)
+- [x] submit to the [Game Dev World Championship](https://thegdwc.com/) (before dec 31)
 - [x] submit to the Godot showreel (before dec 17)
 - [x] update the F-Droid recipe with latest compatible Godot
 - [x] bug: daggers can shoot through walls
@@ -328,6 +328,7 @@ Items:
 - [ ] instructions on how to install all the Android dev dependencies
 - [ ] async preload most shaders to speedup startup
 - [ ] silence a few warnings
+- [ ] remove unreachable levels from starting screen
 
 Strategies:
 - [ ] Benoît roams after the meeting and after yielding
@@ -345,7 +346,7 @@ UX:
 - [ ] make it easier to scroll the inventory without poping the items description
 - [ ] more margins around buttons to prevent mis-taps
 - [ ] clickable links on the 3 start screen popup (#12)
-- [ ] button to go back to main menu (#10)
+- [x] button to go back to main menu (#10)
 - [ ] long press popup as soon as the timeout has elapsed (#4)
 
 Weapons:
