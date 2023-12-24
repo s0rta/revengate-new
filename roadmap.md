@@ -347,6 +347,7 @@ UX:
 - [ ] more margins around buttons to prevent mis-taps
 - [ ] clickable links on the 3 start screen popup (#12)
 - [x] button to go back to main menu (#10)
+- [x] button to exit the game
 - [ ] long press popup as soon as the timeout has elapsed (#4)
 
 Weapons:

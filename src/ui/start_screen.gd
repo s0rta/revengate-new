@@ -70,3 +70,7 @@ func _on_bad_save_version_diag_canceled():
 
 func _on_cant_load_diag_canceled():
 	%CantLoadDiag.confirmed.emit()
+
+func _on_quit_button_button_up():
+	get_tree().quit()
+	
