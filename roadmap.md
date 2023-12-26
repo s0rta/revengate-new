@@ -345,7 +345,7 @@ UX:
 - [ ] quick attack button is too small with half width emojis like the broom
 - [ ] make it easier to scroll the inventory without poping the items description
 - [ ] more margins around buttons to prevent mis-taps
-- [ ] clickable links on the 3 start screen popup (#12)
+- [x] clickable links on the 3 start screen popup (#12)
 - [x] button to go back to main menu (#10)
 - [x] button to exit the game
 - [x] long press popup as soon as the timeout has elapsed (#4)

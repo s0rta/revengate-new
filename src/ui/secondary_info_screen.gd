@@ -27,3 +27,7 @@ func show_main_screen():
 	
 func start_new_game():
 	get_tree().change_scene_to_file("res://src/main.tscn")
+
+func follow_link(url:String):
+	assert(url.begins_with("http"), "'%s' does not look like a url" % [url])
+	OS.shell_open(url)

@@ -39,8 +39,13 @@ horizontal_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="GPLLabel" type="Label" parent="VBoxContainer/VBoxContainer"]
+[node name="LicenceLabel" type="RichTextLabel" parent="VBoxContainer/VBoxContainer"]
+clip_contents = false
+custom_minimum_size = Vector2(720, 0)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+bbcode_enabled = true
 text = "Revengate is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -52,16 +57,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You can find the full text of the GPL licence on the GNU website:
-https://www.gnu.org/licenses/ .
+[url]https://www.gnu.org/licenses/[/url] .
+
+You can download the full source code of Revengate at:
+[url]http://revengate.org/download/[/url]
 
 "
-
-[node name="DLLabel" type="Label" parent="VBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "You can download the full source code of Revengate at:
-http://revengate.org/download/
-
-"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
 
 [node name="BackButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
@@ -69,4 +73,5 @@ size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Back"
 
+[connection signal="meta_clicked" from="VBoxContainer/VBoxContainer/LicenceLabel" to="." method="follow_link"]
 [connection signal="button_up" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

@@ -43,14 +43,18 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="CreditsLabel" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer"]
-custom_minimum_size = Vector2(0, 1024)
+[node name="CreditsLabel" type="RichTextLabel" parent="VBoxContainer/ScrollContainer/MarginContainer"]
+unique_name_in_owner = true
+clip_contents = false
+custom_minimum_size = Vector2(720, 0)
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
+size_flags_horizontal = 4
+size_flags_vertical = 6
+bbcode_enabled = true
 text = "Revengate was made by Yannick Gingras and contributors."
-autowrap_mode = 2
-visible_characters_behavior = 1
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -61,4 +65,5 @@ size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Back"
 
+[connection signal="meta_clicked" from="VBoxContainer/ScrollContainer/MarginContainer/CreditsLabel" to="." method="follow_link"]
 [connection signal="button_up" from="VBoxContainer/MarginContainer2/BackButton" to="." method="_on_back_button_pressed"]

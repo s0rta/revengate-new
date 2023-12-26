@@ -35,16 +35,23 @@ theme_type_variation = &"TitleLabel"
 text = "Revengate does not track you!"
 horizontal_alignment = 1
 
-[node name="PolicyLabel" type="Label" parent="VBoxContainer"]
+[node name="PolicyLabel" type="RichTextLabel" parent="VBoxContainer"]
+clip_contents = false
+custom_minimum_size = Vector2(720, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 6
+bbcode_enabled = true
 text = "
 This game does not collect or store any information about you or your device.
 
 Learn more at:
-http://revengate.org/privacy
+[url]http://revengate.org/privacy[/url]
 
 "
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
 
 [node name="BackButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
@@ -52,4 +59,5 @@ size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Back"
 
+[connection signal="meta_clicked" from="VBoxContainer/PolicyLabel" to="." method="follow_link"]
 [connection signal="button_up" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
