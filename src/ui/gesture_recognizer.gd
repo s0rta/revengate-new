@@ -25,6 +25,7 @@ signal action_complete
 const POS_EPSILON = 2.0  
 
 @onready var viewport: SubViewport = find_child("Viewport")
+var is_processing := false  # are we in the middle of a gesture?
 var is_capturing_clicks := false
 var is_panning := false
 var has_panned := false
@@ -44,7 +45,9 @@ class ActEvent extends InputEventAction:
 		pressed = pressed_
 
 	func ddump():
-		return "ActEvent: action=%s, pressed=%s, pos=%s, coord=%s" % [action, pressed, position, RevBoard.canvas_to_board_str(position)]
+		return "ActEvent: action=%s, pressed=%s, pos=%s, coord=%s" % [
+				action, pressed, position, RevBoard.canvas_to_board_str(position)
+			]
 
 ## Loot exactly where the hero is currently standing
 class LootEvent extends InputEventAction:
@@ -106,6 +109,7 @@ func _gui_input(event):
 		#   the game viewport. Not sure how to work around that...
 		# accept_event()
 		if event.pressed:
+			is_processing = true
 			$LongTapTimer.stop()
 			$LongTapTimer.start()
 			touches_pos[index] = event.position
@@ -117,18 +121,18 @@ func _gui_input(event):
 			touches_pos.erase(index)
 			nb_touching = len(touches_pos)
 			if nb_touching == 0:
+				is_processing = false
 				is_panning = false
-				if not has_panned: 
-					# FIXME: only fire if hero is accepting
-					if $LongTapTimer.time_left == 0:
-						var context_event = ContextMenuEvent.new(event.position)
-						viewport.inject_event(context_event)
-					else:
+				if not has_panned:
+					if $LongTapTimer.time_left > 0:
+						# didn't hold long enough to make it a long tap
+						$LongTapTimer.stop()
 						var act_event = ActEvent.new(event.position)
 						viewport.inject_event(act_event)
 						print("tap release: %s seconds left for a long tap" % $LongTapTimer.time_left)
 
-	if nb_touching > 0 and (event is InputEventScreenDrag or event is InputEventMouseMotion):
+	if (is_processing and nb_touching > 0 
+			and (event is InputEventScreenDrag or event is InputEventMouseMotion)):
 		var index = event.get("index")
 		if index == null:
 			index = 0
@@ -154,7 +158,6 @@ func _gui_input(event):
 	if event.is_action("zoom-in") or event.is_action("zoom-out"):
 		accept_event()
 
-
 func _unhandled_input(event):
 	if is_capturing_clicks and event.is_action_released("ui_cancel"):
 		emit_signal("capture_stopped", false, null)
@@ -167,6 +170,13 @@ func _is_tap_or_left_btn(event):
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 			return true
 	return false
+
+func _on_long_tap_timer_timeout():
+	if nb_touching == 1 and not has_panned:
+		is_processing = false
+		print("New long tap handler")
+		var pos = touches_pos.values()[0]
+		show_context_menu_for(pos)
 
 func _mt_info(current_index, current_pos):
 	## Return a dictionary of information about the current multi-touch event
@@ -211,8 +221,14 @@ func show_inventory():
 	var event = InventoryEvent.new()
 	viewport.inject_event(event)
 
+func show_context_menu_for(pos):
+	var context_event = ContextMenuEvent.new(pos)
+	viewport.inject_event(context_event)
+	
 func ddump():
 	var transform = viewport.get_final_transform()
 	var cam = viewport.get_camera_2d()
 	print("transform is: %s" % transform)
 	print("cam offset is: %s %s" % [cam.offset, RevBoard.canvas_to_board_str(cam.offset)])
+
+	

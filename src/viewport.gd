@@ -52,17 +52,23 @@ func zoom_out(factor:=1.05):
 	## Decrease magnification
 	zoom /= factor
 
-func inject_event(event, manual_xform=true):
+func inject_event(event):
 	## Send an input even to our descendent nodes.
 	## manual_xform: compute reposition manually, useful for custom event types that 
 	##   Viewport.push_event() doen't know how to tranform.
-	if manual_xform and event.get("position"):
+	if event.get("position"):
 		# TODO: we might be able to use InputEvent.xformed_by()
-		#   - use pos_to_local()
 		event.position = pos_to_local(event.position)
 	elif event is InputEventMouseButton:
 		event.position -= get_camera_2d().offset
-	push_unhandled_input(event, not manual_xform)
+	
+	if Tender.hero and Tender.hero.is_alive():
+		# This is a performance optimization since the Hero is the only node 
+		# that is dealing with events in the Main game.
+		Tender.hero._unhandled_input(event)
+	else:
+		# or it might be a Hero-free simulation...
+		push_input(event, false)
 
 func center_on_coord(coord):
 	## move the camera to be directly above `coord`
