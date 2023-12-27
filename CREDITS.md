@@ -11,6 +11,11 @@ Additionnal coding:
 - Chris J. Wallace
 - Rodrigo Espinosa de los Monteros
 
+Testers:
+- Obigre
+- Yellowsilver
+- Zucadragon
+
 DialogueManager plugin: MIT license by Nathan Hoad
 
 2D tiles: CC0, released by the Craw Stone Soup team

@@ -61,6 +61,12 @@ offset_bottom = -80.0
 grow_horizontal = 0
 grow_vertical = 0
 
+[node name="AboutButton" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"StartScreenBtn"
+text = "About"
+
 [node name="CreditsButton" type="Button" parent="HBoxContainer2"]
 layout_mode = 2
 focus_mode = 0
@@ -72,12 +78,6 @@ layout_mode = 2
 focus_mode = 0
 theme_type_variation = &"StartScreenBtn"
 text = "License"
-
-[node name="PrivacyButton" type="Button" parent="HBoxContainer2"]
-layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"StartScreenBtn"
-text = "Privacy"
 
 [node name="QuitButton" type="Button" parent="HBoxContainer2"]
 layout_mode = 2
@@ -130,9 +130,9 @@ dialog_autowrap = true
 
 [connection signal="button_up" from="VBoxContainer/NewGameButton" to="." method="start_new_game"]
 [connection signal="button_up" from="VBoxContainer/ResumeButton" to="." method="resume_game"]
+[connection signal="button_up" from="HBoxContainer2/AboutButton" to="." method="_on_about_button_pressed"]
 [connection signal="button_up" from="HBoxContainer2/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="button_up" from="HBoxContainer2/LicenseButton" to="." method="_on_license_button_pressed"]
-[connection signal="button_up" from="HBoxContainer2/PrivacyButton" to="." method="_on_privacy_button_pressed"]
 [connection signal="button_up" from="HBoxContainer2/QuitButton" to="." method="_on_quit_button_button_up"]
 [connection signal="canceled" from="BadSaveVersionDiag" to="." method="_on_bad_save_version_diag_canceled"]
 [connection signal="canceled" from="CantLoadDiag" to="." method="_on_cant_load_diag_canceled"]
