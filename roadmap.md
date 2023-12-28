@@ -312,8 +312,17 @@ Combat:
 Items:
 - [x] items stats and long description is available from the inventory screen
 
-## v0.12
+## v0.11.1
 - [x] regression: considerable slowdown on some devices (#15)
+
+UX:
+- [x] clickable links on the 3 start screen popup (#12)
+- [x] button to go back to main menu (#10)
+- [x] button to exit the game
+- [x] long press popup as soon as the timeout has elapsed (#4)
+
+
+## v0.12
 - [ ] bug: sewer otter attacks everyone?
 - [ ] bug: self defence does not expire when attacker dies
 - [ ] F-Droid has animated water
@@ -346,10 +355,6 @@ UX:
 - [ ] quick attack button is too small with half width emojis like the broom
 - [ ] make it easier to scroll the inventory without poping the items description
 - [ ] more margins around buttons to prevent mis-taps
-- [x] clickable links on the 3 start screen popup (#12)
-- [x] button to go back to main menu (#10)
-- [x] button to exit the game
-- [x] long press popup as soon as the timeout has elapsed (#4)
 
 Weapons:
 - [ ] axe (𝇤)

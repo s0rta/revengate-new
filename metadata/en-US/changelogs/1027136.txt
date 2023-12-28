@@ -1,0 +1,3 @@
+Fixed a regression where auto-save would make the game very choppy
+New button to go back to start screen
+Links on the info screens are clickable
