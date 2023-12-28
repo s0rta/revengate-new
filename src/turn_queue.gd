@@ -97,6 +97,9 @@ func resume():
 	state = States.PROCESSING
 	emit_signal("resumed")
 
+func is_running():
+	return state == States.PROCESSING
+
 func is_stopped():
 	return state == States.STOPPED
 
@@ -154,7 +157,7 @@ func run():
 
 			if verbose:
 				var elapsed = (Time.get_ticks_msec() - start_act) / 1000.0
-				print("%s acted for %s" % [actor, elapsed])
+				print("%s acted for %0.3f seconds" % [actor, elapsed])
 			if process_actions and actor.is_animating():
 				var delay = min(2.0 * MAX_ACTING_DELAY / visible_actors, MAX_ACTING_DELAY)
 				await get_tree().create_timer(delay).timeout

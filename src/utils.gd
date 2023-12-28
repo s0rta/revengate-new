@@ -335,3 +335,10 @@ static func tags_eq(tags1, tags2):
 	tags2 = tags2.duplicate()
 	tags2.sort()
 	return tags1 == tags2
+
+static func ddump_call(funct:Callable):
+	## Call `funct` and print how long the execution took in real time.
+	var start = Time.get_ticks_msec()
+	funct.call()
+	var elapsed = (Time.get_ticks_msec() - start) / 1000.0
+	print("Execution of %s took %0.3f seconds" % [funct, elapsed])

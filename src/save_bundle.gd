@@ -19,7 +19,8 @@
 class_name SaveBundle extends Resource
 
 const SAVE_DIR = "user://saved-games/"
-const SAVE_FILE = "main_scene.tres"
+const SAVE_FILE = "main_scene"
+const SAVE_EXT = ".tres"
 const VERBOSE := false
 
 @export var version := Consts.VERSION
@@ -35,11 +36,22 @@ const VERBOSE := false
 
 var path:String  # where the Bundle should be serialized
 var root:Node  # the root passed to save()
+var temp_path: String
+
+func _init(id=null):
+	if id:
+		temp_path = full_path(id)
 
 static func _ensure_dir(dir=SAVE_DIR):
 	var da = DirAccess.open("user://")
 	if not da.dir_exists(dir):
 		da.make_dir(dir)
+
+static func full_path(id=null):
+	if id:
+		return "%s%s-%s%s" % [SAVE_DIR, SAVE_FILE, id, SAVE_EXT]
+	else:
+		return SAVE_DIR + SAVE_FILE + SAVE_EXT
 
 static func save(root:Node, turn:int, kills:Dictionary, 
 				sentiments:SentimentTable, quest_tag:String, quest_is_active:bool,
@@ -50,7 +62,7 @@ static func save(root:Node, turn:int, kills:Dictionary,
 	## Any nodes of the saved sub-tree might have its `owner` changed as a side-effect 
 	## of calling this method.
 	## Return the new SaveBundle resource after saving it to disk.
-	var bundle = SaveBundle.new()
+	var bundle = SaveBundle.new(ResourceUID.create_id())
 	bundle.turn = turn
 	bundle.kills = kills
 	bundle.sentiments = sentiments
@@ -60,7 +72,7 @@ static func save(root:Node, turn:int, kills:Dictionary,
 	bundle.play_secs = play_secs
 
 	bundle._ensure_dir()
-	var path = SAVE_DIR + SAVE_FILE
+	var path = full_path()
 	bundle.path = path
 
 	if VERBOSE:
@@ -83,15 +95,18 @@ static func save(root:Node, turn:int, kills:Dictionary,
 		# scene tree looks like.
 		ResourceSaver.save(bundle.scene, path.replace(".tres", ".tscn"))
 
-	var ret_code = ResourceSaver.save(bundle, path)
-	assert(ret_code == OK)
+	SaveBundle.flush_bundle.call_deferred(bundle)
 	return bundle
+
+static func flush_bundle(bundle:SaveBundle):
+	## Static version of SaveBundle.flush()
+	bundle.flush()
 
 static func load(unpack:=false) -> SaveBundle:
 	## Load a saved game and return the root `Node` of the scene.
 	## This only turns the file into game objects. It's up to the caller to register 
 	## those objects with the game loop and with the UI.
-	var path = SAVE_DIR + SAVE_FILE
+	var path = full_path()
 
 	var bundle = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE)
 	if bundle == null:
@@ -110,7 +125,7 @@ static func remove():
 	## Silently do nothing if there is no saved game file.
 	if has_file():
 		var da = DirAccess.open("user://")
-		var path = SAVE_DIR + SAVE_FILE
+		var path = full_path()
 		da.remove(path)
 
 static func has_file():
@@ -119,11 +134,28 @@ static func has_file():
 	if not da.dir_exists(SAVE_DIR):
 		return false
 	else:
-		var path = SAVE_DIR + SAVE_FILE
+		var path = full_path()
 		return da.file_exists(path)
 
 func dlog_root(suffix=".log"):
 	Utils.dlog_node(root, path + suffix)
+
+func flush():
+	## Send the data of this bundle to disk
+	var save_path = path
+	if temp_path:
+		save_path = temp_path
+	var ret_code = ResourceSaver.save(self, save_path)
+	assert(ret_code == OK)
+	
+	if temp_path:
+		# Disk flushing can be done in defferedt calls. Since renaming is atomic, we know that
+		# we won't corrupt the file if two saves happen to be flushed at the same time. We can't 
+		# guarantee that the most recent flush is the one that is going to win, but we can live 
+		# with that level of uncertainty.
+		var da = DirAccess.open(SAVE_DIR)
+		ret_code = da.rename(temp_path, path)
+		assert(ret_code == OK)
 	
 func unpack() -> Node:
 	## Instantiate the root of the saved scene.
@@ -142,4 +174,3 @@ func restore_actors():
 	for board in root.find_children("", "RevBoard", true, false):
 		for actor in board.find_children("", "Actor", false, false):
 			actor.restore()
-			

@@ -265,6 +265,8 @@ func _on_turn_started(_turn):
 
 func _on_turn_finished(turn):
 	print("Turn %d is done." % turn)
+	if not Rand.rstest(Consts.SAVE_PROB):
+		return
 	if active and Tender.hero and Tender.hero.is_alive():
 		capture_game()
 
@@ -330,9 +332,12 @@ func start_ch3():
 
 func capture_game():
 	## Record the current state of the game and save it to a file.
-	$TurnQueue.pause()
-	if not $TurnQueue.is_paused():
-		await $TurnQueue.paused
+	var was_running = false
+	if $TurnQueue.is_running():
+		was_running = true
+		$TurnQueue.pause()
+		if not $TurnQueue.is_paused():
+			await $TurnQueue.paused
 	var bundle = SaveBundle.new()
 	var dungeons = dungeons_cont
 	
@@ -340,7 +345,8 @@ func capture_game():
 	bundle.save(dungeons, $TurnQueue.turn, Tender.kills, Tender.sentiments, 
 				Tender.quest.tag, Tender.quest.is_active,
 				Tender.seen_locs.keys(), Tender.play_secs)
-	await $TurnQueue.resume()  # might be better to send this to the background
+	if was_running:
+		await $TurnQueue.resume()
 	
 func restore_game(bundle=null):
 	## Load a saved game and register it with all UI components
@@ -403,6 +409,10 @@ func replace_with_saved_game():
 func abort_run():
 	## Abandon the current run, go back to Main Screen
 	## The save file, if present, is kept.
+	$TurnQueue.shutdown(true)
+	if not $TurnQueue.is_stopped():
+		await $TurnQueue.done
+	capture_game()
 	get_tree().change_scene_to_file("res://src/ui/start_screen.tscn")
 
 func test():

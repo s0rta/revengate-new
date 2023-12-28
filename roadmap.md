@@ -313,6 +313,7 @@ Items:
 - [x] items stats and long description is available from the inventory screen
 
 ## v0.12
+- [x] regression: considerable slowdown on some devices (#15)
 - [ ] bug: sewer otter attacks everyone?
 - [ ] bug: self defence does not expire when attacker dies
 - [ ] F-Droid has animated water
