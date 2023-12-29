@@ -8,6 +8,8 @@ damage = 11
 damage_family = 1
 char = "🔨"
 caption = "silver war hammer named Mjölnir"
+desc_simple = "A short and heavy hammer with some kind of Viking inscriptions on the head."
+desc_detailed = "A brick-sized solid block of sterling silver engraved with runes and celtic knots mounted to an oak handle that is wrapped in sharkskin and a leather lacing."
 spawn_cost = 1.0
 tags = Array[String](["silver"])
 

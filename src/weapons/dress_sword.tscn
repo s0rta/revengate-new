@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dbtuoxnl8bii3"]
 
-[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_j6nwd"]
+[ext_resource type="PackedScene" uid="uid://bydn4y4xyqw65" path="res://src/weapons/weapon.tscn" id="1_j6nwd"]
 [ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/weapons/sword-hit-01.wav" id="2_yqiqw"]
 
 [node name="DressSword" instance=ExtResource("1_j6nwd")]
@@ -8,6 +8,8 @@ damage = 5
 damage_family = 3
 char = "🗡"
 caption = "light dress sword"
+desc_simple = "A beautiful looking sword that is sure to give an air of distinction to its wearer."
+desc_detailed = "A very light and maneuverable short estoc blade shaped into a triangular cross section for most of its length. The small ornate guard does not offer much hand protection."
 skill = "fencing"
 spawn_cost = 5.0
 

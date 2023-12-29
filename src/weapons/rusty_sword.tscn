@@ -1,14 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://d0mhuir1pm4wo"]
 
-[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_xs8yb"]
+[ext_resource type="PackedScene" uid="uid://bydn4y4xyqw65" path="res://src/weapons/weapon.tscn" id="1_xs8yb"]
 [ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/weapons/sword-hit-01.wav" id="2_634fp"]
 
 [node name="RustySword" instance=ExtResource("1_xs8yb")]
 damage = 5
-range = 1
 damage_family = 2
 char = "🗡"
 caption = "rusty long sword"
+desc_simple = "An old sword."
+desc_detailed = "A long sword from the late crusades era with considerable edge damage from surface corrosion. There are latin inscriptions along the large cross guard."
 skill = "fencing"
 
 [node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]

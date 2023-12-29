@@ -1,14 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://diwm5gi6utoab"]
 
-[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_mi0cl"]
+[ext_resource type="PackedScene" uid="uid://bydn4y4xyqw65" path="res://src/weapons/weapon.tscn" id="1_mi0cl"]
 [ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/weapons/sword-hit-01.wav" id="2_m3aw4"]
 
 [node name="Rapier" instance=ExtResource("1_mi0cl")]
 damage = 7
-range = 1
 damage_family = 3
 char = "🗡"
 caption = "rapier"
+desc_simple = "A long narrow dueling sword."
+desc_detailed = "A flexible steel blade that finishes into a square cross-section near the handle. The hand is protected by an intricate swept hilt."
 skill = "fencing"
 spawn_cost = 6.0
 

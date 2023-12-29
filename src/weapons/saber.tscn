@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://6ml8upew405"]
 
-[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_4hmww"]
+[ext_resource type="PackedScene" uid="uid://bydn4y4xyqw65" path="res://src/weapons/weapon.tscn" id="1_4hmww"]
 [ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/weapons/sword-hit-01.wav" id="2_xllo5"]
 
 [node name="Saber" instance=ExtResource("1_4hmww")]
@@ -8,6 +8,8 @@ damage = 7
 damage_family = 2
 char = "🗡"
 caption = "saber"
+desc_simple = "A cavalry sword."
+desc_detailed = "A curved steel blade with a brass cup guard."
 skill = "fencing"
 spawn_cost = 6.0
 

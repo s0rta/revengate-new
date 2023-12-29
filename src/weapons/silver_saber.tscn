@@ -1,14 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://d01nbq4dt1cs5"]
 
-[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_f546q"]
+[ext_resource type="PackedScene" uid="uid://bydn4y4xyqw65" path="res://src/weapons/weapon.tscn" id="1_f546q"]
 [ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/weapons/sword-hit-01.wav" id="2_tcwd4"]
 
 [node name="SilverSaber" instance=ExtResource("1_f546q")]
 damage = 9
-range = 1
 damage_family = 2
 char = "🗡"
 caption = "ornate saber"
+desc_simple = "A cavalry sword with engraved decoration on the blade and on the guard."
+desc_detailed = "A sterling silver edge welded to an annealed steel spine and engraved with a filigree pattern. The stones on the handle would have very little resell value on their own."
 skill = "fencing"
 spawn_cost = 6.0
 tags = Array[String](["silver"])

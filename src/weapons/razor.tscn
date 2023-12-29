@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cfb7pinvs8cj1"]
 
-[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_xhhy5"]
+[ext_resource type="PackedScene" uid="uid://bydn4y4xyqw65" path="res://src/weapons/weapon.tscn" id="1_xhhy5"]
 [ext_resource type="AudioStream" uid="uid://b26nbvo171rbs" path="res://src/weapons/razor.mp3" id="2_u84ut"]
 
 [node name="Razor" instance=ExtResource("1_xhhy5")]
@@ -8,6 +8,8 @@ damage = 3
 damage_family = 2
 char = "⁊"
 caption = "straight razor"
+desc_simple = "A regular folding razor with a mirror polish on the blade."
+desc_detailed = "A hollow ground silver blade mounted to a pearwood handle."
 spawn_cost = 2.0
 tags = Array[String](["silver"])
 

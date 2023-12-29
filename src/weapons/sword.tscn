@@ -1,14 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://h7s2p8mgm387"]
 
-[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_xs8yb"]
+[ext_resource type="PackedScene" uid="uid://bydn4y4xyqw65" path="res://src/weapons/weapon.tscn" id="1_xs8yb"]
 [ext_resource type="AudioStream" uid="uid://4633rohdhhnd" path="res://src/weapons/sword-hit-01.wav" id="2_634fp"]
 
 [node name="Sword" instance=ExtResource("1_xs8yb")]
 damage = 6
-range = 1
 damage_family = 2
 char = "🗡"
 caption = "sword"
+desc_simple = "The kind of sword that knights probably wore."
+desc_detailed = "A stiff double edged long sword with a large cross guard."
 skill = "fencing"
 
 [node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]

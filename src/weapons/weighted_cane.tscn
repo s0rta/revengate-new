@@ -1,14 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://drnpu2dw1i4nn"]
 
-[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_x26gg"]
+[ext_resource type="PackedScene" uid="uid://bydn4y4xyqw65" path="res://src/weapons/weapon.tscn" id="1_x26gg"]
 [ext_resource type="AudioStream" uid="uid://d1ve3m18ud783" path="res://src/weapons/stick-hit-01.mp3" id="2_ro5vh"]
 
 [node name="WeightedCane" instance=ExtResource("1_x26gg")]
 damage = 6
-range = 1
 damage_family = 1
 char = "ᒋ"
 caption = "weighted cane"
+desc_simple = "A heavy wooden walking stick."
+desc_detailed = "An ash wood stick reinforced with a sturdy brass ferule on one side and decorated with a heavy oversized bronze pommel."
 spawn_cost = 3.0
 
 [node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]

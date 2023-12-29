@@ -1,14 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://d8ovanvojd5g"]
 
-[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_44kv4"]
+[ext_resource type="PackedScene" uid="uid://bydn4y4xyqw65" path="res://src/weapons/weapon.tscn" id="1_44kv4"]
 [ext_resource type="AudioStream" uid="uid://khahrhqgm3fu" path="res://src/weapons/sword-hit-02.wav" id="2_mgq1s"]
 
 [node name="Knife" instance=ExtResource("1_44kv4")]
 damage = 4
-range = 1
 damage_family = 2
 char = "🔪"
 caption = "knife"
+desc_simple = "A regular knife."
+desc_detailed = "A utility knife with a wooden handle and no guard."
 skill = "fencing"
 spawn_cost = 1.0
 

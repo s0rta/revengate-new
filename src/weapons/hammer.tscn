@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dnbg7u15s0nry"]
 
-[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_va6oo"]
+[ext_resource type="PackedScene" uid="uid://bydn4y4xyqw65" path="res://src/weapons/weapon.tscn" id="1_va6oo"]
 [ext_resource type="AudioStream" uid="uid://evhtpi4fygok" path="res://src/weapons/hammer-01.mp3" id="2_gttei"]
 
 [node name="Hammer" instance=ExtResource("1_va6oo")]
@@ -8,6 +8,8 @@ damage = 5
 damage_family = 1
 char = "🔨"
 caption = "hammer"
+desc_simple = "A carpenter's hammer."
+desc_detailed = "A cross peen hammer head mounted on an ash wood handle. The handle is finished smooth and sealed with linseed oil."
 spawn_cost = 1.0
 
 [node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
