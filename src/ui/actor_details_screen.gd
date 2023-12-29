@@ -49,6 +49,7 @@ func clear():
 	%StrengthLabel.text = "Strength:?"
 	%HealthLabel.text = "Health:?"
 	%AgilityLabel.text = "Agility:?"
+	%PerceptionLabel.text = "Perception:?"
 	%DescLabel.text = "???"
 	
 func _make_img_text(img_path):
@@ -66,9 +67,17 @@ func fill_with(actor:Actor):
 	else:
 		%DrawingLabel.text = EMPTY_IMG_TEXT % actor.char
 	%NameLabel.text = "Name: %s" % actor.get_caption()
-	%HealthLabel.text = "Health (typical): %s" % actor.health_full
-	%StrengthLabel.text = "Strength: %s" % actor.strength
-	%AgilityLabel.text = "Agility: %s" % actor.agility
+	var perception = Tender.hero.get_stat("perception")
+	if perception >= Consts.PERFECT_PERCEPTION:
+		%HealthLabel.text = "Health: %s" % actor.health
+	else:
+		%HealthLabel.text = "Health (typical): %s" % actor.health_full
+	var strength = actor.get_stat("strength")
+	%StrengthLabel.text = "Strength: %s" % Utils.vague_value(strength, strength/100.0, perception)
+	var agility = actor.get_stat("agility")
+	%AgilityLabel.text = "Agility: %s" % Utils.vague_value(agility, agility/65.0, perception)
+	var percep = actor.get_stat("perception")
+	%PerceptionLabel.text = "Perception: %s" % Utils.vague_value(percep, percep/100.0, perception)
 	if actor.description:
 		%DescLabel.text = actor.description
 	else:

@@ -342,3 +342,45 @@ static func ddump_call(funct:Callable):
 	funct.call()
 	var elapsed = (Time.get_ticks_msec() - start) / 1000.0
 	print("Execution of %s took %0.3f seconds" % [funct, elapsed])
+
+static func vague_value(value, place_in_range, perception) -> String:
+	## Return a string that describes `value` according to a given `perception` level.
+	## `place_in_range`: 0..1 ranking of `value` in its possible range. Can't be out of 0..1
+	##    for exceptional values.
+	var descpitors:Array
+	var value_str:String
+	if is_instance_of(value, TYPE_FLOAT):
+		value_str = "%0.3f" % value
+	else:
+		value_str = "%s" % value
+		
+	if perception >= Consts.PERFECT_PERCEPTION:
+		# you see the value rather than a descriptor when you are that perceptive
+		return value_str
+	elif perception >= Consts.GREAT_PERCEPTION:
+		descpitors = ["excellent", "good", "average", "mediocre", "feeble"]
+	elif perception > Consts.INEPT_PERCEPTION:
+		descpitors = ["solid", "good", "weak", "very weak"]
+	elif Tender.vague_vals_cache.has(value_str): 
+		return Tender.vague_vals_cache[value_str]
+	else:
+		# you are too unperceptive to know if a value is good or not, so you get a random
+		# descriptor
+		var very_vague_adjs = ["considerable", "substantial", "real", "so so", 
+								"wow!", "medium", "legit", "meh"]
+		var adj = Rand.choice(very_vague_adjs)
+		Tender.vague_vals_cache[value_str] = adj
+		return adj
+
+	var bounds = []
+	for i in len(descpitors):
+		bounds.append(i*1.0/len(descpitors))
+	bounds.reverse()
+		
+	for i in len(descpitors):
+		if place_in_range >= bounds[i]:
+			return descpitors[i]
+	
+	# smaller than the normal range
+	return descpitors[-1]
+	

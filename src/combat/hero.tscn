@@ -1,11 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://bxjfh12dtkof6"]
+[gd_scene load_steps=9 format=3 uid="uid://bxjfh12dtkof6"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_bgbko"]
 [ext_resource type="Script" path="res://src/combat/hero.gd" id="2_jrjv3"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="3_b0isk"]
 [ext_resource type="AudioStream" uid="uid://bajy1gsb550i5" path="res://src/combat/hero_miss.wav" id="4_y2iie"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="5_n8dxk"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="6_6imm7"]
 [ext_resource type="AudioStream" uid="uid://evhtpi4fygok" path="res://src/weapons/hammer-01.mp3" id="6_vvk6j"]
+
+[sub_resource type="Resource" id="Resource_gejyx"]
+script = ExtResource("3_b0isk")
+_facts = []
 
 [node name="Hero" instance=ExtResource("1_bgbko")]
 position = Vector2(-1, 0)
@@ -15,7 +20,7 @@ caption = "hero"
 color = Color(1, 1, 1, 1)
 healing_prob = 0.1
 faction = 1
-mem = null
+mem = SubResource("Resource_gejyx")
 
 [node name="Label" parent="." index="0"]
 offset_left = 0.0

@@ -74,6 +74,10 @@ var CHALLENGES := [] + SKILLS
 const ITEM_BASE_STATS := ["consumable", "switchable"]
 var WEAPON_BASE_STATS := ["damage", "range", "damage_family"] + ITEM_BASE_STATS
 
+const PERFECT_PERCEPTION = 75
+const GREAT_PERCEPTION = 60
+const INEPT_PERCEPTION = 20
+
 const COORD_INVALID = Vector2i(-1, -1)
 
 # Increments for world locations

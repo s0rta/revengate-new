@@ -116,14 +116,13 @@ func get_short_desc():
 	else:
 		return "%s %s" % [$Label.text, desc]
 
+
 func get_long_desc(perception):
-	const perfect_perception = 75
-	const inept_perception = 20
 	const empty_desc = "???"
-	var is_perfect_perception = perception >= perfect_perception
+	var is_perfect_perception = perception >= Consts.PERFECT_PERCEPTION
 	var complete_desc
 	
-	if perception <= inept_perception:
+	if perception <= Consts.INEPT_PERCEPTION:
 		return empty_desc
 	elif is_perfect_perception and not desc_detailed.is_empty():
 		complete_desc = desc_detailed
@@ -132,12 +131,11 @@ func get_long_desc(perception):
 	else:
 		complete_desc = empty_desc
 	
-	if is_perfect_perception:
-		var stats = get_base_stats()
-		if stats.has('damage'):
-			complete_desc += "\nDamage: %d" % [stats.damage]
-		if stats.get('range', 0) > 1:
-			complete_desc += "\nRange: %d" % [stats.range] 
+	var stats = get_base_stats()
+	if stats.has('damage'):
+		complete_desc += "\nDamage: %s" % [Utils.vague_value(stats.damage, stats.damage/11.0, perception)]
+	if stats.get('range', 0) > 1:
+		complete_desc += "\nRange: %s" % [Utils.vague_value(stats.range, stats.range/6, perception)] 
 	return complete_desc
 
 func get_base_stats():

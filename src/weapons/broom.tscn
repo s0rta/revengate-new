@@ -13,7 +13,7 @@ is_equipped = false
 char = "𐇙"
 caption = "broom"
 desc_simple = "A sturdy stick ending with a handful of straw."
-desc_detailed = "A sturdy linden wood stick ending with a 87 strands of barley straw. "
+desc_detailed = "A sturdy linden wood stick ending with 87 strands of barley straw. "
 
 [node name="Label" parent="." index="0"]
 offset_left = -14.0

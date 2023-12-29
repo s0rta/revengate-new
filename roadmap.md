@@ -325,6 +325,8 @@ UX:
 ## v0.12
 - [ ] bug: sewer otter attacks everyone?
 - [ ] bug: self defence does not expire when attacker dies
+- [x] vague value adjectives
+- [ ] vague value adjectives on gaussian distributions
 - [ ] F-Droid has animated water
 - [ ] improved saved games
   - [ ] center on Hero when restoring a game
@@ -385,6 +387,8 @@ Combat:
 - [ ] F-Droid [Reproducible Builds](https://f-droid.org/docs/Reproducible_Builds/)
 - [ ] potion of absinthe
 - [ ] Salapou can steal your items
+- [ ] redo tabulator as a Godot Ressource
+- [ ] flatten the board-area node sub-tree
 
 Performance:
 - [ ] cache stats modifiers for the whole turn (with inval on mods changing events)

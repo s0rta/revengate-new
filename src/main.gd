@@ -418,6 +418,11 @@ func abort_run():
 func test():
 	print("Testing: 1, 2... 1, 2!")
 
+	for perception in [100, 70, 50, 40, 10]:
+		for val in [10, 20, 50, 80, 100]:
+			var adj = Utils.vague_value(val, val/100.0, perception)
+			print("At perception=%s, %s is %s" % [perception, val, adj])
+
 func test2():
 	print("Testing: 2, 1... 2, 1!")
 

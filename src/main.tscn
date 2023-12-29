@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=48 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -10,6 +10,8 @@
 [ext_resource type="Script" path="res://src/hud.gd" id="7_4dw6n"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="7_eg4si"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="7_nbfvd"]
+[ext_resource type="PackedScene" uid="uid://lpworv1rq2g3" path="res://src/items/potion_of_booze.tscn" id="9_2ikhb"]
+[ext_resource type="PackedScene" uid="uid://chpblbtevaa13" path="res://src/items/carrot.tscn" id="10_5tdau"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
 [ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
@@ -122,6 +124,28 @@ position = Vector2(112, 48)
 mem = SubResource("Resource_7gsj3")
 
 [node name="DynaMain" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("7_eg4si")]
+
+[node name="PotionOfBooze" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_2ikhb")]
+
+[node name="PotionOfBooze2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_2ikhb")]
+
+[node name="PotionOfBooze3" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_2ikhb")]
+
+[node name="PotionOfBooze4" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_2ikhb")]
+
+[node name="PotionOfBooze5" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_2ikhb")]
+
+[node name="Carrot" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("10_5tdau")]
+
+[node name="Carrot2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("10_5tdau")]
+
+[node name="Carrot3" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("10_5tdau")]
+
+[node name="Carrot4" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("10_5tdau")]
+
+[node name="Carrot5" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("10_5tdau")]
+
+[node name="Carrot6" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("10_5tdau")]
 
 [node name="Nadege" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_wcjwx")]
 visible = true

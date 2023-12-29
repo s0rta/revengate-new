@@ -1,11 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://cmc47ywu2frcl"]
 
-[ext_resource type="PackedScene" path="res://src/weapons/weapon.tscn" id="1_ca0eb"]
+[ext_resource type="PackedScene" uid="uid://bydn4y4xyqw65" path="res://src/weapons/weapon.tscn" id="1_ca0eb"]
 [ext_resource type="AudioStream" uid="uid://evhtpi4fygok" path="res://src/weapons/hammer-01.mp3" id="2_6pfhg"]
 
 [node name="Mjolnir" instance=ExtResource("1_ca0eb")]
 damage = 11
-range = 1
 damage_family = 1
 char = "🔨"
 caption = "silver war hammer named Mjölnir"

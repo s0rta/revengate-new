@@ -42,6 +42,9 @@ var play_secs := 0.0
 var story_title = null
 var story_path = null
 
+# we try to be consistent with how values are perceived when you are unperceptive
+var vague_vals_cache := {}
+
 func reset(hero_=null, hud_=null, viewport_=null, sentiments_=null):
 	hero = hero_
 	hud = hud_
