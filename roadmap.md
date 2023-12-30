@@ -312,7 +312,7 @@ Combat:
 Items:
 - [x] items stats and long description is available from the inventory screen
 
-## v0.11.1
+## v0.11.2
 - [x] regression: considerable slowdown on some devices (#15)
 
 UX:
@@ -321,11 +321,17 @@ UX:
 - [x] button to exit the game
 - [x] long press popup as soon as the timeout has elapsed (#4)
 
+## v0.11.3
+Items:
+- [x] fuzzy stats on low perception (#7)
+- [x] long descriptions for all weapons (#7)
+- [x] make it easier to scroll the inventory without poping the items description
+- [x] potion of absinthe
+- [x] potion of analysis paralysis
 
 ## v0.12
 - [ ] bug: sewer otter attacks everyone?
 - [ ] bug: self defence does not expire when attacker dies
-- [x] vague value adjectives
 - [ ] vague value adjectives on gaussian distributions
 - [ ] F-Droid has animated water
 - [ ] improved saved games
@@ -350,12 +356,10 @@ Strategies:
 - [ ] Tracking keeps moving towards the last place where they saw their prey after it becomes unperceived
 
 Items:
-- [ ] fuzzy stats on low perception (#7)
-- [ ] long descriptions for most items (#7)
+- [ ] long descriptions for all items (#7)
 
 UX:
 - [ ] quick attack button is too small with half width emojis like the broom
-- [ ] make it easier to scroll the inventory without poping the items description
 - [ ] more margins around buttons to prevent mis-taps
 
 Weapons:

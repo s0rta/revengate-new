@@ -1,0 +1,7 @@
+Added the perception stat to the monster detail screen
+New items:
+  - potion of absinthe
+  - potion of analysis paralysis
+Weapon damage always listed on the item stats screen
+All stat numbers are replace with vague adjectives when perception is low
+Larger scrollbar in the inventory screen

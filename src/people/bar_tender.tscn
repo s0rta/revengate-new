@@ -1,10 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://n2rvggkhsnhx"]
+[gd_scene load_steps=9 format=3 uid="uid://n2rvggkhsnhx"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_n644y"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="2_fn0uo"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="2_i7xe2"]
 [ext_resource type="PackedScene" uid="uid://d8ovanvojd5g" path="res://src/weapons/knife.tscn" id="3_dvmxw"]
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="4_sk6hr"]
 [ext_resource type="PackedScene" uid="uid://lpworv1rq2g3" path="res://src/items/potion_of_booze.tscn" id="5_7i1k5"]
+[ext_resource type="PackedScene" uid="uid://dactu5q2nmdun" path="res://src/items/potion_of_absinthe.tscn" id="7_ptins"]
+
+[sub_resource type="Resource" id="Resource_4e2af"]
+resource_local_to_scene = true
+script = ExtResource("2_i7xe2")
+_facts = []
 
 [node name="BarTender" instance=ExtResource("1_n644y")]
 char = "@"
@@ -13,6 +20,11 @@ color = Color(0.372549, 0.67451, 0.498039, 1)
 conversation_file = "res://src/story/bar_tender.dialogue"
 conversation_sect = "intro"
 faction = 1
+mem = SubResource("Resource_4e2af")
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.372549, 0.67451, 0.498039, 1)
+text = "@"
 
 [node name="SelfDefense" type="Node" parent="." index="6"]
 script = ExtResource("2_fn0uo")
@@ -28,5 +40,11 @@ tags = Array[String](["gift", "groupable"])
 [node name="PotionOfBooze" parent="." index="9" instance=ExtResource("5_7i1k5")]
 tags = Array[String](["gift", "groupable", "booze"])
 
-[node name="PotionOfBooze2" parent="." index="10" instance=ExtResource("5_7i1k5")]
+[node name="PotionOfBooze3" parent="." index="10" instance=ExtResource("5_7i1k5")]
 tags = Array[String](["gift", "groupable", "booze"])
+
+[node name="PotionOfBooze2" parent="." index="11" instance=ExtResource("5_7i1k5")]
+tags = Array[String](["gift", "groupable", "booze"])
+
+[node name="PotionOfAbsinthe" parent="." index="12" instance=ExtResource("7_ptins")]
+tags = Array[String](["booze", "groupable", "gift"])
