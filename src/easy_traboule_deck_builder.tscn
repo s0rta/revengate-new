@@ -1,7 +1,8 @@
-[gd_scene load_steps=24 format=3 uid="uid://bvm0q1k13gmym"]
+[gd_scene load_steps=35 format=3 uid="uid://bvm0q1k13gmym"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_oonn7"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_v4koq"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="3_5yn6t"]
 [ext_resource type="PackedScene" uid="uid://d4f1ul2rt43ys" path="res://src/monsters/labras.tscn" id="3_8yfcp"]
 [ext_resource type="PackedScene" uid="uid://b26vqfk7j6un7" path="res://src/monsters/desert_centipede.tscn" id="4_de7ji"]
 [ext_resource type="PackedScene" uid="uid://cx7utj7hd3ne" path="res://src/monsters/kobold.tscn" id="5_u3117"]
@@ -18,22 +19,72 @@
 [ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="18_w8s5s"]
 [ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="19_u2vc1"]
 [ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="20_r43mm"]
+[ext_resource type="PackedScene" uid="uid://clry405irfeom" path="res://src/items/potion_of_analysis_paralysis.tscn" id="21_cb5rb"]
 [ext_resource type="PackedScene" uid="uid://6ml8upew405" path="res://src/weapons/saber.tscn" id="21_hyraw"]
-[ext_resource type="PackedScene" path="res://src/weapons/sword.tscn" id="22_bc5m8"]
+[ext_resource type="PackedScene" uid="uid://h7s2p8mgm387" path="res://src/weapons/sword.tscn" id="22_bc5m8"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="23_hrfvj"]
 [ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="24_8ja44"]
 [ext_resource type="PackedScene" uid="uid://cmshyslfrv0du" path="res://src/vibes/hissing.tscn" id="27_0wnww"]
+
+[sub_resource type="Resource" id="Resource_1i8vp"]
+resource_local_to_scene = true
+script = ExtResource("3_5yn6t")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_kx0r2"]
+resource_local_to_scene = true
+script = ExtResource("3_5yn6t")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_wvtyv"]
+resource_local_to_scene = true
+script = ExtResource("3_5yn6t")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_uiq3w"]
+resource_local_to_scene = true
+script = ExtResource("3_5yn6t")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_hjjsg"]
+resource_local_to_scene = true
+script = ExtResource("3_5yn6t")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_nnskf"]
+resource_local_to_scene = true
+script = ExtResource("3_5yn6t")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_h2eyj"]
+resource_local_to_scene = true
+script = ExtResource("3_5yn6t")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_7th18"]
+resource_local_to_scene = true
+script = ExtResource("3_5yn6t")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_dmc0g"]
+resource_local_to_scene = true
+script = ExtResource("3_5yn6t")
+_facts = []
 
 [node name="EasyTrabouleDeckBuilder" type="Node"]
 script = ExtResource("1_oonn7")
 
 [node name="SewerOtter" parent="." instance=ExtResource("2_v4koq")]
+mem = SubResource("Resource_1i8vp")
 
 [node name="Labras" parent="." instance=ExtResource("3_8yfcp")]
+mem = SubResource("Resource_kx0r2")
 
 [node name="DesertCentipede" parent="." instance=ExtResource("4_de7ji")]
+mem = SubResource("Resource_wvtyv")
 
 [node name="SulantTiger" parent="." instance=ExtResource("6_urs5r")]
+mem = SubResource("Resource_uiq3w")
 
 [node name="Max1PerFloor5PerDungeon" type="Node" parent="."]
 script = ExtResource("7_18mi5")
@@ -47,8 +98,10 @@ script = ExtResource("7_18mi5")
 max_board_occ = 3
 
 [node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_mpj13")]
+mem = SubResource("Resource_hjjsg")
 
 [node name="Sahwakoon" parent="Max3PerFloor" instance=ExtResource("9_ucbey")]
+mem = SubResource("Resource_nnskf")
 
 [node name="Max3PerDungeonAndLate" type="Node" parent="."]
 script = ExtResource("7_18mi5")
@@ -56,12 +109,14 @@ min_depth = 6
 max_dungeon_occ = 3
 
 [node name="Ghost" parent="Max3PerDungeonAndLate" instance=ExtResource("10_smtmw")]
+mem = SubResource("Resource_h2eyj")
 
 [node name="Max10PerDungeon" type="Node" parent="."]
 script = ExtResource("7_18mi5")
 max_dungeon_occ = 10
 
 [node name="Kobold" parent="Max10PerDungeon" instance=ExtResource("5_u3117")]
+mem = SubResource("Resource_7th18")
 
 [node name="Unique" type="Node" parent="."]
 script = ExtResource("7_18mi5")
@@ -83,21 +138,19 @@ max_board_occ = 1
 max_dungeon_occ = 2
 
 [node name="Hammer" parent="Rare" instance=ExtResource("18_w8s5s")]
-range = 1
 
 [node name="Rapier" parent="Rare" instance=ExtResource("19_u2vc1")]
 
 [node name="Razor" parent="Rare" instance=ExtResource("20_r43mm")]
-range = 1
 
 [node name="Saber" parent="Rare" instance=ExtResource("21_hyraw")]
-range = 1
 
 [node name="Sword" parent="Rare" instance=ExtResource("22_bc5m8")]
-range = 1
 spawn_cost = 5.0
 
 [node name="Dynamite" parent="Rare" instance=ExtResource("23_hrfvj")]
+
+[node name="PotionOfAnalysisParalysis" parent="Rare" instance=ExtResource("21_cb5rb")]
 
 [node name="RareAndDeep" type="Node" parent="."]
 script = ExtResource("7_18mi5")
@@ -105,6 +158,7 @@ min_depth = 7
 max_dungeon_occ = 2
 
 [node name="Pacherr" parent="RareAndDeep" instance=ExtResource("24_8ja44")]
+mem = SubResource("Resource_dmc0g")
 
 [node name="Healing" type="Node" parent="."]
 script = ExtResource("7_18mi5")
@@ -118,13 +172,13 @@ max_dungeon_occ = 3
 
 [node name="Hissing" parent="." instance=ExtResource("27_0wnww")]
 
-[connection signal="visibility_changed" from="Unique/CapsuleOfRegen" to="Unique/CapsuleOfRegen" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Unique/AmuletOfStrength" to="Unique/AmuletOfStrength" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Rare/Hammer" to="Rare/Hammer" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Rare/Rapier" to="Rare/Rapier" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Rare/Razor" to="Rare/Razor" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Rare/Saber" to="Rare/Saber" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Rare/Sword" to="Rare/Sword" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Rare/Dynamite" to="Rare/Dynamite" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Healing/PotionOfHealing" to="Healing/PotionOfHealing" method="_on_visibility_changed" flags=18]
-[connection signal="visibility_changed" from="Healing/PotionOfRegen" to="Healing/PotionOfRegen" method="_on_visibility_changed" flags=18]
+[connection signal="visibility_changed" from="Unique/CapsuleOfRegen" to="Unique/CapsuleOfRegen" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Unique/AmuletOfStrength" to="Unique/AmuletOfStrength" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Rare/Hammer" to="Rare/Hammer" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Rare/Rapier" to="Rare/Rapier" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Rare/Razor" to="Rare/Razor" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Rare/Saber" to="Rare/Saber" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Rare/Sword" to="Rare/Sword" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Rare/Dynamite" to="Rare/Dynamite" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Healing/PotionOfHealing" to="Healing/PotionOfHealing" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Healing/PotionOfRegen" to="Healing/PotionOfRegen" method="_on_visibility_changed"]
