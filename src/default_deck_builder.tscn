@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://c185mr0bu3u3w"]
+[gd_scene load_steps=52 format=3 uid="uid://c185mr0bu3u3w"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_yitoo"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_i1rpj"]
@@ -29,6 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://cmshyslfrv0du" path="res://src/vibes/hissing.tscn" id="25_0ydwd"]
 [ext_resource type="PackedScene" uid="uid://cbpo1nvheopyj" path="res://src/monsters/retznac.tscn" id="25_cxgj3"]
 [ext_resource type="PackedScene" uid="uid://c8frbdj65suee" path="res://src/weapons/cane.tscn" id="27_5htvc"]
+[ext_resource type="PackedScene" uid="uid://dactu5q2nmdun" path="res://src/items/potion_of_absinthe.tscn" id="27_p82t1"]
 [ext_resource type="PackedScene" uid="uid://drnpu2dw1i4nn" path="res://src/weapons/weighted_cane.tscn" id="28_0tyeq"]
 [ext_resource type="PackedScene" uid="uid://dqkhlt4d3sbqn" path="res://src/monsters/sentry_scarab.tscn" id="31_aksig"]
 
@@ -226,6 +227,8 @@ spawn_cost = 5.0
 [node name="Dynamite" parent="Rare" instance=ExtResource("20_8peit")]
 
 [node name="Carrot" parent="Rare" instance=ExtResource("24_2jxsh")]
+
+[node name="PotionOfAbsinthe" parent="Rare" instance=ExtResource("27_p82t1")]
 
 [node name="RareAndDeep" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
