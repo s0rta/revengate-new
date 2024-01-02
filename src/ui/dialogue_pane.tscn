@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cd6ngrhhgito0"]
+[gd_scene load_steps=5 format=3 uid="uid://cd6ngrhhgito0"]
 
 [ext_resource type="Script" path="res://src/ui/dialogue_pane.gd" id="1_7isbc"]
-[ext_resource type="FontVariation" uid="uid://crtqckgwsuhhq" path="res://assets/fonts/system_with_emojis.tres" id="2_ana7x"]
+[ext_resource type="FontVariation" uid="uid://bym5ra6v6cqu0" path="res://assets/fonts/free_sans_with_fallbacks.tres" id="2_i0dj1"]
 [ext_resource type="Script" path="res://addons/dialogue_manager/dialogue_label.gd" id="2_m6frq"]
+[ext_resource type="FontVariation" uid="uid://mqpu6cr474oo" path="res://assets/fonts/free_sans_bold_with_fallbacks.tres" id="3_8dybn"]
 
 [node name="DialoguePane" type="Control"]
 layout_mode = 3
@@ -52,7 +53,7 @@ mouse_filter = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 2
-theme_override_fonts/font = ExtResource("2_ana7x")
+theme_override_fonts/font = ExtResource("2_i0dj1")
 text = "Nadège Cyrat"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SpeechBackgroud/Margin/VBox"]
@@ -73,7 +74,7 @@ layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 theme_override_colors/default_color = Color(1, 1, 1, 1)
-theme_override_fonts/normal_font = ExtResource("2_ana7x")
+theme_override_fonts/normal_font = ExtResource("3_8dybn")
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "This is a test."

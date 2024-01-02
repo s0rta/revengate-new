@@ -1,0 +1,9 @@
+[gd_resource type="FontVariation" load_steps=3 format=3 uid="uid://mqpu6cr474oo"]
+
+[ext_resource type="FontFile" uid="uid://cqwfphid66hy0" path="res://assets/fonts/FreeSansBold.ttf" id="1_s21ys"]
+[ext_resource type="FontFile" uid="uid://dxmp7favkxwsh" path="res://assets/fonts/Symbola_hint.ttf" id="2_1hn3x"]
+
+[resource]
+fallbacks = Array[Font]([ExtResource("2_1hn3x")])
+base_font = ExtResource("1_s21ys")
+variation_embolden = -0.25

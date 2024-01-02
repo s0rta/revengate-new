@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" load_steps=3 format=3 uid="uid://bym5ra6v6cqu0"]
+
+[ext_resource type="FontFile" uid="uid://cb1jm6jmxpb7f" path="res://assets/fonts/FreeSans.ttf" id="1_2lkt3"]
+[ext_resource type="FontFile" uid="uid://dxmp7favkxwsh" path="res://assets/fonts/Symbola_hint.ttf" id="2_2tsrm"]
+
+[resource]
+fallbacks = Array[Font]([ExtResource("2_2tsrm")])
+base_font = ExtResource("1_2lkt3")

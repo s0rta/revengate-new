@@ -32,9 +32,8 @@ Bestiary and NPC images:
 Splash Screen:
 - CC-BY-SA, Zanya Fernández Rodríguez
 
-kalimati.ttf:
-- Copyright Sanir Karmacharya, released under GNU General Public License v2 or later
-- this font is part of fonts-deva-extra
+Free Sans font:
+- Copyright 2002-2012, GNU Freefont contributors, released under GNU General Public License v3 or later
 
 Symbola_hint.ttf:
 - Copyright (C) 2007-2015 George Douros

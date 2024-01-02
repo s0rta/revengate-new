@@ -340,7 +340,7 @@ Items:
 - [ ] web export
   - [ ] better keyboard support (ex.: ESC cancels actions)
   - [ ] bug: story screen does not capture keyboard input
-  - [ ] save to local storage?
+  - [x] save to local storage?
 - [ ] random interlude stories
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] instructions on how to install all the Android dev dependencies

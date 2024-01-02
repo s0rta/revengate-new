@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dxmp7favkxwsh"
-path="res://.godot/imported/Symbola_hint.ttf-214c56e51a9739fa7f3f834689aeef3b.fontdata"
+uid="uid://cqwfphid66hy0"
+path="res://.godot/imported/FreeSansBold.ttf-621a633c69e384391d5ba296dfcab705.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Symbola_hint.ttf"
-dest_files=["res://.godot/imported/Symbola_hint.ttf-214c56e51a9739fa7f3f834689aeef3b.fontdata"]
+source_file="res://assets/fonts/FreeSansBold.ttf"
+dest_files=["res://.godot/imported/FreeSansBold.ttf-621a633c69e384391d5ba296dfcab705.fontdata"]
 
 [params]
 
@@ -27,13 +27,7 @@ Fallbacks=null
 fallbacks=[]
 Compress=null
 compress=true
-preload=[{
-"chars": [],
-"glyphs": [],
-"name": "New Configuration",
-"size": Vector2i(16, 0),
-"variation_embolden": 0.0
-}]
+preload=[]
 language_support={}
 script_support={}
 opentype_features={}

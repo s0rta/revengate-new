@@ -1,13 +1,8 @@
-[gd_resource type="Theme" load_steps=12 format=3 uid="uid://3araln1iald0"]
+[gd_resource type="Theme" load_steps=10 format=3 uid="uid://3araln1iald0"]
 
-[ext_resource type="FontFile" uid="uid://7hp4d53156pw" path="res://assets/fonts/kalimati.ttf" id="1_1u55p"]
-[ext_resource type="FontVariation" uid="uid://tn2p0jg2fn65" path="res://assets/fonts/system_bold.tres" id="1_l6a2a"]
-[ext_resource type="FontFile" uid="uid://dxmp7favkxwsh" path="res://assets/fonts/Symbola_hint.ttf" id="2_dl3k4"]
-[ext_resource type="FontVariation" uid="uid://crtqckgwsuhhq" path="res://assets/fonts/system_with_emojis.tres" id="3_sym2b"]
-
-[sub_resource type="FontVariation" id="FontVariation_ifbsj"]
-fallbacks = Array[Font]([ExtResource("2_dl3k4")])
-base_font = ExtResource("1_1u55p")
+[ext_resource type="FontVariation" uid="uid://mqpu6cr474oo" path="res://assets/fonts/free_sans_bold_with_fallbacks.tres" id="1_uwi6j"]
+[ext_resource type="FontVariation" uid="uid://bym5ra6v6cqu0" path="res://assets/fonts/free_sans_with_fallbacks.tres" id="2_k0ifl"]
+[ext_resource type="FontVariation" uid="uid://cbailsl0xtosp" path="res://assets/fonts/symbola_with_fallbacks.tres" id="4_ef7be"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mjio8"]
 content_margin_left = 4.0
@@ -92,11 +87,11 @@ corner_detail = 5
 
 [resource]
 ActionBtn/base_type = &"Button"
-ActionBtn/fonts/font = ExtResource("1_l6a2a")
+ActionBtn/fonts/font = ExtResource("1_uwi6j")
 AsciiGraphics/base_type = &"Label"
 AsciiGraphics/colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
 AsciiGraphics/font_sizes/font_size = 28
-AsciiGraphics/fonts/font = SubResource("FontVariation_ifbsj")
+AsciiGraphics/fonts/font = ExtResource("2_k0ifl")
 BigMarging/base_type = &"MarginContainer"
 BigMarging/constants/margin_bottom = 50
 BigMarging/constants/margin_left = 50
@@ -111,13 +106,17 @@ Button/colors/font_pressed_color = Color(0.670588, 0.207843, 0.0313726, 1)
 Button/constants/h_separation = 0
 Button/constants/outline_size = 0
 Button/font_sizes/font_size = 30
-Button/fonts/font = ExtResource("3_sym2b")
+Button/fonts/font = ExtResource("2_k0ifl")
 Button/styles/disabled = SubResource("StyleBoxFlat_mjio8")
 Button/styles/focus = SubResource("StyleBoxFlat_k4os5")
 Button/styles/hover = SubResource("StyleBoxFlat_lqhqx")
 Button/styles/normal = SubResource("StyleBoxFlat_m6ywx")
 Button/styles/pressed = SubResource("StyleBoxFlat_1sxh1")
-ItemList/fonts/font = ExtResource("3_sym2b")
+EmojiGraphics/base_type = &"Label"
+EmojiGraphics/colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
+EmojiGraphics/font_sizes/font_size = 28
+EmojiGraphics/fonts/font = ExtResource("4_ef7be")
+ItemList/fonts/font = ExtResource("2_k0ifl")
 Label/colors/font_color = Color(1, 0.878431, 0.52549, 1)
 Label/constants/line_spacing = 0
 Label/constants/outline_size = 0
@@ -125,7 +124,7 @@ Label/constants/shadow_offset_x = 0
 Label/constants/shadow_offset_y = 0
 Label/constants/shadow_outline_size = 0
 Label/font_sizes/font_size = 18
-Label/fonts/font = ExtResource("3_sym2b")
+Label/fonts/font = ExtResource("2_k0ifl")
 Label/styles/normal = null
 MarginContainer/constants/margin_bottom = 24
 MarginContainer/constants/margin_left = 24
@@ -133,7 +132,7 @@ MarginContainer/constants/margin_right = 24
 MarginContainer/constants/margin_top = 24
 RichTextLabel/colors/default_color = Color(1, 0.878431, 0.52549, 1)
 RichTextLabel/font_sizes/normal_font_size = 18
-RichTextLabel/fonts/normal_font = ExtResource("3_sym2b")
+RichTextLabel/fonts/normal_font = ExtResource("2_k0ifl")
 StartScreenBtn/base_type = &"Button"
 StartScreenBtn/styles/normal = SubResource("StyleBoxFlat_1ih0t")
 TitleLabel/base_type = &"Label"
@@ -142,4 +141,4 @@ TitleLabel/colors/font_outline_color = Color(1, 0.768627, 0.415686, 1)
 TitleLabel/colors/font_shadow_color = Color(1, 0.768627, 0.415686, 1)
 TitleLabel/constants/outline_size = 1
 TitleLabel/font_sizes/font_size = 60
-Tree/fonts/font = ExtResource("3_sym2b")
+Tree/fonts/font = ExtResource("2_k0ifl")

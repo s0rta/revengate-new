@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Revengate"
-config/description="A steampunk roguelike for Android."
+config/description="A steampunk roguelike."
 run/main_scene="res://src/ui/start_screen.tscn"
 config/use_custom_user_dir=true
 config/features=PackedStringArray("4.2")
@@ -32,7 +32,8 @@ general/wrap_lines=true
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
-window/stretch/mode="viewport"
+window/size/mode=3
+window/stretch/mode="canvas_items"
 
 [editor]
 
@@ -43,6 +44,11 @@ movie_writer/fps=30
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg")
+
+[filesystem]
+
+import/blender/enabled=false
+import/fbx/enabled=false
 
 [gui]
 
@@ -139,7 +145,7 @@ locale/translations_pot_files=PackedStringArray("res://src/story/narrations.dial
 
 [rendering]
 
-renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)
+anti_aliasing/quality/msaa_2d=1
 environment/default_environment="res://default_env.tres"
