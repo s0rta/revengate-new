@@ -96,10 +96,13 @@ func _gui_input(event):
 		accept_event()
 		return
 
-	# TODO: MOUSE_BUTTON_RIGHT should pop the context menu
-
-	# touch actions are treated like MOUSE_BUTTON_LEFT
-	if _is_tap_or_left_btn(event):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		# context menu on right click
+		is_processing = false
+		accept_event()
+		show_context_menu_for(event.position)
+	elif _is_tap_or_left_btn(event):
+		# touch actions are treated like MOUSE_BUTTON_LEFT
 		var index = event.get("index")
 		if index == null:
 			index = 0
