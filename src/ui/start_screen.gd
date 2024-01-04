@@ -24,6 +24,11 @@ const BAD_VERS_MSG = ("The game version you are running (v%s) is different than 
 						+ "rather than 'Resume' next time.")
 
 func _ready():
+	if OS.has_feature("web"):
+		# That button shuts down the engine, but it does not close the tab so 
+		# it's just confusing. Better let the player close the tab with the browser 
+		# shortcut on HTML5 exports.
+		%QuitButton.hide()
 	%VersionLabel.text = Consts.VERSION
 	if Utils.is_debug():
 		%VersionLabel.text += " debug"
