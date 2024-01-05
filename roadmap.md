@@ -339,9 +339,9 @@ Items:
   - [ ] center on Hero when restoring a game
   - [ ] cheat to disable auto-saving
 - [ ] web export
-  - [ ] better keyboard support (ex.: ESC cancels actions)
+  - [x] better keyboard support (ex.: ESC cancels actions)
     - [x] sub-screens are ModalScreens
-    - [ ] ESC cancels travel
+    - [x] ESC cancels travel
   - [x] bug: story screen does not capture keyboard input
   - [x] save to local storage?
 - [ ] random interlude stories

@@ -258,8 +258,9 @@ func center_on_hero():
 	var hero_coord = Tender.hero.get_cell_coord()
 	%Viewport.center_on_coord(hero_coord)
 
-func _on_cancel_button_pressed():
-	Tender.hero.cancel_strategies()
+func cancel_hero_strats():
+	if Tender.hero.has_strategy(true):
+		Tender.hero.cancel_strategies()
 
 func _on_turn_started(_turn):
 	get_board().clear_highlights()
@@ -427,4 +428,3 @@ func test():
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-

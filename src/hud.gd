@@ -17,6 +17,8 @@
 
 extends Node
 
+signal cancel_strategies
+
 const CRIT_HEALTH = 20  # as a percent of health_full
 
 # TODO: use unique %name to simplify some of those
@@ -35,6 +37,11 @@ func _ready():
 	for node in rbar.get_children():
 		if node is Button:
 			node.visible = is_debug
+
+func _unhandled_input(event):
+	if event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		request_cancel_strats()
 
 func watch_hero(hero:Actor=null):
 	## Connect UI elements like the health-bar to keep track of `hero`.
@@ -165,6 +172,9 @@ func refresh_input_enabled(enabled):
 	for child in %LButtonBar.get_children():
 		if child is Button:
 			child.disabled = not enabled
+
+func request_cancel_strats():
+	cancel_strategies.emit()
 
 func _on_hero_state_changed(new_state):
 	if Tender.hero == null:
