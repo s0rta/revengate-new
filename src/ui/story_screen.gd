@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -16,14 +16,14 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 ## Show a long narration in a modal way.
-class_name StoryScreen extends Control
+class_name StoryScreen extends ModalScreen
 
 func show_story(title, body_path):
 	%TitleLabel.text = title
 	%ScrollView.get_v_scroll_bar().value = 0
 	var body = FileAccess.open(body_path, FileAccess.READ).get_as_text()
 	%StoryLabel.text = body
-	show()
+	popup()
 
 func _on_ok_button_button_up():
-	hide()
+	close(false)

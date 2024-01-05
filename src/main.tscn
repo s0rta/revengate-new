@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=45 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -29,7 +29,6 @@
 [ext_resource type="PackedScene" uid="uid://bvm0q1k13gmym" path="res://src/easy_traboule_deck_builder.tscn" id="19_2as3h"]
 [ext_resource type="PackedScene" uid="uid://bnbtimmwf4woe" path="res://src/trois_gaules_deck_builder.tscn" id="19_fpjoi"]
 [ext_resource type="PackedScene" uid="uid://dab6wiatrc0m6" path="res://src/hard_traboule_deck_builder.tscn" id="20_4ntfa"]
-[ext_resource type="PackedScene" uid="uid://b0n7osww35hyh" path="res://src/ui/narration_pane.tscn" id="20_21sjb"]
 [ext_resource type="Script" path="res://src/dungeons/crypt.gd" id="20_f773d"]
 [ext_resource type="PackedScene" uid="uid://hynfsvr45204" path="res://src/crypt_deck_builder.tscn" id="21_rxcru"]
 [ext_resource type="PackedScene" uid="uid://cf0kj6qn7a40s" path="res://src/ui/city_map_screen.tscn" id="23_aomab"]
@@ -466,7 +465,6 @@ visible = false
 
 [node name="MessagesPane" parent="HUD" instance=ExtResource("17_n3emp")]
 unique_name_in_owner = true
-metadata/_edit_lock_ = true
 
 [node name="ActorDetailsScreen" parent="HUD" instance=ExtResource("14_yna85")]
 unique_name_in_owner = true
@@ -477,10 +475,6 @@ unique_name_in_owner = true
 visible = false
 
 [node name="CityMapScreen" parent="HUD" instance=ExtResource("23_aomab")]
-unique_name_in_owner = true
-visible = false
-
-[node name="NarrationPane" parent="HUD" instance=ExtResource("20_21sjb")]
 unique_name_in_owner = true
 visible = false
 

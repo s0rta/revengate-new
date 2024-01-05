@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -16,21 +16,15 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 ## A window to view the history of messages
-class_name MessagesScreen extends Control
+class_name MessagesScreen extends ModalScreen
 
 const MAX_MESSAGES:=500
-
-func _input(event):
-	# We are not truly modal, so we prevent keys from sending action to the game board
-	# while visible.
-	if visible and event is InputEventKey:
-		accept_event()
 
 func popup():
 	$EmptyLabel.visible = (%ListView.item_count == 0)
 	%ListView.select(%ListView.item_count-1)
 	%ListView.ensure_current_is_visible()
-	show()
+	super()
 
 func trim_old_messages():
 	var nb_msg = %ListView.item_count
@@ -45,4 +39,4 @@ func add_message(text:String,
 	trim_old_messages()
 
 func _on_back_button_pressed():
-	hide()
+	close(false)

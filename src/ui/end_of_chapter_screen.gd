@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -15,11 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-class_name EndOfChapterScreen extends Control
+class_name EndOfChapterScreen extends ModalScreen
 
 signal start_next_chapter
 
-func popup(quest, victory:bool, game_over:bool):
+func show_summary(quest, victory:bool, game_over:bool):
 	%QuitButton.visible = game_over
 	%NextButton.visible = not game_over
 	if victory:
@@ -53,11 +53,14 @@ func popup(quest, victory:bool, game_over:bool):
 		$WinSound.play()
 	else:
 		$FailSound.play()
-	show()
-	
+	popup()
+
+func close(has_acted:=false):
+	emit_signal("start_next_chapter")
+	super(has_acted)
+
 func show_main_screen():
 	get_tree().change_scene_to_file("res://src/ui/start_screen.tscn")
 
 func _on_next_button_button_up():
-	emit_signal("start_next_chapter")
-	hide()
+	close()

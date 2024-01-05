@@ -178,8 +178,7 @@ class Inspect extends Command:
 		var messages = []
 		var actor = index.actor_at(coord)
 		if actor and not actor.is_unexposed():
-			Tender.hud.actor_details_screen.fill_with(actor)
-			Tender.hud.actor_details_screen.popup()
+			Tender.hud.actor_details_screen.show_actor(actor)
 			await Tender.hud.actor_details_screen.closed
 			
 		Tender.viewport.flash_coord_selection(coord)

@@ -330,6 +330,7 @@ Items:
 - [x] potion of analysis paralysis
 
 ## v0.12
+
 - [ ] bug: sewer otter attacks everyone?
 - [ ] bug: self defence does not expire when attacker dies
 - [ ] vague value adjectives on gaussian distributions
@@ -339,7 +340,9 @@ Items:
   - [ ] cheat to disable auto-saving
 - [ ] web export
   - [ ] better keyboard support (ex.: ESC cancels actions)
-  - [ ] bug: story screen does not capture keyboard input
+    - [x] sub-screens are ModalScreens
+    - [ ] ESC cancels travel
+  - [x] bug: story screen does not capture keyboard input
   - [x] save to local storage?
 - [ ] random interlude stories
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs

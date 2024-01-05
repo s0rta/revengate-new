@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -16,7 +16,7 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 ## a screen to show the known stats about a NPC or a monster
-extends Control
+extends ModalScreen
 const EMPTY_IMG_TEXT = "\n[bgcolor=#ffffff][center]%s[/center][/bgcolor]\n"
 
 # TODO: this should be discovered to make the layout more responsive to different screen sizes, 
@@ -24,24 +24,9 @@ const EMPTY_IMG_TEXT = "\n[bgcolor=#ffffff][center]%s[/center][/bgcolor]\n"
 #  so we'll have to come up with something cleaver to do our discovery.
 const IMG_HEIGHT = 537
 
-signal closed(acted:bool)
-
-func _input(event):
-	# We are not truly modal, so we prevent keys from sending action to the game board
-	# while visible.
-	if visible and event is InputEventKey:
-		accept_event()
-
-func popup():
-	show()
-
-func close():
-	hide()
-	emit_signal("closed", false)
-
 func _on_back_button_pressed():
-	close()
-	
+	close(false)
+
 func clear():
 	## Remove traces of the previous actor
 	%DrawingLabel.text = "?"
@@ -60,7 +45,7 @@ func _make_img_text(img_path):
 	#   blindly passing width=0
 	return "[bgcolor=#ffffff][center][img=%sx%s]%s[/img][/center][/bgcolor]" % [0, IMG_HEIGHT, img_path]
 	
-func fill_with(actor:Actor):
+func show_actor(actor:Actor):
 	## put the stats of actor all over the place
 	if actor.bestiary_img:
 		%DrawingLabel.text = _make_img_text(actor.bestiary_img)
@@ -82,4 +67,4 @@ func fill_with(actor:Actor):
 		%DescLabel.text = actor.description
 	else:
 		%DescLabel.text = "???"
-	
+	popup()

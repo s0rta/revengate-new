@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -66,10 +66,20 @@ var dialogue_line: DialogueLine:
 			%DialogueLabel.type_out()
 			await %DialogueLabel.finished_typing
 
+func _input(event):
+	# FIXME: this should go in _unhandled_input
+	# TODO: handle ui_accept key as well
+	if visible and event.is_action_pressed("ui_cancel"):
+		# TODO: advance if typing, close otherwise
+		accept_event()
+		if %DialogueLabel.is_typing:
+			finish_typing()
+		else:
+			close()
+
 func _unhandled_input(event):
-	# Consume all keyboard input while the balloon is visible
-	# TODO: handle ui_cancel and ui_accept keys
 	if visible and event is InputEventKey:
+		# Consume all keyboard input while the balloon is visible
 		accept_event()
 
 func _is_left_released(event):

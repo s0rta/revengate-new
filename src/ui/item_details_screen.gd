@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -16,22 +16,7 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 ## a screen to show the known stats about a NPC or a monster
-extends Control
-
-signal closed(acted:bool)
-
-func _input(event):
-	# We are not truly modal, so we prevent keys from sending action to the game board
-	# while visible.
-	if visible and event is InputEventKey:
-		accept_event()
-
-func popup():
-	show()
-
-func close():
-	hide()
-	emit_signal("closed", false)
+extends ModalScreen
 
 func _on_back_button_pressed():
 	close()
@@ -41,7 +26,7 @@ func clear():
 	%NameLabel.text = "Name:"
 	%DescLabel.text = "???"
 		
-func fill_with(item):
+func show_item(item):
 	## put the stats of item all over the place
 	%NameLabel.text = "Name: %s" % item.get_short_desc()
 	
@@ -50,7 +35,7 @@ func fill_with(item):
 		%DescLabel.text = desc
 	else:
 		%DescLabel.text = "???"
-	
+	popup()
 
 func _on_padding_gui_input(event):
 	if event is InputEventScreenTouch or event is InputEventMouseButton:

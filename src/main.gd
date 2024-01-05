@@ -1,4 +1,4 @@
-# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -246,7 +246,7 @@ func conclude_game(victory:bool, game_over:bool):
 		await Tender.hero.anims_done
 		print("hero done animating!")
 
-	%EndOfChapterScreen.popup(Tender.quest, victory, game_over)
+	%EndOfChapterScreen.show_summary(Tender.quest, victory, game_over)
 	if not game_over:
 		await %EndOfChapterScreen.start_next_chapter
 		var quest = _next_quest(Tender.quest.tag)

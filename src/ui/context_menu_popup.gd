@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -16,25 +16,15 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 ## A container to hold the context menu
-extends Control
+extends ModalScreen
 
-signal closed(acted:bool)
-
-var has_panned := false
-
-func _unhandled_input(event):
-	# dismiss on tap away, but let the pan pass through
-	# FIXME: dismissing works, but pan events are not passing through
-	if event.is_action_pressed("pan"):
-		has_panned = false
-	elif event.is_action_released("pan"):
-		if not has_panned:
-			accept_event()
-			close(false)
-	elif event is InputEventMouseButton and event.is_pressed():
-		accept_event()
-		close(false)
-	elif event.is_action_pressed("ui_cancel"):
+func _gui_input(event):
+	# DEBUG
+	Utils.ddump_event(event, self, "_gui_input")
+	
+	if event is InputEventMouseButton and event.is_pressed():
+		# Dismiss on tap away. Buttons are called before us, so if get the 
+		# button event, it's because it was outside of any buttons.
 		accept_event()
 		close(false)
 
@@ -55,8 +45,7 @@ func run_command(cmd, coord):
 	var acted = await cmd.run(coord)
 	close(acted)
 
-func close(acted:bool=false):
-	hide()
+func close(has_acted:bool=false):
 	for child in %VBox.get_children():
 		child.queue_free()
-	emit_signal("closed", acted)
+	super(has_acted)

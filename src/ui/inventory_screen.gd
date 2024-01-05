@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -15,10 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-class_name InventoryScreen extends Control
+class_name InventoryScreen extends ModalScreen
 
 signal inventory_changed
-signal closed(acted:bool)
 
 enum Cols {
 	DESC,
@@ -42,19 +41,12 @@ func _ready():
 	for i in range(1, tree_view.columns):
 		tree_view.set_column_expand(i, false)
 
-func _input(event):
-	# We are not truly modal, so we prevent keys from sending action to the game board
-	# while visible.
-	if visible and event is InputEventKey:
-		accept_event()
-
 func popup():
 	acted = false
-	show()
+	super()
 
-func close():
-	hide()
-	emit_signal("closed", acted) 
+func close(close_is_action:=false):
+	super(close_is_action or acted)
 
 func _make_from_item(item, root=null, index:=-1):
 	var row = tree_view.create_item(root, index)
@@ -160,6 +152,5 @@ func _on_tree_button_clicked(row, column, id, mouse_button_index):
 func _on_tree_item_selected():
 	var row = %Tree.get_selected()
 	var item = row.get_metadata(0)
-	$ItemDetailsScreen.fill_with(item)
-	$ItemDetailsScreen.popup()
+	$ItemDetailsScreen.show_item(item)
 	%Tree.deselect_all()

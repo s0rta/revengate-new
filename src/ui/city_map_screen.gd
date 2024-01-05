@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -16,7 +16,7 @@
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 ## Map of Lyon with the hero's approximate location highlighted
-extends Control
+extends ModalScreen
 
 const GRIP_PIXELS = 64  # locations grid, not to be consused with the RevBoard grid
 const MAP_PATH = "res://assets/lyon-map-1855.png"
@@ -27,12 +27,6 @@ var map_size: Vector2i
 
 func _ready():
 	%MapLabel.text = LABEL_FMT % [size.x, size.y, MAP_PATH]
-	
-func _input(event):
-	# We are not truly modal, so we prevent keys from sending action to the game board
-	# while visible.
-	if visible and event is InputEventKey:
-		accept_event()
 
 func popup(world_loc=null):
 	show()
@@ -54,4 +48,4 @@ func highlight_loc(world_loc):
 	%PointerLabel.show()
 
 func _on_back_button_pressed():
-	hide()
+	close()
