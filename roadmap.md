@@ -338,7 +338,7 @@ Items:
 - [ ] improved saved games
   - [ ] center on Hero when restoring a game
   - [ ] cheat to disable auto-saving
-- [ ] web export
+- [x] web export
   - [x] better keyboard support (ex.: ESC cancels actions)
     - [x] sub-screens are ModalScreens
     - [x] ESC cancels travel

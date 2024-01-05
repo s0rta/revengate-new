@@ -8,6 +8,7 @@ PRESETS_PATH = "export_presets.cfg"
 CREDS_PATH = ".godot/export_credentials.cfg"
 GODOT_SETTINGS = os.path.expanduser("~/.config/godot/editor_settings-4.tres")
 
+
 def is_newer(fname, ref):
     """ Return whether fname is newer than file at ref. """
     if not os.path.isfile(fname):
@@ -39,9 +40,9 @@ def requirements(c):
 
 
 def _make_path(path_template, version_name):
-    base, ext = os.path.splitext(path_template)
-    base, _ = base.rsplit("-", 1)
-    return f"{base}-{version_name}{ext}"
+    assert "X.Y.Z" in path_template
+    return path_template.replace("X.Y.Z", version_name)
+
 
 def _load_credentials():
     creds = {}
@@ -59,7 +60,7 @@ def _load_credentials():
         creds["password"] = os.environ["REV_KEYSTORE_PASSWORD"]
     else:
         raise RuntimeError("Can't find keystore credentials "
-                            "for signing Android packages!")
+                           "for signing Android packages!")
     return creds
 
 
@@ -84,7 +85,7 @@ def make_export_presets(c, signed=True):
     if signed:
         creds = _load_credentials()
     
-    for sect in ["preset.0", "preset.1"]:
+    for sect in ["preset.0", "preset.1", "preset.2"]:
         old_path = parser[sect]["export_path"]
         parser[sect]["export_path"] = _make_path(old_path, version_name)
 
@@ -107,7 +108,8 @@ def make_export_presets(c, signed=True):
 
 @task
 def make_fdroid_presets(c, godot_src_dir):
-    """ Generate a presets file that Godot can use to produce unsigned Android builds for F-Droid. """
+    """ Generate a presets file that Godot can use to produce unsigned Android builds 
+    for F-Droid. """
     version_name, version_code = _get_version()
     parser = ConfigParser()
     parser.read(PRESETS_PATH + ".in")
@@ -136,8 +138,9 @@ def _find_godot(context):
         return os.environ["GODOT"]
     else:
         raise RuntimeError("Can't find Godot binary. " 
-                            "Consider linking it to `godot4` or defining "
-                            "the GODOT environment variable.")
+                           "Consider linking it to `godot4` or defining "
+                           "the GODOT environment variable.")
+
 
 @task(make_export_presets)
 def build_android(c):
@@ -156,9 +159,40 @@ def build_android(c):
         assert res.return_code == 0
 
 
+@task(make_export_presets)
+def build_web(c):
+    """ Make a zip file with the HTML5 flavour of the game. """
+    # Ex.: godot --export-release 'Web' bin/revengate.apk
+    godot = _find_godot(c)
+    
+    parser = ConfigParser()
+    parser.read(PRESETS_PATH)
+    sect = "preset.2"
+    name = parser[sect]["name"]
+    path = parser[sect]["export_path"].strip('"')
+    assert name.lstrip('"\'').startswith("Web")
+
+    base_dir = os.path.split(path)[0]
+    os.makedirs(base_dir, exist_ok=True)
+
+    cmd = f"{godot} --headless --export-release {name} {path}"
+    res = c.run(cmd, echo=True)
+    assert res.return_code == 0
+
+    pack_path = base_dir.rstrip("/") + ".zip"
+    if os.path.isfile(pack_path):
+        os.unlink(pack_path)
+
+    res = c.run(f"zip -r {pack_path} {base_dir}", echo=True)
+    assert res.return_code == 0
+    
+    print(f"Saved HTML5 export pack to {pack_path}")
+
+
 @task 
 def configure_android_sdk(c, sdk_path):
     """Save the path to the Android SDK in the Godot settings"""
+    # FIXME: this is not needed anymore with Godot 4.2+
     # Doing this here because the path is full of '/' chars and that confuses sed
     assert os.path.isdir(sdk_path)
     # can't use ConfigParser for this one becase the tres dialect is weird
