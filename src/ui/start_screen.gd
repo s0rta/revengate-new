@@ -37,15 +37,23 @@ func _ready():
 	
 	%ResumeButton.visible = SaveBundle.has_file()
 	if OS.has_feature("mobile"):
-		# TODO: be a bit more selective with who gets the big buttons
 		_expand_text_controls()
 
 func _expand_text_controls():
-	## Make all text controls much bigger. We typically need this on 
-	## devices with very small screens or with very high DPI.
+	## Make all text controls bigger. 
+	## We typically need this on devices with very small screens or with very high DPI.
+	var size = Utils.screen_size()
+	var narrow_side = min(size.x, size.y)
+	var alt_theme
+	if narrow_side > 7.0:
+		# this is a really big screen, default controls are fine
+		return
+	elif narrow_side > 4.5:
+		alt_theme = load("res://src/ui/theme_big.tres")
+	else:
+		alt_theme = load("res://src/ui/theme_really_big.tres")
 	var theme = ThemeDB.get_project_theme()
-	var big_theme = load("res://src/ui/theme_big.tres")
-	theme.merge_with(big_theme)
+	theme.merge_with(alt_theme)
 
 func start_new_game():
 	get_tree().change_scene_to_file("res://src/main.tscn")

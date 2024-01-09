@@ -55,6 +55,14 @@ static func ddump_event(event, node, meth_name):
 	if not event is InputEventMouseMotion:
 		print("%s.%s(%s)" % [node.name, meth_name, event])
 
+static func screen_size():
+	## Return a rough approximation of the screen size in cm.
+	## OS reporting is not accurate, so don't use this for anything mission 
+	## critical.
+	var pixels = DisplayServer.screen_get_size()
+	var dpcm = 0.3937 * DisplayServer.screen_get_dpi()
+	return pixels / dpcm
+
 static func sum(values:Array):
 	var total = 0
 	for val in values:

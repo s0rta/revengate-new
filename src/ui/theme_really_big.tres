@@ -1,0 +1,33 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://p6r7huuvo4os"]
+
+[ext_resource type="FontVariation" uid="uid://bym5ra6v6cqu0" path="res://assets/fonts/free_sans_with_fallbacks.tres" id="2_afntk"]
+
+[resource]
+ActionBtn/base_type = &"Button"
+AsciiGraphics/base_type = &"Label"
+Button/font_sizes/font_size = 64
+EmojiGraphics/base_type = &"Label"
+ItemList/font_sizes/font_size = 32
+ItemList/fonts/font = ExtResource("2_afntk")
+Label/font_sizes/font_size = 32
+ProminentButton/base_type = &"Button"
+ProminentButton/font_sizes/font_size = 70
+RichTextLabel/font_sizes/bold_font_size = 32
+RichTextLabel/font_sizes/bold_italics_font_size = 32
+RichTextLabel/font_sizes/italics_font_size = 32
+RichTextLabel/font_sizes/mono_font_size = 32
+RichTextLabel/font_sizes/normal_font_size = 32
+TextBlockMargin/base_type = &"MarginContainer"
+TextBlockMargin/constants/margin_bottom = 8
+TextBlockMargin/constants/margin_left = 64
+TextBlockMargin/constants/margin_right = 64
+TextBlockMargin/constants/margin_top = 8
+TitleLabel/base_type = &"Label"
+TitleLabel/font_sizes/font_size = 60
+TitleMargin/base_type = &"MarginContainer"
+TitleMargin/constants/margin_bottom = 16
+TitleMargin/constants/margin_left = 50
+TitleMargin/constants/margin_right = 50
+TitleMargin/constants/margin_top = 20
+TitleMargin/font_sizes/font_size = 64
+Tree/font_sizes/font_size = 32
