@@ -330,10 +330,12 @@ Items:
 - [x] potion of analysis paralysis
 
 ## v0.12
-
+- [x] bug: phantruch "typical" health is -1
+- [ ] bug: distant actor pop-up takes precedence over inspect
 - [ ] bug: sewer otter attacks everyone?
 - [ ] bug: self defence does not expire when attacker dies
 - [ ] vague value adjectives on gaussian distributions
+- [ ] tent vibe on the Salapou meeting board
 - [ ] F-Droid has animated water
 - [ ] improved saved games
   - [ ] center on Hero when restoring a game
@@ -342,6 +344,7 @@ Items:
   - [x] better keyboard support (ex.: ESC cancels actions)
     - [x] sub-screens are ModalScreens
     - [x] ESC cancels travel
+    - [ ] sub-screens on the start screen are also modal
   - [x] bug: story screen does not capture keyboard input
   - [x] save to local storage?
 - [ ] random interlude stories

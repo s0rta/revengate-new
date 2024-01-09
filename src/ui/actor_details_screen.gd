@@ -55,8 +55,10 @@ func show_actor(actor:Actor):
 	var perception = Tender.hero.get_stat("perception")
 	if perception >= Consts.PERFECT_PERCEPTION:
 		%HealthLabel.text = "Health: %s" % actor.health
-	else:
+	elif actor.health_full > 0:
 		%HealthLabel.text = "Health (typical): %s" % actor.health_full
+	else:
+		%HealthLabel.text = "Health (typical): unknown"
 	var strength = actor.get_stat("strength")
 	%StrengthLabel.text = "Strength: %s" % Utils.vague_value(strength, strength/100.0, perception)
 	var agility = actor.get_stat("agility")
