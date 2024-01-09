@@ -19,6 +19,11 @@
 ## start screen.
 extends Node
 
+func _unhandled_input(event):
+	if event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		show_main_screen()
+
 func _on_back_button_pressed():
 	show_main_screen()
 

@@ -344,7 +344,7 @@ Items:
   - [x] better keyboard support (ex.: ESC cancels actions)
     - [x] sub-screens are ModalScreens
     - [x] ESC cancels travel
-    - [ ] sub-screens on the start screen are also modal
+    - [x] sub-screens on the start screen are also modal
   - [x] bug: story screen does not capture keyboard input
   - [x] save to local storage?
 - [ ] random interlude stories

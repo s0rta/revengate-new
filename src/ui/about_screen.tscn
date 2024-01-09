@@ -14,18 +14,15 @@ grow_vertical = 2
 color = Color(0.0431373, 0.027451, 0, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -439.5
-offset_right = 439.5
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
-theme_type_variation = &"BigMarging"
+theme_type_variation = &"TitleMargin"
 
 [node name="Title" type="Label" parent="VBoxContainer/MarginContainer"]
 layout_mode = 2
@@ -35,7 +32,19 @@ theme_type_variation = &"TitleLabel"
 text = "About Revengate"
 horizontal_alignment = 1
 
-[node name="AboutLabel" type="RichTextLabel" parent="VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"TextBlockMargin"
+
+[node name="AboutLabel" type="RichTextLabel" parent="VBoxContainer/ScrollContainer/MarginContainer"]
 clip_contents = false
 custom_minimum_size = Vector2(720, 0)
 layout_mode = 2
@@ -59,11 +68,15 @@ Learn more at: [url]http://revengate.org/privacy[/url]
 fit_content = true
 shortcut_keys_enabled = false
 
-[node name="BackButton" type="Button" parent="VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 8
+
+[node name="BackButton" type="Button" parent="VBoxContainer/MarginContainer2"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Back"
 
-[connection signal="meta_clicked" from="VBoxContainer/AboutLabel" to="." method="follow_link"]
-[connection signal="button_up" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="meta_clicked" from="VBoxContainer/ScrollContainer/MarginContainer/AboutLabel" to="." method="follow_link"]
+[connection signal="button_up" from="VBoxContainer/MarginContainer2/BackButton" to="." method="_on_back_button_pressed"]

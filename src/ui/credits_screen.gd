@@ -17,7 +17,7 @@
 
 extends "res://src/ui/secondary_info_screen.gd"
 
-@onready var credits_label: RichTextLabel = %CreditsLabel
+@onready var credits_label:RichTextLabel = %CreditsLabel
 
 func _ready():
 	var file = FileAccess.open("res://CREDITS.md", FileAccess.READ)

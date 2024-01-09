@@ -36,6 +36,16 @@ func _ready():
 	Tender.full_game = true
 	
 	%ResumeButton.visible = SaveBundle.has_file()
+	if OS.has_feature("mobile"):
+		# TODO: be a bit more selective with who gets the big buttons
+		_expand_text_controls()
+
+func _expand_text_controls():
+	## Make all text controls much bigger. We typically need this on 
+	## devices with very small screens or with very high DPI.
+	var theme = ThemeDB.get_project_theme()
+	var big_theme = load("res://src/ui/theme_big.tres")
+	theme.merge_with(big_theme)
 
 func start_new_game():
 	get_tree().change_scene_to_file("res://src/main.tscn")
