@@ -6,6 +6,8 @@
 ActionBtn/base_type = &"Button"
 AsciiGraphics/base_type = &"Label"
 Button/font_sizes/font_size = 64
+DialogueLabel/font_sizes/font_size = 40
+DialogueOption/font_sizes/font_size = 44
 EmojiGraphics/base_type = &"Label"
 ItemList/font_sizes/font_size = 32
 ItemList/fonts/font = ExtResource("2_afntk")

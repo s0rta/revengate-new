@@ -66,6 +66,15 @@ var dialogue_line: DialogueLine:
 			%DialogueLabel.type_out()
 			await %DialogueLabel.finished_typing
 
+func _ready():
+	# make sure we have space to fit most convos without meeting a scroll bar
+	var line_height = %ResponseTemplate.get_line_height()
+	var nb_resp = %SpeechBackgroud.size.y / line_height
+	if nb_resp < 10:
+		# this is actually smaller than 10 since margins and other controls 
+		# are also taking space
+		%SpeechBackgroud.custom_minimum_size.y = 10 * line_height
+
 func _input(event):
 	# FIXME: this should go in _unhandled_input
 	# TODO: handle ui_accept key as well

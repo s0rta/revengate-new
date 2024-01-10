@@ -6,6 +6,8 @@
 ActionBtn/base_type = &"Button"
 AsciiGraphics/base_type = &"Label"
 Button/font_sizes/font_size = 40
+DialogueLabel/font_sizes/font_size = 32
+DialogueOption/font_sizes/font_size = 36
 EmojiGraphics/base_type = &"Label"
 ItemList/font_sizes/font_size = 24
 ItemList/fonts/font = ExtResource("1_il46l")
