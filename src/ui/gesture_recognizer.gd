@@ -81,11 +81,8 @@ class ContextMenuEvent extends InputEventAction:
 
 
 func _input(event):
-	if is_capturing_clicks:
-		if _is_tap_or_left_btn(event):
-			accept_event()
-			if event.pressed:
-				emit_signal("capture_stopped", true, event.position)
+	if _attempt_capture(event):
+		return
 	
 func _gui_input(event):
 	# The emulate_mouse_from_touch setting causes Godot to emit both an InputEventMouseButton and
@@ -96,6 +93,9 @@ func _gui_input(event):
 		accept_event()
 		return
 
+	if _attempt_capture(event):
+		return
+	
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		# context menu on right click
 		is_processing = false
@@ -107,17 +107,14 @@ func _gui_input(event):
 		if index == null:
 			index = 0
 		
-		# TODO: we should accept the event to prevent any other controls from processing it, 
-		#   but doing so silences all the events, even the ones that we are injecting into 
-		#   the game viewport. Not sure how to work around that...
-		# accept_event()
+		accept_event()
 		if event.pressed:
 			is_processing = true
 			$LongTapTimer.stop()
-			$LongTapTimer.start()
 			touches_pos[index] = event.position
 			nb_touching = len(touches_pos)
 			if nb_touching == 1:
+				$LongTapTimer.start()
 				is_panning = false
 				has_panned = false
 		else:  # release
@@ -129,10 +126,10 @@ func _gui_input(event):
 				if not has_panned:
 					if $LongTapTimer.time_left > 0:
 						# didn't hold long enough to make it a long tap
-						$LongTapTimer.stop()
 						var act_event = ActEvent.new(event.position)
 						viewport.inject_event(act_event)
 						print("tap release: %s seconds left for a long tap" % $LongTapTimer.time_left)
+				$LongTapTimer.stop()
 
 	if (is_processing and nb_touching > 0 
 			and (event is InputEventScreenDrag or event is InputEventMouseMotion)):
@@ -174,8 +171,19 @@ func _is_tap_or_left_btn(event):
 			return true
 	return false
 
+func _attempt_capture(event):
+	## Try to capture event (possibly for a multi-tap action that is awaiting on it).
+	## Return where the event was indeed captured.
+	if is_capturing_clicks:
+		if _is_tap_or_left_btn(event):
+			accept_event()
+			if event.pressed:
+				emit_signal("capture_stopped", true, event.position)
+			return true
+	return false
+
 func _on_long_tap_timer_timeout():
-	if nb_touching == 1 and not has_panned:
+	if not is_capturing_clicks and nb_touching == 1 and not has_panned:
 		is_processing = false
 		print("New long tap handler")
 		var pos = touches_pos.values()[0]
@@ -234,4 +242,3 @@ func ddump():
 	print("transform is: %s" % transform)
 	print("cam offset is: %s %s" % [cam.offset, RevBoard.canvas_to_board_str(cam.offset)])
 
-	

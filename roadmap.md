@@ -331,11 +331,11 @@ Items:
 
 ## v0.12
 - [x] bug: phantruch "typical" health is -1
-- [ ] bug: distant actor pop-up takes precedence over inspect
+- [x] bug: distant actor pop-up takes precedence over inspect
 - [ ] bug: sewer otter attacks everyone?
 - [ ] bug: self defence does not expire when attacker dies
 - [ ] vague value adjectives on gaussian distributions
-- [ ] tent vibe on the Salapou meeting board
+- [x] tent vibe on the Salapou meeting board
 - [ ] F-Droid has animated water
 - [ ] improved saved games
   - [ ] center on Hero when restoring a game
