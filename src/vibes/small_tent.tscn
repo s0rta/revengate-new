@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://i8spr51jjcl5"]
+
+[ext_resource type="PackedScene" uid="uid://dkjne1n771ldd" path="res://src/vibes/vibe.tscn" id="1_p5f3l"]
+
+[node name="Tent" instance=ExtResource("1_p5f3l")]
+char = "⛺"
+caption = "a small plain tent"
+spawn_cost = 4.0

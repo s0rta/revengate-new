@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bnbtimmwf4woe"]
+[gd_scene load_steps=33 format=3 uid="uid://bnbtimmwf4woe"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_gqi5c"]
 [ext_resource type="Script" path="res://src/card_rule.gd" id="2_ktv76"]
@@ -11,7 +11,9 @@
 [ext_resource type="PackedScene" uid="uid://en0lj3ytrbjm" path="res://src/people/street_outlaw.tscn" id="8_5vl31"]
 [ext_resource type="PackedScene" uid="uid://b1elqic8grhvb" path="res://src/monsters/nochort.tscn" id="9_7av4t"]
 [ext_resource type="PackedScene" uid="uid://dc0rcsweguq63" path="res://src/people/petty_thief.tscn" id="9_15m00"]
+[ext_resource type="PackedScene" uid="uid://i8spr51jjcl5" path="res://src/vibes/small_tent.tscn" id="9_i0iae"]
 [ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="10_6v1jq"]
+[ext_resource type="PackedScene" uid="uid://00gkudimmnjg" path="res://src/vibes/medium_tent.tscn" id="10_llov1"]
 [ext_resource type="PackedScene" uid="uid://bxxknjijfoo7g" path="res://src/people/tourist.tscn" id="10_xeej0"]
 [ext_resource type="PackedScene" uid="uid://dactu5q2nmdun" path="res://src/items/potion_of_absinthe.tscn" id="11_3h4uh"]
 [ext_resource type="PackedScene" uid="uid://chpblbtevaa13" path="res://src/items/carrot.tscn" id="11_gnuqb"]
@@ -101,6 +103,10 @@ mem = SubResource("Resource_5fp0k")
 
 [node name="Yarohu" parent="Quest2Board" instance=ExtResource("7_ltn2i")]
 mem = SubResource("Resource_fu0ta")
+
+[node name="Tent" parent="Quest2Board" instance=ExtResource("9_i0iae")]
+
+[node name="MediumTent" parent="Quest2Board" instance=ExtResource("10_llov1")]
 
 [node name="Max1PerDungeon" type="Node" parent="."]
 script = ExtResource("2_ktv76")
