@@ -162,7 +162,7 @@ func _gui_input(event):
 		accept_event()
 
 func _unhandled_input(event):
-	if is_capturing_clicks and event.is_action_released("ui_cancel"):
+	if is_capturing_clicks and event.is_action_pressed("ui_cancel"):
 		emit_signal("capture_stopped", false, null)
 		accept_event()
 

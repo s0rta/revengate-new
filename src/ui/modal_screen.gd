@@ -19,12 +19,7 @@ class_name ModalScreen extends Control
 
 signal closed(acted:bool)
 
-func _input(event):
-	
-	# DEBUG
-	Utils.ddump_event(event, self, "_input")
-	
-	# FIXME: this logic should go in _unhandled_input() or _gui_input() once we have all the other screens normalized
+func _unhandled_key_input(event):
 	if visible and event.is_action_pressed("ui_cancel"):
 		accept_event()
 		close()

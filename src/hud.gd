@@ -40,8 +40,9 @@ func _ready():
 
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):
-		get_viewport().set_input_as_handled()
-		request_cancel_strats()
+		if Tender.hero.has_strategy(true):
+			get_viewport().set_input_as_handled()
+			request_cancel_strats()
 
 func watch_hero(hero:Actor=null):
 	## Connect UI elements like the health-bar to keep track of `hero`.

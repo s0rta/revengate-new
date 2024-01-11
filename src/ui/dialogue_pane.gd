@@ -75,8 +75,7 @@ func _ready():
 		# are also taking space
 		%SpeechBackgroud.custom_minimum_size.y = 10 * line_height
 
-func _input(event):
-	# FIXME: this should go in _unhandled_input
+func _unhandled_key_input(event):
 	# TODO: handle ui_accept key as well
 	if visible and event.is_action_pressed("ui_cancel"):
 		# TODO: advance if typing, close otherwise
@@ -123,7 +122,6 @@ func next(next_id: String):
 	self.dialogue_line = await dia_res.get_next_dialogue_line(next_id, temp_game_states)
 
 func _on_response_gui_input(event, option_idx):
-#	Utils.ddump_event(event, self, "_on_response_gui_input")
 	if _is_left_released(event):
 		next(dialogue_line.responses[option_idx].next_id)
 

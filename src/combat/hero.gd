@@ -78,13 +78,13 @@ func _unhandled_input(event):
 			acted = true
 		else:
 			print("No stair to follow here")
-	elif Input.is_action_just_pressed("right"):
+	elif Input.is_action_pressed("right"):
 		move = V.i(1, 0)
-	elif Input.is_action_just_pressed("left"):
+	elif Input.is_action_pressed("left"):
 		move = V.i(-1, 0)
-	elif Input.is_action_just_pressed("up"):
+	elif Input.is_action_pressed("up"):
 		move = V.i(0, -1)
-	elif Input.is_action_just_pressed("down"):
+	elif Input.is_action_pressed("down"):
 		move = V.i(0, 1)
 		
 	if move:

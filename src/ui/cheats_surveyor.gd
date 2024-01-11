@@ -70,7 +70,7 @@ func _input(event):
 
 func _unhandled_input(event):
 	# TODO: collapse the cheats button bar if open and no action to cancel
-	if is_capturing and event.is_action_released("ui_cancel"):
+	if is_capturing and event.is_action_pressed("ui_cancel"):
 		emit_signal("capture_stopped", false, null)
 		accept_event()
 	elif event.is_action_released("cheat-teleport-to"):

@@ -19,9 +19,6 @@
 extends ModalScreen
 
 func _gui_input(event):
-	# DEBUG
-	Utils.ddump_event(event, self, "_gui_input")
-	
 	if event is InputEventMouseButton and event.is_pressed():
 		# Dismiss on tap away. Buttons are called before us, so if get the 
 		# button event, it's because it was outside of any buttons.
