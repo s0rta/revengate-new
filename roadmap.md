@@ -365,7 +365,7 @@ Items:
 - [ ] long descriptions for all items (#7)
 
 UX:
-- [ ] quick attack button is too small with half width emojis like the broom
+- [x] quick attack button is too small with half width emojis like the broom
 - [ ] more margins around buttons to prevent mis-taps
 
 Weapons:

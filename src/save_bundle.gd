@@ -144,7 +144,7 @@ static func remove():
 
 static func clear_lock():
 	var da = DirAccess.open(SAVE_DIR)
-	if da.file_exists(SAVE_DIR+BAD_SAVE_LOCK):
+	if da and da.file_exists(SAVE_DIR+BAD_SAVE_LOCK):
 		# since remove() is unreliable in HTML5, we move the lock out of the way before 
 		# trying to delete it.
 		da.rename(SAVE_DIR+BAD_SAVE_LOCK, SAVE_DIR+GOOD_SAVE_LOCK)

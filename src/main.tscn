@@ -319,7 +319,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
-theme_override_font_sizes/font_size = 42
+theme_type_variation = &"ProminentButton"
 text = "🗡️"
 
 [node name="TopRightMargin" type="MarginContainer" parent="HUD"]

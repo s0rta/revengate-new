@@ -1,0 +1,6 @@
+Bigger text controls on small screens.
+New vibe: tents.
+Improved keyboard input:
+  - WASD keys are valid for directions
+  - Holding arrow keys down keep you moving.
+  - Escape closes all sub-screens and cancels multi-turn actions.

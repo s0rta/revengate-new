@@ -49,7 +49,6 @@ clip_contents = false
 custom_minimum_size = Vector2(720, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 6
 bbcode_enabled = true
 text = "Revengate is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -69,7 +68,6 @@ You can download the full source code of Revengate at:
 
 "
 fit_content = true
-scroll_active = false
 shortcut_keys_enabled = false
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer2"]
