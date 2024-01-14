@@ -99,6 +99,8 @@ func _process(delta):
 	Tender.play_secs += delta
 
 func _input(_event):
+	if not Utils.is_debug():
+		return
 	if Input.is_action_just_pressed("test-2"):
 		test2()
 		$/root.set_input_as_handled()
@@ -421,10 +423,26 @@ func abort_run():
 func test():
 	print("Testing: 1, 2... 1, 2!")
 
-	for perception in [100, 70, 50, 40, 10]:
-		for val in [10, 20, 50, 80, 100]:
-			var adj = Utils.vague_value(val, val/100.0, perception)
-			print("At perception=%s, %s is %s" % [perception, val, adj])
+	var theme3 = load("res://src/ui/theme_really_big.tres")
+	var theme2 = ThemeDB.get_project_theme()
+	var theme1 = ThemeDB.get_default_theme()
+	for theme in [theme1, theme2, theme3]:
+		print(theme)
+		print(theme.default_font_size)
+		var types = theme.get_type_list()
+		types.sort()
+		print(types)
+	theme2.merge_with(theme3)
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
+	
+	var board = get_board()
+	var source = board.tile_set.get_source(0)
+	var water_data = source.get_tile_data(V.i(7, 7), 0)
+#	water_data.material = null
+	var mat = water_data.material
+	var noise = mat.get_shader_parameter("noise")
+	print(noise)
+#	print("water mat: %s" % [source.get_tile_data(V.i(7, 7), 0).material])
+#	print("stairs mat: %s" % [source.get_tile_data(V.i(0, 0), 0).material])
