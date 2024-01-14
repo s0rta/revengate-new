@@ -658,6 +658,16 @@ static func canvas_to_board_str(cpos):
 func _ready():
 	if not board_id:
 		board_id = ResourceUID.create_id()
+
+	# FIXME: this is a hack to remove the water shader if the export failed to 
+	#   include the sub textures. The real solution is to fix the export so that
+	#   that the textures are never missing
+	var source = tile_set.get_source(0)
+	var water_data = source.get_tile_data(V.i(7, 7), 0)
+	if water_data.material != null:
+		if water_data.material.get_shader_parameter("noise") == null:
+			water_data.material = null
+
 	detect_terrain_names()
 	detect_actors()
 	reset_visibility(get_items() + get_actors() + get_vibes())
