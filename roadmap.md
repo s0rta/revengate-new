@@ -329,17 +329,7 @@ Items:
 - [x] potion of absinthe
 - [x] potion of analysis paralysis
 
-## v0.12
-- [x] bug: phantruch "typical" health is -1
-- [x] bug: distant actor pop-up takes precedence over inspect
-- [ ] bug: sewer otter attacks everyone?
-- [ ] bug: self defence does not expire when attacker dies
-- [ ] vague value adjectives on gaussian distributions
-- [x] tent vibe on the Salapou meeting board
-- [ ] F-Droid has animated water
-- [ ] improved saved games
-  - [ ] center on Hero when restoring a game
-  - [ ] cheat to disable auto-saving
+## v0.11.4
 - [x] web export
   - [x] better keyboard support (ex.: ESC cancels actions)
     - [x] sub-screens are ModalScreens
@@ -347,6 +337,22 @@ Items:
     - [x] sub-screens on the start screen are also modal
   - [x] bug: story screen does not capture keyboard input
   - [x] save to local storage?
+
+## v0.11.5
+- [x] bug: phantruch "typical" health is -1
+- [x] bug: distant actor pop-up takes precedence over inspect
+- [x] tent vibe on the Salapou meeting board
+- [x] bigger text on small screens
+- [x] gentle degredation for missing shader params on F-Droid
+
+## v0.12
+- [ ] bug: sewer otter attacks everyone?
+- [ ] bug: self defence does not expire when attacker dies
+- [ ] vague value adjectives on gaussian distributions
+- [ ] F-Droid has animated water
+- [ ] improved saved games
+  - [ ] center on Hero when restoring a game
+  - [ ] cheat to disable auto-saving
 - [ ] random interlude stories
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] instructions on how to install all the Android dev dependencies

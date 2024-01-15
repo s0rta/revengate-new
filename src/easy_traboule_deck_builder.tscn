@@ -124,12 +124,10 @@ max_depth = 14
 max_dungeon_occ = 1
 min_dungeon_occ = 1
 
-[node name="CapsuleOfRegen" parent="Unique" instance=ExtResource("16_r5d4u")]
-caption = "magic capsule of regen "
-spawn_cost = 4.0
-
 [node name="AmuletOfStrength" parent="Unique" instance=ExtResource("17_6i3li")]
 caption = "amulet of strength"
+
+[node name="MagicCapsuleOfRegen" parent="Unique" instance=ExtResource("16_r5d4u")]
 
 [node name="Rare" type="Node" parent="."]
 script = ExtResource("7_18mi5")
@@ -172,7 +170,6 @@ max_dungeon_occ = 3
 
 [node name="Hissing" parent="." instance=ExtResource("27_0wnww")]
 
-[connection signal="visibility_changed" from="Unique/CapsuleOfRegen" to="Unique/CapsuleOfRegen" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Unique/AmuletOfStrength" to="Unique/AmuletOfStrength" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Rare/Hammer" to="Rare/Hammer" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Rare/Rapier" to="Rare/Rapier" method="_on_visibility_changed"]
