@@ -5,6 +5,9 @@
 
 [node name="MagicCapsuleOfRegen" instance=ExtResource("1_lbwot")]
 char = "🤀"
+caption = "magic capsule of regen"
+desc_simple = "	A small clay tablet with exotic writing."
+desc_detailed = "A round clay tablet with Sumerian writing embossed into its surface. Can boost your health over your normal maximum."
 consumable = true
 
 [node name="Effect" type="Node" parent="." index="1"]

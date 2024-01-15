@@ -15,6 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
+# TODO: Tap zone to see item details
+# TODO: Hide row when last item in stack is used or dropped
+# TODO: Update label when we use an item from a non empty stack
+# TODO: Duplicate rows when we toggle something that was part of a stack
+
 class_name InventoryScreen extends ModalScreen
 
 signal inventory_changed
@@ -26,20 +31,13 @@ enum Cols {
 	DROP 
 }
 
-@onready var tree_view:Tree = find_child("Tree", true)
-var equip_button_img = load("res://src/ui/equip_btn.png")
-var drop_button_img = load("res://src/ui/drop_btn.png")
-var use_button_img = load("res://src/ui/use_btn.png")
 var actor = null
 # Did the player did something that counts as a turn action while the screen was open?
-var acted := false  
+var acted := false 
+
 
 func _ready():
 	inventory_changed.connect(reset_empty_label_vis)
-	tree_view.set_column_expand_ratio(Cols.DESC, 4)
-	tree_view.set_column_expand(Cols.DESC, true)
-	for i in range(1, tree_view.columns):
-		tree_view.set_column_expand(i, false)
 
 func popup():
 	acted = false
@@ -48,27 +46,50 @@ func popup():
 func close(close_is_action:=false):
 	super(close_is_action or acted)
 
-func _make_from_item(item, root=null, index:=-1):
-	var row = tree_view.create_item(root, index)
-	row.set_metadata(Cols.DESC, item)
-	row.set_text(Cols.DESC, item.get_short_desc())
-	if item.get("is_equipped") != null:
-		row.add_button(Cols.EQUIP, equip_button_img)
-		if item.is_equipped:
-			row.set_button_disabled(Cols.EQUIP, 0, true)
-	if item.consumable or item.switchable:
-		row.add_button(Cols.USE, use_button_img)
-	row.add_button(Cols.DROP, drop_button_img)
-	return row
-
 func fill_actor_items(actor_:Actor):
 	actor = actor_
-	tree_view.clear()
-	var root = tree_view.create_item()
 	var items = actor.get_items()
 	$EmptyLabel.visible = not items.size()
+	
+	for child in %AllItems.find_children("", "InventoryRow", false, false):
+		child.hide()
+		child.queue_free()
+	
 	for item in items:
-		var row = _make_from_item(item, root)
+		var row = %ItemRecordTemplate.duplicate()
+		
+		%AllItems.add_child(row)
+		row.item = item
+		
+		var label = row.label
+		label.text = item.get_short_desc()
+		
+		var equip_button = row.equip_button
+		var is_equipped = item.get("is_equipped")
+		if is_equipped != null:
+			equip_button.disabled = is_equipped
+			equip_button.button_up.connect(equip_item.bind(item))
+		else:
+			equip_button.hide()
+			
+		var consume_button = row.consume_button
+		if not item.consumable:
+			consume_button.hide()
+		else:
+			consume_button.button_up.connect(consume_item.bind(item))
+			
+		var drop_button = row.drop_button
+		drop_button.button_up.connect(drop_item.bind(item))
+		
+
+		row.show()
+	
+	#tree_view.clear()
+	#var root = tree_view.create_item()
+	#
+	#
+	#for item in items:
+		#var row = _make_from_item(item, root)
 
 func reset_empty_label_vis():
 	if not actor:
@@ -78,10 +99,13 @@ func reset_empty_label_vis():
 		$EmptyLabel.visible = not items.size()
 
 func reset_buttons_vis():
-	for row in tree_view.get_root().get_children():
-		var item = row.get_metadata(0)
-		if item.get("is_equipped") != null:
-			row.set_button_disabled(Cols.EQUIP, 0, item.is_equipped)
+	for row in %AllItems.find_children("", "InventoryRow", false, false):
+		if not row.visible:
+			continue
+		var item = row.item
+		var is_equipped = item.get("is_equipped")
+		if is_equipped != null:
+			row.equip_button.disabled = is_equipped
 
 func _on_back_button_pressed():
 	close()
@@ -95,21 +119,31 @@ func _refresh_row(row, item):
 	var drop_disabled = not (item is ItemGrouping and not item.is_empty())
 	row.set_button_disabled(Cols.DROP, 0, drop_disabled)
 
-func _drop_item(row, item):
+func drop_item(item):
 	if item is ItemGrouping:
 		var grouping = item
 		item = grouping.pop()
-		if grouping.is_empty():
-			row.free()
-		else:
-			if item.get("is_equipped"):
-				grouping.is_equipped = true
-			_refresh_row(row, grouping)
-	else:
-		row.free()
+		if item.get("is_equipped") and not grouping.is_empty():
+			grouping.is_equipped = true
+
 	actor.drop_item(item)
 
-func _use_item(row, item):
+func consume_item(item):
+	if item.consumable:
+		if item is ItemGrouping:
+			var grouping = item
+			item = grouping.pop()
+		actor.consume_item(item)
+	
+			
+func switch_item(item):
+	if item.switchable:
+		item.toggle()
+		if item is ItemGrouping:
+			var grouping = item
+			var top_item = grouping.pop()
+
+func _old_use_item(row, item):
 	if item.consumable:
 		if item is ItemGrouping:
 			var grouping = item
@@ -126,7 +160,6 @@ func _use_item(row, item):
 		if item is ItemGrouping:
 			var grouping = item
 			var top_item = grouping.pop()
-			_make_from_item(top_item, null, row.get_index()+1)
 			if grouping.is_empty():
 				row.free()
 			else:
@@ -134,19 +167,6 @@ func _use_item(row, item):
 		else:
 			_refresh_row(row, item)
 
-	
-func _on_tree_button_clicked(row, column, id, mouse_button_index):
-	var item = row.get_metadata(0)
-	row.set_button_disabled(column, id, true)
-	if column == Cols.DROP:
-		_drop_item(row, item)
-	elif column == Cols.EQUIP:
-		Tender.hero.equip_item(item)
-		reset_buttons_vis()
-	elif column == Cols.USE:
-		_use_item(row, item)
-	acted = true
-	emit_signal("inventory_changed")
 
 
 func _on_tree_item_selected():
@@ -154,3 +174,8 @@ func _on_tree_item_selected():
 	var item = row.get_metadata(0)
 	$ItemDetailsScreen.show_item(item)
 	%Tree.deselect_all()
+	
+func equip_item(item):
+	actor.equip_item(item)
+	reset_buttons_vis()
+	
