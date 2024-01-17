@@ -6,6 +6,8 @@
 script = ExtResource("1_0qsqn")
 char = "𝌕"
 caption = "stack of loom cards"
+desc_simple = "A heavy stack of perforated cards."
+desc_detailed = "A stack of 811 perforated cards swen together along the edges. The high hole density suggests  they would fit a rather modern loom."
 spawn_cost = 1.0
 tags = Array[String](["quest-item"])
 

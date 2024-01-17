@@ -6,6 +6,8 @@
 script = ExtResource("1_h874h")
 char = "🗝"
 caption = "key"
+desc_simple = "A brass key."
+desc_detailed = "A brass key designed for a lever lock with a pronounced wave in the keyway."
 
 [node name="Label" type="Label" parent="."]
 anchors_preset = 8

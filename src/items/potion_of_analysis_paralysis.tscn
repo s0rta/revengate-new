@@ -7,6 +7,8 @@
 [node name="PotionOfAnalysisParalysis" instance=ExtResource("1_2meyj")]
 char = "🍸"
 caption = "potion of analysis paralysis"
+desc_simple = "A slimy liquid that smells very earthy."
+desc_detailed = "A decoction of moldy rye, Panaeolus cinctulus and Psilocybe semilanceata. Expands consciousness and gives uncontrolable muscle spasms."
 message = "you feel overwhelmed by the complexity of everything around you"
 consumable = true
 spawn_cost = 7.0

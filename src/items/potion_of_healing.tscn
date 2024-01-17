@@ -6,6 +6,8 @@
 [node name="PotionOfHealing" instance=ExtResource("1_jyilg")]
 char = "🍸"
 caption = "potion of healing"
+desc_simple = "A thick unpalatable syrup."
+desc_detailed = "Fermented berries and mushrooms. Packs lots of antioxidants and antibiotics."
 consumable = true
 spawn_cost = 2.0
 tags = Array[String](["groupable"])

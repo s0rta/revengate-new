@@ -368,7 +368,7 @@ Strategies:
 - [ ] Tracking keeps moving towards the last place where they saw their prey after it becomes unperceived
 
 Items:
-- [ ] long descriptions for all items (#7)
+- [x] long descriptions for all items (#7)
 
 UX:
 - [x] quick attack button is too small with half width emojis like the broom

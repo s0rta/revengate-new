@@ -6,6 +6,8 @@
 [node name="PotionOfPoison" instance=ExtResource("1_eh6jl")]
 char = "🍸"
 caption = "potion of poison"
+desc_simple = "A bitter odorless solution."
+desc_detailed = "A tincture of potent alkaloids adjusted to 5% beet sugar consentration.  Interfers with a number of bodily functions."
 consumable = true
 spawn_cost = 1.0
 tags = Array[String](["groupable"])
