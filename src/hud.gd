@@ -33,10 +33,10 @@ var quick_attack_cmd : CommandPack.Command
 func _ready():
 	# only show the testing UI on debug builds
 	var is_debug = Utils.is_debug()
-	var rbar = find_child("RButtonBar")
-	for node in rbar.get_children():
-		if node is Button:
-			node.visible = is_debug
+	var tabulator = Tabulator.load()
+	%TestButton1.visible = is_debug
+	%TestButton2.visible = is_debug
+	%ShowCheatsButton.visible = is_debug or tabulator.allow_cheats
 
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):

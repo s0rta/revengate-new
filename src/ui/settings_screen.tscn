@@ -1,0 +1,66 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjnmhx32ogq77"]
+
+[ext_resource type="Script" path="res://src/ui/settings_screen.gd" id="1_iaf86"]
+
+[node name="SettingsScreen" type="Node"]
+script = ExtResource("1_iaf86")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0431373, 0.027451, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"TitleMargin"
+
+[node name="Title" type="Label" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_type_variation = &"TitleLabel"
+text = "Settings
+"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="CheatsCheck" type="CheckBox" parent="VBoxContainer/HBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Enable cheats"
+flat = true
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "We won't judge. Just don't lie about how you won."
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 8
+
+[node name="BackButton" type="Button" parent="VBoxContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Back"
+
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/MarginContainer/CheatsCheck" to="." method="_on_cheats_check_toggled"]
+[connection signal="button_up" from="VBoxContainer/MarginContainer2/BackButton" to="." method="_on_back_button_pressed"]

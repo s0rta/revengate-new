@@ -169,6 +169,7 @@ Button/styles/focus = SubResource("StyleBoxFlat_k4os5")
 Button/styles/hover = SubResource("StyleBoxFlat_lqhqx")
 Button/styles/normal = SubResource("StyleBoxFlat_m6ywx")
 Button/styles/pressed = SubResource("StyleBoxFlat_1sxh1")
+CheckBox/constants/h_separation = 8
 DialogueLabel/base_type = &"RichTextLabel"
 DialogueLabel/colors/default_color = Color(1, 1, 1, 1)
 DialogueLabel/font_sizes/font_size = 24

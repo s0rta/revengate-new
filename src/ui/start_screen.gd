@@ -88,6 +88,9 @@ func _on_license_button_pressed():
 func _on_about_button_pressed():
 	get_tree().change_scene_to_file("res://src/ui/about_screen.tscn")
 
+func _on_settings_button_button_up():
+	get_tree().change_scene_to_file("res://src/ui/settings_screen.tscn")
+
 func _on_bad_save_version_diag_canceled():
 	%BadSaveVersionDiag.confirmed.emit()
 
