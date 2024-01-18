@@ -26,6 +26,7 @@ signal action_complete
 
 func start_teleport_to():
 	is_capturing = true
+	Tender.nb_cheats += 1
 	emit_signal("action_started", "select position...")
 	var vals = await capture_stopped
 	emit_signal("action_complete")

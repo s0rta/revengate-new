@@ -246,6 +246,9 @@ static func time_str(seconds:float):
 	return " ".join(parts)
 
 static func make_game_summary():
+	var bullet = "🞙"
+	if Tender.nb_cheats:
+		bullet = "🞟"
 	var kill_summary: String
 	if Tender.kills.is_empty():
 		kill_summary = "You didn't defeat any monsters."
@@ -254,16 +257,24 @@ static func make_game_summary():
 		var categories = Tender.kills.keys()
 		categories.sort()
 		for cat in categories:
-			lines.append("🞙 %s: %s" % [cat, Tender.kills[cat]])
+			lines.append("%s %s: %s" % [bullet, cat, Tender.kills[cat]])
 		kill_summary = "\n".join(lines)
+	var cheats_line = ""
+	if Tender.nb_cheats == 1:
+		cheats_line = "You cheated once.\n\n"
+	elif Tender.nb_cheats > 1:
+		cheats_line = "You cheated %d times.\n\n" % Tender.nb_cheats
 	var stats_lines = []
 	for key in Tender.hero_stats:
 		if Tender.hero_modifiers.get(key):
-			stats_lines.append("🞙 %s:%s (%+d)" % [key, Tender.hero_stats[key], Tender.hero_modifiers[key]])
+			stats_lines.append("%s %s:%s (%+d)" % [bullet, key, 
+													Tender.hero_stats[key], 
+													Tender.hero_modifiers[key]])
 		else:
-			stats_lines.append("🞙 %s:%s" % [key, Tender.hero_stats[key]])
+			stats_lines.append("%s %s:%s" % [bullet, key, Tender.hero_stats[key]])
 	var stats_summary = "\n".join(stats_lines)
-	return ("Your adventure lasted %d turns and took you through %d locations.\n\n" 
+	return ("Your adventure lasted %d turns and took you through %d locations.\n\n"
+			+ cheats_line
 			+ "You played this game for %s.\n\n"
 			+ "Monsters defeated:\n%s\n\n"
 			+ "Character stats (modifiers):\n%s\n\n") % [Tender.last_turn, 

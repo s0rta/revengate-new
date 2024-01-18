@@ -38,6 +38,7 @@ const GOOD_SAVE_LOCK = "valid.lock"
 @export var quest_tag: String
 @export var quest_is_active: bool
 @export var seen_locs: Array
+@export var nb_cheats := 0
 @export var play_secs: float
 
 var path:String  # where the Bundle should be serialized
@@ -61,7 +62,7 @@ static func full_path(id=null):
 
 static func save(root:Node, turn:int, kills:Dictionary, 
 				sentiments:SentimentTable, quest_tag:String, quest_is_active:bool,
-				seen_locs:Array, play_secs:float, immediate:bool=false):
+				seen_locs:Array, nb_cheats:int, play_secs:float, immediate:bool=false):
 	## Save a game. 
 	## The whole subtree starting at `root` is saved. 
 	## This does not need to be the game root.
@@ -76,6 +77,7 @@ static func save(root:Node, turn:int, kills:Dictionary,
 	bundle.quest_tag = quest_tag
 	bundle.quest_is_active = quest_is_active
 	bundle.seen_locs = seen_locs
+	bundle.nb_cheats = nb_cheats
 	bundle.play_secs = play_secs
 
 	bundle._ensure_dir()

@@ -348,6 +348,7 @@ Items:
 ## v0.12
 - [ ] bug: sewer otter attacks everyone?
 - [ ] bug: self defence does not expire when attacker dies
+- [ ] bug: actors from the same spawn deck share a common memory?
 - [ ] vague value adjectives on gaussian distributions
 - [ ] F-Droid has animated water
 - [ ] improved saved games
@@ -359,6 +360,12 @@ Items:
 - [ ] async preload most shaders to speedup startup
 - [ ] silence a few warnings
 - [ ] remove unreachable levels from starting screen
+- [x] settings screen
+- [ ] public cheats
+  - [ ] teleport
+  - [ ] x-ray inspect
+  - [ ] advance chapter
+  - [x] used cheats show on the victory screen
 
 Strategies:
 - [ ] Benoît roams after the meeting and after yielding
