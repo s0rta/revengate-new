@@ -17,7 +17,7 @@
 
 ## Recognize some basic gestures and pass selectively them to the Game Area Viewport.
 class_name GestureRecognizer extends SubViewportContainer
-signal capture_stopped(success, position)
+signal capture_stopped(result:CaptureResult)
 signal action_started(message)
 signal action_complete
 
@@ -34,6 +34,19 @@ var was_long_tap := false
 # multi-touch recognition
 var nb_touching := 0
 var touches_pos := {}  # event.index -> pos
+
+class CaptureResult extends RefCounted:
+	## The result of attempting to capture the next gesture
+	var success: bool  # did the capture work or was it cancelled?
+	var pos: Vector2  # the screen position in pixels
+	var coord: Vector2i  # the board coordinate in tiles
+	
+	func _init(success_:bool, pos_=null, coord_=null):
+		success = success_
+		if pos_:
+			pos = pos_
+		if coord_:
+			coord = coord_
 
 ## Act on Cell: do the default action for a particular tile.
 class ActEvent extends InputEventAction:
@@ -160,7 +173,8 @@ func _gui_input(event):
 
 func _unhandled_input(event):
 	if is_capturing_clicks and event.is_action_pressed("ui_cancel"):
-		emit_signal("capture_stopped", false, null)
+		var res = CaptureResult.new(false)
+		emit_signal("capture_stopped", res)
 		accept_event()
 
 func _is_tap_or_left_btn(event):
@@ -178,7 +192,9 @@ func _attempt_capture(event):
 		if _is_tap_or_left_btn(event):
 			accept_event()
 			if event.pressed:
-				emit_signal("capture_stopped", true, event.position)
+				var coord = viewport.global_pos_to_board_coord(event.position)
+				var res = CaptureResult.new(true, event.position, coord)
+				emit_signal("capture_stopped", res)
 			return true
 	return false
 
@@ -212,20 +228,23 @@ func _mt_info(current_index, current_pos):
 	info.avg_dist_eq = abs(info.avg_dist_old - info.avg_dist_new) < POS_EPSILON
 	return info
 
+func start_capture_coord(msg) -> CaptureResult:
+	is_capturing_clicks = true
+	emit_signal("action_started", msg)
+	var res = await capture_stopped
+	is_capturing_clicks = false
+	emit_signal("action_complete")
+	return res
+
 func start_loot():
 	## Start the loot action, pass the control to Hero
 	var event = LootEvent.new()
 	viewport.inject_event(event)
 
 func start_inspect_at():
-	is_capturing_clicks = true
-	emit_signal("action_started", "select position...")
-	var vals = await capture_stopped
-	emit_signal("action_complete")
-	if vals[0]:
-		var coord = viewport.global_pos_to_board_coord(vals[1])
-		$/root/Main.commands.inspect(coord)
-	is_capturing_clicks = false
+	var res = await start_capture_coord("select position...")
+	if res.success:
+		$/root/Main.commands.inspect(res.coord)
 
 func show_inventory():
 	## Start the loot action, pass the control to Hero

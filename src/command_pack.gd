@@ -24,6 +24,7 @@ var _cmd_classes = []  # all sub-classes of Command must be added to this list
 class Command extends RefCounted:
 	var is_action: bool
 	var is_default := false  # is this command what you'd get from a single tap?
+	var is_cheat := false
 	var caption: String
 	var index: RevBoard.BoardIndex
 
@@ -49,10 +50,12 @@ class Command extends RefCounted:
 		return false  # sub-classes must override this to enable the HUD version of this command
 		
 	func run(coord:Vector2i) -> bool:
+		## Run the command, return if that counted as a turn action.
 		assert(false, "Not implemented")
 		return false
 
 	func run_at_hero(coord:Vector2i) -> bool:
+		## Run the command, return if that counted as a turn action.
 		# TODO: we might as well get the hero coord from the Tender and receive no args
 		assert(false, "Not implemented")
 		return false
@@ -261,6 +264,51 @@ class GetCloser extends Command:
 		else:
 			Tender.hero.move_toward_actor(other)
 		return true
+
+class TeleportCheat extends Command:
+	func _init(index_=null):
+		is_action = false
+		is_cheat = true
+		caption = "Teleport"
+		super(index_)
+
+	func is_valid_for(coord:Vector2i):
+		return true
+	
+	func is_valid_for_hero_at(coord:Vector2i):
+		return true
+	
+	func run(coord:Vector2i) -> bool:
+		var surveyor = Tender.hud.get_gesture_surveyor()
+		var res = await surveyor.start_capture_coord("select position...")
+		if res.success:
+			Tender.hero.place(res.coord, true)
+		return false
+
+	func run_at_hero(coord:Vector2i) -> bool:
+		run(coord)
+		return false 
+
+class RegenCheat extends Command:
+	func _init(index_=null):
+		is_action = false
+		is_cheat = true
+		caption = "Regen"
+		super(index_)
+
+	func is_valid_for(coord:Vector2i):
+		return true
+	
+	func is_valid_for_hero_at(coord:Vector2i):
+		return true
+	
+	func run(coord:Vector2i) -> bool:
+		Tender.hero.health += Tender.hero.health_full / 2
+		Tender.hero.health_changed.emit(Tender.hero.health)
+		return false
+
+	func run_at_hero(coord:Vector2i) -> bool:
+		return run(coord)
 		
 class DoorHandler extends Command:
 	var door_at = null
@@ -331,7 +379,8 @@ class OpenDoor extends DoorHandler:
 		return true
 		
 func _ready():
-	_cmd_classes = [Attack, Talk, TravelTo, GetCloser, Inspect, CloseDoor, OpenDoor]
+	_cmd_classes = [Attack, Talk, TravelTo, GetCloser, Inspect, CloseDoor, OpenDoor, 
+					TeleportCheat, RegenCheat]
 
 func commands_for(coord, hero_pov:=false, index=null):
 	## Return a list of valid coordinates for `coord`
