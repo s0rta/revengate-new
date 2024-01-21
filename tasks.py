@@ -85,7 +85,7 @@ def make_export_presets(c, signed=True):
     if signed:
         creds = _load_credentials()
     
-    for sect in ["preset.0", "preset.1", "preset.2"]:
+    for sect in ["preset.0", "preset.1", "preset.2", "preset.3"]:
         old_path = parser[sect]["export_path"]
         parser[sect]["export_path"] = _make_path(old_path, version_name)
 
@@ -102,6 +102,9 @@ def make_export_presets(c, signed=True):
                 parser[sect][f"keystore/{mode}_password"] = creds["password"]
             else:
                 parser[sect]["package/signed"] = "false"
+
+    for sect in ["preset.3.options"]:
+        parser[sect]["application/version"] = f'"{version_name}"'
 
     parser.write(open(PRESETS_PATH, "wt"), False)
 

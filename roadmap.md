@@ -362,10 +362,12 @@ Items:
 - [ ] remove unreachable levels from starting screen
 - [x] settings screen
 - [ ] public cheats
-  - [ ] teleport
+  - [x] teleport
   - [ ] x-ray inspect
   - [ ] advance chapter
   - [x] used cheats show on the victory screen
+  - [ ] cheats have access key
+- [x] MacOS export preset
 
 Strategies:
 - [ ] Benoît roams after the meeting and after yielding
