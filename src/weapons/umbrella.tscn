@@ -7,10 +7,13 @@
 [node name="Umbrella" instance=ExtResource("1_etf0n")]
 script = ExtResource("1_nhkai")
 damage = 2
+range = 1
 damage_family = 1
 is_equipped = false
 char = "🌂"
 caption = "umbrella"
+desc_simple = "An en-tous-cas umbrella that protects well agains both sun and rain."
+desc_detailed = "A waxed canvas folding cannopy mounted on a meter-long wooden shaft. The handle curves into a half-circle."
 
 [node name="Label" parent="." index="0"]
 text = "⚔"

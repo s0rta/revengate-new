@@ -198,14 +198,17 @@ mem = SubResource("Resource_ayrts")
 [node name="Book" parent="Quest2Goals" instance=ExtResource("17_3gl0d")]
 char = "📗"
 caption = "Little Key of Solomon"
+spawn_cost = 1.0
 
 [node name="Book2" parent="Quest2Goals" instance=ExtResource("17_3gl0d")]
 char = "📘"
 caption = "old looking book"
+spawn_cost = 1.0
 
 [node name="Book3" parent="Quest2Goals" instance=ExtResource("17_3gl0d")]
 char = "📘"
 caption = "large manuscript in a foreign language"
+spawn_cost = 1.0
 
 [node name="Rare" type="Node" parent="."]
 script = ExtResource("7_bd8gw")

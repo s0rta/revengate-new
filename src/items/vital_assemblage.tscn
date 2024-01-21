@@ -5,4 +5,6 @@
 [node name="VitalAssemblage" instance=ExtResource("1_wlvdu")]
 char = "🕜"
 caption = "intricate clockwork mechanism"
+desc_simple = "A series of small gears inside an ornate wooden frame."
+desc_detailed = "Brass gears and tourmaline crystals mounted on a lever escapement. The mechanism is housed in decorated oak frame."
 tags = Array[String](["vital-assemblage"])

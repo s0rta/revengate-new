@@ -6,6 +6,8 @@
 [node name="PotionOfBooze" instance=ExtResource("1_q2tfm")]
 char = "🍾"
 caption = "potion of booze"
+desc_simple = "A cheap beer."
+desc_detailed = "An ale with a mixed grain bill of mostly barley and some beet sugar to increase the alcohol content. Bittered with gruit rather than hops, which stimulates the immune system."
 message = "What an invigorating feeling!"
 consumable = true
 spawn_cost = 3.0

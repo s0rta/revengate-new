@@ -148,9 +148,7 @@ max_dungeon_occ = 3
 
 [node name="PotionOfRegen" parent="Healing" instance=ExtResource("14_cxrka")]
 
-[node name="CapsuleOfRegen" parent="Healing" instance=ExtResource("16_ap6xo")]
-caption = "magic capsule of regen "
-spawn_cost = 4.0
+[node name="MagicCapsuleOfRegen" parent="Healing" instance=ExtResource("16_ap6xo")]
 
 [node name="Hissing" parent="." instance=ExtResource("27_8pr1w")]
 
@@ -167,4 +165,3 @@ mem = SubResource("Resource_ubvso")
 [connection signal="visibility_changed" from="Rare/Dynamite" to="Rare/Dynamite" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Healing/PotionOfHealing" to="Healing/PotionOfHealing" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Healing/PotionOfRegen" to="Healing/PotionOfRegen" method="_on_visibility_changed"]
-[connection signal="visibility_changed" from="Healing/CapsuleOfRegen" to="Healing/CapsuleOfRegen" method="_on_visibility_changed"]

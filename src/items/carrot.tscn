@@ -6,6 +6,9 @@
 [node name="Carrot" instance=ExtResource("1_lg04w")]
 char = "🥕"
 caption = "carrot"
+desc_simple = "A regular red and yellow carrot."
+desc_detailed = "A Longue Rouge Sang carrot that is packed with antioxidants. Improves health and vision."
+message = "Crunchy!"
 consumable = true
 spawn_cost = 2.0
 tags = Array[String](["groupable"])

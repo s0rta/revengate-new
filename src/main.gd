@@ -348,7 +348,7 @@ func capture_game(immediate:bool):
 	print("Saving at turn %d" % $TurnQueue.turn)
 	bundle.save(dungeons, $TurnQueue.turn, Tender.kills, Tender.sentiments, 
 				Tender.quest.tag, Tender.quest.is_active,
-				Tender.seen_locs.keys(), Tender.play_secs, 
+				Tender.seen_locs.keys(), Tender.nb_cheats, Tender.play_secs, 
 				immediate)
 	if was_running:
 		await $TurnQueue.resume()
@@ -380,6 +380,7 @@ func restore_game(bundle=null):
 	Tender.quest = _quest_by_tag(bundle.quest_tag)
 	Tender.quest.is_active = bundle.quest_is_active
 	Tender.seen_locs.clear()
+	Tender.nb_cheats = bundle.nb_cheats
 	Tender.play_secs = bundle.play_secs
 	Tender.viewport = %Viewport
 	Tender.hud = $HUD
@@ -437,12 +438,7 @@ func test():
 func test2():
 	print("Testing: 2, 1... 2, 1!")
 	
-	var board = get_board()
-	var source = board.tile_set.get_source(0)
-	var water_data = source.get_tile_data(V.i(7, 7), 0)
-#	water_data.material = null
-	var mat = water_data.material
-	var noise = mat.get_shader_parameter("noise")
-	print(noise)
-#	print("water mat: %s" % [source.get_tile_data(V.i(7, 7), 0).material])
-#	print("stairs mat: %s" % [source.get_tile_data(V.i(0, 0), 0).material])
+	var tabulator = Tabulator.load()
+	tabulator.allow_cheats = not tabulator.allow_cheats
+	tabulator.save()
+	

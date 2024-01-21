@@ -6,6 +6,8 @@
 [node name="SerumOfAgility" instance=ExtResource("1_2ify7")]
 char = "💉"
 caption = "serum of agility"
+desc_simple = "An opaque metal syringe filled with some kind of liquid."
+desc_detailed = "A mixure of enzymes and potent plant extracts that enhances muscle response."
 message = "Ouch!"
 consumable = true
 spawn_cost = 30.0

@@ -5,3 +5,5 @@
 [node name="Ledger" instance=ExtResource("1_0mml2")]
 char = "📗"
 caption = "Ledger"
+desc_simple = "A large book full of numbers."
+desc_detailed = "A series of hand written records following double-entry accounting principles. There are small smuges here and there, but all the sums are perfectly accurate."

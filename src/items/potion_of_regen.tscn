@@ -6,6 +6,8 @@
 [node name="PotionOfRegen" instance=ExtResource("1_oiw5o")]
 char = "🍸"
 caption = "potion of regeneration"
+desc_simple = "A yellowish viscous liquid."
+desc_detailed = "A selection of Alpine herbs macerated into a neutral grain spirit then redistilled by Carthusian monks. Accelerates coagulation and amplifies the action of white blood cells."
 consumable = true
 spawn_cost = 3.0
 tags = Array[String](["groupable"])

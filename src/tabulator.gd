@@ -20,33 +20,27 @@
 ## A tabulator was a machine to sort and organize punch cards. The first one was developped in the 
 ## late 19th century by Herman Hollerith before he founded the company that would later become IBM 
 ## to manufacture such machines.
-class_name Tabulator extends Node
-const fpath = "user://world_events.data"
+class_name Tabulator extends Resource
+const FILE_PATH = "user://global_facts.tres"
 
-func getv(key, default=null):
-	var values = get_content()
-	return values.get(key, default)
-	
-func setv(key, val):
-	var values = get_content()
-	values[key] = val
-	save_content(values)
+@export var allow_cheats := false
 
-func get_content():
-	if FileAccess.file_exists(fpath):
-		var store = FileAccess.open(fpath, FileAccess.READ)
-		return str_to_var(store.get_as_text())
+static func load() -> Tabulator:
+	var da = DirAccess.open("user://")
+	if da.file_exists(FILE_PATH):
+		var tabulator = ResourceLoader.load(FILE_PATH, "", ResourceLoader.CACHE_MODE_IGNORE)
+		return tabulator
 	else:
-		return {}
-		
-func save_content(values):
-	var store = FileAccess.open(fpath, FileAccess.WRITE)
-	store.store_string(var_to_str(values))
+		return Tabulator.new()
 
-func clear():
+static func clear():
 	## Remove all records from the Tabulator data store.
 	DirAccess.remove_absolute(get_abs_path())
 
-func get_abs_path():
-	return ProjectSettings.globalize_path(fpath)
-	
+static func get_abs_path():
+	return ProjectSettings.globalize_path(FILE_PATH)
+
+func save():
+	var ret_code = ResourceSaver.save(self, FILE_PATH)
+	assert(ret_code == OK)
+

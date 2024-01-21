@@ -6,6 +6,8 @@
 [node name="SerumOfVitality" instance=ExtResource("1_4oqew")]
 char = "💉"
 caption = "serum of vitality"
+desc_simple = "An opaque metal syringe filled with some kind of liquid."
+desc_detailed = "A mixure of enzymes and potent plant extracts that enhances the receiver's constitution and healing ability."
 message = "Ouch!"
 consumable = true
 spawn_cost = 30.0

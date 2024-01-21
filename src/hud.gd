@@ -33,16 +33,19 @@ var quick_attack_cmd : CommandPack.Command
 func _ready():
 	# only show the testing UI on debug builds
 	var is_debug = Utils.is_debug()
-	var rbar = find_child("RButtonBar")
-	for node in rbar.get_children():
-		if node is Button:
-			node.visible = is_debug
+	var tabulator = Tabulator.load()
+	%TestButton1.visible = is_debug
+	%TestButton2.visible = is_debug
+	%ShowCheatsButton.visible = is_debug or tabulator.allow_cheats
 
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):
 		if Tender.hero.has_strategy(true):
 			get_viewport().set_input_as_handled()
 			request_cancel_strats()
+
+func get_gesture_surveyor():
+	return $/root.find_child("GestureSurveyor", true, false)
 
 func watch_hero(hero:Actor=null):
 	## Connect UI elements like the health-bar to keep track of `hero`.
@@ -96,8 +99,20 @@ func _refresh_lbar_commands(hero_coord, index):
 		if node is CommandButton:
 			%LButtonBar.remove_child(node)
 	for cmd in %CommandPack.commands_for(hero_coord, true, index):
-		var btn = CommandButton.new(cmd, hero_coord)
-		%LButtonBar.add_child(btn)
+		if not cmd.is_cheat:
+			var btn = CommandButton.new(cmd, hero_coord)
+			%LButtonBar.add_child(btn)
+
+func _refresh_cheatsbar_commands(hero_coord, index):
+	## Remove commands that are no longer valid from the cheats bar and add the newly valid ones.
+	# TODO: recycle as many buttons as possible rather than recreating everything.
+	for node in %CheatsBar.get_children():
+		if node is CommandButton or node is Button:
+			%CheatsBar.remove_child(node)
+	for cmd in %CommandPack.commands_for(hero_coord, true, index):
+		if cmd.is_cheat:
+			var btn = CommandButton.new(cmd, hero_coord)
+			%CheatsBar.add_child(btn)
 
 func update_states_at(hero_coord):
 	## Refresh internal states by taking into account a recent change at `hero_coord`
@@ -116,6 +131,7 @@ func update_states_at(hero_coord):
 	loot_button.visible = null != index.top_item_at(hero_coord)
 	refresh_cancel_button_vis()
 	_refresh_lbar_commands(hero_coord, index)
+	_refresh_cheatsbar_commands(hero_coord, index)
 
 func refresh_buttons_vis(_old_coord, hero_coord):
 	## update the visibility of some action button depending on where the hero is standing
@@ -169,7 +185,8 @@ func refresh_input_enabled(enabled):
 		var hero_coord = Tender.hero.get_cell_coord()
 		var index = Tender.hero.get_board().make_index()
 		_refresh_lbar_commands(hero_coord, index)
-
+		_refresh_cheatsbar_commands(hero_coord, index)
+		
 	for child in %LButtonBar.get_children():
 		if child is Button:
 			child.disabled = not enabled

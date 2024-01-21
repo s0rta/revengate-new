@@ -170,7 +170,6 @@ position = Vector2(336, 48)
 
 [node name="Umbrella" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_ih5ox")]
 position = Vector2(336, 48)
-range = 1
 
 [node name="BarPatron1" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
 visible = true
@@ -296,6 +295,7 @@ size_flags_horizontal = 10
 size_flags_vertical = 4
 
 [node name="CheatsBar" type="VBoxContainer" parent="HUD/RGroup/DebugButtons/CheatsMargin"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -321,19 +321,22 @@ size_flags_vertical = 8
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="TestButton" type="Button" parent="HUD/RGroup/DebugButtons/RMargin/RButtonBar"]
+[node name="TestButton1" type="Button" parent="HUD/RGroup/DebugButtons/RMargin/RButtonBar"]
+unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0.501961)
 layout_mode = 2
 focus_mode = 0
 text = "Test 1"
 
 [node name="TestButton2" type="Button" parent="HUD/RGroup/DebugButtons/RMargin/RButtonBar"]
+unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0.5)
 layout_mode = 2
 focus_mode = 0
 text = "Test 2"
 
 [node name="ShowCheatsButton" type="Button" parent="HUD/RGroup/DebugButtons/RMargin/RButtonBar"]
+unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0.5)
 layout_mode = 2
 focus_mode = 0
@@ -536,7 +539,7 @@ script = ExtResource("41_hgs5k")
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/InventoryButton" to="BoardArea/GestureSurveyor" method="show_inventory"]
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/CheatsMargin/CheatsBar/TeleportButton" to="HUD/CheatsSurveyor" method="start_teleport_to"]
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/CheatsMargin/CheatsBar/InspectButton" to="HUD/CheatsSurveyor" method="start_inspect_at"]
-[connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/TestButton" to="." method="test"]
+[connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/TestButton1" to="." method="test"]
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/TestButton2" to="." method="test2"]
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/ShowCheatsButton" to="HUD" method="toggle_cheats_box"]
 [connection signal="button_up" from="HUD/RGroup/MarginContainer/QuickAttackButton" to="HUD" method="_on_quick_attack_button_button_up"]

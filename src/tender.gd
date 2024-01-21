@@ -36,6 +36,7 @@ var last_turn = null
 var seen_locs := {}
 var hero_stats = null
 var hero_modifiers = null
+var nb_cheats := 0  # the number of times the player has cheated
 var play_secs := 0.0
 
 # inter-chapter long narrations
@@ -53,13 +54,14 @@ func reset(hero_=null, hud_=null, viewport_=null, sentiments_=null):
 	kills = {}
 	sentiments = sentiments_
 	last_turn = null
-	seen_locs.clear()	
+	seen_locs.clear()
+	nb_cheats = 0
 	hero_stats = null
 	hero_modifiers = null
 	play_secs = 0.0
 	story_title = null
 	story_path = null
-	
+
 func pre_game(story_title_, story_path_):
 	reset()
 	story_title = story_title_
