@@ -99,7 +99,7 @@ func _refresh_lbar_commands(hero_coord, index):
 		if node is CommandButton:
 			%LButtonBar.remove_child(node)
 	for cmd in %CommandPack.commands_for(hero_coord, true, index):
-		if not cmd.is_cheat:
+		if not cmd.is_cheat and not cmd.is_debug:
 			var btn = CommandButton.new(cmd, hero_coord)
 			%LButtonBar.add_child(btn)
 
@@ -110,7 +110,7 @@ func _refresh_cheatsbar_commands(hero_coord, index):
 		if node is CommandButton or node is Button:
 			%CheatsBar.remove_child(node)
 	for cmd in %CommandPack.commands_for(hero_coord, true, index):
-		if cmd.is_cheat:
+		if cmd.is_cheat or cmd.is_debug:
 			var btn = CommandButton.new(cmd, hero_coord)
 			%CheatsBar.add_child(btn)
 

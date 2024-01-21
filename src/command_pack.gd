@@ -25,6 +25,7 @@ class Command extends RefCounted:
 	var is_action: bool
 	var is_default := false  # is this command what you'd get from a single tap?
 	var is_cheat := false
+	var is_debug := false
 	var caption: String
 	var index: RevBoard.BoardIndex
 
@@ -265,6 +266,51 @@ class GetCloser extends Command:
 			Tender.hero.move_toward_actor(other)
 		return true
 
+class DumpCheat extends Command:
+	func _init(index_=null):
+		is_action = false
+		is_debug = true
+		caption = "Debug Dump"
+		super(index_)
+
+	func is_valid_for(coord:Vector2i):
+		return true
+	
+	func is_valid_for_hero_at(coord:Vector2i):
+		return true
+	
+	func _ddump_at(coord):
+		# TODO: move most of this to board.ddump_cell()
+		var coord_str = RevBoard.coord_str(coord)
+		print("Data at %s:" % coord_str)
+		var board: RevBoard = Tender.hero.get_board()
+		print("  Board.is_in_rect(%s): %s" % [coord_str, board.is_on_board(coord)])
+		var data = board.get_cell_tile_data(0, coord)
+		if data:
+			print("  cell data: %s" % [[var_to_str(data), 
+										data.get_custom_data("is_connector")]])
+		board.ddump_cell(coord)
+		var actor = index.actor_at(coord)
+		if actor:
+			actor.ddump()
+		var item = index.top_item_at(coord)
+		if item:
+			item.ddump()
+
+	func run(coord:Vector2i) -> bool:
+		_ddump_at(coord)
+		return false
+
+	func _start_ddump():
+		var surveyor = Tender.hud.get_gesture_surveyor()
+		var res = await surveyor.start_capture_coord("select position...")
+		if res.success:
+			_ddump_at(res.coord)
+
+	func run_at_hero(coord:Vector2i) -> bool:
+		_start_ddump()
+		return false
+
 class TeleportCheat extends Command:
 	func _init(index_=null):
 		is_action = false
@@ -279,15 +325,18 @@ class TeleportCheat extends Command:
 		return true
 	
 	func run(coord:Vector2i) -> bool:
+		Tender.hero.place(coord, true)
+		return false
+
+	func _start_teleport():
 		var surveyor = Tender.hud.get_gesture_surveyor()
 		var res = await surveyor.start_capture_coord("select position...")
 		if res.success:
 			Tender.hero.place(res.coord, true)
-		return false
 
 	func run_at_hero(coord:Vector2i) -> bool:
-		run(coord)
-		return false 
+		_start_teleport()
+		return false
 
 class RegenCheat extends Command:
 	func _init(index_=null):
@@ -297,18 +346,15 @@ class RegenCheat extends Command:
 		super(index_)
 
 	func is_valid_for(coord:Vector2i):
-		return true
+		return false
 	
 	func is_valid_for_hero_at(coord:Vector2i):
 		return true
 	
-	func run(coord:Vector2i) -> bool:
+	func run_at_hero(coord:Vector2i) -> bool:
 		Tender.hero.health += Tender.hero.health_full / 2
 		Tender.hero.health_changed.emit(Tender.hero.health)
 		return false
-
-	func run_at_hero(coord:Vector2i) -> bool:
-		return run(coord)
 		
 class DoorHandler extends Command:
 	var door_at = null
@@ -380,17 +426,20 @@ class OpenDoor extends DoorHandler:
 		
 func _ready():
 	_cmd_classes = [Attack, Talk, TravelTo, GetCloser, Inspect, CloseDoor, OpenDoor, 
-					TeleportCheat, RegenCheat]
+					DumpCheat, TeleportCheat, RegenCheat]
 
 func commands_for(coord, hero_pov:=false, index=null):
 	## Return a list of valid coordinates for `coord`
-	# TODO: option to make the list from the point of view of the hero
-	
+	var is_debug = Utils.is_debug()
+	var allow_cheats = Tabulator.load().allow_cheats
 	if index == null:
 		index = Tender.hero.get_board().make_index()
+	
 	var commands = []
 	for cls in _cmd_classes:
 		var cmd = cls.new(index)
+		if not is_debug and cmd.is_cheat and not allow_cheats:
+			continue
 		if (hero_pov and cmd.is_valid_for_hero_at(coord)) \
 			or (not hero_pov and cmd.is_valid_for(coord)):
 			commands.append(cmd)
