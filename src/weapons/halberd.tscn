@@ -12,6 +12,8 @@ damage_family = 3
 is_equipped = false
 char = "🝐"
 caption = "halberd"
+desc_simple = "A very long axe."
+desc_detailed = "A head with a spike on one side and a blade on the other mounted to an ashwood two meter shaft. Forged languettes protect the first quarter of the shaft closest to the head."
 skill = "polearm"
 
 [node name="Label" parent="." index="0"]
