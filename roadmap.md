@@ -367,6 +367,8 @@ Items:
   - [ ] advance chapter
   - [x] used cheats show on the victory screen
   - [ ] cheats have access key
+  - [x] all cheats incremend the cheats counter
+  - [ ] context menu uses CommandButton
 - [x] MacOS export preset
 
 Strategies:

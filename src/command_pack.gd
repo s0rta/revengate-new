@@ -23,6 +23,7 @@ var _cmd_classes = []  # all sub-classes of Command must be added to this list
 ## A game command
 class Command extends RefCounted:
 	var is_action: bool
+	var ui_action = null
 	var is_default := false  # is this command what you'd get from a single tap?
 	var is_cheat := false
 	var is_debug := false
@@ -269,6 +270,7 @@ class GetCloser extends Command:
 class DumpCheat extends Command:
 	func _init(index_=null):
 		is_action = false
+		ui_action = "cheat-inspect-at"
 		is_debug = true
 		caption = "Debug Dump"
 		super(index_)
@@ -311,10 +313,18 @@ class DumpCheat extends Command:
 		_start_ddump()
 		return false
 
-class TeleportCheat extends Command:
+class Cheat extends Command:
 	func _init(index_=null):
 		is_action = false
 		is_cheat = true
+		super(index_)
+
+	func inc_nb_cheats():
+		Tender.nb_cheats += 1
+
+class TeleportCheat extends Cheat:
+	func _init(index_=null):
+		ui_action = "cheat-teleport-to"
 		caption = "Teleport"
 		super(index_)
 
@@ -325,6 +335,7 @@ class TeleportCheat extends Command:
 		return true
 	
 	func run(coord:Vector2i) -> bool:
+		inc_nb_cheats()
 		Tender.hero.place(coord, true)
 		return false
 
@@ -332,16 +343,15 @@ class TeleportCheat extends Command:
 		var surveyor = Tender.hud.get_gesture_surveyor()
 		var res = await surveyor.start_capture_coord("select position...")
 		if res.success:
+			inc_nb_cheats()
 			Tender.hero.place(res.coord, true)
 
 	func run_at_hero(coord:Vector2i) -> bool:
 		_start_teleport()
 		return false
 
-class RegenCheat extends Command:
+class RegenCheat extends Cheat:
 	func _init(index_=null):
-		is_action = false
-		is_cheat = true
 		caption = "Regen"
 		super(index_)
 
@@ -352,6 +362,7 @@ class RegenCheat extends Command:
 		return true
 	
 	func run_at_hero(coord:Vector2i) -> bool:
+		inc_nb_cheats()
 		Tender.hero.health += Tender.hero.health_full / 2
 		Tender.hero.health_changed.emit(Tender.hero.health)
 		return false

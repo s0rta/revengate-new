@@ -109,8 +109,9 @@ func _refresh_cheatsbar_commands(hero_coord, index):
 	for node in %CheatsBar.get_children():
 		if node is CommandButton or node is Button:
 			%CheatsBar.remove_child(node)
+	var is_debug = Utils.is_debug()
 	for cmd in %CommandPack.commands_for(hero_coord, true, index):
-		if cmd.is_cheat or cmd.is_debug:
+		if cmd.is_cheat or is_debug and cmd.is_debug:
 			var btn = CommandButton.new(cmd, hero_coord)
 			%CheatsBar.add_child(btn)
 
