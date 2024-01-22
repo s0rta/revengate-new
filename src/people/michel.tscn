@@ -1,21 +1,30 @@
-[gd_scene load_steps=7 format=3 uid="uid://3d0xpwofsr0e"]
+[gd_scene load_steps=9 format=3 uid="uid://3d0xpwofsr0e"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_ndmup"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="2_f4a5l"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="2_pmr0y"]
 [ext_resource type="PackedScene" uid="uid://h7s2p8mgm387" path="res://src/weapons/sword.tscn" id="3_bwu75"]
 [ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="4_7v07x"]
 [ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="5_q0pnu"]
 [ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="6_thcb6"]
+
+[sub_resource type="Resource" id="Resource_xmmpf"]
+resource_local_to_scene = true
+script = ExtResource("2_pmr0y")
+_facts = []
 
 [node name="Michel" instance=ExtResource("1_ndmup")]
 char = "@"
 caption = "Michel Boilou"
 color = Color(0.117647, 0.603922, 0.517647, 1)
 conversation_file = "res://src/story/michel.dialogue"
+conversation_sect = "intro"
 faction = 1
+mem = SubResource("Resource_xmmpf")
 
 [node name="Label" parent="." index="0"]
-theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
+theme_override_colors/font_color = Color(0.117647, 0.603922, 0.517647, 1)
+text = "@"
 
 [node name="SelfDefense" type="Node" parent="." index="6"]
 script = ExtResource("2_f4a5l")

@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-# TODO: Tap zone to see item details
 # TODO: Hide row when last item in stack is used or dropped
 # TODO: Update label when we use an item from a non empty stack
 # TODO: Duplicate rows when we toggle something that was part of a stack
@@ -175,7 +174,12 @@ func _on_tree_item_selected():
 	$ItemDetailsScreen.show_item(item)
 	%Tree.deselect_all()
 	
+func _show_item_details(item):
+	$ItemDetailsScreen.show_item(item)	
+
 func equip_item(item):
 	actor.equip_item(item)
 	reset_buttons_vis()
+	
+
 	

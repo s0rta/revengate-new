@@ -17,9 +17,21 @@
 
 class_name InventoryRow extends MarginContainer
 
+signal item_details_requested(item)
+
 var item 
-@onready var label = find_child("Label", true, false)
+var label
 @onready var equip_button = find_child("EquipButton", true, false)
 @onready var consume_button  = find_child("ConsumeButton", true, false)
 @onready var activate_button  = find_child("ActivateButton", true, false)
 @onready var drop_button  = find_child("DropButton", true, false)
+
+func _ready():
+	label = find_child("Label", true, false)
+	label.gui_input.connect(show_detail)
+	
+func show_detail(event):
+	if Utils.event_is_tap_or_left(event):
+		item_details_requested.emit(item)
+
+

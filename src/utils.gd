@@ -403,3 +403,11 @@ static func vague_value(value, place_in_range, perception) -> String:
 	# smaller than the normal range
 	return descpitors[-1]
 	
+static func event_is_tap_or_left(event):
+	if event is InputEventScreenTouch:
+		return true
+	if not OS.has_feature("mobile"):
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+			return true
+	return false
+	

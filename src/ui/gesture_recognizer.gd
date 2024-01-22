@@ -114,7 +114,7 @@ func _gui_input(event):
 		is_processing = false
 		accept_event()
 		show_context_menu_for(event.position)
-	elif _is_tap_or_left_btn(event):
+	elif Utils.event_is_tap_or_left(event):
 		# touch actions are treated like MOUSE_BUTTON_LEFT
 		var index = event.get("index")
 		if index == null:
@@ -177,19 +177,11 @@ func _unhandled_input(event):
 		emit_signal("capture_stopped", res)
 		accept_event()
 
-func _is_tap_or_left_btn(event):
-	if event is InputEventScreenTouch:
-		return true
-	if not OS.has_feature("mobile"):
-		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-			return true
-	return false
-
 func _attempt_capture(event):
 	## Try to capture event (possibly for a multi-tap action that is awaiting on it).
 	## Return where the event was indeed captured.
 	if is_capturing_clicks:
-		if _is_tap_or_left_btn(event):
+		if Utils.event_is_tap_or_left(event):
 			accept_event()
 			if event.pressed:
 				var coord = viewport.global_pos_to_board_coord(event.position)
