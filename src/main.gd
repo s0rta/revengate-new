@@ -274,13 +274,11 @@ func _on_turn_finished(turn):
 	if active and Tender.hero and Tender.hero.is_alive():
 		capture_game(false)
 
-func show_context_menu_for(coord) -> bool:
+func show_context_menu_for(coord):
 	## Show a list of context-specific actions.
 	## Return if any of the actions taken costed a turn.
 	var cmds = commands.commands_for(coord)
 	%ContextMenuPopup.show_commands(cmds, coord)
-	var acted = await %ContextMenuPopup.closed
-	return acted
 
 func start_ch2():
 	var hero = Tender.hero

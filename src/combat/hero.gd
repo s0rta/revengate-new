@@ -51,7 +51,8 @@ func _unhandled_input(event):
 				get_board().add_message(self, "%s has nothing to tell you." % other.caption)
 				acted = true
 		elif other and not other.is_unexposed():
-			acted = await $"/root/Main".show_context_menu_for(coord)
+			# `acted` will be set by the Command if one is invoked
+			$"/root/Main".show_context_menu_for(coord)
 		else:
 			# no one there
 			if index.is_free(coord) and click_dist == 1:

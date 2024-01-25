@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -232,7 +232,8 @@ class TravelTo extends Command:
 		
 	func run(coord:Vector2i) -> bool:
 		if Tender.hero.travel_to(coord, index):
-			return Tender.hero.act()
+			Tender.hero.act()
+			return true
 		else:
 			# didn't work, probably because the path is blocked
 			return false

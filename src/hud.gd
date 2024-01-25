@@ -1,4 +1,4 @@
-# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -100,7 +100,7 @@ func _refresh_lbar_commands(hero_coord, index):
 			%LButtonBar.remove_child(node)
 	for cmd in %CommandPack.commands_for(hero_coord, true, index):
 		if not cmd.is_cheat and not cmd.is_debug:
-			var btn = CommandButton.new(cmd, hero_coord)
+			var btn = CommandButton.new(cmd, hero_coord, true)
 			%LButtonBar.add_child(btn)
 
 func _refresh_cheatsbar_commands(hero_coord, index):
@@ -112,7 +112,7 @@ func _refresh_cheatsbar_commands(hero_coord, index):
 	var is_debug = Utils.is_debug()
 	for cmd in %CommandPack.commands_for(hero_coord, true, index):
 		if cmd.is_cheat or is_debug and cmd.is_debug:
-			var btn = CommandButton.new(cmd, hero_coord)
+			var btn = CommandButton.new(cmd, hero_coord, true)
 			%CheatsBar.add_child(btn)
 
 func update_states_at(hero_coord):

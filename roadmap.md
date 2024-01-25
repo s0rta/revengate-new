@@ -363,12 +363,12 @@ Items:
 - [x] settings screen
 - [ ] public cheats
   - [x] teleport
-  - [ ] x-ray inspect
+  - [x] x-ray inspect
   - [ ] advance chapter
   - [x] used cheats show on the victory screen
-  - [ ] cheats have access key
+  - [x] cheats have access key
   - [x] all cheats incremend the cheats counter
-  - [ ] context menu uses CommandButton
+  - [x] context menu uses CommandButton
 - [x] MacOS export preset
 
 Strategies:

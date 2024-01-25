@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -20,22 +20,38 @@ class_name CommandButton extends Button
 
 var cmd:CommandPack.Command
 var coord:Vector2i
+var hero_pov:bool
 
-func _init(command, coord_):
+func _init(command, coord_, hero_pov_:bool):
 	cmd = command
 	coord = coord_
+	hero_pov = hero_pov_
 	text =  command.caption
 	if cmd.is_action:
 		theme_type_variation = "ActionBtn"
 	button_up.connect(on_button_up)
 
-func on_button_up():
-	# DEBUG
-	cmd.index = Tender.hero.get_board().make_index()
-	assert(cmd.is_valid_for_hero_at(coord))
-	
-	var acted = cmd.run_at_hero(coord)
+func _shortcut_input(event):
+	if disabled:
+		return
+	if cmd.ui_action and event.is_action_pressed(cmd.ui_action):
+		accept_event()
+		pressed.emit()
+		on_button_up()
+
+func reset_visibility(coord, index:RevBoard.BoardIndex):
+	cmd.index = index
+	if hero_pov:
+		visible = cmd.is_valid_for_hero_at(coord)
+	else:
+		visible = cmd.is_valid_for(coord)
+
+func on_button_up():	
+	var acted: bool
+	if hero_pov:
+		acted = cmd.run_at_hero(coord)
+	else:
+		acted = await cmd.run(coord)
+		
 	if acted:
 		Tender.hero.finalize_turn(acted)
-	if not cmd.is_valid_for_hero_at(coord):
-		queue_free()

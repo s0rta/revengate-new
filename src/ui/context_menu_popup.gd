@@ -28,16 +28,6 @@ func _gui_input(event):
 		accept_event()
 		close(false)
 			
-func _shortcut_input(event):
-	print("Shortcut event: %s" % event)
-	for cmd in commands:
-		if cmd.ui_action:
-			var is_action = event.is_action(cmd.ui_action)
-			print("is action: %s" % is_action)
-		if cmd.ui_action and event.is_action_pressed(cmd.ui_action):
-			# FIXME: use the coord we received at popup
-			run_command(cmd)
-
 func show_commands(commands_, coord_=null):
 	# TODO: find where to show the context menu for max visibility
 	coord = coord_
@@ -45,18 +35,13 @@ func show_commands(commands_, coord_=null):
 	for cmd in commands_:
 		commands.append(cmd)
 		# TODO: use CommandButton
-		var button = Button.new()
+		var button = CommandButton.new(cmd, coord, false)
 		button.text = cmd.get_caption()
 		if cmd.is_action:
 			button.theme_type_variation = "ActionBtn"
-		button.pressed.connect(run_command.bind(cmd))
+		button.pressed.connect(close)
 		%VBox.add_child(button)
 	show()
-	
-func run_command(cmd):
-	hide()
-	var acted = await cmd.run(coord)
-	close(acted)
 
 func close(has_acted:bool=false):
 	for child in %VBox.get_children():

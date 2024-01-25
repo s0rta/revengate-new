@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=44 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -11,7 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="7_eg4si"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="7_nbfvd"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
-[ext_resource type="Script" path="res://src/ui/cheats_surveyor.gd" id="12_yvfct"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
 [ext_resource type="Script" path="res://src/dungeons/traboule.gd" id="13_u4fm7"]
 [ext_resource type="PackedScene" uid="uid://ee6oms8ixjh" path="res://src/people/nadege.tscn" id="13_wcjwx"]
@@ -451,13 +450,6 @@ size_flags_horizontal = 4
 focus_mode = 0
 text = "⮿ Cancel"
 
-[node name="CheatsSurveyor" type="Control" parent="HUD"]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("12_yvfct")
-
 [node name="DialoguePane" parent="HUD" instance=ExtResource("18_vtucs")]
 unique_name_in_owner = true
 visible = false
@@ -509,8 +501,6 @@ script = ExtResource("41_hgs5k")
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/LootButton" to="BoardArea/GestureSurveyor" method="start_loot"]
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/InventoryButton" to="BoardArea/GestureSurveyor" method="show_inventory"]
-[connection signal="button_up" from="HUD/RGroup/DebugButtons/CheatsMargin/CheatsBar/TeleportButton" to="HUD/CheatsSurveyor" method="start_teleport_to"]
-[connection signal="button_up" from="HUD/RGroup/DebugButtons/CheatsMargin/CheatsBar/InspectButton" to="HUD/CheatsSurveyor" method="start_inspect_at"]
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/TestButton1" to="." method="test"]
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/TestButton2" to="." method="test2"]
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/ShowCheatsButton" to="HUD" method="toggle_cheats_box"]
@@ -522,7 +512,5 @@ script = ExtResource("41_hgs5k")
 [connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/ShowMessagesButton" to="HUD/MessagesScreen" method="popup"]
 [connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/GoMainButton" to="." method="abort_run"]
 [connection signal="button_up" from="HUD/CenterBox/CancelButton2" to="HUD" method="request_cancel_strats"]
-[connection signal="action_complete" from="HUD/CheatsSurveyor" to="HUD" method="hide_action_label"]
-[connection signal="action_started" from="HUD/CheatsSurveyor" to="HUD" method="show_action_label"]
 [connection signal="quest_activated" from="HUD/DialoguePane" to="HUD" method="_on_dialogue_pane_quest_activated"]
 [connection signal="end_of_chapter" from="VictoryProbe" to="." method="conclude_game"]
