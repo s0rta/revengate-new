@@ -349,6 +349,7 @@ Items:
 - [ ] bug: sewer otter attacks everyone?
 - [ ] bug: self defence does not expire when attacker dies
 - [ ] bug: actors from the same spawn deck share a common memory?
+- [ ] ch2 ends as soon as the encounter happens
 - [ ] vague value adjectives on gaussian distributions
 - [ ] F-Droid has animated water
 - [ ] improved saved games
@@ -364,7 +365,7 @@ Items:
 - [ ] public cheats
   - [x] teleport
   - [x] x-ray inspect
-  - [ ] advance chapter
+  - [x] advance chapter
   - [x] used cheats show on the victory screen
   - [x] cheats have access key
   - [x] all cheats incremend the cheats counter

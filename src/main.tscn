@@ -513,4 +513,3 @@ script = ExtResource("41_hgs5k")
 [connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/GoMainButton" to="." method="abort_run"]
 [connection signal="button_up" from="HUD/CenterBox/CancelButton2" to="HUD" method="request_cancel_strats"]
 [connection signal="quest_activated" from="HUD/DialoguePane" to="HUD" method="_on_dialogue_pane_quest_activated"]
-[connection signal="end_of_chapter" from="VictoryProbe" to="." method="conclude_game"]

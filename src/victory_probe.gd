@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -18,8 +18,6 @@
 ## Monitor the progress of the game against quest objectives
 class_name VictoryProbe extends Node
 
-signal end_of_chapter(victory, game_over)
-
 func has_quest_item(actor:Actor):
 	for item in actor.get_items(["quest-item"]):
 		if item.char == "𝌕":
@@ -37,17 +35,17 @@ func assay_victory(current_board:RevBoard):
 		var mem = Tender.hero.mem
 		for event in Tender.quest.fail_events_any:
 			if mem.recall(event) != null:
-				end_of_chapter.emit(false, false)
+				Tender.hero.end_chapter.emit(false, false)
 				return
 		if has_quest_item(hero):
-			end_of_chapter.emit(true, false)
+			Tender.hero.end_chapter.emit(true, false)
 		else:
 			for event in Tender.quest.win_events_any:
 				if mem.recall(event) != null:
-					end_of_chapter.emit(true, false)
+					Tender.hero.end_chapter.emit(true, false)
 					break				
 
 func on_actor_died(board:RevBoard, coord:Vector2i, tags:Array[String]):
 	print("an actor died! Their tags were: %s" % [tags])
 	if "quest-boss-retznac" in tags:
-		end_of_chapter.emit(true, true)
+		Tender.hero.end_chapter.emit(true, true)

@@ -268,7 +268,7 @@ class GetCloser extends Command:
 			Tender.hero.move_toward_actor(other)
 		return true
 
-class DumpCheat extends Command:
+class DumpDevCheat extends Command:
 	func _init(index_=null):
 		is_action = false
 		ui_action = "cheat-inspect-at"
@@ -367,6 +367,25 @@ class RegenCheat extends Cheat:
 		Tender.hero.health += Tender.hero.health_full / 2
 		Tender.hero.health_changed.emit(Tender.hero.health)
 		return false
+
+class VictoryCheat extends Cheat:
+	func _init(index_=null):
+		caption = "End Chapter"
+		super(index_)
+
+	func is_valid_for(coord:Vector2i):
+		return false
+	
+	func is_valid_for_hero_at(coord:Vector2i):
+		return true
+	
+	func run_at_hero(coord:Vector2i) -> bool:
+		inc_nb_cheats()
+		var game_over = false
+		if Tender.quest.tag == "quest-face-retznac":
+			game_over = true
+		Tender.hero.end_chapter.emit(true, game_over)
+		return false
 		
 class DoorHandler extends Command:
 	var door_at = null
@@ -438,7 +457,7 @@ class OpenDoor extends DoorHandler:
 		
 func _ready():
 	_cmd_classes = [Attack, Talk, TravelTo, GetCloser, Inspect, CloseDoor, OpenDoor, 
-					DumpCheat, TeleportCheat, RegenCheat]
+					DumpDevCheat, TeleportCheat, RegenCheat, VictoryCheat]
 
 func commands_for(coord, hero_pov:=false, index=null):
 	## Return a list of valid coordinates for `coord`

@@ -1,4 +1,4 @@
-# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -17,6 +17,9 @@
 
 @tool
 class_name Hero extends Actor
+
+# not emitted directly, the VictoryProbe decides when this emits
+signal end_chapter(victory:bool, game_over:bool)
 
 func _ready():
 	super()

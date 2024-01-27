@@ -148,6 +148,7 @@ func watch_hero(hero:Actor):
 	Tender.hero = hero
 	%HUD.watch_hero(hero)
 	hero.died.connect(_on_hero_died)
+	hero.end_chapter.connect(conclude_game)
 
 func get_board():
 	## Return the current active board
@@ -280,9 +281,18 @@ func show_context_menu_for(coord):
 	var cmds = commands.commands_for(coord)
 	%ContextMenuPopup.show_commands(cmds, coord)
 
+func _place_on_start_board(coord:Vector2i):
+	var board = dungeons_cont.find_children("StartingBoard", "RevBoard", true, false)[0]
+	var builder = BoardBuilder.new(board)
+	if not board.is_active():
+		_activate_board(board)
+
+	builder.place(Tender.hero, false, coord)
+	center_on_hero()
+	Tender.hero.highlight_options()
+	
 func start_ch2():
-	var hero = Tender.hero
-	destroy_items(hero.get_items(["quest-item"]))
+	destroy_items(Tender.hero.get_items(["quest-item"]))
 	# Nadège gives key and combat cane
 	npcs.nadege.conversation_sect = "intro_2"
 	supply_item(npcs.nadege, "res://src/items/serum_of_vitality.tscn", ["quest-reward", "gift"])
@@ -297,9 +307,7 @@ func start_ch2():
 
 	%StoryScreen.show_story("Chapter 2: Bewitching Bookkeeping",
 		"res://src/story/bewitching_bookkeeping.md")
-	hero.place(V.i(2, 2))
-	center_on_hero()
-	Tender.hero.highlight_options()
+	_place_on_start_board(V.i(2, 2))
 	if $TurnQueue.is_paused():
 		$TurnQueue.resume()
 
@@ -326,9 +334,7 @@ func start_ch3():
 
 	%StoryScreen.show_story("Chapter 3: The Sound of Satin",
 		"res://src/story/sound_of_satin.md")
-	Tender.hero.place(V.i(2, 2))
-	center_on_hero()
-	Tender.hero.highlight_options()
+	_place_on_start_board(V.i(2, 2))
 	if $TurnQueue.is_paused():
 		$TurnQueue.resume()
 
@@ -435,8 +441,3 @@ func test():
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
-	
-	var tabulator = Tabulator.load()
-	tabulator.allow_cheats = not tabulator.allow_cheats
-	tabulator.save()
-	
