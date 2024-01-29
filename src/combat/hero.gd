@@ -43,10 +43,9 @@ func _unhandled_input(event):
 			other = null
 		var click_dist = RevBoard.dist(get_cell_coord(), coord)
 		
-
-		if other and is_foe(other) and click_dist <= get_max_weapon_range():
-			attack(other)
-			acted = true
+		var attack_cmd = CommandPack.Attack.new(index)
+		if attack_cmd.is_valid_for(coord):
+			acted = await attack_cmd.run(coord)
 		elif other and not is_foe(other) and click_dist <= Consts.CONVO_RANGE:
 			if other.get_conversation():
 				acted = await $"/root/Main".commands.talk(coord)
