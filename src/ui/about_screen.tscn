@@ -60,10 +60,11 @@ This game does not collect or store any information about you or your device.
 Learn more at: [url]http://revengate.org/privacy[/url]
 
 [b]Links[/b]
-[url=https://gitlab.com/ygingras/revengate/-/issues]Report an issue or request an improvement[/url]
-[url=https://gitlab.com/ygingras/revengate/]Get the full source code of the game[/url]
-[url=http://ygingras.net/rev-devlog/]Follow the development of the game[/url]
+[url=https://gitlab.com/ygingras/revengate/-/issues/]Report an issue or request an improvement[/url]
 
+[url=https://gitlab.com/ygingras/revengate/]Get the full source code of the game[/url]
+
+[url=http://ygingras.net/rev-devlog/]Follow the development of the game[/url]
 "
 fit_content = true
 shortcut_keys_enabled = false
