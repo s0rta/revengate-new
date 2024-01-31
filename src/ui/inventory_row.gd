@@ -29,9 +29,24 @@ var label
 func _ready():
 	label = find_child("Label", true, false)
 	label.gui_input.connect(show_detail)
-	
+	if item:
+		refresh()
+
 func show_detail(event):
 	if Utils.event_is_tap_or_left(event):
 		item_details_requested.emit(item)
 
+func remove():
+	hide()
+	queue_free()
 
+func refresh():
+	label.text = item.get_short_desc()
+	var is_equipped = item.get("is_equipped")
+	if is_equipped != null:
+		equip_button.disabled = is_equipped
+	else:
+		equip_button.hide()
+		
+	consume_button.visible = item.consumable
+	activate_button.visible = item.switchable

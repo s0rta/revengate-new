@@ -15,10 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-# TODO: Hide row when last item in stack is used or dropped
-# TODO: Update label when we use an item from a non empty stack
-# TODO: Duplicate rows when we toggle something that was part of a stack
-
 class_name InventoryScreen extends ModalScreen
 
 signal inventory_changed
@@ -31,9 +27,8 @@ enum Cols {
 }
 
 var actor = null
-# Did the player did something that counts as a turn action while the screen was open?
+# Did the player do something that counts as a turn action while the screen was open?
 var acted := false 
-
 
 func _ready():
 	inventory_changed.connect(reset_empty_label_vis)
@@ -50,45 +45,29 @@ func fill_actor_items(actor_:Actor):
 	var items = actor.get_items()
 	$EmptyLabel.visible = not items.size()
 	
-	for child in %AllItems.find_children("", "InventoryRow", false, false):
-		child.hide()
-		child.queue_free()
+	for row in %AllItems.find_children("", "InventoryRow", false, false):
+		row.remove()
 	
 	for item in items:
-		var row = %ItemRecordTemplate.duplicate()
-		
+		var row = _make_row(item)	
 		%AllItems.add_child(row)
-		row.item = item
-		
-		var label = row.label
-		label.text = item.get_short_desc()
-		
-		var equip_button = row.equip_button
-		var is_equipped = item.get("is_equipped")
-		if is_equipped != null:
-			equip_button.disabled = is_equipped
-			equip_button.button_up.connect(equip_item.bind(item))
-		else:
-			equip_button.hide()
-			
-		var consume_button = row.consume_button
-		if not item.consumable:
-			consume_button.hide()
-		else:
-			consume_button.button_up.connect(consume_item.bind(item))
-			
-		var drop_button = row.drop_button
-		drop_button.button_up.connect(drop_item.bind(item))
-		
-
+		_connect_row(row)
 		row.show()
 	
-	#tree_view.clear()
-	#var root = tree_view.create_item()
-	#
-	#
-	#for item in items:
-		#var row = _make_from_item(item, root)
+func _make_row(item):
+	## Create a new Item row
+	## The caller is responsible for adding the row in %AllItems
+	var row = %ItemRecordTemplate.duplicate()
+	row.item = item
+	return row
+
+func _connect_row(row):
+	## Connect all the row button to actions on this screen.
+	## Can only be called after the row has been added to the scene.
+	row.equip_button.button_up.connect(equip_item.bind(row))
+	row.consume_button.button_up.connect(consume_item.bind(row))
+	row.activate_button.button_up.connect(switch_item.bind(row))
+	row.drop_button.button_up.connect(drop_item.bind(row))
 
 func reset_empty_label_vis():
 	if not actor:
@@ -97,9 +76,9 @@ func reset_empty_label_vis():
 		var items = actor.get_items()
 		$EmptyLabel.visible = not items.size()
 
-func reset_buttons_vis():
+func reset_equip_state():
 	for row in %AllItems.find_children("", "InventoryRow", false, false):
-		if not row.visible:
+		if not row.visible or not row.item:
 			continue
 		var item = row.item
 		var is_equipped = item.get("is_equipped")
@@ -109,77 +88,66 @@ func reset_buttons_vis():
 func _on_back_button_pressed():
 	close()
 
-func _refresh_row(row, item):
-	row.set_text(Cols.DESC, item.get_short_desc())
+func equip_item(row:InventoryRow):
+	acted = true
+	var item = row.item
+	actor.equip_item(item)
+	row.refresh()
+	reset_equip_state()
 
-	var use_disabled = not (item.consumable or item.switchable)
-	row.set_button_disabled(Cols.USE, 0, use_disabled)
-
-	var drop_disabled = not (item is ItemGrouping and not item.is_empty())
-	row.set_button_disabled(Cols.DROP, 0, drop_disabled)
-
-func drop_item(item):
+func drop_item(row:InventoryRow):
+	acted = true
+	var item = row.item
 	if item is ItemGrouping:
 		var grouping = item
 		item = grouping.pop()
-		if item.get("is_equipped") and not grouping.is_empty():
-			grouping.is_equipped = true
+		if grouping.is_empty():
+			row.remove()
+		else:
+			if item.get("is_equipped") and not grouping.is_empty():
+				# equip the next similar item on the stack
+				grouping.is_equipped = true
+			row.refresh()
+	else:
+		row.remove()
 
 	actor.drop_item(item)
+	inventory_changed.emit()
 
-func consume_item(item):
-	if item.consumable:
-		if item is ItemGrouping:
-			var grouping = item
-			item = grouping.pop()
-		actor.consume_item(item)
-	
+func consume_item(row:InventoryRow):
+	acted = true
+	var item = row.item
+	assert(item.consumable)
+	if item is ItemGrouping:
+		var grouping = item
+		item = grouping.pop()
+		if grouping.is_empty():
+			row.remove()
+		else:
+			row.refresh()
+	else:
+		row.remove()
+	actor.consume_item(item)
 			
-func switch_item(item):
-	if item.switchable:
+func switch_item(row:InventoryRow):
+	acted = true
+	var item = row.item
+	assert(item.switchable)
+	if item is ItemGrouping:
+		var grouping = item
+		item = grouping.pop()
 		item.toggle()
-		if item is ItemGrouping:
-			var grouping = item
-			var top_item = grouping.pop()
-
-func _old_use_item(row, item):
-	if item.consumable:
-		if item is ItemGrouping:
-			var grouping = item
-			item = grouping.pop()
-			if grouping.is_empty():
-				row.free()
-			else:
-				_refresh_row(row, grouping)
+		var new_row = _make_row(item)
+		row.add_sibling(new_row)
+		_connect_row(new_row)
+		new_row.show()
+		if grouping.is_empty():
+			row.remove()
 		else:
-			row.free()
-		actor.consume_item(item)
-	elif item.switchable:
+			row.refresh()
+	else:
 		item.toggle()
-		if item is ItemGrouping:
-			var grouping = item
-			var top_item = grouping.pop()
-			if grouping.is_empty():
-				row.free()
-			else:
-				_refresh_row(row, item)
-		else:
-			_refresh_row(row, item)
-
-
-
-func _on_tree_item_selected():
-	var row = %Tree.get_selected()
-	var item = row.get_metadata(0)
-	$ItemDetailsScreen.show_item(item)
-	%Tree.deselect_all()
+		row.refresh()
 	
 func _show_item_details(item):
 	$ItemDetailsScreen.show_item(item)	
-
-func equip_item(item):
-	actor.equip_item(item)
-	reset_buttons_vis()
-	
-
-	

@@ -65,18 +65,22 @@ text = "Big gloomy staff"
 [node name="EquipButton" type="Button" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
+focus_mode = 0
 text = "Equip"
 
 [node name="ConsumeButton" type="Button" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "Consume"
 
 [node name="ActivateButton" type="Button" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "Activate"
 
 [node name="DropButton" type="Button" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "Drop"
 
 [node name="AllItems" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
