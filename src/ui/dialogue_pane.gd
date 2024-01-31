@@ -89,12 +89,6 @@ func _unhandled_input(event):
 	if visible and event is InputEventKey:
 		# Consume all keyboard input while the balloon is visible
 		accept_event()
-
-func _is_left_released(event):
-	if event is InputEventMouseButton and not event.is_pressed():
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			return true
-	return false
 	
 func start(dia_res_: DialogueResource, title: String, speaker_=null, extra_game_states: Array = []):
 	## Start a dialogue sequence
@@ -122,14 +116,14 @@ func next(next_id: String):
 	self.dialogue_line = await dia_res.get_next_dialogue_line(next_id, temp_game_states)
 
 func _on_response_gui_input(event, option_idx):
-	if _is_left_released(event):
+	if Utils.event_is_tap_or_left(event):
 		next(dialogue_line.responses[option_idx].next_id)
 
 func _on_background_gui_input(event):
 	# Consume all input while the balloon is visible
 	if visible:
 		accept_event()
-		if _is_left_released(event):
+		if Utils.event_is_tap_or_left(event):
 			advance()
 
 func finish_typing():

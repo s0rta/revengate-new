@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://brwk3ae5bwevg"]
+[gd_scene load_steps=4 format=3 uid="uid://brwk3ae5bwevg"]
 
 [ext_resource type="Script" path="res://src/ui/inventory_screen.gd" id="1_i77qu"]
 [ext_resource type="PackedScene" uid="uid://ckb0ee8kavbjo" path="res://src/ui/item_details_screen.tscn" id="2_ebjmw"]
+[ext_resource type="Script" path="res://src/ui/inventory_row.gd" id="2_rtsln"]
 
 [node name="InventoryScreen" type="Control"]
 layout_mode = 3
@@ -35,17 +36,61 @@ theme_type_variation = &"TitleLabel"
 text = "Inventory"
 horizontal_alignment = 1
 
-[node name="Tree" type="Tree" parent="VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 432)
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.5
-theme_override_constants/scrollbar_margin_right = 30
-theme_override_constants/scrollbar_h_separation = 30
-columns = 4
-hide_root = true
-scroll_horizontal_enabled = false
+
+[node name="ItemRecordTemplate" type="MarginContainer" parent="VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 0
+script = ExtResource("2_rtsln")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 8.0
+mouse_filter = 0
+text = "Big gloomy staff"
+
+[node name="EquipButton" type="Button" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+text = "Equip"
+
+[node name="ConsumeButton" type="Button" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Consume"
+
+[node name="ActivateButton" type="Button" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Activate"
+
+[node name="DropButton" type="Button" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Drop"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="AllItems" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -76,6 +121,7 @@ layout_mode = 2
 text = "Equip"
 
 [node name="EmptyLabel" type="Label" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -94,6 +140,5 @@ text = "Inventory is empty!"
 visible = false
 layout_mode = 1
 
-[connection signal="button_clicked" from="VBoxContainer/Tree" to="." method="_on_tree_button_clicked"]
-[connection signal="item_selected" from="VBoxContainer/Tree" to="." method="_on_tree_item_selected"]
+[connection signal="item_details_requested" from="VBoxContainer/ScrollContainer/ItemRecordTemplate" to="." method="_show_item_details"]
 [connection signal="button_up" from="VBoxContainer/MarginContainer/BackButton" to="." method="_on_back_button_pressed"]

@@ -4,6 +4,8 @@
 [ext_resource type="Script" path="res://src/combat/stats_modifiers.gd" id="2_tdwdk"]
 
 [node name="AmuletOfStrength" instance=ExtResource("1_0v25p")]
+desc_simple = "A small clay tablet with exotic writing."
+desc_detailed = "A round clay tablet with Sumerian writing embossed into its surface. You start to feel stronger just as you pick it up."
 spawn_cost = 4.0
 
 [node name="Label" parent="." index="0"]

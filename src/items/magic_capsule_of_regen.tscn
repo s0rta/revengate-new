@@ -6,6 +6,8 @@
 [node name="MagicCapsuleOfRegen" instance=ExtResource("1_lbwot")]
 char = "🤀"
 caption = "magic capsule of regen"
+desc_simple = "A sweet and fragrent mixture in an ornate glass ampoule."
+desc_detailed = "A mixture of honey and rare Persian blue salt in an ornate glass ampoule with writings in an ancient Franconian dialect not spoken since the Black Plague. Can boost your health over your normal maximum."
 consumable = true
 spawn_cost = 4.0
 
