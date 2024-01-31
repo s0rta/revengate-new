@@ -14,11 +14,15 @@ grow_vertical = 2
 color = Color(0.0431373, 0.027451, 0, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = -324.5
+offset_right = 324.5
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_vertical = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -33,34 +37,63 @@ text = "Settings
 "
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
+theme_override_constants/h_separation = 8
+columns = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_bottom = 0
+size_flags_horizontal = 8
+text = "Cheats:"
 
-[node name="CheatsCheck" type="CheckBox" parent="VBoxContainer/HBoxContainer/MarginContainer"]
+[node name="CheatsCheck" type="CheckBox" parent="VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Enable cheats"
+size_flags_vertical = 4
+focus_mode = 0
+text = "Enabled"
 flat = true
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "We won't judge. Just don't lie about how you won."
 
-[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+[node name="Label3" type="Label" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
+size_flags_horizontal = 8
+text = "Text size:"
+
+[node name="TextSizeDropdown" type="OptionButton" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+item_count = 3
+popup/item_0/text = "Normal"
+popup/item_0/id = 0
+popup/item_1/text = "Big"
+popup/item_1/id = 1
+popup/item_2/text = "Really Big"
+popup/item_2/id = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -122.0
+offset_top = -79.0
+grow_horizontal = 0
+grow_vertical = 0
 theme_override_constants/margin_top = 8
 
-[node name="BackButton" type="Button" parent="VBoxContainer/MarginContainer2"]
+[node name="BackButton" type="Button" parent="MarginContainer2"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Back"
 
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/MarginContainer/CheatsCheck" to="." method="_on_cheats_check_toggled"]
-[connection signal="button_up" from="VBoxContainer/MarginContainer2/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="toggled" from="VBoxContainer/GridContainer/CheatsCheck" to="." method="_on_cheats_check_toggled"]
+[connection signal="item_selected" from="VBoxContainer/GridContainer/TextSizeDropdown" to="." method="_on_text_size_dropdown_item_selected"]
+[connection signal="button_up" from="MarginContainer2/BackButton" to="." method="_on_back_button_pressed"]

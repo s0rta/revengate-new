@@ -15,23 +15,21 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends "res://src/ui/secondary_info_screen.gd"
+## Various utility functions to help with the UI and UX.
+class_name UIUtils extends Object
 
-var DD_ITEM_TO_TSIZE = Consts.TextSizes.values().slice(1)
+static func resize_text_controls(size=null):
+	if size == null:
+		size = Tabulator.load().text_size
+	var alt_theme = null
+	if size == Consts.TextSizes.BIG:
+		alt_theme = load("res://src/ui/theme_big.tres")
+	elif size == Consts.TextSizes.HUGE:
+		alt_theme = load("res://src/ui/theme_really_big.tres")
+	else:
+		# If the theme has never been touched, we don't have to force load from disk.
+		# We could detect that by connecting to Theme.changed.
+		alt_theme = ResourceLoader.load("res://src/ui/theme.tres", "", ResourceLoader.CACHE_MODE_IGNORE)
 
-@onready var tabulator = Tabulator.load()
-
-func _ready():
-	%CheatsCheck.button_pressed = tabulator.allow_cheats
-	if tabulator.text_size != Consts.TextSizes.UNSET:
-		%TextSizeDropdown.selected = DD_ITEM_TO_TSIZE.find(tabulator.text_size)
-
-func _on_cheats_check_toggled(toggled_on):
-	tabulator.allow_cheats = toggled_on
-	tabulator.save()
-
-func _on_text_size_dropdown_item_selected(index):
-	var size = DD_ITEM_TO_TSIZE[index]
-	tabulator.text_size = DD_ITEM_TO_TSIZE[index]
-	tabulator.save()
-	UIUtils.resize_text_controls(size)
+	var theme = ThemeDB.get_project_theme()
+	theme.merge_with(alt_theme)

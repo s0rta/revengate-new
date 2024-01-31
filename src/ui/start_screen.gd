@@ -1,4 +1,4 @@
-# Copyright © 2022 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -23,6 +23,8 @@ const BAD_VERS_MSG = ("The game version you are running (v%s) is different than 
 						+ "\n\nIf the game crashes after loading, you should select 'New Game!' "
 						+ "rather than 'Resume' next time.")
 
+@onready var tabulator = Tabulator.load()
+
 func _ready():
 	if OS.has_feature("web"):
 		# That button shuts down the engine, but it does not close the tab so 
@@ -36,24 +38,25 @@ func _ready():
 	Tender.full_game = true
 	
 	%ResumeButton.visible = SaveBundle.has_file()
-	if OS.has_feature("mobile"):
-		_expand_text_controls()
+	if tabulator.text_size == Consts.TextSizes.UNSET:
+		tabulator.text_size = _guess_size()
+		tabulator.save()
+	UIUtils.resize_text_controls(tabulator.text_size)
 
-func _expand_text_controls():
-	## Make all text controls bigger. 
-	## We typically need this on devices with very small screens or with very high DPI.
+func _guess_size():
+	if not OS.has_feature("mobile"):
+		# desktops and HTML have plenty of screen real estate
+		return Consts.TextSizes.NORMAL
+		
 	var size = Utils.screen_size()
 	var narrow_side = min(size.x, size.y)
-	var alt_theme
 	if narrow_side > 7.0:
 		# this is a really big screen, default controls are fine
-		return
+		return Consts.TextSizes.NORMAL
 	elif narrow_side > 4.5:
-		alt_theme = load("res://src/ui/theme_big.tres")
+		return Consts.TextSizes.BIG
 	else:
-		alt_theme = load("res://src/ui/theme_really_big.tres")
-	var theme = ThemeDB.get_project_theme()
-	theme.merge_with(alt_theme)
+		return Consts.TextSizes.HUGE
 
 func start_new_game():
 	get_tree().change_scene_to_file("res://src/main.tscn")

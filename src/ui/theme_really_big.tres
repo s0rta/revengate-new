@@ -12,6 +12,7 @@ EmojiGraphics/base_type = &"Label"
 ItemList/font_sizes/font_size = 32
 ItemList/fonts/font = ExtResource("2_afntk")
 Label/font_sizes/font_size = 32
+PopupMenu/font_sizes/font_size = 64
 ProminentButton/base_type = &"Button"
 ProminentButton/font_sizes/font_size = 70
 RichTextLabel/font_sizes/bold_font_size = 32

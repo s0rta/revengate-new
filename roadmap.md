@@ -349,7 +349,7 @@ Items:
 - [ ] bug: sewer otter attacks everyone?
 - [ ] bug: self defence does not expire when attacker dies
 - [ ] bug: actors from the same spawn deck share a common memory?
-- [ ] ch2 ends as soon as the encounter happens
+- [ ] ch2 ends as soon as the encounter happens, no need to walk back to the café
 - [ ] vague value adjectives on gaussian distributions
 - [ ] F-Droid has animated water
 - [ ] improved saved games
@@ -362,7 +362,8 @@ Items:
 - [ ] silence a few warnings
 - [ ] remove unreachable levels from starting screen
 - [x] settings screen
-- [ ] public cheats
+  - [x] font size
+- [x] public cheats
   - [x] teleport
   - [x] x-ray inspect
   - [x] advance chapter
@@ -401,6 +402,7 @@ Combat:
 - [ ] packaging for Ubuntu
 
 ## Ice Box: not yet scheduled for a release
+- [ ] support armv7 on Google Play
 - [ ] non-walking movement and path finding (wading, swimming, phasing)
 - [ ] Deck.peek(): select the next card, but do not remove it from the deck
 - [ ] help screen with contextual content

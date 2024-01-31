@@ -194,6 +194,7 @@ MarginContainer/constants/margin_bottom = 24
 MarginContainer/constants/margin_left = 24
 MarginContainer/constants/margin_right = 24
 MarginContainer/constants/margin_top = 24
+PopupMenu/font_sizes/font_size = 30
 ProminentButton/base_type = &"Button"
 ProminentButton/font_sizes/font_size = 42
 ProminentButton/fonts/font = ExtResource("4_ef7be")

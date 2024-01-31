@@ -64,6 +64,13 @@ enum MessageLevels {
 	CRITICAL  # you could die within 5 turns
 }
 
+enum TextSizes {
+	UNSET,
+	NORMAL, 
+	BIG, 
+	HUGE
+}
+
 const CORE_STATS := ["agility", "strength", "intelligence", "perception", 
 					"health_full", "healing_prob", 
 					"mana_burn_rate", "mana_recovery_prob"] 

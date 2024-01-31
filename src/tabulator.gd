@@ -24,6 +24,7 @@ class_name Tabulator extends Resource
 const FILE_PATH = "user://global_facts.tres"
 
 @export var allow_cheats := false
+@export var text_size: Consts.TextSizes = Consts.TextSizes.UNSET
 
 static func load() -> Tabulator:
 	var da = DirAccess.open("user://")
