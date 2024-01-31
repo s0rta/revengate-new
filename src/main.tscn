@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=45 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -30,6 +30,7 @@
 [ext_resource type="PackedScene" uid="uid://dab6wiatrc0m6" path="res://src/hard_traboule_deck_builder.tscn" id="20_4ntfa"]
 [ext_resource type="Script" path="res://src/dungeons/crypt.gd" id="20_f773d"]
 [ext_resource type="PackedScene" uid="uid://hynfsvr45204" path="res://src/crypt_deck_builder.tscn" id="21_rxcru"]
+[ext_resource type="PackedScene" uid="uid://cmsxxvu32vsis" path="res://src/stash_deck_builder.tscn" id="22_gyaq5"]
 [ext_resource type="PackedScene" uid="uid://cf0kj6qn7a40s" path="res://src/ui/city_map_screen.tscn" id="23_aomab"]
 [ext_resource type="PackedScene" uid="uid://bb5upsioptfc4" path="res://src/ui/context_menu_popup.tscn" id="25_n5bfn"]
 [ext_resource type="PackedScene" uid="uid://bgntr3w6l7kt0" path="res://src/ui/story_screen.tscn" id="28_7kpa3"]
@@ -189,6 +190,16 @@ start_depth = 1
 base_spawn_budget = 6
 
 [node name="TroisGaulesBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/TroisGaulesSurface" instance=ExtResource("19_fpjoi")]
+
+[node name="Stash" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Dungeons"]
+script = ExtResource("13_u4fm7")
+start_world_loc = Vector3i(14, 5, -1)
+dest_world_loc = Vector3i(16, 5, -1)
+tunneling_elevation = -1
+start_depth = 1
+base_spawn_budget = 28
+
+[node name="StashDeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/Stash" instance=ExtResource("22_gyaq5")]
 
 [node name="Crypt" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Dungeons"]
 script = ExtResource("20_f773d")

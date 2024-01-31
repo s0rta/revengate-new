@@ -1,0 +1,58 @@
+[gd_scene load_steps=13 format=3 uid="uid://cmsxxvu32vsis"]
+
+[ext_resource type="Script" path="res://src/deck_builder.gd" id="1_up4qd"]
+[ext_resource type="PackedScene" uid="uid://cmshyslfrv0du" path="res://src/vibes/hissing.tscn" id="2_l3w3v"]
+[ext_resource type="PackedScene" uid="uid://clry405irfeom" path="res://src/items/potion_of_analysis_paralysis.tscn" id="7_32bbb"]
+[ext_resource type="PackedScene" uid="uid://lpworv1rq2g3" path="res://src/items/potion_of_booze.tscn" id="8_b7p7x"]
+[ext_resource type="Script" path="res://src/card_rule.gd" id="9_gahru"]
+[ext_resource type="PackedScene" uid="uid://dnw86n1s88cwl" path="res://src/weapons/dagger.tscn" id="11_6cs3w"]
+[ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="14_vnhuk"]
+[ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="15_88mj7"]
+[ext_resource type="PackedScene" uid="uid://b80ulbklxp5at" path="res://src/items/potion_of_poison.tscn" id="16_k2kco"]
+[ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="25_g62gj"]
+[ext_resource type="PackedScene" uid="uid://dactu5q2nmdun" path="res://src/items/potion_of_absinthe.tscn" id="27_4a275"]
+[ext_resource type="PackedScene" uid="uid://b2dem6s27irbs" path="res://src/weapons/grayswandir.tscn" id="29_6skwl"]
+
+[node name="StashDeckBuilder" type="Node"]
+script = ExtResource("1_up4qd")
+
+[node name="Hissing" parent="." instance=ExtResource("2_l3w3v")]
+
+[node name="Potions" type="Node" parent="."]
+script = ExtResource("9_gahru")
+
+[node name="PotionOfAbsinthe" parent="Potions" instance=ExtResource("27_4a275")]
+
+[node name="PotionOfHealing" parent="Potions" instance=ExtResource("14_vnhuk")]
+
+[node name="PotionOfRegen" parent="Potions" instance=ExtResource("15_88mj7")]
+
+[node name="PotionOfAnalysisParalysis" parent="Potions" instance=ExtResource("7_32bbb")]
+
+[node name="PotionOfBooze" parent="Potions" instance=ExtResource("8_b7p7x")]
+
+[node name="PotionOfHealing2" parent="Potions" instance=ExtResource("14_vnhuk")]
+
+[node name="PotionOfPoison" parent="Potions" instance=ExtResource("16_k2kco")]
+
+[node name="PotionOfRegen2" parent="Potions" instance=ExtResource("15_88mj7")]
+
+[node name="Unique" type="Node" parent="."]
+script = ExtResource("9_gahru")
+max_dungeon_occ = 1
+min_dungeon_occ = 1
+world_loc = Vector3i(15, 5, -1)
+
+[node name="Grayswandir" parent="Unique" instance=ExtResource("29_6skwl")]
+
+[node name="Weapons" type="Node" parent="."]
+script = ExtResource("9_gahru")
+max_board_occ = 2
+min_board_occ = 1
+
+[node name="Dagger" parent="Weapons" instance=ExtResource("11_6cs3w")]
+
+[node name="Dynamite" parent="Weapons" instance=ExtResource("25_g62gj")]
+
+[connection signal="visibility_changed" from="Potions/PotionOfHealing" to="Potions/PotionOfHealing" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="Potions/PotionOfRegen" to="Potions/PotionOfRegen" method="_on_visibility_changed"]

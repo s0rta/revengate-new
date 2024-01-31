@@ -21,6 +21,7 @@ const START_LOC = Vector3i(13, 5, 0)
 const STARTING_CONN_TARGETS = {
 		Vector2i(5, 3): {"dungeon": "Traboule1"}, 
 		Vector2i(21, 7): {"dungeon": "Traboule2"}, 
+		Vector2i(27, 7): {"dungeon": "Stash"},
 		Vector2i(0, 15): {"dungeon": "TroisGaulesSurface"}
 	}
 	
