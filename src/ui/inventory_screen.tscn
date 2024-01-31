@@ -59,6 +59,7 @@ size_flags_vertical = 4
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 8.0
+mouse_filter = 0
 text = "Big gloomy staff"
 
 [node name="EquipButton" type="Button" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
@@ -131,4 +132,5 @@ text = "Inventory is empty!"
 visible = false
 layout_mode = 1
 
+[connection signal="item_details_requested" from="VBoxContainer/ScrollContainer/ItemRecordTemplate" to="." method="_show_item_details"]
 [connection signal="button_up" from="VBoxContainer/MarginContainer/BackButton" to="." method="_on_back_button_pressed"]
