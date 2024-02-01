@@ -1,0 +1,14 @@
+Long descriptions for all items
+New settings screen:
+ - enable cheats
+ - select the size of text controls
+Improved inventory screen: 
+  - dynamically sized buttons
+  - bigger scroll margins
+  - "consume" and "activate" are now two separate actions rather than "use"
+Cheats:
+  - regen
+  - teleport
+  - conclude a chapter
+  - "secret" stash with premium loot
+Bug fix: can't throw daggers through walls anymore

@@ -475,6 +475,8 @@ func commands_for(coord, hero_pov:=false, index=null):
 		var cmd = cls.new(index)
 		if not is_debug and cmd.is_cheat and not allow_cheats:
 			continue
+		if not is_debug and cmd.is_debug:
+			continue
 		if (hero_pov and cmd.is_valid_for_hero_at(coord)) \
 			or (not hero_pov and cmd.is_valid_for(coord)):
 			commands.append(cmd)

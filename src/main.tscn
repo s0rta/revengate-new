@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=45 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -10,10 +10,6 @@
 [ext_resource type="Script" path="res://src/hud.gd" id="7_4dw6n"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="7_eg4si"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="7_nbfvd"]
-[ext_resource type="PackedScene" uid="uid://dactu5q2nmdun" path="res://src/items/potion_of_absinthe.tscn" id="9_72i1n"]
-[ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="9_qby07"]
-[ext_resource type="PackedScene" uid="uid://c7fgdridawfb3" path="res://src/items/magic_capsule_of_regen.tscn" id="10_bb3y3"]
-[ext_resource type="PackedScene" uid="uid://d01nbq4dt1cs5" path="res://src/weapons/silver_saber.tscn" id="11_4pypc"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
 [ext_resource type="Script" path="res://src/dungeons/traboule.gd" id="13_u4fm7"]
@@ -124,31 +120,7 @@ visible = true
 position = Vector2(112, 48)
 mem = SubResource("Resource_7gsj3")
 
-[node name="DynaMain" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("7_eg4si")]
-
-[node name="PotionOfAbsinthe" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_72i1n")]
-
-[node name="PotionOfAbsinthe2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_72i1n")]
-
-[node name="PotionOfAbsinthe3" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_72i1n")]
-
-[node name="PotionOfAbsinthe4" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_72i1n")]
-
-[node name="MagicCapsuleOfRegen" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("10_bb3y3")]
-
-[node name="SilverSaber" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("11_4pypc")]
-
-[node name="PotionOfAbsinthe5" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_72i1n")]
-
-[node name="PotionOfAbsinthe6" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_72i1n")]
-
-[node name="Rapier14" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_qby07")]
-
-[node name="Rapier15" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_qby07")]
-
-[node name="Rapier16" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_qby07")]
-
-[node name="Rapier17" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_qby07")]
+[node name="Dynamite" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("7_eg4si")]
 
 [node name="Nadege" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_wcjwx")]
 visible = true

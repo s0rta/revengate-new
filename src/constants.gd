@@ -1,4 +1,4 @@
-# Copyright © 2022–2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -19,9 +19,9 @@
 ## This script is autoloaded at `Consts`
 extends Node
 
-const VERSION := "0.11.5"
-const VERSION_CODE := 1027139
-const DEBUG = true
+const VERSION := "0.11.6"
+const VERSION_CODE := 1027140
+const DEBUG = false
 
 const SAVE_PROB := 0.1  # chance that we save the game at the end of a turn
 
