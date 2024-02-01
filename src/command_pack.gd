@@ -83,7 +83,9 @@ class Attack extends Command:
 		var other = index.actor_at(coord)
 		if other == null or other.is_dead() or not Tender.hero.perceives(other):
 			return false
-		is_default = other != null and Tender.hero.is_foe(other)		
+		is_default = (other != null 
+						and other != Tender.hero 
+						and Tender.hero.is_foe(other))
 		return true
 		
 	func run(coord:Vector2i) -> bool:
