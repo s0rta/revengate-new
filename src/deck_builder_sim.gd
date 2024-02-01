@@ -15,7 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
+## A Monte Carlo Simulator to see what the typical board furnishing is like at 
+## different depths.
 extends Node
+
+# TODO: support Item and Vibe generations
 
 const max_sim_depth = 12
 const nb_sims = 1000
