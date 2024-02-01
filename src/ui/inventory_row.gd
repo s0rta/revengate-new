@@ -33,7 +33,7 @@ func _ready():
 		refresh()
 
 func show_detail(event):
-	if Utils.event_is_tap_or_left(event):
+	if Utils.event_is_tap_or_left(event) and not event.pressed:
 		item_details_requested.emit(item)
 
 func remove():

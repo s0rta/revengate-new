@@ -60,12 +60,14 @@ text = "Nadège Cyrat"
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.5
+mouse_filter = 2
 horizontal_scroll_mode = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="DialogueLabel" type="RichTextLabel" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -90,6 +92,7 @@ pause_at_characters = ""
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer/ResponsesBox"]
 visible = false

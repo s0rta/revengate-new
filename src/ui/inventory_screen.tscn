@@ -11,6 +11,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_i77qu")
 
 [node name="Background" type="ColorRect" parent="."]
@@ -45,9 +47,9 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 36
+theme_override_constants/margin_left = 60
 theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 24
+theme_override_constants/margin_right = 36
 theme_override_constants/margin_bottom = 0
 script = ExtResource("2_rtsln")
 
@@ -61,6 +63,11 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 8.0
 mouse_filter = 0
 text = "Big gloomy staff"
+
+[node name="Pad" type="Control" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
 
 [node name="EquipButton" type="Button" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
 layout_mode = 2
@@ -91,6 +98,7 @@ size_flags_vertical = 8
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2

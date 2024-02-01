@@ -116,14 +116,16 @@ func next(next_id: String):
 	self.dialogue_line = await dia_res.get_next_dialogue_line(next_id, temp_game_states)
 
 func _on_response_gui_input(event, option_idx):
-	if Utils.event_is_tap_or_left(event):
+	if Utils.event_is_tap_or_left(event) and event.pressed:
 		next(dialogue_line.responses[option_idx].next_id)
 
 func _on_background_gui_input(event):
 	# Consume all input while the balloon is visible
 	if visible:
 		accept_event()
-		if Utils.event_is_tap_or_left(event):
+		if Utils.event_is_tap_or_left(event) and not event.pressed:
+			# We do our processing on release to fully consume both the tap 
+			# and the release.
 			advance()
 
 func finish_typing():
