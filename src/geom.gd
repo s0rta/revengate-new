@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -198,3 +198,28 @@ static func move_path(path:Array[Vector2i], offset:Vector2i) -> Array[Vector2i]:
 	for coord in path:
 		new_path.append(coord + offset)
 	return new_path
+
+static func cheby_dist(coord1, coord2):
+	## Return the Chebyshev distance between two coords
+	return max(abs(coord1.x - coord2.x), abs(coord1.y - coord2.y))
+		
+static func man_dist(coord1, coord2):
+	## Return the Manhattan distance between two coords
+	return abs(coord1.x - coord2.x) + abs(coord1.y - coord2.y)
+
+static func line(coord1, coord2):
+	## Return an array of coords continuously touching each others between 
+	## coord1 and coord2.
+	# a slightly optimized re-implementation of this is in RevBoard.line_of_sight()
+	var steps = []
+	var nb_steps = cheby_dist(coord1, coord2) + 1
+	var mult = max(1, nb_steps - 1)
+	# using continuous coords from the center of the tiles
+	var offset = Vector2(0.5, 0.5)
+	var c1 = Vector2(coord1) + offset
+	var c2 = Vector2(coord2) + offset
+	for i in range(nb_steps):
+		# weighted average between the two centers
+		var coord = Vector2i(((mult-i)*c1 + i*c2) / mult)
+		steps.append(coord)
+	return steps

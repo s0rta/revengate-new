@@ -1026,18 +1026,17 @@ func filter_coords(coords, free, in_board, bbox, index=null):
 	return coords
 
 static func dist(from, to):
-	## Return the distance between two tiles in number of moves.
+	## Return the "game" distance between two tiles in number of moves.
 	## Obstacles are not taken into account, use path() for that.
-	## This is also known at the Chebyshev distance.
-	if from is Actor or from is Item:
-		from = from.get_cell_coord()
-	if to is Actor or to is Item:
-		to = to.get_cell_coord()
-	return max(abs(from.x - to.x), abs(from.y - to.y))
+	from = CombatUtils.as_coord(from)
+	to = CombatUtils.as_coord(to)
+	return Geom.cheby_dist(from, to)
 
 static func man_dist(from, to):
 	## Return the Manhattan distance between to and from.
-	return abs(from.x - to.x) + abs(from.y - to.y)
+	from = CombatUtils.as_coord(from)
+	to = CombatUtils.as_coord(to)
+	return Geom.man_dist(from, to)
 
 func paint_cell(coord, terrain_name, layer=LAYER_GEOM):
 	paint_cells([coord], terrain_name, layer)
@@ -1305,6 +1304,26 @@ func line_of_sight(coord1, coord2):
 		else:
 			return null
 	return steps
+
+func visible_coords(center, radius:int, include_center=false):
+	## Return an array of coords that are visible from `center`.
+	## The order or the array is arbitrary.
+	center = CombatUtils.as_coord(center)
+	var offset = Vector2i.ONE * (radius - 1)
+	var sight_box = Rect2i(center-offset, Vector2i.ONE*(2*radius-1))
+	sight_box = sight_box.intersection(get_used_rect())
+	
+	var vis = {}
+	if include_center:
+		vis[center] = true
+	# cast a ray towards each perimeter cell and accumulate the visible coords along the way
+	for end in Geom.rect_perim(sight_box):
+		for coord in Geom.line(center, end).slice(1):
+			if is_walkable(coord):
+				vis[coord] = true
+			else:
+				break
+	return vis.keys()
 
 func get_actors(include_tags=null, exclude_tags=null):
 	## Return an array of actors presently on this board.

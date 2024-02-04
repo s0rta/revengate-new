@@ -338,12 +338,34 @@ Items:
   - [x] bug: story screen does not capture keyboard input
   - [x] save to local storage?
 
+
 ## v0.11.5
 - [x] bug: phantruch "typical" health is -1
 - [x] bug: distant actor pop-up takes precedence over inspect
 - [x] tent vibe on the Salapou meeting board
 - [x] bigger text on small screens
 - [x] gentle degredation for missing shader params on F-Droid
+
+
+## v0.11.6
+- [x] settings screen
+  - [x] font size
+- [x] public cheats
+  - [x] teleport
+  - [x] x-ray inspect
+  - [x] advance chapter
+  - [x] used cheats show on the victory screen
+  - [x] cheats have access key
+  - [x] all cheats incremend the cheats counter
+  - [x] context menu uses CommandButton
+- [x] MacOS export preset
+
+Items:
+- [x] long descriptions for all items (#7)
+
+UX:
+- [x] quick attack button is too small with half width emojis like the broom
+
 
 ## v0.12
 - [ ] bug: sewer otter attacks everyone?
@@ -361,17 +383,6 @@ Items:
 - [ ] async preload most shaders to speedup startup
 - [ ] silence a few warnings
 - [ ] remove unreachable levels from starting screen
-- [x] settings screen
-  - [x] font size
-- [x] public cheats
-  - [x] teleport
-  - [x] x-ray inspect
-  - [x] advance chapter
-  - [x] used cheats show on the victory screen
-  - [x] cheats have access key
-  - [x] all cheats incremend the cheats counter
-  - [x] context menu uses CommandButton
-- [x] MacOS export preset
 
 Strategies:
 - [ ] Benoît roams after the meeting and after yielding
@@ -380,15 +391,6 @@ Strategies:
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
 - [ ] Tracking keeps moving towards the last place where they saw their prey after it becomes unperceived
 
-Items:
-- [x] long descriptions for all items (#7)
-
-UX:
-- [x] quick attack button is too small with half width emojis like the broom
-- [ ] more margins around buttons to prevent mis-taps
-
-Weapons:
-- [ ] axe (𝇤)
 
 Combat:
 - [ ] zapping spell
@@ -430,3 +432,6 @@ Simulator:
 
 Magic:
 - [ ] spells check the Aether level of the location
+
+Weapons:
+- [ ] axe (𝇤)

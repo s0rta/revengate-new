@@ -24,6 +24,7 @@ var label
 @onready var equip_button = find_child("EquipButton", true, false)
 @onready var consume_button  = find_child("ConsumeButton", true, false)
 @onready var activate_button  = find_child("ActivateButton", true, false)
+@onready var toss_button  = find_child("TossButton", true, false)
 @onready var drop_button  = find_child("DropButton", true, false)
 
 func _ready():

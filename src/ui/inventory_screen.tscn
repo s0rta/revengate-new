@@ -85,6 +85,11 @@ layout_mode = 2
 focus_mode = 0
 text = "Activate"
 
+[node name="TossButton" type="Button" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Throw"
+
 [node name="DropButton" type="Button" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
 layout_mode = 2
 focus_mode = 0
@@ -107,26 +112,6 @@ size_flags_horizontal = 8
 [node name="BackButton" type="Button" parent="VBoxContainer/MarginContainer"]
 layout_mode = 2
 text = "Back"
-
-[node name="ExtraActions" type="MarginContainer" parent="VBoxContainer"]
-visible = false
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ExtraActions"]
-layout_mode = 2
-theme_override_constants/separation = 15
-
-[node name="Button" type="Button" parent="VBoxContainer/ExtraActions/HBoxContainer"]
-layout_mode = 2
-text = "Use"
-
-[node name="Button2" type="Button" parent="VBoxContainer/ExtraActions/HBoxContainer"]
-layout_mode = 2
-text = "Drop"
-
-[node name="Button3" type="Button" parent="VBoxContainer/ExtraActions/HBoxContainer"]
-layout_mode = 2
-text = "Equip"
 
 [node name="EmptyLabel" type="Label" parent="."]
 visible = false

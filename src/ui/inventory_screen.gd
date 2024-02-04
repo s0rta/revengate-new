@@ -67,6 +67,7 @@ func _connect_row(row):
 	row.equip_button.button_up.connect(equip_item.bind(row))
 	row.consume_button.button_up.connect(consume_item.bind(row))
 	row.activate_button.button_up.connect(switch_item.bind(row))
+	row.toss_button.button_up.connect(toss_item.bind(row))
 	row.drop_button.button_up.connect(drop_item.bind(row))
 
 func reset_empty_label_vis():
@@ -94,6 +95,15 @@ func equip_item(row:InventoryRow):
 	actor.equip_item(item)
 	row.refresh()
 	reset_equip_state()
+
+func toss_item(row:InventoryRow):
+	acted = true
+	var item = row.item
+	var radius = actor.get_throw_range() + 1
+	var board = actor.get_board()
+	var coords = board.visible_coords(Tender.hero, radius)
+	close(false)  # FIXME: actually do the toss
+	board.paint_cells(coords, "highlight-info", board.LAYER_HIGHLIGHTS)
 
 func drop_item(row:InventoryRow):
 	acted = true

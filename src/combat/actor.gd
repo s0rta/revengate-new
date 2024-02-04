@@ -792,6 +792,10 @@ func get_max_action_range(other:Actor):
 	else:
 		return weapon_range
 
+func get_throw_range():
+	var str = get_stat("strength")
+	return int(0.06 * str)
+
 func get_weapons():
 	## Return all the active weapons for the current turn.
 	## All active weapons are eligible for a strike during the turn.

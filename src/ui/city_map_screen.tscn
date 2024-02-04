@@ -5,6 +5,9 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8sbij"]
 shader = ExtResource("2_8njr4")
+shader_parameter/min_alpha = 0.35
+shader_parameter/max_alpha = 1.0
+shader_parameter/speed = 2.5
 
 [node name="CityMapScreen" type="Control"]
 layout_mode = 3
@@ -53,6 +56,7 @@ material = SubResource("ShaderMaterial_8sbij")
 layout_mode = 1
 offset_right = 60.0
 offset_bottom = 88.0
+theme_type_variation = &"EmojiGraphics"
 theme_override_constants/line_spacing = 0
 theme_override_font_sizes/font_size = 64
 text = "☛"
