@@ -97,13 +97,29 @@ func equip_item(row:InventoryRow):
 	reset_equip_state()
 
 func toss_item(row:InventoryRow):
-	acted = true
 	var item = row.item
+	if item is ItemGrouping:
+		item = item.top()
 	var radius = actor.get_throw_range() + 1
 	var board = actor.get_board()
 	var coords = board.visible_coords(Tender.hero, radius)
-	close(false)  # FIXME: actually do the toss
+	
 	board.paint_cells(coords, "highlight-info", board.LAYER_HIGHLIGHTS)
+	hide()
+
+	var surveyor = Tender.hud.get_gesture_surveyor()
+	var msg = "Toss %s where?" % [item.get_short_desc()]
+	var res = await surveyor.start_capture_coord(msg, coords)
+	print("Caputre fininished: %s" % res)
+	if res.success:
+		acted = true
+		res.coord
+		assert(res.coord in coords)
+		actor.drop_item(item, res.coord)
+		close(acted)
+	else:
+		actor.get_board().clear_highlights()
+		show()
 
 func drop_item(row:InventoryRow):
 	acted = true

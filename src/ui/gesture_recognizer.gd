@@ -27,6 +27,7 @@ const POS_EPSILON = 2.0
 @onready var viewport: SubViewport = find_child("Viewport")
 var is_processing := false  # are we in the middle of a gesture?
 var is_capturing_clicks := false
+var valid_capture_coords = null
 var is_panning := false
 var has_panned := false
 var was_long_tap := false
@@ -181,12 +182,18 @@ func _attempt_capture(event):
 	## Try to capture event (possibly for a multi-tap action that is awaiting on it).
 	## Return where the event was indeed captured.
 	if is_capturing_clicks:
+		Utils.ddump_event(event, self, "_attempt_capture")
 		if Utils.event_is_tap_or_left(event):
 			accept_event()
 			if event.pressed:
+				var success:bool
 				var coord = viewport.global_pos_to_board_coord(event.position)
-				var res = CaptureResult.new(true, event.position, coord)
-				emit_signal("capture_stopped", res)
+				if valid_capture_coords and coord not in valid_capture_coords:
+					success = false
+				else:
+					success = true
+				var res = CaptureResult.new(success, event.position, coord)
+				capture_stopped.emit(res)
 			return true
 	return false
 
@@ -220,11 +227,15 @@ func _mt_info(current_index, current_pos):
 	info.avg_dist_eq = abs(info.avg_dist_old - info.avg_dist_new) < POS_EPSILON
 	return info
 
-func start_capture_coord(msg) -> CaptureResult:
+func start_capture_coord(msg, coords=null) -> CaptureResult:
+	## Capture the next click
+	## `coords`: if provided, only consider success if the click is in one of those
 	is_capturing_clicks = true
+	valid_capture_coords = coords
 	emit_signal("action_started", msg)
 	var res = await capture_stopped
 	is_capturing_clicks = false
+	valid_capture_coords = null
 	emit_signal("action_complete")
 	return res
 

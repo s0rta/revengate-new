@@ -541,20 +541,22 @@ func has_strategy(cancellable=false):
 				return true
 	return false
 
-func _get_lunge_anim_cpos(foe):
+func _get_lunge_anim_cpos(where):
 	## Return the canvas coord where an attack animation should reach before starting the 
 	## retreat animation.
+	## `where`: an actor, possibly a foe, or a coord
 	# going roughtly half a cell towards foe, no matter how far foe is
-	var my_coord = get_cell_coord()
-	var foe_coord = foe.get_cell_coord()
-	var attack_vec = Vector2(foe_coord - my_coord)
+	var here = get_cell_coord()
+	where = CombatUtils.as_coord(where)
+	var attack_vec = Vector2(where - here)
 	attack_vec = attack_vec.normalized()
 	var anim_vec = 0.45 * attack_vec
 	return position + anim_vec * RevBoard.TILE_SIZE
 	
-func _anim_lunge(foe):
-	## Return the animation of lunging forward towards `foe` then retreaing.
-	var anim_dest = _get_lunge_anim_cpos(foe)
+func _anim_lunge(where):
+	## Return the animation of lunging forward towards `where` then retreaing.
+	## `where`: a coord or an actor
+	var anim_dest = _get_lunge_anim_cpos(where)
 	var old_cpos = position
 	var anim := create_anim()
 	anim.set_trans(anim.TRANS_SINE)
@@ -1065,6 +1067,8 @@ func drop_item(item, coord=null):
 	var builder = BoardBuilder.new(board)
 	if coord == null:
 		coord = get_cell_coord()
+	else:
+		_anim_lunge(coord)
 	coord = builder.place(item, false, coord, false)
 	emit_signal("dropped_item", coord)
 
