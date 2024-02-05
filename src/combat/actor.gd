@@ -68,6 +68,9 @@ const DAMAGE_FEATURE_MODS = {"undead": {"silver": 3}}
 # 35% more damage on a critical hit
 const CRITICAL_MULT := 0.35
 
+# weapons start sucking if you throw them too far
+const TOO_FAR_MOD = 0.5
+
 # Perception
 const MAX_SIGHT_DIST = 30  # perfect sight
 const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
@@ -778,12 +781,13 @@ func get_conditions():
 	return conds
 
 func get_max_weapon_range():
+	var str = get_stat("strength")
 	var max_range = 0
 	
 	for weapon in get_weapons():
-		if (weapon is Weapon or weapon is InnateWeapon) and weapon.range > max_range:
-			max_range = weapon.range
-	
+		var weapon_range = get_eff_weapon_range(weapon)
+		if (weapon is Weapon or weapon is InnateWeapon) and weapon_range > max_range:
+			max_range = weapon_range	
 	return max_range
 
 func get_max_action_range(other:Actor):
@@ -795,8 +799,14 @@ func get_max_action_range(other:Actor):
 		return weapon_range
 
 func get_throw_range():
+	# linearly adjusted range based on your strength
 	var str = get_stat("strength")
 	return int(0.06 * str)
+
+func get_eff_weapon_range(weapon):
+	# linearly adjusted range based on your strength (str=50 -> weapon.range)
+	var str = get_stat("strength")
+	return max(1, int(weapon.range * 2.0 * str / 100.0))
 
 func get_weapons():
 	## Return all the active weapons for the current turn.
@@ -944,9 +954,10 @@ func attack(foe) -> bool:
 			has_hit = strike(foe, weapon) or has_hit
 	return has_hit
 
-func strike(foe:Actor, weapon):
+func strike(foe:Actor, weapon, throw=null):
 	## Strike foe with weapon. The strike could result in a miss. 
 	## The result is immediately visible in the world.
+	## `throw`: whether the weapon will leave our hand; auto-detect if null
 	# combats works with two random rolls: to-hit then damage.
 	mem.learn("attacked", current_turn, Memory.Importance.TRIVIAL, 
 			{"foe": foe.actor_id})
@@ -959,9 +970,11 @@ func strike(foe:Actor, weapon):
 	var hit_mod = _get_feature_modifier(foe, weapon, TO_HIT_FEATURE_MODS)
 	
 	var attack_dist = RevBoard.dist(self, foe)
-	if Utils.has_tags(weapon, ["throwable"]) and attack_dist > 1:
+	if throw == null:
+		throw = Utils.has_tags(weapon, ["throwable"]) and attack_dist > 1
+	if throw:
 		# re-equip from the same stack when tossing things
-		drop_item(weapon, foe_coord)
+		drop_item(weapon, foe_coord, false)
 		var next_weapon = get_compatible_item(weapon)
 		reequip_weapon_from_group(next_weapon, weapon)
 	
@@ -980,7 +993,10 @@ func strike(foe:Actor, weapon):
 	# damage roll
 	# TODO: use intelligence for spells
 	var dmg_mod = _get_feature_modifier(foe, weapon, DAMAGE_FEATURE_MODS)
-	var damage = stat_roll("strength") * (weapon.damage + dmg_mod)
+	var range_mod = 1.0
+	if throw and get_eff_weapon_range(weapon) < attack_dist:
+		range_mod = TOO_FAR_MOD
+	var damage = stat_roll("strength") * (weapon.damage + dmg_mod) * range_mod
 	if crit:
 		damage *= CRITICAL_MULT
 	damage = foe.normalize_damage(weapon, damage)
@@ -1058,7 +1074,7 @@ func equip_item(item, exclusive=true):
 	item.is_equipped = true
 	emit_signal("changed_weapons")
 
-func drop_item(item, coord=null):
+func drop_item(item, coord=null, anim_toss=true):
 	assert(item.get_parent() == self, "must possess an item before dropping it")
 	if item.get("is_equipped"):
 		item.is_equipped = false
@@ -1067,7 +1083,7 @@ func drop_item(item, coord=null):
 	var builder = BoardBuilder.new(board)
 	if coord == null:
 		coord = get_cell_coord()
-	else:
+	elif anim_toss:
 		_anim_lunge(coord)
 	coord = builder.place(item, false, coord, false)
 	emit_signal("dropped_item", coord)

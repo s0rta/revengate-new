@@ -7,7 +7,7 @@
 [node name="Halberd" instance=ExtResource("1_ncut5")]
 script = ExtResource("2_n0e1y")
 damage = 7
-range = 1
+range = 2
 damage_family = 3
 is_equipped = false
 char = "🝐"

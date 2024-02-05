@@ -103,19 +103,29 @@ func toss_item(row:InventoryRow):
 	var radius = actor.get_throw_range() + 1
 	var board = actor.get_board()
 	var coords = board.visible_coords(Tender.hero, radius)
-	
 	board.paint_cells(coords, "highlight-info", board.LAYER_HIGHLIGHTS)
+
+	if item is Weapon:
+		# highlight the effective range of ranged weapons
+		var item_range = actor.get_eff_weapon_range(item)
+		if item_range and item_range > 1:
+			var effective_coords = board.visible_coords(Tender.hero, item_range+1)
+			board.paint_cells(effective_coords, "highlight-warning", board.LAYER_HIGHLIGHTS)	
 	hide()
 
 	var surveyor = Tender.hud.get_gesture_surveyor()
 	var msg = "Toss %s where?" % [item.get_short_desc()]
 	var res = await surveyor.start_capture_coord(msg, coords)
-	print("Caputre fininished: %s" % res)
 	if res.success:
 		acted = true
 		res.coord
 		assert(res.coord in coords)
-		actor.drop_item(item, res.coord)
+		var index = actor.get_board().make_index()
+		var foe = index.actor_at(res.coord)
+		if item is Weapon and foe:
+			actor.strike(foe, item, true)
+		else:
+			actor.drop_item(item, res.coord)
 		close(acted)
 	else:
 		actor.get_board().clear_highlights()

@@ -5,12 +5,14 @@
 
 [node name="Hammer" instance=ExtResource("1_va6oo")]
 damage = 5
+range = 2
 damage_family = 1
 char = "🔨"
 caption = "hammer"
 desc_simple = "A carpenter's hammer."
 desc_detailed = "A cross peen hammer head mounted on an ash wood handle. The handle is finished smooth and sealed with linseed oil."
 spawn_cost = 1.0
+tags = Array[String](["groupable", "throwable"])
 
 [node name="HitSound" type="AudioStreamPlayer" parent="." index="1"]
 stream = ExtResource("2_gttei")
