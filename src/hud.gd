@@ -129,6 +129,7 @@ func update_states_at(hero_coord):
 	else:
 		stairs_button.visible = false
 	var index = board.make_index()
+	# FIXME: this is somehow true after any toss
 	loot_button.visible = null != index.top_item_at(hero_coord)
 	refresh_cancel_button_vis()
 	_refresh_lbar_commands(hero_coord, index)
@@ -229,3 +230,10 @@ func _on_show_quest_log_button_button_up():
 
 func _on_dialogue_pane_quest_activated():
 	refresh_quest_btn()
+
+func _on_center_control_visibility_changed():
+	%CenterPanel.visible = (%ActionLabel.visible
+							or %WaitingLabel.visible
+							or %ProminentMsgLabel.visible
+							or %CancelButton2.visible)
+

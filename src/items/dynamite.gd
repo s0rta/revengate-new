@@ -17,7 +17,7 @@
 
 extends Item
 
-@export var fuse_nb_turns := 4
+@export var fuse_nb_turns := 2
 
 func _dissipate():
 	blow_up()

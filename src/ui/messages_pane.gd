@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -32,6 +32,7 @@ func add_message(text, level:Consts.MessageLevels, tags:=[]):
 		label.modulate = Color.RED
 	%MessagesBox.add_child(label)
 	label.show()
+	%Panel.show()
 	var timer = get_tree().create_timer(DECAY_SECS)
 	await timer.timeout
 	_fadeout_node(label)
@@ -44,6 +45,15 @@ func _fadeout_node(node):
 		await anim.finished
 		node.hide()
 	node.queue_free()
+	
+	# hide the panel when all the messages have decayed
+	var has_visible = false
+	for label in %MessagesBox.find_children("", "Label", false, false):	
+		if label.visible:
+			has_visible = true
+			break
+	if not has_visible:
+		%Panel.hide()
 
 func _trim_old_messages():
 	var labels = %MessagesBox.get_children()
