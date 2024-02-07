@@ -975,8 +975,9 @@ func strike(foe:Actor, weapon, throw=null):
 	if throw:
 		# re-equip from the same stack when tossing things
 		drop_item(weapon, foe_coord, false)
-		var next_weapon = get_compatible_item(weapon)
-		reequip_weapon_from_group(next_weapon, weapon)
+		if weapon.is_equipped:
+			var next_weapon = get_compatible_item(weapon)
+			reequip_weapon_from_group(next_weapon, weapon)
 	
 	if stat_trial(foe.get_evasion(weapon), "agility", weapon.skill, hit_mod):
 		# Miss!

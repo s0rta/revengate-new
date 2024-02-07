@@ -111,6 +111,7 @@ func toss_item(row:InventoryRow):
 		if item_range and item_range > 1:
 			var effective_coords = board.visible_coords(Tender.hero, item_range+1)
 			board.paint_cells(effective_coords, "highlight-warning", board.LAYER_HIGHLIGHTS)	
+			coords += effective_coords
 	hide()
 
 	var surveyor = Tender.hud.get_gesture_surveyor()

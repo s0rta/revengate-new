@@ -57,7 +57,7 @@ func watch_hero(hero:Actor=null):
 	hero.moved.connect(refresh_buttons_vis)
 	hero.changed_weapons.connect(_on_hero_changed_weapons)
 	hero.dropped_item.connect(_set_quick_attack_icon)
-	hero.dropped_item.connect(update_states_at)
+	hero.dropped_item.connect(update_states_at_hero)
 	hero.picked_item.connect(_set_quick_attack_icon)
 	hero.picked_item.connect(update_states_at)
 	hero.state_changed.connect(_on_hero_state_changed)
@@ -129,11 +129,13 @@ func update_states_at(hero_coord):
 	else:
 		stairs_button.visible = false
 	var index = board.make_index()
-	# FIXME: this is somehow true after any toss
 	loot_button.visible = null != index.top_item_at(hero_coord)
 	refresh_cancel_button_vis()
 	_refresh_lbar_commands(hero_coord, index)
 	_refresh_cheatsbar_commands(hero_coord, index)
+
+func update_states_at_hero(_arg=null):
+	update_states_at(Tender.hero.get_cell_coord())
 
 func refresh_buttons_vis(_old_coord, hero_coord):
 	## update the visibility of some action button depending on where the hero is standing
