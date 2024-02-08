@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=46 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -10,10 +10,6 @@
 [ext_resource type="Script" path="res://src/hud.gd" id="7_4dw6n"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="7_eg4si"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="7_nbfvd"]
-[ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="9_s2ghn"]
-[ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="10_1hetc"]
-[ext_resource type="PackedScene" uid="uid://6ml8upew405" path="res://src/weapons/saber.tscn" id="10_q1knc"]
-[ext_resource type="PackedScene" uid="uid://dnw86n1s88cwl" path="res://src/weapons/dagger.tscn" id="11_6koxt"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
 [ext_resource type="Script" path="res://src/dungeons/traboule.gd" id="13_u4fm7"]
@@ -141,32 +137,6 @@ position = Vector2(112, 48)
 mem = SubResource("Resource_7gsj3")
 
 [node name="Dynamite" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("7_eg4si")]
-
-[node name="Rapier" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_s2ghn")]
-
-[node name="Rapier2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_s2ghn")]
-
-[node name="Rapier3" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_s2ghn")]
-
-[node name="Saber" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("10_q1knc")]
-
-[node name="Saber2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("10_q1knc")]
-
-[node name="Hammer" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("10_1hetc")]
-
-[node name="Hammer2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("10_1hetc")]
-
-[node name="Hammer3" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("10_1hetc")]
-
-[node name="Dagger" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("11_6koxt")]
-
-[node name="Dagger2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("11_6koxt")]
-
-[node name="Dagger3" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("11_6koxt")]
-
-[node name="Dagger4" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("11_6koxt")]
-
-[node name="Hammer4" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("10_1hetc")]
 
 [node name="Nadege" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_wcjwx")]
 visible = true
@@ -390,9 +360,11 @@ offset_bottom = 92.0
 grow_horizontal = 0
 size_flags_horizontal = 4
 size_flags_vertical = 4
+mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD/TopRightMargin"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HUD/TopRightMargin/VBoxContainer"]
 layout_mode = 2
@@ -441,10 +413,12 @@ text = "↩"
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD/TopRightMargin/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
+mouse_filter = 2
 
 [node name="HealthBar" type="ProgressBar" parent="HUD/TopRightMargin/VBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/outline_size = 2
 theme_override_styles/background = SubResource("StyleBoxLine_q8b5c")
 theme_override_styles/fill = SubResource("StyleBoxFlat_iqgbw")
@@ -454,6 +428,7 @@ show_percentage = false
 
 [node name="StatusBar" type="HBoxContainer" parent="HUD/TopRightMargin/VBoxContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="HealthLabel" type="Label" parent="HUD/TopRightMargin/VBoxContainer/VBoxContainer/StatusBar"]
 layout_mode = 2
