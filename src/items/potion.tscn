@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://c3qrp6eeq1lio"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_rpj78"]
+[ext_resource type="AudioStream" uid="uid://jdiqogi3ijrh" path="res://src/items/bottle-break.wav" id="2_gov8g"]
+[ext_resource type="Script" path="res://src/items/potion.gd" id="2_ny2dc"]
+
+[node name="Potion" instance=ExtResource("1_rpj78")]
+script = ExtResource("2_ny2dc")
+char = "🍸"
+caption = null
+desc_simple = null
+desc_detailed = null
+message = null
+skill = null
+consumable = true
+switchable = null
+spawn_cost = null
+spawn_rect = null
+ttl = null
+tags = Array[String](["fragile", "groupable"])
+
+[node name="WreckSound" type="AudioStreamPlayer" parent="." index="1"]
+stream = ExtResource("2_gov8g")

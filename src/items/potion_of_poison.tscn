@@ -1,19 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://b80ulbklxp5at"]
+[gd_scene load_steps=3 format=3 uid="uid://wdbao74ejnju"]
 
-[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_eh6jl"]
-[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_la8ey"]
+[ext_resource type="PackedScene" uid="uid://c3qrp6eeq1lio" path="res://src/items/potion.tscn" id="1_cocqb"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_8q3xi"]
 
-[node name="PotionOfPoison" instance=ExtResource("1_eh6jl")]
-char = "🍸"
+[node name="PotionOfPoison" instance=ExtResource("1_cocqb")]
 caption = "potion of poison"
 desc_simple = "A bitter odorless solution."
 desc_detailed = "A tincture of potent alkaloids adjusted to 5% beet sugar concentration.  Interfers with a number of bodily functions."
 consumable = true
 spawn_cost = 1.0
-tags = Array[String](["groupable"])
 
-[node name="Effect" type="Node" parent="." index="1"]
-script = ExtResource("2_la8ey")
+[node name="Effect" type="Node" parent="." index="2"]
+script = ExtResource("2_8q3xi")
 damage = 2
 damage_family = 7
 nb_turns = 4

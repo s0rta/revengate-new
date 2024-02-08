@@ -127,6 +127,8 @@ func toss_item(row:InventoryRow):
 			actor.strike(foe, item, true)
 		else:
 			actor.drop_item(item, res.coord)
+		if Utils.has_tags(item, ["fragile"]):
+			item.wreck()
 		close(acted)
 	else:
 		actor.get_board().clear_highlights()

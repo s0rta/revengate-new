@@ -1,18 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://dgdyufwncs77t"]
+[gd_scene load_steps=3 format=3 uid="uid://de85ahbbn0ced"]
 
-[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_jyilg"]
-[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_tg0bb"]
+[ext_resource type="PackedScene" uid="uid://c3qrp6eeq1lio" path="res://src/items/potion.tscn" id="1_ssw6f"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_05hel"]
 
-[node name="PotionOfHealing" instance=ExtResource("1_jyilg")]
-char = "🍸"
+[node name="PotionOfHealing" instance=ExtResource("1_ssw6f")]
 caption = "potion of healing"
 desc_simple = "A thick unpalatable syrup."
 desc_detailed = "Fermented berries and mushrooms. Packs lots of antioxidants and antibiotics."
 consumable = true
 spawn_cost = 2.0
-tags = Array[String](["groupable"])
 
-[node name="Effect" type="Node" parent="." index="1"]
-script = ExtResource("2_tg0bb")
+[node name="Effect" type="Node" parent="." index="2"]
+script = ExtResource("2_05hel")
 healing = 20
 immediate = true

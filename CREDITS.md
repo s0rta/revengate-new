@@ -59,6 +59,9 @@ Additionnal sound effects CC-BY-SA Yannick Gingras:
 - explosion-01
 - magic-01, 02
 
+bottle-break: CC-BY 3.0 by spookymodem
+https://opengameart.org/content/breaking-bottle
+
 Particle sprites:
 CC0 by Kenney
 https://www.kenney.nl/

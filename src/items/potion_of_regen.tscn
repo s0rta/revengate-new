@@ -1,18 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://c8qjd5x4rr4vq"]
+[gd_scene load_steps=3 format=3 uid="uid://dvr7bsle8gy1x"]
 
-[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_oiw5o"]
-[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_63tlt"]
+[ext_resource type="PackedScene" uid="uid://c3qrp6eeq1lio" path="res://src/items/potion.tscn" id="1_7s2lj"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="3_tjfos"]
 
-[node name="PotionOfRegen" instance=ExtResource("1_oiw5o")]
-char = "🍸"
+[node name="PotionOfRegen" instance=ExtResource("1_7s2lj")]
 caption = "potion of regeneration"
 desc_simple = "A yellowish viscous liquid."
 desc_detailed = "A selection of Alpine herbs macerated into a neutral grain spirit then redistilled by Carthusian monks. Accelerates coagulation and amplifies the action of white blood cells."
-consumable = true
 spawn_cost = 3.0
-tags = Array[String](["groupable"])
 
-[node name="Effect" type="Node" parent="." index="1"]
-script = ExtResource("2_63tlt")
+[node name="Effect" type="Node" parent="." index="2"]
+script = ExtResource("3_tjfos")
 healing = 3
 nb_turns = 5

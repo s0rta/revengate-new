@@ -1,24 +1,22 @@
-[gd_scene load_steps=4 format=3 uid="uid://clry405irfeom"]
+[gd_scene load_steps=4 format=3 uid="uid://bx8vm75edr76t"]
 
-[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_2meyj"]
-[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_llo5w"]
-[ext_resource type="Script" path="res://src/combat/paralysis.gd" id="3_fetvs"]
+[ext_resource type="PackedScene" uid="uid://c3qrp6eeq1lio" path="res://src/items/potion.tscn" id="1_o5je0"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_erdg5"]
+[ext_resource type="Script" path="res://src/combat/paralysis.gd" id="3_ty7co"]
 
-[node name="PotionOfAnalysisParalysis" instance=ExtResource("1_2meyj")]
-char = "🍸"
+[node name="PotionOfAnalysisParalysis" instance=ExtResource("1_o5je0")]
 caption = "potion of analysis paralysis"
 desc_simple = "A slimy liquid that smells very earthy."
 desc_detailed = "A decoction of moldy rye, Panaeolus cinctulus and Psilocybe semilanceata. Expands consciousness and gives uncontrolable muscle spasms."
 message = "you feel overwhelmed by the complexity of everything around you"
 consumable = true
 spawn_cost = 7.0
-tags = Array[String](["groupable"])
 
-[node name="PerfectPerception" type="Node" parent="." index="1"]
-script = ExtResource("2_llo5w")
+[node name="PerfectPerception" type="Node" parent="." index="2"]
+script = ExtResource("2_erdg5")
 perception = 150
 nb_turns = 12
 
-[node name="Paralysis" type="Node" parent="." index="2"]
-script = ExtResource("3_fetvs")
+[node name="Paralysis" type="Node" parent="." index="3"]
+script = ExtResource("3_ty7co")
 nb_turns = 10

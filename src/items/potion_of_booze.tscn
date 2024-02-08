@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://lpworv1rq2g3"]
+[gd_scene load_steps=3 format=3 uid="uid://dvm0g3y1rr55g"]
 
-[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_q2tfm"]
-[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_3svxc"]
+[ext_resource type="PackedScene" uid="uid://c3qrp6eeq1lio" path="res://src/items/potion.tscn" id="1_0or25"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_8bn8y"]
 
-[node name="PotionOfBooze" instance=ExtResource("1_q2tfm")]
+[node name="PotionOfBooze" instance=ExtResource("1_0or25")]
 char = "🍾"
 caption = "potion of booze"
 desc_simple = "A cheap beer."
@@ -11,10 +11,10 @@ desc_detailed = "An ale with a mixed grain bill of mostly barley and some beet s
 message = "What an invigorating feeling!"
 consumable = true
 spawn_cost = 3.0
-tags = Array[String](["booze", "groupable"])
+tags = Array[String](["fragile", "groupable", "booze"])
 
-[node name="Effect" type="Node" parent="." index="1"]
-script = ExtResource("2_3svxc")
+[node name="Effect" type="Node" parent="." index="2"]
+script = ExtResource("2_8bn8y")
 healing = 1
 agility = -10
 perception = -20

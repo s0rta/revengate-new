@@ -57,6 +57,14 @@ func _dissipate():
 		await shroud()
 	queue_free()
 
+func wreck():
+	## Damage this item, perhaps permanently.
+	## Subclasses should override this to do something more interesting than
+	## just playing a sound.
+	var sound = find_child("WreckSound")
+	if sound:
+		sound.play()
+
 func start_new_turn():
 	if depleted:
 		return

@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -15,18 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Potion
+class_name Potion extends Item
 
-func activate_on_actor(actor):
-	var prev_drank = actor.mem.recall_all("drank_absinthe", actor.current_turn)
-	actor.mem.learn("drank_absinthe", actor.current_turn, Memory.Importance.TRIVIAL)
-	var nb_drank = len(prev_drank) + 1
-	if nb_drank == 2:
-		message = "Things around you seem sureal."
-	elif nb_drank in [3, 4]:
-		message = "Woah!"
-		var effects = find_children("", "Effect", false, false)
-		effects[0].perception = 140
-	elif nb_drank > 4:
-		message = "This doen't feel good anymore."
-	super(actor)
+func wreck():
+	super()
+	if $WreckSound.playing:
+		await $WreckSound.finished
+	activate_on_coord(get_cell_coord())
+	_dissipate()
+
+func activate_on_coord(coord):
+	var index = get_board().make_index()
+	var actor = index.actor_at(coord)
+	if actor:
+		activate_on_actor(actor)
