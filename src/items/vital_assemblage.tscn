@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://cuiqioehqyffe"]
+[gd_scene load_steps=2 format=3 uid="uid://dodjxkw3u6k13"]
 
-[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_wlvdu"]
+[ext_resource type="PackedScene" uid="uid://bhlcqo3fpirgy" path="res://src/items/clockwork.tscn" id="1_kwn7t"]
 
-[node name="VitalAssemblage" instance=ExtResource("1_wlvdu")]
+[node name="VitalAssemblage" instance=ExtResource("1_kwn7t")]
 char = "🕜"
 caption = "intricate clockwork mechanism"
 desc_simple = "A series of small gears inside an ornate wooden frame."
 desc_detailed = "Brass gears and tourmaline crystals mounted on a lever escapement. The mechanism is housed in decorated oak frame."
-tags = Array[String](["vital-assemblage"])
+tags = Array[String](["vital-assemblage", "fragile"])

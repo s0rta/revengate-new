@@ -1,15 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://c18hdsjecec2"]
+[gd_scene load_steps=3 format=3 uid="uid://dkbt6tcv7qmbv"]
 
-[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_3nxwl"]
-[ext_resource type="Script" path="res://src/combat/stats_modifiers.gd" id="2_063ms"]
+[ext_resource type="PackedScene" uid="uid://bhlcqo3fpirgy" path="res://src/items/clockwork.tscn" id="1_0awo7"]
+[ext_resource type="Script" path="res://src/combat/stats_modifiers.gd" id="2_xi4t8"]
 
-[node name="DeviceOfEasyFocus" instance=ExtResource("1_3nxwl")]
+[node name="DeviceOfEasyFocus" instance=ExtResource("1_0awo7")]
 char = "🕗"
 caption = "a clockwork mechanism with a pleasing ticking"
 desc_simple = "A series of diminutive gears inside an ornate wooden case."
 desc_detailed = "A small pearwood case housing brass gears and malachite crystals rotating along complex pattens."
 skill = "device_of_focusing"
 
-[node name="StatsModifiers" type="Node" parent="." index="1"]
-script = ExtResource("2_063ms")
+[node name="StatsModifiers" type="Node" parent="." index="2"]
+script = ExtResource("2_xi4t8")
 mana_burn_rate = -30

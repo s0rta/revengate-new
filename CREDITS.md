@@ -47,8 +47,9 @@ Icons in assets/opencliparts:
 - CC0 by the Open Cliparts project. More info at http://www.openclipart.org
 
 Combat Sound Effects:
-CC0 by Ben (artisticdude)
+CC0 by Ben (artisticdude) and rubberduck
 https://opengameart.org/content/rpg-sound-pack
+https://opengameart.org/content/100-cc0-sfx
 
 Additionnal sound effects CC-BY-SA Yannick Gingras:
 - end screens sound effects

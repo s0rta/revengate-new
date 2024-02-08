@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://bhlcqo3fpirgy"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_6p8xh"]
+[ext_resource type="Script" path="res://src/items/clockwork.gd" id="2_fyhgb"]
+[ext_resource type="AudioStream" uid="uid://7tnfhk4sq15d" path="res://src/items/clockwork-wreck.mp3" id="2_ub30w"]
+
+[node name="Clockwork" instance=ExtResource("1_6p8xh")]
+script = ExtResource("2_fyhgb")
+char = "⚙"
+tags = Array[String](["fragile"])
+
+[node name="WreckSound" type="AudioStreamPlayer" parent="." index="1"]
+stream = ExtResource("2_ub30w")
+volume_db = -10.0
