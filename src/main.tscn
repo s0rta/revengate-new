@@ -280,6 +280,7 @@ grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 4
 size_flags_vertical = 8
+mouse_filter = 2
 
 [node name="DebugButtons" type="HBoxContainer" parent="HUD/RGroup"]
 layout_mode = 2
@@ -291,12 +292,14 @@ visible = false
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
+mouse_filter = 2
 
 [node name="CheatsBar" type="VBoxContainer" parent="HUD/RGroup/DebugButtons/CheatsMargin"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+mouse_filter = 2
 
 [node name="TeleportButton" type="Button" parent="HUD/RGroup/DebugButtons/CheatsMargin/CheatsBar"]
 modulate = Color(1, 1, 1, 0.5)
@@ -314,6 +317,7 @@ text = "Inspect"
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 8
+mouse_filter = 2
 
 [node name="RButtonBar" type="VBoxContainer" parent="HUD/RGroup/DebugButtons/RMargin"]
 layout_mode = 2
@@ -342,6 +346,7 @@ text = "Cheats"
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD/RGroup"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="QuickAttackButton" type="Button" parent="HUD/RGroup/MarginContainer"]
 unique_name_in_owner = true
