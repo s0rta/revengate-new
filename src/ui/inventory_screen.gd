@@ -64,6 +64,7 @@ func _make_row(item):
 func _connect_row(row):
 	## Connect all the row button to actions on this screen.
 	## Can only be called after the row has been added to the scene.
+	row.desc_button.button_up.connect(_show_item_details.bind(row.item))
 	row.equip_button.button_up.connect(equip_item.bind(row))
 	row.consume_button.button_up.connect(consume_item.bind(row))
 	row.activate_button.button_up.connect(switch_item.bind(row))

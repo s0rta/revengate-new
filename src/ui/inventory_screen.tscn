@@ -61,13 +61,18 @@ size_flags_vertical = 4
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 8.0
-mouse_filter = 0
 text = "Big gloomy staff"
 
 [node name="Pad" type="Control" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
+
+[node name="DescButton" type="Button" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+text = " ? "
 
 [node name="EquipButton" type="Button" parent="VBoxContainer/ScrollContainer/ItemRecordTemplate/HBoxContainer"]
 layout_mode = 2

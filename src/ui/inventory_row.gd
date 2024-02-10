@@ -21,6 +21,7 @@ signal item_details_requested(item)
 
 var item 
 var label
+@onready var desc_button = find_child("DescButton", true, false)
 @onready var equip_button = find_child("EquipButton", true, false)
 @onready var consume_button  = find_child("ConsumeButton", true, false)
 @onready var activate_button  = find_child("ActivateButton", true, false)
@@ -28,6 +29,8 @@ var label
 @onready var drop_button  = find_child("DropButton", true, false)
 
 func _ready():
+	# this is disable for now, will need more work before the label feels
+	# good as the tap zone for the items detail screen
 	label = find_child("Label", true, false)
 	label.gui_input.connect(show_detail)
 	if item:
