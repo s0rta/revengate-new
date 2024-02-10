@@ -124,7 +124,7 @@ const VIS_MODULATE := Color.WHITE
 
 # Tags must be declared here before the can be added to items and actors. 
 # This is a small safeguard against typos.
-const TAGS = ["ethereal", "undead", "gift", "broken", "lit", 
+const TAGS = ["ethereal", "undead", "gift", "fragile", "broken", "lit", 
 			"booze", 
 			"magical",  # magical effects and items are often more potent
 			"groupable",  # shows in "stacks" on the inventory screen

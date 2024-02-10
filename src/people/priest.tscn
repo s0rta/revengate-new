@@ -1,9 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://dwsvo4pkjebix"]
+[gd_scene load_steps=7 format=3 uid="uid://dwsvo4pkjebix"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_uf8dd"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="2_42m4r"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="2_t00lj"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="3_ydm75"]
 [ext_resource type="PackedScene" uid="uid://immvec50lanj" path="res://src/weapons/mace.tscn" id="4_prmbd"]
+
+[sub_resource type="Resource" id="Resource_w5qga"]
+resource_local_to_scene = true
+script = ExtResource("2_42m4r")
+_facts = []
 
 [node name="Priest" instance=ExtResource("1_uf8dd")]
 char = "@"
@@ -16,6 +22,7 @@ strength = 47
 agility = 47
 intelligence = 52
 perception = 48
+mem = SubResource("Resource_w5qga")
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.666667, 0.831373, 0.215686, 1)

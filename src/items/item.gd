@@ -221,7 +221,7 @@ func activate_on_actor(actor):
 	for node in get_children():
 		if node is Effect:
 			node.apply(actor)
-	if message:
+	if message and actor == Tender.hero:
 		actor.add_message(message)
 	if consumable:
 		queue_free()

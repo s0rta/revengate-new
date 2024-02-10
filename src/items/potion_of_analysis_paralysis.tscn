@@ -9,8 +9,11 @@ caption = "potion of analysis paralysis"
 desc_simple = "A slimy liquid that smells very earthy."
 desc_detailed = "A decoction of moldy rye, Panaeolus cinctulus and Psilocybe semilanceata. Expands consciousness and gives uncontrolable muscle spasms."
 message = "you feel overwhelmed by the complexity of everything around you"
-consumable = true
+skill = ""
+switchable = false
 spawn_cost = 7.0
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PerfectPerception" type="Node" parent="." index="2"]
 script = ExtResource("2_erdg5")

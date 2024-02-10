@@ -1,14 +1,20 @@
-[gd_scene load_steps=10 format=3 uid="uid://cbpo1nvheopyj"]
+[gd_scene load_steps=12 format=3 uid="uid://cbpo1nvheopyj"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_ymka0"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="2_xakjg"]
 [ext_resource type="Script" path="res://src/strategies/defensive_casting.gd" id="4_j32cc"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="4_s3hbp"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="5_vgonj"]
 [ext_resource type="Script" path="res://src/strategies/summoning.gd" id="6_20m4k"]
-[ext_resource type="PackedScene" uid="uid://cuiqioehqyffe" path="res://src/items/vital_assemblage.tscn" id="7_b5c8f"]
+[ext_resource type="PackedScene" uid="uid://dodjxkw3u6k13" path="res://src/items/vital_assemblage.tscn" id="7_b5c8f"]
 [ext_resource type="PackedScene" uid="uid://6ml8upew405" path="res://src/weapons/saber.tscn" id="7_tvu27"]
 [ext_resource type="Script" path="res://src/spells/restore_health.gd" id="8_k8d84"]
 [ext_resource type="Script" path="res://src/spells/summon_phantruch.gd" id="8_tig2l"]
+
+[sub_resource type="Resource" id="Resource_vhur3"]
+resource_local_to_scene = true
+script = ExtResource("2_xakjg")
+_facts = []
 
 [node name="Retznac" instance=ExtResource("1_ymka0")]
 char = "𝓡"
@@ -27,42 +33,42 @@ resistance = 7
 tags = Array[String](["undead", "quest-boss-retznac"])
 faction = 2
 description = "A well dressed man with a pale skin and a calm demeanor."
+mem = SubResource("Resource_vhur3")
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.921569, 0.258824, 0.184314, 1)
 text = "𝓡"
 
-[node name="Tracking" type="Node" parent="." index="7"]
+[node name="Tracking" type="Node" parent="." index="6"]
 script = ExtResource("4_s3hbp")
 nb_track_turns = null
 priority = 0.1
 ttl = null
 cancellable = null
 
-[node name="SkillLevels" type="Node" parent="." index="8"]
+[node name="SkillLevels" type="Node" parent="." index="7"]
 script = ExtResource("5_vgonj")
 fencing = 3
 channeling = 3
 device_of_focusing = 1
 
-[node name="DefensiveCasting" type="Node" parent="." index="9"]
+[node name="DefensiveCasting" type="Node" parent="." index="8"]
 script = ExtResource("4_j32cc")
 priority = 0.6
 
-[node name="Summoning" type="Node" parent="." index="10"]
+[node name="Summoning" type="Node" parent="." index="9"]
 script = ExtResource("6_20m4k")
 priority = 0.5
 
-[node name="VitalAssemblage" parent="." index="11" instance=ExtResource("7_b5c8f")]
+[node name="VitalAssemblage" parent="." index="10" instance=ExtResource("7_b5c8f")]
 
-[node name="VitalAssemblage2" parent="." index="12" instance=ExtResource("7_b5c8f")]
+[node name="VitalAssemblage2" parent="." index="11" instance=ExtResource("7_b5c8f")]
 
-[node name="SummonPhantruch" type="Node" parent="." index="13"]
+[node name="SummonPhantruch" type="Node" parent="." index="12"]
 script = ExtResource("8_tig2l")
 
-[node name="RestoreHealth" type="Node" parent="." index="14"]
+[node name="RestoreHealth" type="Node" parent="." index="13"]
 script = ExtResource("8_k8d84")
 
-[node name="Saber" parent="." index="15" instance=ExtResource("7_tvu27")]
-range = 1
+[node name="Saber" parent="." index="14" instance=ExtResource("7_tvu27")]
 is_equipped = true
