@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -20,13 +20,13 @@ class_name Simulator extends Node2D
 
 enum Results {VICTORY, DEFEAT, DRAW}
 
-const NB_SIMS_PER_RUN = 200
+const NB_SIMS_PER_RUN = 500
 const MAX_SIM_TURNS = 50
 const RUN_ALL_STAGES = true  # sim the first board and all the challengers in $ExtraStages
 
 # whether to let Godot start the sims in between rendering frames, gives better profiling stats
 # FIXME: Stats output is broken in when ASYNC_MODE is true
-const ASYNC_MODE = false
+const ASYNC_MODE = true
 
 signal sims_done  # sims completed for one stage (see RUN_ALL_STAGES)
 
@@ -35,7 +35,7 @@ var gladiator = null  # the actor who's fate tells us when the simulation is don
 var challengers_health_full:int
 var sim_board:RevBoard
 
-var remaining_sims:int
+var remaining_sims := -1  # setting this auto-starts the runner in async mode
 var nb_turns:Array[int]  # array of number of turns each simulation lasted
 var nb_hits:Dictionary  # actor->int
 var nb_misses:Dictionary  # actor->int
@@ -52,11 +52,11 @@ var start_time:int
 func _ready():
 	for actor in get_actors():
 		_make_duelist(actor)
-		
-	if RUN_ALL_STAGES:
-		run_stages()
-	else:
+	
+	if ASYNC_MODE or not RUN_ALL_STAGES:
 		run_sims()
+	else:
+		run_stages()
 
 func _input(event):
 	if event.is_action_pressed("ui_accept"):
@@ -66,11 +66,18 @@ func _input(event):
 
 func _process(_delta):
 	if ASYNC_MODE:
-		if not sim_running and remaining_sims >= 0:
+		# FIXME: should not start until we get the OK the setup is finished
+		if not sim_running and remaining_sims > 0:
 			remaining_sims -= 1
 			start_sim()
 			if remaining_sims == 0:
-				emit_signal("sims_done")
+				sims_done.emit()
+		elif RUN_ALL_STAGES and not sim_running and remaining_sims <= 0:
+			if advance_stage():
+				run_sims.call_deferred()
+			else:
+				print("Done!")
+				get_tree().quit()
 
 func _mk_res_store(default=[]):
 	var clone = func (val):
@@ -89,7 +96,6 @@ func run_stages():
 		run_sims()
 		
 func run_sims():
-	remaining_sims = NB_SIMS_PER_RUN
 	start_time = Time.get_ticks_msec()
 	nb_turns = []
 	nb_hits = {}
@@ -99,8 +105,9 @@ func run_sims():
 	challengers_health_left = _mk_res_store()
 	
 	var names = $Board.get_actors().map(func (actor): return actor.name)
-	print("Starting a batch of %d sims for %s..." % [remaining_sims, ", ".join(names)])
+	print("Starting a batch of %d sims for %s..." % [NB_SIMS_PER_RUN, ", ".join(names)])
 	
+	remaining_sims = NB_SIMS_PER_RUN
 	if ASYNC_MODE:
 		await sims_done
 		print("Finished sims for %s" % [", ".join(names)])
@@ -115,18 +122,23 @@ func start_sim():
 	if sim_board:
 		sim_board.queue_free()
 	sim_board = $Board.duplicate()
+	# FIXME: as off Godot 4.2.1, we can't do this from _ready() and the simulator only works
+	#   in aync-mode for now.
 	add_child(sim_board)
 	challengers_health_full = 0
 	gladiator = null
 	for actor in get_actors():
+		actor.spawn()
 		if gladiator == null:
 			gladiator = actor
 		else:
 			challengers_health_full += actor.health_full
-		actor.died.connect(_on_actor_died)
-		actor.hit.connect(_inc_hit.bind(actor))
-		actor.missed.connect(_inc_miss.bind(actor))
+		if not actor.died.is_connected(_on_actor_died):
+			actor.died.connect(_on_actor_died)
+			actor.hit.connect(_inc_hit.bind(actor))
+			actor.missed.connect(_inc_miss.bind(actor))
 	$TurnQueue.run()
+	assert($TurnQueue.is_stopped())
 	sim_running = false
 
 func get_board():
@@ -145,12 +157,13 @@ func _make_duelist(actor):
 	var strat = Dueling.new(actor, 1.0)
 	actor.add_child(strat)
 
-func advance_stage():
+func advance_stage() -> bool:
 	## Line up the next contender(s) to fight againts the gladiator
-	var next_stage = $ExtraStages.get_child(0)
-	if next_stage == null:
+	## Return false when all stage have been executed
+	if not $ExtraStages.get_child_count():
 		print("No stage to advance to.")
-		return
+		return false
+	var next_stage = $ExtraStages.get_child(0)
 
 	var old_actors = $Board.get_actors()
 	var gladiator = old_actors.pop_front()
@@ -166,6 +179,9 @@ func advance_stage():
 			new_actors.append(child)
 		next_stage.reparent(self)
 		next_stage.queue_free()
+
+	var desc_func = func (actor): return actor.get_short_desc()
+	print("Advancing stage to: %s" % [new_actors.map(desc_func)])
 	
 	var gladiator_coord = gladiator.get_cell_coord()
 	var builder = BoardBuilder.new($Board)
@@ -173,6 +189,8 @@ func advance_stage():
 	for actor in new_actors:
 		_make_duelist(actor)
 		builder.place(actor, false, gladiator_coord, true, null, index)
+		actor.owner = null  # maybe builder.place() should not change the owner?
+	return true
 	
 func finalize_sim(result:Results):
 	$TurnQueue.shutdown()

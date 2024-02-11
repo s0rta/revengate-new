@@ -1403,7 +1403,7 @@ func _on_actor_moved(from, to):
 		update_all_shrouding(things, index)
 		for vibe in index.vibes_at(to):
 			vibe.activate()
-	else:
+	elif Tender.hero:
 		if Tender.hero.perceives(from, index):
 			update_shrouding_at(from, index)
 		if Tender.hero.perceives(to, index):
