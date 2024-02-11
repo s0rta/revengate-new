@@ -274,7 +274,7 @@ func get_skill(skill_name) -> Consts.SkillLevel:
 func get_stat(stat_name, challenge=null):
 	## Return the effective stat with all the active modifiers and skills included
 	assert(stat_name in Consts.CORE_STATS, "%s is not a core stat" % stat_name)
-	
+
 	# are we trained to perform that specific challenge?
 	var skill_mod = 0
 	if challenge in Consts.SKILLS:

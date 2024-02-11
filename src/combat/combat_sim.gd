@@ -21,12 +21,13 @@ class_name Simulator extends Node2D
 enum Results {VICTORY, DEFEAT, DRAW}
 
 const NB_SIMS_PER_RUN = 500
-const MAX_SIM_TURNS = 50
+const MAX_SIM_TURNS = 100  # DEBUG, was 50
 const RUN_ALL_STAGES = true  # sim the first board and all the challengers in $ExtraStages
 
 # whether to let Godot start the sims in between rendering frames, gives better profiling stats
 # FIXME: Stats output is broken in when ASYNC_MODE is true
 const ASYNC_MODE = true
+const SIM_PER_FRAME = 10
 
 signal sims_done  # sims completed for one stage (see RUN_ALL_STAGES)
 
@@ -48,6 +49,7 @@ var gladiator_health_left:Dictionary
 var challengers_health_left:Dictionary
 
 var start_time:int
+var combat_msec:int
 
 func _ready():
 	for actor in get_actors():
@@ -67,17 +69,21 @@ func _input(event):
 func _process(_delta):
 	if ASYNC_MODE:
 		# FIXME: should not start until we get the OK the setup is finished
-		if not sim_running and remaining_sims > 0:
-			remaining_sims -= 1
-			start_sim()
-			if remaining_sims == 0:
-				sims_done.emit()
-		elif RUN_ALL_STAGES and not sim_running and remaining_sims <= 0:
-			if advance_stage():
-				run_sims.call_deferred()
-			else:
-				print("Done!")
-				get_tree().quit()
+		for i in SIM_PER_FRAME:
+			if not sim_running and remaining_sims > 0:
+				remaining_sims -= 1
+				start_sim()
+				if remaining_sims == 0:
+					sims_done.emit()
+					return
+			elif RUN_ALL_STAGES and not sim_running and remaining_sims <= 0:
+				if advance_stage():
+					run_sims.call_deferred()
+					return
+				else:
+					print("Done!")
+					get_tree().quit()
+					break
 
 func _mk_res_store(default=[]):
 	var clone = func (val):
@@ -97,6 +103,7 @@ func run_stages():
 		
 func run_sims():
 	start_time = Time.get_ticks_msec()
+	combat_msec = 0
 	nb_turns = []
 	nb_hits = {}
 	nb_misses = {}
@@ -122,9 +129,11 @@ func start_sim():
 	if sim_board:
 		sim_board.queue_free()
 	sim_board = $Board.duplicate()
+	
 	# FIXME: as off Godot 4.2.1, we can't do this from _ready() and the simulator only works
 	#   in aync-mode for now.
 	add_child(sim_board)
+	
 	challengers_health_full = 0
 	gladiator = null
 	for actor in get_actors():
@@ -137,8 +146,12 @@ func start_sim():
 			actor.died.connect(_on_actor_died)
 			actor.hit.connect(_inc_hit.bind(actor))
 			actor.missed.connect(_inc_miss.bind(actor))
+
+	var combat_start = Time.get_ticks_msec()
 	$TurnQueue.run()
 	assert($TurnQueue.is_stopped())
+	combat_msec += Time.get_ticks_msec() - combat_start
+
 	sim_running = false
 
 func get_board():
@@ -212,9 +225,11 @@ func finalize_sim(result:Results):
 
 func summarize_sims():
 	var elapsed = (Time.get_ticks_msec() - start_time) / 1000.0
+	var combat_sec = combat_msec / 1000.0
 	var nb_sims = Utils.sum(results.values())
 	var all_turns = Utils.sum(nb_turns)
 	print("Ran %d sims in %0.2f seconds (%0.2f turn/s)" % [nb_sims, elapsed, all_turns/elapsed])
+	print("Combat time:  %0.2f seconds (%0.2f turn/s)" % [combat_sec, all_turns/combat_sec])
 	print("Median encouter lasted %d turns" % Utils.median(nb_turns))
 	print("Victory: %0.2f%%" % (100.0*results[Results.VICTORY]/nb_sims))
 	summarize_gladiator_health(Results.VICTORY)
