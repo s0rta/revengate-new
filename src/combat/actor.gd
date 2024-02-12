@@ -138,6 +138,7 @@ var has_acted: bool  # reset at the start of every turn
 var _anims := []  # all turn-blocking anims
 var shrouded := false
 var _shroud_anim = null
+var _mods_cache = null
 
 
 func _get_configuration_warnings():
@@ -155,6 +156,7 @@ func _ready():
 	if mem == null:
 		mem = Memory.new()
 	assert(mem != null)
+	picked_item.connect(_clear_mods_cache)
 
 func _to_string():
 	var parent = get_parent()
@@ -211,6 +213,7 @@ func act() -> void:
 	## The Hero overloads this method to select the action based on player input.
 	has_acted = false
 	state = States.ACTING
+	_mods_cache = null
 	refresh_strategies()
 	var strat = get_strategy()
 	if strat:
@@ -251,6 +254,9 @@ func get_caption():
 func get_short_desc():
 	return "(%s) %s" % [char, get_caption()]
 
+func _clear_mods_cache(_arg=null):
+	_mods_cache = null
+
 func get_modifiers():
 	## return a dict of all the modifiers from items and conditions combined together
 	var no_skill = Consts.SkillLevel.NEOPHYTE
@@ -281,9 +287,10 @@ func get_stat(stat_name, challenge=null):
 		var level = get_skills().get(challenge, Consts.SkillLevel.NEOPHYTE)
 		skill_mod = CombatUtils.skill_modifier(level)
 
-	var mods = get_modifiers()
-	var eff_stat = get(stat_name) + mods.get(stat_name, 0)
-	var challenge_mod = mods.get(challenge, 0)
+	if _mods_cache == null:
+		_mods_cache = get_modifiers()
+	var eff_stat = get(stat_name) + _mods_cache.get(stat_name, 0)
+	var challenge_mod = _mods_cache.get(challenge, 0)
 	return eff_stat + challenge_mod + skill_mod
 
 func get_base_stats():
@@ -392,6 +399,7 @@ func start_turn(new_turn:int):
 				break
 			node.start_new_turn()
 	current_turn = new_turn
+	_mods_cache = null
 
 func finalize_turn(acted=null):
 	## Cleanup internal state, pass the control back to the TurnQueue.
@@ -1073,6 +1081,7 @@ func equip_item(item, exclusive=true):
 			if other.get("is_equipped") != null:
 				other.is_equipped = false
 	item.is_equipped = true
+	_mods_cache = null
 	emit_signal("changed_weapons")
 
 func drop_item(item, coord=null, anim_toss=true):
@@ -1087,6 +1096,7 @@ func drop_item(item, coord=null, anim_toss=true):
 	elif anim_toss:
 		_anim_lunge(coord)
 	coord = builder.place(item, false, coord, false)
+	_mods_cache = null
 	emit_signal("dropped_item", coord)
 
 func reequip_weapon_from_group(grouping, prev_weapon=null):
