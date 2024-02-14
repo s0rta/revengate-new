@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://c185mr0bu3u3w"]
+[gd_scene load_steps=57 format=3 uid="uid://c185mr0bu3u3w"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_yitoo"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_i1rpj"]
@@ -11,9 +11,9 @@
 [ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="8_eau7g"]
 [ext_resource type="PackedScene" uid="uid://c3uuk6yfc2thp" path="res://src/monsters/sahwakoon.tscn" id="9_s5p53"]
 [ext_resource type="PackedScene" uid="uid://djjksywe6fjk4" path="res://src/items/lost_loom_cards.tscn" id="11_320yy"]
-[ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="12_5tg6f"]
+[ext_resource type="PackedScene" uid="uid://dvr7bsle8gy1x" path="res://src/items/potion_of_regen.tscn" id="12_5tg6f"]
 [ext_resource type="PackedScene" uid="uid://d8jxxkoa4b00" path="res://src/people/outlaw.tscn" id="12_g5w02"]
-[ext_resource type="PackedScene" uid="uid://b80ulbklxp5at" path="res://src/items/potion_of_poison.tscn" id="15_0p6sp"]
+[ext_resource type="PackedScene" uid="uid://wdbao74ejnju" path="res://src/items/potion_of_poison.tscn" id="15_0p6sp"]
 [ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="15_ngw60"]
 [ext_resource type="PackedScene" uid="uid://ddryv4det5wth" path="res://src/people/grenn_kuhn.tscn" id="16_s7e88"]
 [ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="16_ygxep"]
@@ -23,16 +23,17 @@
 [ext_resource type="PackedScene" uid="uid://h7s2p8mgm387" path="res://src/weapons/sword.tscn" id="19_holdq"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="20_8peit"]
 [ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="21_2o5vb"]
-[ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="22_bxpqo"]
+[ext_resource type="PackedScene" uid="uid://de85ahbbn0ced" path="res://src/items/potion_of_healing.tscn" id="22_bxpqo"]
 [ext_resource type="PackedScene" uid="uid://chpblbtevaa13" path="res://src/items/carrot.tscn" id="24_2jxsh"]
 [ext_resource type="PackedScene" uid="uid://b2dem6s27irbs" path="res://src/weapons/grayswandir.tscn" id="24_lwi07"]
 [ext_resource type="PackedScene" uid="uid://cmshyslfrv0du" path="res://src/vibes/hissing.tscn" id="25_0ydwd"]
 [ext_resource type="PackedScene" uid="uid://cbpo1nvheopyj" path="res://src/monsters/retznac.tscn" id="25_cxgj3"]
 [ext_resource type="PackedScene" uid="uid://c8frbdj65suee" path="res://src/weapons/cane.tscn" id="27_5htvc"]
-[ext_resource type="PackedScene" uid="uid://dactu5q2nmdun" path="res://src/items/potion_of_absinthe.tscn" id="27_p82t1"]
+[ext_resource type="PackedScene" uid="uid://bado87soxnga5" path="res://src/items/potion_of_absinthe.tscn" id="27_p82t1"]
 [ext_resource type="PackedScene" uid="uid://drnpu2dw1i4nn" path="res://src/weapons/weighted_cane.tscn" id="28_0tyeq"]
 [ext_resource type="PackedScene" uid="uid://dqkhlt4d3sbqn" path="res://src/monsters/sentry_scarab.tscn" id="31_aksig"]
 [ext_resource type="PackedScene" uid="uid://cjoutyju3dhre" path="res://src/monsters/gleugt.tscn" id="33_08vnm"]
+[ext_resource type="PackedScene" uid="uid://bnykesyfgf2b5" path="res://src/people/lyonese.tscn" id="34_yppu8"]
 
 [sub_resource type="Resource" id="Resource_v0b0i"]
 resource_local_to_scene = true
@@ -130,6 +131,16 @@ script = ExtResource("4_kpuol")
 _facts = []
 
 [sub_resource type="Resource" id="Resource_teplk"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_bq34y"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_mhmkf"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
@@ -299,6 +310,17 @@ mem = SubResource("Resource_e563k")
 
 [node name="Gleugt" parent="TestingQuestTransitions" instance=ExtResource("33_08vnm")]
 mem = SubResource("Resource_teplk")
+
+[node name="MovementStressTest" type="Node" parent="."]
+script = ExtResource("7_bd8gw")
+min_board_occ = 5
+world_loc = Vector3i(13, 4, 0)
+
+[node name="Lyonese" parent="MovementStressTest" instance=ExtResource("34_yppu8")]
+mem = SubResource("Resource_bq34y")
+
+[node name="Rat" parent="MovementStressTest" instance=ExtResource("8_eau7g")]
+mem = SubResource("Resource_mhmkf")
 
 [connection signal="visibility_changed" from="Quest1Goals/Outlaw2/PotionOfHealing" to="Quest1Goals/Outlaw2/PotionOfHealing" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Quest1Goals/Outlaw2/PotionOfRegen" to="Quest1Goals/Outlaw2/PotionOfRegen" method="_on_visibility_changed"]

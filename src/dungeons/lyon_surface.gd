@@ -19,12 +19,14 @@ class_name LyonSurface extends Dungeon
 
 const START_LOC = Vector3i(13, 5, 0)
 const STARTING_CONN_TARGETS = {
-		Vector2i(5, 3): {"dungeon": "Traboule1"}, 
+		Vector2i(5, 3): {"dungeon": "Traboule1", "world_loc": Vector3i(12, 4, -1)}, 
 		Vector2i(21, 7): {"dungeon": "Traboule2"}, 
 		Vector2i(27, 7): {"dungeon": "Stash"},
-		Vector2i(0, 15): {"dungeon": "TroisGaulesSurface"}
+		Vector2i(0, 15): {"dungeon": "TroisGaulesSurface"},
+		Vector2i(24, 0): {"size": Vector2i(36, 28)}
 	}
 	
+const LOC_MAX_HOUSES = {Vector3i(13, 4, 0): [0, 0]}  # world_loc -> [min, max]
 @export var min_houses := 3
 @export var max_houses := 6
 
@@ -67,9 +69,11 @@ func finalize_static_board() -> RevBoard:
 			elif terrain == "stairs-down":
 				z_delta = -1
 
-			var region = Geom.coord_region(coord, board.get_used_rect())
-			var loc_delta = Vector3i(region.x, region.y, z_delta)
-			rec.world_loc = board.world_loc + loc_delta
+			if not rec.has("world_loc"):
+				var region = Geom.coord_region(coord, board.get_used_rect())
+				var loc_delta = Vector3i(region.x, region.y, z_delta)
+				print("Connector at %s goes to %s" % [board.coord_str(coord), board.world_loc_str(loc_delta)])
+				rec.world_loc = board.world_loc + loc_delta
 			if not STARTING_CONN_TARGETS.has(coord):
 				rec.dungeon = dungeon_for_loc(rec.world_loc)
 			board.set_cell_rec(coord, "conn_target", rec)
@@ -92,7 +96,12 @@ func fill_new_board(builder:BoardBuilder, depth, world_loc, size):
 	
 	# houses are rooms, they have a 1-tile gap all around to make the Lyon surface feel open
 	builder.rect = Geom.inner_rect(outer_rect, 1)
-	builder.gen_rooms(randi_range(min_houses, max_houses), false)
+	var min_h = min_houses
+	var max_h = max_houses
+	if LOC_MAX_HOUSES.has(world_loc):
+		min_h = LOC_MAX_HOUSES[world_loc][0]
+		max_h = LOC_MAX_HOUSES[world_loc][1] 
+	builder.gen_rooms(randi_range(min_h, max_h), false)
 	builder.open_rooms()
 	
 	builder.rect = orig_rect

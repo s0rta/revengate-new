@@ -233,7 +233,11 @@ func gen_rooms(nb_rooms:int, add_corridors:=true):
 	var is_full := false
 	var _large_enough = func(rect):
 		return max(rect.size.x, rect.size.y) >= MIN_PART_SIZE
-		
+	
+	if nb_rooms <= 0:
+		# we need to handle this case separately in order to be able to seed partitions 
+		# with the whole bounding rect
+		return 0
 	while not is_full and partitions.size() < nb_rooms and nb_iter < 10:
 		var index = Rand.rect(partitions, _large_enough)
 		if index == null:

@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -139,7 +139,8 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=default_board_size, pr
 	return new_board
 
 func _region_for_loc(near_loc, far_loc):
-	## Return which region should host the connector to go from near_loc to far_loc
+	## Return which region should host the connector to go from near_loc to far_loc, 
+	## Return null when the connector can be in any region
 	if near_loc.x == far_loc.x and near_loc.y == far_loc.y:
 		return null
 	elif near_loc.x == far_loc.x and near_loc.y > far_loc.y:
@@ -151,7 +152,20 @@ func _region_for_loc(near_loc, far_loc):
 	elif near_loc.x < far_loc.x and near_loc.y == far_loc.y:
 		return Consts.REG_EAST
 	else:
-		assert(false, "Can't relate where %s is relative to %s" % [near_loc, far_loc])
+		# more than one eligigle region, we pick one at random
+		var regions = []
+		if near_loc.y > far_loc.y:
+			regions.append(Consts.REG_NORTH)
+		if near_loc.y < far_loc.y:
+			regions.append(Consts.REG_SOUTH)
+		if near_loc.x > far_loc.x:
+			regions.append(Consts.REG_WEST)
+		if near_loc.x < far_loc.x:
+			regions.append(Consts.REG_EAST)
+		if not regions.is_empty():
+			return Rand.choice(regions)
+		else:
+			assert(false, "Can't relate where %s is relative to %s" % [near_loc, far_loc])
 
 func add_connectors(builder:BoardBuilder, neighbors):
 	## place stairs and other cross-board connectors on a board
@@ -363,7 +377,10 @@ func new_board_for_target(old_board, conn_target):
 		dungeon = self
 	assert(dungeon != null, "Dungeon can't be found for conn_target: %s" % conn_target)
 	var new_loc = conn_target.world_loc
-	var new_board = dungeon.build_board(conn_target.depth, new_loc, dungeon.default_board_size, old_board.world_loc)
+	var size = conn_target.get("size")
+	if size == null:
+		size = dungeon.default_board_size
+	var new_board = dungeon.build_board(conn_target.depth, new_loc, size, old_board.world_loc)
 	return new_board
  
 func add_loc_prefabs(builder, world_loc:Vector3i):
