@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -18,7 +18,7 @@
 ## Factories to fill areas of boards with mazes.
 class_name Mazes extends RefCounted
 
-const CROSS_DIRS = [Vector2i.UP, Vector2i.DOWN, Vector2i.RIGHT, Vector2i.LEFT]
+const CROSS_DIRS = RevBoard.CROSS_OFFSETS
 
 class MazeBuilder extends RefCounted:
 	## Base class for MazeBuilders, specific algorithem must be implemented in `fill()`

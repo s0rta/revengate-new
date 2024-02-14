@@ -34,9 +34,8 @@ static func skill_modifier(level:Consts.SkillLevel):
 	return 5 * level
 
 static func apply_all_effects(weapon, victim):
-	for node in weapon.get_children():
-		if node is Effect:
-			node.apply(victim)
+	for node in weapon.find_children("", "Effect", false, false):
+		node.apply(victim)
 
 static func as_coord(thing):
 	## Return the board coordinates of `thing`

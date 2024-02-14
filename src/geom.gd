@@ -48,16 +48,16 @@ static func rect_perim(rect: Rect2i, region=null) -> Array[Vector2i]:
 	var coords:Array[Vector2i] = []
 	if region == null or region == Consts.REG_NORTH:
 		for i in range(rect.size.x):
-			coords.append(rect.position + V.i(i, 0))
+			coords.append(rect.position + Vector2i(i, 0))
 	if region == null or region == Consts.REG_EAST:
 		for j in range(1, rect.size.y):
-			coords.append(rect.position + V.i(rect.size.x-1, j))
+			coords.append(rect.position + Vector2i(rect.size.x-1, j))
 	if region == null or region == Consts.REG_SOUTH:
 		for i in range(rect.size.x-2, 0, -1):
-			coords.append(rect.position + V.i(i, rect.size.y-1))
+			coords.append(rect.position + Vector2i(i, rect.size.y-1))
 	if region == null or region == Consts.REG_WEST:
 		for j in range(rect.size.y-1, 0, -1):
-			coords.append(rect.position + V.i(0, j))
+			coords.append(rect.position + Vector2i(0, j))
 	return coords
 
 static func rect_area(rect: Rect2i) -> int:

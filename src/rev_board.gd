@@ -18,12 +18,14 @@
 class_name RevBoard extends TileMap
 
 const TILE_SIZE = 32
+const INV_TILE_SIZE = 1.0 / TILE_SIZE  # we speed up conversion with mult rather than div
 const LAYER_GEOM = 0
 const LAYER_HIGHLIGHTS = 1
 
 # clockwise around a cell starting at top left
 const ADJ_OFFSETS = [Vector2i(-1, -1), Vector2i(0, -1), Vector2i(1, -1), Vector2i(1, 0), 
 					Vector2i(1, 1), Vector2i(0, 1), Vector2i(-1, 1), Vector2i(-1, 0)]
+const CROSS_OFFSETS = [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
 
 # which terrains lead to other boards?
 const CONNECTOR_TERRAINS = ["stairs-down", "stairs-up", "gateway"]
@@ -187,7 +189,7 @@ class BoardMetrics:
 		var coords = []
 		for i in range(dists.size.x):
 			for j in range(dists.size.y):
-				var coord = V.i(i, j)
+				var coord = Vector2i(i, j)
 				if dists.getv(coord) != null:
 					coords.append(coord)
 		return coords
@@ -197,7 +199,7 @@ class BoardMetrics:
 		var used_dists = []
 		for i in range(dists.size.x):
 			for j in range(dists.size.y):
-				var coord = V.i(i, j)
+				var coord = Vector2i(i, j)
 				var dist = dists.getv(coord)
 				if dist != null:
 					used_dists.append(dist)
@@ -290,7 +292,7 @@ class WallHugMetricsPump extends MetricsPump:
 		var val = wall_counts.getv(coord)
 		if val == null:
 			val = 0
-			for offset in [V.i(-1, 0), V.i(0, -1), V.i(1, 0), V.i(0, 1)]:
+			for offset in CROSS_OFFSETS:
 				if not board.is_walkable(coord+offset):
 					val += 1
 			wall_counts.setv(coord, val)
@@ -569,16 +571,20 @@ class BoardIndex extends RefCounted:
 
 	func line_of_sight(from, to):
 		## Like Board.line_of_sight(), but cached
-		from = CombatUtils.as_coord(from)
-		to = CombatUtils.as_coord(to)
+		if not from is Vector2i:
+			from = CombatUtils.as_coord(from)
+		if not to is Vector2i:
+			to = CombatUtils.as_coord(to)
 		if not _los.has([from, to]):
 			_los[[from, to]] = board.line_of_sight(from, to)
 		return _los[[from, to]]  # could be null
 
 	func has_los(from, to):
 		## Return whether there is a line of sight between `from` and `to`
-		from = CombatUtils.as_coord(from)
-		to = CombatUtils.as_coord(to)
+		if not from is Vector2i:
+			from = CombatUtils.as_coord(from)
+		if not to is Vector2i:
+			to = CombatUtils.as_coord(to)
 		if _los.has([from, to]):
 			return _los[[from, to]] != null
 		elif _los.has([to, from]):
@@ -631,8 +637,8 @@ class BoardIndex extends RefCounted:
 
 static func canvas_to_board(cpos):
 	## Return a coordinate in number of tiles from coord in pixels.
-	return Vector2i(int(cpos.x) / TILE_SIZE,
-					int(cpos.y) / TILE_SIZE)
+	return Vector2i(cpos.x * INV_TILE_SIZE,
+					cpos.y * INV_TILE_SIZE)
 
 static func board_to_canvas(coord):
 	## Return a coordinate in pixels to the center of the tile at coord. 
@@ -1028,14 +1034,18 @@ func filter_coords(coords, free, in_board, bbox, index=null):
 static func dist(from, to):
 	## Return the "game" distance between two tiles in number of moves.
 	## Obstacles are not taken into account, use path() for that.
-	from = CombatUtils.as_coord(from)
-	to = CombatUtils.as_coord(to)
+	if not from is Vector2i:
+		from = CombatUtils.as_coord(from)
+	if not to is Vector2i:
+		to = CombatUtils.as_coord(to)
 	return Geom.cheby_dist(from, to)
 
 static func man_dist(from, to):
 	## Return the Manhattan distance between to and from.
-	from = CombatUtils.as_coord(from)
-	to = CombatUtils.as_coord(to)
+	if not from is Vector2i:
+		from = CombatUtils.as_coord(from)
+	if not to is Vector2i:
+		to = CombatUtils.as_coord(to)
 	return Geom.man_dist(from, to)
 
 func paint_cell(coord, terrain_name, layer=LAYER_GEOM):
@@ -1286,8 +1296,10 @@ func line_of_sight(coord1, coord2):
 	## Return an array of coords in the line of sight between coord1 and coord2 
 	## or null if the direct path is visibly obstructed.
 	## Both end point params are included in the returned array.
-	coord1 = CombatUtils.as_coord(coord1)
-	coord2 = CombatUtils.as_coord(coord2)
+	if not coord1 is Vector2i:
+		coord1 = CombatUtils.as_coord(coord1)
+	if not coord2 is Vector2i:
+		coord2 = CombatUtils.as_coord(coord2)
 	
 	var steps = []
 	var nb_steps = dist(coord1, coord2) + 1

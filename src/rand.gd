@@ -128,13 +128,13 @@ static func coord_on_rect_perim(rect: Rect2i, region=null):
 	# rect.end() is outside the rect, so we have to subtract 1 from it
 	var coord = coord_in_rect(Geom.inner_rect(rect))
 	if region == Consts.REG_NORTH:
-		return V.i(coord.x, rect.position.y)
+		return Vector2i(coord.x, rect.position.y)
 	elif region == Consts.REG_SOUTH:
-		return V.i(coord.x, rect.end.y-1)
+		return Vector2i(coord.x, rect.end.y-1)
 	elif region == Consts.REG_WEST:
-		return V.i(rect.position.x, coord.y)
+		return Vector2i(rect.position.x, coord.y)
 	elif region == Consts.REG_EAST:
-		return V.i(rect.end.x-1, coord.y)
+		return Vector2i(rect.end.x-1, coord.y)
 	else:
 		assert(false, "Unknown region: %s" % region)
 
@@ -185,13 +185,13 @@ static func split_rect(rect:Rect2i, orientation, pad=0, min_side=1):
 	var r2size = null  # size of the second rect
 	var tl2 = null  # top-left of second partition
 	if orientation == Orientation.HORIZONTAL:
-		r1size = V.i(boundary, rect.size.y)
-		r2size = V.i(metric - boundary - pad, rect.size.y)
-		tl2 = rect.position + V.i(boundary + pad, 0)
+		r1size = Vector2i(boundary, rect.size.y)
+		r2size = Vector2i(metric - boundary - pad, rect.size.y)
+		tl2 = rect.position + Vector2i(boundary + pad, 0)
 	elif orientation == Orientation.VERTICAL:
-		r1size = V.i(rect.size.x, boundary)
-		r2size = V.i(rect.size.x, metric - boundary - pad)
-		tl2 = rect.position + V.i(0, boundary + pad)
+		r1size = Vector2i(rect.size.x, boundary)
+		r2size = Vector2i(rect.size.x, metric - boundary - pad)
+		tl2 = rect.position + Vector2i(0, boundary + pad)
 	else: 
 		return null
 	return [Rect2i(rect.position, r1size), 

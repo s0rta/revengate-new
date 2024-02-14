@@ -20,14 +20,14 @@ class_name Simulator extends Node2D
 
 enum Results {VICTORY, DEFEAT, DRAW}
 
-const NB_SIMS_PER_RUN = 500
+const NB_SIMS_PER_RUN = 1000
 const MAX_SIM_TURNS = 100  # DEBUG, was 50
 const RUN_ALL_STAGES = true  # sim the first board and all the challengers in $ExtraStages
 
-# whether to let Godot start the sims in between rendering frames, gives better profiling stats
-# FIXME: Stats output is broken in when ASYNC_MODE is true
+# Whether to let Godot start the sims in between rendering frames, gives better 
+# profiling stats, but runs slower
 const ASYNC_MODE = true
-const SIM_PER_FRAME = 10
+const SIM_PER_FRAME = 10  # only applies to ASYNC_MODE
 
 signal sims_done  # sims completed for one stage (see RUN_ALL_STAGES)
 

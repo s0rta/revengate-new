@@ -224,6 +224,7 @@ func act() -> void:
 func spawn():
 	## Mark sub-nodes to make then properly save and restore.
 	## This should be called exactly once after a newly created actor has been added to a board.
+	mem = Memory.new()
 	if health_full <= 0:
 		health_full = health
 	if not actor_id:
@@ -511,7 +512,7 @@ func add_strategy(strat:Strategy):
 
 func refresh_strategies():
 	## Ask strategie to update their awareness of the world.
-	for node in get_children():
+	for node in find_children("", "Strategy", false, false):
 		if node is Strategy:
 			node.refresh(current_turn)
 
