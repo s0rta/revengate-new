@@ -26,7 +26,11 @@ class_name InnateWeapon extends Node
 @export var range := 1
 @export_range(0.0, 1.0) var probability := 1.0
 @export var tags:Array[String]
+var has_effect := false
 
 # You can't change which skill is checked, but that skill can be trained. To improve it, 
 # add a SkillLevels sub-node on the actor.
 const skill := "innate_attack"
+
+func _ready():
+	has_effect = not find_children("", "Effect", false, false).is_empty()

@@ -512,16 +512,15 @@ func add_strategy(strat:Strategy):
 
 func refresh_strategies():
 	## Ask strategie to update their awareness of the world.
-	for node in find_children("", "Strategy", false, false):
-		if node is Strategy:
-			node.refresh(current_turn)
+	for strat in find_children("", "Strategy", false, false):
+		strat.refresh(current_turn)
 
 func cancel_strategies():
 	## Force the expiration of all strategies that can be expired.
 	var has_cancelled = false
-	for node in get_children():
-		if node is Strategy and node.cancellable:
-			node.cancel()
+	for strat in find_children("", "Strategy", false, false):
+		if strat.cancellable:
+			strat.cancel()
 			has_cancelled = true
 	if has_cancelled:
 		emit_signal("strategy_expired")
@@ -530,25 +529,20 @@ func get_strategy():
 	## Return the best strategy for this turn or `null` if no strategy is currently valid.
 	var pri_desc = func(a, b):
 		return a.priority >= b.priority
-	var strats = []
-	# find_children() does not find dynamically created strategies for some reason
-	for node in get_children():
-		if node is Strategy and node.is_valid():
-			strats.append(node)
-
-	if strats.size(): 
-		strats.sort_custom(pri_desc)
-		return strats[0]
-	else:
-		return null
+	var strats = find_children("", "Strategy", false, false)
+	strats.sort_custom(pri_desc)
+	for strat in strats:
+		if strat.is_valid():
+			return strat
+	return null
 
 func has_strategy(cancellable=false):
 	## Return `true` if the actor has any valid strategy.
 	## cancellable: the strategies must also be cancellable.
-	for node in get_children():
-		if node is Strategy and node.is_valid():
+	for strat in find_children("", "Strategy", false, false):
+		if strat.is_valid():
 			if cancellable:
-				return node.cancellable
+				return strat.cancellable
 			else:
 				return true
 	return false
@@ -1011,7 +1005,8 @@ func strike(foe:Actor, weapon, throw=null):
 		damage *= CRITICAL_MULT
 	damage = foe.normalize_damage(weapon, damage)
 	foe.update_health(-damage)
-	CombatUtils.apply_all_effects(weapon, foe)	
+	if weapon.get("has_effect"):
+		CombatUtils.apply_all_effects(weapon, foe)	
 	emit_signal("hit", foe, damage)
 	add_message("%s hit %s for %d dmg" % [get_short_desc(), foe.get_short_desc(), damage])
 	foe.emit_signal("was_attacked", self)

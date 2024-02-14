@@ -24,6 +24,7 @@ var mana_cost := 1  # base cost before modifiers from devices are added
 var damage := 0
 var damage_family: Consts.DamageFamily
 var tags:Array[String]
+var has_effect := false
 var skill := "channeling"
 
 var me: Actor  # the owner of this spell
@@ -38,6 +39,7 @@ func _ready():
 		var parent = get_parent()
 		if parent is Actor:
 			me = parent
+	has_effect = not find_children("", "Effect", false, false).is_empty()
 	assert(me, "Spells must be connected to an Actor")
 
 func has_reqs():

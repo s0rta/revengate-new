@@ -22,6 +22,11 @@ class_name Weapon extends Item
 @export var range := 1  # number of effective tile for an average thwrower (strength=50)
 @export var damage_family: Consts.DamageFamily
 @export var is_equipped := false
+var has_effect := false
+
+func _ready():
+	super()
+	has_effect = not find_children("", "Effect", false, false).is_empty()
 
 func get_base_stats():
 	## Return a dictionnary of the core stats without any modifiers applied
