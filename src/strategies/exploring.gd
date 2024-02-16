@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -30,7 +30,10 @@ func find_suitable_waypoint():
 	var size = board.get_used_rect().size
 	var long_side = max(size.x, size.y)
 	var here = me.get_cell_coord()
-	var max_dist = min(10, long_side/2)
+	var max_dist = min(12, long_side/2)
+	# we randomize the max dist to avoid having all the exploring 
+	# actors re-pick a waypoint when they reach destination at the same time
+	max_dist = randi_range(0.75 * max_dist, max_dist)
 	var metrics = board.dist_metrics(here, null, false, max_dist)
 	if metrics.furthest_coord == here:
 		return null
@@ -59,6 +62,8 @@ func act() -> bool:
 	if not path:
 		path = _get_path(my_coord, waypoint)
 	else:
+		# TODO: should consider the next 3 steps, keep moving but start thinking of changing path
+		#   if it does not unblock
 		var index = me.get_board().make_index()
 		var next = _path_next(path)
 		if next == null or not index.is_free(next):

@@ -635,7 +635,7 @@ class BoardIndex extends RefCounted:
 		for coord in _coord_to_items:
 			print("  items at %s: %s" % [RevBoard.coord_str(coord), _coord_to_items[coord]])
 
-static func canvas_to_board(cpos):
+static func canvas_to_board(cpos:Vector2) -> Vector2i:
 	## Return a coordinate in number of tiles from coord in pixels.
 	return Vector2i(cpos.x * INV_TILE_SIZE,
 					cpos.y * INV_TILE_SIZE)
@@ -1034,19 +1034,31 @@ func filter_coords(coords, free, in_board, bbox, index=null):
 static func dist(from, to):
 	## Return the "game" distance between two tiles in number of moves.
 	## Obstacles are not taken into account, use path() for that.
-	if not from is Vector2i:
-		from = CombatUtils.as_coord(from)
-	if not to is Vector2i:
-		to = CombatUtils.as_coord(to)
-	return Geom.cheby_dist(from, to)
+	var from_coord:Vector2i
+	var to_coord:Vector2i
+	if from is Vector2i:
+		from_coord = from
+	else:
+		from_coord = CombatUtils.as_coord(from)
+	if to is Vector2i:
+		to_coord = to
+	else:
+		to_coord = CombatUtils.as_coord(to)
+	return Geom.cheby_dist(from_coord, to_coord)
 
 static func man_dist(from, to):
 	## Return the Manhattan distance between to and from.
-	if not from is Vector2i:
-		from = CombatUtils.as_coord(from)
-	if not to is Vector2i:
-		to = CombatUtils.as_coord(to)
-	return Geom.man_dist(from, to)
+	var from_coord:Vector2i
+	var to_coord:Vector2i
+	if from is Vector2i:
+		from_coord = from
+	else:
+		from_coord = CombatUtils.as_coord(from)
+	if to is Vector2i:
+		to_coord = to
+	else:
+		to_coord = CombatUtils.as_coord(to)
+	return Geom.man_dist(from_coord, to_coord)
 
 func paint_cell(coord, terrain_name, layer=LAYER_GEOM):
 	paint_cells([coord], terrain_name, layer)
@@ -1133,7 +1145,7 @@ func astar_metrics(start_, dest_, free_dest_=false, max_dist=null, valid_pred=nu
 	var ctx = _init_metric_context(start_, dest_, free_dest_, max_dist, valid_pred, index)
 	if ctx.invalid_dest:
 		return ctx.metrics
-	var estimate = dist(ctx.start, ctx.dest)
+	var estimate = Geom.cheby_dist(ctx.start, ctx.dest)
 	# dist is a [h(n), g(n), man(p, n)] triplet: estimate and real dists
 	# with Manhattan distance with the previous node as the tie breaker to favor 
 	# straigth lines over diagonals.
@@ -1145,7 +1157,7 @@ func astar_metrics(start_, dest_, free_dest_=false, max_dist=null, valid_pred=nu
 		current = ctx.queue.dequeue()
 		if current == ctx.dest:
 			break  # Done!
-		elif dist(current, ctx.dest) == 1:
+		elif Geom.cheby_dist(current, ctx.dest) == 1:
 			# got next to dest, no need to look at adjacents()
 			ctx.metrics.setv(ctx.dest, dist[1]+1)
 			ctx.metrics.add_edge(current, ctx.dest)
@@ -1160,9 +1172,9 @@ func astar_metrics(start_, dest_, free_dest_=false, max_dist=null, valid_pred=nu
 			if ctx.pre_dist == null or ctx.pre_dist > dist[1]+1:
 				ctx.metrics.setv(pos, dist[1]+1)
 				ctx.metrics.add_edge(current, pos)
-			ctx.post_dist = dist(pos, ctx.dest)
+			ctx.post_dist = Geom.cheby_dist(pos, ctx.dest)
 			estimate = ctx.post_dist + dist[1] + 1
-			ctx.queue.enqueue(pos, [estimate, dist[1]+1, man_dist(pos, current)])
+			ctx.queue.enqueue(pos, [estimate, dist[1]+1, Geom.man_dist(pos, current)])
 		ctx.done[current] = true
 	return ctx.metrics
 	
@@ -1187,7 +1199,7 @@ func astar_metrics_custom(pump:MetricsPump, start_, dest_, free_dest_=false, max
 		current = ctx.queue.dequeue()
 		if current == ctx.dest:
 			break  # Done!
-		elif dist(current, ctx.dest) == 1:
+		elif Geom.cheby_dist(current, ctx.dest) == 1:
 			# Not using pump.dist_real() in the test because we are looking to see if we are 
 			# one step away, no matter what value range the pump in using for the distances.
 
@@ -1231,9 +1243,9 @@ func dist_metrics(start_=null, dest_=null, free_dest_=false, max_dist=null, vali
 		current = ctx.queue.dequeue()
 		if current == ctx.dest:
 			break  # Done!
-		elif ctx.dest != null and dist(current, ctx.dest) == 1:
+		elif ctx.dest != null and Geom.cheby_dist(current, ctx.dest) == 1:
 			# got next to dest, no need to look at adjacents()
-			ctx.metrics.setv(V.i(ctx.dest.x, ctx.dest.y), dist+1)
+			ctx.metrics.setv(Vector2i(ctx.dest.x, ctx.dest.y), dist+1)
 			ctx.metrics.add_edge(current, ctx.dest)
 			break
 		if ctx.done.has(current) or dist == max_dist:

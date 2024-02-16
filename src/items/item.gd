@@ -99,7 +99,7 @@ func get_board():
 	else:
 		assert(false, "This item does not seem to be in play")
 
-func get_cell_coord():
+func get_cell_coord() -> Vector2i:
 	## Return the board coord of the item or the coord of its owner if the item 
 	##   is in someone's inventory.
 	## Return null if the item is not yet in play.
@@ -110,6 +110,7 @@ func get_cell_coord():
 		return parent.get_cell_coord()
 	else:
 		assert(false, "This item does not seem to be in play")
+		return Consts.COORD_INVALID
 
 func get_short_desc():
 	var desc = caption
@@ -218,9 +219,8 @@ func is_groupable_with(other:Item):
 	
 func activate_on_actor(actor):
 	## activate the item on actor
-	for node in get_children():
-		if node is Effect:
-			node.apply(actor)
+	for effect in find_children("", "Effect", false, false):
+		effect.apply(actor)
 	if message and actor == Tender.hero:
 		actor.add_message(message)
 	if consumable:

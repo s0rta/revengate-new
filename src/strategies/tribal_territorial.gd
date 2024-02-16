@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -20,12 +20,11 @@
 class_name TribalTerritorial extends Strategy
 
 const INFLUENCE_RADIUS = 5
-
-var has_activated := false
 var intruder: Actor
 
-func refresh(turn):
-	has_activated = false
+func is_valid():
+	if not super():
+		return false
 	var board = me.get_board()
 	var index = board.make_index()
 	
@@ -34,7 +33,7 @@ func refresh(turn):
 		if actor == me:
 			continue
 		if CombatUtils.are_peers(me, actor) and board.dist(me, actor) <= INFLUENCE_RADIUS:
-			if me.perceives(actor):
+			if me.perceives(actor, index):
 				nb_supporters += 1
 	
 	# your personal space increases the more supporters you have
@@ -46,10 +45,8 @@ func refresh(turn):
 			if actor.faction != me.faction and actor_dist <= pers_space_radius:
 				if actor_dist < intruder_dist:
 					intruder = actor
-					has_activated = true
-
-func is_valid():
-	return super() and has_activated
+					return true
+	return false
 
 func act() -> bool:
 	var board = me.get_board() as RevBoard

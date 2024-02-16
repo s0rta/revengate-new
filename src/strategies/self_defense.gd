@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -43,9 +43,7 @@ func is_valid():
 
 func act() -> bool:
 	var board = me.get_board()
-	var my_coord = me.get_cell_coord()
-	var foe_coord = attacker.get_cell_coord()
-	if board.dist(my_coord, foe_coord) == 1:
+	if board.dist(me, attacker) == 1:
 		await me.attack(attacker)
 		return true  # it costs you your turn to attack whether you land a hit or not
 	else:

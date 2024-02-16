@@ -60,11 +60,14 @@ func start_new_turn():
 
 func refresh(turn):
 	## Update the internal states that would influence predicates like is_valid() and is_expired().
-	## This will only be called once per turn, before invoking any of the predicates.
+	## This will only be called exactly once per turn, before invoking any of the predicates.
+	## Make this cheap. If priority has to change, it should happen here.
 	pass  # nothing to do by default; sub-classes are most likely more interesting than that.
 
 func is_valid() -> bool:
-	## return is the strategy is valid for the current turn
+	## Return if the strategy is valid for the current turn
+	## This is called at most once. Between refresh() and this, this one should be the most 
+	## expensive of the two.
 	return not is_expired() and not is_cancelled and ttl != 0
 	
 func is_expired() -> bool:

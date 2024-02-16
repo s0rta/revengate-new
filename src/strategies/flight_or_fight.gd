@@ -49,7 +49,7 @@ func act() -> bool:
 	var index = board.make_index() as RevBoard.BoardIndex
 	var cells = board.adjacents(my_coord, true, true, null, index)
 	
-	var cur_dist = board.dist(my_coord, bully_coord)
+	var cur_dist = Geom.cheby_dist(my_coord, bully_coord)
 	# Elements is a list of [dist, coord] of possible moves
 	var elems = []
 	for cell in cells:

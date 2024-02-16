@@ -278,6 +278,16 @@ func get_skill(skill_name) -> Consts.SkillLevel:
 	## Unknown skills return Consts.SkillLevel.NEOPHYTE
 	return get_skills().get(skill_name, Consts.SkillLevel.NEOPHYTE)
 
+func set_skill(skill_name, level):
+	var skill_node = null
+	var nodes = find_children("", "SkillLevels", false, false)
+	if nodes.is_empty():
+		skill_node = SkillLevels.new()
+		add_child(skill_node)
+	else:
+		skill_node = nodes[0]
+	skill_node.set(skill_name, level)
+
 func get_stat(stat_name, challenge=null):
 	## Return the effective stat with all the active modifiers and skills included
 	assert(stat_name in Consts.CORE_STATS, "%s is not a core stat" % stat_name)
@@ -414,7 +424,7 @@ func reset_dest(former_dest=null):
 	if former_dest == null or dest == former_dest:
 		dest = Consts.COORD_INVALID
 
-func get_cell_coord():
+func get_cell_coord() -> Vector2i:
 	## Return the board position occupied by the actor.
 	## If the actor is currently moving, return where it's expected to be at the
 	## end of the turn.
@@ -732,7 +742,7 @@ func perceives(thing, index=null):
 	elif not (thing is Vector2i) and board != thing.get_board():
 		return false
 
-	var dist = board.dist(self, there)
+	var dist = Geom.cheby_dist(here, there)
 	if dist > ranges.sight:
 		return false
 	elif dist <= ranges.feel:
@@ -743,9 +753,9 @@ func perceives(thing, index=null):
 			return true
 	# In sight-only range: perceived when there is a clear line of sight
 	if index == null:
-		return board.line_of_sight(self, thing) != null
+		return board.line_of_sight(here, there) != null
 	else:
-		return index.has_los(self, thing)
+		return index.has_los(here, there)
 
 func perceives_free(coord:Vector2i, index:RevBoard.BoardIndex):
 	## Return whether we think that `coord` is walkable and unoccupied.
@@ -967,12 +977,13 @@ func strike(foe:Actor, weapon, throw=null):
 
 	var with_anims = not is_unexposed()
 	var crit = false
-	var foe_coord = foe.get_cell_coord()
+	var here := get_cell_coord()
+	var foe_coord := foe.get_cell_coord()
 	# to-hit
 	# pre-compute the to-hit bonnus from features
 	var hit_mod = _get_feature_modifier(foe, weapon, TO_HIT_FEATURE_MODS)
 	
-	var attack_dist = RevBoard.dist(self, foe)
+	var attack_dist = Geom.cheby_dist(here, foe_coord)
 	if throw == null:
 		throw = Utils.has_tags(weapon, ["throwable"]) and attack_dist > 1
 	if throw:

@@ -199,13 +199,19 @@ static func move_path(path:Array[Vector2i], offset:Vector2i) -> Array[Vector2i]:
 		new_path.append(coord + offset)
 	return new_path
 
-static func cheby_dist(coord1, coord2):
+static func cheby_dist(coord1:Vector2i, coord2:Vector2i) -> int:
 	## Return the Chebyshev distance between two coords
-	return max(abs(coord1.x - coord2.x), abs(coord1.y - coord2.y))
-		
-static func man_dist(coord1, coord2):
+	# slightly optimized expression for: 
+	#   max(abs(coord1.x - coord2.x), abs(coord1.y - coord2.y))
+	var diff:Vector2i = (coord2 - coord1).abs()
+	return diff[diff.max_axis_index()]
+
+static func man_dist(coord1:Vector2i, coord2:Vector2i) -> int:
 	## Return the Manhattan distance between two coords
-	return abs(coord1.x - coord2.x) + abs(coord1.y - coord2.y)
+	# slightly optimized expresson for: 
+	#   abs(coord1.x - coord2.x) + abs(coord1.y - coord2.y)
+	var diff:Vector2i = (coord2 - coord1).abs()
+	return diff.x + diff.y
 
 static func line(coord1, coord2):
 	## Return an array of coords continuously touching each others between 

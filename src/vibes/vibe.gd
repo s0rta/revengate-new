@@ -40,13 +40,13 @@ func get_board():
 	else:
 		return null
 
-func get_cell_coord():
+func get_cell_coord() -> Vector2i:
 	## Return the board coord of the vibe or null if the vibe has not been placed.
 	var parent = get_parent()
 	if parent is RevBoard:
 		return RevBoard.canvas_to_board(position)
 	else:
-		return null
+		return Consts.COORD_INVALID
 
 func get_short_desc():
 	return caption
