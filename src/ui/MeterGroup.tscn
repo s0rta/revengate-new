@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3 uid="uid://cbhsiga8clmpe"]
+
+[ext_resource type="Script" path="res://src/ui/meter_group.gd" id="1_pknoy"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_q8b5c"]
+color = Color(0.5, 0.5, 0.5, 0.5)
+thickness = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iqgbw"]
+bg_color = Color(0.960784, 0.843137, 0.505882, 1)
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+
+[node name="MeterGroup" type="VBoxContainer"]
+size_flags_horizontal = 8
+mouse_filter = 2
+script = ExtResource("1_pknoy")
+
+[node name="MeterBar" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/outline_size = 2
+theme_override_styles/background = SubResource("StyleBoxLine_q8b5c")
+theme_override_styles/fill = SubResource("StyleBoxFlat_iqgbw")
+value = 30.0
+rounded = true
+show_percentage = false
+
+[node name="StatusBar" type="HBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CaptionLabel" type="Label" parent="StatusBar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Something: "
+
+[node name="ValueLabel" type="Label" parent="StatusBar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "???"

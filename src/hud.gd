@@ -19,12 +19,9 @@ extends Node
 
 signal cancel_strategies
 
-const CRIT_HEALTH = 20  # as a percent of health_full
-
 # TODO: use unique %name to simplify some of those
 @onready var loot_button = find_child("LootButton")
 @onready var stairs_button = find_child("StairsButton")
-@onready var hplabel = find_child("HPLabel")
 @onready var cheats_box = find_child("CheatsMargin")
 @onready var dialogue_pane = %DialoguePane
 @onready var actor_details_screen = %ActorDetailsScreen
@@ -81,16 +78,8 @@ func _set_quick_attack_icon(_arg=null):
 			%QuickAttackButton.text += "x%d" % (nb+1)
 
 func refresh_hps(_new_health=null):
-	# TODO: bold animation when dead
-	hplabel.text = "%2d" % Tender.hero.health
-	var health_pct = 100.0 * Tender.hero.health / Tender.hero.health_full
-	%HealthBar.value = health_pct
-	if health_pct <= CRIT_HEALTH:
-		%HealthBar.modulate = Color.RED
-	elif health_pct > 100:
-		%HealthBar.modulate = Color.GREEN_YELLOW
-	else:
-		%HealthBar.modulate = Color.WHITE
+	%HealthMeter.value_full = Tender.hero.health_full
+	%HealthMeter.set_value(Tender.hero.health)
 
 func _refresh_lbar_commands(hero_coord, index):
 	## Remove commands that are no longer valid from the lbar and add the newly valid ones.
