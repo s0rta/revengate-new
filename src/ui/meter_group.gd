@@ -24,20 +24,27 @@ const CRIT_PCT = 20  # as a percent of value_full
 @export var value_name : String
 @export var value : int
 @export var value_full : int  # over-filling is possible
+@export var color:Color
 
 func _ready():
 	if value_name:
-		%CaptionLabel.text = value_name
+		%CaptionLabel.text = value_name + ":"
 	assert(value_full, "value_full not provided")
+	
+	var stylebox = %MeterBar.get_theme_stylebox("fill")
+	stylebox.bg_color = color
 
 func set_value(new_value):
 	value = new_value
 	%ValueLabel.text = "%2d" % new_value
-	var value_pct = 100.0 * value / value_full
-	%MeterBar.value = value_pct
-	if value_pct <= CRIT_PCT:
-		%MeterBar.modulate = Color.RED
-	elif value_pct > 100:
-		%MeterBar.modulate = Color.GREEN_YELLOW
+	if value_full:
+		var value_pct = 100.0 * value / value_full
+		%MeterBar.value = value_pct
+		if value_pct <= CRIT_PCT:
+			%MeterBar.modulate = Color.RED
+		elif value_pct > 100:
+			%MeterBar.modulate = Color.GREEN_YELLOW
+		else:
+			%MeterBar.modulate = Color.WHITE
 	else:
-		%MeterBar.modulate = Color.WHITE
+		%MeterBar.value = 0

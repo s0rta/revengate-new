@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://bp8i08570ptbb"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_alicf"]
+[ext_resource type="Script" path="res://src/items/spellbook.gd" id="2_vf75y"]
+
+[node name="Spellbook" instance=ExtResource("1_alicf")]
+script = ExtResource("2_vf75y")
+char = "🕮"
+caption = "spellbook"
+desc_simple = "an old book"
+desc_detailed = "a late 200AP codex transcribed from the pre-plague original, the iron-gall ink has deteriorated some of the pages"
+consumable = true

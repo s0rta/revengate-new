@@ -1,4 +1,4 @@
-# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -33,6 +33,8 @@ signal hit(victim, damage)
 signal was_attacked(attacker)
 # health changed, either got better or worst
 signal health_changed(new_health)
+# mana changed, either up or down
+signal mana_changed(new_mana)
 # the actor met their ultimate demise
 signal died(old_coord, tags)
 # the actor moved to a new location on the current board
@@ -326,6 +328,7 @@ func use_mana(base_cost):
 	## Return how many mana points were used.
 	var cost = mana_cost(base_cost)
 	mana -= cost
+	mana_changed.emit(mana)
 	return cost
 
 func stat_roll(stat_name, challenge=null):
@@ -629,12 +632,11 @@ func get_health_ratio() -> float:
 
 func update_health(hp_delta: int):
 	## Update our health and animate the event.
-	## Return the animation.
 	if hp_delta == 0:
 		return  # don't animate 0 deltas
 	
 	health += hp_delta
-	emit_signal("health_changed", health)
+	health_changed.emit(health)
 		
 	if not is_unexposed():
 		# animate visible health changes
@@ -645,6 +647,14 @@ func update_health(hp_delta: int):
 		
 	if health <= 0:
 		die()
+
+func update_mana(mana_delta: int):
+	## Update our mana.
+	if mana_delta == 0:
+		return  # nothing to do
+	
+	mana += mana_delta
+	mana_changed.emit(mana)
 
 func die():
 	## Animate our ultimate demise, drop our inventory, then remove ourself from this cruel world.
@@ -1076,7 +1086,7 @@ func refocus(delta:=1):
 		delta = mana_full - mana
 	if delta > 0:
 		add_message("%s seems more focused" % get_caption())
-		mana += delta
+		update_mana(delta)
 
 func equip_item(item, exclusive=true):
 	## Equip the item (typically a weapon). 

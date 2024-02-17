@@ -59,6 +59,8 @@ func watch_hero(hero:Actor=null):
 	hero.picked_item.connect(update_states_at)
 	hero.state_changed.connect(_on_hero_state_changed)
 	hero.strategy_expired.connect(refresh_cancel_button_vis)
+	hero.mana_changed.connect(refresh_mana)
+	refresh_mana()
 	hero.health_changed.connect(refresh_hps)
 	refresh_hps()
 	refresh_buttons_vis(null, hero.get_cell_coord())
@@ -80,6 +82,13 @@ func _set_quick_attack_icon(_arg=null):
 func refresh_hps(_new_health=null):
 	%HealthMeter.value_full = Tender.hero.health_full
 	%HealthMeter.set_value(Tender.hero.health)
+
+func refresh_mana(_new_mana=null):
+	var skill = Tender.hero.get_skill("channeling")
+	%ManaMeter.visible = skill >= Consts.SkillLevel.INITIATE
+
+	%ManaMeter.value_full = Tender.hero.mana_full
+	%ManaMeter.set_value(Tender.hero.mana)
 
 func _refresh_lbar_commands(hero_coord, index):
 	## Remove commands that are no longer valid from the lbar and add the newly valid ones.
