@@ -61,6 +61,7 @@ func watch_hero(hero:Actor=null):
 	hero.strategy_expired.connect(refresh_cancel_button_vis)
 	hero.mana_changed.connect(refresh_mana)
 	refresh_mana()
+	refresh_spells()
 	hero.health_changed.connect(refresh_hps)
 	refresh_hps()
 	refresh_buttons_vis(null, hero.get_cell_coord())
@@ -89,6 +90,16 @@ func refresh_mana(_new_mana=null):
 
 	%ManaMeter.value_full = Tender.hero.mana_full
 	%ManaMeter.set_value(Tender.hero.mana)
+
+func refresh_spells():
+	for node in %QuickActionsBox.get_children():
+		if node != %QuickAttackButton:
+			node.hide()
+			node.queue_free()
+	for spell in Tender.hero.find_children("", "Spell", false, false):
+		var btn = SpellButton.new(spell)
+		%QuickActionsBox.add_child(btn)
+		btn.set_enabled(false)
 
 func _refresh_lbar_commands(hero_coord, index):
 	## Remove commands that are no longer valid from the lbar and add the newly valid ones.
@@ -203,6 +214,8 @@ func _on_hero_state_changed(new_state):
 	if new_state != Actor.States.IDLE:
 		%ProminentMsgLabel.text = ""
 	refresh_input_enabled(new_state == Actor.States.LISTENING)
+	for btn in %QuickActionsBox.find_children("", "SpellButton", false, false):
+		btn.set_enabled(new_state == Actor.States.LISTENING)
 	if new_state == Actor.States.LISTENING:
 		quick_attack_cmd.refresh(Tender.hero.get_board().make_index())
 		var here = Tender.hero.get_cell_coord()
@@ -237,3 +250,5 @@ func _on_center_control_visibility_changed():
 							or %ProminentMsgLabel.visible
 							or %CancelButton2.visible)
 
+func _on_hero_spells_changed():
+	refresh_spells()

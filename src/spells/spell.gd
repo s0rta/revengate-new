@@ -20,6 +20,8 @@ class_name Spell extends Node
 
 # TODO: would be nice to export those, but then subclasses have to be inherited scenes, 
 #   not just subclasses
+var char : String
+var caption : String
 var mana_cost := 1  # base cost before modifiers from devices are added
 var damage := 0
 var damage_family: Consts.DamageFamily
@@ -41,6 +43,12 @@ func _ready():
 			me = parent
 	has_effect = not find_children("", "Effect", false, false).is_empty()
 	assert(me, "Spells must be connected to an Actor")
+
+func get_short_desc():
+	if char:
+		return "(%s) %s" % [char, caption]
+	else:
+		return caption
 
 func has_reqs():
 	## Return whether the actor can "pay" for this spell. 

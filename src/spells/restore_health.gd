@@ -22,6 +22,8 @@ const HEALTH_GAIN = 15
 func _ready():
 	super()
 	mana_cost = 8
+	char = "⚕"  # maybe ⚚ or ☤?
+	caption = "restore health"
 	tags.append("healing")
 
 func cast():

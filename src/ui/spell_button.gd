@@ -15,16 +15,31 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Item
+## A Button specifically made to cast a spell
+class_name SpellButton extends Button
 
-var spells= [RestoreHealth]
+var spell:Spell
 
-func activate_on_actor(actor):
-	if actor.get_skill("channeling") < Consts.SkillLevel.INITIATE:
-		actor.set_skill("channeling", Consts.SkillLevel.INITIATE)
-	actor.mana_full += 10
-	for spell_class in spells:
-		var spell = spell_class.new()
-		actor.add_spell(spell)
-		actor.add_message("%s learned the %s spell" % [actor.caption, spell.get_short_desc()])
-	super(actor)
+func _init(spell_):
+	spell = spell_
+	text =  spell.char
+	theme_type_variation = "ProminentButton"
+	focus_mode = Control.FOCUS_NONE
+	button_up.connect(on_button_up)
+
+func _ready():
+	set_enabled()
+
+func set_enabled(val=null):
+	## Make this button enabled or disabled. 
+	## For the button to be enabled, both val and spell.has_req() must be true.
+	## if val is not provided, only spell.has_req() is considered.
+	if val != null and not val:
+		disabled = true
+	else:
+		disabled = not spell.has_reqs()
+
+func on_button_up():
+	if spell.has_reqs():
+		spell.cast()
+		Tender.hero.finalize_turn(true)

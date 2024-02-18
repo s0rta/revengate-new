@@ -35,6 +35,8 @@ signal was_attacked(attacker)
 signal health_changed(new_health)
 # mana changed, either up or down
 signal mana_changed(new_mana)
+# learned or forgot a spell
+signal spells_changed
 # the actor met their ultimate demise
 signal died(old_coord, tags)
 # the actor moved to a new location on the current board
@@ -330,6 +332,13 @@ func use_mana(base_cost):
 	mana -= cost
 	mana_changed.emit(mana)
 	return cost
+
+func add_spell(spell:Spell):
+	if spell.get_parent():
+		spell.reparent(self)
+	else:
+		add_child(spell)
+	spells_changed.emit()
 
 func stat_roll(stat_name, challenge=null):
 	## Return a random number in [0..1] weighted by the given stat. 
