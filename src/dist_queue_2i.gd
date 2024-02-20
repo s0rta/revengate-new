@@ -1,19 +1,38 @@
+# Copyright © 2024 Yannick Gingras <ygingras@ygingras.net> and contributors
+
+# This file is part of Revengate.
+
+# Revengate is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Revengate is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
 ## A minimum heapqueue optimized for Vector2i entried and integer distances.
+# This impementation is highly inspired by the Python heapq module.
 class_name DistQueue2i extends RefCounted
 
 class Entry:
 	var coord: Vector2i
 	var dist: int
+	var tie_breaker: Array[int]
 	
-	func _init(coord_:Vector2i, dist_:int):
+	func _init(coord_:Vector2i, dist_:int, tie_breaker_:Array[int]=[]):
 		coord = coord_
 		dist = dist_
+		tie_breaker = tie_breaker_
 	
 var heap : Array[Entry] = []
 
-func enqueue(coord:Vector2i, dist:int):
-	var entry = Entry.new(coord, dist)
+func enqueue(coord:Vector2i, dist:int, tie_breaker:Array[int]=[]):
+	var entry = Entry.new(coord, dist, tie_breaker)
 	heap.append(entry)
 	_siftdown(0, len(heap)-1)
 	
@@ -42,7 +61,8 @@ func _siftdown(startpos:int, pos:int):
 	while pos > startpos:
 		var parentpos:int = (pos - 1) >> 1
 		var parent:Entry = heap[parentpos]
-		if entry.dist < parent.dist:
+		if (entry.dist < parent.dist 
+				or entry.dist == parent.dist and entry.tie_breaker < parent.tie_breaker):
 			heap[pos] = parent
 			pos = parentpos
 			continue
@@ -60,7 +80,10 @@ func _siftup(pos:int):
 	while childpos < endpos:
 		# Set childpos to index of smaller child.
 		rightpos = childpos + 1
-		if rightpos < endpos and not heap[childpos].dist < heap[rightpos].dist:
+		if (rightpos < endpos 
+			and not (heap[childpos].dist < heap[rightpos].dist 
+						or (heap[childpos].dist < heap[rightpos].dist 
+							and heap[childpos].tie_breaker < heap[rightpos].tie_breaker))):
 			childpos = rightpos
 		# swap the smaller child up
 		heap[pos] = heap[childpos]

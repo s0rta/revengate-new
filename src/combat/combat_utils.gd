@@ -37,7 +37,7 @@ static func apply_all_effects(weapon, victim):
 	for node in weapon.find_children("", "Effect", false, false):
 		node.apply(victim)
 
-static func as_coord(thing):
+static func as_coord(thing) -> Vector2i:
 	## Return the board coordinates of `thing`
 	if thing is Vector2i:
 		return thing
@@ -45,6 +45,7 @@ static func as_coord(thing):
 		return thing.get_cell_coord()
 	else:
 		assert(false, "Don't know how to get board coordinates of %s" % thing)
+		return Consts.COORD_INVALID
 
 static func add_kill(actor_type):
 	## Increment the kill count for a given actor type

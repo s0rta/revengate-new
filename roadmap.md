@@ -367,10 +367,15 @@ UX:
 - [x] quick attack button is too small with half width emojis like the broom
 
 
-## v0.12
+## v0.12.0
 - [ ] bug: sewer otter attacks everyone?
 - [ ] bug: self defence does not expire when attacker dies
 - [ ] bug: actors from the same spawn deck share a common memory?
+- [ ] bug: Exploring does not flush path after being invalid for a few turns
+- [ ] document conn_target and connection fields
+- [ ] close the old play test survey
+- [ ] close the old known issues page
+- [ ] better text description on Google Play and F-Droid
 - [ ] ch2 ends as soon as the encounter happens, no need to walk back to the café
 - [ ] vague value adjectives on gaussian distributions
 - [ ] F-Droid has animated water
@@ -380,9 +385,15 @@ UX:
 - [ ] random interlude stories
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] instructions on how to install all the Android dev dependencies
-- [ ] async preload most shaders to speedup startup
 - [ ] silence a few warnings
 - [ ] remove unreachable levels from starting screen
+
+Performance:
+- [x] cache stats modifiers for the whole turn (with inval on mods changing events)
+- [x] sort strategies by priority for early exits when starting a turn
+- [x] fully typed and optimized heap queue
+- [x] path finding is typed and optimized
+- [ ] async preload most shaders to speedup startup
 
 Strategies:
 - [ ] Benoît roams after the meeting and after yielding
@@ -393,8 +404,13 @@ Strategies:
 
 
 Combat:
+- [x] hero can learn spells
 - [ ] zapping spell
+- [x] throwing
 
+
+## v0.12.1
+???
 
 ## v1.0
 - [ ] A Fight for Fumes campaign
@@ -421,10 +437,6 @@ Combat:
 - [ ] Salapou can steal your items
 - [ ] redo tabulator as a Godot Ressource
 - [ ] flatten the board-area node sub-tree
-
-Performance:
-- [ ] cache stats modifiers for the whole turn (with inval on mods changing events)
-- [ ] sort strategies by priority for early exits when starting a turn
 
 Simulator:
 - [ ] simulator auto-starts an ExtraStage if the starting board is not populated

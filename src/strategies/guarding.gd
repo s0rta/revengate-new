@@ -64,7 +64,7 @@ func refresh(turn):
 	if waypoint == null:
 		var index = board.make_index()
 		var pred = _mk_walkable_pred(client_coord, index)
-		var metrics = board.dist_metrics(here, null, false, null, pred, index)
+		var metrics = board.dist_metrics(here, Consts.COORD_INVALID, false, -1, pred, index)
 
 		if metrics.getv(client_coord) == null:
 			# client is currently unreachable
@@ -92,7 +92,7 @@ func _valid_waypoint(waypoint, client_coord):
 		return false
 	if not me.perceives_free(waypoint, index):
 		return false
-	path = board.path_perceived(me.get_cell_coord(), waypoint, me, true, null, index)
+	path = board.path_perceived(me.get_cell_coord(), waypoint, me, true, -1, index)
 	return path != null
 
 func _can_retaliate():

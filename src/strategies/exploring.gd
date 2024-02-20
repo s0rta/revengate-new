@@ -33,8 +33,10 @@ func find_suitable_waypoint():
 	var max_dist = min(12, long_side/2)
 	# we randomize the max dist to avoid having all the exploring 
 	# actors re-pick a waypoint when they reach destination at the same time
+	
 	max_dist = randi_range(0.75 * max_dist, max_dist)
-	var metrics = board.dist_metrics(here, null, false, max_dist)
+		
+	var metrics = board.dist_metrics(here, Consts.COORD_INVALID, false, max_dist)
 	if metrics.furthest_coord == here:
 		return null
 	return Rand.weighted_choice(metrics.all_coords(), metrics.all_dists())
@@ -52,7 +54,7 @@ func act() -> bool:
 	var my_coord = me.get_cell_coord()
 	if my_coord == waypoint or nb_travel_attempts >= MAX_TRAVEL_ATTEMPTS:
 		waypoint = null
-	
+		
 	if waypoint == null:
 		nb_travel_attempts = 0
 		waypoint = find_suitable_waypoint()

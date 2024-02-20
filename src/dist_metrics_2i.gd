@@ -179,11 +179,14 @@ func path(to=null):
 		dest = self.dest
 	else:
 		dest = to
+	if dists.getv(dest) == -1:
+		return null
 	var path = []
 	var current = dest
 	while current != Consts.COORD_INVALID:
 		path.append(current)
 		current = prevs.get(current)
+		assert(current != null)
 	if path[-1] != start:
 		return null
 	else:
