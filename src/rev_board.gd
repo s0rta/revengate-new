@@ -1103,7 +1103,7 @@ func path(start:Vector2i, dest:Vector2i, free_dest:=true, max_dist:=-1, index=nu
 	## `free_dest`: does the destination have to be walkable?
 	##   true: ex.: you want to go there;
 	##   false: ex.: you want to get close and attack the actor standing there.
-	var metrics = astar_metrics(start, dest, free_dest, max_dist, index)
+	var metrics = astar_metrics(start, dest, free_dest, max_dist, null, index)
 	return metrics.path()
 
 func path_potential(start:Vector2i, dest:Vector2i, max_dist:=-1, index=null):

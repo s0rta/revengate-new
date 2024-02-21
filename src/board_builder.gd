@@ -302,7 +302,7 @@ func find_poles():
 	var start = null
 	if has_rooms():
 		start = Rand.coord_in_rect(Rand.choice(rooms))
-	var metrics:RevBoard.BoardMetrics = board.dist_metrics(start)
+	var metrics:DistMetrics2i = board.dist_metrics(start)
 	metrics = board.dist_metrics(metrics.furthest_coord)
 	return [metrics.start, metrics.furthest_coord]
 

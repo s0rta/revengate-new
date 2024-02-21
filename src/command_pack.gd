@@ -260,7 +260,7 @@ class GetCloser extends Command:
 		dist = board.dist(hero_coord, coord)
 		if dist <= 1:
 			return false
-		path = board.path_perceived_strict(hero_coord, coord, Tender.hero, false, null, index)
+		path = board.path_perceived_strict(hero_coord, coord, Tender.hero, false, -1, index)
 		return path != null
 		
 	func run(coord:Vector2i) -> bool:
