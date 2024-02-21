@@ -295,7 +295,13 @@ func start_ch2():
 	destroy_items(Tender.hero.get_items(["quest-item"]))
 	# Nadège gives key and combat cane
 	npcs.nadege.conversation_sect = "intro_2"
-	supply_item(npcs.nadege, "res://src/items/serum_of_vitality.tscn", ["quest-reward", "gift"])
+
+	# TODO: the spellbook is probably too good of a reward, but we want to expose 
+	#   the new magic mechanics, so it will have to do until we can hide it in a 
+	#   side quest.
+	#supply_item(npcs.nadege, "res://src/items/serum_of_vitality.tscn", ["quest-reward", "gift"])
+	supply_item(npcs.nadege, "res://src/items/spellbook.tscn", ["quest-reward", "gift"])
+
 	supply_item(npcs.nadege, "res://src/items/key.tscn", ["key-blue", "gift"])
 	supply_item(npcs.nadege, "res://src/weapons/weighted_cane.tscn", ["gift"])
 	
@@ -327,7 +333,7 @@ func start_ch3():
 	supply_item(npcs.nadege, "res://src/weapons/dress_sword.tscn", ["gift"])
 	
 	npcs.bar_patron_1.conversation_sect = "bloody_mary"
-	npcs.bar_patron_2.conversation_sect = "party_magic"
+	npcs.bar_patron_2.conversation_sect = "privacy"
 
 	npcs.bar_tender.conversation_sect = "intro_3"
 	supply_item(npcs.bar_tender, "res://src/items/potion_of_healing.tscn", ["gift"])
@@ -427,17 +433,6 @@ func abort_run():
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-
-	var theme3 = load("res://src/ui/theme_really_big.tres")
-	var theme2 = ThemeDB.get_project_theme()
-	var theme1 = ThemeDB.get_default_theme()
-	for theme in [theme1, theme2, theme3]:
-		print(theme)
-		print(theme.default_font_size)
-		var types = theme.get_type_list()
-		types.sort()
-		print(types)
-	theme2.merge_with(theme3)
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
