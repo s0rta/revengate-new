@@ -160,14 +160,14 @@ func _gui_input(event):
 		if not info.avg_dist_eq:
 			var factor = 1+(info.avg_dist_old - info.avg_dist_new) / info.avg_dist_old
 			# re-zoom
-			viewport.zoom *= factor
+			viewport.zoom_in(info.center_new, factor)
 			touches_pos[index] = event.position
 		accept_event()
 	
 	if event.is_action_pressed("zoom-in"):
-		viewport.zoom_in()
+		viewport.zoom_in(event.position)
 	elif event.is_action_pressed("zoom-out"):
-		viewport.zoom_out()
+		viewport.zoom_out(event.position)
 	# consume both zoom press and zoom release
 	if event.is_action("zoom-in") or event.is_action("zoom-out"):
 		accept_event()

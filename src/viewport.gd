@@ -44,13 +44,19 @@ func global_pos_to_board_coord(pos):
 	## Convert a screen pixel `pos` into a Board tile `coord`.
 	return RevBoard.canvas_to_board(pos_to_local(pos))
 
-func zoom_in(factor:=1.05):
+func zoom_in(focal_point=null, factor:=1.05):
 	## Increase magnification
+	if focal_point == null:
+		focal_point = size/2.0
+	var old_focus = pos_to_local(focal_point, false)
 	zoom *= factor
+	var new_focus = pos_to_local(focal_point, false)
+	var camera = get_camera_2d()
+	camera.offset += old_focus - new_focus
 	
-func zoom_out(factor:=1.05):
+func zoom_out(focal_point=null, factor:=1.05):
 	## Decrease magnification
-	zoom /= factor
+	zoom_in(focal_point, 1.0/factor)
 
 func inject_event(event):
 	## Send an input even to our descendent nodes.

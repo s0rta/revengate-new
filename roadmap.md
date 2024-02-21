@@ -370,8 +370,10 @@ UX:
 ## v0.12.0
 - [ ] bug: sewer otter attacks everyone?
 - [ ] bug: self defence does not expire when attacker dies
-- [ ] bug: actors from the same spawn deck share a common memory?
-- [ ] bug: Exploring does not flush path after being invalid for a few turns
+- [x] bug: actors from the same spawn deck share a common memory?
+- [x] bug: Exploring does not flush path after being invalid for a few turns
+- [x] bug: UI button groups steal clicks
+- [x] pinching is centered on touch centroid
 - [ ] document conn_target and connection fields
 - [ ] close the old play test survey
 - [ ] close the old known issues page
