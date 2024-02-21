@@ -190,10 +190,9 @@ class Inspect extends Command:
 			Tender.hud.actor_details_screen.show_actor(actor)
 			await Tender.hud.actor_details_screen.closed
 			
-		Tender.viewport.flash_coord_selection(coord)
-
 		# only one of Actor or Item message will show
 		var board = Tender.hero.get_board()
+		board.highlight_cells([coord])
 		var here_str = "at %s" % board.coord_str(coord) if Utils.is_debug() else "here"
 
 		if Tender.hero.perceives(coord):

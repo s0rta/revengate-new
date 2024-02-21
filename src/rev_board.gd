@@ -882,6 +882,9 @@ func paint_cells(coords, terrain_name, layer=LAYER_GEOM):
 	var tkey = terrain_names[terrain_name]
 	set_cells_terrain_connect(layer, coords, tkey[0], tkey[1])
 
+func highlight_cells(coords, terrain_name="highlight-info"):
+	paint_cells(coords, terrain_name, LAYER_HIGHLIGHTS)
+
 func paint_path(path:Array[Vector2i], terrain_name, layer=LAYER_GEOM, interpolate=true):
 	assert(terrain_name not in INDEXED_TERRAINS, "indexing path terrain is not implemented")
 	if interpolate:

@@ -124,22 +124,23 @@ func highlight_options():
 	board.clear_highlights()
 	
 	var index = board.make_index() as RevBoard.BoardIndex
-	var friend_coords = []
+
 	var foe_coords = []
-	
-	var cmd = CommandPack.Talk.new(index)
-	for actor in index.get_actors():
-		var there = actor.get_cell_coord()
-		if cmd.is_valid_for(there) and cmd.is_default:
-			friend_coords.append(there)
-			
-	cmd = CommandPack.Attack.new(index)
+	var cmd = CommandPack.Attack.new(index)
 	for actor in index.get_actors():
 		var there = actor.get_cell_coord()
 		if cmd.is_valid_for(there) and cmd.is_default:
 			foe_coords.append(there)
-	board.paint_cells(friend_coords, "highlight-friend", board.LAYER_HIGHLIGHTS)
-	board.paint_cells(foe_coords, "highlight-foe", board.LAYER_HIGHLIGHTS)
+	board.highlight_cells(foe_coords, "highlight-foe")
+
+	var friend_coords = []
+	cmd = CommandPack.Talk.new(index)
+	for actor in index.get_actors():
+		var there = actor.get_cell_coord()
+		if cmd.is_valid_for(there) and cmd.is_default:
+			friend_coords.append(there)
+	board.highlight_cells(friend_coords, "highlight-friend")
+			
 	if not turn_done.is_connected(board.clear_highlights):
 		turn_done.connect(board.clear_highlights, CONNECT_ONE_SHOT)
 

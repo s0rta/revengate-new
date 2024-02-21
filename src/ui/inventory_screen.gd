@@ -104,14 +104,14 @@ func toss_item(row:InventoryRow):
 	var radius = actor.get_throw_range() + 1
 	var board = actor.get_board()
 	var coords = board.visible_coords(Tender.hero, radius)
-	board.paint_cells(coords, "highlight-info", board.LAYER_HIGHLIGHTS)
+	board.highlight_cells(coords, "highlight-info")
 
 	if item is Weapon:
 		# highlight the effective range of ranged weapons
 		var item_range = actor.get_eff_weapon_range(item)
 		if item_range and item_range > 1:
 			var effective_coords = board.visible_coords(Tender.hero, item_range+1)
-			board.paint_cells(effective_coords, "highlight-warning", board.LAYER_HIGHLIGHTS)	
+			board.highlight_cells(effective_coords, "highlight-warning")	
 			coords += effective_coords
 	hide()
 
