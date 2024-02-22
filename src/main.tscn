@@ -133,16 +133,19 @@ mem = SubResource("Resource_7gsj3")
 [node name="Nadege" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_wcjwx")]
 visible = true
 position = Vector2(48, 80)
+mana_full = 0
 mem = SubResource("Resource_45y0r")
 
 [node name="BarTender" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_x3gva")]
 visible = true
 position = Vector2(48, 240)
+mana_full = 0
 mem = SubResource("Resource_svdmg")
 
 [node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_ymwa7")]
 visible = true
 position = Vector2(464, 48)
+mana_full = 0
 mem = SubResource("Resource_tdvsr")
 
 [node name="Broom" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_w5yd8")]
@@ -157,6 +160,7 @@ position = Vector2(112, 272)
 caption = "Robert"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "ghosts"
+mana_full = 0
 mem = SubResource("Resource_tmb6n")
 
 [node name="BarPatron2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
@@ -164,7 +168,8 @@ visible = true
 position = Vector2(112, 208)
 caption = "Mathieu"
 conversation_file = "res://src/story/bar_chatter.dialogue"
-conversation_sect = "privacy"
+conversation_sect = "party_magic"
+mana_full = 0
 mem = SubResource("Resource_hfpoa")
 
 [node name="Sign" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_621w4")]
@@ -345,7 +350,13 @@ text = "Cheats"
 layout_mode = 2
 mouse_filter = 2
 
-[node name="QuickAttackButton" type="Button" parent="HUD/RGroup/MarginContainer"]
+[node name="QuickActionsBox" type="HBoxContainer" parent="HUD/RGroup/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="QuickAttackButton" type="Button" parent="HUD/RGroup/MarginContainer/QuickActionsBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -370,6 +381,7 @@ mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HUD/TopRightMargin/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 8
 
 [node name="CancelButton" type="Button" parent="HUD/TopRightMargin/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
@@ -412,11 +424,26 @@ size_flags_horizontal = 4
 focus_mode = 0
 text = "↩"
 
-[node name="HealthMeter" parent="HUD/TopRightMargin/VBoxContainer" instance=ExtResource("35_eopq6")]
+[node name="HBoxContainer2" type="HBoxContainer" parent="HUD/TopRightMargin/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="ManaMeter" parent="HUD/TopRightMargin/VBoxContainer/HBoxContainer2" instance=ExtResource("35_eopq6")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+value_name = "Mana"
+value_full = 100
+color = Color(0.164706, 0.215686, 0.960784, 1)
+
+[node name="HealthMeter" parent="HUD/TopRightMargin/VBoxContainer/HBoxContainer2" instance=ExtResource("35_eopq6")]
 unique_name_in_owner = true
 layout_mode = 2
 value_name = "Health"
 value_full = 50
+color = Color(0.960784, 0.843137, 0.505882, 1)
 
 [node name="CenterPanel" type="PanelContainer" parent="HUD"]
 unique_name_in_owner = true
@@ -518,6 +545,7 @@ script = ExtResource("41_hgs5k")
 [connection signal="action_complete" from="BoardArea/GestureSurveyor" to="HUD" method="hide_action_label"]
 [connection signal="action_started" from="BoardArea/GestureSurveyor" to="HUD" method="show_action_label"]
 [connection signal="timeout" from="BoardArea/GestureSurveyor/LongTapTimer" to="BoardArea/GestureSurveyor" method="_on_long_tap_timer_timeout"]
+[connection signal="spells_changed" from="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" to="HUD" method="_on_hero_spells_changed"]
 [connection signal="turn_finished" from="TurnQueue" to="." method="_on_turn_finished"]
 [connection signal="turn_started" from="TurnQueue" to="." method="_on_turn_started"]
 [connection signal="cancel_strategies" from="HUD" to="." method="cancel_hero_strats"]
@@ -527,7 +555,7 @@ script = ExtResource("41_hgs5k")
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/TestButton1" to="." method="test"]
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/TestButton2" to="." method="test2"]
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/ShowCheatsButton" to="HUD" method="toggle_cheats_box"]
-[connection signal="button_up" from="HUD/RGroup/MarginContainer/QuickAttackButton" to="HUD" method="_on_quick_attack_button_button_up"]
+[connection signal="button_up" from="HUD/RGroup/MarginContainer/QuickActionsBox/QuickAttackButton" to="HUD" method="_on_quick_attack_button_button_up"]
 [connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/CancelButton" to="HUD" method="request_cancel_strats"]
 [connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/CityMapButton" to="HUD" method="_on_city_map_button_pressed"]
 [connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/InspectButton" to="BoardArea/GestureSurveyor" method="start_inspect_at"]

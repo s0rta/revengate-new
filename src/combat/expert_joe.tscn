@@ -1,12 +1,18 @@
-[gd_scene load_steps=8 format=3 uid="uid://be5gmw06g76qk"]
+[gd_scene load_steps=10 format=3 uid="uid://be5gmw06g76qk"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_nf4bs"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="2_2tb20"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="2_yc7tl"]
 [ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="4_r4nic"]
 [ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="5_jghxj"]
 [ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="6_x8ws3"]
 [ext_resource type="PackedScene" uid="uid://d01nbq4dt1cs5" path="res://src/weapons/silver_saber.tscn" id="6_yvmbj"]
 [ext_resource type="PackedScene" uid="uid://dj5x5c687ddyj" path="res://src/items/amulet_of_strength.tscn" id="7_hnwcd"]
+
+[sub_resource type="Resource" id="Resource_j7t61"]
+resource_local_to_scene = true
+script = ExtResource("2_yc7tl")
+_facts = []
 
 [node name="ExpertJoe" instance=ExtResource("1_nf4bs")]
 char = "@"
@@ -14,6 +20,7 @@ caption = "expert joe"
 color = Color(0.741176, 0.741176, 0.741176, 1)
 agility = 52
 faction = 1
+mem = SubResource("Resource_j7t61")
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.741176, 0.741176, 0.741176, 1)

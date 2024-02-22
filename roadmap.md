@@ -368,12 +368,25 @@ UX:
 
 
 ## v0.12.0
-- [ ] bug: sewer otter attacks everyone?
-- [ ] bug: self defence does not expire when attacker dies
+- [x] bug: self defence does not expire when attacker dies
 - [x] bug: actors from the same spawn deck share a common memory?
 - [x] bug: Exploring does not flush path after being invalid for a few turns
 - [x] bug: UI button groups steal clicks
 - [x] pinching is centered on touch centroid
+
+Performance:
+- [x] cache stats modifiers for the whole turn (with inval on mods changing events)
+- [x] sort strategies by priority for early exits when starting a turn
+- [x] fully typed and optimized heap queue
+- [x] path finding is typed and optimized
+
+Combat:
+- [x] hero can learn spells
+- [x] throwing
+
+
+## v0.12.1
+- [ ] bug: sewer otter attacks everyone?
 - [ ] document conn_target and connection fields
 - [ ] close the old play test survey
 - [ ] close the old known issues page
@@ -381,20 +394,12 @@ UX:
 - [ ] ch2 ends as soon as the encounter happens, no need to walk back to the café
 - [ ] vague value adjectives on gaussian distributions
 - [ ] F-Droid has animated water
-- [ ] improved saved games
-  - [ ] center on Hero when restoring a game
-  - [ ] cheat to disable auto-saving
 - [ ] random interlude stories
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] instructions on how to install all the Android dev dependencies
 - [ ] silence a few warnings
-- [ ] remove unreachable levels from starting screen
 
 Performance:
-- [x] cache stats modifiers for the whole turn (with inval on mods changing events)
-- [x] sort strategies by priority for early exits when starting a turn
-- [x] fully typed and optimized heap queue
-- [x] path finding is typed and optimized
 - [ ] async preload most shaders to speedup startup
 
 Strategies:
@@ -404,15 +409,8 @@ Strategies:
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
 - [ ] Tracking keeps moving towards the last place where they saw their prey after it becomes unperceived
 
-
 Combat:
-- [x] hero can learn spells
 - [ ] zapping spell
-- [x] throwing
-
-
-## v0.12.1
-???
 
 ## v1.0
 - [ ] A Fight for Fumes campaign

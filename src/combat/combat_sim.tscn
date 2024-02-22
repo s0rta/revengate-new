@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://d1wjr6usat6lm"]
+[gd_scene load_steps=14 format=3 uid="uid://d1wjr6usat6lm"]
 
 [ext_resource type="Script" path="res://src/combat/combat_sim.gd" id="1_0qirp"]
 [ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="1_fdq17"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cy4viyhan31e6" path="res://src/combat/advanced_joe.tscn" id="4_l8kup"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="5_57flp"]
 [ext_resource type="PackedScene" uid="uid://cx7utj7hd3ne" path="res://src/monsters/kobold.tscn" id="6_3iqgc"]
+[ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="6_b7d4m"]
 [ext_resource type="PackedScene" uid="uid://d8jxxkoa4b00" path="res://src/people/outlaw.tscn" id="6_n5g3r"]
 [ext_resource type="PackedScene" uid="uid://dvm0g3y1rr55g" path="res://src/items/potion_of_booze.tscn" id="7_scp3a"]
 
@@ -18,6 +19,11 @@ script = ExtResource("5_57flp")
 _facts = []
 
 [sub_resource type="Resource" id="Resource_yturu"]
+script = ExtResource("5_57flp")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_psa4b"]
+resource_local_to_scene = true
 script = ExtResource("5_57flp")
 _facts = []
 
@@ -34,10 +40,12 @@ layer_0/tile_data = PackedInt32Array(0, 0, 3, 1, 131072, 3, 2, 131072, 3, 3, 0, 
 visible = true
 position = Vector2(83, 82)
 health = 500
+mana_full = 0
 mem = SubResource("Resource_511rn")
 
 [node name="Kobold" parent="Board" instance=ExtResource("6_3iqgc")]
 position = Vector2(48, 47)
+mana_full = 0
 mem = SubResource("Resource_hpiot")
 
 [node name="ExtraStages" type="Node" parent="."]
@@ -45,71 +53,190 @@ mem = SubResource("Resource_hpiot")
 [node name="SuperOutlaw" parent="ExtraStages" instance=ExtResource("6_n5g3r")]
 position = Vector2(112, 40)
 health = 500
+mana_full = 0
 mem = SubResource("Resource_yturu")
 
 [node name="SuperOutlawWithLoot" parent="ExtraStages" instance=ExtResource("6_n5g3r")]
 position = Vector2(112, 40)
 health = 500
+mana_full = 0
 mem = SubResource("Resource_yturu")
 
 [node name="PotionOfBooze" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze2" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze3" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze4" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze5" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze6" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze7" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze8" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze9" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze10" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze11" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze12" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze13" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze14" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze15" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze16" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze17" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze18" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze19" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze20" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze21" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze22" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze23" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze24" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze25" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze26" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze27" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfBooze28" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
+
+[node name="Rat" parent="ExtraStages" instance=ExtResource("6_b7d4m")]
+mana_full = 0
+mem = SubResource("Resource_psa4b")
 
 [node name="Kobold2" parent="ExtraStages" instance=ExtResource("6_3iqgc")]
 position = Vector2(48, 48)
+mana_full = 0
 mem = SubResource("Resource_hpiot")
 
 [connection signal="turn_started" from="TurnQueue" to="." method="_on_turn_queue_turn_started"]

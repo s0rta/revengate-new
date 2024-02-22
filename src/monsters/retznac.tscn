@@ -28,6 +28,7 @@ agility = 49
 intelligence = 70
 perception = 65
 mana = 60
+mana_full = 60
 mana_recovery_prob = 0.2
 resistance = 7
 tags = Array[String](["undead", "quest-boss-retznac"])

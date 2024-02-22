@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://c185mr0bu3u3w"]
+[gd_scene load_steps=58 format=3 uid="uid://c185mr0bu3u3w"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_yitoo"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_i1rpj"]
@@ -135,6 +135,11 @@ resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
+[sub_resource type="Resource" id="Resource_6ne1h"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
 [sub_resource type="Resource" id="Resource_bq34y"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
@@ -191,14 +196,29 @@ mem = SubResource("Resource_88qut")
 
 [node name="PotionOfHealing" parent="Quest1Goals/Outlaw2" instance=ExtResource("22_bxpqo")]
 visible = false
+message = ""
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfRegen" parent="Quest1Goals/Outlaw2" instance=ExtResource("12_5tg6f")]
 visible = false
+message = ""
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="Outlaw3" parent="Quest1Goals" instance=ExtResource("12_g5w02")]
 mem = SubResource("Resource_u01tk")
 
 [node name="PotionOfPoison" parent="Quest1Goals/Outlaw3" instance=ExtResource("15_0p6sp")]
+message = ""
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="Quest2Goals" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -249,6 +269,10 @@ spawn_cost = 5.0
 [node name="Carrot" parent="Rare" instance=ExtResource("24_2jxsh")]
 
 [node name="PotionOfAbsinthe" parent="Rare" instance=ExtResource("27_p82t1")]
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="RareAndDeep" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -265,8 +289,18 @@ max_board_occ = 1
 max_dungeon_occ = 3
 
 [node name="PotionOfHealing" parent="Healing" instance=ExtResource("22_bxpqo")]
+message = ""
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="PotionOfRegen" parent="Healing" instance=ExtResource("12_5tg6f")]
+message = ""
+skill = ""
+switchable = false
+spawn_rect = Rect2i(0, 0, 0, 0)
+ttl = -1
 
 [node name="TestingQuestTransitions" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -311,9 +345,13 @@ mem = SubResource("Resource_e563k")
 [node name="Gleugt" parent="TestingQuestTransitions" instance=ExtResource("33_08vnm")]
 mem = SubResource("Resource_teplk")
 
+[node name="Gleugt2" parent="TestingQuestTransitions" instance=ExtResource("33_08vnm")]
+mem = SubResource("Resource_6ne1h")
+
 [node name="MovementStressTest" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
-min_board_occ = 5
+max_board_occ = 0
+min_dungeon_occ = 5
 world_loc = Vector3i(13, 4, 0)
 
 [node name="Lyonese" parent="MovementStressTest" instance=ExtResource("34_yppu8")]
