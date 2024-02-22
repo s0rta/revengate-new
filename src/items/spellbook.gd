@@ -23,9 +23,9 @@ func activate_on_actor(actor:Actor):
 	if actor.get_skill("channeling") < Consts.SkillLevel.INITIATE:
 		actor.set_skill("channeling", Consts.SkillLevel.INITIATE)
 	actor.mana_full += 10
-	actor.refocus()
 	for spell_class in spells:
 		var spell = spell_class.new()
 		actor.add_spell(spell)
 		actor.add_message("%s learned the %s spell" % [actor.caption, spell.get_short_desc()])
+	actor.refocus()
 	super(actor)

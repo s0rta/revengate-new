@@ -90,6 +90,8 @@ func refresh_mana(_new_mana=null):
 
 	%ManaMeter.value_full = Tender.hero.mana_full
 	%ManaMeter.set_value(Tender.hero.mana)
+	# FIXME: this should not be needed if Hero.spell_changed is reliable
+	refresh_spells()
 
 func refresh_spells():
 	for node in %QuickActionsBox.get_children():
