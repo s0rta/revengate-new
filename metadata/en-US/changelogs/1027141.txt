@@ -1,4 +1,4 @@
 You can throw items.
 You can learn spells.
-Improved performance when there are many monters on a level.
+Improved performance when there are many monsters on a level.
 The pinching gesture uses the center of all fingers as zoom center.

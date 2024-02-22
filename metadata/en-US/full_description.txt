@@ -1,3 +1,9 @@
-Revengate is a Rogue-like dungeon crawler RPG set in a steampunk universe full of technology and magic.
+Revengate is a Rogue-like dungeon crawler RPG set in a steampunk universe full of Victorian technology and magic.
 
-Explore an alternate mid-19th century Lyon as an investigator for the mysterious Lux Co. organisation. Meet locals and investigate mysteries through role-playing and dungeon exploration.
+Explore an alternate mid-19th century Lyon as an investigator for the mysterious Lux Co. organization. Meet locals and investigate mysteries through role-playing and dungeon exploration. With quirky items like the potion of absinthe and the potion of analysis-paralysis, you will have to apply novel strategies and tactics to overcome your challenges.
+
+The game takes a lot of inspiration from Nethack and other traditional roguelikes while keeping actions simple to make the controls more mobile-friendly. The control scheme borrows a lot ideas from the excellent UI in Pixel Dungeon and its Shattered Pixel variant.
+
+You can also play Revengate in your browser: https://ygingras.itch.io/revengate
+
+This free and open source game is made with the Godot Game Engine.
