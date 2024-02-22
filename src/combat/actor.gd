@@ -104,7 +104,7 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 @export var intelligence := 50
 @export var perception := 50
 @export var mana := 0
-@onready var mana_full = mana
+@export var mana_full := -1
 @export var mana_burn_rate := 100
 @export_range(0.0, 1.0) var mana_recovery_prob := 0.1
 @export var resistance: Consts.DamageFamily = Consts.DamageFamily.NONE  # at most one!
@@ -231,6 +231,8 @@ func spawn():
 	mem = Memory.new()
 	if health_full <= 0:
 		health_full = health
+	if mana_full <= 0:
+		mana_full = mana
 	if not actor_id:
 		actor_id = ResourceUID.create_id()
 	for item in get_items([], [], false):
@@ -285,6 +287,7 @@ func get_skill(skill_name) -> Consts.SkillLevel:
 func set_skill(skill_name, level):
 	var skill_node = null
 	var nodes = find_children("", "SkillLevels", false, false)
+	nodes = nodes.filter(func (node): return node.owner != self)  # built-in nodes do not save updates
 	if nodes.is_empty():
 		skill_node = SkillLevels.new()
 		add_child(skill_node)
