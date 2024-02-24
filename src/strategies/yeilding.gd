@@ -21,6 +21,9 @@ class_name Yeilding extends Strategy
 @export var fact_name: String
 @export_range(0.0, 1.0) var yeild_health_percentage = 0.3 
 
+## how many turns do we stay pleading before moving with our life
+@export var post_yeild_turns := 5
+
 var attacker_id: int
 var turn: int
 var has_yeilded = false
@@ -39,8 +42,11 @@ func is_valid():
 		
 func act() -> bool:	
 	# Record that we have yeilded
-	Tender.hero.mem.learn(fact_name, turn, Memory.Importance.CRUCIAL, {"attacker": attacker_id})
+	for mem in [me.mem, Tender.hero.mem]:
+		mem.learn(fact_name, turn, Memory.Importance.CRUCIAL, {"attacker": attacker_id})
 	var board = me.get_board()
 	me.add_message("%s throws their arms in the air, saying 'I give up!'" % me.get_short_desc(),
 					Consts.MessageLevels.WARNING)
+	if ttl < 0:
+		ttl = post_yeild_turns
 	return true
