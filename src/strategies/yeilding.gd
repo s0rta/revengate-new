@@ -30,20 +30,21 @@ var has_yeilded = false
 
 func refresh(turn_):
 	turn = turn_
+
+func is_valid():
 	var health = (1.0 * me.health / me.health_full)
 	if health <= yeild_health_percentage:
 		var fact = me.mem.recall('was_attacked')
 		if fact != null:
 			has_yeilded = true
 			attacker_id = fact.by
-
-func is_valid():
 	return super() and has_yeilded
 		
 func act() -> bool:	
 	# Record that we have yeilded
-	for mem in [me.mem, Tender.hero.mem]:
-		mem.learn(fact_name, turn, Memory.Importance.CRUCIAL, {"attacker": attacker_id})
+	if not me.mem.recall(fact_name, turn, ):
+		for mem in [me.mem, Tender.hero.mem]:
+			mem.learn(fact_name, turn, Memory.Importance.CRUCIAL, {"attacker": attacker_id})
 	var board = me.get_board()
 	me.add_message("%s throws their arms in the air, saying 'I give up!'" % me.get_short_desc(),
 					Consts.MessageLevels.WARNING)

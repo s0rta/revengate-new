@@ -159,6 +159,9 @@ func speaker_learns(event_name, importance:=Memory.Importance.NOTABLE, by_hero=t
 	if by_hero:
 		data = {"by":Tender.hero.actor_id}
 	speaker.mem.learn(event_name, speaker.current_turn, importance, data)
+	
+func speaker_recalls(event_name) -> bool:
+	return speaker.mem.recall(event_name) != null
 
 func speaker_has_gifts(extra_tags:=[]) -> bool:
 	if speaker == null:

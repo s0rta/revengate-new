@@ -1,6 +1,13 @@
 ~ intro
+if speaker_recalls("accountant_yeilded")
+	=> respect
 Benoît: What the hell do you want?
 - I want you to turn around right now!
 	do speaker_learns("was_insulted")
 	Benoît: I'll show you how to mind your own business!
+=> END
+
+~ respect
+Benoît: You make a strong point... Ouch!
+Benoît: You are right, I will quietly destroy those financial statements if you leave me alone.
 => END
