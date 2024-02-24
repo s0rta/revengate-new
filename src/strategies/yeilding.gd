@@ -41,6 +41,10 @@ func is_valid():
 	return super() and has_yeilded
 		
 func act() -> bool:	
+	# reset self-defense
+	me.mem.forget("was_attacked")
+	me.mem.forget("was_insulted")
+
 	# Record that we have yeilded
 	if not me.mem.recall(fact_name, turn, ):
 		for mem in [me.mem, Tender.hero.mem]:

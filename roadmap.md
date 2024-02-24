@@ -373,6 +373,7 @@ UX:
 - [x] bug: Exploring does not flush path after being invalid for a few turns
 - [x] bug: UI button groups steal clicks
 - [x] pinching is centered on touch centroid
+- [x] close the old play test survey
 
 Performance:
 - [x] cache stats modifiers for the whole turn (with inval on mods changing events)
@@ -388,7 +389,6 @@ Combat:
 ## v0.12.1
 - [ ] bug: sewer otter attacks everyone?
 - [ ] document conn_target and connection fields
-- [ ] close the old play test survey
 - [ ] close the old known issues page
 - [ ] better text description on Google Play and F-Droid
 - [ ] ch2 ends as soon as the encounter happens, no need to walk back to the café
@@ -401,6 +401,7 @@ Combat:
 
 Performance:
 - [ ] async preload most shaders to speedup startup
+- [ ] mem.recall accept an importance param to know how deep to search
 
 Strategies:
 - [ ] Benoît roams after the meeting and after yielding

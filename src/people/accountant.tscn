@@ -26,7 +26,8 @@ tags = Array[String](["spawn-distant"])
 mem = SubResource("Resource_oo0im")
 
 [node name="Label" parent="." index="0"]
-theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
+theme_override_colors/font_color = Color(0.768627, 0.443137, 0.270588, 1)
+text = "@"
 
 [node name="Cane" parent="." index="6" instance=ExtResource("3_p7djt")]
 is_equipped = true
