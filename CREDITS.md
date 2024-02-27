@@ -11,7 +11,10 @@ Additionnal coding:
 - Chris J. Wallace
 - Rodrigo Espinosa de los Monteros
 
-Testers:
+Main testing:
+- Colin Etienne Jean-Marie "cwpute" Landreau
+
+Additionnal testing:
 - Obigre
 - Yellowsilver
 - Zucadragon
