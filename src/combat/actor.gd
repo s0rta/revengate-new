@@ -1021,9 +1021,13 @@ func strike(foe:Actor, weapon, throw=null):
 	
 	if stat_trial(foe.get_evasion(weapon), "agility", weapon.skill, hit_mod):
 		# Miss!
+		foe.mem.learn("was_targeted", 
+						current_turn, 
+						Memory.Importance.TRIVIAL, 
+						{"by": actor_id})
 		if with_anims:
 			anim_miss(foe, weapon)
-		emit_signal("missed", foe)
+		missed.emit(foe)
 		return false
 
 	# TODO: agility should influence the chance of a critical hit	
@@ -1046,7 +1050,7 @@ func strike(foe:Actor, weapon, throw=null):
 		CombatUtils.apply_all_effects(weapon, foe)	
 	emit_signal("hit", foe, damage)
 	add_message("%s hit %s for %d dmg" % [get_short_desc(), foe.get_short_desc(), damage])
-	foe.emit_signal("was_attacked", self)
+	foe.was_attacked.emit(self)
 	if with_anims and not foe.is_unexposed():
 		anim_hit(foe, weapon, damage)
 	return true

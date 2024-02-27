@@ -145,4 +145,4 @@ const TAGS = ["ethereal", "undead", "gift", "fragile", "broken", "lit",
 			"quest-lost-cards", "quest-stop-accountant", "quest-face-retznac",
 			]
 
-const OFFENSIVE_EVENTS:Array[String] = ["was_attacked", "was_insulted", "was_threatened"]
+const OFFENSIVE_EVENTS:Array[String] = ["was_attacked", "was_insulted", "was_threatened", "was_targeted"]
