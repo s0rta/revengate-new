@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -18,10 +18,10 @@
 ## Submit to an attacker after taking a beating
 class_name Yeilding extends Strategy
 
-@export var fact_name: String
+@export var event_name: String
 @export_range(0.0, 1.0) var yeild_health_percentage = 0.3 
 
-## how many turns do we stay pleading before moving with our life
+## how many turns do we stay pleading before moving on with our life
 @export var post_yeild_turns := 5
 
 var attacker_id: int
@@ -46,9 +46,9 @@ func act() -> bool:
 	Tender.hero.forgive(me)
 
 	# Record that we have yeilded
-	if not me.mem.recall(fact_name, turn, ):
+	if not me.mem.recall(event_name, turn, ):
 		for mem in [me.mem, Tender.hero.mem]:
-			mem.learn(fact_name, turn, Memory.Importance.CRUCIAL, {"attacker": attacker_id})
+			mem.learn(event_name, turn, Memory.Importance.CRUCIAL, {"attacker": attacker_id})
 	var board = me.get_board()
 	me.add_message("%s throws their arms in the air, saying 'I give up!'" % me.get_short_desc(),
 					Consts.MessageLevels.WARNING)

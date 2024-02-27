@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cx2577omrgup0"]
+[gd_scene load_steps=11 format=3 uid="uid://cx2577omrgup0"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_g7n00"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="2_yngsp"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://src/strategies/yeilding.gd" id="6_geqwb"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="7_53qre"]
 [ext_resource type="PackedScene" uid="uid://vd7cxhh4pocv" path="res://src/items/ledger.tscn" id="8_c70k0"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="8_lcy0d"]
 
 [sub_resource type="Resource" id="Resource_oo0im"]
 resource_local_to_scene = true
@@ -32,26 +33,31 @@ text = "@"
 [node name="Cane" parent="." index="6" instance=ExtResource("3_p7djt")]
 is_equipped = true
 
-[node name="SelfDefense" type="Node" parent="." index="7"]
+[node name="Yeilding" type="Node" parent="." index="7"]
+script = ExtResource("6_geqwb")
+event_name = "accountant_yeilded"
+priority = 0.9
+
+[node name="SelfDefense" type="Node" parent="." index="8"]
 script = ExtResource("4_7ghrn")
 priority = 0.8
 
-[node name="Seeking" type="Node" parent="." index="8"]
-script = ExtResource("5_fem4g")
-target_tags = Array[String](["quest-boss-salapou"])
-resolution_range = 1
-fact_name = "accountant_met_salapou"
-priority = 0.6
-
-[node name="Yeilding" type="Node" parent="." index="9"]
-script = ExtResource("6_geqwb")
-fact_name = "accountant_yeilded"
-priority = 0.9
-
-[node name="Tracking" type="Node" parent="." index="10"]
+[node name="Tracking" type="Node" parent="." index="9"]
 script = ExtResource("7_53qre")
 priority = 0.7
 
-[node name="Ledger2" parent="." index="11" instance=ExtResource("8_c70k0")]
+[node name="Seeking" type="Node" parent="." index="10"]
+script = ExtResource("5_fem4g")
+target_tags = Array[String](["quest-boss-salapou"])
+resolution_range = 1
+event_name = "accountant_met_salapou"
+cancel_event_name = "accountant_yeilded"
+priority = 0.6
 
-[node name="Ledger" parent="." index="12" instance=ExtResource("8_c70k0")]
+[node name="Exploring" type="Node" parent="." index="11"]
+script = ExtResource("8_lcy0d")
+priority = 0.1
+
+[node name="Ledger2" parent="." index="12" instance=ExtResource("8_c70k0")]
+
+[node name="Ledger" parent="." index="13" instance=ExtResource("8_c70k0")]

@@ -1,6 +1,8 @@
 ~ intro
 if speaker_recalls("accountant_yeilded")
 	=> respect
+elif speaker_recalls("accountant_met_salapou"):
+	=> too_late
 Benoît: What the hell do you want?
 - I want you to turn around right now!
 	do speaker_learns("was_insulted")
@@ -10,4 +12,9 @@ Benoît: What the hell do you want?
 ~ respect
 Benoît: You make a strong point... Ouch!
 Benoît: You are right, I will quietly destroy those financial statements if you leave me alone.
+=> END
+
+~ too_late
+Benoît: I don't know what you want, dear fellow, but I'm on my way to get a very fine cognac and I have no time for chit chat.
+Benoît: The Salapou Circus is in town. I highly recommend it. If you get a chance to meet him, Le Grand Salapou is as funny in person as he is on stage.
 => END

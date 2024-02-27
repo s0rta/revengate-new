@@ -1,4 +1,4 @@
-# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -21,7 +21,11 @@ class_name Seeking extends Strategy
 @export var target_tags: Array[String]
 @export var resolution_range := Consts.CONVO_RANGE
 @export var resolution_message := ""
-@export var fact_name: String
+@export var event_name: String
+@export var cancel_event_name: String  # we stop seeking if this happened
+
+## how many turns do we stay in place before moving on with our life
+@export var post_resolution_turns := 5
 
 
 var target: Actor
@@ -41,6 +45,11 @@ func refresh(turn_):
 	if target == null:
 		locate_target()
 
+func is_expired() -> bool:
+	if cancel_event_name and Tender.hero.mem.recall(cancel_event_name):
+		return true
+	return super()
+
 func is_valid():
 	return super() and target != null and target.is_alive() and not met_target
 		
@@ -56,6 +65,8 @@ func act() -> bool:
 		return me.move_toward_actor(target)
 	
 func resolve():
-	Tender.hero.mem.learn(fact_name, turn, Memory.Importance.CRUCIAL)
+	if ttl < 0:
+		ttl = post_resolution_turns
+	for mem in [me.mem, Tender.hero.mem]:
+		mem.learn(event_name, turn, Memory.Importance.CRUCIAL)
 	return true
-
