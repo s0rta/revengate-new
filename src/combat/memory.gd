@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -40,6 +40,9 @@ const RELEVANCE_AGE = {
 }
 
 @export_group("Internals")
+# Entries can be null when a fact has been forgotten.
+# This array is compacted from time to time to remove entries that have been forgotten
+# or that are no longer relevant.
 @export var _facts := []
 
 func learn(event:String, turn, importance:=Importance.NOTABLE, data=null):
@@ -51,29 +54,34 @@ func learn(event:String, turn, importance:=Importance.NOTABLE, data=null):
 		fact.merge(data)
 	_facts.append(fact)
 
-func forget(event):
+func forget(event, valid_pred=null):
 	## Forget that `event` ever happened.
+	## valid_pred: only facts that are true for this predicate are forgotten.
 	var new_facts = []
-	for fact in _facts:
-		if fact.event != event:
-			new_facts.append(fact)
-	_facts = new_facts
-	
+	for i in len(_facts):
+		if _facts[i] == null:
+			continue
+		if _facts[i].event == event and (valid_pred == null or valid_pred.call(_facts[i])):
+			_facts[i] = null
+
+func forget_all(events, valid_pred=null):
+	## like forget() for multible events.
+	for event in events:
+		forget(event, valid_pred)
+
 func clear():
 	## Induce total amnesia
 	_facts = []
 
-func is_relevant(fact, current_turn):
+func is_relevant(fact, current_turn) -> bool:
 	## Return true if `fact` is still relevant.
+	if fact == null:
+		return false
 	return (current_turn - fact.turn) < RELEVANCE_AGE[fact.importance]
 	
 func gc(current_turn):
 	## Forget about facts that are too old to still be relevant.
-	var new_facts = []
-	for fact in _facts:
-		if is_relevant(fact, current_turn):
-			new_facts.append(fact)
-	_facts = new_facts
+	_facts = _facts.filter(is_relevant.bind(current_turn))
 	
 func recall(event, current_turn=null, valid_pred=null):
 	## Return the latest fact about `event` or `null` if nothing is known about `event`
@@ -88,7 +96,7 @@ func recall_any(events:Array[String], current_turn=null, valid_pred=null):
 	## `valid_pred`: only facts that are true with this callable are considered.
 	for i in _facts.size():
 		var fact = _facts[-i-1]
-		if fact.event in events:
+		if fact != null and fact.event in events:
 			if current_turn:
 				if is_relevant(fact, current_turn):
 					if valid_pred == null:
@@ -105,7 +113,7 @@ func recall_all(event, current_turn=null):
 	var facts = []
 	for i in _facts.size():
 		var fact = _facts[-i-1]
-		if fact.event == event:
+		if fact != null and fact.event == event:
 			if current_turn:
 				if is_relevant(fact, current_turn):
 					facts.append(fact)

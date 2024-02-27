@@ -42,8 +42,8 @@ func is_valid():
 		
 func act() -> bool:	
 	# reset self-defense
-	me.mem.forget("was_attacked")
-	me.mem.forget("was_insulted")
+	me.forgive(Tender.hero)
+	Tender.hero.forgive(me)
 
 	# Record that we have yeilded
 	if not me.mem.recall(fact_name, turn, ):

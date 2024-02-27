@@ -723,6 +723,10 @@ func was_offended_by(other: Actor):
 	var by_other = func (fact): return fact.by == other.actor_id
 	return mem.recall_any(Consts.OFFENSIVE_EVENTS, current_turn, by_other) != null
 
+func forgive(other: Actor):
+	## Forget any past offences by `other`
+	mem.forget_all(Consts.OFFENSIVE_EVENTS, func (fact): return fact.by == other.actor_id)
+
 func is_friend(other: Actor):
 	## Return whether `self` has positive sentiment towards `other`
 	if not Tender.sentiments:
