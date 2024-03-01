@@ -372,8 +372,10 @@ UX:
 - [x] bug: actors from the same spawn deck share a common memory?
 - [x] bug: Exploring does not flush path after being invalid for a few turns
 - [x] bug: UI button groups steal clicks
+- [x] support armv7 on Google Play
 - [x] pinching is centered on touch centroid
 - [x] close the old play test survey
+- [x] better text description on Google Play and F-Droid
 
 Performance:
 - [x] cache stats modifiers for the whole turn (with inval on mods changing events)
@@ -387,16 +389,13 @@ Combat:
 
 
 ## v0.12.1
-- [ ] bug: sewer otter attacks everyone?
+- [ ] bug: inspect and GetCloser have different perception results
 - [ ] document conn_target and connection fields
-- [ ] close the old known issues page
-- [ ] better text description on Google Play and F-Droid
-- [ ] ch2 ends as soon as the encounter happens, no need to walk back to the café
+- [x] close the old known issues page
 - [ ] vague value adjectives on gaussian distributions
 - [ ] F-Droid has animated water
 - [ ] random interlude stories
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
-- [ ] instructions on how to install all the Android dev dependencies
 - [ ] silence a few warnings
 
 Performance:
@@ -404,14 +403,14 @@ Performance:
 - [ ] mem.recall accept an importance param to know how deep to search
 
 Strategies:
-- [ ] Benoît roams after the meeting and after yielding
+- [x] Benoît roams after the meeting and after yielding
 - [ ] Seeking is easier to resolve even is the target keeps moving
 - [ ] TravelTo uses a cached `path_perceived()`
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
 - [ ] Tracking keeps moving towards the last place where they saw their prey after it becomes unperceived
 
 Combat:
-- [ ] zapping spell
+- [x] zapping spell
 
 ## v1.0
 - [ ] A Fight for Fumes campaign
@@ -421,7 +420,6 @@ Combat:
 - [ ] packaging for Ubuntu
 
 ## Ice Box: not yet scheduled for a release
-- [ ] support armv7 on Google Play
 - [ ] non-walking movement and path finding (wading, swimming, phasing)
 - [ ] Deck.peek(): select the next card, but do not remove it from the deck
 - [ ] help screen with contextual content
@@ -434,7 +432,6 @@ Combat:
 - [ ] phantruch is destroyed if the vital assembly is broken or stolen
 - [ ] startled strategy: flee when first contact is from afar, attack when from nearby
 - [ ] F-Droid [Reproducible Builds](https://f-droid.org/docs/Reproducible_Builds/)
-- [ ] potion of absinthe
 - [ ] Salapou can steal your items
 - [ ] redo tabulator as a Godot Ressource
 - [ ] flatten the board-area node sub-tree

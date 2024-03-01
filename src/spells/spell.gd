@@ -42,7 +42,6 @@ func _ready():
 		if parent is Actor:
 			me = parent
 	has_effect = not find_children("", "Effect", false, false).is_empty()
-	assert(me, "Spells must be connected to an Actor")
 
 func get_short_desc():
 	if char:

@@ -15,16 +15,25 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Item
+@tool
+## an item that can teach you how to use a new spell
+class_name Spellbook extends Item
 
-var spells= [RestoreHealth]
+@export var mana_boost := 10
+@onready var spells:Array = find_children("", "Spell", false, false)
+
+func _get_configuration_warnings():
+	var warnings = []
+	if spells.is_empty():
+		warnings.append("This book has not spell child nodes!")
+	return warnings
 
 func activate_on_actor(actor:Actor):
 	if actor.get_skill("channeling") < Consts.SkillLevel.INITIATE:
 		actor.set_skill("channeling", Consts.SkillLevel.INITIATE)
-	actor.mana_full += 10
+	actor.mana_full += mana_boost
 	for spell_class in spells:
-		var spell = spell_class.new()
+		var spell = spell_class.duplicate()
 		actor.add_spell(spell)
 		actor.add_message("%s learned the %s spell" % [actor.caption, spell.get_short_desc()])
 	actor.refocus()

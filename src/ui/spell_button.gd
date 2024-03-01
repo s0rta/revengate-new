@@ -41,5 +41,30 @@ func set_enabled(val=null):
 
 func on_button_up():
 	if spell.has_reqs():
-		spell.cast()
+		if Utils.has_tags(spell, ["attack"]):
+			await _target_and_cast()
+		else:
+			spell.cast()
+			Tender.hero.finalize_turn(true)
+
+func _target_and_cast():
+	var board = Tender.hero.get_board()
+	var index = board.make_index()
+	var here = Tender.hero.get_cell_coord()
+	var coords = board.visible_coords(here, spell.range)
+	board.highlight_cells(coords, "highlight-info")
+
+	var actor_coords = coords.filter(index.actor_at)
+	board.highlight_cells(actor_coords, "highlight-warning")
+	
+	coords.append(here)
+	var surveyor = Tender.hud.get_gesture_surveyor()
+	var res = await surveyor.start_capture_coord("Cast %s where?" % spell.caption, coords)
+
+	if res.success:
+		var other = index.actor_at(res.coord)
+		if other != null:
+			spell.cast_on(other)
+		else:
+			spell.cast_at(res.coord)
 		Tender.hero.finalize_turn(true)

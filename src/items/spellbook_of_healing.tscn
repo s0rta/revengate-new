@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjpwq3yahnoqw"]
+
+[ext_resource type="PackedScene" uid="uid://bp8i08570ptbb" path="res://src/items/spellbook.tscn" id="1_wtb7a"]
+[ext_resource type="Script" path="res://src/spells/restore_health.gd" id="2_7qnp5"]
+
+[node name="SpellbookOfHealing" instance=ExtResource("1_wtb7a")]
+caption = "spellbook of restore-health"
+
+[node name="RestoreHealth" type="Node" parent="." index="1"]
+script = ExtResource("2_7qnp5")

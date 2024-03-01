@@ -345,7 +345,7 @@ class TeleportCheat extends Cheat:
 
 	func _start_teleport():
 		var surveyor = Tender.hud.get_gesture_surveyor()
-		var res = await surveyor.start_capture_coord("select position...")
+		var res = await surveyor.start_capture_coord("Teleport where?")
 		if res.success:
 			inc_nb_cheats()
 			Tender.hero.place(res.coord, true)

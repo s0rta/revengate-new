@@ -24,13 +24,14 @@ class_name ElectricZap extends Spell
 func _ready():
 	super()
 	mana_cost = 12
+	char = "🗲"
+	caption = "zap"
 	tags.append("attack")
 	damage_family = Consts.DamageFamily.ELECTRIC
 
 func cast_on(victim:Actor):
-	var here = me.get_cell_coord()
 	var there = victim.get_cell_coord()
-	Tender.viewport.effect_between_coords("zap_sfx", here, there)
+	Tender.viewport.effect_at_coord("zap_sfx", there)
 	var damage = victim.normalize_damage(self, base_damage)
 	victim.update_health(-damage)
 	
@@ -38,4 +39,9 @@ func cast_on(victim:Actor):
 	var strat = Paralized.new(victim, 1.0, stun_turns)
 	victim.add_strategy(strat)
 
+	me.use_mana(mana_cost)
+
+func cast_at(coord:Vector2i):
+	var here = me.get_cell_coord()
+	Tender.viewport.effect_at_coord("zap_sfx", coord)
 	me.use_mana(mana_cost)

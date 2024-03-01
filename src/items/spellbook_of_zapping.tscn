@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://eotqpasq760o"]
+
+[ext_resource type="PackedScene" uid="uid://bp8i08570ptbb" path="res://src/items/spellbook.tscn" id="1_6iyc1"]
+[ext_resource type="Script" path="res://src/spells/electric_zap.gd" id="2_266ae"]
+
+[node name="SpellbookOfZapping" instance=ExtResource("1_6iyc1")]
+mana_boost = 15
+caption = "spellbook of zapping"
+
+[node name="ElectricZap" type="Node" parent="." index="1"]
+script = ExtResource("2_266ae")
+stun_turns = 4

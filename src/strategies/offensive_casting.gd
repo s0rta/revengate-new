@@ -32,7 +32,7 @@ func refresh(turn):
 	spells.shuffle()
 	var ranges = [0]
 	for spell in spells:
-		ranges.append(spell.get("range"))
+		ranges.append(spell.get("range", 0))
 	var max_range = ranges.max()
 	var here = me.get_cell_coord()
 	var index = me.get_board().make_index()
