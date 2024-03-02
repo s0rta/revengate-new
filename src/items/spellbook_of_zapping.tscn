@@ -6,6 +6,7 @@
 [node name="SpellbookOfZapping" instance=ExtResource("1_6iyc1")]
 mana_boost = 15
 caption = "spellbook of zapping"
+spawn_cost = 9.0
 
 [node name="ElectricZap" type="Node" parent="." index="1"]
 script = ExtResource("2_266ae")
