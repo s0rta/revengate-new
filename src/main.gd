@@ -300,7 +300,7 @@ func start_ch2():
 	#   the new magic mechanics, so it will have to do until we can hide it in a 
 	#   side quest.
 	#supply_item(npcs.nadege, "res://src/items/serum_of_vitality.tscn", ["quest-reward", "gift"])
-	supply_item(npcs.nadege, "res://src/items/spellbook.tscn", ["quest-reward", "gift"])
+	supply_item(npcs.nadege, "res://src/items/spellbook_of_healing.tscn", ["quest-reward", "gift"])
 
 	supply_item(npcs.nadege, "res://src/items/key.tscn", ["key-blue", "gift"])
 	supply_item(npcs.nadege, "res://src/weapons/weighted_cane.tscn", ["gift"])

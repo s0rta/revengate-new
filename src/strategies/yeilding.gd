@@ -22,7 +22,7 @@ class_name Yeilding extends Strategy
 @export_range(0.0, 1.0) var yeild_health_percentage = 0.3 
 
 ## how many turns do we stay pleading before moving on with our life
-@export var post_yeild_turns := 5
+@export var post_yeild_turns := 4
 
 var attacker_id: int
 var turn: int
