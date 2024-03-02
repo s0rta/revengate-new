@@ -51,12 +51,59 @@ func refresh(turn):
 
 func is_valid():
 	return super() and foe != null
+	
+## A metrics pump that considers crowding behind a path blocked by a 
+## friend a valid move
+class CrowdingMetricsPump extends RevBoard.MetricsPump:
+	const crowding_slowdown = 8
+	var index
+	var prey
+	
+	func _init(board, prey_):
+		super(board)
+		index = board.make_index()
+		prey = prey_
+	
+	func dist_real(here, there):
+		
+		var dist = board.dist(here, there)
+		var actor = index.actor_at(there)
+		if actor != null and actor != prey:
+			dist = dist + crowding_slowdown
+		return dist
+
+	func dist_estim(here, there):
+		return board.dist(here, there)
+		
+	func dist_tiebreak(here, there):
+		return board.man_dist(here, there)
 		
 func act() -> bool:	
 	# attack if we can, move towards foe otherwise
-	var board = me.get_board()
+	var board: RevBoard = me.get_board()
+	var start = me.get_cell_coord()
+	var foe_coord = foe.get_cell_coord()
+	var index = board.make_index()
 	if board.dist(me, foe) <= me.get_max_weapon_range():
 		await me.attack(foe)
 		return true
 	else:
-		return me.move_toward_actor(foe)
+		var pred = func(coord):
+			if not board.is_walkable(coord):
+				return false
+
+			var other = index.actor_at(coord)
+			if other == null or me.is_friend(other):
+				return true
+			return false
+				
+		var metrics = board.astar_metrics_custom(CrowdingMetricsPump.new(board, foe), start, foe_coord, 
+													false, -1, pred, index)
+
+		var path = metrics.path()
+		if path != null and len(path) >= 2 and index.is_free(path[1]):
+			me.move_to(path[1])
+			return true
+		else:
+			return false
+

@@ -39,6 +39,8 @@ func cast_on(victim:Actor):
 	var strat = Paralized.new(victim, 1.0, stun_turns)
 	victim.add_strategy(strat)
 
+	victim.was_attacked.emit(me)
+
 	me.use_mana(mana_cost)
 
 func cast_at(coord:Vector2i):
