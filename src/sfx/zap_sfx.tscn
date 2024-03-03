@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dsp2ax22wnqwg"]
+[gd_scene load_steps=5 format=3 uid="uid://dsp2ax22wnqwg"]
 
 [ext_resource type="Script" path="res://src/sfx/special_effect.gd" id="1_3qmw2"]
 [ext_resource type="Texture2D" uid="uid://bcnck7cg4yesp" path="res://addons/kenney_particle_pack/spark_05.png" id="2_7vshc"]
+[ext_resource type="AudioStream" uid="uid://bia88i0p6i5c6" path="res://src/sfx/zap.mp3" id="3_ydqub"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ysjcj"]
 particle_flag_disable_z = true
@@ -17,6 +18,7 @@ color = Color(0, 0.643137, 0.988235, 0.835294)
 
 [node name="ZapEffect" type="Node2D"]
 script = ExtResource("1_3qmw2")
+max_screen_time = 1.9
 
 [node name="Lightning" type="GPUParticles2D" parent="."]
 position = Vector2(0, -11)
@@ -27,3 +29,7 @@ speed_scale = 1.5
 explosiveness = 0.2
 visibility_rect = Rect2(-80, -80, 160, 160)
 draw_order = 0
+
+[node name="Sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_ydqub")
+volume_db = -1.0

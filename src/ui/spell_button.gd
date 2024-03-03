@@ -68,3 +68,5 @@ func _target_and_cast():
 		else:
 			spell.cast_at(res.coord)
 		Tender.hero.finalize_turn(true)
+	else:
+		board.clear_highlights()

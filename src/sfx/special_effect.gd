@@ -21,7 +21,7 @@ class_name SpecialEffect extends Node2D
 ## should the VFX remove itself from the scene tree after flashing
 @export var auto_free := true
 
-const MAX_SCREEN_TIME = 5
+@export_range(0.0, 10.0) var max_screen_time := 5.0
 
 # only set on linear effects like the electric arc
 var start_coord:Vector2i
@@ -44,7 +44,7 @@ func _process(delta):
 	time += delta
 	if material is ShaderMaterial:
 		material.set_shader_parameter("time", time)
-	if auto_free and time > MAX_SCREEN_TIME:
+	if auto_free and time > max_screen_time:
 		queue_free()
 	
 func reset_start_time():
