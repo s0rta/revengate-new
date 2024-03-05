@@ -1,8 +1,8 @@
 shader_type canvas_item;
 
-uniform float min_alpha: hint_range(0, 1) = 0;
-uniform float max_alpha: hint_range(0, 1) = 1;
-uniform float speed: hint_range(0, 10) = 2.5;
+uniform float min_alpha: hint_range(0.0, 1.0) = 0.0;
+uniform float max_alpha: hint_range(0.0, 1.0) = 1.0;
+uniform float speed: hint_range(0.0, 10.0) = 2.5;
 
 void fragment() {
 	float range = max_alpha - min_alpha;
