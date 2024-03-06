@@ -34,7 +34,7 @@ func _unhandled_input(event):
 	
 	var board = get_board()
 	var index = board.make_index()
-	if event.is_action("act-on-cell"):
+	if event.is_action_pressed("act-on-cell"):
 		var coord = RevBoard.canvas_to_board(event.position)
 		print("Click at pos=%s, coord=%s" % [event.position, RevBoard.coord_str(coord)])
 
