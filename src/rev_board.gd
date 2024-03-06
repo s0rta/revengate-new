@@ -1249,6 +1249,9 @@ func update_all_shrouding(things, index=null):
 		else:
 			thing.unshroud()
 
+func update_all_actor_shrouding(index:BoardIndex):
+	update_all_shrouding(get_actors(), index)
+
 func update_shrouding_at(where, index:BoardIndex):
 	## Shroud or reveal things that have changed perceptibility at a given coord.
 	## See update_all_shrouding() for more details.
@@ -1268,9 +1271,8 @@ func _on_actor_moved(from, to):
 		for vibe in index.vibes_at(to):
 			vibe.activate()
 	elif Tender.hero:
-		if Tender.hero.perceives(from, index):
+		if Tender.hero.perceives(from, index) or Tender.hero.perceives(to, index):
 			update_shrouding_at(from, index)
-		if Tender.hero.perceives(to, index):
 			update_shrouding_at(to, index)
 
 func _on_items_changed_at(coord):

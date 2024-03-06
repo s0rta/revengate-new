@@ -389,11 +389,12 @@ Combat:
 
 
 ## v0.12.1
-- [ ] bug: inspect and GetCloser have different perception results
+- [x] bug: crash on F-Droid builds when starting a game
+- [x] bug: inspect and GetCloser have different perception results
 - [ ] document conn_target and connection fields
 - [x] close the old known issues page
 - [ ] vague value adjectives on gaussian distributions
-- [ ] F-Droid has animated water
+- [x] F-Droid has animated water
 - [ ] random interlude stories
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings

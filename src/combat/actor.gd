@@ -175,6 +175,8 @@ func ddump():
 	print("  core stats: %s" % get_base_stats())
 	print("  modifiers:  %s" % get_modifiers())
 	print("  skills:  %s" % get_skills())
+	print("  is_unexposed(): %s" % is_unexposed())
+	print("  should shroud: %s" % should_shroud())
 	if Tender.hero.perceives(self):
 		print("  perceived by Hero")
 	if perceives(Tender.hero):
@@ -701,7 +703,7 @@ func is_expired():
 	return is_dead()
 
 func is_unexposed(index=null):
-	## Return if this actor is where the hero should could be aware of them
+	## Return if this actor is where the hero shouldn't be aware of them
 	
 	# not inside a valid game
 	if Tender.hero == null:
@@ -709,7 +711,7 @@ func is_unexposed(index=null):
 	
 	# on a board other than the active one
 	var parent = get_parent()
-	if parent == null or not parent is RevBoard or not parent.visible:
+	if parent == null or not parent is RevBoard or not parent.is_active():
 		return true
 
 	# out of sight

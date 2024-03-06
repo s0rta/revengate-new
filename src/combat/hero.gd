@@ -115,15 +115,17 @@ func _unhandled_input(event):
 func _dissipate():
 	pass  # the hero sticks around so we can disect him/her for the end-of-game stats
 
-func highlight_options():
+func highlight_options(board=null, index=null):
 	## Put highlight markers where one-tap actions are available
-	var board = get_board()
+	if board == null:
+		board = get_board()
 	
 	# FIXME: this pre-clearing is not needed if we figuere out what prevents turn_done
 	# from firing when there is a conversation
 	board.clear_highlights()
 	
-	var index = board.make_index() as RevBoard.BoardIndex
+	if index == null:
+		index = board.make_index() as RevBoard.BoardIndex
 
 	var foe_coords = []
 	var cmd = CommandPack.Attack.new(index)
@@ -159,6 +161,9 @@ func act() -> void:
 	else:
 		state = States.LISTENING
 		print("player acting...")
-		highlight_options()
+		var board = get_board()
+		var index = board.make_index()
+		board.update_all_actor_shrouding(index)
+		highlight_options(board, index)
 		# _unhandled_input() or the selected Command must set has_acted and call finalize_turn()
 		await self.turn_done

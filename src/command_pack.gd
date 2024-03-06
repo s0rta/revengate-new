@@ -185,8 +185,8 @@ class Inspect extends Command:
 		
 	func run(coord:Vector2i) -> bool:
 		var messages = []
-		var actor = index.actor_at(coord)
-		if actor and not actor.is_unexposed():
+		var actor:Actor = index.actor_at(coord)
+		if actor and not actor.is_unexposed(index):
 			Tender.hud.actor_details_screen.show_actor(actor)
 			await Tender.hud.actor_details_screen.closed
 			
@@ -252,7 +252,7 @@ class GetCloser extends Command:
 
 	func is_valid_for(coord:Vector2i):
 		other = index.actor_at(coord)
-		if other == null:
+		if other == null or other.is_unexposed(index):
 			return false
 		var board = Tender.hero.get_board()
 		var hero_coord = Tender.hero.get_cell_coord()
