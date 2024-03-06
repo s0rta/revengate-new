@@ -391,10 +391,20 @@ Combat:
 ## v0.12.1
 - [x] bug: crash on F-Droid builds when starting a game
 - [x] bug: inspect and GetCloser have different perception results
-- [ ] document conn_target and connection fields
 - [x] close the old known issues page
-- [ ] vague value adjectives on gaussian distributions
 - [x] F-Droid has animated water
+
+Strategies:
+- [x] Benoît roams after the meeting and after yielding
+- [x] tracking monsters are more likely to crowd your exit
+
+Combat:
+- [x] zapping spell
+
+
+## v0.12.2
+- [ ] document conn_target and connection fields
+- [ ] vague value adjectives on gaussian distributions
 - [ ] random interlude stories
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings
@@ -404,14 +414,10 @@ Performance:
 - [ ] mem.recall accept an importance param to know how deep to search
 
 Strategies:
-- [x] Benoît roams after the meeting and after yielding
 - [ ] Seeking is easier to resolve even is the target keeps moving
 - [ ] TravelTo uses a cached `path_perceived()`
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
 - [ ] Tracking keeps moving towards the last place where they saw their prey after it becomes unperceived
-
-Combat:
-- [x] zapping spell
 
 ## v1.0
 - [ ] A Fight for Fumes campaign

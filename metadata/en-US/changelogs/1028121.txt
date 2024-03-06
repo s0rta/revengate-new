@@ -1,0 +1,5 @@
+Fixed a startup crash on some Android devices
+New zapping spell
+Monsters are more likely to crowd your exit path
+F-Droid builds have animated water
+Get Closer and Inspect agree on wether a monster is within perception range

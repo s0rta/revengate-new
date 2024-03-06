@@ -22,4 +22,4 @@ immediate = true
 script = ExtResource("2_2ktei")
 perception = 7
 immediate = true
-nb_turns = 30
+nb_turns = 35

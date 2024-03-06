@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="10_6v1jq"]
 [ext_resource type="PackedScene" uid="uid://00gkudimmnjg" path="res://src/vibes/medium_tent.tscn" id="10_llov1"]
 [ext_resource type="PackedScene" uid="uid://bxxknjijfoo7g" path="res://src/people/tourist.tscn" id="10_xeej0"]
-[ext_resource type="PackedScene" uid="uid://dactu5q2nmdun" path="res://src/items/potion_of_absinthe.tscn" id="11_3h4uh"]
+[ext_resource type="PackedScene" uid="uid://bado87soxnga5" path="res://src/items/potion_of_absinthe.tscn" id="11_3h4uh"]
 [ext_resource type="PackedScene" uid="uid://chpblbtevaa13" path="res://src/items/carrot.tscn" id="11_gnuqb"]
 [ext_resource type="PackedScene" uid="uid://bnykesyfgf2b5" path="res://src/people/lyonese.tscn" id="11_qwldy"]
 [ext_resource type="PackedScene" uid="uid://db6sjyoaw3ms2" path="res://src/monsters/giant_locust.tscn" id="13_veiw4"]

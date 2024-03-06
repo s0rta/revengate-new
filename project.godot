@@ -39,6 +39,7 @@ window/stretch/mode="canvas_items"
 movie_writer/mjpeg_quality=0.85
 movie_writer/movie_file="/home/ygingras/proj/revengate/tmp/capture.avi"
 movie_writer/fps=30
+export/convert_text_resources_to_binary=false
 
 [editor_plugins]
 
