@@ -2,7 +2,7 @@
 class_name DialogueLine extends RefCounted
 
 
-const _DialogueConstants = preload("res://addons/dialogue_manager/constants.gd")
+const _DialogueConstants = preload("./constants.gd")
 
 
 ## The ID of this line
@@ -45,7 +45,10 @@ var responses: Array[DialogueResponse] = []
 var extra_game_states: Array = []
 
 ## How long to show this line before advancing to the next. Either a float (of seconds), [code]"auto"[/code], or [code]null[/code].
-var time = null
+var time: String = ""
+
+## Any #tags that were included in the line
+var tags: PackedStringArray = []
 
 ## The mutation details if this is a mutation line (where [code]type == TYPE_MUTATION[/code]).
 var mutation: Dictionary = {}
@@ -59,20 +62,20 @@ func _init(data: Dictionary = {}) -> void:
 		id = data.id
 		next_id = data.next_id
 		type = data.type
-		extra_game_states = data.extra_game_states
+		extra_game_states = data.get("extra_game_states", [])
 
 		match type:
 			_DialogueConstants.TYPE_DIALOGUE:
 				character = data.character
-				character_replacements = data.character_replacements
+				character_replacements = data.get("character_replacements", [] as Array[Dictionary])
 				text = data.text
-				text_replacements = data.text_replacements
-				translation_key = data.translation_key
-				pauses = data.pauses
-				speeds = data.speeds
-				inline_mutations = data.inline_mutations
-				conditions = data.conditions
-				time = data.time
+				text_replacements = data.get("text_replacements", [] as Array[Dictionary])
+				translation_key = data.get("translation_key", data.text)
+				pauses = data.get("pauses", {})
+				speeds = data.get("speeds", {})
+				inline_mutations = data.get("inline_mutations", [] as Array[Array])
+				time = data.get("time", "")
+				tags = data.get("tags", [])
 
 			_DialogueConstants.TYPE_MUTATION:
 				mutation = data.mutation
@@ -84,4 +87,12 @@ func _to_string() -> String:
 			return "<DialogueLine character=\"%s\" text=\"%s\">" % [character, text]
 		_DialogueConstants.TYPE_MUTATION:
 			return "<DialogueLine mutation>"
+	return ""
+
+
+func get_tag_value(tag_name: String) -> String:
+	var wrapped := "%s=" % tag_name
+	for t in tags:
+		if t.begins_with(wrapped):
+			return t.replace(wrapped, "").strip_edges()
 	return ""

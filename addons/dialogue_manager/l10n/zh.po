@@ -1,10 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Dialogue Manager\n"
-"Language: zh-cn\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: penghao123456、憨憨羊の宇航鸽鸽\n"
+"Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4\n"
 
 msgid "start_a_new_file"
 msgstr "创建新文件"
@@ -158,6 +163,9 @@ msgstr "忽略全局变量缺失错误（不建议）"
 
 msgid "settings.custom_test_scene"
 msgstr "自定义测试场景（必须继承自BaseDialogueTestScene）"
+
+msgid "settings.default_csv_locale"
+msgstr "默认 CSV 区域格式"
 
 msgid "settings.states_shortcuts"
 msgstr "全局变量映射"
@@ -368,15 +376,6 @@ msgstr "文件中存在{errrors}个错误。请查看调试输出。"
 
 msgid "runtime.invalid_expression"
 msgstr "表达式“{expression}”无效：{error}"
-
-msgid "runtime.unsupported_array_method"
-msgstr "不支持的数组方法{method_name}。"
-
-msgid "runtime.unsupported_dictionary_method"
-msgstr "不支持的字典方法{method_name}。"
-
-msgid "runtime.unsupported_quaternion_method"
-msgstr "不支持的 Quarternion 方法{method_name}。"
 
 msgid "runtime.array_index_out_of_bounds"
 msgstr "数组索引“{index}”越界。（数组名：“{array}”）"

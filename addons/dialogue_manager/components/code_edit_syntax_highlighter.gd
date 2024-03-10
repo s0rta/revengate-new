@@ -12,11 +12,11 @@ var regex_comments: RegEx = RegEx.create_from_string("(?:(?>\"(?:\\\\\"|[^\"\\n]
 var regex_mutation: RegEx = RegEx.create_from_string("^\\s*(do|set) (?<mutation>.*)")
 var regex_condition: RegEx = RegEx.create_from_string("^\\s*(if|elif|while|else if) (?<condition>.*)")
 var regex_wcondition: RegEx = RegEx.create_from_string("\\[if (?<condition>((?:[^\\[\\]]*)|(?:\\[(?1)\\]))*?)\\]")
-var regex_wendif: RegEx = RegEx.create_from_string("\\[\\/(if)\\]")
+var regex_wendif: RegEx = RegEx.create_from_string("\\[(\\/if|else)\\]")
 var regex_rgroup: RegEx = RegEx.create_from_string("\\[\\[(?<options>.*?)\\]\\]")
-var regex_endconditions: RegEx = RegEx.create_from_string("^\\s*(endif|else)\\s*$")
+var regex_endconditions: RegEx = RegEx.create_from_string("^\\s*(endif|else):?\\s*$")
 var regex_tags: RegEx = RegEx.create_from_string("\\[(?<tag>(?!(?:ID:.*)|if)[a-zA-Z_][a-zA-Z0-9_]*)(?:[= ](?<val>[^\\[\\]]+))?\\](?:(?<text>(?!\\[\\/\\k<tag>\\]).*?)?(?<end>\\[\\/\\k<tag>\\]))?")
-var regex_dialogue: RegEx = RegEx.create_from_string("^\\s*(?:(?<random>\\%\\d* )|(?<response>- ))?(?:(?<character>[^#:]*): )?(?<dialogue>.*)$")
+var regex_dialogue: RegEx = RegEx.create_from_string("^\\s*(?:(?<random>\\%[\\d.]* )|(?<response>- ))?(?:(?<character>[^#:]*): )?(?<dialogue>.*)$")
 var regex_goto: RegEx = RegEx.create_from_string("=><? (?:(?<file>[^\\/]+)\\/)?(?<title>[^\\/]*)")
 var regex_string: RegEx = RegEx.create_from_string("^(?<delimiter>[\"'])(?<content>(?:\\\\{2})*|(?:.*?[^\\\\](?:\\\\{2})*))\\1$")
 var regex_escape: RegEx = RegEx.create_from_string("\\\\.")
@@ -26,8 +26,8 @@ var regex_dict: RegEx = RegEx.create_from_string("^\\{((?>[^\\{\\}]+|(?R))*)\\}$
 var regex_kvdict: RegEx = RegEx.create_from_string("^\\s*(?<left>.*?)\\s*(?<colon>:)\\s*(?<right>.*)$")
 var regex_commas: RegEx = RegEx.create_from_string("([^,]+)(?:\\s*,\\s*)?")
 var regex_assignment: RegEx = RegEx.create_from_string("^\\s*(?<var>[a-zA-Z_][a-zA-Z_0-9]*)(?:(?<attr>(?:\\.[a-zA-Z_][a-zA-Z_0-9]*)+)|(?:\\[(?<key>[^\\]]+)\\]))?\\s*(?<op>(?:\\/|\\*|-|\\+)?=)\\s*(?<val>.*)$")
-var regex_varname: RegEx = RegEx.create_from_string("^\\s*(?!true|false|and|or|not|in)(?<var>[a-zA-Z_][a-zA-Z_0-9]*)(?:(?<attr>(?:\\.[a-zA-Z_][a-zA-Z_0-9]*)+)|(?:\\[(?<key>[^\\]]+)\\]))?\\s*$")
-var regex_bool: RegEx = RegEx.create_from_string("^\\s*(true|false)\\s*$")
+var regex_varname: RegEx = RegEx.create_from_string("^\\s*(?!true|false|and|or|not|in|null)(?<var>[a-zA-Z_][a-zA-Z_0-9]*)(?:(?<attr>(?:\\.[a-zA-Z_][a-zA-Z_0-9]*)+)|(?:\\[(?<key>[^\\]]+)\\]))?\\s*$")
+var regex_keyword: RegEx = RegEx.create_from_string("^\\s*(true|false|null)\\s*$")
 var regex_function: RegEx = RegEx.create_from_string("^\\s*([a-zA-Z_][a-zA-Z_0-9]*\\s*)\\(")
 var regex_comparison: RegEx = RegEx.create_from_string("^(?<left>.*?)\\s*(?<op>==|>=|<=|<|>|!=)\\s*(?<right>.*)$")
 var regex_blogical: RegEx = RegEx.create_from_string("^(?<left>.*?)\\s+(?<op>and|or|in)\\s+(?<right>.*)$")
@@ -37,11 +37,9 @@ var regex_paren: RegEx = RegEx.create_from_string("\\((?<paren>((?:[^\\(\\)]*)|(
 var cache: Dictionary = {}
 
 
-func unreference() -> bool:
-	if super():
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
 		dialogue_manager_parser.free()
-		return true
-	return false
 
 
 func _clear_highlighting_cache() -> void:
@@ -102,6 +100,12 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 		colors[import_match.get_start("prefix")] = {"color": text_edit.theme_overrides.members_color}
 		colors[import_match.get_end("prefix")] = {"color": text_edit.theme_overrides.conditions_color}
 
+	# Using clauses
+	var using_matches: Array[RegExMatch] = dialogue_manager_parser.USING_REGEX.search_all(text)
+	for using_match in using_matches:
+		colors[using_match.get_start(0)] = {"color": text_edit.theme_overrides.conditions_color}
+		colors[using_match.get_start("state") - 1] = {"color": text_edit.theme_overrides.text_color}
+
 	# Condition keywords and expressions.
 	var condition_matches: Array[RegExMatch] = regex_condition.search_all(text)
 	for condition_match in condition_matches:
@@ -112,6 +116,7 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 	var endcondition_matches: Array[RegExMatch] = regex_endconditions.search_all(text)
 	for endcondition_match in endcondition_matches:
 		colors[endcondition_match.get_start(1)] = {"color": text_edit.theme_overrides.conditions_color}
+		colors[endcondition_match.get_end(1)] = {"color": text_edit.theme_overrides.symbols_color}
 
 	# Mutations.
 	var mutation_matches: Array[RegExMatch] = regex_mutation.search_all(text)
@@ -134,6 +139,12 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 func _get_dialogue_syntax_highlighting(start_index: int, text: String) -> Dictionary:
 	var text_edit: TextEdit = get_text_edit()
 	var colors: Dictionary = {}
+
+	# #tag style tags
+	var hashtag_matches: Array[RegExMatch] = dialogue_manager_parser.TAGS_REGEX.search_all(text)
+	for hashtag_match in hashtag_matches:
+		colors[start_index + hashtag_match.get_start(0)] = { "color": text_edit.theme_overrides.comments_color }
+		colors[start_index + hashtag_match.get_end(0)] = { "color": text_edit.theme_overrides.text_color }
 
 	# Global tags, like bbcode.
 	var tag_matches: Array[RegExMatch] = regex_tags.search_all(text)
@@ -303,7 +314,7 @@ func _get_literal_syntax_highlighting(start_index: int, text: String) -> Diction
 		colors.merge(_get_literal_syntax_highlighting(start_index + kvdict_match.get_start("right"), kvdict_match.get_string("right")), true)
 
 	# Booleans.
-	var bool_matches: Array[RegExMatch] = regex_bool.search_all(text)
+	var bool_matches: Array[RegExMatch] = regex_keyword.search_all(text)
 	for bool_match in bool_matches:
 		colors[start_index + bool_match.get_start(0)] = {"color": text_edit.theme_overrides.conditions_color}
 
