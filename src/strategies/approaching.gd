@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -32,6 +32,7 @@ func _turns_left():
 	return max(0, path.size() - me.get_max_action_range(other))
 
 func refresh(_turn):
+	var board = me.get_board()
 	if not me.perceives(other):
 		if not arrived and not unreachable:
 			add_hero_message("Stopped traveling: you don't know where %s went." % dest_str, 
@@ -42,6 +43,9 @@ func refresh(_turn):
 			add_hero_message("Stopped traveling: your urge to get closer to %s went away with their demise." % dest_str, 
 							Consts.MessageLevels.CRITICAL)
 		_invalidate()
+	elif board.dist(me, other) <= me.get_max_action_range(other):
+		arrived = true
+		_invalidate()
 	else:
-		dest = other.get_cell_coord()
+		dest = other.get_cell_coord()	
 	super(_turn)

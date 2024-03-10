@@ -141,6 +141,8 @@ const TAGS = ["ethereal", "undead", "gift", "fragile", "broken", "lit",
 			# progen placement constraints
 			"spawn-north", "spawn-south", "spawn-west", "spawn-east", 
 			"spawn-center", "spawn-distant", 
+			# quest items
+			"book-key-of-solomon", "book-of-magical-ceremonies",
 			# quest IDs
 			"quest-lost-cards", "quest-stop-accountant", "quest-face-retznac",
 			]

@@ -1,25 +1,41 @@
-[gd_scene load_steps=6 format=3 uid="uid://ddryv4det5wth"]
+[gd_scene load_steps=12 format=3 uid="uid://ddryv4det5wth"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_w52dt"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="2_lifrx"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_u2ahk"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="3_3g2b5"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="3_y4pf0"]
 [ext_resource type="PackedScene" uid="uid://d8ovanvojd5g" path="res://src/weapons/knife.tscn" id="4_o3sek"]
 [ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="5_u78k4"]
+[ext_resource type="Script" path="res://src/strategies/yeilding.gd" id="6_h3vfm"]
+[ext_resource type="PackedScene" uid="uid://bmmjq8jhbrqva" path="res://src/items/book_by_agrippa.tscn" id="7_wku4i"]
+[ext_resource type="PackedScene" uid="uid://6q2gi4f0lkcb" path="res://src/items/book_key_of_solomon.tscn" id="8_7pguo"]
+
+[sub_resource type="Resource" id="Resource_wrmfi"]
+resource_local_to_scene = true
+script = ExtResource("2_lifrx")
+_facts = []
 
 [node name="Grenn" instance=ExtResource("1_w52dt")]
 char = "@"
 caption = "Grenn Kuhn the book trader"
-color = Color(0.921569, 0.45098, 0.45098, 1)
+color = Color(0.913725, 0.482353, 0.176471, 1)
+conversation_file = "res://src/story/book_trader.dialogue"
+conversation_sect = "intro"
 spawn_cost = 1.0
 health = 30
 strength = 40
 agility = 44
 intelligence = 60
-faction = 3
+mem = SubResource("Resource_wrmfi")
 
 [node name="Label" parent="." index="0"]
-theme_override_colors/font_color = Color(0.921569, 0.45098, 0.45098, 1)
+theme_override_colors/font_color = Color(0.913725, 0.482353, 0.176471, 1)
 text = "@"
+
+[node name="Exploring" type="Node" parent="." index="6"]
+script = ExtResource("3_3g2b5")
+priority = 0.1
 
 [node name="Tracking" type="Node" parent="." index="7"]
 script = ExtResource("2_u2ahk")
@@ -27,11 +43,20 @@ priority = 0.5
 
 [node name="SelfDefense" type="Node" parent="." index="8"]
 script = ExtResource("3_y4pf0")
+priority = 0.8
+
+[node name="Yielding" type="Node" parent="." index="9"]
+script = ExtResource("6_h3vfm")
+event_name = "grenn_yielded"
 priority = 0.9
 
-[node name="Knife" parent="." index="9" instance=ExtResource("4_o3sek")]
+[node name="Knife" parent="." index="10" instance=ExtResource("4_o3sek")]
 is_equipped = true
 
-[node name="Item" parent="." index="10" instance=ExtResource("5_u78k4")]
+[node name="Item" parent="." index="11" instance=ExtResource("5_u78k4")]
 char = "📒"
 caption = "coded notepad"
+
+[node name="OldBook" parent="." index="12" instance=ExtResource("7_wku4i")]
+
+[node name="OldBook2" parent="." index="13" instance=ExtResource("8_7pguo")]

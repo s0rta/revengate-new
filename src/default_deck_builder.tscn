@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://c185mr0bu3u3w"]
+[gd_scene load_steps=48 format=3 uid="uid://c185mr0bu3u3w"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_yitoo"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_i1rpj"]
@@ -17,7 +17,6 @@
 [ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="15_ngw60"]
 [ext_resource type="PackedScene" uid="uid://ddryv4det5wth" path="res://src/people/grenn_kuhn.tscn" id="16_s7e88"]
 [ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="16_ygxep"]
-[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="17_3gl0d"]
 [ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="17_4rmpd"]
 [ext_resource type="PackedScene" uid="uid://6ml8upew405" path="res://src/weapons/saber.tscn" id="18_0s2fs"]
 [ext_resource type="PackedScene" uid="uid://h7s2p8mgm387" path="res://src/weapons/sword.tscn" id="19_holdq"]
@@ -31,8 +30,6 @@
 [ext_resource type="PackedScene" uid="uid://c8frbdj65suee" path="res://src/weapons/cane.tscn" id="27_5htvc"]
 [ext_resource type="PackedScene" uid="uid://bado87soxnga5" path="res://src/items/potion_of_absinthe.tscn" id="27_p82t1"]
 [ext_resource type="PackedScene" uid="uid://drnpu2dw1i4nn" path="res://src/weapons/weighted_cane.tscn" id="28_0tyeq"]
-[ext_resource type="PackedScene" uid="uid://dqkhlt4d3sbqn" path="res://src/monsters/sentry_scarab.tscn" id="31_aksig"]
-[ext_resource type="PackedScene" uid="uid://cjoutyju3dhre" path="res://src/monsters/gleugt.tscn" id="33_08vnm"]
 [ext_resource type="PackedScene" uid="uid://bnykesyfgf2b5" path="res://src/people/lyonese.tscn" id="34_yppu8"]
 
 [sub_resource type="Resource" id="Resource_v0b0i"]
@@ -100,42 +97,7 @@ resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_c3vjx"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_bq5vr"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_ic7uf"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_kw848"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_7dw8r"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_e563k"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_teplk"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_6ne1h"]
+[sub_resource type="Resource" id="Resource_rukkp"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
@@ -232,21 +194,6 @@ mem = SubResource("Resource_d1oex")
 [node name="Grenn" parent="Quest2Goals" instance=ExtResource("16_s7e88")]
 mem = SubResource("Resource_ayrts")
 
-[node name="Book" parent="Quest2Goals" instance=ExtResource("17_3gl0d")]
-char = "📗"
-caption = "Little Key of Solomon"
-spawn_cost = 1.0
-
-[node name="Book2" parent="Quest2Goals" instance=ExtResource("17_3gl0d")]
-char = "📘"
-caption = "old looking book"
-spawn_cost = 1.0
-
-[node name="Book3" parent="Quest2Goals" instance=ExtResource("17_3gl0d")]
-char = "📘"
-caption = "large manuscript in a foreign language"
-spawn_cost = 1.0
-
 [node name="Rare" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
 min_depth = 3
@@ -316,37 +263,14 @@ debug_only = true
 
 [node name="Saber" parent="TestingQuestTransitions" instance=ExtResource("18_0s2fs")]
 
-[node name="Kobold" parent="TestingQuestTransitions" instance=ExtResource("5_yqsgm")]
-mem = SubResource("Resource_c3vjx")
-
-[node name="LoomCards" parent="TestingQuestTransitions/Kobold" instance=ExtResource("11_320yy")]
-
 [node name="Cane" parent="TestingQuestTransitions" instance=ExtResource("27_5htvc")]
 position = Vector2(631, 437)
 
 [node name="WeightedCane" parent="TestingQuestTransitions" instance=ExtResource("28_0tyeq")]
 position = Vector2(631, 437)
 
-[node name="SentryScarab" parent="TestingQuestTransitions" instance=ExtResource("31_aksig")]
-mem = SubResource("Resource_bq5vr")
-
-[node name="DesertCentipede" parent="TestingQuestTransitions" instance=ExtResource("4_m33kh")]
-mem = SubResource("Resource_ic7uf")
-
-[node name="SewerOtter" parent="TestingQuestTransitions" instance=ExtResource("2_i1rpj")]
-mem = SubResource("Resource_kw848")
-
-[node name="SulantTiger" parent="TestingQuestTransitions" instance=ExtResource("6_da4pf")]
-mem = SubResource("Resource_7dw8r")
-
-[node name="SulantTiger2" parent="TestingQuestTransitions" instance=ExtResource("6_da4pf")]
-mem = SubResource("Resource_e563k")
-
-[node name="Gleugt" parent="TestingQuestTransitions" instance=ExtResource("33_08vnm")]
-mem = SubResource("Resource_teplk")
-
-[node name="Gleugt2" parent="TestingQuestTransitions" instance=ExtResource("33_08vnm")]
-mem = SubResource("Resource_6ne1h")
+[node name="Grenn" parent="TestingQuestTransitions" instance=ExtResource("16_s7e88")]
+mem = SubResource("Resource_rukkp")
 
 [node name="MovementStressTest" type="Node" parent="."]
 script = ExtResource("7_bd8gw")

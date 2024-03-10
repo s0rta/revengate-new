@@ -198,6 +198,13 @@ func hero_give_item(include_tags=null, extrude_tags=null):
 	var item = Rand.choice(items)
 	Tender.hero.give_item(item, speaker)
 
+func hero_learns(event_name, importance:=Memory.Importance.NOTABLE, by_speaker=true):
+	var data = null
+	## Add a fact to the hero's memory
+	if by_speaker:
+		data = {"by":speaker.actor_id}
+	Tender.hero.mem.learn(event_name, speaker.current_turn, importance, data)
+
 func show_message(message):
 	Tender.hero.add_message(message)
 
