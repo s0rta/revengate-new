@@ -1,0 +1,67 @@
+~ intro
+# debug
+=> negotiate_2
+
+if speaker_recalls("grenn_yielded"):
+	=> yielded
+elif speaker_recalls("was_insulted"):
+	=> angry
+elif speaker_recalls("was_attacked"):
+	=> angry
+
+if not speaker_recalls("was_annoyed"):
+	Grenn: Look, you kind of are in my way. Would you mind giving me some space? I am busy right now.
+	do speaker_learns("was_annoyed")
+else:
+	Green: I said out of my way!
+	do speaker_learns("was_insulted")
+=> END
+
+~ angry
+
+Grenn: You don't know what you are interfering with. This is bigger then me. 
+Grenn: You won't be able to make a quick Franc from my stuff and you might set things in motion that you will deeply regret.
+
+=> END
+
+~ yielded
+
+Grenn: So we're good?
+
+- No! I'm going keep beating you up if you don't give me those books!
+	=> negotiate
+- Maybe, tell me more about what you are going here.
+	Grenn: I don't know everything, but I have these books, very rare books. I took me three months to track them down.
+	Grenn: There is this guy, Retznac, with an old timey accent, he's really pale too. He's offering good money for anything about magic.
+	Green: He gives me the creeps a little bit, but he's very courteous. I've had worst clients.
+	do hero_learns("aware_of_retznac")
+- Yeah, buzz off and I don't want to see you ever again.
+	Grenn: Thank you! Have a good day.
+
+=> END
+
+~ negotiate
+Grenn: Look, you can't do that to me. I worked really hard to get those books. They are very rare originals.
+- Okay, you can keep the books. Have a good day.
+	=> END
+- I really am going to beat you up if you don't hand them over NOW!
+	=> negotiate_2
+=> END
+
+~ negotiate_2
+Grenn: No, you don't understand. The buyer won't deal with you. 
+Grenn: Retznac and I have been working together on this deal for months. He likes me and he doesn't trust anyone else. Besides, just looking at his pale face would fill you with unease and make you want to run away.
+# do hero_learns("aware_of_retznac")
+# do show_message("back to the convo")
+=> negotiate_3
+
+~ negotiate_3
+Grenn: Crazy, right?
+- I insist. Give the books or get punched in the face, hard.
+	=> get_the_books
+- Wow! You are right, I don't want anything to do with this.
+=> END
+
+~ get_the_books
+do speaker_give_items()
+=> END

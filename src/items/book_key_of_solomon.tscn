@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://6q2gi4f0lkcb"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_f5eg1"]
+
+[node name="OldBook" instance=ExtResource("1_f5eg1")]
+char = "📗"
+caption = "very old looking book"
+desc_simple = "An old book with some notable damange, title page simply says \"Of Magical Ceremonies\"."
+desc_detailed = "An original copy of \"Of Magical Ceremonies\". The handwritting strikingly ressembles that of Cornelius Agrippa."
+tags = Array[String](["book-of-magical-ceremonies", "gift"])

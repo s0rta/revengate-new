@@ -1,0 +1,15 @@
+[remap]
+
+importer="dialogue_manager_compiler_11"
+type="Resource"
+uid="uid://djygc40df1v46"
+path="res://.godot/imported/book_trader.dialogue-12cece0a29dd85ecff21aa1f94fbc319.tres"
+
+[deps]
+
+source_file="res://src/story/book_trader.dialogue"
+dest_files=["res://.godot/imported/book_trader.dialogue-12cece0a29dd85ecff21aa1f94fbc319.tres"]
+
+[params]
+
+defaults=true
