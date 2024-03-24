@@ -6,4 +6,4 @@ The game takes a lot of inspiration from Nethack and other traditional roguelike
 
 You can also play Revengate in your browser: https://ygingras.itch.io/revengate
 
-This free and open source game is made with the Godot Game Engine.
+This free and open source game is made with the Godot Game Engine. Revengate has no ads, no micro transactions, and can be played offline.
