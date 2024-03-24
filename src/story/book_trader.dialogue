@@ -1,12 +1,7 @@
 ~ intro
-# debug
-=> negotiate_2
-
 if speaker_recalls("grenn_yielded"):
 	=> yielded
-elif speaker_recalls("was_insulted"):
-	=> angry
-elif speaker_recalls("was_attacked"):
+elif speaker_recalls("was_insulted") or speaker_recalls("was_attacked"):
 	=> angry
 
 if not speaker_recalls("was_annoyed"):
@@ -18,24 +13,28 @@ else:
 => END
 
 ~ angry
-
 Grenn: You don't know what you are interfering with. This is bigger then me. 
 Grenn: You won't be able to make a quick Franc from my stuff and you might set things in motion that you will deeply regret.
-
 => END
 
 ~ yielded
+Grenn: Ouch! You made yourself clear and I have no choice but to agree.
+if not speaker_has_gifts():
+	=> beaudelaire
 
 Grenn: So we're good?
-
 - No! I'm going keep beating you up if you don't give me those books!
 	=> negotiate
+
 - Maybe, tell me more about what you are going here.
 	Grenn: I don't know everything, but I have these books, very rare books. I took me three months to track them down.
+	do checkpoint("beaudelaire")
 	Grenn: There is this guy, Retznac, with an old timey accent, he's really pale too. He's offering good money for anything about magic.
 	Green: He gives me the creeps a little bit, but he's very courteous. I've had worst clients.
 	do hero_learns("aware_of_retznac")
+
 - Yeah, buzz off and I don't want to see you ever again.
+	do checkpoint("beaudelaire")
 	Grenn: Thank you! Have a good day.
 
 => END
@@ -43,6 +42,8 @@ Grenn: So we're good?
 ~ negotiate
 Grenn: Look, you can't do that to me. I worked really hard to get those books. They are very rare originals.
 - Okay, you can keep the books. Have a good day.
+	do checkpoint("beaudelaire")
+	Grenn: I'm glad we managed to reach an agreement. The books are heading out of town with me and you don't have to worry about any locals getting their hands on them.
 	=> END
 - I really am going to beat you up if you don't hand them over NOW!
 	=> negotiate_2
@@ -50,18 +51,18 @@ Grenn: Look, you can't do that to me. I worked really hard to get those books. T
 
 ~ negotiate_2
 Grenn: No, you don't understand. The buyer won't deal with you. 
-Grenn: Retznac and I have been working together on this deal for months. He likes me and he doesn't trust anyone else. Besides, just looking at his pale face would fill you with unease and make you want to run away.
-# do hero_learns("aware_of_retznac")
-# do show_message("back to the convo")
-=> negotiate_3
-
-~ negotiate_3
-Grenn: Crazy, right?
+Grenn: Retznac and I have been working together on this deal for months. He likes me and he doesn't trust anyone else. Besides, just looking at his pale face would fill you with unease and make you want to run away. [do hero_learns("aware_of_retznac")]
 - I insist. Give the books or get punched in the face, hard.
-	=> get_the_books
+	do speaker_give_items()
+	do checkpoint("beaudelaire")
+	Grenn: There you go. It's all on you now and don't come complaining if you stub your toes walking this dark path.
 - Wow! You are right, I don't want anything to do with this.
+	Grenn: That's what I thought. Have a good day.
+	do checkpoint("beaudelaire")
 => END
 
-~ get_the_books
-do speaker_give_items()
+~ beaudelaire
+Grenn: I met this art critic the other day. He writes some poetry on the side, weird stuff, very dark and avant garde.
+Grenn: If you get your hands on any of his originals, I would pay good money for them. Baudelaire is his name.
+Grenn: I suspect he might suffer from depression, but please don't cheer him up. If he ever makes a name for himself, melancholy will be his signature.
 => END
