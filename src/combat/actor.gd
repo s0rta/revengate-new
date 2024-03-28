@@ -181,6 +181,7 @@ func ddump():
 		print("  perceived by Hero")
 	if perceives(Tender.hero):
 		print("  perceives Hero")
+	mem.ddump_summary(current_turn)
 
 func ddump_pos():
 	print("Officially at %s" % RevBoard.coord_str(get_cell_coord()))
