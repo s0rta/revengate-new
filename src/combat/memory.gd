@@ -121,8 +121,9 @@ func recall_all(event, current_turn=null):
 				facts.append(fact)
 	return facts
 
-func ddump_summary(current_turn = null):
+func ddump_summary(current_turn=null, prefix=""):
 	## `current_turn`: if provided, only relevant facts are considered
+	## `prefix`: if provided, all output lines will start with it
 	var counts = {}
 	for fact in _facts:
 		if current_turn == null or is_relevant(fact, current_turn):
@@ -131,7 +132,7 @@ func ddump_summary(current_turn = null):
 	for event in counts:
 		pairs.append([counts[event], event])
 	pairs.sort()
-	print("Known events:")
+	print("%sKnown events:" % prefix)
 	for pair in pairs:
-		print("- %s: %d" % [pair[1], pair[0]])
+		print("%s- %s: %d" % [prefix, pair[1], pair[0]])
 		

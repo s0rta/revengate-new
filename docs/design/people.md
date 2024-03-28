@@ -157,8 +157,28 @@ He got initiated to the Blue Circle Lodge in Germany. He quickly climbed the ran
 De Lévi aspires to restore magic at the core of human society.  He sees magic as compatible with religion and hopes to see monks reuniting with the ancient art to have a bigger impact on their communities. He also feels like too much credit is given to science and hopes to take away some of the hero glamour from the researchers. At the same time, he feels like magic is too powerful for the masses and he wants to keep it's teaching secret and well controlled.
 
 
+## Grenn Kuhn
+
+Grenn Kuhn is a book trader from Sweden. He mostly deals in older older books. Knowing history very well, he is particularly skilled in sourcing originals and rare prints. He speaks Swedish, Franconian, Saxonian, and Prussian fluently with hardly any hint of an accent. He is always well dressed, but completely oblivious to the subtleties of local fashion.
+
+Grenn is in his early 40's with a hint of gray in show well trimmed his beard. His hair is still a pure shade of light brown. His eyes are dark blue with hints of purple.
+
+He has no affiliation with any political factions. He does his best to not offend anyone and keep his trading options open. He is partly motivated by financial gains, but more than anything, he make a gets a kick of solving historical mysteries and tracking down the writings of people long gone. He systematically reads everything he trades and sometimes he makes copies of the rarest books that he gets his hands one. 
+
+He can easily tell a forgery from an original thanks to his keen eye for handwriting styles and period inks.
+
+
+## Retznac
+
+Gilles de Raies (alt. de Retz) was a noble in early after-plage era. He fought along side Joan of Arc against the Saxonians. He delved into into the occult after the war and found enough pre-plage books to unlock the secret of immortality. He is a lover of art, particularly theater and music. He has dark eyes and hairs.
+
+After being sentenced for the murder of numerous children, he was supposed to be burnt at the stake on accounts of sorcery, but he managed to use his influence to be hung instead. He survived the sentence, but he played the part well enough that most people presumed him dead.
+
+
 ## Inspiration for Future Characters
 * Allan Kardec, 1804–1869, founder of spiritism, lived in Lyon
 * Joseph-Antoine Boullan, 1824–1893, satanist, lived in Lyon
 * Pierre-Eugène Vintras, 1807–1875, satanist, lived in Lyon
 * Jacques Vaucanson, 1709–1782, inventor, lived in Lyon, early prototype of the programmable loom, produced several anthropomorphic automata
+
+

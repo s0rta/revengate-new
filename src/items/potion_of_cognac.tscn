@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvu7t3614rxwv"]
+
+[ext_resource type="PackedScene" uid="uid://dvm0g3y1rr55g" path="res://src/items/potion_of_booze.tscn" id="1_1lg84"]
+
+[node name="PotionOfCognac" instance=ExtResource("1_1lg84")]
+caption = "potion of cognac"
+desc_simple = "A bottle of Cognac."
+desc_detailed = "A grape brandy aged in limousin oak for over a decade. Despite the high alcohol concentration, there is no burn. This premium distilate stimulates health."
+tags = Array[String](["fragile", "groupable", "booze", "cognac"])
+
+[node name="Effect" parent="." index="2"]
+healing = 2
+nb_turns = 12

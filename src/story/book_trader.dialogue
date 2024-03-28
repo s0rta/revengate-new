@@ -9,7 +9,7 @@ if not speaker_recalls("was_annoyed"):
 	do speaker_learns("was_annoyed")
 else:
 	Green: I said out of my way!
-	do speaker_learns("was_insulted")
+	do speaker_feels_insulted()
 => END
 
 ~ angry

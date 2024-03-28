@@ -1,5 +1,31 @@
 ~ intro
-Retznac: I have no desire to fight you. 
+if hero_has_item(["old-occult-book"]):
+	=> negotiate
+elif hero_recalls("grenn_was_offended"):
+	=> angry
+=> indifferent
 
-Retznac: Your life will be short enough as it is. You should turn around and offer your ears many more symphonies instead of pointlessly expiring here.
+~ indifferent
+Retznac: Young one, your curiosity is commendable, but you are presently interfering with my day. I bid you farewell.
+=> END
+
+~ angry
+Retznac: You are meddling with affairs way beyong the petty politics of your irrelevant government, young one.
+Retznac: I was wishing for you to spend many more years enjoying symphonies, but as it stands, this day shall be your last.
+do speaker_feels_insulted()
+=> END
+
+~ negotiate
+Retznac: What are those books you are carrying? They seem rather dated for someone your age.
+Retznac: Perhaps you would be interested in trading? I would take them off your hands and offer something more likely to be valuable to you.
+Retznac: Would you happen to like Cognac?
+- Sure!
+	do hero_learns("traded_with_retznac")
+	do hero_give_items(["old-occult-book"])
+	do speaker_give_items()
+	Retznac: It was great pleasure trading with you. I wish you many healthy years of the finest things that life can offer.
+	Retznac: Your aspiration is remarquable. Find me again if you think our alliance could go further.
+- I'm not dealing with you. Get a tax permit and open your own store if you want to be a librarian.
+	Retznac: Your choice is short sighted, but understandable. I happen to be very patient, young one. Find me again if seasons steer your mind in a different direction.
+	Retznac: In the meantime, you would be wise not to tempt me – or anyone else – too much.
 => END

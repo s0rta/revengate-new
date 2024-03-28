@@ -159,9 +159,16 @@ func speaker_learns(event_name, importance:=Memory.Importance.NOTABLE, by_hero=t
 	if by_hero:
 		data = {"by":Tender.hero.actor_id}
 	speaker.mem.learn(event_name, speaker.current_turn, importance, data)
+
+func speaker_feels_insulted(by_hero=true):
+	speaker_learns("was_insulted", Memory.Importance.NOTABLE, by_hero)
+	var offender = null
+	if by_hero:
+		offender = Tender.hero
+	speaker.was_offended.emit(offender)
 	
 func speaker_recalls(event_name) -> bool:
-	return speaker.mem.recall(event_name) != null
+	return speaker.mem.recall(event_name, speaker.current_turn) != null
 
 func speaker_has_gifts(extra_tags:=[]) -> bool:
 	if speaker == null:
@@ -189,14 +196,20 @@ func speaker_give_items(extra_tags=null):
 	for item in items:
 		speaker.give_item(item, Tender.hero)
 
-func hero_has_item(include_tags=null, extrude_tags=null) -> bool:
-	return not Tender.hero.get_items(include_tags, extrude_tags).is_empty()
+func hero_has_item(include_tags=null, exclude_tags=null) -> bool:
+	return not Tender.hero.get_items(include_tags, exclude_tags).is_empty()
 
-func hero_give_item(include_tags=null, extrude_tags=null):
+func hero_give_item(include_tags=null, exclude_tags=null):
 	## pass an item from the hero to the speaker
-	var items = Tender.hero.get_items(include_tags, extrude_tags, false)
+	var items = Tender.hero.get_items(include_tags, exclude_tags, false)
 	var item = Rand.choice(items)
 	Tender.hero.give_item(item, speaker)
+
+func hero_give_items(include_tags=null, exclude_tags=null):
+	## pass items from the hero to the speaker
+	var items = Tender.hero.get_items(include_tags, exclude_tags, false)
+	for item in items:
+		Tender.hero.give_items(item, speaker)
 
 func hero_learns(event_name, importance:=Memory.Importance.NOTABLE, by_speaker=true):
 	var data = null
@@ -204,6 +217,24 @@ func hero_learns(event_name, importance:=Memory.Importance.NOTABLE, by_speaker=t
 	if by_speaker:
 		data = {"by":speaker.actor_id}
 	Tender.hero.mem.learn(event_name, speaker.current_turn, importance, data)
+
+func hero_recalls(event_name) -> bool:
+	return Tender.hero.mem.recall(event_name, Tender.hero.current_turn) != null
+
+func hero_is_foe(actor_tags=[]):
+	## Return if someone considers the hero a foe.
+	## The actor of reference is found with `actor_tags` or if `speaker` if no tags are provided
+	## If more than one actor matches all tags, return `true` as long as at least
+	## one considers the hero a foe.
+	if actor_tags.is_empty():
+		return speaker.is_foe(Tender.hero)
+	else:
+		var board = speaker.get_board()
+		for actor in board.get_actors():
+			if Utils.has_tags(actor, actor_tags):
+				if actor.is_foe(Tender.hero):
+					return true
+		return false
 
 func show_message(message):
 	Tender.hero.add_message(message)

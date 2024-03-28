@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cbpo1nvheopyj"]
+[gd_scene load_steps=13 format=3 uid="uid://cbpo1nvheopyj"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_ymka0"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="2_xakjg"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://6ml8upew405" path="res://src/weapons/saber.tscn" id="7_tvu27"]
 [ext_resource type="Script" path="res://src/spells/restore_health.gd" id="8_k8d84"]
 [ext_resource type="Script" path="res://src/spells/summon_phantruch.gd" id="8_tig2l"]
+[ext_resource type="PackedScene" uid="uid://bvu7t3614rxwv" path="res://src/items/potion_of_cognac.tscn" id="11_dw8tr"]
 
 [sub_resource type="Resource" id="Resource_vhur3"]
 resource_local_to_scene = true
@@ -21,6 +22,7 @@ char = "𝓡"
 caption = "Retznac the vampire"
 color = Color(0.921569, 0.258824, 0.184314, 1)
 conversation_file = "res://src/story/retznac.dialogue"
+conversation_sect = "intro"
 spawn_cost = 20.0
 healing_prob = 0.15
 strength = 47
@@ -32,7 +34,6 @@ mana_full = 60
 mana_recovery_prob = 0.2
 resistance = 7
 tags = Array[String](["undead", "quest-boss-retznac"])
-faction = 2
 description = "A well dressed man with a pale skin and a calm demeanor."
 mem = SubResource("Resource_vhur3")
 
@@ -73,3 +74,18 @@ script = ExtResource("8_k8d84")
 
 [node name="Saber" parent="." index="14" instance=ExtResource("7_tvu27")]
 is_equipped = true
+
+[node name="PotionOfCognac" parent="." index="15" instance=ExtResource("11_dw8tr")]
+tags = Array[String](["fragile", "groupable", "booze", "cognac", "gift"])
+
+[node name="PotionOfCognac2" parent="." index="16" instance=ExtResource("11_dw8tr")]
+tags = Array[String](["fragile", "groupable", "booze", "cognac", "gift"])
+
+[node name="PotionOfCognac3" parent="." index="17" instance=ExtResource("11_dw8tr")]
+tags = Array[String](["fragile", "groupable", "booze", "cognac", "gift"])
+
+[node name="PotionOfCognac4" parent="." index="18" instance=ExtResource("11_dw8tr")]
+tags = Array[String](["fragile", "groupable", "booze", "cognac", "gift"])
+
+[node name="PotionOfCognac5" parent="." index="19" instance=ExtResource("11_dw8tr")]
+tags = Array[String](["fragile", "groupable", "booze", "cognac", "gift"])

@@ -31,6 +31,8 @@ signal missed(foe)
 signal hit(victim, damage)
 # the actor was the victim of an attack
 signal was_attacked(attacker)
+# the actor was the victim of an offense
+signal was_offended(offender)
 # health changed, either got better or worst
 signal health_changed(new_health)
 # mana changed, either up or down
@@ -721,7 +723,7 @@ func is_unexposed(index=null):
 
 	return false
 
-func was_offended_by(other: Actor):
+func recalls_offense_by(other: Actor):
 	## Return whether we recall `other` doing anything to piss us off
 	var by_other = func (fact): return fact.by == other.actor_id
 	return mem.recall_any(Consts.OFFENSIVE_EVENTS, current_turn, by_other) != null
@@ -734,19 +736,19 @@ func is_friend(other: Actor):
 	## Return whether `self` has positive sentiment towards `other`
 	if not Tender.sentiments:
 		return false
-	return Tender.sentiments.is_friend(self, other) and not was_offended_by(other)
+	return Tender.sentiments.is_friend(self, other) and not recalls_offense_by(other)
 	
 func is_foe(other: Actor):
 	## Return whether `self` has negative sentiment towards `other`
 	if Tender.sentiments:
-		return Tender.sentiments.is_foe(self, other) or was_offended_by(other)
+		return Tender.sentiments.is_foe(self, other) or recalls_offense_by(other)
 	else:
 		return false
 	
 func is_neutral(other: Actor):
 	## Return whether `self` has neutral sentiment towards `other`
 	if Tender.sentiments:
-		return Tender.sentiments.is_neutral(self, other) and not was_offended_by(other)
+		return Tender.sentiments.is_neutral(self, other) and not recalls_offense_by(other)
 	else:
 		return true
 
@@ -1003,6 +1005,7 @@ func strike(foe:Actor, weapon, throw=null):
 	# combats works with two random rolls: to-hit then damage.
 	mem.learn("attacked", current_turn, Memory.Importance.TRIVIAL, 
 			{"foe": foe.actor_id})
+	foe.was_offended.emit(self)
 
 	var with_anims = not is_unexposed()
 	var crit = false
