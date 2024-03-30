@@ -4,7 +4,7 @@ Salapou: May I help you, young one?
 - I'm a big fan of yours. How do you do the trick with the knives?
 	=> knives
 - I want you to turn around right now!
-	do speaker_learns("was_insulted")
+	do speaker_feels_insulted()
 	do set_global_sentiment(-1)
 	do checkpoint("angry")
 	Salapou: It is a beauty of Franconia that everyone is entitled to their own opinions, but I'm afraid your are infringing on my personal space right now.

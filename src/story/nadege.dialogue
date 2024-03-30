@@ -49,15 +49,49 @@ if speaker_has_gifts(["quest-reward"])
 Nadège: I have another job for you. Someone has been discreetly acquiring rare books and we want you to find out what that is all about. They are staying a little South of here.
 Nadège: The traboule across the plaza will take you there. Here's the key. It's not very safe down there, so take this weapon too just in case.
 do activate_quest()
-do checkpoint("cards_followup")
+do checkpoint("ch3_post_briefing")
 do speaker_give_items()
 Nadège: Good luck!
 => END
 
+~ ch3_post_briefing
+
+if hero_recalls("traded_with_retznac"):
+	=> ch3_alarmed
+elif hero_recalls("aware_of_retznac")
+	=> ch3_more_on_retnac
+
+=>< cards_followup
+=>< about_lyon
+
+=> END
+
 ~ cards_followup
-Nadège: I talked to a Canut smuggler, he thinks the loom cards you recovered are a coded message. A modified loom would be able to run those an print the decoded message. The problem is we need the cypher card to decode anything.
+Nadège: I talked to a Canut smuggler, he thinks the loom cards you recovered are a coded message. A modified loom would be able to run those an print the decoded message. The problem is we need the cypher cards to decode anything.
 Nadège: Someone is trying to be very secretive. Whatever this is about, it can't be good.
 do checkpoint("about_lyon")
+=> END
+
+~ ch3_more_on_retnac
+Nadège: Retznac? I've heard that name, but I don't think it's going to help you much.
+Nadège: It was in some silly fairy tale from Rouen. Something about a vampire who got caught because he was collecting paintings.
+Nadège: Sounds like we are dealing with someone who is trying a bit too hard to hide their identity. Find that Retznac and see what the deal really is.
+=> END
+
+~ ch3_alarmed
+if not hero_recalls("must_kill_retznac"):
+	Nadège: What the hell do you think you are doing? Are you out of your fucking mind!?
+	Nadège: This is not an oppotunity for a quick franc! This is humanity fighting for independence from those abominations!
+	Nadège: You'd better go down there right now and send this vampire into oblivion or I do it myself after kicking your ass.
+	do hero_learns("must_kill_retznac", Memory.Importance.CRUCIAL)
+	Nadège: Go!
+elif not hero_recalls("must_really_kill_retznac"):
+	Nadège: I said go!
+	do hero_learns("must_really_kill_retznac", Memory.Importance.CRUCIAL)
+else:
+	Nadège: So you've picked your side.
+	do speaker_feels_insulted()
+	Nadège: Fine, but don't expect me to make it easy for you.
 => END
 
 ~ about_lyon

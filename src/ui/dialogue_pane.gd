@@ -170,6 +170,10 @@ func speaker_feels_insulted(by_hero=true):
 func speaker_recalls(event_name) -> bool:
 	return speaker.mem.recall(event_name, speaker.current_turn) != null
 
+func speaker_recalls_nb(event_name) -> int:
+	assert(false, "broken, always returns 0 when used in the dialogue")
+	return speaker.mem.recall_nb(event_name, speaker.current_turn)
+
 func speaker_has_gifts(extra_tags:=[]) -> bool:
 	if speaker == null:
 		return false
@@ -209,7 +213,7 @@ func hero_give_items(include_tags=null, exclude_tags=null):
 	## pass items from the hero to the speaker
 	var items = Tender.hero.get_items(include_tags, exclude_tags, false)
 	for item in items:
-		Tender.hero.give_items(item, speaker)
+		Tender.hero.give_item(item, speaker)
 
 func hero_learns(event_name, importance:=Memory.Importance.NOTABLE, by_speaker=true):
 	var data = null
@@ -220,6 +224,10 @@ func hero_learns(event_name, importance:=Memory.Importance.NOTABLE, by_speaker=t
 
 func hero_recalls(event_name) -> bool:
 	return Tender.hero.mem.recall(event_name, Tender.hero.current_turn) != null
+
+func hero_recalls_nb(event_name) -> int:
+	assert(false, "broken, always returns 0 when used in the dialogue")
+	return Tender.hero.mem.recall_nb(event_name, Tender.hero.current_turn)
 
 func hero_is_foe(actor_tags=[]):
 	## Return if someone considers the hero a foe.

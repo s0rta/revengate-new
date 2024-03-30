@@ -107,10 +107,10 @@ func recall_any(events:Array[String], current_turn=null, valid_pred=null):
 				return fact
 	return null
 
-func recall_all(event, current_turn=null):
+func recall_all(event, current_turn=null) -> Array:
 	## Return all the known facts about `event` in reverse chronological order
 	## `current_turn`: if provided, only facts that are still relevant are considered.
-	var facts = []
+	var facts := []
 	for i in _facts.size():
 		var fact = _facts[-i-1]
 		if fact != null and fact.event == event:
@@ -120,6 +120,13 @@ func recall_all(event, current_turn=null):
 			else:
 				facts.append(fact)
 	return facts
+	
+func recall_nb(event, current_turn=null) -> int:
+	## Return the number of facts about `event` that we know about.
+	## `current_turn`: if provided, only facts that are still relevant are considered.
+	# We could save a bit of space by directly counting rather than building the whole list
+	# of facts, but this is plenty good until the profiler tells us that it's wrong.
+	return len(recall_all(event, current_turn))	
 
 func ddump_summary(current_turn=null, prefix=""):
 	## `current_turn`: if provided, only relevant facts are considered

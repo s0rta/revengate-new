@@ -26,6 +26,8 @@ do checkpoint("secret_societies")
 => END
 
 ~ bloody_mary
+if hero_recalls("aware_of_retznac"):
+	=> vampire_of_rouen
 {{speaker_name}}: Have your heard about this latest fad, Bloody Mary?
 
 {{speaker_name}}: Teens these days believe they can summon ghosts with candles and a mirror while reading cheesy poetry.
@@ -35,13 +37,23 @@ do checkpoint("vampire_of_nantes")
 => END
 
 ~ vampire_of_nantes
+if hero_recalls("aware_of_retznac"):
+	=> vampire_of_rouen
 {{speaker_name}}: My grand pop uses to tell us the story of the Vampire of Nantes.
 
 {{speaker_name}}: Back when he was a lad, maybe around 430AP, they found over a dozen dead travellers in the woods around Nantes. That happend over the course of two or three years.
 
-{{speaker_name}}: The bodies were always white as undyed silk, very stiff, and hardly decomposed. Completely drained of their blood, that's what Grand Pop said. He even stumpled upon one himself while going fishing! At least that's what he said...
+{{speaker_name}}: The bodies were always white as raw silk, very stiff, and hardly decomposed. Completely drained of their blood, that's what Grand Pop said. He even stumpled upon one himself while going fishing! At least that's what he said...
 
 {{speaker_name}}: I think this story is a lot of rubbish. Vampires can't cross open water, so why would one hang around a city full of rivers like Nantes?
+=> END
+
+~ vampire_of_rouen
+{{speaker_name}}: Retznac the vampire of Rouen? Yeah, I recall that story.
+{{speaker_name}}: I think it happend 150 years after the plague. The war with Saxonia was recently over and out of nowhere someone was importing fine paintings from all over the continent. It's a greedy tax auditor who had traced it all.
+{{speaker_name}}: None of the lords had the paintings, it was some odd young guy living as a recluse on a small estate who was buying everything.
+{{speaker_name}}: Because of the way he looked, some people said it was Lord Retz, back from the dead. Maybe there was something else to cue them. I can't recall. I mean, people die in Rouen like everywhere else. There are many reasons why people may die. The odd guy vanished soon after that.
+{{speaker_name}}: I don't know if the story is rubbish. I just don't know...
 => END
 
 ~ privacy
