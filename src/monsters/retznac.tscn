@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://cbpo1nvheopyj"]
+[gd_scene load_steps=14 format=3 uid="uid://cbpo1nvheopyj"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_ymka0"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="2_xakjg"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="4_7yrld"]
 [ext_resource type="Script" path="res://src/strategies/defensive_casting.gd" id="4_j32cc"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="4_s3hbp"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="5_vgonj"]
@@ -41,51 +42,55 @@ mem = SubResource("Resource_vhur3")
 theme_override_colors/font_color = Color(0.921569, 0.258824, 0.184314, 1)
 text = "𝓡"
 
-[node name="Tracking" type="Node" parent="." index="6"]
-script = ExtResource("4_s3hbp")
-nb_track_turns = null
-priority = 0.1
-ttl = null
-cancellable = null
-
-[node name="SkillLevels" type="Node" parent="." index="7"]
+[node name="SkillLevels" type="Node" parent="." index="6"]
 script = ExtResource("5_vgonj")
 fencing = 3
 channeling = 3
 device_of_focusing = 1
 
-[node name="DefensiveCasting" type="Node" parent="." index="8"]
+[node name="Exploring" type="Node" parent="." index="7"]
+script = ExtResource("4_7yrld")
+priority = 0.1
+
+[node name="Tracking" type="Node" parent="." index="8"]
+script = ExtResource("4_s3hbp")
+nb_track_turns = null
+priority = 0.2
+ttl = null
+cancellable = null
+
+[node name="DefensiveCasting" type="Node" parent="." index="9"]
 script = ExtResource("4_j32cc")
 priority = 0.6
 
-[node name="Summoning" type="Node" parent="." index="9"]
+[node name="Summoning" type="Node" parent="." index="10"]
 script = ExtResource("6_20m4k")
 priority = 0.5
 
-[node name="VitalAssemblage" parent="." index="10" instance=ExtResource("7_b5c8f")]
+[node name="VitalAssemblage" parent="." index="11" instance=ExtResource("7_b5c8f")]
 
-[node name="VitalAssemblage2" parent="." index="11" instance=ExtResource("7_b5c8f")]
+[node name="VitalAssemblage2" parent="." index="12" instance=ExtResource("7_b5c8f")]
 
-[node name="SummonPhantruch" type="Node" parent="." index="12"]
+[node name="SummonPhantruch" type="Node" parent="." index="13"]
 script = ExtResource("8_tig2l")
 
-[node name="RestoreHealth" type="Node" parent="." index="13"]
+[node name="RestoreHealth" type="Node" parent="." index="14"]
 script = ExtResource("8_k8d84")
 
-[node name="Saber" parent="." index="14" instance=ExtResource("7_tvu27")]
+[node name="Saber" parent="." index="15" instance=ExtResource("7_tvu27")]
 is_equipped = true
 
-[node name="PotionOfCognac" parent="." index="15" instance=ExtResource("11_dw8tr")]
+[node name="PotionOfCognac" parent="." index="16" instance=ExtResource("11_dw8tr")]
 tags = Array[String](["fragile", "groupable", "booze", "cognac", "gift"])
 
-[node name="PotionOfCognac2" parent="." index="16" instance=ExtResource("11_dw8tr")]
+[node name="PotionOfCognac2" parent="." index="17" instance=ExtResource("11_dw8tr")]
 tags = Array[String](["fragile", "groupable", "booze", "cognac", "gift"])
 
-[node name="PotionOfCognac3" parent="." index="17" instance=ExtResource("11_dw8tr")]
+[node name="PotionOfCognac3" parent="." index="18" instance=ExtResource("11_dw8tr")]
 tags = Array[String](["fragile", "groupable", "booze", "cognac", "gift"])
 
-[node name="PotionOfCognac4" parent="." index="18" instance=ExtResource("11_dw8tr")]
+[node name="PotionOfCognac4" parent="." index="19" instance=ExtResource("11_dw8tr")]
 tags = Array[String](["fragile", "groupable", "booze", "cognac", "gift"])
 
-[node name="PotionOfCognac5" parent="." index="19" instance=ExtResource("11_dw8tr")]
+[node name="PotionOfCognac5" parent="." index="20" instance=ExtResource("11_dw8tr")]
 tags = Array[String](["fragile", "groupable", "booze", "cognac", "gift"])

@@ -139,7 +139,10 @@ func ddump_summary(current_turn=null, prefix=""):
 	for event in counts:
 		pairs.append([counts[event], event])
 	pairs.sort()
-	print("%sKnown events:" % prefix)
-	for pair in pairs:
-		print("%s- %s: %d" % [prefix, pair[1], pair[0]])
+	if pairs.is_empty():
+		print("%sNo known events." % prefix)
+	else:
+		print("%sKnown events:" % prefix)
+		for pair in pairs:
+			print("%s- %s: %d" % [prefix, pair[1], pair[0]])
 		
