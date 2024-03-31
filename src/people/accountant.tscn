@@ -24,6 +24,7 @@ conversation_sect = "intro"
 health = 30
 agility = 44
 tags = Array[String](["spawn-distant"])
+description = "A well dressed man with a bowler hat and a monocle."
 mem = SubResource("Resource_oo0im")
 
 [node name="Label" parent="." index="0"]

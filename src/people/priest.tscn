@@ -22,6 +22,7 @@ strength = 47
 agility = 47
 intelligence = 52
 perception = 48
+description = "A catholic priest."
 mem = SubResource("Resource_w5qga")
 
 [node name="Label" parent="." index="0"]
