@@ -21,6 +21,7 @@ color = Color(1, 1, 1, 1)
 healing_prob = 0.1
 mana_full = 0
 faction = 1
+description = "A clean shaven man in his early twenties."
 mem = SubResource("Resource_gejyx")
 
 [node name="Label" parent="." index="0"]

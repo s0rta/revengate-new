@@ -5,8 +5,8 @@
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="2_pmr0y"]
 [ext_resource type="PackedScene" uid="uid://h7s2p8mgm387" path="res://src/weapons/sword.tscn" id="3_bwu75"]
 [ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="4_7v07x"]
-[ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="5_q0pnu"]
-[ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="6_thcb6"]
+[ext_resource type="PackedScene" uid="uid://de85ahbbn0ced" path="res://src/items/potion_of_healing.tscn" id="5_q0pnu"]
+[ext_resource type="PackedScene" uid="uid://dvr7bsle8gy1x" path="res://src/items/potion_of_regen.tscn" id="6_thcb6"]
 
 [sub_resource type="Resource" id="Resource_xmmpf"]
 resource_local_to_scene = true
@@ -20,6 +20,7 @@ color = Color(0.117647, 0.603922, 0.517647, 1)
 conversation_file = "res://src/story/michel.dialogue"
 conversation_sect = "intro"
 faction = 1
+description = "Your favourite barber. He seems to be in his fourties. His dark moustache is impecably styled."
 mem = SubResource("Resource_xmmpf")
 
 [node name="Label" parent="." index="0"]
