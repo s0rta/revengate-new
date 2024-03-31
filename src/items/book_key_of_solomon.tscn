@@ -5,6 +5,6 @@
 [node name="OldBook" instance=ExtResource("1_f5eg1")]
 char = "📗"
 caption = "very old looking book"
-desc_simple = "An old book with some notable damange, title page simply says \"Of Magical Ceremonies\"."
-desc_detailed = "An original copy of \"Of Magical Ceremonies\". The handwritting strikingly ressembles that of Cornelius Agrippa."
-tags = Array[String](["book-of-magical-ceremonies", "gift"])
+desc_simple = "a very old book written either in Latin on very early Franconian with many alchemical symbols"
+desc_detailed = "An old copy of The Little Key of Solomon. "
+tags = Array[String](["book-of-magical-ceremonies", "gift", "old-occult-book"])
