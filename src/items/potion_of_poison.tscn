@@ -7,10 +7,9 @@
 caption = "potion of poison"
 desc_simple = "A bitter odorless solution."
 desc_detailed = "A tincture of potent alkaloids adjusted to 5% beet sugar concentration.  Interfers with a number of bodily functions."
-consumable = true
 spawn_cost = 1.0
 
-[node name="Effect" type="Node" parent="." index="2"]
+[node name="PoisonEffect" type="Node" parent="." index="2"]
 script = ExtResource("2_8q3xi")
 damage = 2
 damage_family = 7

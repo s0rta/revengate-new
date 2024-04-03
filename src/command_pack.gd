@@ -291,10 +291,6 @@ class DumpDevCheat extends Command:
 		print("Data at %s:" % coord_str)
 		var board: RevBoard = Tender.hero.get_board()
 		print("  Board.is_in_rect(%s): %s" % [coord_str, board.is_on_board(coord)])
-		var data = board.get_cell_tile_data(0, coord)
-		if data:
-			print("  cell data: %s" % [[var_to_str(data), 
-										data.get_custom_data("is_connector")]])
 		board.ddump_cell(coord)
 		var actor = index.actor_at(coord)
 		if actor:

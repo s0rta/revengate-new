@@ -161,6 +161,8 @@ func _ready():
 	Utils.hide_unplaced(self)
 	if mem == null:
 		mem = Memory.new()
+	if not was_attacked.is_connected(_learn_attack):
+		was_attacked.connect(_learn_attack)
 	assert(mem != null)
 	picked_item.connect(_clear_mods_cache)
 
@@ -177,12 +179,14 @@ func ddump():
 	print("  core stats: %s" % get_base_stats())
 	print("  modifiers:  %s" % get_modifiers())
 	print("  skills:  %s" % get_skills())
+	print("  conditions: %s" % [get_conditions()])
 	print("  is_unexposed(): %s" % is_unexposed())
 	print("  should shroud: %s" % should_shroud())
-	if Tender.hero.perceives(self):
-		print("  perceived by Hero")
-	if perceives(Tender.hero):
-		print("  perceives Hero")
+	if Tender.hero != null:
+		if Tender.hero.perceives(self):
+			print("  perceived by Hero")
+		if perceives(Tender.hero):
+			print("  perceives Hero")
 	mem.ddump_summary(current_turn, "  ")
 
 func ddump_pos():
@@ -252,7 +256,6 @@ func restore():
 	## This should be called exactly once per actor after a reloaded game has 
 	## been added to the scene tree.
 	for item in get_items([], [], false):
-		print("%s owner=%s" % [item.get_short_desc(), item.owner])
 		if item.owner == self:
 			item.reparent($"/root")
 			item.queue_free()
@@ -723,10 +726,13 @@ func is_unexposed(index=null):
 
 	return false
 
-func recalls_offense_by(other: Actor):
-	## Return whether we recall `other` doing anything to piss us off
-	var by_other = func (fact): return fact.by == other.actor_id
-	return mem.recall_any(Consts.OFFENSIVE_EVENTS, current_turn, by_other) != null
+func recalls_offense(other=null):
+	## Return whether we recall ever being offended 
+	## `other`: if provided, only offences by this actor are considered
+	var pred = null
+	if other != null:
+		pred = func (fact): return fact.by == other.actor_id
+	return mem.recall_any(Consts.OFFENSIVE_EVENTS, current_turn, pred) != null
 
 func forgive(other: Actor):
 	## Forget any past offences by `other`
@@ -736,19 +742,19 @@ func is_friend(other: Actor):
 	## Return whether `self` has positive sentiment towards `other`
 	if not Tender.sentiments:
 		return false
-	return Tender.sentiments.is_friend(self, other) and not recalls_offense_by(other)
+	return Tender.sentiments.is_friend(self, other) and not recalls_offense(other)
 	
 func is_foe(other: Actor):
 	## Return whether `self` has negative sentiment towards `other`
 	if Tender.sentiments:
-		return Tender.sentiments.is_foe(self, other) or recalls_offense_by(other)
+		return Tender.sentiments.is_foe(self, other) or recalls_offense(other)
 	else:
 		return false
 	
 func is_neutral(other: Actor):
 	## Return whether `self` has neutral sentiment towards `other`
 	if Tender.sentiments:
-		return Tender.sentiments.is_neutral(self, other) and not recalls_offense_by(other)
+		return Tender.sentiments.is_neutral(self, other) and not recalls_offense(other)
 	else:
 		return true
 

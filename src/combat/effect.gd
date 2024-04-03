@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -44,6 +44,7 @@ class_name Effect extends Node
 
 
 class Condition extends Node:
+	@export var dkind: String  # Debug Kind, never shown to the player
 	@export var damage: int
 	@export var healing: int
 	@export var damage_family: Consts.DamageFamily
@@ -51,12 +52,18 @@ class Condition extends Node:
 	@export var stats_modifiers: Dictionary
 	@export var tags:Array[String]
 
-	func _init(damage_, healing_, damage_family_, tags_:Array[String], nb_turns_):
+	func _init(dkind_:String, damage_, healing_, damage_family_, 
+				tags_:Array[String], nb_turns_):
+		name = dkind_  # might be overriden before _ready() if there is a name clash with our siblings
+		dkind = dkind_
 		damage = damage_
 		healing = healing_
 		damage_family = damage_family_
 		tags = tags_.duplicate()
 		nb_turns = nb_turns_
+
+	func _to_string():
+		return "<%s %s dmg=%d heal=%d, turns=%d>" % [name, dkind, damage, healing, nb_turns]
 		
 	func erupt():
 		## activate the condition
@@ -94,8 +101,9 @@ func apply(actor):
 	if permanent:
 		perma_boost(actor, mods)
 	else:
-		var cond = Condition.new(damage, healing, damage_family, tags, nb_turns)
+		var cond = Condition.new("%sCond" % [name], damage, healing, damage_family, tags, nb_turns)
 		cond.stats_modifiers = mods
+		cond.owner = null
 		actor.add_child(cond)
 		if immediate:
 			cond.erupt()
