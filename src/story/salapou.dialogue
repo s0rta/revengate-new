@@ -5,7 +5,6 @@ Salapou: May I help you, young one?
 	=> knives
 - I want you to turn around right now!
 	do speaker_feels_insulted()
-	do set_global_sentiment(-1)
 	do checkpoint("angry")
 	Salapou: It is a beauty of Franconia that everyone is entitled to their own opinions, but I'm afraid your are infringing on my personal space right now.
 => END
@@ -20,5 +19,5 @@ Salapou: I'm glad you enjoyed our shows, but I have to go somewhere else now. Ha
 => END
 
 ~ angry
-Salapou: Perhaps you are the one who should turn around. I would advise that you would do so rather promptly.
+Salapou: You looked, but you failed to see, perhaps you are the one who should turn around. I would advise that you would do so rather promptly.
 => END

@@ -1,17 +1,25 @@
-[gd_scene load_steps=11 format=3 uid="uid://cpjfi7f2jww5a"]
+[gd_scene load_steps=13 format=3 uid="uid://cpjfi7f2jww5a"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_xboc2"]
+[ext_resource type="Script" path="res://src/monsters/faction_leader.gd" id="2_6agoy"]
 [ext_resource type="PackedScene" uid="uid://c71npa04ilk1k" path="res://src/weapons/umbrella.tscn" id="2_3hlu4"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="2_es3l6"]
 [ext_resource type="PackedScene" uid="uid://drnpu2dw1i4nn" path="res://src/weapons/weighted_cane.tscn" id="2_jxae8"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="3_i84nx"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="4_rc8re"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="5_lrisf"]
 [ext_resource type="PackedScene" uid="uid://c7fgdridawfb3" path="res://src/items/magic_capsule_of_regen.tscn" id="7_o1p1u"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="8_qu2ug"]
-[ext_resource type="PackedScene" uid="uid://lpworv1rq2g3" path="res://src/items/potion_of_booze.tscn" id="9_7dfd4"]
-[ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="10_ll2eq"]
+[ext_resource type="PackedScene" uid="uid://dvm0g3y1rr55g" path="res://src/items/potion_of_booze.tscn" id="9_7dfd4"]
+[ext_resource type="PackedScene" uid="uid://de85ahbbn0ced" path="res://src/items/potion_of_healing.tscn" id="10_ll2eq"]
+
+[sub_resource type="Resource" id="Resource_kuagb"]
+resource_local_to_scene = true
+script = ExtResource("2_es3l6")
+_facts = []
 
 [node name="Salapou" instance=ExtResource("1_xboc2")]
+script = ExtResource("2_6agoy")
 char = "@"
 caption = "Le Grand Salapou"
 color = Color(0.85098, 0.823529, 0.0941176, 1)
@@ -26,37 +34,37 @@ tags = Array[String](["quest-boss-salapou", "spawn-distant"])
 faction = 4
 bestiary_img = "res://src/people/salapou.png"
 description = "Le Grand Salapou is the owner of the Salapou Traveling Circus. He is an exceptional actor and an ace of sleight of hand."
+mem = SubResource("Resource_kuagb")
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.85098, 0.823529, 0.0941176, 1)
 text = "@"
 
-[node name="WeightedCane" parent="." index="7" instance=ExtResource("2_jxae8")]
+[node name="WeightedCane" parent="." index="6" instance=ExtResource("2_jxae8")]
 is_equipped = true
 
-[node name="Umbrella" parent="." index="8" instance=ExtResource("2_3hlu4")]
+[node name="Umbrella" parent="." index="7" instance=ExtResource("2_3hlu4")]
 visible = false
-range = 1
 
-[node name="SelfDefense" type="Node" parent="." index="9"]
+[node name="SelfDefense" type="Node" parent="." index="8"]
 script = ExtResource("3_i84nx")
 priority = 0.9
 
-[node name="Exploring" type="Node" parent="." index="10"]
+[node name="Exploring" type="Node" parent="." index="9"]
 script = ExtResource("4_rc8re")
 hug_walls = null
 priority = 0.1
 ttl = null
 cancellable = null
 
-[node name="Tracking" type="Node" parent="." index="11"]
+[node name="Tracking" type="Node" parent="." index="10"]
 script = ExtResource("5_lrisf")
 priority = 0.7
 
-[node name="MagicCapsuleOfRegen" parent="." index="12" instance=ExtResource("7_o1p1u")]
+[node name="MagicCapsuleOfRegen" parent="." index="11" instance=ExtResource("7_o1p1u")]
 
-[node name="Dynamite" parent="." index="13" instance=ExtResource("8_qu2ug")]
+[node name="Dynamite" parent="." index="12" instance=ExtResource("8_qu2ug")]
 
-[node name="PotionOfBooze" parent="." index="14" instance=ExtResource("9_7dfd4")]
+[node name="PotionOfBooze" parent="." index="13" instance=ExtResource("9_7dfd4")]
 
-[node name="PotionOfHealing" parent="." index="15" instance=ExtResource("10_ll2eq")]
+[node name="PotionOfHealing" parent="." index="14" instance=ExtResource("10_ll2eq")]

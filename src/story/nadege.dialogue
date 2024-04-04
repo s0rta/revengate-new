@@ -61,15 +61,17 @@ if hero_recalls("traded_with_retznac"):
 elif hero_recalls("aware_of_retznac")
 	=> ch3_more_on_retnac
 
-=>< cards_followup
-=>< about_lyon
+if not hero_recalls("cards_are_coded"):
+	=> cards_followup
+else:
+	=> about_lyon
 
 => END
 
 ~ cards_followup
-Nadège: I talked to a Canut smuggler, he thinks the loom cards you recovered are a coded message. A modified loom would be able to run those an print the decoded message. The problem is we need the cypher cards to decode anything.
+Nadège: I talked to a Canut smuggler, he thinks the loom cards you recovered are a coded message. A modified loom would be able to run those and print the decoded message. The problem is we need the cypher cards to decode anything.
 Nadège: Someone is trying to be very secretive. Whatever this is about, it can't be good.
-do checkpoint("about_lyon")
+do hero_learns("cards_are_coded", Memory.Importance.INTERESTING)
 => END
 
 ~ ch3_more_on_retnac

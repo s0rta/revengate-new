@@ -29,7 +29,7 @@ Grenn: So we're good?
 - Maybe, tell me more about what you are going here.
 	Grenn: I don't know everything, but I have these books, very rare books. I took me three months to track them down.
 	do checkpoint("beaudelaire")
-	Grenn: There is this guy, Retznac, with an old timey accent, he's really pale too. He's offering good money for anything about magic.
+	Grenn: There is this guy, Retznac, with an old timey accent, he's really pale too. He's offering good money for anything about occult rituals.
 	Green: He gives me the creeps a little bit, but he's very courteous. I've had worst clients.
 	do hero_learns("aware_of_retznac")
 
