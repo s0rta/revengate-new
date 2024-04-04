@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -18,8 +18,9 @@
 ## Guard a "client": stay close and attack their foes.
 class_name Guarding extends Strategy
 
-# TODO: @tool rule to check if client_tags is sane
+# TODO: @tool rule to check if client_tags are sane
 @export var client_tags:Array[String]
+@export var client_id := 0
 
 var client  # Actor
 var foe  # Actor
@@ -27,6 +28,12 @@ var waypoint  # Vector2i
 var path
 var index
 var guard_radius:int
+
+
+func _init(client:Actor, actor=null, priority_=null, ttl_=null):
+	client = client
+	client_id = client.actor_id
+	super()
 
 func _ready():
 	super()
@@ -42,15 +49,19 @@ func refresh(turn):
 	if client != null and not client.is_alive():
 		# our previous client didn't make it...
 		client = null
+		client_id = 0
 		waypoint = null
 	
 	if client == null:
 		# try to pick a new client
 		var actors = board.get_actors(client_tags)
-		actors.filter(func(actor): return actor.is_alive())
+		actors = actors.filter(func(actor): return actor.is_alive())
+		if client_id:
+			actors = actors.filter(func(actor): return actor.actor_id == client_id)		
 		if actors.is_empty():
 			return
 		client = Rand.choice(actors)
+		client_id = client.actor_id
 
 	if _can_retaliate():
 		# will fight back
@@ -108,7 +119,7 @@ func _can_retaliate():
 			return true
 		var here = me.get_cell_coord()
 		var there = foe.get_cell_coord()
-		path = index.board.path_perceived(here, there, me, false, null, index)
+		path = index.board.path_perceived(here, there, me, false, -1, index)
 		if path != null:
 			return true
 	foe = null  # can't do anything about this one, forgetting about them for now
