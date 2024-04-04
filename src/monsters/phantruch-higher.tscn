@@ -1,11 +1,17 @@
-[gd_scene load_steps=7 format=3 uid="uid://bq44ya251uwp0"]
+[gd_scene load_steps=9 format=3 uid="uid://bq44ya251uwp0"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_b0shi"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="2_2xi70"]
 [ext_resource type="Script" path="res://src/monsters/phantruch.gd" id="2_j40pw"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="3_g6q0q"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="3_s4mxm"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="4_4qdtt"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="5_n08ed"]
+
+[sub_resource type="Resource" id="Resource_g6j1c"]
+resource_local_to_scene = true
+script = ExtResource("3_g6q0q")
+_facts = []
 
 [node name="PhantruchHigher" instance=ExtResource("1_b0shi")]
 script = ExtResource("2_j40pw")
@@ -21,12 +27,13 @@ perception = 60
 faction = 2
 bestiary_img = "res://src/monsters/phantruch-higher.jpg"
 description = "A biomechanicoïd construct held in between planes of existence by magic."
+mem = SubResource("Resource_g6j1c")
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.603922, 0.545098, 1, 1)
 text = "𝜑"
 
-[node name="Claw" type="Node" parent="." index="7"]
+[node name="Claw" type="Node" parent="." index="6"]
 script = ExtResource("2_2xi70")
 damage = 4
 damage_family = 3
@@ -36,7 +43,7 @@ stream = ExtResource("3_s4mxm")
 volume_db = -3.0
 pitch_scale = 1.25
 
-[node name="Pincer" type="Node" parent="." index="8"]
+[node name="Pincer" type="Node" parent="." index="7"]
 script = ExtResource("2_2xi70")
 damage = 5
 damage_family = 2
@@ -47,10 +54,10 @@ stream = ExtResource("3_s4mxm")
 volume_db = -3.0
 pitch_scale = 1.25
 
-[node name="Tracking" type="Node" parent="." index="9"]
+[node name="Tracking" type="Node" parent="." index="8"]
 script = ExtResource("4_4qdtt")
-priority = 0.1
+priority = 0.5
 
-[node name="SkillLevels" type="Node" parent="." index="10"]
+[node name="SkillLevels" type="Node" parent="." index="9"]
 script = ExtResource("5_n08ed")
 innate_attack = 2

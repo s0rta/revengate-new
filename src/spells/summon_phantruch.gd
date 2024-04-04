@@ -46,6 +46,10 @@ func cast():
 	var there = builder.place(creature, false, here, true, null, index)
 	var devices = me.get_items(["vital-assemblage"], ["broken"])
 	me.give_item(Rand.choice(devices), creature)
+	
+	# turn the new spawn into a servant
+	creature.faction = me.faction
+	
 	creature.show()
 	Tender.viewport.effect_at_coord("magic_sfx_01", there)
 	me.use_mana(mana_cost)

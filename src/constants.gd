@@ -47,7 +47,8 @@ enum Factions {
 	BEASTS, 
 	OUTLAWS, 
 	CIRCUS,
-	CELESTIALS
+	CELESTIALS, 
+	HOUSE_RETZ
 }
 
 enum SkillLevel {
