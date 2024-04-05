@@ -402,22 +402,27 @@ Combat:
 - [x] zapping spell
 
 
-## v0.12.2
+## v0.12.3
+- [x] better conversations to make a progressive reveal of the story during ch.3
+- [x] better descriptions for NPCs
+- [x] document the Android dependencies
+
+
+## v0.12.4
+- [ ] bug: explosions crash the game on some Andoid devices (#24)
 - [ ] document conn_target and connection fields
-- [ ] vague value adjectives on gaussian distributions
-- [ ] random interlude stories
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings
 
+UX:
+- [ ] dialogue responses are easier to tell apart from the speaker's chatter
+
 Performance:
 - [ ] async preload most shaders to speedup startup
-- [ ] mem.recall accept an importance param to know how deep to search
 
 Strategies:
 - [ ] Seeking is easier to resolve even is the target keeps moving
-- [ ] TravelTo uses a cached `path_perceived()`
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
-- [ ] Tracking keeps moving towards the last place where they saw their prey after it becomes unperceived
 
 ## v1.0
 - [ ] A Fight for Fumes campaign
@@ -427,6 +432,7 @@ Strategies:
 - [ ] packaging for Ubuntu
 
 ## Ice Box: not yet scheduled for a release
+- [ ] random interlude stories
 - [ ] non-walking movement and path finding (wading, swimming, phasing)
 - [ ] Deck.peek(): select the next card, but do not remove it from the deck
 - [ ] help screen with contextual content
@@ -452,3 +458,6 @@ Magic:
 
 Weapons:
 - [ ] axe (𝇤)
+
+Performance:
+- [ ] mem.recall accept an importance param to know how deep to search

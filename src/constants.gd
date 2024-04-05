@@ -19,8 +19,8 @@
 ## This script is autoloaded at `Consts`
 extends Node
 
-const VERSION := "0.12.2"
-const VERSION_CODE := 1028122
+const VERSION := "0.12.3"
+const VERSION_CODE := 1028123
 const DEBUG = true
 
 const SAVE_PROB := 0.05  # chance that we save the game at the end of a turn
