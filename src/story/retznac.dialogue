@@ -1,6 +1,8 @@
 ~ intro
 if hero_has_item(["old-occult-book"]):
 	=> negotiate
+elif hero_recalls("traded_with_retznac"):
+	=> patience
 elif hero_recalls("grenn_was_offended"):
 	=> angry
 => indifferent
@@ -21,6 +23,7 @@ Retznac: Perhaps you would be interested in trading? I would take them off your 
 Retznac: Would you happen to like Cognac?
 - Sure!
 	do hero_learns("traded_with_retznac")
+	do speaker_forgives()
 	do hero_give_items(["old-occult-book"])
 	do speaker_give_items()
 	Retznac: It was great pleasure trading with you. I wish you many healthy years and the finest experiences life can offer.
@@ -28,4 +31,8 @@ Retznac: Would you happen to like Cognac?
 - I'm not dealing with you. Get a tax permit and open your own store if you want to be a librarian.
 	Retznac: Your choice is short sighted, but understandable. I happen to be very patient, young one. Find me again if seasons steer your mind in a different direction.
 	Retznac: In the meantime, you would be wise not to tempt me – or anyone else – too much.
+=> END
+
+~ patience
+Retznac: When the time is right, I will request service from you. For now, you would be wise to enjoy this beautiful season.
 => END

@@ -1,0 +1,2 @@
+More extensive conversations with NPCs during chapter 3.
+Better Inspect descriptions for most NPCs.

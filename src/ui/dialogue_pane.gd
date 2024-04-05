@@ -167,6 +167,10 @@ func speaker_feels_insulted(by_hero=true):
 		offender = Tender.hero
 	speaker.was_offended.emit(offender)
 	
+func speaker_forgives():
+	speaker.forgive(Tender.hero)
+	Tender.hero.forgive(speaker)
+
 func speaker_recalls(event_name) -> bool:
 	return speaker.mem.recall(event_name, speaker.current_turn) != null
 

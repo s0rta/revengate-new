@@ -25,3 +25,7 @@ func spawn():
 func hate_faction(offender):
 	if offender != null and Tender.sentiments:
 		Tender.sentiments.set_sentiment(faction, offender.faction, -1.0)
+		
+func forgive(other:Actor):
+	super(other)
+	Tender.sentiments.set_sentiment(faction, other.faction, 0.0)

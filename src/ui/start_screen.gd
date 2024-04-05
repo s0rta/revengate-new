@@ -59,6 +59,7 @@ func _guess_size():
 		return Consts.TextSizes.HUGE
 
 func start_new_game():
+	SaveBundle.remove()
 	get_tree().change_scene_to_file("res://src/main.tscn")
 	
 func resume_game():
