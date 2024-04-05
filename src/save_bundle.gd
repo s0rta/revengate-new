@@ -137,7 +137,9 @@ static func remove():
 	## Silently do nothing if there is no saved game file.
 	
 	# in HTML5, remove() is unrelable, so we make sure we don't re-use a file that should not be there
-	FileAccess.open(SAVE_DIR+BAD_SAVE_LOCK, FileAccess.WRITE).close()
+	var fa = FileAccess.open(SAVE_DIR+BAD_SAVE_LOCK, FileAccess.WRITE)
+	if fa != null:
+		fa.close()
 	
 	if has_file():
 		var da = DirAccess.open("user://")
