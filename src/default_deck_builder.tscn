@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://c185mr0bu3u3w"]
+[gd_scene load_steps=49 format=3 uid="uid://c185mr0bu3u3w"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_yitoo"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_i1rpj"]
@@ -82,12 +82,12 @@ resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_d1oex"]
+[sub_resource type="Resource" id="Resource_hjvia"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_ayrts"]
+[sub_resource type="Resource" id="Resource_e2e4w"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
@@ -97,7 +97,12 @@ resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_rukkp"]
+[sub_resource type="Resource" id="Resource_btnb0"]
+resource_local_to_scene = true
+script = ExtResource("4_kpuol")
+_facts = []
+
+[sub_resource type="Resource" id="Resource_bpp1f"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
@@ -189,10 +194,10 @@ min_dungeon_occ = 1
 world_loc = Vector3i(13, 8, 0)
 
 [node name="Retznac" parent="Quest2Goals" instance=ExtResource("25_cxgj3")]
-mem = SubResource("Resource_d1oex")
+mem = SubResource("Resource_hjvia")
 
 [node name="Grenn" parent="Quest2Goals" instance=ExtResource("16_s7e88")]
-mem = SubResource("Resource_ayrts")
+mem = SubResource("Resource_e2e4w")
 
 [node name="Rare" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -270,7 +275,10 @@ position = Vector2(631, 437)
 position = Vector2(631, 437)
 
 [node name="Grenn" parent="TestingQuestTransitions" instance=ExtResource("16_s7e88")]
-mem = SubResource("Resource_rukkp")
+mem = SubResource("Resource_btnb0")
+
+[node name="Retznac" parent="TestingQuestTransitions" instance=ExtResource("25_cxgj3")]
+mem = SubResource("Resource_bpp1f")
 
 [node name="MovementStressTest" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -284,14 +292,31 @@ mem = SubResource("Resource_bq34y")
 [node name="Rat" parent="MovementStressTest" instance=ExtResource("8_eau7g")]
 mem = SubResource("Resource_mhmkf")
 
+[connection signal="was_attacked" from="SewerOtter" to="SewerOtter" method="_learn_attack"]
+[connection signal="was_attacked" from="Labras" to="Labras" method="_learn_attack"]
+[connection signal="was_attacked" from="DesertCentipede" to="DesertCentipede" method="_learn_attack"]
+[connection signal="was_attacked" from="Kobold" to="Kobold" method="_learn_attack"]
+[connection signal="was_attacked" from="SulantTiger" to="SulantTiger" method="_learn_attack"]
+[connection signal="was_attacked" from="Max3PerFloor/Rat" to="Max3PerFloor/Rat" method="_learn_attack"]
+[connection signal="was_attacked" from="Max3PerFloor/Sahwakoon" to="Max3PerFloor/Sahwakoon" method="_learn_attack"]
+[connection signal="was_attacked" from="Quest1Goals/Outlaw1" to="Quest1Goals/Outlaw1" method="_learn_attack"]
+[connection signal="was_attacked" from="Quest1Goals/Outlaw2" to="Quest1Goals/Outlaw2" method="_learn_attack"]
 [connection signal="visibility_changed" from="Quest1Goals/Outlaw2/PotionOfHealing" to="Quest1Goals/Outlaw2/PotionOfHealing" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Quest1Goals/Outlaw2/PotionOfRegen" to="Quest1Goals/Outlaw2/PotionOfRegen" method="_on_visibility_changed"]
+[connection signal="was_attacked" from="Quest1Goals/Outlaw3" to="Quest1Goals/Outlaw3" method="_learn_attack"]
 [connection signal="visibility_changed" from="Quest1Goals/Outlaw3/PotionOfPoison" to="Quest1Goals/Outlaw3/PotionOfPoison" method="_on_visibility_changed"]
+[connection signal="was_attacked" from="Quest2Goals/Retznac" to="Quest2Goals/Retznac" method="_learn_attack"]
+[connection signal="was_attacked" from="Quest2Goals/Grenn" to="Quest2Goals/Grenn" method="_learn_attack"]
 [connection signal="visibility_changed" from="Rare/Hammer" to="Rare/Hammer" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Rare/Rapier" to="Rare/Rapier" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Rare/Razor" to="Rare/Razor" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Rare/Saber" to="Rare/Saber" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Rare/Sword" to="Rare/Sword" method="_on_visibility_changed"]
+[connection signal="was_attacked" from="RareAndDeep/Pacherr" to="RareAndDeep/Pacherr" method="_learn_attack"]
 [connection signal="visibility_changed" from="Healing/PotionOfHealing" to="Healing/PotionOfHealing" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Healing/PotionOfRegen" to="Healing/PotionOfRegen" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="TestingQuestTransitions/Razor" to="TestingQuestTransitions/Razor" method="_on_visibility_changed"]
+[connection signal="was_attacked" from="TestingQuestTransitions/Grenn" to="TestingQuestTransitions/Grenn" method="_learn_attack"]
+[connection signal="was_attacked" from="TestingQuestTransitions/Retznac" to="TestingQuestTransitions/Retznac" method="_learn_attack"]
+[connection signal="was_attacked" from="MovementStressTest/Lyonese" to="MovementStressTest/Lyonese" method="_learn_attack"]
+[connection signal="was_attacked" from="MovementStressTest/Rat" to="MovementStressTest/Rat" method="_learn_attack"]

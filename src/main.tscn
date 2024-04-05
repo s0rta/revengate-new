@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=45 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -10,7 +10,6 @@
 [ext_resource type="Script" path="res://src/hud.gd" id="7_4dw6n"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="7_eg4si"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="7_nbfvd"]
-[ext_resource type="PackedScene" uid="uid://drnpu2dw1i4nn" path="res://src/weapons/weighted_cane.tscn" id="9_oq88t"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
 [ext_resource type="Script" path="res://src/dungeons/traboule.gd" id="13_u4fm7"]
@@ -131,9 +130,6 @@ mem = SubResource("Resource_7gsj3")
 
 [node name="Dynamite" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("7_eg4si")]
 
-[node name="WeightedCane" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("9_oq88t")]
-is_equipped = true
-
 [node name="Nadege" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_wcjwx")]
 visible = true
 position = Vector2(48, 80)
@@ -165,6 +161,7 @@ caption = "Robert"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "ghosts"
 mana_full = 0
+description = "A man in a three piece suit."
 mem = SubResource("Resource_tmb6n")
 
 [node name="BarPatron2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
@@ -174,6 +171,7 @@ caption = "Mathieu"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "party_magic"
 mana_full = 0
+description = "A man with a long tail coat and a top hat."
 mem = SubResource("Resource_hfpoa")
 
 [node name="Sign" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_621w4")]
@@ -550,6 +548,11 @@ script = ExtResource("41_hgs5k")
 [connection signal="action_started" from="BoardArea/GestureSurveyor" to="HUD" method="show_action_label"]
 [connection signal="timeout" from="BoardArea/GestureSurveyor/LongTapTimer" to="BoardArea/GestureSurveyor" method="_on_long_tap_timer_timeout"]
 [connection signal="spells_changed" from="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" to="HUD" method="_on_hero_spells_changed"]
+[connection signal="was_attacked" from="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" to="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" method="_learn_attack"]
+[connection signal="was_attacked" from="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Nadege" to="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Nadege" method="_learn_attack"]
+[connection signal="was_attacked" from="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/BarTender" to="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/BarTender" method="_learn_attack"]
+[connection signal="was_attacked" from="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Michel" to="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Michel" method="_learn_attack"]
+[connection signal="was_attacked" from="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/BarPatron1" to="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/BarPatron1" method="_learn_attack"]
 [connection signal="turn_finished" from="TurnQueue" to="." method="_on_turn_finished"]
 [connection signal="turn_started" from="TurnQueue" to="." method="_on_turn_started"]
 [connection signal="cancel_strategies" from="HUD" to="." method="cancel_hero_strats"]

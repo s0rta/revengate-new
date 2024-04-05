@@ -1,8 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://cpjfi7f2jww5a"]
+[gd_scene load_steps=14 format=3 uid="uid://cpjfi7f2jww5a"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_xboc2"]
-[ext_resource type="Script" path="res://src/monsters/faction_leader.gd" id="2_6agoy"]
 [ext_resource type="PackedScene" uid="uid://c71npa04ilk1k" path="res://src/weapons/umbrella.tscn" id="2_3hlu4"]
+[ext_resource type="Script" path="res://src/monsters/faction_leader.gd" id="2_6agoy"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="2_es3l6"]
 [ext_resource type="PackedScene" uid="uid://drnpu2dw1i4nn" path="res://src/weapons/weighted_cane.tscn" id="2_jxae8"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="3_i84nx"]

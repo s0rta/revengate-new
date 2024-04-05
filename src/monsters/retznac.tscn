@@ -16,8 +16,9 @@
 [node name="Retznac" instance=ExtResource("1_ymka0")]
 script = ExtResource("2_6agoy")
 char = "𝓡"
-caption = "Retznac the vampire"
+caption = "Retznac"
 color = Color(0.921569, 0.258824, 0.184314, 1)
+conversation_file = "res://src/story/retznac.dialogue"
 conversation_sect = "intro"
 spawn_cost = 20.0
 healing_prob = 0.15
@@ -31,6 +32,7 @@ mana_recovery_prob = 0.2
 resistance = 7
 tags = Array[String](["undead", "quest-boss-retznac"])
 faction = 6
+description = "A well dressed man with a pale skin and a calm demeanor."
 mem = null
 
 [node name="Label" parent="." index="0"]
