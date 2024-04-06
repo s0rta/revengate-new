@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -23,6 +23,11 @@ class_name SpecialEffect extends Node2D
 
 @export_range(0.0, 10.0) var max_screen_time := 5.0
 
+@export_group("Debug")
+@export var skip_particles := false
+@export var skip_sound := false
+@export var skip_shader := false
+
 # only set on linear effects like the electric arc
 var start_coord:Vector2i
 var end_coord:Vector2i
@@ -34,10 +39,14 @@ var time: float
 func _ready():
 	time = 0
 	if material is ShaderMaterial:
-		material.set_shader_parameter("time", time)
-		reset_start_time()
-	start_particles()
-	if $Sound:
+		if skip_shader:
+			material = null
+		else:
+			material.set_shader_parameter("time", time)
+			reset_start_time()
+	if not skip_particles:
+		start_particles()
+	if $Sound and not skip_sound:
 		$Sound.play()
 
 func _process(delta):

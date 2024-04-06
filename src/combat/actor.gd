@@ -131,7 +131,6 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 # keep track of where we are going while animations are running 
 @export var dest:Vector2i = Consts.COORD_INVALID
 
-@export_group("Internals")
 @export var mem: Memory
 @export var actor_id := 0
 

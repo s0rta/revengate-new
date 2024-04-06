@@ -88,15 +88,17 @@ func flash_coord_selection(coord:Vector2i):
 	add_child(highlight)
 	Utils.fadeout_later(highlight, 5)
 
-func effect_at_coord(effect_name, coord:Vector2i, fadeout_secs:=0):
-	var effect = load(Utils.effect_path(effect_name)).instantiate()
+func effect_at_coord(effect, coord:Vector2i, fadeout_secs:=0):
+	if effect is String:
+		effect = load(Utils.effect_path(effect)).instantiate()
 	effect.position = RevBoard.board_to_canvas(coord)
 	add_child(effect)
 	if fadeout_secs:
 		Utils.fadeout_later(effect, fadeout_secs)
 
-func effect_between_coords(effect_name, start_coord:Vector2i, end_coord:Vector2i, fadeout_secs:=0):
-	var effect = load(Utils.effect_path(effect_name)).instantiate()
+func effect_between_coords(effect, start_coord:Vector2i, end_coord:Vector2i, fadeout_secs:=0):
+	if effect is String:
+		effect = load(Utils.effect_path(effect)).instantiate()
 	effect.start_coord = start_coord
 	effect.end_coord = end_coord
 	var start_pos = RevBoard.board_to_canvas(start_coord)

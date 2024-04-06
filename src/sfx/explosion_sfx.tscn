@@ -32,21 +32,21 @@ point_count = 3
 curve = SubResource("Curve_n7xgx")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_uibh5"]
+particle_flag_disable_z = true
 emission_shape = 1
 emission_sphere_radius = 1.0
-particle_flag_disable_z = true
+angle_max = 211.8
 direction = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
 spread = 88.38
-gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
 angular_velocity_min = 1.4988e-14
 angular_velocity_max = 1.4988e-14
 orbit_velocity_min = 2.08167e-14
 orbit_velocity_max = 2.08167e-14
+gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
 linear_accel_min = 47.41
 linear_accel_max = 100.0
 damping_min = 4.41
 damping_max = 11.77
-angle_max = 211.8
 scale_min = 0.7
 scale_max = 0.7
 scale_curve = SubResource("CurveTexture_5ma48")
@@ -68,10 +68,8 @@ curve = SubResource("Curve_xo3bk")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rl37c"]
 particle_flag_disable_z = true
-gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
-orbit_velocity_min = 0.0
-orbit_velocity_max = 0.0
 angle_max = 190.6
+gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
 scale_min = 0.5
 scale_max = 0.5
 scale_curve = SubResource("CurveTexture_ber2y")
@@ -94,9 +92,9 @@ curve = SubResource("Curve_kokle")
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tnx1l"]
 particle_flag_disable_z = true
 direction = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
-gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
 orbit_velocity_min = 2.08167e-14
 orbit_velocity_max = 2.08167e-14
+gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
 scale_min = 0.5
 scale_max = 0.5
 scale_curve = SubResource("CurveTexture_ynqnr")
@@ -123,7 +121,6 @@ grow_vertical = 2
 
 [node name="DebugTimer" type="Timer" parent="."]
 wait_time = 5.0
-autostart = true
 
 [node name="RedFlash" type="GPUParticles2D" parent="."]
 position = Vector2(0.999999, 0.00102366)
