@@ -37,7 +37,7 @@ var end_coord:Vector2i
 var time: float
 
 func _ready():
-	time = 0
+	time = 0.0
 	if material is ShaderMaterial:
 		if skip_shader:
 			material = null

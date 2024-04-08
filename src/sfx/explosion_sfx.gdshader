@@ -15,8 +15,8 @@ void fragment() {
 
 	// distance from the center of effect
 	float dist = distance(UV, vec2(0.5));
-	float wave_front = clamp(-fade_slope * dist + effect_time, 0, 1);
-	float wave_back = clamp(-fade_slope * dist + effect_time-delay, 0, 1);
+	float wave_front = clamp(-fade_slope * dist + effect_time, 0.0, 1.0);
+	float wave_back = clamp(-fade_slope * dist + effect_time-delay, 0.0, 1.0);
 
 	// fast ripples with a few periods inside the effect radius
 	float wave = cos(PI * 6.0 * dist - time * 12.0);
