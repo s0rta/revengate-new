@@ -6,8 +6,6 @@ uniform sampler2D screen_texture: hint_screen_texture;
 
 uniform float time;
 uniform float start_time;
-// we add the hue to the background color, so it should not be too saturated
-uniform vec3 hue: source_color;
 uniform float duration = 2.6;
 
 float runaway(float val){
@@ -20,13 +18,6 @@ mat2 rotate2d(float angle){
 			vec2(sin(angle), cos(angle)));
 }
 
-void vertex() {
-	float effect_time = time - start_time;
-	float fast_time = effect_time * time_scale;
-	float scale = 1.0 + 0.2 * sin(fast_time);  // wobbling
-	VERTEX = VERTEX * rotate2d(runaway(fast_time)) * scale; 
-}
-
 void fragment() {
 	float effect_time = time - start_time;
 	float fast_time = effect_time * time_scale;
@@ -36,5 +27,5 @@ void fragment() {
 	float intensity = clamp(texture(TEXTURE, UV).a - effect_time/duration, 0.0, 1.0);
 	vec2 offset = intensity * vec2(0.015) * rotate2d(runaway(fast_time));
 	vec4 color = texture(screen_texture, SCREEN_UV + offset);	
-	COLOR.rgb = clamp(color.rgb + hue*intensity, vec3(0.0), vec3(1.0));
+	COLOR.rgb = clamp(color.rgb + COLOR.rgb*intensity, vec3(0.0), vec3(1.0));
 }

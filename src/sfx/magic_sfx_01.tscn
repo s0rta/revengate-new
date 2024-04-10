@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://cvsa3n8fy0ira"]
 
-[ext_resource type="Shader" path="res://src/sfx/magic_sfx_01.gdshader" id="1_wa4bg"]
-[ext_resource type="Script" path="res://src/sfx/special_effect.gd" id="2_xlosw"]
+[ext_resource type="Shader" path="res://src/sfx/magic_sfx_03.gdshader" id="1_6v2dh"]
+[ext_resource type="Script" path="res://src/sfx/magic_sfx_01.gd" id="2_f7fpy"]
 [ext_resource type="AudioStream" uid="uid://bym5psawxctj0" path="res://src/sfx/magic-01.mp3" id="3_4pwn2"]
 [ext_resource type="Texture2D" uid="uid://cyhj8vloo7nef" path="res://addons/kenney_particle_pack/light_01.png" id="4_4crag"]
 [ext_resource type="Texture2D" uid="uid://bcegewnjfju5u" path="res://addons/kenney_particle_pack/circle_05.png" id="5_4d2fq"]
@@ -10,15 +10,16 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b227l"]
 resource_local_to_scene = true
-shader = ExtResource("1_wa4bg")
+shader = ExtResource("1_6v2dh")
 shader_parameter/time = null
 shader_parameter/start_time = null
-shader_parameter/hue = Color(0.596078, 0, 0.552941, 1)
 shader_parameter/duration = 3.0
 
 [node name="SummoningGlobe" type="Node2D"]
+modulate = Color(0.596078, 0, 0.552941, 1)
 material = SubResource("ShaderMaterial_b227l")
-script = ExtResource("2_xlosw")
+script = ExtResource("2_f7fpy")
+max_screen_time = 2.65
 
 [node name="Sound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_4pwn2")
