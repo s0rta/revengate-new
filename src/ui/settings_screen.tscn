@@ -59,6 +59,23 @@ flat = true
 layout_mode = 2
 text = "We won't judge. Just don't lie about how you won."
 
+[node name="Label4" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Shaders:"
+
+[node name="ShadersCheck" type="CheckBox" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+text = "Enabled"
+flat = true
+
+[node name="Label5" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Disable shaders if the game is too slow or tends to crash"
+
 [node name="Label3" type="Label" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
@@ -75,6 +92,9 @@ popup/item_1/text = "Big"
 popup/item_1/id = 1
 popup/item_2/text = "Really Big"
 popup/item_2/id = 2
+
+[node name="Pad2" type="Control" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="."]
 anchors_preset = 3
@@ -95,5 +115,6 @@ size_flags_vertical = 8
 text = "Back"
 
 [connection signal="toggled" from="VBoxContainer/GridContainer/CheatsCheck" to="." method="_on_cheats_check_toggled"]
+[connection signal="toggled" from="VBoxContainer/GridContainer/ShadersCheck" to="." method="_on_shaders_check_toggled"]
 [connection signal="item_selected" from="VBoxContainer/GridContainer/TextSizeDropdown" to="." method="_on_text_size_dropdown_item_selected"]
 [connection signal="button_up" from="MarginContainer2/BackButton" to="." method="_on_back_button_pressed"]

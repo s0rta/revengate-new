@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -24,6 +24,7 @@ class_name Tabulator extends Resource
 const FILE_PATH = "user://global_facts.tres"
 
 @export var allow_cheats := false
+@export var enable_shaders := true
 @export var text_size: Consts.TextSizes = Consts.TextSizes.UNSET
 
 static func load() -> Tabulator:

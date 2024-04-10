@@ -434,9 +434,9 @@ func abort_run():
 func test():
 	print("Testing: 1, 2... 1, 2!")
 	var effect = load(Utils.effect_path("explosion_sfx")).instantiate()
-	effect.skip_sound = true
+	#effect.skip_sound = true
 	#effect.skip_particles = true
-	effect.skip_shader = true
+	#effect.skip_shader = true
 	Tender.viewport.effect_at_coord(effect, Tender.hero.get_cell_coord())
 
 

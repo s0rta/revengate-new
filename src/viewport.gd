@@ -1,4 +1,4 @@
-# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -18,6 +18,7 @@
 ## A sub-class of viewport that makes it easy to remap game commands to the 
 ## zoomed and panned game board.
 extends SubViewport
+var tabulator := Tabulator.load()
 
 var zoom := 1.0:
 	get:
@@ -92,6 +93,7 @@ func effect_at_coord(effect, coord:Vector2i, fadeout_secs:=0):
 	if effect is String:
 		effect = load(Utils.effect_path(effect)).instantiate()
 	effect.position = RevBoard.board_to_canvas(coord)
+	effect.skip_shader = effect.skip_shader or not tabulator.enable_shaders
 	add_child(effect)
 	if fadeout_secs:
 		Utils.fadeout_later(effect, fadeout_secs)
@@ -104,6 +106,7 @@ func effect_between_coords(effect, start_coord:Vector2i, end_coord:Vector2i, fad
 	var start_pos = RevBoard.board_to_canvas(start_coord)
 	var end_pos = RevBoard.board_to_canvas(end_coord)
 	effect.position = (start_pos + end_pos) / 2.0
+	effect.skip_shader = effect.skip_shader or not tabulator.enable_shaders
 	add_child(effect)
 	if fadeout_secs:
 		Utils.fadeout_later(effect, fadeout_secs)

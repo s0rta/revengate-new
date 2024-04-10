@@ -19,15 +19,20 @@ extends "res://src/ui/secondary_info_screen.gd"
 
 var DD_ITEM_TO_TSIZE = Consts.TextSizes.values().slice(1)
 
-@onready var tabulator = Tabulator.load()
+@onready var tabulator:Tabulator = Tabulator.load()
 
 func _ready():
 	%CheatsCheck.button_pressed = tabulator.allow_cheats
+	%ShadersCheck.button_pressed = tabulator.enable_shaders
 	if tabulator.text_size != Consts.TextSizes.UNSET:
 		%TextSizeDropdown.selected = DD_ITEM_TO_TSIZE.find(tabulator.text_size)
 
 func _on_cheats_check_toggled(toggled_on):
 	tabulator.allow_cheats = toggled_on
+	tabulator.save()
+
+func _on_shaders_check_toggled(toggled_on):
+	tabulator.enable_shaders = toggled_on
 	tabulator.save()
 
 func _on_text_size_dropdown_item_selected(index):
