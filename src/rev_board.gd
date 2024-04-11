@@ -478,14 +478,13 @@ func _ready():
 	if not board_id:
 		board_id = ResourceUID.create_id()
 
-	# FIXME: this is a hack to remove the water shader if the export failed to 
-	#   include the sub textures. The real solution is to fix the export so that
-	#   that the textures are never missing
-	var source = tile_set.get_source(0)
-	var water_data = source.get_tile_data(V.i(7, 7), 0)
-	if water_data.material != null:
-		if water_data.material.get_shader_parameter("noise") == null:
-			water_data.material = null
+	var tabulator:Tabulator = Tabulator.load()
+	if not tabulator.enable_shaders:
+		var source = tile_set.get_source(0)
+		# TODO: would be better to detect which tile has a shader, but this will do for now
+		for tile_id in [V.i(4, 0), V.i(5, 0), V.i(6, 0), V.i(7, 0), V.i(7, 7)]:
+			var data = source.get_tile_data(tile_id, 0)
+			data.material = null
 
 	detect_terrain_names()
 	detect_actors()
