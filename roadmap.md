@@ -418,7 +418,7 @@ UX:
 - [ ] dialogue responses are easier to tell apart from the speaker's chatter
 
 Performance:
-- [ ] async preload most shaders to speedup startup
+- [x] async preload most shaders to speedup startup
 
 Strategies:
 - [ ] Seeking is easier to resolve even is the target keeps moving

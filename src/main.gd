@@ -93,6 +93,7 @@ func _ready():
 		watch_hero(%Hero)
 		if Tender.full_game:
 			%StoryScreen.show_story(quests[0].title, quests[0].intro_path)
+	pre_load_resources.call_deferred()
 	await $TurnQueue.run()
 
 func _process(delta):
@@ -344,6 +345,17 @@ func start_ch3():
 	if $TurnQueue.is_paused():
 		$TurnQueue.resume()
 
+func pre_load_resources():
+	## pre-load and cache a few expensive resources
+	if not Tabulator.load().enable_shaders:
+		return
+	var exp_res = ["res://src/sfx/explosion_sfx.tscn", 
+					"res://src/sfx/magic_sfx_01.tscn", 
+					"res://src/sfx/magic_sfx_02.tscn", 
+					"res://src/sfx/zap_sfx.tscn"]
+	for res in exp_res:
+		ResourceLoader.load_threaded_request(res)
+
 func capture_game(immediate:bool):
 	## Record the current state of the game and save it to a file.
 	var was_running = false
@@ -433,12 +445,6 @@ func abort_run():
 
 func test():
 	print("Testing: 1, 2... 1, 2!")
-	var effect = load(Utils.effect_path("explosion_sfx")).instantiate()
-	#effect.skip_sound = true
-	#effect.skip_particles = true
-	#effect.skip_shader = true
-	Tender.viewport.effect_at_coord(effect, Tender.hero.get_cell_coord())
-
 
 func test2():
 	print("Testing: 2, 1... 2, 1!")
