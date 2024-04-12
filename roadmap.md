@@ -415,7 +415,7 @@ Combat:
 - [ ] silence a few warnings
 
 UX:
-- [ ] dialogue responses are easier to tell apart from the speaker's chatter
+- [x] dialogue responses are easier to tell apart from the speaker's chatter
 
 Performance:
 - [x] async preload most shaders to speedup startup

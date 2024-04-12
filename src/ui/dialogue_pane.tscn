@@ -33,7 +33,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 3
-mouse_filter = 2
 color = Color(0, 0, 0, 0.701961)
 
 [node name="Margin" type="MarginContainer" parent="Background/SpeechBackgroud"]
@@ -49,12 +48,30 @@ mouse_filter = 2
 layout_mode = 2
 mouse_filter = 2
 
-[node name="SpeakerLabel" type="Label" parent="Background/SpeechBackgroud/Margin/VBox"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Background/SpeechBackgroud/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="SpeakerLabel" type="Label" parent="Background/SpeechBackgroud/Margin/VBox/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 2
+size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("2_i0dj1")
 text = "Nadège Cyrat"
+
+[node name="NextButton" type="Button" parent="Background/SpeechBackgroud/Margin/VBox/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+text = "⏩"
+
+[node name="CloseButton2" type="Button" parent="Background/SpeechBackgroud/Margin/VBox/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+text = "⏹"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SpeechBackgroud/Margin/VBox"]
 layout_mode = 2
@@ -87,14 +104,24 @@ deselect_on_focus_loss_enabled = false
 visible_characters_behavior = 2
 script = ExtResource("2_m6frq")
 pause_at_characters = ""
+skip_pause_at_abbreviations = PackedStringArray("Mr", "Mrs", "Ms", "Dr", "etc", "eg", "ex")
 
-[node name="ResponsesBox" type="VBoxContainer" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+mouse_filter = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 0
+
+[node name="ResponsesBox" type="VBoxContainer" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_horizontal = 4
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer/ResponsesBox"]
+[node name="Label" type="Label" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer/MarginContainer/ResponsesBox"]
 visible = false
 layout_mode = 2
 theme_type_variation = &"DialogueOption"
@@ -102,7 +129,7 @@ theme_override_colors/font_color = Color(0.87451, 0.615686, 0.160784, 1)
 theme_override_font_sizes/font_size = 26
 text = "This is a response"
 
-[node name="Label2" type="Label" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer/ResponsesBox"]
+[node name="Label2" type="Label" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer/MarginContainer/ResponsesBox"]
 visible = false
 layout_mode = 2
 theme_type_variation = &"DialogueOption"
@@ -110,13 +137,23 @@ theme_override_colors/font_color = Color(0.87451, 0.615686, 0.160784, 1)
 theme_override_font_sizes/font_size = 26
 text = "This is a response"
 
-[node name="Label3" type="Label" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer/ResponsesBox"]
+[node name="Label3" type="Label" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer/MarginContainer/ResponsesBox"]
 visible = false
 layout_mode = 2
 theme_type_variation = &"DialogueOption"
 theme_override_colors/font_color = Color(0.87451, 0.615686, 0.160784, 1)
 theme_override_font_sizes/font_size = 26
 text = "This is a response"
+
+[node name="Button" type="Button" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer/MarginContainer/ResponsesBox"]
+visible = false
+layout_mode = 2
+text = "Got something"
+
+[node name="Button2" type="Button" parent="Background/SpeechBackgroud/Margin/VBox/ScrollContainer/VBoxContainer/MarginContainer/ResponsesBox"]
+visible = false
+layout_mode = 2
+text = "To Respond"
 
 [node name="ResponseTemplate1" type="RichTextLabel" parent="Background/SpeechBackgroud/Margin/VBox"]
 unique_name_in_owner = true
@@ -128,7 +165,7 @@ theme_override_font_sizes/normal_font_size = 26
 text = "This is a test"
 scroll_active = false
 
-[node name="ResponseTemplate" type="Label" parent="Background/SpeechBackgroud/Margin/VBox"]
+[node name="ResponseTemplate2" type="Label" parent="Background/SpeechBackgroud/Margin/VBox"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -136,12 +173,23 @@ mouse_filter = 0
 theme_type_variation = &"DialogueOption"
 text = "This is a response"
 
+[node name="ResponseTemplate" type="Button" parent="Background/SpeechBackgroud/Margin/VBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+text = "To your question and the text can go really long.... Right, you ever seen text that go this long on? Me neighter. It's kind of crazy..."
+
 [node name="CloseButton" type="Button" parent="Background/SpeechBackgroud/Margin/VBox"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 0
 text = "Close"
 
-[connection signal="gui_input" from="Background" to="." method="_on_background_gui_input"]
+[connection signal="gui_input" from="Background" to="." method="_on_outside_gui_input"]
+[connection signal="gui_input" from="Background/SpeechBackgroud" to="." method="_on_background_gui_input"]
+[connection signal="button_up" from="Background/SpeechBackgroud/Margin/VBox/HBoxContainer/NextButton" to="." method="advance"]
+[connection signal="button_up" from="Background/SpeechBackgroud/Margin/VBox/HBoxContainer/CloseButton2" to="." method="close"]
 [connection signal="button_up" from="Background/SpeechBackgroud/Margin/VBox/CloseButton" to="." method="close"]

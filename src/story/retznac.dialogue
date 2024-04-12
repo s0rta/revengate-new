@@ -28,7 +28,8 @@ Retznac: Would you happen to like Cognac?
 	do speaker_give_items()
 	Retznac: It was great pleasure trading with you. I wish you many healthy years and the finest experiences life can offer.
 	Retznac: Your aspiration is remarquable. Find me again if you think our alliance could go further.
-- I'm not dealing with you. Get a tax permit and open your own store if you want to be a librarian.
+- I'm not dealing with you. 
+	Hero: Get a tax permit and open your own store if you want to be a librarian.
 	Retznac: Your choice is short sighted, but understandable. I happen to be very patient, young one. Find me again if seasons steer your mind in a different direction.
 	Retznac: In the meantime, you would be wise not to tempt me – or anyone else – too much.
 => END

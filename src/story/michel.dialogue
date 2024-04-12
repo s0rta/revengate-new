@@ -7,7 +7,7 @@ Michel: Did you get a job from Nadège?
 	=> extra_potions
 - Who is that?
 	Michel: She hangs at the Café Caché. Take the secret door in my broom closet on the left and go talk to her.
-	=> END
+=> END
 
 ~ extra_potions
 Michel: I have too many potions and they use some valuable shelve space. Would you like one?

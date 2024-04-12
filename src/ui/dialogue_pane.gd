@@ -20,6 +20,8 @@
 ## A rudimentatry speech bubble
 class_name DialoguePane extends Control
 
+const MIN_RESPONSES = 6
+
 signal closed(acted:bool)
 signal new_sentiment(faction_a, faction_b, value:int)
 signal quest_activated()
@@ -47,6 +49,7 @@ var dialogue_line: DialogueLine:
 		dialogue_line = next_dialogue_line
 		%SpeakerLabel.text = dialogue_line.character
 		%DialogueLabel.dialogue_line = dialogue_line
+		%NextButton.disabled = has_options()
 
 		# Show response options
 		if len(dialogue_line.responses):
@@ -68,12 +71,17 @@ var dialogue_line: DialogueLine:
 
 func _ready():
 	# make sure we have space to fit most convos without meeting a scroll bar
-	var line_height = %ResponseTemplate.get_line_height()
+	var line_height : int
+	if %ResponseTemplate.get("get_line_height"):
+		line_height = %ResponseTemplate.get_line_height()
+	else:
+		line_height = %ResponseTemplate.size.y
 	var nb_resp = %SpeechBackgroud.size.y / line_height
-	if nb_resp < 10:
-		# this is actually smaller than 10 since margins and other controls 
+	if nb_resp < MIN_RESPONSES:
+		# this is actually smaller than MIN_RESPONSE since margins and other controls 
 		# are also taking space
-		%SpeechBackgroud.custom_minimum_size.y = 10 * line_height
+		var parent_h = %SpeechBackgroud.get_parent().size.y
+		%SpeechBackgroud.custom_minimum_size.y = min(parent_h, MIN_RESPONSES * line_height)
 
 func _unhandled_key_input(event):
 	# TODO: handle ui_accept key as well
@@ -118,6 +126,15 @@ func next(next_id: String):
 func _on_response_gui_input(event, option_idx):
 	if Utils.event_is_tap_or_left(event) and event.pressed:
 		next(dialogue_line.responses[option_idx].next_id)
+
+func _on_outside_gui_input(event):
+	# Consume all input while the balloon is visible
+	if visible:
+		accept_event()
+		if Utils.event_is_tap_or_left(event) and not event.pressed:
+			# We do our processing on release to fully consume both the tap 
+			# and the release.
+			close()
 
 func _on_background_gui_input(event):
 	# Consume all input while the balloon is visible
