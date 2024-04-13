@@ -114,3 +114,14 @@ func _path_next(path):
 		if step != here:
 			return step
 	return null
+
+func highlight_path(path):
+	## Display a cell highlight on each steps of a path
+	if not Consts.DEBUG_PATHS and me != Tender.hero:
+		return
+		
+	var board:RevBoard = me.get_board()
+	var terrain = "highlight-info"
+	if me != Tender.hero:
+		terrain = "highlight-warning"
+	board.highlight_cells(path, terrain)

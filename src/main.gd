@@ -267,7 +267,8 @@ func cancel_hero_strats():
 		Tender.hero.cancel_strategies()
 
 func _on_turn_started(_turn):
-	get_board().clear_highlights()
+	pass
+	#get_board().clear_highlights()
 
 func _on_turn_finished(turn):
 	print("Turn %d is done." % turn)

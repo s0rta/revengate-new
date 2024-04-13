@@ -409,13 +409,15 @@ Combat:
 
 
 ## v0.12.4
-- [ ] bug: explosions crash the game on some Andoid devices (#24)
+- [x] bug: explosions crash the game on some Andoid devices (#24)
 - [ ] document conn_target and connection fields
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings
+- [ ] skip turn command
 
 UX:
 - [x] dialogue responses are easier to tell apart from the speaker's chatter
+- [ ] show path while traveling rather than the number of turns
 
 Performance:
 - [x] async preload most shaders to speedup startup
@@ -423,6 +425,10 @@ Performance:
 Strategies:
 - [ ] Seeking is easier to resolve even is the target keeps moving
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
+
+## v0.13
+- [ ] wait and heal
+- [ ] new quest
 
 ## v1.0
 - [ ] A Fight for Fumes campaign

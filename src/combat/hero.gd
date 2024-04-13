@@ -148,6 +148,10 @@ func highlight_options(board=null, index=null):
 
 func act() -> void:
 	has_acted = false
+
+	var board = get_board()
+	board.clear_highlights()
+
 	refresh_strategies()
 	var strat = get_strategy()
 	if strat:
@@ -161,7 +165,6 @@ func act() -> void:
 	else:
 		state = States.LISTENING
 		print("player acting...")
-		var board = get_board()
 		var index = board.make_index()
 		board.update_all_actor_shrouding(index)
 		highlight_options(board, index)

@@ -107,6 +107,7 @@ func act() -> bool:
 	if path and len(path) >= 2:
 		var step = _path_next(path)
 		path = path.slice(path.find(step))
+		highlight_path(path)
 		me.move_to(step)
 		return true
 	else:

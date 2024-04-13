@@ -102,6 +102,7 @@ func act() -> bool:
 
 		var path = metrics.path()
 		if path != null and len(path) >= 2 and index.is_free(path[1]):
+			highlight_path(path)
 			me.move_to(path[1])
 			return true
 		else:

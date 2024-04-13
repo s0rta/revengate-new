@@ -103,12 +103,12 @@ func act():
 	var nb_steps = _turns_left()
 	if nb_steps:
 		var msg = "%s is travelling towards %s." % [me.get_short_desc(), dest_str]
-		if nb_steps > 1:
-			msg += " Arriving in %d turn(s)." % (nb_steps - 1)
 		add_hero_message(msg, Consts.MessageLevels.INFO, ["strategy"])
-
+		
 		if nb_steps <= 1:
 			arrived = true
+		else:
+			highlight_path(path)
 		var there = path[0]
 		me.move_to(there)
 		return true
