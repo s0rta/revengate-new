@@ -417,7 +417,7 @@ Combat:
 
 UX:
 - [x] dialogue responses are easier to tell apart from the speaker's chatter
-- [ ] show path while traveling rather than the number of turns
+- [x] show path while traveling rather than the number of turns
 
 Performance:
 - [x] async preload most shaders to speedup startup

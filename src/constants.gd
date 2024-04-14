@@ -22,7 +22,7 @@ extends Node
 const VERSION := "0.12.4"
 const VERSION_CODE := 1028124
 const DEBUG = true
-const DEBUG_PATHS = true
+const DEBUG_PATHS = false
 
 const SAVE_PROB := 0.05  # chance that we save the game at the end of a turn
 

@@ -28,6 +28,9 @@ class Entry:
 		coord = coord_
 		dist = dist_
 		tie_breaker = tie_breaker_
+
+	func _to_string():
+		return "<Entry %s %s %s>" % [coord, dist, tie_breaker]
 	
 var heap : Array[Entry] = []
 
@@ -82,7 +85,7 @@ func _siftup(pos:int):
 		rightpos = childpos + 1
 		if (rightpos < endpos 
 			and not (heap[childpos].dist < heap[rightpos].dist 
-						or (heap[childpos].dist < heap[rightpos].dist 
+						or (heap[childpos].dist == heap[rightpos].dist 
 							and heap[childpos].tie_breaker < heap[rightpos].tie_breaker))):
 			childpos = rightpos
 		# swap the smaller child up
@@ -93,3 +96,11 @@ func _siftup(pos:int):
 	# to its final resting place (by sifting its parents down).
 	heap[pos] = entry
 	_siftdown(startpos, pos)
+
+func ddump():
+	var q = DistQueue2i.new()
+	q.heap = heap.duplicate()
+	var entries = []
+	while not q.is_empty():
+		entries.append(q.dequeue())
+	print(entries)
