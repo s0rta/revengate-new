@@ -413,7 +413,7 @@ Combat:
 - [ ] document conn_target and connection fields
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings
-- [ ] skip turn command
+- [x] skip turn command
 
 UX:
 - [x] dialogue responses are easier to tell apart from the speaker's chatter

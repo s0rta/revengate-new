@@ -95,7 +95,7 @@ func refresh_mana(_new_mana=null):
 
 func refresh_spells():
 	for node in %QuickActionsBox.get_children():
-		if node != %QuickAttackButton:
+		if not (node == %QuickAttackButton or node == %SkipTurnButton):
 			node.hide()
 			node.queue_free()
 	for spell in Tender.hero.find_children("", "Spell", false, false):
@@ -219,10 +219,12 @@ func _on_hero_state_changed(new_state):
 	for btn in %QuickActionsBox.find_children("", "SpellButton", false, false):
 		btn.set_enabled(new_state == Actor.States.LISTENING)
 	if new_state == Actor.States.LISTENING:
+		%SkipTurnButton.disabled = false
 		quick_attack_cmd.refresh(Tender.hero.get_board().make_index())
 		var here = Tender.hero.get_cell_coord()
 		%QuickAttackButton.disabled = not quick_attack_cmd.is_valid_for_hero_at(here)
 	else:
+		%SkipTurnButton.disabled = true
 		%QuickAttackButton.disabled = true
 
 func _on_city_map_button_pressed():
@@ -254,3 +256,7 @@ func _on_center_control_visibility_changed():
 
 func _on_hero_spells_changed():
 	refresh_spells()
+
+
+func _on_skip_turn_button_button_up():
+	Tender.hero.finalize_turn()
