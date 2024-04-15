@@ -132,6 +132,8 @@ static func get_node_modifiers(node:Node, valid_pred=null):
 		# modifier can be on a `StatsModifiers` sub-node inside a `stats_modifiers` dict attribute
 		if valid_pred and not valid_pred.call(child):
 			continue
+		if child.get("is_expired") and child.is_expired():
+			continue
 		if child is StatsModifiers:
 			_combine_modifiers(all_mods, child)
 		else:

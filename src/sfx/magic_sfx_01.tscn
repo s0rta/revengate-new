@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://cvsa3n8fy0ira"]
 
-[ext_resource type="Shader" path="res://src/sfx/magic_sfx_03.gdshader" id="1_6v2dh"]
+[ext_resource type="Shader" path="res://src/sfx/magic_sfx_01.gdshader" id="1_6v2dh"]
 [ext_resource type="Script" path="res://src/sfx/magic_sfx_01.gd" id="2_f7fpy"]
 [ext_resource type="AudioStream" uid="uid://bym5psawxctj0" path="res://src/sfx/magic-01.mp3" id="3_4pwn2"]
 [ext_resource type="Texture2D" uid="uid://cyhj8vloo7nef" path="res://addons/kenney_particle_pack/light_01.png" id="4_4crag"]

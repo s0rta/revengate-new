@@ -174,6 +174,46 @@ class Talk extends Command:
 		print("The dia has been closed!")
 		return true
 
+class Rest extends Command:
+	func _init(index_=null):
+		is_action = true
+		
+		caption = "Rest"
+		super(index_)
+
+	func is_valid_for(coord:Vector2i):
+		return coord == Tender.hero.get_cell_coord()
+
+	func run(coord:Vector2i) -> bool:
+		var target_health = _find_target_health()
+		var ttl = _find_ttl(target_health)
+		var strat = Resting.new(Tender.hero, 1.0, ttl, target_health)
+		var mods = StatsModifiers.new()
+		mods.perception = -45
+		strat.add_child(mods)
+		Tender.hero.add_strategy(strat)
+		Tender.hero.add_message("You close your eyes and meditate for a while...")
+		return true
+		
+	func _find_target_health() -> int:
+		var me = Tender.hero
+		var hratio = me.get_health_ratio()
+		if hratio >= 1.0:
+			return -1
+		elif hratio < .65:
+			return .80 * me.health_full
+		else:
+			return min((hratio + .15) * me.health_full, me.health_full)
+
+	func _find_ttl(target_health:int):
+		const min_ttl := 50
+		var me:Actor = Tender.hero
+		if target_health < 0:
+			return min_ttl
+		else:
+			var hdelta = target_health - me.health
+			return max(int(hdelta / me.healing_prob * 1.5), min_ttl)
+
 class Inspect extends Command:
 	func _init(index_=null):
 		is_action = false
@@ -456,6 +496,7 @@ class OpenDoor extends DoorHandler:
 		
 func _ready():
 	_cmd_classes = [Attack, Talk, TravelTo, GetCloser, Inspect, CloseDoor, OpenDoor, 
+					Rest,
 					DumpDevCheat, TeleportCheat, RegenCheat, VictoryCheat]
 
 func commands_for(coord, hero_pov:=false, index=null):

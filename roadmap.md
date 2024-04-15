@@ -409,11 +409,13 @@ Combat:
 
 
 ## v0.12.4
+- [ ] bug: inspect screen does not take all dynamic stats modifiers into account
 - [x] bug: explosions crash the game on some Andoid devices (#24)
 - [ ] document conn_target and connection fields
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings
 - [x] skip turn command
+- [x] wait and heal
 
 UX:
 - [x] dialogue responses are easier to tell apart from the speaker's chatter
@@ -427,7 +429,6 @@ Strategies:
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
 
 ## v0.13
-- [ ] wait and heal
 - [ ] new quest
 
 ## v1.0
@@ -454,6 +455,7 @@ Strategies:
 - [ ] Salapou can steal your items
 - [ ] redo tabulator as a Godot Ressource
 - [ ] flatten the board-area node sub-tree
+- [ ] different room styles, ex.: https://www.zorbus.net/bts/vaults.png
 
 Simulator:
 - [ ] simulator auto-starts an ExtraStage if the starting board is not populated
