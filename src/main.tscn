@@ -198,6 +198,7 @@ caption = "the complex aroma of a premium absinthe"
 script = ExtResource("13_u4fm7")
 start_world_loc = Vector3i(12, 4, -1)
 dest_world_loc = Vector3i(11, 4, 0)
+ambient_light_col = Color(0.639216, 0.639216, 0.74902, 1)
 
 [node name="DeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/Traboule1" instance=ExtResource("19_2as3h")]
 
@@ -207,6 +208,7 @@ start_world_loc = Vector3i(13, 5, -1)
 dest_world_loc = Vector3i(13, 8, 0)
 start_depth = 1
 base_spawn_budget = 8
+ambient_light_col = Color(0.639216, 0.74902, 0.729412, 1)
 
 [node name="DeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/Traboule2" instance=ExtResource("20_4ntfa")]
 
@@ -229,6 +231,7 @@ dest_world_loc = Vector3i(16, 5, -1)
 tunneling_elevation = -1
 start_depth = 1
 base_spawn_budget = 28
+ambient_light_col = Color(0.7225, 0.7225, 0.85, 1)
 
 [node name="StashDeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/Stash" instance=ExtResource("22_gyaq5")]
 
@@ -237,6 +240,7 @@ script = ExtResource("20_f773d")
 default_board_size = Vector2i(32, 15)
 start_depth = 2
 base_spawn_budget = 8
+ambient_light_col = Color(0.640575, 0.73, 0.6205, 1)
 
 [node name="CryptDeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/Crypt" instance=ExtResource("21_rxcru")]
 

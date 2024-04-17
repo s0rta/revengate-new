@@ -38,6 +38,8 @@ const FLOOR_TERRAINS = ["floor", "floor-rough", "floor-dirt"]
 signal new_message(message, level, tags)
 signal actor_died(board, coord, tags)
 
+@export var ambient_light_col := Color(1, 1, 1, 1)
+
 @export_group("Internals")
 # approximate topological distance to the starting board, used for spawning difficulty
 @export var depth := 0  
@@ -475,6 +477,7 @@ static func canvas_to_board_str(cpos):
 	return coord_str(canvas_to_board(cpos))
 
 func _ready():
+	$AmbientLight.color = ambient_light_col
 	if not board_id:
 		board_id = ResourceUID.create_id()
 

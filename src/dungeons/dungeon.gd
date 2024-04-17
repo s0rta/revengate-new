@@ -38,6 +38,7 @@ var prefab_map = {Vector3i(13, 3, 0): "Er",
 @export var default_board_size := Vector2i(23, 15)
 @export var start_depth := 0
 @export var base_spawn_budget := 0
+@export var ambient_light_col := Color(1, 1, 1, 1)  # this is z-adjusted at board creation time
 var deck_builder: DeckBuilder
 var starting_board: RevBoard
 
@@ -123,6 +124,9 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=default_board_size, pr
 	## Make a new board with fresh terrain, monsters, and items.
 	var scene = load("res://src/rev_board.tscn") as PackedScene
 	var new_board = scene.instantiate() as RevBoard
+	new_board.ambient_light_col = ambient_light_col
+	if world_loc.z < 0:
+		new_board.ambient_light_col.v = ambient_light_col.v ** abs(world_loc.z)
 	new_board.depth = depth
 	new_board.world_loc = world_loc
 	add_child(new_board)

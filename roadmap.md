@@ -411,6 +411,7 @@ Combat:
 ## v0.12.4
 - [ ] bug: inspect screen does not take all dynamic stats modifiers into account
 - [x] bug: explosions crash the game on some Andoid devices (#24)
+- [ ] bug: new A* sometimes picks sub-optimal detours
 - [ ] document conn_target and connection fields
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bxjfh12dtkof6"]
+[gd_scene load_steps=10 format=3 uid="uid://bxjfh12dtkof6"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_bgbko"]
 [ext_resource type="Script" path="res://src/combat/hero.gd" id="2_jrjv3"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="5_n8dxk"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="6_6imm7"]
 [ext_resource type="AudioStream" uid="uid://evhtpi4fygok" path="res://src/weapons/hammer-01.mp3" id="6_vvk6j"]
+[ext_resource type="Texture2D" uid="uid://bcegewnjfju5u" path="res://addons/kenney_particle_pack/circle_05.png" id="8_0sjto"]
 
 [sub_resource type="Resource" id="Resource_gejyx"]
 script = ExtResource("3_b0isk")
@@ -46,3 +47,16 @@ damage_family = 1
 
 [node name="HitSound" type="AudioStreamPlayer" parent="Punch" index="0"]
 stream = ExtResource("6_vvk6j")
+
+[node name="LongLight" type="PointLight2D" parent="." index="8"]
+energy = 0.3
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 18.0
+texture = ExtResource("8_0sjto")
+texture_scale = 0.7
+
+[node name="ShortLight" type="PointLight2D" parent="." index="9"]
+energy = 0.5
+texture = ExtResource("8_0sjto")
+texture_scale = 0.3
