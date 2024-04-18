@@ -45,3 +45,12 @@ texture = ExtResource("6_y8sxf")
 use_parent_material = true
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("7_h5hko")
+
+[node name="Light" type="PointLight2D" parent="."]
+color = Color(0.596078, 0, 0.552941, 1)
+energy = 2.0
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 18.0
+texture = ExtResource("4_4crag")
+texture_scale = 2.0

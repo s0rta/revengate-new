@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://n16i04jsaieo"]
+[gd_scene load_steps=16 format=3 uid="uid://n16i04jsaieo"]
 
 [ext_resource type="Script" path="res://src/sfx/magic_sfx_02.gd" id="1_ycm2h"]
 [ext_resource type="Texture2D" uid="uid://c60y0oqwx0t6r" path="res://addons/kenney_particle_pack/star_06.png" id="2_6wivk"]
+[ext_resource type="Texture2D" uid="uid://bcegewnjfju5u" path="res://addons/kenney_particle_pack/circle_05.png" id="3_iunce"]
 [ext_resource type="Texture2D" uid="uid://ccvmfsha4b16v" path="res://addons/kenney_particle_pack/flare_01.png" id="3_jixdf"]
 [ext_resource type="AudioStream" uid="uid://ca0r4toptaise" path="res://src/sfx/angels_choir.mp3" id="4_63fcu"]
 
@@ -115,3 +116,10 @@ draw_order = 2
 [node name="Sound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_63fcu")
 pitch_scale = 1.1
+
+[node name="Light" type="PointLight2D" parent="."]
+color = Color(0.611765, 0.988235, 0, 1)
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 18.0
+texture = ExtResource("3_iunce")

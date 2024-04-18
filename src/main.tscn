@@ -240,7 +240,7 @@ script = ExtResource("20_f773d")
 default_board_size = Vector2i(32, 15)
 start_depth = 2
 base_spawn_budget = 8
-ambient_light_col = Color(0.640575, 0.73, 0.6205, 1)
+ambient_light_col = Color(0.639216, 0.729412, 0.619608, 1)
 
 [node name="CryptDeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/Crypt" instance=ExtResource("21_rxcru")]
 

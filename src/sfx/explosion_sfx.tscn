@@ -1,10 +1,11 @@
-[gd_scene load_steps=22 format=3 uid="uid://digge31pscsl"]
+[gd_scene load_steps=23 format=3 uid="uid://digge31pscsl"]
 
 [ext_resource type="Shader" path="res://src/sfx/explosion_sfx.gdshader" id="1_hlm6u"]
 [ext_resource type="Script" path="res://src/sfx/special_effect.gd" id="2_8x1eq"]
 [ext_resource type="Texture2D" uid="uid://bxs0fp4u36b06" path="res://addons/kenney_particle_pack/scorch_01.png" id="3_hje1q"]
 [ext_resource type="Texture2D" uid="uid://dvoyfk1h103dp" path="res://addons/kenney_particle_pack/smoke_07.png" id="4_ficeo"]
 [ext_resource type="AudioStream" uid="uid://cdddart17v3fw" path="res://src/sfx/explosion-01.mp3" id="5_8k2py"]
+[ext_resource type="Texture2D" uid="uid://bcegewnjfju5u" path="res://addons/kenney_particle_pack/circle_05.png" id="6_lngbt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b227l"]
 resource_local_to_scene = true
@@ -147,5 +148,12 @@ one_shot = true
 
 [node name="Sound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_8k2py")
+
+[node name="Light" type="PointLight2D" parent="."]
+color = Color(1, 0.615686, 0.109804, 1)
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 18.0
+texture = ExtResource("6_lngbt")
 
 [connection signal="timeout" from="DebugTimer" to="." method="reset_start_time"]

@@ -48,6 +48,15 @@ func _ready():
 		start_particles()
 	if $Sound and not skip_sound:
 		$Sound.play()
+	
+	if $Light:
+		$Light.energy = 0
+		var tween = create_tween()
+		tween.set_ease(Tween.EASE_OUT)
+		tween.set_trans(Tween.TRANS_LINEAR)
+		tween.tween_property($Light, "energy", 1, 0.5)
+		tween.set_trans(Tween.TRANS_SINE)
+		tween.tween_property($Light, "energy", 0, 0.5)
 
 func _process(delta):
 	time += delta
