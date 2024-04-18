@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bvm0q1k13gmym"]
+[gd_scene load_steps=36 format=3 uid="uid://bvm0q1k13gmym"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_oonn7"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_v4koq"]
@@ -9,17 +9,18 @@
 [ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="6_urs5r"]
 [ext_resource type="Script" path="res://src/card_rule.gd" id="7_18mi5"]
 [ext_resource type="PackedScene" uid="uid://dnw86n1s88cwl" path="res://src/weapons/dagger.tscn" id="7_u30ex"]
+[ext_resource type="PackedScene" uid="uid://ck7fboee46nls" path="res://src/vibes/gas_lamp.tscn" id="8_lwp41"]
 [ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="8_mpj13"]
 [ext_resource type="PackedScene" uid="uid://c3uuk6yfc2thp" path="res://src/monsters/sahwakoon.tscn" id="9_ucbey"]
 [ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="10_smtmw"]
-[ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="13_3wmd5"]
-[ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="14_8bfbv"]
+[ext_resource type="PackedScene" uid="uid://de85ahbbn0ced" path="res://src/items/potion_of_healing.tscn" id="13_3wmd5"]
+[ext_resource type="PackedScene" uid="uid://dvr7bsle8gy1x" path="res://src/items/potion_of_regen.tscn" id="14_8bfbv"]
 [ext_resource type="PackedScene" uid="uid://c7fgdridawfb3" path="res://src/items/magic_capsule_of_regen.tscn" id="16_r5d4u"]
 [ext_resource type="PackedScene" uid="uid://dj5x5c687ddyj" path="res://src/items/amulet_of_strength.tscn" id="17_6i3li"]
 [ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="18_w8s5s"]
 [ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="19_u2vc1"]
 [ext_resource type="PackedScene" uid="uid://cfb7pinvs8cj1" path="res://src/weapons/razor.tscn" id="20_r43mm"]
-[ext_resource type="PackedScene" uid="uid://clry405irfeom" path="res://src/items/potion_of_analysis_paralysis.tscn" id="21_cb5rb"]
+[ext_resource type="PackedScene" uid="uid://bx8vm75edr76t" path="res://src/items/potion_of_analysis_paralysis.tscn" id="21_cb5rb"]
 [ext_resource type="PackedScene" uid="uid://6ml8upew405" path="res://src/weapons/saber.tscn" id="21_hyraw"]
 [ext_resource type="PackedScene" uid="uid://h7s2p8mgm387" path="res://src/weapons/sword.tscn" id="22_bc5m8"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="23_hrfvj"]
@@ -85,6 +86,10 @@ mem = SubResource("Resource_wvtyv")
 
 [node name="SulantTiger" parent="." instance=ExtResource("6_urs5r")]
 mem = SubResource("Resource_uiq3w")
+
+[node name="Hissing" parent="." instance=ExtResource("27_0wnww")]
+
+[node name="GasLamp" parent="." instance=ExtResource("8_lwp41")]
 
 [node name="Max1PerFloor5PerDungeon" type="Node" parent="."]
 script = ExtResource("7_18mi5")
@@ -167,8 +172,6 @@ max_dungeon_occ = 3
 [node name="PotionOfHealing" parent="Healing" instance=ExtResource("13_3wmd5")]
 
 [node name="PotionOfRegen" parent="Healing" instance=ExtResource("14_8bfbv")]
-
-[node name="Hissing" parent="." instance=ExtResource("27_0wnww")]
 
 [connection signal="visibility_changed" from="Unique/AmuletOfStrength" to="Unique/AmuletOfStrength" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Rare/Hammer" to="Rare/Hammer" method="_on_visibility_changed"]

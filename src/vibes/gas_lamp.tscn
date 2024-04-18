@@ -1,14 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://yo7lqbalyw4"]
+[gd_scene load_steps=3 format=3 uid="uid://ck7fboee46nls"]
 
-[ext_resource type="Script" path="res://src/vibes/vibe.gd" id="1_2gxt4"]
-[ext_resource type="Texture2D" uid="uid://bcegewnjfju5u" path="res://addons/kenney_particle_pack/circle_05.png" id="2_5qs1u"]
+[ext_resource type="Script" path="res://src/vibes/vibe.gd" id="1_w7cpt"]
+[ext_resource type="Texture2D" uid="uid://bcegewnjfju5u" path="res://addons/kenney_particle_pack/circle_05.png" id="2_0bnm6"]
 
-[node name="Candles" type="Node2D"]
-script = ExtResource("1_2gxt4")
-char = "🕯"
-caption = "a shelf with several votive candles"
-spawn_cost = 3.0
-light_col = Color(1, 0.878431, 0.670588, 1)
+[node name="GasLamp" type="Node2D"]
+script = ExtResource("1_w7cpt")
+char = "🟑"
+caption = "a gas lamp hissing softly"
+spawn_cost = 2.0
+light_col = Color(1, 0.921569, 0.580392, 1)
 
 [node name="Label" type="Label" parent="."]
 anchors_preset = 8
@@ -31,16 +31,16 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="LongLight" type="PointLight2D" parent="."]
-color = Color(1, 0.878431, 0.670588, 1)
+color = Color(1, 0.921569, 0.580392, 1)
 energy = 0.3
 shadow_enabled = true
 shadow_filter = 1
 shadow_filter_smooth = 18.0
-texture = ExtResource("2_5qs1u")
-texture_scale = 1.05
+texture = ExtResource("2_0bnm6")
+texture_scale = 1.2
 
 [node name="ShortLight" type="PointLight2D" parent="."]
 color = Color(1, 0.878431, 0.670588, 1)
 energy = 0.5
-texture = ExtResource("2_5qs1u")
+texture = ExtResource("2_0bnm6")
 texture_scale = 0.3

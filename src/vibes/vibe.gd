@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -25,6 +25,9 @@ class_name Vibe extends Node2D
 @export var spawn_rect:Rect2i
 @export var tags:Array[String]
 
+@export_group("Lights")
+@export var light_col := Color(1, 1, 1, 1)
+
 var shrouded := false  # partially or completely obscured
 var _shroud_anim = null  # only one fading going on at a time
 
@@ -32,6 +35,12 @@ func _ready():
 	$Label.text = char
 	Utils.assert_all_tags(tags)
 	Utils.hide_unplaced(self)
+	
+	var lights = find_children("", "PointLight2D", false, true)
+	for light in lights:
+		light.color = light_col
+		if light.name.begins_with("Long"):
+			_start_flicker(light)
 
 func get_board():
 	var parent = get_parent()
@@ -97,3 +106,13 @@ func shroud(animate=true):
 		
 func unshroud(animate=true):
 	Utils.unshroud_node(self, animate)
+
+func _start_flicker(light):
+	# FIXME: this would look better if we kept both Long and Short lights in sync
+	var old_energy = light.energy
+	var low_energy = randf_range(0.0, old_energy/2.0)
+	var tween = create_tween()
+	var anim_time = randf_range(0.1, 0.8)
+	tween.tween_property(light, "energy", low_energy, anim_time)
+	tween.tween_property(light, "energy", old_energy, anim_time)
+	tween.finished.connect(_start_flicker.bind(light), CONNECT_ONE_SHOT)
