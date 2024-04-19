@@ -1005,8 +1005,8 @@ func astar_metrics(start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.C
 				ctx.metrics.setv(pos, tie_breaker[0]+1)
 				ctx.metrics.add_edge(current, pos)
 			ctx.post_dist = Geom.cheby_dist(pos, ctx.dest)
-			estimate = ctx.post_dist
-			ctx.queue.enqueue(pos, estimate, [tie_breaker[0]+1, Geom.man_dist(pos, current)])
+			estimate = ctx.post_dist + tie_breaker[0]
+			ctx.queue.enqueue(pos, estimate, [tie_breaker[0]+1, Geom.man_dist(pos, ctx.start)])
 		ctx.done[current] = true
 	return ctx.metrics
 	
@@ -1056,8 +1056,8 @@ func astar_metrics_custom(pump:MetricsPump,
 				ctx.metrics.setv(pos, tie_breaker[0]+step_dist)
 				ctx.metrics.add_edge(current, pos)
 			ctx.post_dist = pump.dist_estim(pos, ctx.dest)
-			estimate = ctx.post_dist
-			var tiebreak:int = pump.dist_tiebreak(pos, current)
+			estimate = ctx.post_dist + tie_breaker[0] + step_dist
+			var tiebreak:int = pump.dist_tiebreak(pos, ctx.start)
 			ctx.queue.enqueue(pos, estimate, [tie_breaker[0]+step_dist, tiebreak])
 		ctx.done[current] = true
 	return ctx.metrics
