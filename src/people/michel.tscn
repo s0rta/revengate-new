@@ -39,8 +39,8 @@ visible = false
 
 [node name="PotionOfHealing" parent="." index="9" instance=ExtResource("5_q0pnu")]
 visible = false
-tags = Array[String](["gift", "groupable"])
+tags = Array[String](["gift", "groupable", "fragile"])
 
 [node name="PotionOfRegen" parent="." index="10" instance=ExtResource("6_thcb6")]
 visible = false
-tags = Array[String](["gift", "groupable"])
+tags = Array[String](["gift", "groupable", "fragile"])

@@ -1,0 +1,5 @@
+New setting to optionally disable most shaders for spells and explosions.
+New commands: skip turn and rest (hold still and heal).
+Showing the path while traveling rather than the number of turns to destination.
+Dynamic lighting.
+Bug fix: gifted potions shatter on impact like the ones you find in the dungeon.

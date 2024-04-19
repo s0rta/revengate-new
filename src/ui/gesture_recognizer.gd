@@ -215,7 +215,10 @@ func _mt_info(current_index, current_pos):
 	for index in touches_pos:
 		total += info.center_old.distance_to(touches_pos[index])
 	info.avg_dist_old = total / nb_touching
-	info.center_new = info.center_old + (current_pos - touches_pos[current_index]) / nb_touching
+	if touches_pos.has(current_index):
+		info.center_new = info.center_old + (current_pos - touches_pos[current_index]) / nb_touching
+	else:
+		info.center_new = info.center_old
 	total = 0.0
 	for index in touches_pos:
 		if index == current_index:
