@@ -357,9 +357,10 @@ func regen(board:RevBoard):
 	for coord in board.get_connectors():
 		var conn = board.get_connection(coord)
 		if conn:
-			var far_loc = conn.far_board.world_loc
+			var far_board = get_board_by_id(conn.far_board_id)
+			var far_loc = far_board.world_loc
 			var near_coord = far_loc_to_coord[far_loc]
-			new_board.add_connection(near_coord, conn.far_board, conn.far_coord)
+			new_board.add_connection(near_coord, far_board, conn.far_coord)
 		else:
 			# nothing to do, it was not connected
 			pass

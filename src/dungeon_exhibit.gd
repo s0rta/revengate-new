@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -22,9 +22,9 @@ var board: RevBoard  # the active board
 
 func _ready():
 	for dungeon in find_children("", "Dungeon", false, false):
-		if dungeon.starting_board != null:
-			board = dungeon.starting_board
-			break
+		if dungeon.has_starting_board():
+			board = dungeon.finalize_static_board()
+			board.set_active(true)
 	assert(board != null, "Could not find a starting board!")
 
 func _switch_board(new_board:RevBoard):
@@ -88,7 +88,8 @@ func _progress_on_loc(loc_pred):
 	for coord in old_board.get_connectors():
 		var loc = old_board.get_cell_rec_val(coord, "conn_target", "world_loc")
 		if loc == null:
-			loc = old_board.get_connection(coord).far_board.world_loc
+			var conn = old_board.get_connection(coord) 
+			loc = conn.far_loc
 		if loc_pred.call(loc):
 			coords.append(coord)
 	if coords.is_empty():
@@ -136,7 +137,7 @@ func follow_connector_at(old_board:RevBoard, coord):
 	var new_board:RevBoard
 	var conn = old_board.get_connection(coord)
 	if conn:
-		new_board = conn.far_board
+		new_board = old_board.get_dungeon().get_board_by_id(conn.far_board_id)
 	else:
 		var conn_target = old_board.get_cell_rec(coord, "conn_target")
 		var old_dungeon = old_board.get_dungeon() 

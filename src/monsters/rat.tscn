@@ -1,12 +1,18 @@
-[gd_scene load_steps=8 format=3 uid="uid://d32rti5y0shob"]
+[gd_scene load_steps=10 format=3 uid="uid://d32rti5y0shob"]
 
 [ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_cnguh"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="2_l0hj0"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="3_6ex08"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="4_m70cc"]
 [ext_resource type="AudioStream" uid="uid://da0cslkk526yk" path="res://src/monsters/bite-small.wav" id="4_suc3h"]
 [ext_resource type="Script" path="res://src/strategies/flight_or_fight.gd" id="6_3136s"]
 [ext_resource type="Script" path="res://src/strategies/tribal_territorial.gd" id="6_larah"]
 [ext_resource type="PackedScene" uid="uid://y1ws81ictm30" path="res://src/vibes/rat_poop.tscn" id="7_kqkal"]
+
+[sub_resource type="Resource" id="Resource_denkt"]
+resource_local_to_scene = true
+script = ExtResource("2_l0hj0")
+_facts = []
 
 [node name="Rat" instance=ExtResource("1_cnguh")]
 char = "r"
@@ -16,12 +22,13 @@ health = 3
 strength = 17
 agility = 45
 intelligence = 15
+mem = SubResource("Resource_denkt")
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
 text = "r"
 
-[node name="SkillLevels" parent="." index="7"]
+[node name="SkillLevels" parent="." index="6"]
 evasion = 1
 
 [node name="Exploring" type="Node" parent="." index="8"]
@@ -29,16 +36,16 @@ script = ExtResource("4_m70cc")
 hug_walls = true
 priority = 0.2
 
-[node name="FlightOrFight" type="Node" parent="." index="10"]
+[node name="FlightOrFight" type="Node" parent="." index="9"]
 script = ExtResource("6_3136s")
 probability = 0.5
 priority = 0.9
 
-[node name="TribalTerritorial" type="Node" parent="." index="11"]
+[node name="TribalTerritorial" type="Node" parent="." index="10"]
 script = ExtResource("6_larah")
 priority = 0.8
 
-[node name="Bite" type="Node" parent="." index="12"]
+[node name="Bite" type="Node" parent="." index="11"]
 script = ExtResource("3_6ex08")
 damage = 2
 damage_family = 3
@@ -46,6 +53,6 @@ damage_family = 3
 [node name="HitSound" type="AudioStreamPlayer" parent="Bite" index="0"]
 stream = ExtResource("4_suc3h")
 
-[node name="RatPoop" parent="." index="13" instance=ExtResource("7_kqkal")]
+[node name="RatPoop" parent="." index="12" instance=ExtResource("7_kqkal")]
 
-[node name="RatPoop2" parent="." index="14" instance=ExtResource("7_kqkal")]
+[node name="RatPoop2" parent="." index="13" instance=ExtResource("7_kqkal")]
