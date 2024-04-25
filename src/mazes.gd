@@ -18,7 +18,7 @@
 ## Factories to fill areas of boards with mazes.
 class_name Mazes extends RefCounted
 
-const CROSS_DIRS = RevBoard.CROSS_OFFSETS
+const CROSS_DIRS = Geom.CROSS_OFFSETS
 
 class MazeBuilder extends RefCounted:
 	## Base class for MazeBuilders, specific algorithem must be implemented in `fill()`

@@ -407,6 +407,13 @@ layer_1/modulate = Color(1, 1, 1, 0.717647)
 layer_1/z_index = -1
 layer_1/tile_data = PackedInt32Array()
 script = ExtResource("2_dlal2")
+ambient_light_col = null
+depth = null
+world_loc = null
+_cell_records = null
+_cells_by_terrain = null
+current_turn = null
+board_id = null
 
 [node name="Pad" type="Node" parent="."]
 editor_description = "This node is a hack to work around an abscure bug that make the first child of a RevBoard invisible."

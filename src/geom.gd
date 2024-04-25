@@ -18,13 +18,19 @@
 ## Utilities related to geometry
 class_name Geom extends Node
 
+# clockwise around a cell starting at top left
+const ADJ_OFFSETS = [Vector2i(-1, -1), Vector2i(0, -1), Vector2i(1, -1), Vector2i(1, 0), 
+					Vector2i(1, 1), Vector2i(0, 1), Vector2i(-1, 1), Vector2i(-1, 0)]
+const CROSS_OFFSETS = [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
+
 const CENTRAL_REGION_MARGIN := 0.25  # ration of coords that are on each side of the central region	
 
 # Some notes on Rect2i when working with tiles:
 # - `rect.end` is *outside* the rect, it's *not* the bottom right corner
 # ex.: Rect2i(0, 0, 4, 4).end => V.i(4, 4)  # br here is V.i(3, 3)
-# - `rect.has_point(p)` includes the whole rect. The Godot docs suggets otherwise, but it's because
-#    they consider the bottom and right edges to be the ones that line up with `rect.end`.
+# - `rect.has_point(p)` includes exactly the whole rect and nothing else. The Godot docs
+#    suggets otherwise, but it's because they consider the bottom and right edges to be the
+#    ones that line up with `rect.end`.
 # ex.: Rect2i(0, 0, 4, 4).has_point(V.i(3, 3)) => true
 
 static func is_corner(coord:Vector2i, rect: Rect2i):

@@ -140,6 +140,9 @@ func setv(coord:Vector2i, val:int):
 		furthest_dist = val
 	dists.setv(coord, val)
 
+func has(coord:Vector2i):
+	return dists.getv(coord) != dists.default
+
 func all_coords():
 	## Return an array of all coordinates with a recorded distance
 	## 0-dist(s) is included
@@ -147,7 +150,7 @@ func all_coords():
 	for i in range(dists.size.x):
 		for j in range(dists.size.y):
 			var coord := Vector2i(i, j)
-			if dists.getv(coord) != -1:
+			if has(coord):
 				coords.append(coord)
 	return coords
 
@@ -159,7 +162,7 @@ func all_dists():
 		for j in range(dists.size.y):
 			var coord := Vector2i(i, j)
 			dist = dists.getv(coord)
-			if dist != -1:
+			if dist != dists.default:
 				used_dists.append(dist)
 	return used_dists
 

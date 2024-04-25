@@ -53,7 +53,7 @@ func _get_path(here, there):
 	# TODO: use perceived_path()
 	var board: RevBoard = me.get_board()
 	if hug_walls:
-		var pump = RevBoard.WallHugMetricsPump.new(board)
+		var pump = Paths.WallHugMetricsPump.new(board)
 		var metrics = board.astar_metrics_custom(pump, here, there, true, -1, null, index)
 		return metrics.path()
 	else:

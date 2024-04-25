@@ -1,4 +1,4 @@
-# Copyright © 2022–2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -253,9 +253,12 @@ func gen_rooms(nb_rooms:int, add_corridors:=true):
 		nb_iter += 1
 	for rect in partitions:
 		add_room(Rand.sub_rect(rect, MIN_ROOM_SIDE))
+		
 	if add_corridors:
 		for i in rooms.size()-1:
-			connect_rooms(rooms[i], rooms[i+1])
+			if not connect_rooms_clean(rooms[i], rooms[i+1]):
+				# failed to find a clean corridor, we punch through regardless of terrain
+				connect_rooms(rooms[i], rooms[i+1])
 	# not using rooms.size() because there might have been existing room before we started
 	return partitions.size()
 
@@ -329,6 +332,43 @@ func connect_rooms(room1, room2):
 			cells.append(c1 + V.i(v.x, j))
 	# TODO: replaced walls should become doors
 	board.paint_path(cells, floor_terrain)
+
+func _valid_door_spot(coord) -> bool:
+	# We can punch a door in a wall breach if it's not next to another opening 
+	# and doesn't lead to a corridor (we place the doors before carving the passage).
+	var adjs = board.adjacents_cross(coord, board.is_walkable)
+	return len(adjs) <= 1
+
+func connect_rooms_clean(room1, room2) -> bool:
+	## Create a passage between the two rooms.
+	## This will try hard to avoid touching any other rooms or passages.
+	## Return if the whether we managed to add the passage.
+	var pump = Paths.CarvingPump.new(board)
+	var index = board.make_index()
+	var pred = func(coord): return board.is_terrain(coord, clear_terrain)
+	var side_pairs = Procgen.connectable_sides(room1, room2)
+	side_pairs.shuffle()
+	# try to connect until one of the list if empty
+	# early exit on success, keep looking on the outer for on failure
+	for sides in side_pairs:
+		var r1_perim = Procgen.connectable_near_coords(room1, sides[0], room2, sides[1])
+		r1_perim = r1_perim.filter(_valid_door_spot)
+		var r2_perim = Procgen.connectable_near_coords(room2, sides[1], room1, sides[0])
+		r2_perim = r2_perim.filter(_valid_door_spot)
+		while not (r1_perim.is_empty() or r2_perim.is_empty()):
+			var start = r1_perim.pop_back()
+			var end = r2_perim.pop_back()
+			
+			var metrics = board.astar_metrics_custom(pump, start, end, 
+													false, -1, pred, index)
+			print(metrics)
+			var path = metrics.path()
+			if path != null:
+				board.paint_cells(path, floor_terrain)
+				add_door(start)
+				add_door(end)
+				return true
+	return false
 
 func place(thing, in_room:=true, coord=null, free:bool=true, bbox=null, index=null):
 	## Put `thing` on a board cell, return where it was placed.

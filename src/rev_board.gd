@@ -22,11 +22,6 @@ const INV_TILE_SIZE = 1.0 / TILE_SIZE  # we speed up conversion with mult rather
 const LAYER_GEOM = 0
 const LAYER_HIGHLIGHTS = 1
 
-# clockwise around a cell starting at top left
-const ADJ_OFFSETS = [Vector2i(-1, -1), Vector2i(0, -1), Vector2i(1, -1), Vector2i(1, 0), 
-					Vector2i(1, 1), Vector2i(0, 1), Vector2i(-1, 1), Vector2i(-1, 0)]
-const CROSS_OFFSETS = [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
-
 # which terrains lead to other boards?
 const CONNECTOR_TERRAINS = ["stairs-down", "stairs-up", "gateway"]
 const STAIRS_TERRAINS = ["stairs-down", "stairs-up"]
@@ -52,64 +47,6 @@ signal actor_died(board, coord, tags)
 @export var board_id:int
 
 var terrain_names := {}  # name -> (terrain_set, terrain_id)
-
-
-## Optionally used to produce the intermediate values of a BoardMetrics
-class MetricsPump:
-	var board
-	
-	func _init(board_):
-		board = board_
-	
-	func dist_real(here, there):
-		assert(false, "not implemented")
-
-	func dist_estim(here, there):
-		assert(false, "not implemented")
-
-	func dist_tiebreak(here, there):
-		assert(false, "not implemented")
-
-## Implement the metrics used for the movement of most actors
-class StandardMetricsPump extends MetricsPump:
-	func dist_real(here, there):
-		return board.dist(here, there)
-
-	func dist_estim(here, there):
-		return board.dist(here, there)
-		
-	func dist_tiebreak(here, there):
-		return board.man_dist(here, there)
-
-## Implement metrics that favor following the edge of walls
-class WallHugMetricsPump extends MetricsPump:
-	var wall_counts: DistMetrics2i.Matrix2i  # number of walls that are in man_dist()=1 for a given coord
-	
-	func _init(board_):
-		super(board_)
-		wall_counts = DistMetrics2i.Matrix2i.new(board.get_used_rect().size, -1)
-
-	func dist_real(here, there):
-		# Using Manhattan dist to discourage diagonals, they are still legal but cost +1.
-		# It's also more expensive to go where there are fewer walls, up to a certain point.
-		return board.man_dist(here, there) + max(0, 2-get_wall_counts(there))
-
-	func dist_estim(here, there):
-		return board.man_dist(here, there)
-		
-	func dist_tiebreak(here, there):
-		return 0
-
-	func get_wall_counts(coord) -> int:
-		## lazy compute the values when requested
-		var val = wall_counts.getv(coord)
-		if val == -1:
-			val = 0
-			for offset in CROSS_OFFSETS:
-				if not board.is_walkable(coord+offset):
-					val += 1
-			wall_counts.setv(coord, val)
-		return val
 
 class TileSpiral extends RefCounted:
 	var board: RevBoard
@@ -775,12 +712,12 @@ func is_walkable(coord:Vector2i):
 	var poly = tdata.get_collision_polygons_count(0)
 	return poly == 0
 
-func ring(center:Vector2i, radius:int, free:bool=true, in_board:bool=true, bbox=null, index=null):
+func ring(center:Vector2i, radius:int, free:bool=true, in_board:bool=true, bbox=null, index=null) -> Array[Vector2i]:
 	## Return an Array of coords that define a Chebyshev-ring around `center`.
 	## In other words, the coords are arranged like a square on the game board 
 	## and they all have the same board.dist() metric to `center`.
 	## see filter_coords() for the description of the other params	
-	var coords = []
+	var coords : Array[Vector2i] = []
 	var r = radius
 
 	for i in range(-r, r+1):
@@ -801,29 +738,41 @@ func spiral(center:Vector2i, max_radius=null, free:bool=true, in_board:bool=true
 	## all other params: like RevBoard.filter_coords()
 	return RevBoard.TileSpiral.new(self, center, max_radius, free, in_board, bbox, index)
 
-func adjacents(pos:Vector2i, free:bool=true, in_board:bool=true, 
-				bbox=null, index=null):
-	## Return an Array of coords immediately next to `pos`. 
+func adjacents(coord:Vector2i, free:bool=true, in_board:bool=true, 
+				bbox=null, index=null) -> Array[Vector2i]:
+	## Return an Array of coords immediately next to `coord`. 
 	## see filter_coords() for the description of the other params
 	# This is a special case of ring()
-	var coords = []
-	for offset in ADJ_OFFSETS:
-		coords.append(pos + offset)
+	var coords : Array[Vector2i] = []
+	for offset in Geom.ADJ_OFFSETS:
+		coords.append(coord + offset)
 	return filter_coords(coords, free, in_board, bbox, index)
 
-func adjacents_walkable(pos:Vector2i, filter_pred=null):
-	## Return an Array of coords immediately next to `pos`, in-board and walkable.
+func adjacents_walkable(coord:Vector2i, filter_pred=null) -> Array[Vector2i]:
+	## Return an Array of coords immediately next to `coord`, in-board and walkable.
 	## filter_pred: only coords that are true for this function are returned.
-	var coords = []
-	for offset in ADJ_OFFSETS:
-		coords.append(pos + offset)
+	var coords : Array[Vector2i] = []
+	for offset in Geom.ADJ_OFFSETS:
+		coords.append(coord + offset)
 	coords = filter_coords(coords, false, true, get_used_rect())
 	coords = coords.filter(is_walkable)
 	if filter_pred != null:
 		coords = coords.filter(filter_pred)
 	return coords
 
-func filter_coords(coords, free, in_board, bbox, index=null):
+func adjacents_cross(coord:Vector2i, filter_pred=null) -> Array[Vector2i]:
+	## Return an Array of coords immediately up, down, left, and right of `coord`, 
+	## in-board and walkable.
+	## filter_pred: only coords that are true for this function are returned.
+	var coords : Array[Vector2i] = []
+	for offset in Geom.CROSS_OFFSETS:
+		coords.append(coord + offset)
+	coords = filter_coords(coords, false, true, get_used_rect())
+	if filter_pred != null:
+		coords = coords.filter(filter_pred)
+	return coords
+
+func filter_coords(coords:Array[Vector2i], free, in_board, bbox, index=null) -> Array[Vector2i]:
 	## Return a sub-selection of coords that match criteria for being walkable 
 	## and contained within the bounding box `bbox`.
 	## free: only include tiles that are walkable and unoccupied
@@ -836,7 +785,7 @@ func filter_coords(coords, free, in_board, bbox, index=null):
 		# The doc says that the right and bottom edges are excluded, but this 
 		# actally works just fine because they assume a different semantic for 
 		# bottom-right (rect.end()) that is [1, 1] away from our tile-based 
-		# definition. 
+		# definition. See the doc string in geom.gd for more details.
 		coords = coords.filter(func (coord): return bbox.has_point(coord))
 	if free:
 		if index != null:
@@ -1010,17 +959,17 @@ func astar_metrics(start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.C
 		ctx.done[current] = true
 	return ctx.metrics
 	
-
-func astar_metrics_custom(pump:MetricsPump, 
+func astar_metrics_custom(pump:Paths.MetricsPump, 
 							start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.COORD_INVALID, 
 							free_dest_:=false, max_dist:int=-1, 
 							valid_pred=null, index=null):
 	## Return sparse BoardMetrics using the A* algorithm. 
 	## pump: the fully initialized extractor for the intermediate values
 	## all other params like `astar_metrics()`
-	var ctx:MetricsContext = _init_metric_context_static(start_, dest_, free_dest_, valid_pred, index)	
+	var ctx:MetricsContext = _init_metric_context_static(start_, dest_, free_dest_, valid_pred, index)
 	if ctx.invalid_dest:
 		return ctx.metrics
+	pump.set_metrics(ctx.metrics)
 	var estimate:int = pump.dist_estim(ctx.start, ctx.dest)
 	# dist is h(n), the estimate to dest; [g(n), tiebreak(p, n)] pairs are used to resolve ties.
 	# g(n) is real path dist from start, tiebreak() is provided by the MetricsPump
@@ -1029,17 +978,20 @@ func astar_metrics_custom(pump:MetricsPump,
 	ctx.queue.enqueue(ctx.start, dist, tie_breaker)
 	var current:Vector2i
 	var entry: DistQueue2i.Entry
+	var adjs: Array[Vector2i]
 	while not ctx.queue.is_empty():
 		entry = ctx.queue.dequeue()
 		dist = entry.dist
 		tie_breaker = entry.tie_breaker
 		current = entry.coord
+
 		if current == ctx.dest:
 			break  # Done!
-		elif Geom.cheby_dist(current, ctx.dest) == 1:
-			# Not using pump.dist_real() in the test because we are looking to see if we are 
-			# one step away, no matter what value range the pump in using for the distances.
-
+			
+		adjs = pump.adjacents(current)		
+		if pump.dist_real(current, ctx.dest) == 1 or ctx.dest in adjs:
+			# We both look at both dist() and adjs because some pumps have step 
+			# increments bigger than 1.
 			# Got next to dest, no need to look at adjacents()
 			ctx.metrics.setv(ctx.dest, tie_breaker[0]+pump.dist_real(current, ctx.dest))
 			ctx.metrics.add_edge(current, ctx.dest)
@@ -1047,7 +999,9 @@ func astar_metrics_custom(pump:MetricsPump,
 		if ctx.done.has(current) or tie_breaker[0] == max_dist:
 			continue  # this position is finalized already
 
-		for pos in adjacents_walkable(current, ctx.pred):
+		if ctx.pred != null:
+			adjs = adjs.filter(ctx.pred)
+		for pos in adjs:
 			if ctx.done.has(pos):
 				continue
 			ctx.pre_dist = ctx.metrics.getv(pos)

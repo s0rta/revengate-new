@@ -1,4 +1,4 @@
-# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -51,32 +51,6 @@ func refresh(turn):
 
 func is_valid():
 	return super() and foe != null
-	
-## A metrics pump that considers crowding behind a path blocked by a 
-## friend a valid move
-class CrowdingMetricsPump extends RevBoard.MetricsPump:
-	const crowding_slowdown = 8
-	var index
-	var prey
-	
-	func _init(board, prey_):
-		super(board)
-		index = board.make_index()
-		prey = prey_
-	
-	func dist_real(here, there):
-		
-		var dist = board.dist(here, there)
-		var actor = index.actor_at(there)
-		if actor != null and actor != prey:
-			dist = dist + crowding_slowdown
-		return dist
-
-	func dist_estim(here, there):
-		return board.dist(here, there)
-		
-	func dist_tiebreak(here, there):
-		return board.man_dist(here, there)
 		
 func act() -> bool:	
 	# attack if we can, move towards foe otherwise
@@ -97,7 +71,7 @@ func act() -> bool:
 				return true
 			return false
 				
-		var metrics = board.astar_metrics_custom(CrowdingMetricsPump.new(board, foe), start, foe_coord, 
+		var metrics = board.astar_metrics_custom(Paths.CrowdingMetricsPump.new(board, foe), start, foe_coord, 
 													false, -1, pred, index)
 
 		var path = metrics.path()
