@@ -1,5 +1,9 @@
 
 import os
+import sys
+import json
+from glob import glob
+from itertools import chain
 from configparser import ConfigParser
 from invoke import task
 
@@ -231,3 +235,84 @@ def migrate_legacy_asset(c, old_path, new_path):
     rel_new = os.path.join(*[".."]*depth, new_path)
     os.symlink(rel_new, fname)
     c.run(f"git add {fname}")
+
+
+def _parse_room(path):
+    """ Convert a Zorbus room prefab into a dict representation."""
+    # turn ascii art into (x, y) coords
+    coords = []
+    for y, line in enumerate(open(path, "rt")):
+        for x, char in enumerate(line):
+            if char == "#":
+                coords.append((x, y))
+                
+    # shrink the bounding box
+    xs, ys = zip(*coords)
+    tl = (min(xs), min(ys))
+    coords = [(x-tl[0], y-tl[1]) for x, y in coords]
+    if not coords:
+        raise ValueError(f"Couldn't find any coords in {path}")
+    
+    # convert the outer wall into a serial path
+    all_coords = set(coords)
+    perim = [coords[0]]
+    
+    current = coords[0]
+    while all_coords:
+        has_next = False
+        for dx, dy in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
+            new_coord = (current[0]+dx, current[1]+dy)
+            if new_coord in all_coords and new_coord not in perim[-2:]:
+                current = new_coord
+                all_coords.remove(current)
+                has_next = True
+                break
+        if not has_next:
+            raise ValueError(f"wall outline in {path} is not continous at {current}")        
+        perim.append(current)
+    if perim[0] != perim[-1]:
+        raise ValueError(f"the outer wall in {path} is not closed")
+    xs, ys = zip(*perim)
+    size = (max(xs)+1, max(ys)+1)
+
+    # simplify: only keep the pillars where the wall changes direction
+    pillars = []
+    direction = None
+    for i in range(1, len(perim)+1):
+        prev = perim[i-1]
+        x, y = perim[i % len(perim)]
+        dx, dy = prev[0] - x, prev[1] - y
+        if direction != (dx, dy):
+            pillars.append(prev)
+        direction = (dx, dy)
+
+    room = dict(name=os.path.splitext(os.path.basename(path))[0], 
+                size=size, 
+                pillars=pillars)
+    return room
+
+    
+@task()
+def jsonify_room_frefabs(c, files, extra_files=[]):
+    """ Convert Zorbus room prefabs into a json representation.
+
+    `files`: file path or glob expression 
+    `extra_files`: file path or glob expression, can be specified more than once
+    """
+    paths = chain(*[glob(os.path.expanduser(arg)) for arg in [files] + extra_files])
+    rooms = []
+    for path in paths:
+        try:
+            rooms.append(_parse_room(path))
+        except ValueError as e:
+            print(e, file=sys.stderr)
+            
+    rooms = [room for room in rooms if max(room["size"]) <= 20]
+    
+    rooms.sort(key=lambda room: room["name"])
+    jstxt = json.dumps(rooms)
+    
+    # put each room on one like to make git diffs smaller when we add rooms
+    jstxt = jstxt.replace("},", "},\n")
+   
+    print(jstxt)
