@@ -69,24 +69,24 @@ static func connectable_sides(rect1:Rect2i, rect2:Rect2i):
 
 	return pairs
 	
-static func connectable_near_coords(near_rect:Rect2i, near_side:Vector2i, 
-									far_rect:Rect2i, far_side:Vector2i, 
+static func connectable_near_coords(near_room:Room, near_side:Vector2i, 
+									far_room:Room, far_side:Vector2i, 
 									shuffle=true):
 	## Return an arrays of coords representing which wall cells are elegible to be the start 
-	## of a passage between `near_rect` and `far_rect`. The path between those is not tested 
+	## of a passage between `near_room` and `far_room`. The path between those is not tested 
 	## and there can be obstructions preventing the carving of an actuall passage. 
 	## Return an empty array if there are no valid coords.
-	var pred = func(coord): return not Geom.is_corner(coord, near_rect)
+	var pred:Callable
+	var far_rect = far_room.rect
 	if far_side == Consts.REG_NORTH:
-		pred = func(coord): return pred.call(coord) && coord.y < far_rect.position.y
+		pred = func(coord): return coord.y < far_rect.position.y
 	elif far_side == Consts.REG_SOUTH:
-		pred = func(coord): return pred.call(coord) && coord.y > far_rect.end.y - 1
+		pred = func(coord): return coord.y > far_rect.end.y - 1
 	elif far_side == Consts.REG_WEST:
-		pred = func(coord): return pred.call(coord) && coord.x < far_rect.position.x
+		pred = func(coord): return coord.x < far_rect.position.x
 	elif far_side == Consts.REG_EAST:
-		pred = func(coord): return pred.call(coord) && coord.x > far_rect.end.x - 1
-	var coords = Geom.rect_perim(near_rect, near_side).filter(pred)
+		pred = func(coord): return coord.x > far_rect.end.x - 1
+	var coords = near_room.perim(near_side).filter(pred)
 	if shuffle:
 		coords.shuffle()
 	return coords
-

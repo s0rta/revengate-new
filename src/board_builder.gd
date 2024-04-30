@@ -27,7 +27,7 @@ var rect: Rect2i
 var clear_terrain = "rock"
 var floor_terrain = "floor"
 var wall_terrain = "wall"
-var rooms = []  # array of Rect2i, there may be walls along the perimeter
+var rooms:Array[Room] = []
 var fabs = []  # prefabs that were placed on the level
 
 func _init(board:RevBoard, rect=null):
@@ -44,18 +44,18 @@ func has_rooms():
 func is_in_room(coord:Vector2i):
 	## Return whether `coord` is inside one of the rooms known by this builder.
 	for room in rooms:
-		if room.has_point(coord):
+		if room.has_coord(coord):
 			return true
 	return false
 
-func add_room(rect: Rect2i, walls=true):
-	rooms.append(rect)
-	board.paint_rect(rect, floor_terrain)
-	if walls:
-		var path = Geom.rect_perim(rect)
+func add_room(room: Room):
+	rooms.append(room)
+	board.paint_cells(room.floor_coords(), floor_terrain)
+	if room.has_walls:
+		var path = room.perim()
 		board.paint_path(path, wall_terrain)
 
-func room_region(room: Rect2i):
+func room_region(room: Room):
 	## Return the region that this room is mostly in. 
 	## It's possible that the room also spills slightly into other regions.
 	var center = room.get_center()
@@ -64,7 +64,9 @@ func room_region(room: Rect2i):
 func random_floor_cell():
 	var coord = null
 	if has_rooms():
-		coord = Rand.coord_in_rect(Rand.choice(rooms))
+		var room = Rand.choice(rooms)
+		# FIXME: would be better to ask the room for a random floor coord
+		coord = Rand.coord_in_rect(room.rect)
 	else:
 		coord = Rand.coord_in_rect(rect)
 	if board.is_walkable(coord):
@@ -252,7 +254,8 @@ func gen_rooms(nb_rooms:int, add_corridors:=true):
 			partitions.insert(index, sub_parts[0])
 		nb_iter += 1
 	for rect in partitions:
-		add_room(Rand.sub_rect(rect, MIN_ROOM_SIDE))
+		var room = Room.from_rect(Rand.sub_rect(rect, MIN_ROOM_SIDE))
+		add_room(room)
 		
 	if add_corridors:
 		for i in rooms.size()-1:
@@ -266,8 +269,8 @@ func open_rooms():
 	## Add an opening to each of the known rooms
 	for room in rooms:
 		var region = Geom.coord_region(room.get_center(), rect)
-		var coord = Rand.coord_on_rect_perim(room, -region)
-		board.paint_cells([coord], "door-open")
+		var coord = room.new_door_coord(-region)
+		add_door(coord)
 
 func gen_maze(rect_, biases=null):
 	## Fill rect with a maze.
@@ -304,7 +307,7 @@ func find_poles():
 	# the second starting at the first pole will find the second one.
 	var start = null
 	if has_rooms():
-		start = Rand.coord_in_rect(Rand.choice(rooms))
+		start = Rand.choice(rooms).rand_coord()
 	var metrics:DistMetrics2i = board.dist_metrics(start)
 	metrics = board.dist_metrics(metrics.furthest_coord)
 	return [metrics.start, metrics.furthest_coord]
@@ -346,7 +349,7 @@ func connect_rooms_clean(room1, room2) -> bool:
 	var pump = Paths.CarvingPump.new(board)
 	var index = board.make_index()
 	var pred = func(coord): return board.is_terrain(coord, clear_terrain)
-	var side_pairs = Procgen.connectable_sides(room1, room2)
+	var side_pairs = Procgen.connectable_sides(room1.rect, room2.rect)
 	side_pairs.shuffle()
 	# try to connect until one of the list if empty
 	# early exit on success, keep looking on the outer for on failure
@@ -361,7 +364,6 @@ func connect_rooms_clean(room1, room2) -> bool:
 			
 			var metrics = board.astar_metrics_custom(pump, start, end, 
 													false, -1, pred, index)
-			print(metrics)
 			var path = metrics.path()
 			if path != null:
 				board.paint_cells(path, floor_terrain)
@@ -394,7 +396,8 @@ func place(thing, in_room:=true, coord=null, free:bool=true, bbox=null, index=nu
 		cell = random_coord_in_region(region)
 		Utils.remove_tag(thing, tag)
 	elif in_room:
-		cell = Rand.coord_in_rect(Rand.choice(rooms))
+		var room = Rand.choice(rooms)
+		cell = room.rand_coord()
 	else:
 		if bbox == null:
 			bbox = rect

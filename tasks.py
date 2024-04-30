@@ -3,6 +3,7 @@ import os
 import sys
 import json
 from glob import glob
+from operator import mul
 from itertools import chain
 from configparser import ConfigParser
 from invoke import task
@@ -11,6 +12,7 @@ CONSTANTS_PATH = "src/constants.gd"
 PRESETS_PATH = "export_presets.cfg"
 CREDS_PATH = ".godot/export_credentials.cfg"
 GODOT_SETTINGS = os.path.expanduser("~/.config/godot/editor_settings-4.tres")
+MAX_ROOM_SIDE = 20
 
 
 def is_newer(fname, ref):
@@ -291,10 +293,10 @@ def _parse_room(path):
                 pillars=pillars)
     return room
 
-    
+
 @task()
-def jsonify_room_frefabs(c, files, extra_files=[]):
-    """ Convert Zorbus room prefabs into a json representation.
+def jsonify_room_layouts(c, files, extra_files=[]):
+    """ Convert Zorbus room layouts into a json representation.
 
     `files`: file path or glob expression 
     `extra_files`: file path or glob expression, can be specified more than once
@@ -307,9 +309,9 @@ def jsonify_room_frefabs(c, files, extra_files=[]):
         except ValueError as e:
             print(e, file=sys.stderr)
             
-    rooms = [room for room in rooms if max(room["size"]) <= 20]
+    rooms = [room for room in rooms if max(room["size"]) <= MAX_ROOM_SIDE]
     
-    rooms.sort(key=lambda room: room["name"])
+    rooms.sort(key=lambda room: (mul(*room["size"]), room["name"]))
     jstxt = json.dumps(rooms)
     
     # put each room on one like to make git diffs smaller when we add rooms

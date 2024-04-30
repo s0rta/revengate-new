@@ -69,6 +69,14 @@ static func rect_perim(rect: Rect2i, region=null) -> Array[Vector2i]:
 static func rect_area(rect: Rect2i) -> int:
 	return rect.get_area()
 
+static func rect_coords(rect: Rect2i) -> Array[Vector2i]:
+	## Return an array of all the cell coords covered by `rect`
+	var coords:Array[Vector2i] = []
+	for i in rect.size.x:
+		for j in rect.size.y:
+			coords.append(Vector2i(i, j) + rect.position)
+	return coords
+
 static func inner_rect(rect:Rect2i, margin=0):
 	## Return a Rect2i that is one tile inside `rect`
 	## margin: if >0, that many tiles separate the outer rect perimiter tiles from the inner rect.
