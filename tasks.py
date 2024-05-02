@@ -238,35 +238,41 @@ def migrate_legacy_asset(c, old_path, new_path):
     os.symlink(rel_new, fname)
     c.run(f"git add {fname}")
 
+def _move_coords(coords, offset):
+    return [(x+offset[0], y+offset[1]) for x, y in coords]
 
 def _parse_room(path):
     """ Convert a Zorbus room prefab into a dict representation."""
     # turn ascii art into (x, y) coords
-    coords = []
+    wall_coords = []
+    floor_coords = []
     for y, line in enumerate(open(path, "rt")):
         for x, char in enumerate(line):
             if char == "#":
-                coords.append((x, y))
+                wall_coords.append((x, y))
+            elif char == ".":
+                floor_coords.append((x, y))
+    if not wall_coords:
+        raise ValueError(f"Couldn't find any wall coords in {path}")
                 
     # shrink the bounding box
-    xs, ys = zip(*coords)
-    tl = (min(xs), min(ys))
-    coords = [(x-tl[0], y-tl[1]) for x, y in coords]
-    if not coords:
-        raise ValueError(f"Couldn't find any coords in {path}")
+    xs, ys = zip(*wall_coords)
+    offset = (-min(xs), -min(ys))
+    wall_coords = _move_coords(wall_coords, offset)
+    floor_coords = _move_coords(floor_coords, offset)
     
     # convert the outer wall into a serial path
-    all_coords = set(coords)
-    perim = [coords[0]]
+    all_walls = set(wall_coords)
+    perim = [wall_coords[0]]
     
-    current = coords[0]
-    while all_coords:
+    current = wall_coords[0]
+    while all_walls:
         has_next = False
         for dx, dy in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
             new_coord = (current[0]+dx, current[1]+dy)
-            if new_coord in all_coords and new_coord not in perim[-2:]:
+            if new_coord in all_walls and new_coord not in perim[-2:]:
                 current = new_coord
-                all_coords.remove(current)
+                all_walls.remove(current)
                 has_next = True
                 break
         if not has_next:
@@ -288,9 +294,28 @@ def _parse_room(path):
             pillars.append(prev)
         direction = (dx, dy)
 
+    # Simplify the floor coords
+    # Only keep the first floor tile after a wall on each line, we stop when we see a 
+    # wall if there is a restart, then we keep another seed to know we need another 
+    # floor section. This allows for expansion in O(x*y) in one pass without taking much 
+    # space in the json dump.
+
+    floor_seeds = []
+    walls = set(wall_coords)
+    floors = set(floor_coords)
+    for j in range(size[1]):
+        in_sect = False
+        for i in range(size[0]):
+            if (i, j) in floors and not in_sect:
+                in_sect = True
+                floor_seeds.append((i, j))
+            elif (i, j) in walls and in_sect:
+                in_sect = False
+
     room = dict(name=os.path.splitext(os.path.basename(path))[0], 
                 size=size, 
-                pillars=pillars)
+                pillars=pillars, 
+                floor_seeds=floor_seeds)
     return room
 
 

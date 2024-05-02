@@ -254,7 +254,7 @@ func gen_rooms(nb_rooms:int, add_corridors:=true):
 			partitions.insert(index, sub_parts[0])
 		nb_iter += 1
 	for rect in partitions:
-		var room = Room.from_rect(Rand.sub_rect(rect, MIN_ROOM_SIDE))
+		var room = Room.new(Rand.sub_rect(rect, MIN_ROOM_SIDE))
 		add_room(room)
 		
 	if add_corridors:

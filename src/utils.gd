@@ -89,6 +89,14 @@ static func percentile_breakdown(values:Array, k_nums:Array):
 		
 	return percentiles	
 
+static func to_set(keys:Array) -> Dictionary:
+	## Return a dict to be use as a set (each key marks set membership).
+	## keys are set to `true`, you get test them with `set.has()` or `set.get()`.
+	var set = {}
+	for key in keys:
+		set[key] = true
+	return set
+
 static func is_tag(str):
 	return str in Consts.TAGS
 
