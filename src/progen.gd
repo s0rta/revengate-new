@@ -86,7 +86,7 @@ static func connectable_near_coords(near_room:Room, near_side:Vector2i,
 		pred = func(coord): return coord.x < far_rect.position.x
 	elif far_side == Consts.REG_EAST:
 		pred = func(coord): return coord.x > far_rect.end.x - 1
-	var coords = near_room.perim(near_side).filter(pred)
+	var coords = near_room.perim(false, near_side).filter(pred)
 	if shuffle:
 		coords.shuffle()
 	return coords

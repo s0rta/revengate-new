@@ -27,8 +27,10 @@ var rect: Rect2i
 var clear_terrain = "rock"
 var floor_terrain = "floor"
 var wall_terrain = "wall"
+var rect_room_prob := 0.1
 var rooms:Array[Room] = []
 var fabs = []  # prefabs that were placed on the level
+var _layout_pack: JSON  # layzy loaded from res when we need it
 
 func _init(board:RevBoard, rect=null):
 	self.board = board
@@ -47,6 +49,19 @@ func is_in_room(coord:Vector2i):
 		if room.has_coord(coord):
 			return true
 	return false
+
+func rand_layout(max_size:Vector2i):
+	## Return a room layout that is at most `max_size`.
+	## Return `null` if there are no such layout
+	if not _layout_pack:
+		_layout_pack = load("res://assets/rooms.json")
+	var size_pred = func(layout): 
+			return layout.size[0] <= max_size.x and layout.size[1] <= max_size.y
+	var layouts = _layout_pack.data.filter(size_pred)
+	if not layouts.is_empty():
+		return Rand.choice(layouts)
+	else:
+		return null
 
 func add_room(room: Room):
 	rooms.append(room)
@@ -254,7 +269,15 @@ func gen_rooms(nb_rooms:int, add_corridors:=true):
 			partitions.insert(index, sub_parts[0])
 		nb_iter += 1
 	for rect in partitions:
-		var room = Room.new(Rand.sub_rect(rect, MIN_ROOM_SIDE))
+		var room:Room
+		var layout
+		if Rand.rftest(rect_room_prob):
+			layout = rand_layout(rect.size)
+		if layout == null:
+			room = Room.new(Rand.sub_rect(rect, Vector2i.ONE*MIN_ROOM_SIDE))
+		else:
+			var sub_rect = Rand.sub_rect(rect, Vector2i(layout.size[0], layout.size[1]))
+			room = Room.from_layout(layout, sub_rect.position)
 		add_room(room)
 		
 	if add_corridors:

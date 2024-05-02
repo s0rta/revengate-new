@@ -89,18 +89,19 @@ func rand_coord() -> Vector2i:
 	else:
 		return Rand.choice(floor_coords())
 
-func perim(corners=true, region=null):
+func perim(corners:=true, region=null):
 	var coords:Array
 	if layout_perim.is_empty():
 		coords = Geom.rect_perim(rect, region)
 		if not corners:
-			coords = coords.filter(Geom.is_corner.bind(rect))
+			coords = coords.filter(func(coord): return not Geom.is_corner(coord, rect))
 	else:
 		coords = Geom.interpolate_path(layout_perim)
 		if not corners:
 			var all_corners = Utils.to_set(layout_perim)
 			coords = coords.filter(func(coord): return not all_corners.has(coord))
-		assert(region == null, "not implemented for layouts with region")
+		if region != null:
+			coords = coords.filter(func(coord): return Geom.region_has_coord(rect, region, coord))
 	return coords
 
 func floor_coords() -> Array[Vector2i]:

@@ -1,4 +1,4 @@
-# Copyright © 2022–2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -138,11 +138,11 @@ static func coord_on_rect_perim(rect: Rect2i, region=null):
 	else:
 		assert(false, "Unknown region: %s" % region)
 
-static func sub_rect(rect:Rect2i, min_side=1):
-	## Return a rectangle that is contained inside rect, likely smaller, 
-	## with sides no smaller than min_side.
-	var size = Vector2i(randi_range(min_side, rect.size.x), 
-						randi_range(min_side, rect.size.y))
+static func sub_rect(rect:Rect2i, min_size:=Vector2i.ONE):
+	## Return a rectangle that is contained inside rect, likely smaller.
+	## `min_size`: The rect is at least that big.
+	var size = Vector2i(randi_range(min_size.x, rect.size.x), 
+						randi_range(min_size.y, rect.size.y))
 	var margin = rect.size - size
 	var offset = Vector2i(randi_range(0, margin.x), randi_range(0, margin.y))
 	return Rect2i(rect.position + offset, size)					

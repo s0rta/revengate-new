@@ -21,7 +21,7 @@ class_name DungeonExhibit extends Node2D
 var board: RevBoard  # the active board
 
 func _ready():
-	for dungeon in find_children("", "Dungeon", false, false):
+	for dungeon in find_children("", "Dungeon", true, false):
 		if dungeon.has_starting_board():
 			board = dungeon.finalize_static_board()
 			board.set_active(true)
@@ -32,6 +32,7 @@ func _switch_board(new_board:RevBoard):
 	board.set_active(false)
 	new_board.set_active(true)
 	board = new_board
+	_scale_to_fit_board()
 
 func _unhandled_input(event):
 	if Input.is_action_just_pressed("up"):
@@ -52,7 +53,14 @@ func _get_dungeon(board:RevBoard):
 		return parent
 	return null
 
+func _scale_to_fit_board():
+	var viewport = get_viewport()
+	var px_size:Vector2 = board.get_used_rect().size * board.TILE_SIZE
+	var ratios = Vector2(viewport.size) / px_size
+	viewport.get_camera_2d().zoom = Vector2.ONE * min(ratios.x, ratios.y)
+
 func refresh():
+	## rebuild the board at the current world loc, preserving cross-board connections
 	if board:
 		var dungeon = _get_dungeon(board)
 		if dungeon:
@@ -68,7 +76,9 @@ func _progress_on_depth(depth_pred):
 	for coord in old_board.get_connectors():
 		var depth = old_board.get_cell_rec_val(coord, "conn_target", "depth")
 		if depth == null:
-			depth = old_board.get_connection(coord).far_board.depth
+			var conn = old_board.get_connection(coord)
+			var far_board = old_board.get_dungeon().get_board_by_id(conn.far_board_id)
+			depth = far_board.depth
 		if depth_pred.call(depth):
 			coords.append(coord)
 	if coords.is_empty():

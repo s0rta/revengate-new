@@ -37,6 +37,7 @@ var prefab_map = {Vector3i(13, 3, 0): "Er",
 
 @export var default_board_size := Vector2i(23, 15)
 @export var start_depth := 0
+@export_range(0.0, 1.0) var rect_room_prob := 0.9
 @export var base_spawn_budget := 0
 @export var ambient_light_col := Color(1, 1, 1, 1)  # this is z-adjusted at board creation time
 var deck_builder: DeckBuilder
@@ -71,6 +72,7 @@ func make_builder(board, rect):
 	var builder = BoardBuilder.new(board, rect)
 	builder.floor_terrain = "floor-rough"
 	builder.wall_terrain = "wall-old"	
+	builder.rect_room_prob = rect_room_prob
 	return builder
 	
 func get_boards():
