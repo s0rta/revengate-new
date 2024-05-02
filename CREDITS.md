@@ -71,6 +71,8 @@ Particle sprites:
 CC0 by Kenney
 https://www.kenney.nl/
 
+Room layouts are CC0 from Zorbus: http://dungeon.zorbus.net/
+
 The historical map of Lyon in 1855 is Public Domain, digitize by Archives Municipales de Lyon.
 
 Revengate is made with the Godot game engine.

@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
-
+## a dungeon with long skinny levels that are lined with small chambers
 class_name Crypt extends Dungeon
-const MIN_ELEV = -5
+const MIN_ELEV = -15
 var _corridor:Array[Vector2i]  # the long corridor that devides the level in two
 
 func dungeon_for_loc(world_loc:Vector3i):
@@ -82,15 +82,17 @@ func fill_new_board(builder:BoardBuilder, depth, world_loc, size):
 				break
 
 		for sub_part in sub_parts:
-			builder.add_room(Rand.sub_rect(sub_part, builder.MIN_ROOM_SIDE))
+			var sub_rect = Rand.sub_rect(sub_part, Vector2i.ONE*builder.MIN_ROOM_SIDE)
+			builder.add_room(Room.new(sub_rect))
 			_connect_room(builder, builder.rooms[-1])
 	
 	builder.rect = orig_rect
 
-func _connect_room(builder:BoardBuilder, room):
+func _connect_room(builder:BoardBuilder, room:Room):
 	## Connect a room to the central corridor
 	var corridor_y = _corridor[0].y
-	var start = Rand.coord_in_rect(Geom.inner_rect(room))
+	var side = [Consts.REG_NORTH, Consts.REG_SOUTH][int(corridor_y > room.position.y)]
+	var start = room.new_door_coord(side)
 	var diff = corridor_y - start.y
 	var step = Vector2i(0, sign(diff))
 	var coords:Array[Vector2i] = Geom.interpolate_path([start, Vector2i(start.x, corridor_y)])
