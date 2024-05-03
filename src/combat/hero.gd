@@ -161,6 +161,8 @@ func act() -> void:
 		print("Hero turn automated by %s" % [strat])
 		state = States.ACTING
 		has_acted = strat.act()
+		# pass the control to the drawing thread to make sure our action is shown
+		await get_tree().create_timer(0.0001).timeout
 		finalize_turn()
 	else:
 		state = States.LISTENING

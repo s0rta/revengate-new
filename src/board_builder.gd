@@ -21,6 +21,7 @@ class_name BoardBuilder extends RefCounted
 const MIN_ROOM_SIDE = 4  # 2 floor and 2 walls
 const ROOM_PAD = 1  # one stone in between the walls of adjacent rooms
 const MIN_PART_SIZE = MIN_ROOM_SIDE*2 + ROOM_PAD
+const CORRIDOR_DOOR_PROB = 0.7
 
 var board: RevBoard
 var rect: Rect2i
@@ -390,8 +391,9 @@ func connect_rooms_clean(room1, room2) -> bool:
 			var path = metrics.path()
 			if path != null:
 				board.paint_cells(path, floor_terrain)
-				add_door(start)
-				add_door(end)
+				if Rand.rstest(CORRIDOR_DOOR_PROB):
+					add_door(start)
+					add_door(end)
 				return true
 	return false
 

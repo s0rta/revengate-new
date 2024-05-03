@@ -40,8 +40,8 @@ class Quest:
 	var fail_msg: String
 
 	func _init(tag_, title_, summary_, intro_path_, win_msg_, setup_func_=null,
-			win_event_any_:Array[String]=[],
-			fail_event_any_:Array[String]=[], fail_msg_=""):
+		win_event_any_:Array[String]=[],
+		fail_event_any_:Array[String]=[], fail_msg_=""):
 		assert(Utils.is_tag(tag_))
 		tag = tag_
 		title = title_
@@ -241,7 +241,7 @@ func conclude_game(victory:bool, game_over:bool):
 	if game_over:
 		active = false
 		$TurnQueue.shutdown()
-		SaveBundle.remove()		
+		SaveBundle.remove()
 	else:
 		$TurnQueue.pause()
 	if Tender.hero.is_animating():
@@ -350,10 +350,10 @@ func pre_load_resources():
 	## pre-load and cache a few expensive resources
 	if not Tabulator.load().enable_shaders:
 		return
-	var exp_res = ["res://src/sfx/explosion_sfx.tscn", 
-					"res://src/sfx/magic_sfx_01.tscn", 
-					"res://src/sfx/magic_sfx_02.tscn", 
-					"res://src/sfx/zap_sfx.tscn"]
+	var exp_res = ["res://src/sfx/explosion_sfx.tscn",
+		"res://src/sfx/magic_sfx_01.tscn",
+		"res://src/sfx/magic_sfx_02.tscn",
+		"res://src/sfx/zap_sfx.tscn"]
 	for res in exp_res:
 		ResourceLoader.load_threaded_request(res)
 
@@ -369,10 +369,10 @@ func capture_game(immediate:bool):
 	var dungeons = dungeons_cont
 	
 	print("Saving at turn %d" % $TurnQueue.turn)
-	bundle.save(dungeons, $TurnQueue.turn, Tender.kills, Tender.sentiments, 
-				Tender.quest.tag, Tender.quest.is_active,
-				Tender.seen_locs.keys(), Tender.nb_cheats, Tender.play_secs, 
-				immediate)
+	bundle.save(dungeons, $TurnQueue.turn, Tender.kills, Tender.sentiments,
+		Tender.quest.tag, Tender.quest.is_active,
+		Tender.seen_locs.keys(), Tender.nb_cheats, Tender.play_secs,
+		immediate)
 	if was_running:
 		await $TurnQueue.resume()
 	
@@ -397,7 +397,7 @@ func restore_game(bundle=null):
 	
 	if bundle.VERBOSE:
 		bundle.dlog_root(".final")
-	var hero = dungeons.find_child("Hero")	
+	var hero = dungeons.find_child("Hero")
 	Tender.kills = bundle.kills
 	Tender.sentiments = bundle.sentiments
 	Tender.quest = _quest_by_tag(bundle.quest_tag)

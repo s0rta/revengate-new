@@ -23,17 +23,17 @@ if not speaker_has_gifts():
 	=> beaudelaire
 
 Grenn: So we're good?
-- No! I'm going keep beating you up if you don't give me those books!
+- No! Give me those books or I keep beating you up!
 	=> negotiate
 
-- Maybe, tell me more about what you are going here.
+- Maybe, tell me why you are here.
 	Grenn: I don't know everything, but I have these books, very rare books. I took me three months to track them down.
 	do checkpoint("beaudelaire")
 	Grenn: There is this guy, Retznac, with an old timey accent, he's really pale too. He's offering good money for anything about occult rituals.
 	Green: He gives me the creeps a little bit, but he's very courteous. I've had worst clients.
 	do hero_learns("aware_of_retznac")
 
-- Yeah, buzz off and I don't want to see you ever again.
+- Yeah, buzz off.
 	do checkpoint("beaudelaire")
 	Grenn: Thank you! Have a good day.
 
@@ -41,22 +41,24 @@ Grenn: So we're good?
 
 ~ negotiate
 Grenn: Look, you can't do that to me. I worked really hard to get those books. They are very rare originals.
-- Okay, you can keep the books. Have a good day.
+- Okay, you can keep the books.
 	do checkpoint("beaudelaire")
 	Grenn: I'm glad we managed to reach an agreement. The books are heading out of town with me and you don't have to worry about any locals getting their hands on them.
 	=> END
-- I really am going to beat you up if you don't hand them over NOW!
+- Hand the books over NOW!
 	=> negotiate_2
 => END
 
 ~ negotiate_2
 Grenn: No, you don't understand. The buyer won't deal with you. 
 Grenn: Retznac and I have been working together on this deal for months. He likes me and he doesn't trust anyone else. Besides, just looking at his pale face would fill you with unease and make you want to run away. [do hero_learns("aware_of_retznac")]
-- I insist. Give the books or get punched in the face, hard.
+- I insist. 
+	Hero: Give the books or get punched in the face, hard.
 	do speaker_give_items()
 	do checkpoint("beaudelaire")
 	Grenn: There you go. It's all on you now and don't come complaining if you stub your toes walking this dark path.
-- Wow! You are right, I don't want anything to do with this.
+- Wow! You are right. 
+	Hero: I don't want anything to do with this.
 	Grenn: That's what I thought. Have a good day.
 	do checkpoint("beaudelaire")
 => END

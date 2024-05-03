@@ -51,6 +51,8 @@ mouse_filter = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="Background/SpeechBackgroud/Margin/VBox"]
 layout_mode = 2
 size_flags_vertical = 6
+mouse_filter = 2
+theme_override_constants/separation = 24
 
 [node name="SpeakerLabel" type="Label" parent="Background/SpeechBackgroud/Margin/VBox/HBoxContainer"]
 unique_name_in_owner = true
@@ -64,14 +66,16 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
-text = "⏩"
+theme_type_variation = &"ActionBtn"
+text = " ⏩ "
 
 [node name="CloseButton2" type="Button" parent="Background/SpeechBackgroud/Margin/VBox/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
-text = "⏹"
+theme_type_variation = &"ActionBtn"
+text = " ⏹ "
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SpeechBackgroud/Margin/VBox"]
 layout_mode = 2

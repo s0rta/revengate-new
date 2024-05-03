@@ -177,7 +177,6 @@ class Talk extends Command:
 class Rest extends Command:
 	func _init(index_=null):
 		is_action = true
-		
 		caption = "Rest"
 		super(index_)
 

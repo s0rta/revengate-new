@@ -149,7 +149,7 @@ func run():
 					print("Had to wait %s on %s before starting its action" % [elapsed, actor])
 				
 			var start_act = Time.get_ticks_msec()
-			actor.act()
+			await actor.act()
 			if not actor.is_idle():
 				if verbose:
 					print("waiting for %s..." % actor)

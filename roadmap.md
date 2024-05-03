@@ -423,11 +423,19 @@ Performance:
 
 
 ## v0.12.5
-- [ ] bug: inspect screen does not take all dynamic stats modifiers into account
+- [x] bug: inspect screen does not take all dynamic stats modifiers into account
+- [x] bug: tossing a dagger de-equips the stack
+- [x] non-rectangular rooms
+- [x] corridors are more twisty
+- [x] bigger dialogue control buttons
+- [x] better corridors that completely bisects rooms less often
+
+
+## v0.12.6
+- [ ] support Godot 4.2.2
 - [ ] document conn_target and connection fields
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings
-- [x] better corridors that completely bisects rooms less often
 
 Strategies:
 - [ ] Seeking is easier to resolve even is the target keeps moving

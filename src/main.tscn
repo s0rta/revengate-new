@@ -197,6 +197,7 @@ ambient_light_col = Color(0.639216, 0.639216, 0.74902, 1)
 script = ExtResource("13_u4fm7")
 start_world_loc = Vector3i(13, 5, -1)
 dest_world_loc = Vector3i(13, 8, 0)
+default_board_size = Vector2i(23, 35)
 start_depth = 1
 rect_room_prob = 0.1
 base_spawn_budget = 8

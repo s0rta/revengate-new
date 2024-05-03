@@ -1,0 +1,5 @@
+- rooms can be non-rectangular
+- corridors are more twisty
+- bigger dialogue control buttons
+- bug fix: weapons stacks (like daggers) stay equipped after a throw
+- bug fix: meditation message appears at the beginning of the rest

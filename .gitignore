@@ -25,3 +25,4 @@ android/build*
 build
 android/.build_version
 .DS_Store
+done.txt
