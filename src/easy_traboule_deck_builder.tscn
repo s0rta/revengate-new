@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://bvm0q1k13gmym"]
+[gd_scene load_steps=37 format=3 uid="uid://bvm0q1k13gmym"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_oonn7"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_v4koq"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="10_smtmw"]
 [ext_resource type="PackedScene" uid="uid://de85ahbbn0ced" path="res://src/items/potion_of_healing.tscn" id="13_3wmd5"]
 [ext_resource type="PackedScene" uid="uid://dvr7bsle8gy1x" path="res://src/items/potion_of_regen.tscn" id="14_8bfbv"]
+[ext_resource type="PackedScene" uid="uid://nw7xiux0jbv4" path="res://src/items/glow_mushroom.tscn" id="15_lhnv2"]
 [ext_resource type="PackedScene" uid="uid://c7fgdridawfb3" path="res://src/items/magic_capsule_of_regen.tscn" id="16_r5d4u"]
 [ext_resource type="PackedScene" uid="uid://dj5x5c687ddyj" path="res://src/items/amulet_of_strength.tscn" id="17_6i3li"]
 [ext_resource type="PackedScene" uid="uid://dnbg7u15s0nry" path="res://src/weapons/hammer.tscn" id="18_w8s5s"]
@@ -122,6 +123,13 @@ max_dungeon_occ = 10
 
 [node name="Kobold" parent="Max10PerDungeon" instance=ExtResource("5_u3117")]
 mem = SubResource("Resource_7th18")
+
+[node name="Deep" type="Node" parent="."]
+script = ExtResource("7_18mi5")
+min_depth = 5
+
+[node name="GlowMushroom" parent="Deep" instance=ExtResource("15_lhnv2")]
+visible = false
 
 [node name="Unique" type="Node" parent="."]
 script = ExtResource("7_18mi5")

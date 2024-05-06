@@ -446,7 +446,7 @@ Vibes:
 Items:
 - [x] coffee
 - [x] eye glasses
-- [ ] light sources
+- [x] glow mushroom
 
 Strategies:
 - [ ] Seeking is easier to resolve even is the target keeps moving

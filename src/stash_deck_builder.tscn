@@ -1,22 +1,26 @@
-[gd_scene load_steps=13 format=3 uid="uid://cmsxxvu32vsis"]
+[gd_scene load_steps=15 format=3 uid="uid://cmsxxvu32vsis"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_up4qd"]
 [ext_resource type="PackedScene" uid="uid://cmshyslfrv0du" path="res://src/vibes/hissing.tscn" id="2_l3w3v"]
-[ext_resource type="PackedScene" uid="uid://clry405irfeom" path="res://src/items/potion_of_analysis_paralysis.tscn" id="7_32bbb"]
-[ext_resource type="PackedScene" uid="uid://lpworv1rq2g3" path="res://src/items/potion_of_booze.tscn" id="8_b7p7x"]
+[ext_resource type="PackedScene" uid="uid://nw7xiux0jbv4" path="res://src/items/glow_mushroom.tscn" id="3_ac7nv"]
+[ext_resource type="PackedScene" uid="uid://bx8vm75edr76t" path="res://src/items/potion_of_analysis_paralysis.tscn" id="7_32bbb"]
+[ext_resource type="PackedScene" uid="uid://dvm0g3y1rr55g" path="res://src/items/potion_of_booze.tscn" id="8_b7p7x"]
 [ext_resource type="Script" path="res://src/card_rule.gd" id="9_gahru"]
 [ext_resource type="PackedScene" uid="uid://dnw86n1s88cwl" path="res://src/weapons/dagger.tscn" id="11_6cs3w"]
-[ext_resource type="PackedScene" uid="uid://dgdyufwncs77t" path="res://src/items/potion_of_healing.tscn" id="14_vnhuk"]
-[ext_resource type="PackedScene" uid="uid://c8qjd5x4rr4vq" path="res://src/items/potion_of_regen.tscn" id="15_88mj7"]
-[ext_resource type="PackedScene" uid="uid://b80ulbklxp5at" path="res://src/items/potion_of_poison.tscn" id="16_k2kco"]
+[ext_resource type="PackedScene" uid="uid://dk1dv7sw386vc" path="res://src/items/coffee.tscn" id="11_6fb54"]
+[ext_resource type="PackedScene" uid="uid://de85ahbbn0ced" path="res://src/items/potion_of_healing.tscn" id="14_vnhuk"]
+[ext_resource type="PackedScene" uid="uid://dvr7bsle8gy1x" path="res://src/items/potion_of_regen.tscn" id="15_88mj7"]
+[ext_resource type="PackedScene" uid="uid://wdbao74ejnju" path="res://src/items/potion_of_poison.tscn" id="16_k2kco"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="25_g62gj"]
-[ext_resource type="PackedScene" uid="uid://dactu5q2nmdun" path="res://src/items/potion_of_absinthe.tscn" id="27_4a275"]
+[ext_resource type="PackedScene" uid="uid://bado87soxnga5" path="res://src/items/potion_of_absinthe.tscn" id="27_4a275"]
 [ext_resource type="PackedScene" uid="uid://b2dem6s27irbs" path="res://src/weapons/grayswandir.tscn" id="29_6skwl"]
 
 [node name="StashDeckBuilder" type="Node"]
 script = ExtResource("1_up4qd")
 
 [node name="Hissing" parent="." instance=ExtResource("2_l3w3v")]
+
+[node name="GlowMushroom" parent="." instance=ExtResource("3_ac7nv")]
 
 [node name="Potions" type="Node" parent="."]
 script = ExtResource("9_gahru")
@@ -36,6 +40,8 @@ script = ExtResource("9_gahru")
 [node name="PotionOfPoison" parent="Potions" instance=ExtResource("16_k2kco")]
 
 [node name="PotionOfRegen2" parent="Potions" instance=ExtResource("15_88mj7")]
+
+[node name="Coffee" parent="Potions" instance=ExtResource("11_6fb54")]
 
 [node name="Unique" type="Node" parent="."]
 script = ExtResource("9_gahru")

@@ -1143,7 +1143,7 @@ func drop_item(item, coord=null, anim_toss=true):
 		_anim_lunge(coord)
 	coord = builder.place(item, false, coord, false)
 	_mods_cache = null
-	emit_signal("dropped_item", coord)
+	dropped_item.emit(coord)
 
 func reequip_weapon_from_group(grouping, prev_weapon=null):
 	if grouping == null or grouping is ItemGrouping and grouping.is_empty():
@@ -1173,11 +1173,12 @@ func pick_item(item):
 	# TODO: dist() == 1 would also work nicely
 	var item_coord = item.get_cell_coord()
 	assert(item_coord == get_cell_coord(), "can only pick items that are under us")
-	item.visible = false
+	
+	item.shroud(false)
 	if item.get("is_equipped") != null:
 		item.is_equipped = false
 	item.reparent(self)
-	emit_signal("picked_item", item_coord)
+	picked_item.emit(item_coord)
 	add_message("%s added to %s's inventory" % [item.get_short_desc(), caption])
 
 func consume_item(item: Item):

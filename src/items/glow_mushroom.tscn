@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://nw7xiux0jbv4"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_qicc8"]
+[ext_resource type="Texture2D" uid="uid://bcegewnjfju5u" path="res://addons/kenney_particle_pack/circle_05.png" id="2_pjrl0"]
+
+[node name="GlowMushroom" instance=ExtResource("1_qicc8")]
+char = "🍄"
+caption = "bioluminescent mushroom"
+desc_simple = "a mushroom that produces a soft relaxing glow"
+spawn_cost = 6.0
+tags = Array[String](["groupable"])
+
+[node name="LongLight" type="PointLight2D" parent="." index="1"]
+color = Color(0.301961, 0.698039, 0.768627, 1)
+energy = 0.5
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 18.0
+texture = ExtResource("2_pjrl0")
+texture_scale = 1.5
+
+[node name="ShortLight" type="PointLight2D" parent="." index="2"]
+color = Color(0.301961, 0.698039, 0.768627, 1)
+energy = 0.5
+texture = ExtResource("2_pjrl0")
+texture_scale = 0.3
