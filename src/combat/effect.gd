@@ -32,6 +32,7 @@ class_name Effect extends Node
 @export var perception := 0
 @export var health_full := 0
 @export_range(0, 1) var healing_prob := 0.0
+@export_range(0.0, 1.0) var mana_recovery_prob := 0.0
 
 @export_group("Applicability")
 @export_range(0, 1) var probability := 1.0  # chance that the effect will be applied

@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://pdu1a8fc862t"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_4stya"]
+[ext_resource type="Script" path="res://src/combat/stats_modifiers.gd" id="2_8b8e6"]
+
+[node name="EyeGlasses" instance=ExtResource("1_4stya")]
+char = "👓"
+caption = "a pair of eye glasses"
+desc_simple = "stylish eye glasses with a thick ebonite frame"
+desc_detailed = "Expertly cut clear glass lenses with a foyer, improves near and distance vision."
+spawn_cost = 5.0
+tags = Array[String](["fragile"])
+
+[node name="StatsModifiers" type="Node" parent="." index="1"]
+script = ExtResource("2_8b8e6")
+perception = 25

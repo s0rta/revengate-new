@@ -432,10 +432,21 @@ Performance:
 
 
 ## v0.12.6
+- [x] perception range is visible and animated when it changes
 - [ ] support Godot 4.2.2
 - [ ] document conn_target and connection fields
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings
+- [ ] light fixtures only glow when in line of sight
+
+Vibes:
+- [x] chill
+- [x] scratched floor
+
+Items:
+- [x] coffee
+- [x] eye glasses
+- [ ] light sources
 
 Strategies:
 - [ ] Seeking is easier to resolve even is the target keeps moving

@@ -7,7 +7,6 @@
 caption = "potion of healing"
 desc_simple = "A thick unpalatable syrup."
 desc_detailed = "Fermented berries and mushrooms. Packs lots of antioxidants and antibiotics."
-consumable = true
 spawn_cost = 2.0
 
 [node name="Effect" type="Node" parent="." index="2"]

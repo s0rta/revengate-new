@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://dab6wiatrc0m6"]
+[gd_scene load_steps=35 format=3 uid="uid://dab6wiatrc0m6"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_phj4j"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_3bv6l"]
@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://bado87soxnga5" path="res://src/items/potion_of_absinthe.tscn" id="16_mb0ny"]
 [ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="19_n7j36"]
 [ext_resource type="PackedScene" uid="uid://db6sjyoaw3ms2" path="res://src/monsters/giant_locust.tscn" id="20_3j7oh"]
+[ext_resource type="PackedScene" uid="uid://dk1dv7sw386vc" path="res://src/items/coffee.tscn" id="21_pcgkh"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="23_6bt64"]
 [ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="24_3pef4"]
 [ext_resource type="PackedScene" uid="uid://cjoutyju3dhre" path="res://src/monsters/gleugt.tscn" id="25_8ffwd"]
@@ -149,6 +150,8 @@ max_dungeon_occ = 3
 [node name="PotionOfRegen" parent="Healing" instance=ExtResource("14_cxrka")]
 
 [node name="MagicCapsuleOfRegen" parent="Healing" instance=ExtResource("16_ap6xo")]
+
+[node name="Coffee" parent="Healing" instance=ExtResource("21_pcgkh")]
 
 [node name="Hissing" parent="." instance=ExtResource("27_8pr1w")]
 

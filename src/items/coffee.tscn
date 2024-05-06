@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dk1dv7sw386vc"]
+
+[ext_resource type="PackedScene" uid="uid://c3qrp6eeq1lio" path="res://src/items/potion.tscn" id="1_hlfka"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_l7ov0"]
+
+[node name="Coffee" instance=ExtResource("1_hlfka")]
+char = "☕"
+caption = "potion of coffee"
+desc_simple = "a bitter brew with a very pleasant smell"
+desc_detailed = "An infusion of Coffea arabica. Helps with concentration."
+message = "your mind feels sharper"
+spawn_cost = 3.0
+
+[node name="ManaRegen" type="Node" parent="." index="2"]
+script = ExtResource("2_l7ov0")
+perception = 2
+mana_recovery_prob = 0.5
+nb_turns = 15
