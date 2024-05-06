@@ -21,6 +21,8 @@ class_name Hero extends Actor
 # not emitted directly, the VictoryProbe decides when this emits
 signal end_chapter(victory:bool, game_over:bool)
 
+var _fog_anim = null  # the last tween that touched the FogLight size
+
 func _ready():
 	super()
 	state = States.LISTENING
@@ -115,6 +117,10 @@ func _unhandled_input(event):
 func _dissipate():
 	pass  # the hero sticks around so we can disect him/her for the end-of-game stats
 
+func start_turn(turn_number:int):
+	super(turn_number)
+	scale_fog_light(get_perception_ranges().sight)
+
 func highlight_options(board=null, index=null):
 	## Put highlight markers where one-tap actions are available
 	if board == null:
@@ -145,6 +151,17 @@ func highlight_options(board=null, index=null):
 			
 	if not turn_done.is_connected(board.clear_highlights):
 		turn_done.connect(board.clear_highlights, CONNECT_ONE_SHOT)
+
+func scale_fog_light(nb_cells):
+	## Adjust the size of the FogLight to light `nb_cells` passed the hero in all 
+	## cardinal directions.
+	## The light is circular and will therefore cover fewer cells along diagonals.
+	if _fog_anim != null and _fog_anim.is_running():
+		_fog_anim.kill()
+	var light_width = $FogLight.texture.get_width()
+	var scale = 2.0 * (nb_cells + 0.5) * RevBoard.TILE_SIZE / light_width
+	_fog_anim = get_tree().create_tween()
+	_fog_anim.tween_property($FogLight, "texture_scale", scale, 0.35)
 
 func act() -> void:
 	has_acted = false

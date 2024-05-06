@@ -776,7 +776,7 @@ func perceives(thing, index=null):
 	elif not (thing is Vector2i) and board != thing.get_board():
 		return false
 
-	var dist = Geom.cheby_dist(here, there)
+	var dist = Geom.euclid_dist(here, there)
 	if dist > ranges.sight:
 		return false
 	elif dist <= ranges.feel:

@@ -227,6 +227,10 @@ static func man_dist(coord1:Vector2i, coord2:Vector2i) -> int:
 	var diff:Vector2i = (coord2 - coord1).abs()
 	return diff.x + diff.y
 
+static func euclid_dist(coord1:Vector2i, coord2:Vector2i) -> float:
+	## Return the Euclidean distance between two coords
+	return (coord1 - coord2).length()
+
 static func line(coord1, coord2):
 	## Return an array of coords continuously touching each others between 
 	## coord1 and coord2.
