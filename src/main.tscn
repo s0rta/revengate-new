@@ -126,27 +126,46 @@ layer_0/tile_data = PackedInt32Array(0, 262144, 3, 1, 458752, 3, 2, 327680, 3, 3
 unique_name_in_owner = true
 visible = true
 position = Vector2(112, 48)
+conversation_sect = null
+spawn_cost = null
+spawn_rect = null
+health = null
+health_full = null
+strength = null
+agility = null
+intelligence = null
+perception = null
+mana = null
+mana_burn_rate = null
+mana_recovery_prob = null
+resistance = null
+tags = null
+current_turn = null
+conditions_turn = null
+acted_turn = null
+dest = null
 mem = SubResource("Resource_7gsj3")
+actor_id = null
 
 [node name="Dynamite" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("7_eg4si")]
 
 [node name="Nadege" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_wcjwx")]
 visible = true
 position = Vector2(48, 80)
-mana_full = 0
 mem = SubResource("Resource_45y0r")
+mana_full = 0
 
 [node name="BarTender" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_x3gva")]
 visible = true
 position = Vector2(48, 240)
-mana_full = 0
 mem = SubResource("Resource_svdmg")
+mana_full = 0
 
 [node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_ymwa7")]
 visible = true
 position = Vector2(464, 48)
-mana_full = 0
 mem = SubResource("Resource_tdvsr")
+mana_full = 0
 
 [node name="Broom" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_w5yd8")]
 position = Vector2(336, 48)
@@ -157,22 +176,22 @@ position = Vector2(336, 48)
 [node name="BarPatron1" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
 visible = true
 position = Vector2(112, 272)
+mem = SubResource("Resource_tmb6n")
 caption = "Robert"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "ghosts"
 mana_full = 0
 description = "A man in a three piece suit."
-mem = SubResource("Resource_tmb6n")
 
 [node name="BarPatron2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
 visible = true
 position = Vector2(112, 208)
+mem = SubResource("Resource_hfpoa")
 caption = "Mathieu"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "party_magic"
 mana_full = 0
 description = "A man with a long tail coat and a top hat."
-mem = SubResource("Resource_hfpoa")
 
 [node name="Sign" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_621w4")]
 position = Vector2(688, 48)
@@ -364,6 +383,7 @@ mouse_filter = 2
 [node name="QuickActionsBox" type="HBoxContainer" parent="HUD/RGroup/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 8
 mouse_filter = 2
 theme_override_constants/separation = 8
 
