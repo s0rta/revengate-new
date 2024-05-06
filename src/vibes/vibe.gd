@@ -37,10 +37,10 @@ func _ready():
 	Utils.hide_unplaced(self)
 	
 	var lights = find_children("", "PointLight2D", false, true)
-	for light in lights:
-		light.color = light_col
-		if light.name.begins_with("Long"):
-			_start_flicker(light)
+	if lights:
+		for light in lights:
+			light.color = light_col
+		_start_flicker_all(lights)
 
 func get_board():
 	var parent = get_parent()
@@ -103,16 +103,22 @@ func should_shroud(index=null):
 
 func shroud(animate=true):
 	Utils.shroud_node(self, animate)
-		
+	for light in find_children("", "PointLight2D", false, true):
+		light.enabled = false
+			
 func unshroud(animate=true):
 	Utils.unshroud_node(self, animate)
+	for light in find_children("", "PointLight2D", false, true):
+		light.enabled = true
 
-func _start_flicker(light):
-	# FIXME: this would look better if we kept both Long and Short lights in sync
-	var old_energy = light.energy
-	var low_energy = randf_range(0.0, old_energy/2.0)
-	var tween = create_tween()
+func _start_flicker_all(lights):
 	var anim_time = randf_range(0.1, 0.8)
-	tween.tween_property(light, "energy", low_energy, anim_time)
-	tween.tween_property(light, "energy", old_energy, anim_time)
-	tween.finished.connect(_start_flicker.bind(light), CONNECT_ONE_SHOT)
+	var drop_mul = randf_range(0.0, 0.5)
+	var tween:Tween
+	for light in lights:
+		var old_energy = light.energy
+		var low_energy = old_energy * drop_mul
+		tween = create_tween()
+		tween.tween_property(light, "energy", low_energy, anim_time)
+		tween.tween_property(light, "energy", old_energy, anim_time)	
+	get_tree().create_timer(anim_time*2.1).timeout.connect(_start_flicker_all.bind(lights))
