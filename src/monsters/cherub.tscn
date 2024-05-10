@@ -1,11 +1,18 @@
-[gd_scene load_steps=7 format=3 uid="uid://0yvvkfod7748"]
+[gd_scene load_steps=10 format=3 uid="uid://0yvvkfod7748"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_ojldm"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_domgc"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="2_grdhn"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="3_qpsgw"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="4_s5t1x"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="5_fud0b"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="6_7xbfp"]
+[ext_resource type="PackedScene" uid="uid://dkjne1n771ldd" path="res://src/vibes/vibe.tscn" id="6_rtelo"]
+
+[sub_resource type="Resource" id="Resource_kpo4s"]
+resource_local_to_scene = true
+script = ExtResource("2_grdhn")
+_facts = []
 
 [node name="Cherub" instance=ExtResource("1_ojldm")]
 char = "𝒜"
@@ -20,23 +27,28 @@ perception = 60
 faction = 5
 bestiary_img = "res://src/monsters/cherub.jpg"
 description = "Cherubim are minor angelic beings."
+mem = SubResource("Resource_kpo4s")
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
 text = "𝒜"
 
-[node name="Tracking" type="Node" parent="." index="7"]
+[node name="Tracking" type="Node" parent="." index="6"]
 script = ExtResource("2_domgc")
 priority = 0.7
 
-[node name="Exploring" type="Node" parent="." index="8"]
+[node name="Exploring" type="Node" parent="." index="7"]
 script = ExtResource("3_qpsgw")
 priority = 0.4
 
-[node name="SkillLevels" type="Node" parent="." index="9"]
+[node name="SkillLevels" type="Node" parent="." index="8"]
 script = ExtResource("4_s5t1x")
 innate_attack = 4
 channeling = 4
+
+[node name="Feathers" parent="." index="9" instance=ExtResource("6_rtelo")]
+caption = "feathers on the ground"
+spawn_cost = 2.0
 
 [node name="Claw" type="Node" parent="." index="10"]
 script = ExtResource("5_fud0b")

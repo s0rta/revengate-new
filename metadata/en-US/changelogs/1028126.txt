@@ -1,0 +1,3 @@
+- Rest when long-pressing the Skip Turn button
+- Vision range is animated
+- Tips and hints in the print shop

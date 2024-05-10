@@ -19,7 +19,7 @@ Michel: I have too many potions and they use some valuable shelve space. Would y
 	do checkpoint("dungeon_intro")
 	Michel: That's a bold choice!
 
-Michel: I'll be right here. Chat with me again if you want to learn more about how things work around here.
+Michel: I'll be right here. Chat with me again if you want to learn more about how things work around here. You should also checkout the print shop next door.
 => END
 
 ~ dungeon_intro
@@ -34,5 +34,5 @@ Michel: Try a long tap (hold your finger down for a bit) at different locations.
 
 Michel: If a button has [b]bold[/b] text, it means that what it does counts as your action for the turn. Right after pressing it, your turn ends and monsters will start acting. There are a few obvious exceptions and I'm sure you will figure them out.
 
-Michel: Good luck!
+Michel: There are other tips at the print shop next door. Good luck!
 => END

@@ -127,46 +127,27 @@ layer_0/tile_data = PackedInt32Array(0, 262144, 3, 1, 458752, 3, 2, 327680, 3, 3
 unique_name_in_owner = true
 visible = true
 position = Vector2(112, 48)
-conversation_sect = null
-spawn_cost = null
-spawn_rect = null
-health = null
-health_full = null
-strength = null
-agility = null
-intelligence = null
-perception = null
-mana = null
-mana_burn_rate = null
-mana_recovery_prob = null
-resistance = null
-tags = null
-current_turn = null
-conditions_turn = null
-acted_turn = null
-dest = null
 mem = SubResource("Resource_7gsj3")
-actor_id = null
 
 [node name="Dynamite" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("7_eg4si")]
 
 [node name="Nadege" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_wcjwx")]
 visible = true
 position = Vector2(48, 80)
-mem = SubResource("Resource_45y0r")
 mana_full = 0
+mem = SubResource("Resource_45y0r")
 
 [node name="BarTender" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_x3gva")]
 visible = true
 position = Vector2(48, 240)
-mem = SubResource("Resource_svdmg")
 mana_full = 0
+mem = SubResource("Resource_svdmg")
 
 [node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_ymwa7")]
 visible = true
 position = Vector2(464, 48)
-mem = SubResource("Resource_tdvsr")
 mana_full = 0
+mem = SubResource("Resource_tdvsr")
 
 [node name="Broom" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_w5yd8")]
 position = Vector2(336, 48)
@@ -177,22 +158,22 @@ position = Vector2(336, 48)
 [node name="BarPatron1" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
 visible = true
 position = Vector2(112, 272)
-mem = SubResource("Resource_tmb6n")
 caption = "Robert"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "ghosts"
 mana_full = 0
 description = "A man in a three piece suit."
+mem = SubResource("Resource_tmb6n")
 
 [node name="BarPatron2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
 visible = true
 position = Vector2(112, 208)
-mem = SubResource("Resource_hfpoa")
 caption = "Mathieu"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "party_magic"
 mana_full = 0
 description = "A man with a long tail coat and a top hat."
+mem = SubResource("Resource_hfpoa")
 
 [node name="Sign" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_621w4")]
 position = Vector2(688, 48)
@@ -202,6 +183,26 @@ caption = "a sign: \"main square ahead\""
 [node name="Smell" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_621w4")]
 position = Vector2(80, 48)
 caption = "the complex aroma of a premium absinthe"
+
+[node name="RotoPress" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_621w4")]
+position = Vector2(336, 112)
+char = "🖭"
+caption = "a towering steam powered rotary printer"
+
+[node name="PrintedPages" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_621w4")]
+position = Vector2(304, 112)
+char = "🗐"
+caption = "a stack of printed pages that reads: \"consume a spell book to learn a new spell, a button will appear at the bottom right corner of the screen\""
+
+[node name="LithoPlate" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_621w4")]
+position = Vector2(272, 112)
+char = "🀆"
+caption = "a heavy lithographic plate that reads: \"long press on yourself or on monsters to see more action options\""
+
+[node name="PrintRoll" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_621w4")]
+position = Vector2(336, 144)
+char = "🗞"
+caption = "a large roll of printed paper that reads: \"hold the ⏳ button for a long rest\""
 
 [node name="Traboule1" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Dungeons"]
 script = ExtResource("13_u4fm7")
@@ -390,12 +391,11 @@ theme_override_constants/separation = 8
 
 [node name="MultiCmdButton" type="VBoxContainer" parent="HUD/RGroup/MarginContainer/QuickActionsBox"]
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 0
 script = ExtResource("26_eo8x3")
 text = "⏳"
 cmd_label = "Skip Turn"
 alt_cmd_label = "Rest"
-hero_pov = null
 
 [node name="QuickAttackButton" type="Button" parent="HUD/RGroup/MarginContainer/QuickActionsBox"]
 unique_name_in_owner = true
