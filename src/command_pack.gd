@@ -28,6 +28,7 @@ class Command extends RefCounted:
 	var is_cheat := false
 	var is_debug := false
 	var caption: String
+	var auto_display := true  # show a button for this command whenever it's valid
 	var index: RevBoard.BoardIndex
 
 	func _init(index_=null):
@@ -178,6 +179,7 @@ class SkipTurn extends Command:
 	func _init(index_=null):
 		is_action = true
 		caption = "Skip Turn"
+		auto_display = false
 		super(index_)
 
 	func is_valid_for(coord:Vector2i):
@@ -204,7 +206,7 @@ class Rest extends Command:
 		return coord == Tender.hero.get_cell_coord()
 		
 	func is_valid_for_hero_at(_coord:Vector2i) -> bool:
-		return true
+		return false  # it's valid, but we lie to make the buttons less spammy
 
 	func run(coord:Vector2i) -> bool:
 		var target_health = _find_target_health()
@@ -543,8 +545,9 @@ func get_commands(names:Array[String]) -> Dictionary:
 		assert(has_match, "Can't find a command labeled %s" % name)
 	return dict
 
-func commands_for(coord, hero_pov:=false, index=null):
+func commands_for(coord, hero_pov:=false, auto_display:=true, index=null):
 	## Return a list of valid coordinates for `coord`
+	## `auto_display`: only return auto_display commands
 	var is_debug = Utils.is_debug()
 	var allow_cheats = Tabulator.load().allow_cheats
 	if index == null:
@@ -556,6 +559,8 @@ func commands_for(coord, hero_pov:=false, index=null):
 		if not is_debug and cmd.is_cheat and not allow_cheats:
 			continue
 		if not is_debug and cmd.is_debug:
+			continue
+		if auto_display and not cmd.auto_display:
 			continue
 		if (hero_pov and cmd.is_valid_for_hero_at(coord)) \
 			or (not hero_pov and cmd.is_valid_for(coord)):

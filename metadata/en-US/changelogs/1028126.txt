@@ -1,3 +1,4 @@
 - Rest when long-pressing the Skip Turn button
 - Vision range is animated
-- Tips and hints in the print shop
+- Tips and hints on display at the print shop
+- New items: potion of coffee, eye glasses, bioluminescent mushrooms

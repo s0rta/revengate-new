@@ -32,12 +32,12 @@ vertical_alignment = 1
 
 [node name="LongLight" type="PointLight2D" parent="."]
 color = Color(1, 0.921569, 0.580392, 1)
-energy = 0.3
+energy = 0.55
 shadow_enabled = true
 shadow_filter = 1
 shadow_filter_smooth = 18.0
 texture = ExtResource("2_0bnm6")
-texture_scale = 1.2
+texture_scale = 1.3
 
 [node name="ShortLight" type="PointLight2D" parent="."]
 color = Color(1, 0.878431, 0.670588, 1)

@@ -192,7 +192,7 @@ caption = "a towering steam powered rotary printer"
 [node name="PrintedPages" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_621w4")]
 position = Vector2(304, 112)
 char = "🗐"
-caption = "a stack of printed pages that reads: \"consume a spell book to learn a new spell, a button will appear at the bottom right corner of the screen\""
+caption = "printed pages that read: \"consume a spell book to learn a new spell, a button to cast it will appear\""
 
 [node name="LithoPlate" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_621w4")]
 position = Vector2(272, 112)

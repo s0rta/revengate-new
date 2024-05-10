@@ -112,8 +112,8 @@ func unshroud(animate=true):
 		light.enabled = true
 
 func _start_flicker_all(lights):
-	var anim_time = randf_range(0.1, 0.8)
-	var drop_mul = randf_range(0.0, 0.5)
+	var anim_time = randf_range(0.25, 0.8)
+	var drop_mul = randf_range(0.3, 0.6)
 	var tween:Tween
 	for light in lights:
 		var old_energy = light.energy
