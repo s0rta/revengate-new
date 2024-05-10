@@ -93,6 +93,8 @@ class ContextMenuEvent extends InputEventAction:
 	func ddump():
 		return "ContextMenuEvent: action=%s, pressed=%s" % [action, pressed]
 
+func _ready():
+	$LongTapTimer.wait_time = UIUtils.LONG_TAP_SECS
 
 func _input(event):
 	if _attempt_capture(event):

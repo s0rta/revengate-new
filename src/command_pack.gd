@@ -174,25 +174,51 @@ class Talk extends Command:
 		print("The dia has been closed!")
 		return true
 
+class SkipTurn extends Command:
+	func _init(index_=null):
+		is_action = true
+		caption = "Skip Turn"
+		super(index_)
+
+	func is_valid_for(coord:Vector2i):
+		return coord == Tender.hero.get_cell_coord()
+
+	func is_valid_for_hero_at(_coord:Vector2i) -> bool:
+		return true
+
+	func run(coord:Vector2i) -> bool:
+		return true
+
+	func run_at_hero(coord:Vector2i) -> bool:
+		return true
+
 class Rest extends Command:
+	const PERCEPTION_MOD = -45
+	
 	func _init(index_=null):
 		is_action = true
 		caption = "Rest"
 		super(index_)
 
-	func is_valid_for(coord:Vector2i):
+	func is_valid_for(coord:Vector2i) -> bool:
 		return coord == Tender.hero.get_cell_coord()
+		
+	func is_valid_for_hero_at(_coord:Vector2i) -> bool:
+		return true
 
 	func run(coord:Vector2i) -> bool:
 		var target_health = _find_target_health()
 		var ttl = _find_ttl(target_health)
 		var strat = Resting.new(Tender.hero, 1.0, ttl, target_health)
 		var mods = StatsModifiers.new()
-		mods.perception = -45
+		mods.perception = PERCEPTION_MOD
 		strat.add_child(mods)
 		Tender.hero.add_strategy(strat)
 		Tender.hero.add_message("You close your eyes and meditate for a while...")
 		return true
+	
+	func run_at_hero(coord:Vector2i) -> bool:
+		return run(coord)
 		
 	func _find_target_health() -> int:
 		var me = Tender.hero
@@ -495,8 +521,27 @@ class OpenDoor extends DoorHandler:
 		
 func _ready():
 	_cmd_classes = [Attack, Talk, TravelTo, GetCloser, Inspect, CloseDoor, OpenDoor, 
-					Rest,
+					SkipTurn, Rest,
 					DumpDevCheat, TeleportCheat, RegenCheat, VictoryCheat]
+
+func get_commands(names:Array[String]) -> Dictionary:
+	## Return a {name:instance} mapping from command captions.
+	## Raise an assertion error if any of the names does not correspond to a command.
+	## If more than one command use the same caption, the first one in the registry is returned.
+	# TODO: it would be more robust to go by class name rather than caption, but that 
+	#   does not seem possible as of Godot 4.2.1
+	var dict = {}
+	var has_match : bool
+	for name in names:
+		has_match = false
+		for cls in _cmd_classes:
+			var cmd = cls.new()
+			if cmd.caption == name:
+				has_match = true
+				dict[name] = cmd
+				break
+		assert(has_match, "Can't find a command labeled %s" % name)
+	return dict
 
 func commands_for(coord, hero_pov:=false, index=null):
 	## Return a list of valid coordinates for `coord`

@@ -66,6 +66,8 @@ func watch_hero(hero:Actor=null):
 	refresh_hps()
 	refresh_buttons_vis(null, hero.get_cell_coord())
 	
+	for btn in %QuickActionsBox.find_children("", "MultiCmdButton", false, false):
+		btn.resolve_commands(%CommandPack)
 	var index = hero.get_board().make_index()
 	quick_attack_cmd = CommandPack.QuickAttack.new(index)
 	_set_quick_attack_icon()
@@ -95,7 +97,7 @@ func refresh_mana(_new_mana=null):
 
 func refresh_spells():
 	for node in %QuickActionsBox.get_children():
-		if not (node == %QuickAttackButton or node == %SkipTurnButton):
+		if not (node is MultiCmdButton or node == %QuickAttackButton):
 			node.hide()
 			node.queue_free()
 	for spell in Tender.hero.find_children("", "Spell", false, false):
@@ -216,15 +218,17 @@ func _on_hero_state_changed(new_state):
 	if new_state != Actor.States.IDLE:
 		%ProminentMsgLabel.text = ""
 	refresh_input_enabled(new_state == Actor.States.LISTENING)
+	var index = Tender.hero.get_board().make_index()
 	for btn in %QuickActionsBox.find_children("", "SpellButton", false, false):
 		btn.set_enabled(new_state == Actor.States.LISTENING)
+	for btn in %QuickActionsBox.find_children("", "MultiCmdButton", false, false):
+		btn.refresh(index)
+		btn.set_enabled(new_state == Actor.States.LISTENING)
 	if new_state == Actor.States.LISTENING:
-		%SkipTurnButton.disabled = false
-		quick_attack_cmd.refresh(Tender.hero.get_board().make_index())
+		quick_attack_cmd.refresh(index)
 		var here = Tender.hero.get_cell_coord()
 		%QuickAttackButton.disabled = not quick_attack_cmd.is_valid_for_hero_at(here)
 	else:
-		%SkipTurnButton.disabled = true
 		%QuickAttackButton.disabled = true
 
 func _on_city_map_button_pressed():
@@ -256,7 +260,3 @@ func _on_center_control_visibility_changed():
 
 func _on_hero_spells_changed():
 	refresh_spells()
-
-
-func _on_skip_turn_button_button_up():
-	Tender.hero.finalize_turn()

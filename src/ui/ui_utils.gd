@@ -18,6 +18,8 @@
 ## Various utility functions to help with the UI and UX.
 class_name UIUtils extends Object
 
+const LONG_TAP_SECS := 0.5
+
 static func resize_text_controls(size=null):
 	if size == null:
 		size = Tabulator.load().text_size

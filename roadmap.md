@@ -438,10 +438,14 @@ Performance:
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings
 - [ ] light fixtures only glow when in line of sight
+- [x] long tap to rest
+- [ ] rename MeterGroup
 
 Vibes:
 - [x] chill
 - [x] scratched floor
+- [ ] feathers
+- [ ] print shop has lots of hints: 🗜, 🖭, 🗞
 
 Items:
 - [x] coffee

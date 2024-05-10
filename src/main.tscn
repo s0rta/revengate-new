@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=46 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -33,6 +33,7 @@
 [ext_resource type="PackedScene" uid="uid://cmsxxvu32vsis" path="res://src/stash_deck_builder.tscn" id="22_gyaq5"]
 [ext_resource type="PackedScene" uid="uid://cf0kj6qn7a40s" path="res://src/ui/city_map_screen.tscn" id="23_aomab"]
 [ext_resource type="PackedScene" uid="uid://bb5upsioptfc4" path="res://src/ui/context_menu_popup.tscn" id="25_n5bfn"]
+[ext_resource type="Script" path="res://src/ui/multi_cmd_button.gd" id="26_eo8x3"]
 [ext_resource type="PackedScene" uid="uid://bgntr3w6l7kt0" path="res://src/ui/story_screen.tscn" id="28_7kpa3"]
 [ext_resource type="PackedScene" uid="uid://dpgcrubb5v6p7" path="res://src/ui/end_of_chapter_screen.tscn" id="30_5u5si"]
 [ext_resource type="PackedScene" uid="uid://cbhsiga8clmpe" path="res://src/ui/MeterGroup.tscn" id="35_eopq6"]
@@ -387,13 +388,14 @@ size_flags_horizontal = 8
 mouse_filter = 2
 theme_override_constants/separation = 8
 
-[node name="SkipTurnButton" type="Button" parent="HUD/RGroup/MarginContainer/QuickActionsBox"]
-unique_name_in_owner = true
+[node name="MultiCmdButton" type="VBoxContainer" parent="HUD/RGroup/MarginContainer/QuickActionsBox"]
 layout_mode = 2
-size_flags_horizontal = 4
-focus_mode = 0
-theme_type_variation = &"ProminentButton"
+size_flags_horizontal = 6
+script = ExtResource("26_eo8x3")
 text = "⏳"
+cmd_label = "Skip Turn"
+alt_cmd_label = "Rest"
+hero_pov = null
 
 [node name="QuickAttackButton" type="Button" parent="HUD/RGroup/MarginContainer/QuickActionsBox"]
 unique_name_in_owner = true
@@ -599,7 +601,6 @@ script = ExtResource("41_hgs5k")
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/TestButton1" to="." method="test"]
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/TestButton2" to="." method="test2"]
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/ShowCheatsButton" to="HUD" method="toggle_cheats_box"]
-[connection signal="button_up" from="HUD/RGroup/MarginContainer/QuickActionsBox/SkipTurnButton" to="HUD" method="_on_skip_turn_button_button_up"]
 [connection signal="button_up" from="HUD/RGroup/MarginContainer/QuickActionsBox/QuickAttackButton" to="HUD" method="_on_quick_attack_button_button_up"]
 [connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/CancelButton" to="HUD" method="request_cancel_strats"]
 [connection signal="button_up" from="HUD/TopRightMargin/VBoxContainer/HBoxContainer/CityMapButton" to="HUD" method="_on_city_map_button_pressed"]
