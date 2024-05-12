@@ -7,7 +7,7 @@ content_margin_left = 16.0
 content_margin_top = 16.0
 content_margin_right = 16.0
 content_margin_bottom = 16.0
-bg_color = Color(0, 0, 0, 0.490196)
+bg_color = Color(0, 0, 0, 0.6)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -47,6 +47,6 @@ mouse_filter = 2
 
 [node name="MessageTemplate" type="Label" parent="Panel/MessagesBox"]
 unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0.9)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.77, 0.42, 0.9)
 text = "This is a test message..."

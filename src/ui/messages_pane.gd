@@ -27,6 +27,11 @@ func _ready():
 func add_message(text, level:Consts.MessageLevels, tags:=[]):
 	_trim_old_messages()
 	var label = %MessageTemplate.duplicate()
+	if "msg:combat" in tags:
+		label.theme_type_variation = "MsgCombat"
+	elif "msg:vibe" in tags:
+		label.theme_type_variation = "MsgVibe"
+
 	label.text = text
 	if level >= Consts.MessageLevels.WARNING:
 		label.modulate = Color.RED

@@ -139,7 +139,7 @@ const TAGS = ["ethereal", "undead", "gift", "fragile", "broken", "lit",
 			# weapons
 			"silver", "throwable", 
 			# messages
-			"strategy",
+			"msg:strategy", "msg:combat", "msg:vibe", "msg:inventory",
 			# progen placement constraints
 			"spawn-north", "spawn-south", "spawn-west", "spawn-east", 
 			"spawn-center", "spawn-distant", 

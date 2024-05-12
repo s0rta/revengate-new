@@ -1058,7 +1058,9 @@ func strike(foe:Actor, weapon, throw=null):
 	if weapon.get("has_effect"):
 		CombatUtils.apply_all_effects(weapon, foe)	
 	emit_signal("hit", foe, damage)
-	add_message("%s hit %s for %d dmg" % [get_short_desc(), foe.get_short_desc(), damage])
+	add_message("%s hit %s for %d dmg" % [get_short_desc(), foe.get_short_desc(), damage], 
+				Consts.MessageLevels.INFO, 
+				["msg:combat"])
 	foe.was_attacked.emit(self)
 	if with_anims and not foe.is_unexposed():
 		anim_hit(foe, weapon, damage)
@@ -1194,7 +1196,7 @@ func consume_item(item: Item):
 	
 func add_message(text:String, 
 				level:Consts.MessageLevels=Consts.MessageLevels.INFO, 
-				tags:Array[String]=[]):
+				tags:=[]):
 	## Try to add a message to the message window. 
 	## The visibility of the message depends on us being visible to the Hero
 	if level == null:

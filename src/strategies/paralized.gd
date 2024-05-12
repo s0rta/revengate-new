@@ -21,5 +21,5 @@ class_name Paralized extends Strategy
 func act():
 	if me == Tender.hero:
 		var msg = "%s is paralized and can't move!" % [me.get_short_desc()]
-		me.add_message(msg, Consts.MessageLevels.INFO, ["strategy"])
+		me.add_message(msg, Consts.MessageLevels.INFO, ["msg:strategy"])
 	return true  # one rare case of a non-deliberate action costing you your turn

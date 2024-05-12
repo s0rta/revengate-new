@@ -103,7 +103,7 @@ func act():
 	var nb_steps = _turns_left()
 	if nb_steps:
 		var msg = "%s is travelling towards %s." % [me.get_short_desc(), dest_str]
-		add_hero_message(msg, Consts.MessageLevels.INFO, ["strategy"])
+		add_hero_message(msg, Consts.MessageLevels.INFO, ["msg:strategy"])
 		
 		if nb_steps <= 1:
 			arrived = true

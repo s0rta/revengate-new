@@ -34,7 +34,7 @@ func trim_old_messages():
 	
 func add_message(text:String, 
 				level:Consts.MessageLevels, 
-				tags:Array[String]):
+				tags:Array):
 	%ListView.add_item(text)
 	trim_old_messages()
 

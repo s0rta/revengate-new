@@ -180,8 +180,8 @@ func hide_action_label():
 
 func add_message(text:String, 
 				level:Consts.MessageLevels, 
-				tags:Array[String]):
-	if "strategy" in tags:
+				tags:Array):
+	if "msg:strategy" in tags:
 		if %ProminentMsgLabel.text.is_empty():
 			%ProminentMsgLabel.text = text
 		else:

@@ -1251,7 +1251,7 @@ func _on_actor_died(coord, tags, actor):
 	
 func add_message(actor, text:String, 
 				level:Consts.MessageLevels=Consts.MessageLevels.INFO, 
-				tags:Array[String]=[]):
+				tags:=[]):
 	if level == null:
 		level = Consts.MessageLevels.INFO
 	if not actor.is_unexposed():
