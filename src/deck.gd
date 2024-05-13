@@ -29,14 +29,40 @@ func _init(card_occs=null, tally_func_=null):
 			add_card(item[0], item[1])
 	tally_func = tally_func_
 
+func _to_string():
+	var elems = _card_summaries()
+	if elems:
+		return "<Deck with %d cards: %s>" % [len(elems), ", ".join(elems)]
+	else:
+		return "<Deck with 0 cards>"
+
+func _card_name(card):
+	var name = card.get("name")
+	if name:
+		return name
+	else:
+		return "%s" % card
+
+func _card_summaries(sparse=true):
+	var total = Utils.sum(occurences)
+	var elems = []
+	for i in len(cards):
+		if sparse and occurences[i] <= 0.0:
+			continue
+		var pct = 100.0 * occurences[i] / total
+		elems.append("%s: %0.2f (%0.1f%%)" % [cards[i].name, occurences[i], pct])
+	return elems
+
 func ddump(sparse=false):
 	## Print the content of the deck. 
 	## sparse: only print cards with non-zezo occurences
-	print("Cards in this deck:")
-	for i in len(cards):
-		if sparse and occurences[i] == 0:
-			continue
-		print("  %s: %s" % [cards[i], occurences[i]])
+	var elems = _card_summaries(sparse)
+	if elems:
+		print("Cards in this deck:")
+		for elem in elems:
+			print("  " + elem)
+	else:
+		print("No cards in this deck!")
 
 func validate_nb_copies(nb_copies):
 	assert(nb_copies != INF and nb_copies != NAN, 
@@ -64,7 +90,7 @@ func add_copies(card, nb_copies):
 
 func normalize():
 	## Adjust the content of the deck to be consistent with drawing rules. 
-	## Cads with less than one occurence are removed.
+	## Cards with less than one occurence are removed.
 	for i in len(occurences):
 		if occurences[i] < 1:
 			occurences[i] = 0

@@ -40,6 +40,7 @@ var prefab_map = {Vector3i(13, 3, 0): "Er",
 @export_range(0.0, 1.0) var rect_room_prob := 0.9
 @export var base_spawn_budget := 0
 @export var ambient_light_col := Color(1, 1, 1, 1)  # this is z-adjusted at board creation time
+@export var verbose_decks = false  # print a summary of new furnishing decks before drawing
 var deck_builder: DeckBuilder
 var starting_board: RevBoard
 
@@ -277,12 +278,22 @@ func _gen_decks_and_draw(board_builder:BoardBuilder, index, deck_builder, card_t
 	
 	# mandatory cards
 	var deck = deck_builder.gen_mandatory_deck(card_type, depth, world_loc, extra_mandatory_cards)
+	
+	if Utils.is_debug() and verbose_decks and not deck.is_empty():
+		print("Mantatory %s deck for new board at %s:" % [card_type, RevBoard.world_loc_str(world_loc)])
+		print(deck)
+	
 	while not deck.is_empty():
 		cards.append(deck.draw())
 		budget -= cards[-1].spawn_cost
 
 	# optional cards, if we have any spawning budget left
 	deck = deck_builder.gen_prob_deck(card_type, depth, world_loc, budget, extra_optional_cards)
+
+	if Utils.is_debug() and verbose_decks and not deck.is_empty():
+		print("Probabilistic %s deck for new board at %s:" % [card_type, RevBoard.world_loc_str(world_loc)])
+		print(deck)
+
 	while not deck.is_empty() and budget > 0:
 		cards.append(deck.draw())
 		budget -= cards[-1].spawn_cost
