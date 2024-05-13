@@ -1,8 +1,9 @@
-[gd_resource type="Theme" load_steps=15 format=3 uid="uid://3araln1iald0"]
+[gd_resource type="Theme" load_steps=16 format=3 uid="uid://3araln1iald0"]
 
 [ext_resource type="FontVariation" uid="uid://mqpu6cr474oo" path="res://assets/fonts/free_sans_bold_with_fallbacks.tres" id="1_uwi6j"]
 [ext_resource type="FontVariation" uid="uid://bym5ra6v6cqu0" path="res://assets/fonts/free_sans_with_fallbacks.tres" id="2_k0ifl"]
 [ext_resource type="FontVariation" uid="uid://cbailsl0xtosp" path="res://assets/fonts/symbola_with_fallbacks.tres" id="4_ef7be"]
+[ext_resource type="FontVariation" uid="uid://d11yqud5jnmdk" path="res://assets/fonts/free_sans_oblique_with_fallbacks.tres" id="4_usch0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mjio8"]
 content_margin_left = 4.0
@@ -197,7 +198,8 @@ MarginContainer/constants/margin_top = 24
 MsgCombat/base_type = &"Label"
 MsgCombat/colors/font_color = Color(0.85098, 0.576471, 0.384314, 1)
 MsgVibe/base_type = &"Label"
-MsgVibe/colors/font_color = Color(0.65098, 0.858824, 0, 1)
+MsgVibe/colors/font_color = Color(0.86, 0.845093, 0.4128, 1)
+MsgVibe/fonts/font = ExtResource("4_usch0")
 PopupMenu/font_sizes/font_size = 30
 ProminentButton/base_type = &"Button"
 ProminentButton/font_sizes/font_size = 42
