@@ -18,10 +18,22 @@
 ## Run staged combats and record summaries of what happened
 class_name Simulator extends Node2D
 
+# Terminology 
+# - sim: all the turns of a combat encounter until last party standing (gladiator or challengers)
+# - stage: many sims (~1000) all with the same gladiator and challengers
+# - run: one or more stages, based on RUN_ALL_STAGES
+
+# To run, add two or more actors on $Board, the first one will be the gladiator for all stages.
+# Optionally: add more actors as chidren of $ExtraStages, 
+#   stages can with multiple challengers must be a Node with actors as direct children.
+# Then press F6 (run scene).
+
+# TODO: fix placement of stage-0 if anyone is inside a wall or on top of one another
+
 enum Results {VICTORY, DEFEAT, DRAW}
 
 const NB_SIMS_PER_RUN = 1000
-const MAX_SIM_TURNS = 100  # DEBUG, was 50
+const MAX_SIM_TURNS = 50
 const RUN_ALL_STAGES = true  # sim the first board and all the challengers in $ExtraStages
 
 # Whether to let Godot start the sims in between rendering frames, gives better 

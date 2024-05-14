@@ -432,6 +432,7 @@ Performance:
 
 
 ## v0.12.6
+- [x] deck simulator runs items and vibes
 - [x] perception range is visible and animated when it changes
 - [ ] support Godot 4.2.2
 - [ ] document conn_target and connection fields

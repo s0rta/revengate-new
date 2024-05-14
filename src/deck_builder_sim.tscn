@@ -10,10 +10,10 @@
 script = ExtResource("1_c3005")
 base_spawn_budget = 15
 
-[node name="StashDeckBuilder" parent="." instance=ExtResource("2_w8tte")]
+[node name="EasyTrabouleDeckBuilder" parent="." instance=ExtResource("2_vtj4q")]
 
 [node name="HardTrabouleDeckBuilder" parent="." instance=ExtResource("3_0mfiq")]
 
-[node name="EasyTrabouleDeckBuilder" parent="." instance=ExtResource("2_vtj4q")]
-
 [node name="CryptDeckBuilder" parent="." instance=ExtResource("2_ee8rm")]
+
+[node name="StashDeckBuilder" parent="." instance=ExtResource("2_w8tte")]
