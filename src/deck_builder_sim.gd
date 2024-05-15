@@ -70,7 +70,7 @@ func sim_stage_for_card_type(ref_deck_builder, card_type) -> Dictionary:
 				stage_context.sims[depth] = []
 			sim_counter = {}
 
-			var budget = spawn_budget(depth, Dungeon.MONSTER_MULTIPLIER)			
+			var budget = spawn_budget(depth, Dungeon.BUDGET_MULTIPLIERS[card_type])			
 			var depth_counters = [stage_context.stage[depth], sim_counter]
 			
 			var deck = builder.gen_mandatory_deck(card_type, depth, Consts.LOC_INVALID)

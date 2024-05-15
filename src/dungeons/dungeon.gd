@@ -20,9 +20,9 @@
 class_name Dungeon extends Node
 
 # Spawn budget multipliers
-const ITEM_MULTIPLIER = 1.3
-const MONSTER_MULTIPLIER = 1.7
-const VIBE_MULTIPLIER = 1.1
+const BUDGET_MULTIPLIERS = {"Actor": 1.7, 
+							"Item": 1.3, 
+							"Vibe": 1.1}
 
 var prefab_map = {Vector3i(13, 3, 0): "Er", 
 					Vector3i(13, 4, 0): "Er", 
@@ -248,13 +248,13 @@ func populate_board(builder, depth, world_loc:Vector3i):
 		fab_optional_cards += fab.get_optional_cards()
 	
 	# Items
-	var budget = spawn_budget(depth, ITEM_MULTIPLIER)
+	var budget = spawn_budget(depth, BUDGET_MULTIPLIERS["Item"])
 	_gen_decks_and_place(builder, index, deck_builder, "Item", depth, world_loc, budget, 
 						Utils.filter_nodes_by_type(fab_mandatory_cards, "Item"), 
 						Utils.filter_nodes_by_type(fab_optional_cards, "Item"))
 		
 	# Monsters
-	budget = spawn_budget(depth, MONSTER_MULTIPLIER)
+	budget = spawn_budget(depth, BUDGET_MULTIPLIERS["Actor"])
 	_gen_decks_and_place(builder, index, deck_builder, "Actor", depth, world_loc, budget, 
 						Utils.filter_nodes_by_type(fab_mandatory_cards, "Actor"), 
 						Utils.filter_nodes_by_type(fab_optional_cards, "Actor"))
@@ -263,7 +263,7 @@ func populate_board(builder, depth, world_loc:Vector3i):
 	var extra_vibe = []
 	for actor in builder.board.get_actors():
 		extra_vibe += actor.get_vibe_cards()
-	budget = spawn_budget(depth, VIBE_MULTIPLIER)
+	budget = spawn_budget(depth, BUDGET_MULTIPLIERS["Vibe"])
 	_gen_decks_and_place(builder, index, deck_builder, "Vibe", depth, world_loc, budget, 
 						Utils.filter_nodes_by_type(fab_mandatory_cards, "Vibe"), 
 						Utils.filter_nodes_by_type(fab_optional_cards, "Vibe") + extra_vibe)
