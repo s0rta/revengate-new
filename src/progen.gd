@@ -90,3 +90,22 @@ static func connectable_near_coords(near_room:Room, near_side:Vector2i,
 	if shuffle:
 		coords.shuffle()
 	return coords
+
+
+static func spawn_key(node:Node) -> String:
+	## Return a serializable representation of the node id.
+	## This is usefull for deck tallies.
+	var tags_str = ""
+	var tags = node.get("tags")
+	if tags:
+		tags_str = ":".join(tags)
+
+	var name_str:String
+	if node.get("get_short_desc"):
+		name_str = node.get_short_desc()
+	elif node.get("caption"):
+		name_str = node.caption
+	else:
+		name_str = node.name
+
+	return "%s:%s" % [name_str, tags_str]

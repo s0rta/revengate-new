@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -19,8 +19,9 @@
 ## Factory to make card decks based on composable rules
 class_name DeckBuilder extends Node
 
-var hold_counts := {}  # card -> nb_holds mapping
-var draw_counts := {}  # card -> nb_draws mapping
+@export_category("Internals")
+@export var hold_counts := {}  # card -> nb_holds mapping
+@export var draw_counts := {}  # card -> nb_draws mapping
 
 func _get_cards(node:Node, card_type):
 	return node.find_children("", card_type, false, false)
@@ -43,19 +44,21 @@ func _add_all_cards(deck, cards, depth, world_loc:Vector3i, budget, rule=null):
 func tally_draw(card, update_holds=false):
 	## Record that `card` was just drawn.
 	## if update_holds, one hold is released for the card
-	if not draw_counts.has(card):
-		draw_counts[card] = 0
-	if update_holds and hold_counts.has(card):
-		var hold = hold_counts[card]
-		hold_counts[card] = min(0, hold-1)
-	draw_counts[card] += 1
+	var card_key = Procgen.spawn_key(card)
+	if not draw_counts.has(card_key):
+		draw_counts[card_key] = 0
+	if update_holds and hold_counts.has(card_key):
+		var hold = hold_counts[card_key]
+		hold_counts[card_key] = min(0, hold-1)
+	draw_counts[card_key] += 1
 
 func set_hold(card, nb_occ=1):
 	## Set a temporary hold on card. 
 	## Held occurences will be considered as drawn when generating new decks.
-	if not hold_counts.has(card):
-		hold_counts[card] = 0
-	hold_counts[card] += nb_occ
+	var card_key = Procgen.spawn_key(card)
+	if not hold_counts.has(card_key):
+		hold_counts[card_key] = 0
+	hold_counts[card_key] += nb_occ
 	
 func clear_holds():
 	## Release all the holds
@@ -63,7 +66,8 @@ func clear_holds():
 
 func nb_tied_occ(card):
 	## Return the number of unavailable copies of card: held+drawn.
-	return hold_counts.get(card, 0) + draw_counts.get(card, 0)
+	var card_key = Procgen.spawn_key(card)
+	return hold_counts.get(card_key, 0) + draw_counts.get(card_key, 0)
 
 func nb_mandatory_occ(card, rule, depth, world_loc:Vector3i):
 	## Return how many occurences are mandated by a rule
