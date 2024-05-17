@@ -356,6 +356,21 @@ func pre_load_resources():
 		"res://src/sfx/zap_sfx.tscn"]
 	for res in exp_res:
 		ResourceLoader.load_threaded_request(res)
+		
+func _collect_tallies() -> Dictionary:
+	## Get the tallies for distributed cards for all the dungeons. 
+	## Return a {dungeon_name:tally} mapping.
+	var tallies = {}
+	for dungeon in dungeons_cont.find_children("", "Dungeon", false, true):
+		tallies[dungeon.name] = dungeon.deck_builder.tally
+	return tallies
+	
+func _restore_tallies(tallies:Dictionary):
+	## Set the tallies for distributed cards on all the dungeons. 
+	## `tallies`: a {dungeon_name:tally} mapping
+	for dungeon in dungeons_cont.find_children("", "Dungeon", false, true):
+		if tallies.has(dungeon.name):
+			dungeon.deck_builder.tally = tallies[dungeon.name]
 
 func capture_game(immediate:bool):
 	## Record the current state of the game and save it to a file.
@@ -369,7 +384,8 @@ func capture_game(immediate:bool):
 	var dungeons = dungeons_cont
 	
 	print("Saving at turn %d" % $TurnQueue.turn)
-	bundle.save(dungeons, $TurnQueue.turn, Tender.kills, Tender.sentiments,
+	bundle.save(dungeons, $TurnQueue.turn, _collect_tallies(),
+		Tender.kills, Tender.sentiments,
 		Tender.quest.tag, Tender.quest.is_active,
 		Tender.seen_locs.keys(), Tender.nb_cheats, Tender.play_secs,
 		immediate)
@@ -398,6 +414,7 @@ func restore_game(bundle=null):
 	if bundle.VERBOSE:
 		bundle.dlog_root(".final")
 	var hero = dungeons.find_child("Hero")
+	_restore_tallies(bundle.tallies)
 	Tender.kills = bundle.kills
 	Tender.sentiments = bundle.sentiments
 	Tender.quest = _quest_by_tag(bundle.quest_tag)

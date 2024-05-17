@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -31,6 +31,7 @@ const GOOD_SAVE_LOCK = "valid.lock"
 
 @export var version := Consts.VERSION
 @export var turn:int
+@export var tallies:Dictionary
 @export var scene:PackedScene
 
 @export var kills:Dictionary
@@ -60,7 +61,7 @@ static func full_path(id=null):
 	else:
 		return SAVE_DIR + SAVE_FILE + SAVE_EXT
 
-static func save(root:Node, turn:int, kills:Dictionary, 
+static func save(root:Node, turn:int, tallies:Dictionary, kills:Dictionary, 
 				sentiments:SentimentTable, quest_tag:String, quest_is_active:bool,
 				seen_locs:Array, nb_cheats:int, play_secs:float, immediate:bool=false):
 	## Save a game. 
@@ -72,6 +73,7 @@ static func save(root:Node, turn:int, kills:Dictionary,
 	## Return the new SaveBundle resource after saving it to disk.
 	var bundle = SaveBundle.new(ResourceUID.create_id())
 	bundle.turn = turn
+	bundle.tallies = tallies
 	bundle.kills = kills
 	bundle.sentiments = sentiments
 	bundle.quest_tag = quest_tag
@@ -177,7 +179,7 @@ func flush():
 	assert(ret_code == OK)
 	
 	if temp_path:
-		# Disk flushing can be done in defferedt calls. Since renaming is atomic, we know that
+		# Disk flushing can be done in deferred calls. Since renaming is atomic, we know that
 		# we won't corrupt the file if two saves happen to be flushed at the same time. We can't 
 		# guarantee that the most recent flush is the one that is going to win, but we can live 
 		# with that level of uncertainty.

@@ -20,8 +20,21 @@
 class_name DeckBuilder extends Node
 
 @export_category("Internals")
-@export var hold_counts := {}  # card -> nb_holds mapping
-@export var draw_counts := {}  # card -> nb_draws mapping
+@export var tally:Tally
+
+
+class Tally extends Resource:
+	## A running count of cards that have been drawn or have been spoken for (held)
+	@export var hold_counts := {}  # card -> nb_holds mapping
+	@export var draw_counts := {}  # card -> nb_draws mapping
+
+	func ddump():
+		print("holds: %s" % [hold_counts])
+		print("draws: %s" % [draw_counts])
+
+func _init():
+	if tally == null:
+		tally = Tally.new()
 
 func _get_cards(node:Node, card_type):
 	return node.find_children("", card_type, false, false)
@@ -45,29 +58,29 @@ func tally_draw(card, update_holds=false):
 	## Record that `card` was just drawn.
 	## if update_holds, one hold is released for the card
 	var card_key = Procgen.spawn_key(card)
-	if not draw_counts.has(card_key):
-		draw_counts[card_key] = 0
-	if update_holds and hold_counts.has(card_key):
-		var hold = hold_counts[card_key]
-		hold_counts[card_key] = min(0, hold-1)
-	draw_counts[card_key] += 1
+	if not tally.draw_counts.has(card_key):
+		tally.draw_counts[card_key] = 0
+	if update_holds and tally.hold_counts.has(card_key):
+		var hold = tally.hold_counts[card_key]
+		tally.hold_counts[card_key] = min(0, hold-1)
+	tally.draw_counts[card_key] += 1
 
 func set_hold(card, nb_occ=1):
 	## Set a temporary hold on card. 
 	## Held occurences will be considered as drawn when generating new decks.
 	var card_key = Procgen.spawn_key(card)
-	if not hold_counts.has(card_key):
-		hold_counts[card_key] = 0
-	hold_counts[card_key] += nb_occ
+	if not tally.hold_counts.has(card_key):
+		tally.hold_counts[card_key] = 0
+	tally.hold_counts[card_key] += nb_occ
 	
 func clear_holds():
 	## Release all the holds
-	hold_counts = {}
+	tally.hold_counts = {}
 
 func nb_tied_occ(card):
 	## Return the number of unavailable copies of card: held+drawn.
 	var card_key = Procgen.spawn_key(card)
-	return hold_counts.get(card_key, 0) + draw_counts.get(card_key, 0)
+	return tally.hold_counts.get(card_key, 0) + tally.draw_counts.get(card_key, 0)
 
 func nb_mandatory_occ(card, rule, depth, world_loc:Vector3i):
 	## Return how many occurences are mandated by a rule
