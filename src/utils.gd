@@ -189,6 +189,30 @@ static func colored(text):
 
 	return "%s%s%s" % [ESC_MAG, text, ESC_RESET]
 
+static func path_join(a:String, b:String) -> String:
+	## Return a joined path from `a` and `b`.
+	## This is more or less like os.path.join() in Python
+	if a.is_empty() or a.ends_with("/"):
+		return a + b
+	else:
+		return a + "/" + b
+
+static func path_join_all(parts:Array) -> String:
+	var path = ""
+	for part in parts:
+		path = path_join(path, part)
+	return path
+
+static func remove_dir(path):
+	## Remove a directory and all of its content
+	## Only flat directories (no sub-dirs) are supported 
+	# TODO: recursive process
+	for f in DirAccess.get_files_at(path):
+		var f_path = path_join(path, f)
+		DirAccess.remove_absolute(f_path)
+	var res = DirAccess.remove_absolute(path)
+	assert(res==Error.OK, "Couldn't remove %s: %s" % [path, res])
+
 static func wait_for_signal(sig):
 	## Wait for a signal to be emited, return how long you waited in seconds
 	var start = Time.get_unix_time_from_system()

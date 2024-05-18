@@ -84,7 +84,7 @@ func _ready():
 		restore_game(Tender.save_bunle)
 		Tender.save_bunle = null
 	else:
-		SaveBundle.clear_lock()
+		SaveBundle.remove()
 		var sentiments = SentimentTable.new()
 		Tender.reset(%Hero, %HUD, %Viewport, sentiments)
 		Tender.quest = quests[0]
@@ -275,7 +275,7 @@ func _on_turn_finished(turn):
 	if not Rand.rstest(Consts.SAVE_PROB):
 		return
 	if active and Tender.hero and Tender.hero.is_alive():
-		capture_game(false)
+		capture_game()
 
 func show_context_menu_for(coord):
 	## Show a list of context-specific actions.
@@ -372,7 +372,7 @@ func _restore_tallies(tallies:Dictionary):
 		if tallies.has(dungeon.name):
 			dungeon.deck_builder.tally = tallies[dungeon.name]
 
-func capture_game(immediate:bool):
+func capture_game():
 	## Record the current state of the game and save it to a file.
 	var was_running = false
 	if $TurnQueue.is_running():
@@ -387,8 +387,7 @@ func capture_game(immediate:bool):
 	bundle.save(dungeons, $TurnQueue.turn, _collect_tallies(),
 		Tender.kills, Tender.sentiments,
 		Tender.quest.tag, Tender.quest.is_active,
-		Tender.seen_locs.keys(), Tender.nb_cheats, Tender.play_secs,
-		immediate)
+		Tender.seen_locs.keys(), Tender.nb_cheats, Tender.play_secs)
 	if was_running:
 		await $TurnQueue.resume()
 	
@@ -458,7 +457,7 @@ func abort_run():
 	$TurnQueue.shutdown(true)
 	if not $TurnQueue.is_stopped():
 		await $TurnQueue.done
-	capture_game(true)
+	capture_game()
 	get_tree().change_scene_to_file("res://src/ui/start_screen.tscn")
 
 func test():

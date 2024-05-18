@@ -21,13 +21,11 @@ class_name SaveBundle extends Resource
 # add lots of debug output and a few partial states files on disk
 const VERBOSE := false
 
-const SAVE_DIR = "user://saved-games/"
-const SAVE_FILE = "main_scene"
-const SAVE_EXT = ".tres"
+const SAVE_DIR_PARTS = ["user://saves/", "current/"]
+const STALE_DIR_PARTS = ["user://saves/", "stale/"]  # an old save file that is not valid anymore
 
-# we won't actually lock those, only look for their presence
-const BAD_SAVE_LOCK = "invalid.lock"
-const GOOD_SAVE_LOCK = "valid.lock"
+# TODO: can't construct this from SAVE_DIR_PARTS, but a static function could
+const SAVE_PATH_PARTS = ["user://saves/", "current/", "bundle.tres"]
 
 @export var version := Consts.VERSION
 @export var turn:int
@@ -44,34 +42,27 @@ const GOOD_SAVE_LOCK = "valid.lock"
 
 var path:String  # where the Bundle should be serialized
 var root:Node  # the root passed to save()
-var temp_path: String
 
-func _init(id=null):
-	if id:
-		temp_path = full_path(id)
+static func _ensure_dir(parts:Array):
+	var path = ""
+	for part in parts:
+		path = Utils.path_join(path, part)
+		if not DirAccess.dir_exists_absolute(path):
+			DirAccess.make_dir_absolute(path)
 
-static func _ensure_dir(dir=SAVE_DIR):
-	var da = DirAccess.open("user://")
-	if not da.dir_exists(dir):
-		da.make_dir(dir)
-
-static func full_path(id=null):
-	if id:
-		return "%s%s-%s%s" % [SAVE_DIR, SAVE_FILE, id, SAVE_EXT]
-	else:
-		return SAVE_DIR + SAVE_FILE + SAVE_EXT
+static func full_path():
+	return Utils.path_join_all(SAVE_PATH_PARTS)
 
 static func save(root:Node, turn:int, tallies:Dictionary, kills:Dictionary, 
 				sentiments:SentimentTable, quest_tag:String, quest_is_active:bool,
-				seen_locs:Array, nb_cheats:int, play_secs:float, immediate:bool=false):
+				seen_locs:Array, nb_cheats:int, play_secs:float):
 	## Save a game. 
 	## The whole subtree starting at `root` is saved. 
 	## This does not need to be the game root.
 	## Any nodes of the saved sub-tree might have its `owner` changed as a side-effect 
 	## of calling this method.
-	## `immediate`: send the bytes to disk this frame if true, async if false.
 	## Return the new SaveBundle resource after saving it to disk.
-	var bundle = SaveBundle.new(ResourceUID.create_id())
+	var bundle = SaveBundle.new()
 	bundle.turn = turn
 	bundle.tallies = tallies
 	bundle.kills = kills
@@ -82,7 +73,7 @@ static func save(root:Node, turn:int, tallies:Dictionary, kills:Dictionary,
 	bundle.nb_cheats = nb_cheats
 	bundle.play_secs = play_secs
 
-	bundle._ensure_dir()
+	bundle._ensure_dir(SAVE_DIR_PARTS)
 	var path = full_path()
 	bundle.path = path
 
@@ -106,10 +97,7 @@ static func save(root:Node, turn:int, tallies:Dictionary, kills:Dictionary,
 		# scene tree looks like.
 		ResourceSaver.save(bundle.scene, path.replace(".tres", ".tscn"))
 
-	if immediate:
-		bundle.flush()
-	else:
-		SaveBundle.flush_bundle.call_deferred(bundle)
+	bundle.flush()
 	return bundle
 
 static func flush_bundle(bundle:SaveBundle):
@@ -137,55 +125,27 @@ static func load(unpack:=false) -> SaveBundle:
 static func remove():
 	## Delete the saved game at the default path
 	## Silently do nothing if there is no saved game file.
-	
-	# in HTML5, remove() is unrelable, so we make sure we don't re-use a file that should not be there
-	var fa = FileAccess.open(SAVE_DIR+BAD_SAVE_LOCK, FileAccess.WRITE)
-	if fa != null:
-		fa.close()
-	
 	if has_file():
-		var da = DirAccess.open("user://")
-		var path = full_path()
-		da.remove(path)
-
-static func clear_lock():
-	var da = DirAccess.open(SAVE_DIR)
-	if da and da.file_exists(SAVE_DIR+BAD_SAVE_LOCK):
-		# since remove() is unreliable in HTML5, we move the lock out of the way before 
-		# trying to delete it.
-		da.rename(SAVE_DIR+BAD_SAVE_LOCK, SAVE_DIR+GOOD_SAVE_LOCK)
-		da.remove(SAVE_DIR+GOOD_SAVE_LOCK)
+		var stale_dir = Utils.path_join_all(STALE_DIR_PARTS)
+		DirAccess.rename_absolute(Utils.path_join_all(SAVE_DIR_PARTS), stale_dir)
+		Utils.remove_dir(stale_dir)
 
 static func has_file():
 	## Return whether a save file exists
-	var da = DirAccess.open("user://")
-	if not da.dir_exists(SAVE_DIR):
-		return false
-	elif da.file_exists(SAVE_DIR+BAD_SAVE_LOCK):
-		return false
-	else:
-		var path = full_path()
-		return da.file_exists(path)
+	var path = ""
+	for part in SAVE_PATH_PARTS:
+		path = Utils.path_join(path, part)
+		if not DirAccess.dir_exists_absolute(path) and not FileAccess.file_exists(path):
+			return false
+	return true
 
 func dlog_root(suffix=".log"):
 	Utils.dlog_node(root, path + suffix)
 
 func flush():
 	## Send the data of this bundle to disk
-	var save_path = path
-	if temp_path:
-		save_path = temp_path
-	var ret_code = ResourceSaver.save(self, save_path)
+	var ret_code = ResourceSaver.save(self, path)
 	assert(ret_code == OK)
-	
-	if temp_path:
-		# Disk flushing can be done in deferred calls. Since renaming is atomic, we know that
-		# we won't corrupt the file if two saves happen to be flushed at the same time. We can't 
-		# guarantee that the most recent flush is the one that is going to win, but we can live 
-		# with that level of uncertainty.
-		var da = DirAccess.open(SAVE_DIR)
-		ret_code = da.rename(temp_path, path)
-		assert(ret_code == OK)
 	
 func unpack() -> Node:
 	## Instantiate the root of the saved scene.

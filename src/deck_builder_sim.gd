@@ -21,7 +21,7 @@ extends Node
 
 # Terminology 
 # - sim: one set of decks fully drawn to budget from min_depth to max_depth
-# - stage: many sims (~1000) with the same one refercence deck builder and dungeon params (start_depht and budget curves)
+# - stage: many sims (~1000) with the same one refercence deck builder and dungeon params (start_depth and budget curves)
 # - run: one or more stages (only single is currently implemented)
 # - counter: {card_key:int} mapping, may be aggregated at arbitrary levels
 
