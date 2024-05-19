@@ -45,6 +45,7 @@ signal actor_died(board, coord, tags)
 @export var _cells_by_terrain := {}  # terrain_name -> array of coords
 @export var current_turn := 0
 @export var board_id:int
+@export var dungeon_name:String
 
 var terrain_names := {}  # name -> (terrain_set, terrain_id)
 

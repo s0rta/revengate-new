@@ -127,6 +127,7 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=default_board_size, pr
 	## Make a new board with fresh terrain, monsters, and items.
 	var scene = load("res://src/rev_board.tscn") as PackedScene
 	var new_board = scene.instantiate() as RevBoard
+	new_board.dungeon_name = name
 	new_board.ambient_light_col = ambient_light_col
 	if world_loc.z < 0:
 		new_board.ambient_light_col.v = ambient_light_col.v ** abs(world_loc.z)

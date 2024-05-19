@@ -22,16 +22,6 @@ class_name DeckBuilder extends Node
 @export_category("Internals")
 @export var tally:Tally
 
-
-class Tally extends Resource:
-	## A running count of cards that have been drawn or have been spoken for (held)
-	@export var hold_counts := {}  # card -> nb_holds mapping
-	@export var draw_counts := {}  # card -> nb_draws mapping
-
-	func ddump():
-		print("holds: %s" % [hold_counts])
-		print("draws: %s" % [draw_counts])
-
 func _init():
 	if tally == null:
 		tally = Tally.new()
@@ -84,7 +74,7 @@ func nb_tied_occ(card):
 
 func nb_mandatory_occ(card, rule, depth, world_loc:Vector3i):
 	## Return how many occurences are mandated by a rule
-		
+	
 	var dungeon_deficit = 0
 	if (rule.min_dungeon_occ and depth == rule.max_depth) \
 			or (rule.world_loc != Consts.LOC_INVALID and rule.world_loc == world_loc):

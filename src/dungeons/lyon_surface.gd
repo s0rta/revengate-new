@@ -51,6 +51,7 @@ func finalize_static_board() -> RevBoard:
 	var board = starting_board
 	board.scan_terrain()
 	board.world_loc = START_LOC
+	board.dungeon_name = name
 	board.lock(V.i(20, 8), "key-red")
 	board.lock(V.i(3, 15), "key-blue")
 	

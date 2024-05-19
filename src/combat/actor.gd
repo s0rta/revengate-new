@@ -438,7 +438,7 @@ func finalize_turn(acted=null):
 	state = States.IDLE
 	if acted != false and (acted or has_acted):
 		acted_turn = current_turn
-	emit_signal("turn_done")
+	turn_done.emit()
 
 func reset_dest(former_dest=null):
 	if former_dest == null or dest == former_dest:

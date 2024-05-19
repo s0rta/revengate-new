@@ -109,6 +109,7 @@ func _unhandled_input(event):
 
 	if acted:
 		has_acted = true
+		get_viewport().set_input_as_handled()
 		finalize_turn()
 	else:
 		# NOT calling finalize_turn() to let the player provide more input during this turn

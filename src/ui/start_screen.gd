@@ -75,11 +75,6 @@ func resume_game():
 		await %BadSaveVersionDiag.confirmed
 		print("Looks like we can proceed...")
 
-	if bundle.unpack() == null:
-		%CantLoadDiag.popup_centered()
-		await %CantLoadDiag.confirmed
-		return
-
 	Tender.save_bunle = bundle
 	get_tree().change_scene_to_file("res://src/main.tscn")
 

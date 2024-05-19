@@ -18,9 +18,6 @@
 ## A saved game.
 class_name SaveBundle extends Resource
 
-# add lots of debug output and a few partial states files on disk
-const VERBOSE := false
-
 const SAVE_DIR_PARTS = ["user://saves/", "current/"]
 const STALE_DIR_PARTS = ["user://saves/", "stale/"]  # an old save file that is not valid anymore
 
@@ -29,8 +26,8 @@ const SAVE_PATH_PARTS = ["user://saves/", "current/", "bundle.tres"]
 
 @export var version := Consts.VERSION
 @export var turn:int
+@export var active_board_id:int
 @export var tallies:Dictionary
-@export var scene:PackedScene
 
 @export var kills:Dictionary
 @export var sentiments:SentimentTable
@@ -53,7 +50,7 @@ static func _ensure_dir(parts:Array):
 static func full_path():
 	return Utils.path_join_all(SAVE_PATH_PARTS)
 
-static func save(root:Node, turn:int, tallies:Dictionary, kills:Dictionary, 
+static func save(board:RevBoard, turn:int, tallies:Dictionary, kills:Dictionary, 
 				sentiments:SentimentTable, quest_tag:String, quest_is_active:bool,
 				seen_locs:Array, nb_cheats:int, play_secs:float):
 	## Save a game. 
@@ -63,6 +60,7 @@ static func save(root:Node, turn:int, tallies:Dictionary, kills:Dictionary,
 	## of calling this method.
 	## Return the new SaveBundle resource after saving it to disk.
 	var bundle = SaveBundle.new()
+	bundle.active_board_id = board.board_id
 	bundle.turn = turn
 	bundle.tallies = tallies
 	bundle.kills = kills
@@ -77,26 +75,7 @@ static func save(root:Node, turn:int, tallies:Dictionary, kills:Dictionary,
 	var path = full_path()
 	bundle.path = path
 
-	if VERBOSE:
-		Utils.dlog_node(root, path + ".zero", true)
-
-	var seen = {root:true}
-	for child in root.find_children("", "Node", true, false):
-		seen[child] = true
-		if not seen.has(child.owner) or child.owner is RevBoard:
-			child.owner = root
-
-	if VERBOSE:
-		Utils.dlog_node(root, path + ".pre", false)
-	
-	bundle.scene = PackedScene.new()
-	bundle.scene.pack(root)
-
-	if VERBOSE:
-		# This .tscn can be loaded in the editor to easily debug what the saved 
-		# scene tree looks like.
-		ResourceSaver.save(bundle.scene, path.replace(".tres", ".tscn"))
-
+	save_board(board)
 	bundle.flush()
 	return bundle
 
@@ -115,10 +94,6 @@ static func load(unpack:=false) -> SaveBundle:
 		# loading failed and it's really hard to convert the Godot errors into something that 
 		# would make sense to the player
 		return null
-	bundle.path = path
-
-	if unpack:
-		bundle.unpack()
 
 	return bundle
 
@@ -139,6 +114,33 @@ static func has_file():
 			return false
 	return true
 
+static func _board_path(board_id):
+	var fname = "board-%s.scn" % board_id
+	return Utils.path_join_all(SAVE_DIR_PARTS + [fname])
+	
+static func save_board(board:RevBoard):
+	var path = _board_path(board.board_id)
+	_ensure_dir(SAVE_DIR_PARTS)
+	
+	var seen = {board:true}
+	for child in board.find_children("", "Node", true, false):
+		seen[child] = true
+		if not seen.has(child.owner) or child.owner is RevBoard and child.owner != board:
+			child.owner = board
+	
+	var scene = PackedScene.new()
+	scene.pack(board)
+	ResourceSaver.save(scene, path)
+
+static func load_board(board_id:int) -> RevBoard:
+	# FIXME: support stripping the old hero
+	var path = _board_path(board_id)
+	var scene = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE)
+	assert(scene, "Can't load board at %s" % path)
+
+	var board:RevBoard = scene.instantiate()
+	return board
+
 func dlog_root(suffix=".log"):
 	Utils.dlog_node(root, path + suffix)
 
@@ -146,21 +148,3 @@ func flush():
 	## Send the data of this bundle to disk
 	var ret_code = ResourceSaver.save(self, path)
 	assert(ret_code == OK)
-	
-func unpack() -> Node:
-	## Instantiate the root of the saved scene.
-	## Return the root.
-	root = scene.instantiate()
-
-	if VERBOSE:
-		# FIXME: this is of limited use at unpacking time since node paths will 
-		#   be empty until we add the scene to a tree
-		Utils.dlog_node(root, path + ".post")
-
-	return root
-
-func restore_actors():
-	## Do a bit if sub-node cleanup on all actors.
-	for board in root.find_children("", "RevBoard", true, false):
-		for actor in board.find_children("", "Actor", false, false):
-			actor.restore()

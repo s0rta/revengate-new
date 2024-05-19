@@ -132,6 +132,7 @@ func _activate_board(new_board):
 	## Mark `new_board` as the current game board
 	if board != null:
 		board.set_active(false)
+		board.queue_free()
 	new_board.start_turn($TurnQueue.turn)  # catch up with conditions and decay
 	new_board.set_active(true)
 	Tender.seen_locs[new_board.world_loc] = true
@@ -155,11 +156,12 @@ func get_board():
 	## Return the current active board
 	return board
 
-func destroy_items(items):
-	for item in items:
-		item.hide()
-		item.reparent($/root)
-		item.queue_free()
+func destroy_nodes(nodes):
+	for node in nodes:
+		node.hide()
+		node.owner = null
+		node.reparent($/root)
+		node.queue_free()
 		
 func supply_item(actor, item_path, extra_tags=[]):
 	## Supply actor with a new instance of an item. 
@@ -186,23 +188,25 @@ func switch_board_at(coord):
 	## If the destination does not exist yet, create and link it with the current board.
 	var old_board = get_board()
 	assert(old_board.is_connector(coord), "can only switch board at a connector cell")
-	var old_dungeon = old_board.get_dungeon()
+
 	var new_board = null
 	var conn = old_board.get_connection(coord)
 	if conn:
-		new_board = old_dungeon.get_board_by_id(conn.far_board_id)
+		new_board = restore_board(conn.far_board_id, false)
 	else:
+		var old_dungeon = old_board.get_dungeon()
 		var conn_target = old_board.get_cell_rec(coord, "conn_target")
 		new_board = old_dungeon.new_board_for_target(old_board, conn_target)
 
 		# connect the outgoing connector with the incomming one
-		conn = old_board.add_connection(coord, new_board)
-	_activate_board(new_board)
-		
+		conn = old_board.add_connection(coord, new_board)		
+	capture_game()
+	
 	var builder = BoardBuilder.new(new_board)
 	var index = new_board.make_index()
 	var new_pos = builder.place(Tender.hero, builder.has_rooms(),
-		conn.far_coord, true, null, index)
+								conn.far_coord, true, null, index)
+	_activate_board(new_board)
 	%HUD.refresh_buttons_vis(null, new_pos)
 	board_changed.emit(new_board)
 	
@@ -294,7 +298,7 @@ func _place_on_start_board(coord:Vector2i):
 	Tender.hero.highlight_options()
 	
 func start_ch2():
-	destroy_items(Tender.hero.get_items(["quest-item"]))
+	destroy_nodes(Tender.hero.get_items(["quest-item"]))
 	# Nadège gives key and combat cane
 	npcs.nadege.conversation_sect = "intro_2"
 
@@ -322,7 +326,7 @@ func start_ch2():
 func start_ch3():
 	var mem = Tender.hero.mem
 	# Nadège gives key and dress sword
-	destroy_items(npcs.nadege.get_items(["quest-reward"]))
+	destroy_nodes(npcs.nadege.get_items(["quest-reward"]))
 	npcs.nadege.conversation_sect = "intro_3"
 	if not mem.recall("accountant_met_salapou"):
 		if mem.recall("accountant_died"):
@@ -381,38 +385,44 @@ func capture_game():
 		if not $TurnQueue.is_paused():
 			await $TurnQueue.paused
 	var bundle = SaveBundle.new()
-	var dungeons = dungeons_cont
 	
 	print("Saving at turn %d" % $TurnQueue.turn)
-	bundle.save(dungeons, $TurnQueue.turn, _collect_tallies(),
+	bundle.save(board, $TurnQueue.turn, _collect_tallies(),
 		Tender.kills, Tender.sentiments,
 		Tender.quest.tag, Tender.quest.is_active,
 		Tender.seen_locs.keys(), Tender.nb_cheats, Tender.play_secs)
 	if was_running:
 		await $TurnQueue.resume()
-	
+
+func restore_board(board_id:int, keep_hero=true) -> RevBoard:
+	## Load a board from disk and add it to it's dungeon. Return the board.
+	## The board it not activated.
+	var new_board = SaveBundle.load_board(board_id)
+	if not keep_hero:
+		destroy_nodes(new_board.find_children("", "Hero", false, false))
+	var nodes = dungeons_cont.find_children(new_board.dungeon_name, "Dungeon", false, false)
+	assert(nodes, "Can't find a dungeon named %s" % new_board.dungeon_name)
+	nodes[0].add_child(new_board)
+	for actor in new_board.find_children("", "Actor", false, false):
+		actor.restore()
+	return new_board
+
 func restore_game(bundle=null):
 	## Load a saved game and register it with all UI components
 	if bundle == null:
 		bundle = SaveBundle.load(true)
 		print("Got the bundle loaded!")
-	var dungeons = bundle.root
 
-	dungeons_cont.add_sibling(dungeons)
-	get_tree().call_group("no-save", "queue_free")
-	dungeons_cont.reparent($"/root")
-	
 	for board in dungeons_cont.find_children("", "RevBoard"):
 		board.set_active(false)
-	dungeons_cont.queue_free()
-	dungeons_cont = dungeons
+		board.queue_free()
+
+	var new_board = restore_board(bundle.active_board_id)
+	get_tree().call_group("no-save", "queue_free")
 	
-	bundle.restore_actors()
 	_discover_npcs()
 	
-	if bundle.VERBOSE:
-		bundle.dlog_root(".final")
-	var hero = dungeons.find_child("Hero")
+	var hero = new_board.find_child("Hero")
 	_restore_tallies(bundle.tallies)
 	Tender.kills = bundle.kills
 	Tender.sentiments = bundle.sentiments
@@ -428,12 +438,12 @@ func restore_game(bundle=null):
 	watch_hero(hero)
 	$TurnQueue.turn = bundle.turn
 
-	for board in dungeons_cont.find_children("", "RevBoard"):
-		if board.is_active():
-			for actor in board.find_children("", "Actor", false, false):
-				actor.place(actor.get_cell_coord())
-			_activate_board(board)
-			break
+	# FIXME: We used to do those replacements, probably to force set the owners. That does not
+	#   seem to be needed anymore, but we should test more just to be sure.
+	#for actor in new_board.find_children("", "Actor", false, false):
+		#actor.place(actor.get_cell_coord())
+		
+	_activate_board(new_board)
 
 func replace_with_saved_game():
 	## Replace the current game with one from a saved file
