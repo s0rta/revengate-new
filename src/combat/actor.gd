@@ -170,7 +170,7 @@ func _to_string():
 	if parent:
 		parent = parent.name
 	var coord_str = RevBoard.coord_str(get_cell_coord())
-	return "<Actor %s on %s at %s>" % [name, parent, coord_str]
+	return "<Actor %s(%s) on %s at %s>" % [name, char, parent, coord_str]
 
 func ddump():
 	print(self)
