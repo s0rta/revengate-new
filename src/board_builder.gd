@@ -33,12 +33,9 @@ var rooms:Array[Room] = []
 var fabs = []  # prefabs that were placed on the level
 var _layout_pack: JSON  # layzy loaded from res when we need it
 
-func _init(board:RevBoard, rect=null):
-	self.board = board
-	if rect == null:
-		self.rect = board.get_used_rect()
-	else:
-		self.rect = rect
+func _init(board_:RevBoard):
+	rect = Rect2i(Vector2i.ZERO, board_.size)
+	board = board_
 
 func has_rooms():
 	## Return whether this builder is aware of rooms.

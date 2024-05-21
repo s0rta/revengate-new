@@ -45,6 +45,7 @@ signal actor_died(board, coord, tags)
 @export var _cells_by_terrain := {}  # terrain_name -> array of coords
 @export var current_turn := 0
 @export var board_id:int
+@export var size:Vector2i
 
 var terrain_names := {}  # name -> (terrain_set, terrain_id)
 
@@ -874,6 +875,7 @@ class MetricsContext extends RefCounted:
 	var pred : Callable
 	var pre_dist : int
 	var post_dist : int
+	var rect : Rect2i
 	var metrics : DistMetrics2i
 
 func _init_metric_context_static(start:Vector2i, dest:Vector2i, free_dest=false, 
@@ -887,19 +889,19 @@ func _init_metric_context_static(start:Vector2i, dest:Vector2i, free_dest=false,
 	##   ex.: board.is_walkable() or index.is_free()
 	## `index`: the BoardIndex to query, a fresh one will be created internally if `null`.
 	var ctx := MetricsContext.new()
+	ctx.rect = Rect2i(Vector2i.ONE, size)
 	if index == null:
 		index = make_index()
 	if valid_pred == null:
 		valid_pred = index.is_free
 	
 	# find the start: randomize if not provided
-	var bbox:Rect2i = get_used_rect()
 	if start == Consts.COORD_INVALID:
-		start = Rand.coord_in_rect(bbox)
+		start = Rand.coord_in_rect(ctx.rect)
 		if not is_walkable(start):
-			start = spiral(start, null, true, true, bbox, index).next()
+			start = spiral(start, null, true, true, ctx.rect, index).next()
 			
-	var metrics = DistMetrics2i.new(bbox.size, start, dest)	
+	var metrics = DistMetrics2i.new(size, start, dest)	
 	metrics.add_edge(Consts.COORD_INVALID, start)
 	var invalid_dest = false
 	if free_dest and dest != Consts.COORD_INVALID:
@@ -1028,6 +1030,8 @@ func dist_metrics(start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.CO
 		return ctx.metrics
 	var dist := 0
 
+	var known_good = {}  # used a a set
+
 	ctx.queue.enqueue(ctx.start, dist)
 	var current:Vector2i
 	var entry: DistQueue2i.Entry
@@ -1045,7 +1049,20 @@ func dist_metrics(start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.CO
 		if ctx.done.has(current) or dist == max_dist:
 			continue  # this position is finalized already
 
-		for pos in adjacents_walkable(current, ctx.pred):
+		# This inline version of `adjacent_walkable(current, ctx.pred)`
+		# is about twice as fast. It depends on ctx.pred() to be sensible.
+		var adjs:Array[Vector2i] = []
+		for offset in Geom.ADJ_OFFSETS:
+			var adj = current + offset
+			if not ctx.rect.has_point(adj):
+				continue
+			elif known_good.has(adj):
+				adjs.append(adj)
+			elif ctx.pred.call(adj):
+				known_good[adj] = true
+				adjs.append(adj)
+
+		for pos in adjs:
 			if ctx.done.has(pos):
 				continue
 			ctx.pre_dist = ctx.metrics.getv(pos)

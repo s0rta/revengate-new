@@ -30,9 +30,9 @@ func dungeon_for_loc(world_loc:Vector3i):
 		return "LyonSurface"
 	return null
 
-func make_builder(board, rect):
+func make_builder(board):
 	## Return a new builder configure for the style of the current dungeon.
-	var builder = BoardBuilder.new(board, rect)
+	var builder = BoardBuilder.new(board)
 	builder.floor_terrain = "floor-rough"
 	builder.wall_terrain = "wall-old"	
 	return builder

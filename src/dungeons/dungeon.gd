@@ -68,9 +68,9 @@ func dungeon_for_loc(world_loc:Vector3i):
 	## Return the name of the dungeon where `world_loc` belongs or null is it's part of the current dungeon
 	assert(false, "Not implemented")
 
-func make_builder(board, rect):
+func make_builder(board):
 	## Return a new builder configure for the style of the current dungeon.
-	var builder = BoardBuilder.new(board, rect)
+	var builder = BoardBuilder.new(board)
 	builder.floor_terrain = "floor-rough"
 	builder.wall_terrain = "wall-old"	
 	builder.rect_room_prob = rect_room_prob
@@ -127,6 +127,7 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=default_board_size, pr
 	## Make a new board with fresh terrain, monsters, and items.
 	var scene = load("res://src/rev_board.tscn") as PackedScene
 	var new_board = scene.instantiate() as RevBoard
+	new_board.size = size
 	new_board.ambient_light_col = ambient_light_col
 	if world_loc.z < 0:
 		new_board.ambient_light_col.v = ambient_light_col.v ** abs(world_loc.z)
@@ -135,7 +136,7 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=default_board_size, pr
 	add_child(new_board)
 	new_board.clear()
 
-	var builder = make_builder(new_board, Rect2i(Vector2i.ZERO, size))
+	var builder = make_builder(new_board)
 	fill_new_board(builder, depth, world_loc, size)
 			
 	if neighbors == null:
