@@ -148,8 +148,8 @@ func all_coords():
 	## 0-dist(s) is included
 	var coords = []
 	var idx := 0
-	for i in range(dists.size.x):
-		for j in range(dists.size.y):
+	for j in range(dists.size.y):
+		for i in range(dists.size.x):
 			# inline version of `has(Vector2i(i, j))`
 			if dists.cells[idx] != dists.default:
 				coords.append(Vector2i(i, j))
@@ -161,8 +161,8 @@ func all_dists():
 	var used_dists = []
 	var dist:int
 	var idx := 0
-	for i in range(dists.size.x):
-		for j in range(dists.size.y):
+	for j in range(dists.size.y):
+		for i in range(dists.size.x):
 			# inline version of `dist = dists.getv(Vector2i(i, j))`
 			dist = dists.cells[idx]
 			if dist != dists.default:

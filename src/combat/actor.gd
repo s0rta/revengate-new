@@ -369,7 +369,7 @@ func stat_trial(difficulty, stat_name, challenge=null, modifier:=0):
 func is_hero():
 	return Tender.hero != null and Tender.hero == self
 
-func get_board():
+func get_board() -> RevBoard:
 	## Return the RevBoard this actor is playing on, return `null` is no board is currently active.
 	# board is either the parent or the global board
 	var parent = get_parent()
