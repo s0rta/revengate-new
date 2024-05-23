@@ -1019,11 +1019,13 @@ func astar_metrics_custom(pump:Paths.MetricsPump,
 	return ctx.metrics
 
 func dist_metrics(start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.COORD_INVALID, 
-					free_dest_:=false, max_dist:int=-1, valid_pred=null, index=null):
+					free_dest_:=false, max_dist:int=-1, max_steps:int=-1,
+					valid_pred=null, index=null):
 	## Return distance metrics or all positions accessible from start. 
 	## Start is randomly selected if not provided.
 	## Stop exploring after reaching `dest` if provided.
 	## Do not explore further than `max_dist` if provided. 
+	## Do not consider more than `max_steps` coords if provided.
 	# using the Dijkstra algo
 	var ctx:MetricsContext = _init_metric_context_static(start_, dest_, free_dest_, valid_pred, index)
 	if ctx.invalid_dest:
@@ -1035,7 +1037,11 @@ func dist_metrics(start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.CO
 	ctx.queue.enqueue(ctx.start, dist)
 	var current:Vector2i
 	var entry: DistQueue2i.Entry
+	var nb_steps := 0
 	while not ctx.queue.is_empty():
+		nb_steps += 1
+		if max_steps > 0 and nb_steps >= max_steps:
+			break
 		entry = ctx.queue.dequeue()
 		dist = entry.dist
 		current = entry.coord
@@ -1054,7 +1060,7 @@ func dist_metrics(start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.CO
 		var adjs:Array[Vector2i] = []
 		for offset in Geom.ADJ_OFFSETS:
 			var adj = current + offset
-			if not ctx.rect.has_point(adj):
+			if not ctx.rect.has_point(adj) or ctx.done.has(adj):
 				continue
 			elif known_good.has(adj):
 				adjs.append(adj)
