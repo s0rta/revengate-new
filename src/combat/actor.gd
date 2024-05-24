@@ -823,7 +823,7 @@ func get_vibe_cards():
 func get_conditions():
 	var conds = []
 	for node in get_children():
-		if node is Effect.Condition:
+		if node is Condition:
 			conds.append(node)
 	return conds
 

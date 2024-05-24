@@ -43,44 +43,6 @@ class_name Effect extends Node
 @export_group("Tagging")
 @export var tags:Array[String]
 
-
-class Condition extends Node:
-	@export var dkind: String  # Debug Kind, never shown to the player
-	@export var damage: int
-	@export var healing: int
-	@export var damage_family: Consts.DamageFamily
-	@export var nb_turns: int
-	@export var stats_modifiers: Dictionary
-	@export var tags:Array[String]
-
-	func _init(dkind_:String, damage_, healing_, damage_family_, 
-				tags_:Array[String], nb_turns_):
-		name = dkind_  # might be overriden before _ready() if there is a name clash with our siblings
-		dkind = dkind_
-		damage = damage_
-		healing = healing_
-		damage_family = damage_family_
-		tags = tags_.duplicate()
-		nb_turns = nb_turns_
-
-	func _to_string():
-		return "<%s %s dmg=%d heal=%d, turns=%d>" % [name, dkind, damage, healing, nb_turns]
-		
-	func erupt():
-		## activate the condition
-		var actor = get_parent()
-		assert(actor is Actor, "Conditions can only erupt after being attached to an actor")
-		# TODO: there could be a case for randomizing the damage from conditions
-		var h_delta = healing - damage
-		if h_delta != 0:
-			h_delta = actor.normalize_health_delta(self, h_delta)
-			actor.update_health(h_delta)
-		decay()
-		
-	func decay():
-		nb_turns -= 1
-		if nb_turns <= 0:
-			queue_free()
 	
 func _get_configuration_warnings():
 	var warnings = []
