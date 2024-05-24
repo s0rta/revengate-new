@@ -21,7 +21,7 @@ class_name Geom extends Node
 # clockwise around a cell starting at top left
 const ADJ_OFFSETS = [Vector2i(-1, -1), Vector2i(0, -1), Vector2i(1, -1), Vector2i(1, 0), 
 					Vector2i(1, 1), Vector2i(0, 1), Vector2i(-1, 1), Vector2i(-1, 0)]
-const CROSS_OFFSETS = [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
+const CROSS_OFFSETS:Array[Vector2i] = [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
 
 const CENTRAL_REGION_MARGIN := 0.25  # ration of coords that are on each side of the central region	
 

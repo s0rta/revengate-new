@@ -391,10 +391,12 @@ static func tags_eq(tags1, tags2):
 
 static func ddump_call(funct:Callable):
 	## Call `funct` and print how long the execution took in real time.
+	## Return the value of the funct() call.
 	var start = Time.get_ticks_msec()
-	funct.call()
+	var ret = funct.call()
 	var elapsed = (Time.get_ticks_msec() - start) / 1000.0
 	print("Execution of %s took %0.3f seconds" % [funct, elapsed])
+	return ret
 
 static func vague_value(value, place_in_range, perception) -> String:
 	## Return a string that describes `value` according to a given `perception` level.

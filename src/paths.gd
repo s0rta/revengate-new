@@ -20,23 +20,26 @@ class_name Paths extends Object
 
 ## Optionally used to produce the intermediate values of a BoardMetrics
 class MetricsPump:
-	var board
+	var board: RevBoard
 	var metrics: DistMetrics2i
 	
-	func _init(board_):
+	func _init(board_:RevBoard):
 		board = board_
 	
 	func set_metrics(metrics_:DistMetrics2i):
 		metrics = metrics_
 	
-	func dist_real(here, there):
+	func dist_real(here:Vector2i, there:Vector2i) -> int:
 		assert(false, "not implemented")
+		return 0
 
-	func dist_estim(here, there):
+	func dist_estim(here:Vector2i, there:Vector2i) -> int:
 		assert(false, "not implemented")
+		return 0
 
-	func dist_tiebreak(here, there):
+	func dist_tiebreak(here:Vector2i, there:Vector2i) -> int:
 		assert(false, "not implemented")
+		return 0
 
 	func adjacents(coord, filter_pred=null) -> Array[Vector2i]:
 		return board.adjacents_walkable(coord, filter_pred)
@@ -56,28 +59,29 @@ class StandardMetricsPump extends MetricsPump:
 class WallHugMetricsPump extends MetricsPump:
 	var wall_counts: DistMetrics2i.Matrix2i  # number of walls that are in man_dist()=1 for a given coord
 	
-	func _init(board_):
+	func _init(board_:RevBoard):
 		super(board_)
 		wall_counts = DistMetrics2i.Matrix2i.new(board.get_used_rect().size, -1)
 
-	func dist_real(here, there):
+	func dist_real(here:Vector2i, there:Vector2i) -> int:
 		# Using Manhattan dist to discourage diagonals, they are still legal but cost +1.
 		# It's also more expensive to go where there are fewer walls, up to a certain point.
-		return board.man_dist(here, there) + max(0, 2-get_wall_counts(there))
+		return Geom.man_dist(here, there) + max(0, 2-get_wall_counts(there))
 
-	func dist_estim(here, there):
-		return board.man_dist(here, there)
+	func dist_estim(here:Vector2i, there:Vector2i) -> int:
+		return Geom.man_dist(here, there)
 		
-	func dist_tiebreak(here, there):
+	func dist_tiebreak(here:Vector2i, there:Vector2i) -> int:
 		return 0
 
-	func get_wall_counts(coord) -> int:
+	func get_wall_counts(coord:Vector2i) -> int:
 		## lazy compute the values when requested
-		var val = wall_counts.getv(coord)
+		var val := wall_counts.getv(coord)
 		if val == -1:
 			val = 0
-			for offset in Geom.CROSS_OFFSETS:
-				if not board.is_walkable(coord+offset):
+			for offset:Vector2i in Geom.CROSS_OFFSETS as Array[Vector2i]:
+				var adj:Vector2i = coord + offset
+				if not board.is_walkable(adj):
 					val += 1
 			wall_counts.setv(coord, val)
 		return val

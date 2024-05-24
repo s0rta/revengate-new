@@ -36,9 +36,9 @@ func dungeon_for_loc(world_loc:Vector3i):
 		return "Traboule2"
 	return null
 
-func make_builder(board, rect):
+func make_builder(board):
 	## Return a new builder configure for the style of the current dungeon.
-	var builder = BoardBuilder.new(board, rect)
+	var builder = BoardBuilder.new(board)
 	builder.clear_terrain = "floor"
 	builder.floor_terrain = "floor"
 	builder.wall_terrain = "wall"	
@@ -49,6 +49,7 @@ func finalize_static_board() -> RevBoard:
 	# FIXME: a few of those can go with the parent class
 	starting_board = find_child("StartingBoard")
 	var board = starting_board
+	board.size = board.get_used_rect().size
 	board.scan_terrain()
 	board.world_loc = START_LOC
 	board.dungeon_name = name

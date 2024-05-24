@@ -24,9 +24,9 @@ func dungeon_for_loc(world_loc:Vector3i):
 	## Return the name of the dungeon where `world_loc` belongs or null is it's part of the current dungeon
 	return null
 
-func make_builder(board, rect):
+func make_builder(board):
 	## Return a new builder configure for the style of the current dungeon.
-	var builder = BoardBuilder.new(board, rect)
+	var builder = BoardBuilder.new(board)
 	builder.floor_terrain = "floor-rough"
 	builder.wall_terrain = "wall"
 	builder.clear_terrain = "rock"

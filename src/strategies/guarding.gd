@@ -75,7 +75,8 @@ func refresh(turn):
 	if waypoint == null:
 		var index = board.make_index()
 		var pred = _mk_walkable_pred(client_coord, index)
-		var metrics = board.dist_metrics(here, Consts.COORD_INVALID, false, -1, pred, index)
+		# FIXME: use same max explore steps as Exploring
+		var metrics = board.dist_metrics(here, Consts.COORD_INVALID, false, -1, -1, pred, index)
 
 		if metrics.getv(client_coord) == null:
 			# client is currently unreachable

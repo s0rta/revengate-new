@@ -46,6 +46,7 @@ signal actor_died(board, coord, tags)
 @export var current_turn := 0
 @export var board_id:int
 @export var dungeon_name:String
+@export var size:Vector2i
 
 var terrain_names := {}  # name -> (terrain_set, terrain_id)
 
@@ -703,14 +704,14 @@ func unlock(coord:Vector2i, key:Item):
 	key.reparent($/root)
 	key.queue_free()
 
-func is_walkable(coord:Vector2i):
+func is_walkable(coord:Vector2i) -> bool:
 	## Return whether a cell is walkable for normal actors
 	# collision is only specified on physics layer 0
 	if not is_on_board(coord):
 		return false
 	var tdata = get_cell_tile_data(0, coord)
 	assert(tdata != null, "no data for coord=%s" % coord)
-	var poly = tdata.get_collision_polygons_count(0)
+	var poly:int = tdata.get_collision_polygons_count(0)
 	return poly == 0
 
 func ring(center:Vector2i, radius:int, free:bool=true, in_board:bool=true, bbox=null, index=null) -> Array[Vector2i]:
@@ -875,6 +876,7 @@ class MetricsContext extends RefCounted:
 	var pred : Callable
 	var pre_dist : int
 	var post_dist : int
+	var rect : Rect2i
 	var metrics : DistMetrics2i
 
 func _init_metric_context_static(start:Vector2i, dest:Vector2i, free_dest=false, 
@@ -888,19 +890,19 @@ func _init_metric_context_static(start:Vector2i, dest:Vector2i, free_dest=false,
 	##   ex.: board.is_walkable() or index.is_free()
 	## `index`: the BoardIndex to query, a fresh one will be created internally if `null`.
 	var ctx := MetricsContext.new()
+	ctx.rect = Rect2i(Vector2i.ONE, size)
 	if index == null:
 		index = make_index()
 	if valid_pred == null:
 		valid_pred = index.is_free
 	
 	# find the start: randomize if not provided
-	var bbox:Rect2i = get_used_rect()
 	if start == Consts.COORD_INVALID:
-		start = Rand.coord_in_rect(bbox)
+		start = Rand.coord_in_rect(ctx.rect)
 		if not is_walkable(start):
-			start = spiral(start, null, true, true, bbox, index).next()
+			start = spiral(start, null, true, true, ctx.rect, index).next()
 			
-	var metrics = DistMetrics2i.new(bbox.size, start, dest)	
+	var metrics = DistMetrics2i.new(size, start, dest)	
 	metrics.add_edge(Consts.COORD_INVALID, start)
 	var invalid_dest = false
 	if free_dest and dest != Consts.COORD_INVALID:
@@ -1018,21 +1020,29 @@ func astar_metrics_custom(pump:Paths.MetricsPump,
 	return ctx.metrics
 
 func dist_metrics(start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.COORD_INVALID, 
-					free_dest_:=false, max_dist:int=-1, valid_pred=null, index=null):
+					free_dest_:=false, max_dist:int=-1, max_steps:int=-1,
+					valid_pred=null, index=null):
 	## Return distance metrics or all positions accessible from start. 
 	## Start is randomly selected if not provided.
 	## Stop exploring after reaching `dest` if provided.
 	## Do not explore further than `max_dist` if provided. 
+	## Do not consider more than `max_steps` coords if provided.
 	# using the Dijkstra algo
 	var ctx:MetricsContext = _init_metric_context_static(start_, dest_, free_dest_, valid_pred, index)
 	if ctx.invalid_dest:
 		return ctx.metrics
 	var dist := 0
 
+	var known_good = {}  # used a a set
+
 	ctx.queue.enqueue(ctx.start, dist)
 	var current:Vector2i
 	var entry: DistQueue2i.Entry
+	var nb_steps := 0
 	while not ctx.queue.is_empty():
+		nb_steps += 1
+		if max_steps > 0 and nb_steps >= max_steps:
+			break
 		entry = ctx.queue.dequeue()
 		dist = entry.dist
 		current = entry.coord
@@ -1046,7 +1056,20 @@ func dist_metrics(start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.CO
 		if ctx.done.has(current) or dist == max_dist:
 			continue  # this position is finalized already
 
-		for pos in adjacents_walkable(current, ctx.pred):
+		# This inline version of `adjacent_walkable(current, ctx.pred)`
+		# is about twice as fast. It depends on ctx.pred() to be sensible.
+		var adjs:Array[Vector2i] = []
+		for offset in Geom.ADJ_OFFSETS:
+			var adj = current + offset
+			if not ctx.rect.has_point(adj) or ctx.done.has(adj):
+				continue
+			elif known_good.has(adj):
+				adjs.append(adj)
+			elif ctx.pred.call(adj):
+				known_good[adj] = true
+				adjs.append(adj)
+
+		for pos in adjs:
 			if ctx.done.has(pos):
 				continue
 			ctx.pre_dist = ctx.metrics.getv(pos)

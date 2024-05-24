@@ -434,13 +434,9 @@ Performance:
 ## v0.12.6
 - [x] deck simulator runs items and vibes
 - [x] perception range is visible and animated when it changes
-- [ ] support Godot 4.2.2
-- [ ] document conn_target and connection fields
-- [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
-- [ ] silence a few warnings
+- [x] support Godot 4.2.2
 - [x] light fixtures only glow when in line of sight
 - [x] long tap to rest
-- [ ] rename MeterGroup
 
 Vibes:
 - [x] chill
@@ -452,6 +448,15 @@ Items:
 - [x] coffee
 - [x] eye glasses
 - [x] glow mushroom
+
+
+## v0.12.7
+- [ ] bug: conditions are not saved
+- [ ] tune vibe cost curves
+- [ ] rename MeterGroup
+- [ ] document conn_target and connection fields
+- [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
+- [ ] silence a few warnings
 
 Strategies:
 - [ ] Seeking is easier to resolve even is the target keeps moving

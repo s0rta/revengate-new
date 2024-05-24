@@ -21,6 +21,9 @@ class_name Exploring extends Strategy
 
 const MAX_TRAVEL_ATTEMPTS = 5
 const MAX_PATH_TTL = 5  # number of times we can recycle a path from previous turns
+# If we have to explore more than that, it slows down the game without significantly
+# improving how smart the monsters feel.
+const MAX_WAYPOINT_STEPS := 600
 
 var waypoint := Consts.COORD_INVALID
 var nb_travel_attempts := 0
@@ -40,16 +43,16 @@ func find_suitable_waypoint() -> Vector2i:
 	
 	# we randomize the max dist to avoid having all the exploring 
 	# actors re-pick a waypoint when they reach destination at the same time
-	var max_dist = min(12, long_side/2)
-	max_dist = randi_range(0.75 * max_dist, max_dist)
-		
+	var max_dist = min(15, long_side/2)
+	max_dist = randi_range(0.65 * max_dist, max_dist)
+	
 	var here = me.get_cell_coord()
-	var metrics = board.dist_metrics(here, Consts.COORD_INVALID, false, max_dist, null, index)
+	var metrics = board.dist_metrics(here, Consts.COORD_INVALID, false, max_dist, MAX_WAYPOINT_STEPS, null, index)
 	if metrics.furthest_coord == here:
-		return Consts.COORD_INVALID
+		return Consts.COORD_INVALID	
 	return Rand.weighted_choice(metrics.all_coords(), metrics.all_dists())
 	
-func _get_path(here, there):
+func _get_path(here:Vector2i, there:Vector2i):
 	# TODO: use perceived_path()
 	var board: RevBoard = me.get_board()
 	if hug_walls:

@@ -147,23 +147,27 @@ func all_coords():
 	## Return an array of all coordinates with a recorded distance
 	## 0-dist(s) is included
 	var coords = []
-	for i in range(dists.size.x):
-		for j in range(dists.size.y):
-			var coord := Vector2i(i, j)
-			if has(coord):
-				coords.append(coord)
+	var idx := 0
+	for j in range(dists.size.y):
+		for i in range(dists.size.x):
+			# inline version of `has(Vector2i(i, j))`
+			if dists.cells[idx] != dists.default:
+				coords.append(Vector2i(i, j))
+			idx += 1
 	return coords
 
 func all_dists():
 	## Return an array of all recorded distances in the same order as all_coords()
 	var used_dists = []
 	var dist:int
-	for i in range(dists.size.x):
-		for j in range(dists.size.y):
-			var coord := Vector2i(i, j)
-			dist = dists.getv(coord)
+	var idx := 0
+	for j in range(dists.size.y):
+		for i in range(dists.size.x):
+			# inline version of `dist = dists.getv(Vector2i(i, j))`
+			dist = dists.cells[idx]
 			if dist != dists.default:
 				used_dists.append(dist)
+			idx += 1
 	return used_dists
 
 func add_edge(here:Vector2i, there:Vector2i):

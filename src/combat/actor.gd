@@ -170,7 +170,7 @@ func _to_string():
 	if parent:
 		parent = parent.name
 	var coord_str = RevBoard.coord_str(get_cell_coord())
-	return "<Actor %s on %s at %s>" % [name, parent, coord_str]
+	return "<Actor %s(%s) on %s at %s>" % [name, char, parent, coord_str]
 
 func ddump():
 	print(self)
@@ -369,7 +369,7 @@ func stat_trial(difficulty, stat_name, challenge=null, modifier:=0):
 func is_hero():
 	return Tender.hero != null and Tender.hero == self
 
-func get_board():
+func get_board() -> RevBoard:
 	## Return the RevBoard this actor is playing on, return `null` is no board is currently active.
 	# board is either the parent or the global board
 	var parent = get_parent()
