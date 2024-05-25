@@ -1,7 +1,8 @@
-[gd_scene load_steps=49 format=3 uid="uid://c185mr0bu3u3w"]
+[gd_scene load_steps=51 format=3 uid="uid://c185mr0bu3u3w"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_yitoo"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_i1rpj"]
+[ext_resource type="Script" path="res://src/tally.gd" id="2_lywjr"]
 [ext_resource type="PackedScene" uid="uid://d4f1ul2rt43ys" path="res://src/monsters/labras.tscn" id="3_tqdik"]
 [ext_resource type="Script" path="res://src/combat/memory.gd" id="4_kpuol"]
 [ext_resource type="PackedScene" uid="uid://b26vqfk7j6un7" path="res://src/monsters/desert_centipede.tscn" id="4_m33kh"]
@@ -31,6 +32,11 @@
 [ext_resource type="PackedScene" uid="uid://bado87soxnga5" path="res://src/items/potion_of_absinthe.tscn" id="27_p82t1"]
 [ext_resource type="PackedScene" uid="uid://drnpu2dw1i4nn" path="res://src/weapons/weighted_cane.tscn" id="28_0tyeq"]
 [ext_resource type="PackedScene" uid="uid://bnykesyfgf2b5" path="res://src/people/lyonese.tscn" id="34_yppu8"]
+
+[sub_resource type="Resource" id="Resource_58dw8"]
+script = ExtResource("2_lywjr")
+hold_counts = {}
+draw_counts = {}
 
 [sub_resource type="Resource" id="Resource_v0b0i"]
 resource_local_to_scene = true
@@ -82,12 +88,12 @@ resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_wmmnv"]
+[sub_resource type="Resource" id="Resource_mckkd"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_obwcl"]
+[sub_resource type="Resource" id="Resource_ymvoa"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
@@ -97,12 +103,12 @@ resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_7cd87"]
+[sub_resource type="Resource" id="Resource_dgjcv"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_pcyso"]
+[sub_resource type="Resource" id="Resource_eo2w7"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
@@ -119,6 +125,7 @@ _facts = []
 
 [node name="DeckBuilder" type="Node"]
 script = ExtResource("1_yitoo")
+tally = SubResource("Resource_58dw8")
 
 [node name="Hissing" parent="." instance=ExtResource("25_0ydwd")]
 
@@ -194,10 +201,10 @@ min_dungeon_occ = 1
 world_loc = Vector3i(13, 8, 0)
 
 [node name="Retznac" parent="Quest2Goals" instance=ExtResource("25_cxgj3")]
-mem = SubResource("Resource_wmmnv")
+mem = SubResource("Resource_mckkd")
 
 [node name="Grenn" parent="Quest2Goals" instance=ExtResource("16_s7e88")]
-mem = SubResource("Resource_obwcl")
+mem = SubResource("Resource_ymvoa")
 
 [node name="Rare" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -275,10 +282,10 @@ position = Vector2(631, 437)
 position = Vector2(631, 437)
 
 [node name="Grenn" parent="TestingQuestTransitions" instance=ExtResource("16_s7e88")]
-mem = SubResource("Resource_7cd87")
+mem = SubResource("Resource_dgjcv")
 
 [node name="Retznac" parent="TestingQuestTransitions" instance=ExtResource("25_cxgj3")]
-mem = SubResource("Resource_pcyso")
+mem = SubResource("Resource_eo2w7")
 
 [node name="MovementStressTest" type="Node" parent="."]
 script = ExtResource("7_bd8gw")

@@ -15,12 +15,23 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
+@tool
 @icon("res://assets/opencliparts/card_deck.svg")
 ## Factory to make card decks based on composable rules
 class_name DeckBuilder extends Node
 
 @export_category("Internals")
 @export var tally:Tally
+
+func _get_configuration_warnings():
+	var warnings = []
+	for card_type in ["Actor", "Vibe", "Item"]:
+		for node in [self] + find_children('', "CardRule", false, true):
+			for card in node.find_children('', card_type, false, true):
+				if not card.spawn_cost:
+					update_configuration_warnings()
+					warnings.append("%s has undefined spawn cost"%card.name)
+	return warnings
 
 func _init():
 	if tally == null:
