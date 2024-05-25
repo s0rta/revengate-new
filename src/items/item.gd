@@ -41,7 +41,8 @@ var _shroud_anim = null  # only one fading going on at a time
 func _ready():
 	$Label.text = char
 	Utils.assert_all_tags(tags)
-	Utils.hide_unplaced(self)
+	Utils.hide_unplaced(self)	
+	Utils.adjust_lights_settings(self)
 
 func _to_string():
 	var str = caption

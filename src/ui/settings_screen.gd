@@ -26,6 +26,8 @@ func _ready():
 	%ShadersCheck.button_pressed = tabulator.enable_shaders
 	if tabulator.text_size != Consts.TextSizes.UNSET:
 		%TextSizeDropdown.selected = DD_ITEM_TO_TSIZE.find(tabulator.text_size)
+	if tabulator.dyn_lights != Consts.Lights.UNSET:
+		%LightsDropdown.selected = %LightsDropdown.get_item_index(tabulator.dyn_lights)
 
 func _on_cheats_check_toggled(toggled_on):
 	tabulator.allow_cheats = toggled_on
@@ -40,3 +42,7 @@ func _on_text_size_dropdown_item_selected(index):
 	tabulator.text_size = DD_ITEM_TO_TSIZE[index]
 	tabulator.save()
 	UIUtils.resize_text_controls(size)
+
+func _on_lights_dropdown_item_selected(index):
+	tabulator.dyn_lights = %LightsDropdown.get_item_id(index)
+	tabulator.save()

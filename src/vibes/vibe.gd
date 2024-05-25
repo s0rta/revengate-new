@@ -30,18 +30,25 @@ class_name Vibe extends Node2D
 
 var shrouded := false  # partially or completely obscured
 var _shroud_anim = null  # only one fading going on at a time
+var _dyn_lights := true
 
 func _ready():
 	$Label.text = char
 	Utils.assert_all_tags(tags)
 	Utils.hide_unplaced(self)
+
+	Utils.adjust_lights_settings(self)
 	
 	var lights = find_children("", "PointLight2D", false, true)
+	lights = lights.filter(func(light):return light.enabled)
 	if lights:
+		_dyn_lights = true
 		for light in lights:
 			light.color = light_col
 		_start_flicker_all(lights)
-
+	else:
+		_dyn_lights = false
+		
 func get_board():
 	var parent = get_parent()
 	if parent is RevBoard:
@@ -105,13 +112,15 @@ func should_shroud(index=null):
 
 func shroud(animate=true):
 	Utils.shroud_node(self, animate)
-	for light in find_children("", "PointLight2D", false, true):
-		light.enabled = false
+	if _dyn_lights:
+		for light in find_children("", "PointLight2D", false, true):
+			light.enabled = false
 			
 func unshroud(animate=true):
 	Utils.unshroud_node(self, animate)
-	for light in find_children("", "PointLight2D", false, true):
-		light.enabled = true
+	if _dyn_lights:
+		for light in find_children("", "PointLight2D", false, true):
+			light.enabled = true
 
 func _start_flicker_all(lights):
 	var anim_time = randf_range(0.25, 0.8)

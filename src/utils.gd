@@ -447,3 +447,18 @@ static func event_is_tap_or_left(event):
 			return true
 	return false
 	
+static func adjust_lights_settings(node:Node):
+	## Match the light properties to what we have in the saved Tabulator settings
+	var tab := Tabulator.load()
+	for light in node.find_children("", "Light2D", false, false):
+		if tab.dyn_lights == Consts.Lights.NONE:
+			light.enabled = false
+		elif tab.dyn_lights == Consts.Lights.HARD_SHADOWS:
+			light.enabled = true
+			if light.shadow_enabled:
+				light.shadow_filter = Light2D.SHADOW_FILTER_NONE
+		elif tab.dyn_lights == Consts.Lights.SOFT_SHADOWS:
+			light.enabled = true
+			if light.shadow_enabled:
+				light.shadow_filter = Light2D.SHADOW_FILTER_PCF5
+				light.shadow_filter_smooth = 18

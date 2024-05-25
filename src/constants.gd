@@ -73,6 +73,14 @@ enum TextSizes {
 	HUGE
 }
 
+enum Lights {
+	UNSET,
+	NONE, 
+	HARD_SHADOWS, 
+	SOFT_SHADOWS
+}
+
+
 const CORE_STATS := ["agility", "strength", "intelligence", "perception", 
 					"health_full", "healing_prob", 
 					"mana_burn_rate", "mana_recovery_prob"] 

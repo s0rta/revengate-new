@@ -26,6 +26,7 @@ var _fog_anim = null  # the last tween that touched the FogLight size
 func _ready():
 	super()
 	state = States.LISTENING
+	Utils.adjust_lights_settings(self)
 
 func _unhandled_input(event):
 	if state != States.LISTENING:

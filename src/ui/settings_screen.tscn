@@ -96,6 +96,27 @@ popup/item_2/id = 2
 [node name="Pad2" type="Control" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
 
+[node name="Label6" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Dynamic Lights:"
+
+[node name="LightsDropdown" type="OptionButton" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+item_count = 3
+popup/item_0/text = "None"
+popup/item_0/id = 1
+popup/item_1/text = "Hard shadows"
+popup/item_1/id = 2
+popup/item_2/text = "Soft shadows"
+popup/item_2/id = 3
+
+[node name="Label7" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Dynamic lights may slow down the game on some devices"
+
 [node name="MarginContainer2" type="MarginContainer" parent="."]
 anchors_preset = 3
 anchor_left = 1.0
@@ -117,4 +138,5 @@ text = "Back"
 [connection signal="toggled" from="VBoxContainer/GridContainer/CheatsCheck" to="." method="_on_cheats_check_toggled"]
 [connection signal="toggled" from="VBoxContainer/GridContainer/ShadersCheck" to="." method="_on_shaders_check_toggled"]
 [connection signal="item_selected" from="VBoxContainer/GridContainer/TextSizeDropdown" to="." method="_on_text_size_dropdown_item_selected"]
+[connection signal="item_selected" from="VBoxContainer/GridContainer/LightsDropdown" to="." method="_on_lights_dropdown_item_selected"]
 [connection signal="button_up" from="MarginContainer2/BackButton" to="." method="_on_back_button_pressed"]

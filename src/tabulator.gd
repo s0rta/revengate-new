@@ -26,6 +26,7 @@ const FILE_PATH = "user://global_facts.tres"
 @export var allow_cheats := false
 @export var enable_shaders := true
 @export var text_size: Consts.TextSizes = Consts.TextSizes.UNSET
+@export var dyn_lights: Consts.Lights = Consts.Lights.SOFT_SHADOWS
 
 static func load() -> Tabulator:
 	var da = DirAccess.open("user://")
