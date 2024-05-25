@@ -92,7 +92,8 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 @export var conversation_sect: String
 
 @export_group("Procedural Generation")
-@export var spawn_cost:float   # in [0..100] for normal cases
+@export var spawn_cost:float   ## in [0..100] for normal cases
+@export_range(0.0,1.0) var spawn_prob := 1.0 ## probability that this gets added to a deck on a per board basis
 @export var spawn_rect:Rect2i
 
 # core combat attributes

@@ -9,6 +9,7 @@ caption = "a clockwork mechanism with a pleasing ticking"
 desc_simple = "A series of diminutive gears inside an ornate wooden case."
 desc_detailed = "A small pearwood case housing brass gears and malachite crystals rotating along complex pattens."
 skill = "device_of_focusing"
+spawn_cost = 1.0
 
 [node name="StatsModifiers" type="Node" parent="." index="2"]
 script = ExtResource("2_xi4t8")

@@ -53,12 +53,12 @@ resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_hkqm6"]
+[sub_resource type="Resource" id="Resource_ukqh8"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_ukqh8"]
+[sub_resource type="Resource" id="Resource_hkqm6"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
@@ -88,12 +88,12 @@ resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_mckkd"]
+[sub_resource type="Resource" id="Resource_ykwkt"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_ymvoa"]
+[sub_resource type="Resource" id="Resource_6ogbb"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
@@ -103,12 +103,12 @@ resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_dgjcv"]
+[sub_resource type="Resource" id="Resource_gkrpo"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_eo2w7"]
+[sub_resource type="Resource" id="Resource_13hi7"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
@@ -130,42 +130,53 @@ tally = SubResource("Resource_58dw8")
 [node name="Hissing" parent="." instance=ExtResource("25_0ydwd")]
 
 [node name="SewerOtter" parent="." instance=ExtResource("2_i1rpj")]
+spawn_prob = 1.0
 mem = SubResource("Resource_v0b0i")
 
 [node name="Labras" parent="." instance=ExtResource("3_tqdik")]
+spawn_prob = 1.0
 mem = SubResource("Resource_s3xhm")
 
 [node name="DesertCentipede" parent="." instance=ExtResource("4_m33kh")]
+spawn_prob = 1.0
 mem = SubResource("Resource_54crc")
 
-[node name="Kobold" parent="." instance=ExtResource("5_yqsgm")]
-mem = SubResource("Resource_hkqm6")
-
 [node name="SulantTiger" parent="." instance=ExtResource("6_da4pf")]
+spawn_prob = 1.0
 mem = SubResource("Resource_ukqh8")
+
+[node name="Kobold" parent="." instance=ExtResource("5_yqsgm")]
+spawn_prob = 1.0
+mem = SubResource("Resource_hkqm6")
 
 [node name="Max3PerFloor" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
 max_board_occ = 3
+max_run_occ = null
 
 [node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_eau7g")]
+spawn_prob = 1.0
 mem = SubResource("Resource_58sqy")
 
 [node name="Sahwakoon" parent="Max3PerFloor" instance=ExtResource("9_s5p53")]
+spawn_prob = 1.0
 mem = SubResource("Resource_v8uhu")
 
 [node name="Quest1Goals" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
 max_dungeon_occ = 1
+max_run_occ = null
 min_dungeon_occ = 1
 world_loc = Vector3i(11, 4, 0)
 
 [node name="Outlaw1" parent="Quest1Goals" instance=ExtResource("12_g5w02")]
+spawn_prob = 1.0
 mem = SubResource("Resource_nmve0")
 
 [node name="LoomCards" parent="Quest1Goals/Outlaw1" instance=ExtResource("11_320yy")]
 
 [node name="Outlaw2" parent="Quest1Goals" instance=ExtResource("12_g5w02")]
+spawn_prob = 1.0
 mem = SubResource("Resource_88qut")
 
 [node name="PotionOfHealing" parent="Quest1Goals/Outlaw2" instance=ExtResource("22_bxpqo")]
@@ -185,6 +196,7 @@ spawn_rect = Rect2i(0, 0, 0, 0)
 ttl = -1
 
 [node name="Outlaw3" parent="Quest1Goals" instance=ExtResource("12_g5w02")]
+spawn_prob = 1.0
 mem = SubResource("Resource_u01tk")
 
 [node name="PotionOfPoison" parent="Quest1Goals/Outlaw3" instance=ExtResource("15_0p6sp")]
@@ -197,20 +209,24 @@ ttl = -1
 [node name="Quest2Goals" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
 max_dungeon_occ = 1
+max_run_occ = null
 min_dungeon_occ = 1
 world_loc = Vector3i(13, 8, 0)
 
 [node name="Retznac" parent="Quest2Goals" instance=ExtResource("25_cxgj3")]
-mem = SubResource("Resource_mckkd")
+spawn_prob = 1.0
+mem = SubResource("Resource_ykwkt")
 
 [node name="Grenn" parent="Quest2Goals" instance=ExtResource("16_s7e88")]
-mem = SubResource("Resource_ymvoa")
+spawn_prob = 1.0
+mem = SubResource("Resource_6ogbb")
 
 [node name="Rare" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
 min_depth = 3
 max_board_occ = 1
 max_dungeon_occ = 2
+max_run_occ = null
 
 [node name="Hammer" parent="Rare" instance=ExtResource("15_ngw60")]
 
@@ -237,8 +253,10 @@ ttl = -1
 script = ExtResource("7_bd8gw")
 min_depth = 7
 max_dungeon_occ = 2
+max_run_occ = null
 
 [node name="Pacherr" parent="RareAndDeep" instance=ExtResource("21_2o5vb")]
+spawn_prob = 1.0
 mem = SubResource("Resource_omuge")
 
 [node name="Healing" type="Node" parent="."]
@@ -246,6 +264,7 @@ script = ExtResource("7_bd8gw")
 min_depth = 4
 max_board_occ = 1
 max_dungeon_occ = 3
+max_run_occ = null
 
 [node name="PotionOfHealing" parent="Healing" instance=ExtResource("22_bxpqo")]
 message = ""
@@ -263,6 +282,7 @@ ttl = -1
 
 [node name="TestingQuestTransitions" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
+max_run_occ = null
 min_dungeon_occ = 1
 world_loc = Vector3i(13, 6, 0)
 debug_only = true
@@ -282,28 +302,33 @@ position = Vector2(631, 437)
 position = Vector2(631, 437)
 
 [node name="Grenn" parent="TestingQuestTransitions" instance=ExtResource("16_s7e88")]
-mem = SubResource("Resource_dgjcv")
+spawn_prob = 1.0
+mem = SubResource("Resource_gkrpo")
 
 [node name="Retznac" parent="TestingQuestTransitions" instance=ExtResource("25_cxgj3")]
-mem = SubResource("Resource_eo2w7")
+spawn_prob = 1.0
+mem = SubResource("Resource_13hi7")
 
 [node name="MovementStressTest" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
 max_board_occ = 0
+max_run_occ = null
 min_dungeon_occ = 5
 world_loc = Vector3i(13, 4, 0)
 
 [node name="Lyonese" parent="MovementStressTest" instance=ExtResource("34_yppu8")]
+spawn_prob = 1.0
 mem = SubResource("Resource_bq34y")
 
 [node name="Rat" parent="MovementStressTest" instance=ExtResource("8_eau7g")]
+spawn_prob = 1.0
 mem = SubResource("Resource_mhmkf")
 
 [connection signal="was_attacked" from="SewerOtter" to="SewerOtter" method="_learn_attack"]
 [connection signal="was_attacked" from="Labras" to="Labras" method="_learn_attack"]
 [connection signal="was_attacked" from="DesertCentipede" to="DesertCentipede" method="_learn_attack"]
-[connection signal="was_attacked" from="Kobold" to="Kobold" method="_learn_attack"]
 [connection signal="was_attacked" from="SulantTiger" to="SulantTiger" method="_learn_attack"]
+[connection signal="was_attacked" from="Kobold" to="Kobold" method="_learn_attack"]
 [connection signal="was_attacked" from="Max3PerFloor/Rat" to="Max3PerFloor/Rat" method="_learn_attack"]
 [connection signal="was_attacked" from="Max3PerFloor/Sahwakoon" to="Max3PerFloor/Sahwakoon" method="_learn_attack"]
 [connection signal="was_attacked" from="Quest1Goals/Outlaw1" to="Quest1Goals/Outlaw1" method="_learn_attack"]

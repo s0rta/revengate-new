@@ -22,6 +22,7 @@ class_name DeckBuilder extends Node
 
 @export_category("Internals")
 @export var tally:Tally
+@export var run_tally:Tally
 
 func _get_configuration_warnings():
 	var warnings = []
@@ -45,12 +46,17 @@ func _add_all_cards(deck, cards, depth, world_loc:Vector3i, budget, rule=null):
 	## nb_occurences is adjusted according to `bugdet`
 	for card in cards:
 		assert(card.spawn_cost != 0, "Can only produce decks when spawn_cost is configured")
+		var spawn_prob = card.get("spawn_prob")
+		if spawn_prob != null and not Rand.rstest(spawn_prob):
+			continue
 		var nb_occ = budget/card.spawn_cost
 		if rule != null:
 			if rule.max_board_occ != -1:
 				nb_occ = min(nb_occ, rule.max_board_occ)
 			if rule.max_dungeon_occ != -1:
 				nb_occ = min(nb_occ, rule.max_dungeon_occ - nb_tied_occ(card))
+			if rule.max_run_occ != -1:
+				nb_occ = min(nb_occ, rule.max_run_occ - run_nb_tied_occ(card))
 		nb_occ = max(nb_occ, 0)
 		if nb_occ > 0:
 			deck.add_card(card, nb_occ)
@@ -59,29 +65,42 @@ func tally_draw(card, update_holds=false):
 	## Record that `card` was just drawn.
 	## if update_holds, one hold is released for the card
 	var card_key = Procgen.spawn_key(card)
-	if not tally.draw_counts.has(card_key):
-		tally.draw_counts[card_key] = 0
-	if update_holds and tally.hold_counts.has(card_key):
-		var hold = tally.hold_counts[card_key]
-		tally.hold_counts[card_key] = min(0, hold-1)
-	tally.draw_counts[card_key] += 1
+	for tal in [tally,run_tally]:
+		if not tal.draw_counts.has(card_key):
+			tal.draw_counts[card_key] = 0
+		if update_holds and tal.hold_counts.has(card_key):
+			var hold = tal.hold_counts[card_key]
+			tal.hold_counts[card_key] = min(0, hold-1)
+		tal.draw_counts[card_key] += 1
 
 func set_hold(card, nb_occ=1):
 	## Set a temporary hold on card. 
 	## Held occurences will be considered as drawn when generating new decks.
 	var card_key = Procgen.spawn_key(card)
-	if not tally.hold_counts.has(card_key):
-		tally.hold_counts[card_key] = 0
-	tally.hold_counts[card_key] += nb_occ
-	
+	for tal in [tally, run_tally]:
+		if not tal.hold_counts.has(card_key):
+			tal.hold_counts[card_key] = 0
+		tal.hold_counts[card_key] += nb_occ
+		
 func clear_holds():
 	## Release all the holds
-	tally.hold_counts = {}
+	for key in tally.hold_counts.keys():
+		var key_holds = tally.hold_counts[key]
+		run_tally.hold_counts[key] -= key_holds
+		if run_tally.hold_counts[key] <= 0:
+			run_tally.hold_counts.erase(key)
+			
+		tally.hold_counts.erase(key)
+		
 
 func nb_tied_occ(card):
 	## Return the number of unavailable copies of card: held+drawn.
 	var card_key = Procgen.spawn_key(card)
 	return tally.hold_counts.get(card_key, 0) + tally.draw_counts.get(card_key, 0)
+
+func run_nb_tied_occ(card):
+	var card_key = Procgen.spawn_key(card)
+	return run_tally.hold_counts.get(card_key, 0) + run_tally.draw_counts.get(card_key, 0)
 
 func nb_mandatory_occ(card, rule, depth, world_loc:Vector3i):
 	## Return how many occurences are mandated by a rule
@@ -99,6 +118,7 @@ func gen_mandatory_deck(card_type, depth, world_loc:Vector3i, extra_cards=[]):
 	## The mandatory deck is shuffled and the order of cards is random.
 	## Return an empty deck if there are no mandatory cards for the level.
 	## Mandatory distribution rules take precedence over spawn_cost and budget is therefore ignored.
+	assert(run_tally != null)
 	var tally = tally_draw.bind(true)
 	var deck = Deck.new(null, tally)
 	# we skip cards that are direct children because there are no rules that would force 
@@ -123,6 +143,7 @@ func gen_prob_deck(card_type, depth, world_loc:Vector3i, budget, extra_cards=[])
 	## The deck is shuffled and will return cards in a random order. 
 	## There are typically more cards than the spawn budget for the board and the caller has to 
 	## keep track of the value of the drawn cards to decide when to stop taking from the deck.
+	assert(run_tally != null)
 	var deck = Deck.new(null, tally_draw)
 	_add_all_cards(deck, _get_cards(self, card_type), depth, world_loc, budget)
 	for child in get_children():

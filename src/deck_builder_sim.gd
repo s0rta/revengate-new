@@ -60,9 +60,11 @@ func sim_stage_for_card_type(ref_deck_builder, card_type) -> Dictionary:
 	## stage: one counter for each depth, reused for all the sims at that depth during the stage
 	## sims: an array of counters for each depth. Each sim appends a new counter
 	var stage_context = {"stage": {}, "sims": {}, "nb_decks": 0}
-	
+	var run_tally
 	for i in nb_sims:
+		run_tally = Tally.new()
 		var builder = ref_deck_builder.duplicate() as DeckBuilder
+		builder.run_tally = run_tally
 		
 		for depth in range(1, max_sim_depth + 1):
 			if not stage_context.stage.has(depth):

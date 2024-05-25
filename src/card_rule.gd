@@ -24,10 +24,12 @@ class_name CardRule extends Node
 @export var max_depth:int = -1
 @export var max_board_occ:int = -1
 @export var max_dungeon_occ:int = -1
+@export var max_run_occ:int = -1
 
 # applied by forcing those cards in the mandatory deck for a floor
 @export var min_board_occ:int = 0
 @export var min_dungeon_occ:int = 0
+
 
 # the item is guarateed to be generated for a board at this location
 @export var world_loc := Consts.LOC_INVALID
