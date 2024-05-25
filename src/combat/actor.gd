@@ -258,6 +258,8 @@ func restore():
 		if item.owner == self:
 			item.reparent($"/root")
 			item.queue_free()
+		else:
+			item.show()
 
 func get_caption():
 	if caption:

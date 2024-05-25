@@ -222,7 +222,10 @@ static func wait_for_signal(sig):
 
 static func hide_unplaced(node:Node2D):
 	## Hide a node unless it's currently placed on a board.
-	if not node.get_parent() is RevBoard:
+	var parent = node.get_parent()
+	if parent is Actor:
+		node.shroud(false)
+	if not parent is RevBoard:
 		node.hide()
 
 static func shroud_node(node:Node2D, animate=true):
