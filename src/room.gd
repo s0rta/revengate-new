@@ -79,7 +79,7 @@ func new_door_coord(region=null) -> Vector2i:
 	else:
 		var pillars = Utils.to_set(layout_perim)
 		var coords = perim().filter(func (coord): return not pillars.has(coord))
-		if region != null:
+		if not (region == null or region == Consts.REG_CENTER):
 			coords = coords.filter(func (coord): return Geom.region_has_coord(rect, region, coord))
 		return Rand.choice(coords)
 

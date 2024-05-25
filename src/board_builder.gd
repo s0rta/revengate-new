@@ -289,6 +289,7 @@ func gen_rooms(nb_rooms:int, add_corridors:=true):
 func open_rooms():
 	## Add an opening to each of the known rooms
 	for room in rooms:
+		# building doors should not face the edge of the board
 		var region = Geom.coord_region(room.get_center(), rect)
 		var coord = room.new_door_coord(-region)
 		add_door(coord)
