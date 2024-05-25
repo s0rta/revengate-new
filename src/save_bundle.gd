@@ -27,6 +27,7 @@ const SAVE_PATH_PARTS = ["user://saves/", "current/", "bundle.tres"]
 @export var version := Consts.VERSION
 @export var turn:int
 @export var active_board_id:int
+@export var start_board_id:int
 @export var tallies:Dictionary
 
 @export var kills:Dictionary
@@ -50,7 +51,8 @@ static func _ensure_dir(parts:Array):
 static func full_path():
 	return Utils.path_join_all(SAVE_PATH_PARTS)
 
-static func save(board:RevBoard, turn:int, tallies:Dictionary, kills:Dictionary, 
+static func save(board:RevBoard, start_board_id:int, turn:int, 
+				tallies:Dictionary, kills:Dictionary, 
 				sentiments:SentimentTable, quest_tag:String, quest_is_active:bool,
 				seen_locs:Array, nb_cheats:int, play_secs:float):
 	## Save a game. 
@@ -61,6 +63,7 @@ static func save(board:RevBoard, turn:int, tallies:Dictionary, kills:Dictionary,
 	## Return the new SaveBundle resource after saving it to disk.
 	var bundle = SaveBundle.new()
 	bundle.active_board_id = board.board_id
+	bundle.start_board_id = start_board_id
 	bundle.turn = turn
 	bundle.tallies = tallies
 	bundle.kills = kills

@@ -26,6 +26,8 @@ var board: RevBoard  # the active board
 var active := true  # becomes false when the run is over
 var quests = []
 var npcs = {}
+var start_board_id : int
+var _res_cache = []
 
 class Quest:
 	var tag: String
@@ -89,7 +91,6 @@ func _ready():
 		Tender.reset(%Hero, %HUD, %Viewport, sentiments)
 		Tender.quest = quests[0]
 		_discover_start_board()
-		_discover_npcs()
 		watch_hero(%Hero)
 		if Tender.full_game:
 			%StoryScreen.show_story(quests[0].title, quests[0].intro_path)
@@ -114,16 +115,17 @@ func _on_board_changed(_arg):
 	center_on_hero()
 
 func _discover_npcs():
-	npcs.nadege = dungeons_cont.find_child("Nadege")
-	npcs.bar_patron_1 = dungeons_cont.find_child("BarPatron1")
-	npcs.bar_patron_2 = dungeons_cont.find_child("BarPatron2")
-	npcs.bar_tender = dungeons_cont.find_child("BarTender")
+	npcs.nadege = board.find_child("Nadege")
+	npcs.bar_patron_1 = board.find_child("BarPatron1")
+	npcs.bar_patron_2 = board.find_child("BarPatron2")
+	npcs.bar_tender = board.find_child("BarTender")
 
 func _discover_start_board():
 	## Find the board that the game should start with
 	for dungeon in dungeons_cont.find_children("", "Dungeon", false, false):
 		if dungeon.has_starting_board():
 			var start_board = dungeon.finalize_static_board()
+			start_board_id = start_board.board_id
 			_activate_board(start_board)
 			break
 	assert(board != null, "Could not find a starting board!")
@@ -288,16 +290,18 @@ func show_context_menu_for(coord):
 	%ContextMenuPopup.show_commands(cmds, coord)
 
 func _place_on_start_board(coord:Vector2i):
-	var board = dungeons_cont.find_children("StartingBoard", "RevBoard", true, false)[0]
+	if board.board_id != start_board_id:
+		var new_board = restore_board(start_board_id, false)
+		_activate_board(new_board)
 	var builder = BoardBuilder.new(board)
-	if not board.is_active():
-		_activate_board(board)
-
 	builder.place(Tender.hero, false, coord)
 	center_on_hero()
 	Tender.hero.highlight_options()
 	
 func start_ch2():
+	_place_on_start_board(V.i(2, 2))
+	_discover_npcs()
+	assert(npcs.nadege)
 	destroy_nodes(Tender.hero.get_items(["quest-item"]))
 	# Nadège gives key and combat cane
 	npcs.nadege.conversation_sect = "intro_2"
@@ -319,11 +323,12 @@ func start_ch2():
 
 	%StoryScreen.show_story("Chapter 2: Bewitching Bookkeeping",
 		"res://src/story/bewitching_bookkeeping.md")
-	_place_on_start_board(V.i(2, 2))
 	if $TurnQueue.is_paused():
 		$TurnQueue.resume()
 
 func start_ch3():
+	_place_on_start_board(V.i(2, 2))
+	_discover_npcs()
 	var mem = Tender.hero.mem
 	# Nadège gives key and dress sword
 	destroy_nodes(npcs.nadege.get_items(["quest-reward"]))
@@ -346,7 +351,6 @@ func start_ch3():
 
 	%StoryScreen.show_story("Chapter 3: The Sound of Satin",
 		"res://src/story/sound_of_satin.md")
-	_place_on_start_board(V.i(2, 2))
 	if $TurnQueue.is_paused():
 		$TurnQueue.resume()
 
@@ -387,7 +391,8 @@ func capture_game():
 	var bundle = SaveBundle.new()
 	
 	print("Saving at turn %d" % $TurnQueue.turn)
-	bundle.save(board, $TurnQueue.turn, _collect_tallies(),
+	bundle.save(board, start_board_id, 
+		$TurnQueue.turn, _collect_tallies(),
 		Tender.kills, Tender.sentiments,
 		Tender.quest.tag, Tender.quest.is_active,
 		Tender.seen_locs.keys(), Tender.nb_cheats, Tender.play_secs)
@@ -419,11 +424,10 @@ func restore_game(bundle=null):
 
 	var new_board = restore_board(bundle.active_board_id)
 	get_tree().call_group("no-save", "queue_free")
-	
-	_discover_npcs()
-	
+		
 	var hero = new_board.find_child("Hero")
 	_restore_tallies(bundle.tallies)
+	start_board_id = bundle.start_board_id
 	Tender.kills = bundle.kills
 	Tender.sentiments = bundle.sentiments
 	Tender.quest = _quest_by_tag(bundle.quest_tag)
