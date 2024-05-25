@@ -4,4 +4,4 @@
 
 [node name="Hissing" instance=ExtResource("1_la1ix")]
 caption = "steam hissing nearby"
-spawn_cost = 1.0
+spawn_cost = 2.0

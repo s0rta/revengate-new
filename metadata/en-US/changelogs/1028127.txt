@@ -1,0 +1,10 @@
+Performance:
+- only keeping one the active level in memory
+- only saving one level at a time
+- Exploring monsters find where they are going faster
+
+Bug fixes:
+- conditions (like being poisoned) are saved and restored
+- buldings always have a usable access point
+
+Log message have different styles depending on their caterogy.

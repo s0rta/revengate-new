@@ -453,6 +453,8 @@ Items:
 ## v0.12.7
 - [x] bug: mushrooms in inventory are permanently invisible after a game restore
 - [x] bug: conditions are not saved
+- [x] bug: only one outlaw spaws for quest 1
+- [ ] bug: potion of absinthe has no breaking sound
 - [ ] tune vibe cost curves
 - [ ] rename MeterGroup
 - [ ] document conn_target and connection fields

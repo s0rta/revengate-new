@@ -22,7 +22,7 @@ class_name Dungeon extends Node
 # Spawn budget multipliers
 const BUDGET_MULTIPLIERS = {"Actor": 1.7, 
 							"Item": 1.3, 
-							"Vibe": 1.1}
+							"Vibe": 0.3}
 
 var prefab_map = {Vector3i(13, 3, 0): "Er", 
 					Vector3i(13, 4, 0): "Er", 

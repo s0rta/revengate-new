@@ -100,12 +100,10 @@ static func spawn_key(node:Node) -> String:
 	if tags:
 		tags_str = ":".join(tags)
 
-	var name_str:String
+	var name_str := node.name
 	if node.get("get_short_desc"):
-		name_str = node.get_short_desc()
+		name_str += node.get_short_desc()
 	elif node.get("caption"):
-		name_str = node.caption
-	else:
-		name_str = node.name
+		name_str += node.caption
 
 	return "%s:%s" % [name_str, tags_str]
