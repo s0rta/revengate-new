@@ -430,7 +430,6 @@ Performance:
 - [x] bigger dialogue control buttons
 - [x] better corridors that completely bisects rooms less often
 
-
 ## v0.12.6
 - [x] deck simulator runs items and vibes
 - [x] perception range is visible and animated when it changes
@@ -454,8 +453,11 @@ Items:
 - [x] bug: mushrooms in inventory are permanently invisible after a game restore
 - [x] bug: conditions are not saved
 - [x] bug: only one outlaw spaws for quest 1
+- [x] only keeping the active board in memory
+- [x] tune vibe cost curves
+
+## v0.12.8
 - [ ] bug: potion of absinthe has no breaking sound
-- [ ] tune vibe cost curves
 - [ ] rename MeterGroup
 - [ ] document conn_target and connection fields
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
@@ -483,16 +485,13 @@ Strategies:
 - [ ] on-screen joystick
 - [ ] auto-pan to hero when he gets close to the egde of the screen
 - [ ] VFX: edge of water reflections 
-- [ ] items long descriptions
 - [ ] Allow mixing rooms and mazes in level generation
 - [ ] Strategy.refresh() updates the internal index
 - [ ] phantruch is destroyed if the vital assembly is broken or stolen
 - [ ] startled strategy: flee when first contact is from afar, attack when from nearby
 - [ ] F-Droid [Reproducible Builds](https://f-droid.org/docs/Reproducible_Builds/)
 - [ ] Salapou can steal your items
-- [ ] redo tabulator as a Godot Ressource
 - [ ] flatten the board-area node sub-tree
-- [ ] different room styles, ex.: https://www.zorbus.net/bts/vaults.png
 - [ ] try pixel fonts (ex.: https://www.dafont.com/alkhemikal.font https://www.dafont.com/retro-gaming.font )
 
 Simulator:
