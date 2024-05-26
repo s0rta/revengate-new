@@ -82,12 +82,12 @@ resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_wmmnv"]
+[sub_resource type="Resource" id="Resource_8d0lt"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_obwcl"]
+[sub_resource type="Resource" id="Resource_7jeqn"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
@@ -97,12 +97,12 @@ resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_7cd87"]
+[sub_resource type="Resource" id="Resource_5ia1g"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
 
-[sub_resource type="Resource" id="Resource_pcyso"]
+[sub_resource type="Resource" id="Resource_ktl3a"]
 resource_local_to_scene = true
 script = ExtResource("4_kpuol")
 _facts = []
@@ -194,10 +194,10 @@ min_dungeon_occ = 1
 world_loc = Vector3i(13, 8, 0)
 
 [node name="Retznac" parent="Quest2Goals" instance=ExtResource("25_cxgj3")]
-mem = SubResource("Resource_wmmnv")
+mem = SubResource("Resource_8d0lt")
 
 [node name="Grenn" parent="Quest2Goals" instance=ExtResource("16_s7e88")]
-mem = SubResource("Resource_obwcl")
+mem = SubResource("Resource_7jeqn")
 
 [node name="Rare" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -275,10 +275,10 @@ position = Vector2(631, 437)
 position = Vector2(631, 437)
 
 [node name="Grenn" parent="TestingQuestTransitions" instance=ExtResource("16_s7e88")]
-mem = SubResource("Resource_7cd87")
+mem = SubResource("Resource_5ia1g")
 
 [node name="Retznac" parent="TestingQuestTransitions" instance=ExtResource("25_cxgj3")]
-mem = SubResource("Resource_pcyso")
+mem = SubResource("Resource_ktl3a")
 
 [node name="MovementStressTest" type="Node" parent="."]
 script = ExtResource("7_bd8gw")

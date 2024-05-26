@@ -5,6 +5,6 @@ Performance:
 
 Bug fixes:
 - conditions (like being poisoned) are saved and restored
-- buldings always have a usable access point
+- buildings always have a usable access point
 
-Log message have different styles to show their caterogy.
+Log message have different styles to show their category.
