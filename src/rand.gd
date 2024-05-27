@@ -23,12 +23,22 @@ enum Orientation {HORIZONTAL, VERTICAL, RANDOM, LONG_SIDE}
 static func rstest(success_rate:float):
 	## Randon Success Test: return `true` success_rate fraction of the times 
 	## success_rate: in 0..1
-	return randf() <= success_rate
+	# Because both 0.0 and 1.0 are likely `randf()` outcomes, we need a special case on one of 
+	# those sides to make sure that 0.0 fails all the times and that 1.0 always succeeds.
+	if success_rate == 0.0:
+		return false
+	else:
+		return randf() <= success_rate
 
 static func rftest(failure_rate:float):
 	## Randon Failure Test: return `true` failure_rate fraction of the times 
 	## failure_rate: in 0..1
-	return randf() > failure_rate
+	# Because both 0.0 and 1.0 are likely `randf()` outcomes, we need a special case on one of 
+	# those sides to make sure that 1.0 fails all the times and that 0.0 always succeeds.
+	if failure_rate == 1.0:
+		return false
+	else:
+		return randf() > failure_rate
 
 static func linear_prob_test(val, start, end) -> bool:
 	## Return return true/false weighted by how far val is in [start..end].

@@ -29,6 +29,7 @@ extends Node
 
 const max_sim_depth = 12
 const nb_sims = 1000
+const CARD_TYPES = ["Actor", "Item", "Vibe"]
 
 @export var base_spawn_budget := 0
 
@@ -40,13 +41,14 @@ func _ready():
 	print("Starting a multi-depth simulation for %s" % ref_deck_builder)
 
 	var contexts = []
-	for card_type in ["Actor", "Item", "Vibe"]:
+	for card_type in CARD_TYPES:
 		contexts.append(sim_stage_for_card_type(ref_deck_builder, card_type))
 
 	var elapsed = (Time.get_ticks_msec() - start_time) / 1000.0	
 	var nb_decks := 0.0
 	for depth in range(1, max_sim_depth + 1):
-		print("Summary of depth %d"% [depth])
+		var budgets = spawn_budgets(depth)
+		print("Summary of depth %d  --  budgets:%s" % [depth, budgets])
 		for context in contexts:
 			sumarize_depth(depth, context)
 			nb_decks += context.nb_decks
@@ -72,12 +74,16 @@ func sim_stage_for_card_type(ref_deck_builder, card_type) -> Dictionary:
 				stage_context.sims[depth] = []
 			sim_counter = {}
 
-			var budget = spawn_budget(depth, Dungeon.BUDGET_MULTIPLIERS[card_type])			
+			var budget = spawn_budget(depth, card_type)
 			var depth_counters = [stage_context.stage[depth], sim_counter]
 			
+			# DEBUG:
+			#print("depth:%d budget:%s" % [depth, budget])
 			var deck = builder.gen_mandatory_deck(card_type, depth, Consts.LOC_INVALID)
+			#print("mandatory deck: %s" % deck)
 			budget = draw_and_tally(deck, budget, depth_counters, true)
 			deck = builder.gen_prob_deck(card_type, depth, Consts.LOC_INVALID, budget)
+			#print("prob deck: %s" % deck)
 			budget = draw_and_tally(deck, budget, depth_counters, true)			
 			stage_context.nb_decks += 2
 			
@@ -97,7 +103,7 @@ func card_key(card):
 	
 func fmt_key(card_key):
 	## Convert a card key into something that looks good in the end of stage report
-	return "%33s" % [card_key[1]]
+	return "%35s" % [card_key[1]]
 
 func draw_and_tally(deck, budget, counters:Array, strict_budget):
 	## Get all the cards we can from `deck` and record what cards were drawn.
@@ -141,6 +147,13 @@ func inc_occ(counter, key):
 	else:
 		counter[key] += 1
 
-func spawn_budget(depth, budget_multiplier):
+func spawn_budget(depth, card_type:String):
 	# TODO: get this from the dungeon
+	var budget_multiplier = Dungeon.BUDGET_MULTIPLIERS[card_type]
 	return max(0, (base_spawn_budget + depth)*budget_multiplier)
+
+func spawn_budgets(depth):
+	var budgets = {}
+	for card_type in CARD_TYPES:
+		budgets[card_type] = spawn_budget(depth, card_type)
+	return budgets
