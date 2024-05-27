@@ -19,8 +19,9 @@
 ## This script is autoloaded at `Consts`
 extends Node
 
-const VERSION := "0.12.7"
-const VERSION_CODE := 1028127
+# TODO: leave a non-significant digit in the version code to allow for patched builds
+const VERSION := "0.12.8"
+const VERSION_CODE := 1028128
 const DEBUG = true
 const DEBUG_PATHS = false
 

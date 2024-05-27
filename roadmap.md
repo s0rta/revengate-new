@@ -458,17 +458,38 @@ Items:
 
 ## v0.12.8
 - [ ] bug: potion of absinthe has no breaking sound
+- [ ] bug: kobold has not attack sound
+- [ ] bug: deck simulator percentiles are innacurate
+- [ ] bug: tag on self corrupt the next Move command (#32)
+- [ ] bug: paralized is not saved (#38)
+
+- [ ] type a few stories
+- [ ] don't change Tally and Mem every time the scene is loaded in the editor
 - [ ] rename MeterGroup
 - [ ] document conn_target and connection fields
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings
+- [ ] remove src/ui/explosion_vfx.gd
+- [ ] delete some old Python code
+- [ ] clear todo.txt
+- [ ] self-host web exports for dev builds ( https://gist.github.com/nisovin/cf9dd74678641fb70902866c79692b17 )
+
+UX:
+- [ ] yield message is not Critical (#31)
+- [ ] clear previous highlights when inspecting (#59)
+- [ ] more info on loot button (#54)
+- [ ] Talk command button (#58)
+- [ ] finalize long rest (#16)
 
 Strategies:
 - [ ] Seeking is easier to resolve even is the target keeps moving
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
 
+Maybe: 
+- [ ] special icon for loot piles (#55)
+
 ## v0.13
-- [ ] new quest
+- [ ] new quest: Pacherrs are seeking some new crystals
 
 ## v1.0
 - [ ] A Fight for Fumes campaign
