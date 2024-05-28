@@ -89,8 +89,8 @@ func _ready():
 	else:
 		SaveBundle.remove()
 		run_tally = Tally.new()
-		for node in dungeons_cont.find_children("", "DeckBuilder", true, false):
-			node.run_tally = run_tally
+		for dungeon in dungeons_cont.find_children("", "Dungeon", false, false):
+			dungeon.deck_builder.run_tally = run_tally
 		var sentiments = SentimentTable.new()
 		Tender.reset(%Hero, %HUD, %Viewport, sentiments)
 		Tender.quest = quests[0]
