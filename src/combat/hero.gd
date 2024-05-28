@@ -42,7 +42,12 @@ func _unhandled_input(event):
 		print("Click at pos=%s, coord=%s" % [event.position, RevBoard.coord_str(coord)])
 
 		var other = index.actor_at(coord)
-		if other and not perceives(other) or other == self:
+		if other == self:
+			# tapping on yourself doesn't do anything (yet)
+			get_viewport().set_input_as_handled()
+			state = States.LISTENING
+			return
+		elif other and not perceives(other):
 			other = null
 		var click_dist = RevBoard.dist(get_cell_coord(), coord)
 		

@@ -460,7 +460,7 @@ Items:
 - [ ] bug: potion of absinthe has no breaking sound
 - [ ] bug: kobold has not attack sound
 - [ ] bug: deck simulator percentiles are innacurate
-- [ ] bug: tag on self corrupt the next Move command (#32)
+- [x] bug: tag on self corrupt the next Move command (#32)
 - [ ] bug: paralized is not saved (#38)
 
 - [ ] type a few stories
