@@ -50,7 +50,10 @@ func _card_summaries(sparse=true):
 		if sparse and occurences[i] <= 0.0:
 			continue
 		var pct = 100.0 * occurences[i] / total
-		elems.append("%s: %0.2f (%0.1f%%)" % [cards[i].name, occurences[i], pct])
+		var card_name = cards[i].get("name")
+		if not card_name:
+			card_name = "%s" % [cards[i]]
+		elems.append("%s: %0.2f (%0.1f%%)" % [card_name, occurences[i], pct])
 	return elems
 
 func ddump(sparse=false):
