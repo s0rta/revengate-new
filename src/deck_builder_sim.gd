@@ -47,8 +47,7 @@ func _ready():
 	var elapsed = (Time.get_ticks_msec() - start_time) / 1000.0	
 	var nb_decks := 0.0
 	for depth in range(1, max_sim_depth + 1):
-		var budgets = spawn_budgets(depth)
-		print("Summary of depth %d  --  budgets:%s" % [depth, budgets])
+		print("Summary of depth %d" % [depth])
 		for context in contexts:
 			sumarize_depth(depth, context)
 			nb_decks += context.nb_decks
@@ -61,12 +60,12 @@ func sim_stage_for_card_type(ref_deck_builder, card_type) -> Dictionary:
 		
 	## stage: one counter for each depth, reused for all the sims at that depth during the stage
 	## sims: an array of counters for each depth. Each sim appends a new counter
-	var stage_context = {"stage": {}, "sims": {}, "nb_decks": 0}
+	var stage_context = {"stage": {}, "sims": {}, "nb_decks": 0, "card_type": card_type}
 	var run_tally
 	for i in nb_sims:
-		run_tally = Tally.new()
 		var builder = ref_deck_builder.duplicate() as DeckBuilder
-		builder.run_tally = run_tally
+		builder.tally = Tally.new()
+		builder.run_tally = Tally.new()
 		
 		for depth in range(1, max_sim_depth + 1):
 			if not stage_context.stage.has(depth):
@@ -75,15 +74,10 @@ func sim_stage_for_card_type(ref_deck_builder, card_type) -> Dictionary:
 			sim_counter = {}
 
 			var budget = spawn_budget(depth, card_type)
-			var depth_counters = [stage_context.stage[depth], sim_counter]
-			
-			# DEBUG:
-			#print("depth:%d budget:%s" % [depth, budget])
+			var depth_counters = [stage_context.stage[depth], sim_counter]			
 			var deck = builder.gen_mandatory_deck(card_type, depth, Consts.LOC_INVALID)
-			#print("mandatory deck: %s" % deck)
 			budget = draw_and_tally(deck, budget, depth_counters, true)
 			deck = builder.gen_prob_deck(card_type, depth, Consts.LOC_INVALID, budget)
-			#print("prob deck: %s" % deck)
 			budget = draw_and_tally(deck, budget, depth_counters, true)			
 			stage_context.nb_decks += 2
 			
@@ -122,19 +116,22 @@ func sumarize_depth(depth:int, stage_context:Dictionary):
 	var stage_counter = stage_context.stage[depth]
 	var total_cards = Utils.sum(stage_counter.values())
 	var k_nums = [10, 50, 90]
-	
+	var budget = spawn_budget(depth, stage_context.card_type)
+	print("   %s budget: %0.1f, avg %0.1f card(s) per sim" % 
+			[stage_context.card_type, budget, 1.0*total_cards/nb_sims])
 	for key in stage_context.ordered_keys:
 		var occ = []
 		for counter in stage_context.sims[depth]:
 			occ.append(counter.get(key, 0))
 
 		if stage_counter.get(key, false):
+			var avg = 1.0*stage_counter[key]/nb_sims
 			var percentiles = Utils.percentile_breakdown(occ, k_nums)
-
 			var pct = 100.0 * stage_counter.get(key, 0) / total_cards
 			var summary = "%s: %5.2f%% |" % [fmt_key(key), pct]
 			for i in len(k_nums):
 				summary += " p%d: %d"%[k_nums[i], percentiles[i]]
+			summary += " | avg:%0.1f" % [avg]
 			print(summary)
 		else:
 			# we have not seen this card at that depth in any of the sims during this stage

@@ -29,7 +29,6 @@ draw_counts = {}
 
 [node name="DeckBuilderSim" type="Node"]
 script = ExtResource("1_c3005")
-base_spawn_budget = 15
 
 [node name="EasyTrabouleDeckBuilder" parent="." instance=ExtResource("2_vtj4q")]
 tally = SubResource("Resource_xga4t")
