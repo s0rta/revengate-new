@@ -459,7 +459,7 @@ Items:
 ## v0.12.8
 - [ ] bug: potion of absinthe has no breaking sound
 - [ ] bug: kobold has not attack sound
-- [ ] bug: deck simulator percentiles are innacurate
+- [x] bug: deck simulator percentiles are innacurate
 - [x] bug: tag on self corrupt the next Move command (#32)
 - [ ] bug: paralized is not saved (#38)
 
@@ -476,7 +476,7 @@ Items:
 
 UX:
 - [ ] yield message is not Critical (#31)
-- [ ] clear previous highlights when inspecting (#59)
+- [x] clear previous highlights when inspecting (#59)
 - [ ] more info on loot button (#54)
 - [ ] Talk command button (#58)
 - [ ] finalize long rest (#16)

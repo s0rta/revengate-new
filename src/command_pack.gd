@@ -251,6 +251,8 @@ class Inspect extends Command:
 		return true
 		
 	func run(coord:Vector2i) -> bool:
+		var board = Tender.hero.get_board()
+		board.clear_highlights()
 		var messages = []
 		var actor:Actor = index.actor_at(coord)
 		if actor and not actor.is_unexposed(index):
@@ -258,7 +260,6 @@ class Inspect extends Command:
 			await Tender.hud.actor_details_screen.closed
 			
 		# only one of Actor or Item message will show
-		var board = Tender.hero.get_board()
 		board.highlight_cells([coord])
 		var here_str = "at %s" % board.coord_str(coord) if Utils.is_debug() else "here"
 
