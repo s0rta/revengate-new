@@ -462,6 +462,7 @@ Items:
 - [x] bug: deck simulator percentiles are innacurate
 - [x] bug: tag on self corrupt the next Move command (#32)
 - [ ] bug: paralized is not saved (#38)
+- [ ] bug: new board is now saved when entering a new area
 
 - [ ] type a few stories
 - [ ] don't change Tally and Mem every time the scene is loaded in the editor
@@ -475,7 +476,7 @@ Items:
 - [ ] self-host web exports for dev builds ( https://gist.github.com/nisovin/cf9dd74678641fb70902866c79692b17 )
 
 UX:
-- [ ] yield message is not Critical (#31)
+- [x] yield message is not Critical (#31)
 - [x] clear previous highlights when inspecting (#59)
 - [x] more info on loot button (#54)
 - [ ] Talk command button (#58)

@@ -29,7 +29,7 @@ func add_message(text, level:Consts.MessageLevels, tags:=[]):
 	var label = %MessageTemplate.duplicate()
 	if "msg:combat" in tags:
 		label.theme_type_variation = "MsgCombat"
-	elif "msg:vibe" in tags:
+	elif "msg:vibe" in tags or "msg:story" in tags:
 		label.theme_type_variation = "MsgVibe"
 
 	label.text = text

@@ -23,6 +23,7 @@ class_name Yeilding extends Strategy
 
 ## how many turns do we stay pleading before moving on with our life
 @export var post_yeild_turns := 4
+@export_range(0.0, 1.0) var keep_screaming_prob = 0.2
 
 var attacker_id: int
 var turn: int
@@ -50,8 +51,10 @@ func act() -> bool:
 		for mem in [me.mem, Tender.hero.mem]:
 			mem.learn(event_name, turn, Memory.Importance.CRUCIAL, {"attacker": attacker_id})
 	var board = me.get_board()
-	me.add_message("%s throws their arms in the air, saying 'I give up!'" % me.get_short_desc(),
-					Consts.MessageLevels.WARNING)
+	if ttl < 0 or Rand.rstest(keep_screaming_prob):
+		me.add_message("%s throws their arms in the air, saying 'I give up!'" % me.get_short_desc(),
+						Consts.MessageLevels.INFO, 
+						["msg:story"])
 	if ttl < 0:
 		ttl = post_yeild_turns
 	return true
