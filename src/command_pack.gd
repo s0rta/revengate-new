@@ -125,7 +125,7 @@ class QuickAttack extends Command:
 				nearby_foe = actor
 				return true
 		return false
-		
+	
 	func run_at_hero(coord:Vector2i) -> bool:
 		var board = Tender.hero.get_board()
 		var foe = nearby_foe
@@ -143,6 +143,10 @@ class QuickAttack extends Command:
 		return true
 
 class Talk extends Command:
+	var speaker
+	var prev_speaker
+	var prev_convo
+	
 	func _init(index_=null):
 		is_action = true
 		caption = "Talk"
@@ -159,21 +163,51 @@ class Talk extends Command:
 		is_default = other != null and not Tender.hero.is_foe(other)		
 		return (dist <= Consts.CONVO_RANGE 
 				and other
-				and other.is_alive()
-				and other.get_conversation() 
+				and _is_talkative(other))
+	
+	func _is_talkative(other:Actor) -> bool:
+		return (other.is_alive() 
+				and other.get_conversation() != null 
 				and Tender.hero.perceives(other))
-		
-	func run(coord:Vector2i) -> bool:
-		var other = index.actor_at(coord)
+	
+	func is_valid_for_hero_at(coord:Vector2i):
+		var others = index.get_actors_around(coord, Consts.CONVO_RANGE).filter(_is_talkative)
+		if others.is_empty():
+			return false
+		elif prev_speaker in others and prev_speaker.get_conversation() != prev_convo:
+			# keep talking to the same chap only if they have new things to say
+			speaker = prev_speaker
+		elif len(others) >= 2 and prev_speaker in others:
+			return Rand.choice(others.filter(func(other): return other != prev_speaker))
+		else:
+			speaker = Rand.choice(others)
+		return true
+	
+	func _chat_with(other:Actor):
 		var conversation = other.get_conversation()
 		if conversation == null:
-			Tender.hud.add_message("%s has nothing to say." % other.caption)
-		Tender.hud.dialogue_pane.start(conversation.res, conversation.sect, other)
-		await Tender.hud.dialogue_pane.hidden
-		
-		# FIXME: we never seem to receive this signal when called by hero directly
-		print("The dia has been closed!")
+			Tender.hud.add_message("%s has nothing to say." % other.caption, 
+									Consts.MessageLevels.INFO, 
+									["msg:story"])
+		else:
+			prev_speaker = other
+			prev_convo = conversation
+			
+			Tender.hud.dialogue_pane.start(conversation.res, conversation.sect, other)
+			await Tender.hud.dialogue_pane.hidden
+			
+			# FIXME: we never seem to receive this signal when called by hero directly
+			print("The dia has been closed!")
+
+	func run(coord:Vector2i) -> bool:
+		var other = index.actor_at(coord)
+		_chat_with(other)
 		return true
+
+	func run_at_hero(coord:Vector2i) -> bool:
+		_chat_with(speaker)
+		return true
+
 
 class PickItem extends Command:
 	var caption_prefix = "Pick"

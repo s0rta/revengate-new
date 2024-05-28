@@ -58,7 +58,10 @@ func _unhandled_input(event):
 			if other.get_conversation():
 				acted = await $"/root/Main".commands.talk(coord)
 			else:
-				get_board().add_message(self, "%s has nothing to tell you." % other.caption)
+				get_board().add_message(self, 
+										"%s has nothing to tell you." % other.caption,
+										Consts.MessageLevels.INFO, 
+										["msg:story"])
 				acted = true
 		elif other and not other.is_unexposed():
 			# `acted` will be set by the Command if one is invoked

@@ -479,7 +479,7 @@ UX:
 - [x] yield message is not Critical (#31)
 - [x] clear previous highlights when inspecting (#59)
 - [x] more info on loot button (#54)
-- [ ] Talk command button (#58)
+- [x] Talk command button (#58)
 - [ ] finalize long rest (#16)
 
 Strategies:
