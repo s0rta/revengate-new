@@ -23,7 +23,8 @@ class_name Tally extends Resource
 @export var draw_counts := {}  # card -> nb_draws mapping
 
 func _to_string():
-	return "<Tally with %d holds, %d draws>" % [len(hold_counts), len(draw_counts)]
+	return "<Tally with %d held card types, %d held cards, %d drawn card types, %d drawn cards>" % \
+				[len(hold_counts),Utils.sum(hold_counts.values()), len(draw_counts), Utils.sum(draw_counts.values())]
 
 func ddump():
 	print("holds: %s" % [hold_counts])

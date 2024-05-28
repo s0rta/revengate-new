@@ -47,6 +47,7 @@ mem = SubResource("Resource_3er8c")
 script = ExtResource("2_p183e")
 max_depth = 6
 max_board_occ = 5
+max_run_occ = null
 
 [node name="Rat" parent="Max5PerBoardEarly" instance=ExtResource("12_xxt6x")]
 mem = SubResource("Resource_aipj0")
@@ -57,6 +58,7 @@ mem = SubResource("Resource_joy5l")
 [node name="Deep" type="Node" parent="."]
 script = ExtResource("2_p183e")
 min_depth = 5
+max_run_occ = null
 
 [node name="Skeleton" parent="Deep" instance=ExtResource("5_00grc")]
 mem = SubResource("Resource_26kg5")
@@ -66,8 +68,10 @@ script = ExtResource("2_p183e")
 min_depth = 5
 max_depth = 7
 max_dungeon_occ = 1
+max_run_occ = null
 
 [node name="SpellbookOfZapping" parent="DeepAndUnique" instance=ExtResource("8_e8bb1")]
+spawn_prob = null
 
 [node name="RareAndDeep" type="Node" parent="."]
 script = ExtResource("2_p183e")
@@ -75,6 +79,7 @@ min_depth = 7
 max_depth = 11
 max_board_occ = 1
 max_dungeon_occ = 2
+max_run_occ = null
 min_dungeon_occ = 1
 
 [node name="Cherub" parent="RareAndDeep" instance=ExtResource("6_2qcbt")]
@@ -85,6 +90,7 @@ script = ExtResource("2_p183e")
 min_depth = 12
 max_depth = 15
 max_dungeon_occ = 1
+max_run_occ = null
 
 [node name="Mjolnir" parent="QuestGoal" instance=ExtResource("8_b4cid")]
 
@@ -93,5 +99,6 @@ script = ExtResource("2_p183e")
 min_depth = 3
 max_board_occ = 1
 max_dungeon_occ = 1
+max_run_occ = null
 
 [node name="EyeGlasses" parent="Unique" instance=ExtResource("11_08iub")]

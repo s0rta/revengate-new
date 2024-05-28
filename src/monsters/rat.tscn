@@ -15,16 +15,18 @@ script = ExtResource("2_l0hj0")
 _facts = []
 
 [node name="Rat" instance=ExtResource("1_cnguh")]
-mem = SubResource("Resource_denkt")
 char = "r"
 caption = "rat"
 spawn_cost = 1.0
+spawn_prob = 1.0
 health = 3
 strength = 17
 agility = 45
 intelligence = 15
+mem = SubResource("Resource_denkt")
 
 [node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
 text = "r"
 
 [node name="SkillLevels" parent="." index="6"]

@@ -16,6 +16,7 @@ size = Vector2(32, 32)
 [node name="Actor" type="Area2D"]
 visible = false
 script = ExtResource("1_8kibw")
+spawn_prob = null
 mem = SubResource("Resource_oa7st")
 
 [node name="Label" type="Label" parent="."]

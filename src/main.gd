@@ -26,6 +26,7 @@ var board: RevBoard  # the active board
 var active := true  # becomes false when the run is over
 var quests = []
 var npcs = {}
+var run_tally: Tally
 var start_board_id : int
 var _res_cache = []
 
@@ -87,6 +88,9 @@ func _ready():
 		Tender.save_bunle = null
 	else:
 		SaveBundle.remove()
+		run_tally = Tally.new()
+		for node in dungeons_cont.find_children("", "DeckBuilder", true, false):
+			node.run_tally = run_tally
 		var sentiments = SentimentTable.new()
 		Tender.reset(%Hero, %HUD, %Viewport, sentiments)
 		Tender.quest = quests[0]
@@ -368,7 +372,7 @@ func pre_load_resources():
 func _collect_tallies() -> Dictionary:
 	## Get the tallies for distributed cards for all the dungeons. 
 	## Return a {dungeon_name:tally} mapping.
-	var tallies = {}
+	var tallies = {"run": run_tally}
 	for dungeon in dungeons_cont.find_children("", "Dungeon", false, true):
 		tallies[dungeon.name] = dungeon.deck_builder.tally
 	return tallies
@@ -376,9 +380,15 @@ func _collect_tallies() -> Dictionary:
 func _restore_tallies(tallies:Dictionary):
 	## Set the tallies for distributed cards on all the dungeons. 
 	## `tallies`: a {dungeon_name:tally} mapping
+	if not tallies.has("run"):
+		run_tally = Tally.new()
+	else:
+		run_tally = tallies["run"]
+		
 	for dungeon in dungeons_cont.find_children("", "Dungeon", false, true):
 		if tallies.has(dungeon.name):
 			dungeon.deck_builder.tally = tallies[dungeon.name]
+			dungeon.deck_builder.run_tally = run_tally
 
 func capture_game():
 	## Record the current state of the game and save it to a file.

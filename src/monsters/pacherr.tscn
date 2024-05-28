@@ -1,15 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://cjhuo8ouk2mpa"]
+[gd_scene load_steps=7 format=3 uid="uid://cjhuo8ouk2mpa"]
 
 [ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_rs7wm"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_1hkqn"]
+[ext_resource type="Script" path="res://src/combat/memory.gd" id="2_8d11p"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="3_1e5ek"]
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="4_ge1c0"]
+
+[sub_resource type="Resource" id="Resource_5jevm"]
+resource_local_to_scene = true
+script = ExtResource("2_8d11p")
+_facts = []
 
 [node name="Pacherr" instance=ExtResource("1_rs7wm")]
 char = "P"
 caption = "pacherr"
 color = Color(0.596078, 0.411765, 0.321569, 1)
 spawn_cost = 12.0
+spawn_prob = 1.0
 health = 60
 strength = 63
 agility = 40
@@ -22,6 +29,7 @@ They rarely go taller than 1.5m, but because they are greatly muscular, 100kg is
 Pacherrs come from nomadic tribes in Ukraine and Eastern Russian. They form strong bonds within their clan and will readily help any individual within the clan. Clans have a matriarchal structure with an elder female having the final word on internal affairs.
 
 Among themselves, Pacherrs love music and dancing with both genders taking interchangeable roles in their traditional dances. Their music often includes the tambourine and the balalaika."
+mem = SubResource("Resource_5jevm")
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.596078, 0.411765, 0.321569, 1)

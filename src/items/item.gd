@@ -30,6 +30,7 @@ class_name Item extends Node2D
 
 # TODO: "spawn" sounds more like something that applies to living things...
 @export var spawn_cost := 0.0
+@export_range(0.0,1.0) var spawn_prob := 1.0 ## probability that this gets added to a deck on a per board basis
 @export var spawn_rect:Rect2i
 @export var ttl := -1
 @export var tags:Array[String]
