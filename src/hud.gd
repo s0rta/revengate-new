@@ -20,7 +20,6 @@ extends Node
 signal cancel_strategies
 
 # TODO: use unique %name to simplify some of those
-@onready var loot_button = find_child("LootButton")
 @onready var stairs_button = find_child("StairsButton")
 @onready var cheats_box = find_child("CheatsMargin")
 @onready var dialogue_pane = %DialoguePane
@@ -142,7 +141,6 @@ func update_states_at(hero_coord):
 	else:
 		stairs_button.visible = false
 	var index = board.make_index()
-	loot_button.visible = null != index.top_item_at(hero_coord)
 	refresh_cancel_button_vis()
 	_refresh_lbar_commands(hero_coord, index)
 	_refresh_cheatsbar_commands(hero_coord, index)

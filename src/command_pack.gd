@@ -175,6 +175,29 @@ class Talk extends Command:
 		print("The dia has been closed!")
 		return true
 
+class PickItem extends Command:
+	var caption_prefix = "Pick"
+	func _init(index_=null):
+		super(index)
+		is_action = true
+		caption = caption_prefix
+
+	func is_valid_for(coord:Vector2i):
+		return false
+
+	func is_valid_for_hero_at(coord:Vector2i):
+		var item = index.top_item_at(coord)
+		if item == null:
+			return false
+		else:
+			caption = "%s (%s)" % [caption_prefix, item.char]
+			return true
+	
+	func run_at_hero(coord:Vector2i) -> bool:
+		var item = index.top_item_at(coord)
+		Tender.hero.pick_item(item)
+		return true
+
 class SkipTurn extends Command:
 	func _init(index_=null):
 		is_action = true
@@ -523,8 +546,9 @@ class OpenDoor extends DoorHandler:
 		return true
 		
 func _ready():
-	_cmd_classes = [Attack, Talk, TravelTo, GetCloser, Inspect, CloseDoor, OpenDoor, 
-					SkipTurn, Rest,
+	_cmd_classes = [PickItem, Attack, Talk, TravelTo, GetCloser, Inspect, 
+					CloseDoor, OpenDoor, 
+					SkipTurn, Rest, 
 					DumpDevCheat, TeleportCheat, RegenCheat, VictoryCheat]
 
 func get_commands(names:Array[String]) -> Dictionary:

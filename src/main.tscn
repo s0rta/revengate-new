@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=52 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://cgdqkl167nhyj" path="res://src/ui/actor_details_screen.tscn" id="14_yna85"]
 [ext_resource type="PackedScene" uid="uid://xj173wp8xock" path="res://src/people/bar_patron.tscn" id="15_mexm3"]
 [ext_resource type="PackedScene" uid="uid://cl6ylq5q74oxy" path="res://src/ui/messages_pane.tscn" id="17_n3emp"]
+[ext_resource type="Script" path="res://src/tally.gd" id="18_jh88m"]
 [ext_resource type="Script" path="res://src/dungeons/trois_gaules_surface.gd" id="18_qey18"]
 [ext_resource type="PackedScene" uid="uid://cd6ngrhhgito0" path="res://src/ui/dialogue_pane.tscn" id="18_vtucs"]
 [ext_resource type="PackedScene" uid="uid://bvm0q1k13gmym" path="res://src/easy_traboule_deck_builder.tscn" id="19_2as3h"]
@@ -62,6 +63,31 @@ _facts = []
 [sub_resource type="Resource" id="Resource_hfpoa"]
 script = ExtResource("7_nbfvd")
 _facts = []
+
+[sub_resource type="Resource" id="Resource_e0wol"]
+script = ExtResource("18_jh88m")
+hold_counts = {}
+draw_counts = {}
+
+[sub_resource type="Resource" id="Resource_rt7xm"]
+script = ExtResource("18_jh88m")
+hold_counts = {}
+draw_counts = {}
+
+[sub_resource type="Resource" id="Resource_jdmp0"]
+script = ExtResource("18_jh88m")
+hold_counts = {}
+draw_counts = {}
+
+[sub_resource type="Resource" id="Resource_ikcq1"]
+script = ExtResource("18_jh88m")
+hold_counts = {}
+draw_counts = {}
+
+[sub_resource type="Resource" id="Resource_wgh8y"]
+script = ExtResource("18_jh88m")
+hold_counts = {}
+draw_counts = {}
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xod6b"]
 content_margin_left = 16.0
@@ -134,6 +160,7 @@ board_id = 0
 unique_name_in_owner = true
 visible = true
 position = Vector2(112, 48)
+spawn_prob = 1.0
 mem = SubResource("Resource_7gsj3")
 
 [node name="Dynamite" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("7_eg4si")]
@@ -141,18 +168,21 @@ mem = SubResource("Resource_7gsj3")
 [node name="Nadege" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_wcjwx")]
 visible = true
 position = Vector2(48, 80)
+spawn_prob = 1.0
 mana_full = 0
 mem = SubResource("Resource_45y0r")
 
 [node name="BarTender" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_x3gva")]
 visible = true
 position = Vector2(48, 240)
+spawn_prob = 1.0
 mana_full = 0
 mem = SubResource("Resource_svdmg")
 
 [node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_ymwa7")]
 visible = true
 position = Vector2(464, 48)
+spawn_prob = 1.0
 mana_full = 0
 mem = SubResource("Resource_tdvsr")
 
@@ -168,6 +198,7 @@ position = Vector2(112, 272)
 caption = "Robert"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "ghosts"
+spawn_prob = 1.0
 mana_full = 0
 description = "A man in a three piece suit."
 mem = SubResource("Resource_tmb6n")
@@ -178,6 +209,7 @@ position = Vector2(112, 208)
 caption = "Mathieu"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "party_magic"
+spawn_prob = 1.0
 mana_full = 0
 description = "A man with a long tail coat and a top hat."
 mem = SubResource("Resource_hfpoa")
@@ -220,6 +252,7 @@ rect_room_prob = 0.2
 ambient_light_col = Color(0.639216, 0.639216, 0.74902, 1)
 
 [node name="DeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/Traboule1" instance=ExtResource("19_2as3h")]
+tally = SubResource("Resource_e0wol")
 
 [node name="Traboule2" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Dungeons"]
 script = ExtResource("13_u4fm7")
@@ -232,6 +265,7 @@ base_spawn_budget = 8
 ambient_light_col = Color(0.639216, 0.74902, 0.729412, 1)
 
 [node name="DeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/Traboule2" instance=ExtResource("20_4ntfa")]
+tally = SubResource("Resource_rt7xm")
 
 [node name="TroisGaulesSurface" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Dungeons"]
 script = ExtResource("18_qey18")
@@ -244,6 +278,7 @@ start_depth = 1
 base_spawn_budget = 6
 
 [node name="TroisGaulesBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/TroisGaulesSurface" instance=ExtResource("19_fpjoi")]
+tally = SubResource("Resource_jdmp0")
 
 [node name="Stash" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Dungeons"]
 script = ExtResource("13_u4fm7")
@@ -255,6 +290,7 @@ base_spawn_budget = 28
 ambient_light_col = Color(0.7225, 0.7225, 0.85, 1)
 
 [node name="StashDeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/Stash" instance=ExtResource("22_gyaq5")]
+tally = SubResource("Resource_ikcq1")
 
 [node name="Crypt" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Dungeons"]
 script = ExtResource("20_f773d")
@@ -265,6 +301,7 @@ base_spawn_budget = 8
 ambient_light_col = Color(0.639216, 0.729412, 0.619608, 1)
 
 [node name="CryptDeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/Crypt" instance=ExtResource("21_rxcru")]
+tally = SubResource("Resource_wgh8y")
 
 [node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]
 anchor_mode = 0
@@ -297,12 +334,6 @@ layout_mode = 2
 focus_mode = 0
 theme_type_variation = &"ActionBtn"
 text = "Follow Stairs"
-
-[node name="LootButton" type="Button" parent="HUD/LMargin/LButtonBar"]
-layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"ActionBtn"
-text = "Loot"
 
 [node name="InventoryButton" type="Button" parent="HUD/LMargin/LButtonBar"]
 layout_mode = 2
@@ -603,7 +634,6 @@ script = ExtResource("41_hgs5k")
 [connection signal="turn_started" from="TurnQueue" to="." method="_on_turn_started"]
 [connection signal="cancel_strategies" from="HUD" to="." method="cancel_hero_strats"]
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/StairsButton" to="HUD" method="_on_stairs_button_pressed"]
-[connection signal="button_up" from="HUD/LMargin/LButtonBar/LootButton" to="BoardArea/GestureSurveyor" method="start_loot"]
 [connection signal="button_up" from="HUD/LMargin/LButtonBar/InventoryButton" to="BoardArea/GestureSurveyor" method="show_inventory"]
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/TestButton1" to="." method="test"]
 [connection signal="button_up" from="HUD/RGroup/DebugButtons/RMargin/RButtonBar/TestButton2" to="." method="test2"]

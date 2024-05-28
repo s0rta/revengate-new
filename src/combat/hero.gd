@@ -75,11 +75,6 @@ func _unhandled_input(event):
 	elif event.is_action_pressed("context-menu"):
 		var coord = RevBoard.canvas_to_board(event.position)
 		acted = await $"/root/Main".show_context_menu_for(coord)
-	elif event.is_action_pressed("loot-here"):
-		var item = index.top_item_at(get_cell_coord())
-		if item:
-			pick_item(item)
-			acted = true
 	elif event.is_action_pressed("show-inventory"):
 		acted = await $"/root/Main".show_inventory_screen()
 	elif event.is_action_pressed("follow-stairs"):

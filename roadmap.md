@@ -477,7 +477,7 @@ Items:
 UX:
 - [ ] yield message is not Critical (#31)
 - [x] clear previous highlights when inspecting (#59)
-- [ ] more info on loot button (#54)
+- [x] more info on loot button (#54)
 - [ ] Talk command button (#58)
 - [ ] finalize long rest (#16)
 

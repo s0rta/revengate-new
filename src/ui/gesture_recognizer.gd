@@ -63,15 +63,6 @@ class ActEvent extends InputEventAction:
 				action, pressed, position, RevBoard.canvas_to_board_str(position)
 			]
 
-## Loot exactly where the hero is currently standing
-class LootEvent extends InputEventAction:
-	func _init(pressed_=true):
-		action = "loot-here"
-		pressed = pressed_
-
-	func ddump():
-		return "LootEvent: action=%s, pressed=%s" % [action, pressed]
-
 ## Show the inventory screen
 class InventoryEvent extends InputEventAction:
 	func _init(pressed_=true):
@@ -243,11 +234,6 @@ func start_capture_coord(msg, coords=null) -> CaptureResult:
 	valid_capture_coords = null
 	emit_signal("action_complete")
 	return res
-
-func start_loot():
-	## Start the loot action, pass the control to Hero
-	var event = LootEvent.new()
-	viewport.inject_event(event)
 
 func start_inspect_at():
 	var res = await start_capture_coord("select position...")
