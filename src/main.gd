@@ -198,6 +198,7 @@ func switch_board_at(coord):
 	var new_board = null
 	var conn = old_board.get_connection(coord)
 	if conn:
+		capture_game()
 		new_board = restore_board(conn.far_board_id, false)
 	else:
 		var old_dungeon = old_board.get_dungeon()
@@ -205,8 +206,11 @@ func switch_board_at(coord):
 		new_board = old_dungeon.new_board_for_target(old_board, conn_target)
 
 		# connect the outgoing connector with the incomming one
-		conn = old_board.add_connection(coord, new_board)		
-	capture_game()
+		conn = old_board.add_connection(coord, new_board)
+		# when the conn was not there, we capture only after generating the new board so 
+		# we can add its ID to the SaveBundle
+		capture_game()
+		SaveBundle.save_board(new_board)
 	
 	var builder = BoardBuilder.new(new_board)
 	var index = new_board.make_index()

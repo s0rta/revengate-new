@@ -136,7 +136,6 @@ static func save_board(board:RevBoard):
 	ResourceSaver.save(scene, path)
 
 static func load_board(board_id:int) -> RevBoard:
-	# FIXME: support stripping the old hero
 	var path = _board_path(board_id)
 	var scene = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE)
 	assert(scene, "Can't load board at %s" % path)
