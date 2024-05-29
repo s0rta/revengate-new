@@ -461,7 +461,6 @@ Items:
 - [ ] bug: kobold has not attack sound
 - [x] bug: deck simulator percentiles are innacurate
 - [x] bug: tag on self corrupt the next Move command (#32)
-- [ ] bug: paralized is not saved (#38)
 - [x] bug: new board is not saved when entering a new area
 
 - [ ] type a few stories

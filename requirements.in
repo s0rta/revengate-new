@@ -1,6 +1,0 @@
-tomlkit
-kivy >= 2.1.0
-kivymd >= 1.0.2
-pillow
-asynckivy
-ffpyplayer
