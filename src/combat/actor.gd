@@ -1112,7 +1112,9 @@ func regen(delta:=1):
 	if health + delta > health_full:
 		delta = health_full - health
 	if delta > 0:
-		add_message("%s healed a little" % get_caption())
+		add_message("%s healed a little" % get_caption(), 
+					Consts.MessageLevels.INFO, 
+					["msg:regen"])
 		update_health(delta)
 		
 func refocus(delta:=1):
@@ -1205,8 +1207,14 @@ func add_message(text:String,
 				tags:=[]):
 	## Try to add a message to the message window. 
 	## The visibility of the message depends on us being visible to the Hero
+	## Any direct child of the actor can block a message by implementing filter_message() and 
+	## returning false for the same args as add_message()
 	if level == null:
 		level = Consts.MessageLevels.INFO
+	for node in get_children():
+		var filter = node.get("filter_message")
+		if filter != null and not filter.call(text, level, tags):
+			return			
 	var board = get_board()
 	if board != null:
 		board.add_message(self, text, level, tags)

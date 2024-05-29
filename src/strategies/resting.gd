@@ -19,13 +19,39 @@
 class_name Resting extends Strategy
 
 @export var target_health := -1
+@export_category("Internals")
+@export var start_health : int
+
+func _ready():
+	super()
+	if me is Actor and start_health == null:
+		start_health = me.health
+	me.was_attacked.connect(_on_being_attacked, CONNECT_ONE_SHOT)
 
 func _init(actor=null, priority=null, ttl=null, target_health_=-1):
 	cancellable = true
 	target_health = target_health_
 	super(actor, priority, ttl)
-	me.was_attacked.connect(_on_being_attacked, CONNECT_ONE_SHOT)
-	
+
+func _dissipate():
+	if me == Tender.hero:
+		var health_gain = me.health - start_health
+		var verb = "recovered"
+		var level = Consts.MessageLevels.INFO
+		if health_gain < 0:
+			verb = "lost"
+			level = Consts.MessageLevels.CRITICAL
+		if health_gain:
+			me.add_message("%s %s %d health while resting" % [me.caption, verb, health_gain], 
+							level, 
+							["msg:combat"])
+	super()
+
+func refresh(turn):
+	super(turn)
+	if start_health == null:
+		start_health = me.health
+
 func is_expired():
 	if super():
 		return true
@@ -38,6 +64,12 @@ func act():
 		var msg = "%s is meditating..." % [me.get_short_desc()]
 		me.add_message(msg, Consts.MessageLevels.INFO, ["msg:strategy"])
 	return true
+
+func filter_message(text:String, 
+					level:Consts.MessageLevels, 
+					tags:Array):
+	# block all regen messages since we'll post a summary at the end of the meditation
+	return "msg:regen" not in tags
 
 func _on_being_attacked(_arg):
 	if is_valid():
