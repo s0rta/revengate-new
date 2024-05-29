@@ -471,7 +471,7 @@ Items:
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings
 - [ ] remove src/ui/explosion_vfx.gd
-- [ ] delete some old Python code
+- [x] delete some old Python code
 - [ ] clear todo.txt
 - [ ] self-host web exports for dev builds ( https://gist.github.com/nisovin/cf9dd74678641fb70902866c79692b17 )
 
