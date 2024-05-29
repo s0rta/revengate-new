@@ -1,9 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://hynfsvr45204"]
+[gd_scene load_steps=11 format=3 uid="uid://hynfsvr45204"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_0ct5b"]
 [ext_resource type="PackedScene" uid="uid://uur5d1k2jgbo" path="res://src/monsters/ghost.tscn" id="2_kjc0p"]
 [ext_resource type="Script" path="res://src/card_rule.gd" id="2_p183e"]
-[ext_resource type="Script" path="res://src/combat/memory.gd" id="3_bjj7m"]
 [ext_resource type="PackedScene" uid="uid://b6fcsa8psp63y" path="res://src/monsters/skeleton.tscn" id="5_00grc"]
 [ext_resource type="PackedScene" uid="uid://j6l7bxwn04uw" path="res://src/monsters/plasus_rat.tscn" id="5_e27ml"]
 [ext_resource type="PackedScene" uid="uid://0yvvkfod7748" path="res://src/monsters/cherub.tscn" id="6_2qcbt"]
@@ -12,66 +11,41 @@
 [ext_resource type="PackedScene" uid="uid://pdu1a8fc862t" path="res://src/items/eye_glasses.tscn" id="11_08iub"]
 [ext_resource type="PackedScene" uid="uid://d32rti5y0shob" path="res://src/monsters/rat.tscn" id="12_xxt6x"]
 
-[sub_resource type="Resource" id="Resource_3er8c"]
-resource_local_to_scene = true
-script = ExtResource("3_bjj7m")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_aipj0"]
-resource_local_to_scene = true
-script = ExtResource("3_bjj7m")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_joy5l"]
-resource_local_to_scene = true
-script = ExtResource("3_bjj7m")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_26kg5"]
-resource_local_to_scene = true
-script = ExtResource("3_bjj7m")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_wkqei"]
-resource_local_to_scene = true
-script = ExtResource("3_bjj7m")
-_facts = []
-
 [node name="CryptDeckBuilder" type="Node"]
 script = ExtResource("1_0ct5b")
 
 [node name="Ghost" parent="." instance=ExtResource("2_kjc0p")]
-mem = SubResource("Resource_3er8c")
+spawn_prob = 1.0
+mem = null
 
 [node name="Max5PerBoardEarly" type="Node" parent="."]
 script = ExtResource("2_p183e")
 max_depth = 6
 max_board_occ = 5
-max_run_occ = null
 
 [node name="Rat" parent="Max5PerBoardEarly" instance=ExtResource("12_xxt6x")]
-mem = SubResource("Resource_aipj0")
+mem = null
 
 [node name="PlasusRat" parent="Max5PerBoardEarly" instance=ExtResource("5_e27ml")]
-mem = SubResource("Resource_joy5l")
+spawn_prob = 1.0
+mem = null
 
 [node name="Deep" type="Node" parent="."]
 script = ExtResource("2_p183e")
 min_depth = 5
-max_run_occ = null
 
 [node name="Skeleton" parent="Deep" instance=ExtResource("5_00grc")]
-mem = SubResource("Resource_26kg5")
+spawn_prob = 1.0
+mem = null
 
 [node name="DeepAndUnique" type="Node" parent="."]
 script = ExtResource("2_p183e")
 min_depth = 5
 max_depth = 7
 max_dungeon_occ = 1
-max_run_occ = null
 
 [node name="SpellbookOfZapping" parent="DeepAndUnique" instance=ExtResource("8_e8bb1")]
-spawn_prob = null
+spawn_prob = 1.0
 
 [node name="RareAndDeep" type="Node" parent="."]
 script = ExtResource("2_p183e")
@@ -79,18 +53,17 @@ min_depth = 7
 max_depth = 11
 max_board_occ = 1
 max_dungeon_occ = 2
-max_run_occ = null
 min_dungeon_occ = 1
 
 [node name="Cherub" parent="RareAndDeep" instance=ExtResource("6_2qcbt")]
-mem = SubResource("Resource_wkqei")
+spawn_prob = 1.0
+mem = null
 
 [node name="QuestGoal" type="Node" parent="."]
 script = ExtResource("2_p183e")
 min_depth = 12
 max_depth = 15
 max_dungeon_occ = 1
-max_run_occ = null
 
 [node name="Mjolnir" parent="QuestGoal" instance=ExtResource("8_b4cid")]
 
@@ -99,6 +72,5 @@ script = ExtResource("2_p183e")
 min_depth = 3
 max_board_occ = 1
 max_dungeon_occ = 1
-max_run_occ = null
 
 [node name="EyeGlasses" parent="Unique" instance=ExtResource("11_08iub")]

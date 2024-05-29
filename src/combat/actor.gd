@@ -159,19 +159,22 @@ func _ready():
 	$Label.add_theme_color_override("font_color", color)
 	Utils.assert_all_tags(tags)
 	Utils.hide_unplaced(self)
-	if mem == null:
+	if mem == null and not Engine.is_editor_hint():
 		mem = Memory.new()
 	if not was_attacked.is_connected(_learn_attack):
 		was_attacked.connect(_learn_attack)
-	assert(mem != null)
 	picked_item.connect(_clear_mods_cache)
 
 func _to_string():
 	var parent = get_parent()
 	if parent:
-		parent = parent.name
-	var coord_str = RevBoard.coord_str(get_cell_coord())
-	return "<Actor %s(%s) on %s at %s>" % [name, char, parent, coord_str]
+		if parent is RevBoard:
+			var coord_str = RevBoard.coord_str(get_cell_coord())
+			return "<Actor %s(%s) on %s at %s>" % [name, char, parent.name, coord_str]
+		else:
+			return "<Actor %s(%s) on %s>" % [name, char, parent.name]
+	else:
+		return "<Actor %s(%s)>" % [name, char]
 
 func ddump():
 	print(self)

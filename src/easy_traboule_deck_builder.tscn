@@ -1,8 +1,7 @@
-[gd_scene load_steps=37 format=3 uid="uid://bvm0q1k13gmym"]
+[gd_scene load_steps=27 format=3 uid="uid://bvm0q1k13gmym"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_oonn7"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_v4koq"]
-[ext_resource type="Script" path="res://src/combat/memory.gd" id="3_5yn6t"]
 [ext_resource type="PackedScene" uid="uid://d4f1ul2rt43ys" path="res://src/monsters/labras.tscn" id="3_8yfcp"]
 [ext_resource type="PackedScene" uid="uid://b26vqfk7j6un7" path="res://src/monsters/desert_centipede.tscn" id="4_de7ji"]
 [ext_resource type="PackedScene" uid="uid://cx7utj7hd3ne" path="res://src/monsters/kobold.tscn" id="5_u3117"]
@@ -28,65 +27,24 @@
 [ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="24_8ja44"]
 [ext_resource type="PackedScene" uid="uid://cmshyslfrv0du" path="res://src/vibes/hissing.tscn" id="27_0wnww"]
 
-[sub_resource type="Resource" id="Resource_1i8vp"]
-resource_local_to_scene = true
-script = ExtResource("3_5yn6t")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_kx0r2"]
-resource_local_to_scene = true
-script = ExtResource("3_5yn6t")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_wvtyv"]
-resource_local_to_scene = true
-script = ExtResource("3_5yn6t")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_uiq3w"]
-resource_local_to_scene = true
-script = ExtResource("3_5yn6t")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_hjjsg"]
-resource_local_to_scene = true
-script = ExtResource("3_5yn6t")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_nnskf"]
-resource_local_to_scene = true
-script = ExtResource("3_5yn6t")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_h2eyj"]
-resource_local_to_scene = true
-script = ExtResource("3_5yn6t")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_7th18"]
-resource_local_to_scene = true
-script = ExtResource("3_5yn6t")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_dmc0g"]
-resource_local_to_scene = true
-script = ExtResource("3_5yn6t")
-_facts = []
-
 [node name="EasyTrabouleDeckBuilder" type="Node"]
 script = ExtResource("1_oonn7")
 
 [node name="SewerOtter" parent="." instance=ExtResource("2_v4koq")]
-mem = SubResource("Resource_1i8vp")
+spawn_prob = 1.0
+mem = null
 
 [node name="Labras" parent="." instance=ExtResource("3_8yfcp")]
-mem = SubResource("Resource_kx0r2")
+spawn_prob = 1.0
+mem = null
 
 [node name="DesertCentipede" parent="." instance=ExtResource("4_de7ji")]
-mem = SubResource("Resource_wvtyv")
+spawn_prob = 1.0
+mem = null
 
 [node name="SulantTiger" parent="." instance=ExtResource("6_urs5r")]
-mem = SubResource("Resource_uiq3w")
+spawn_prob = 1.0
+mem = null
 
 [node name="Hissing" parent="." instance=ExtResource("27_0wnww")]
 
@@ -104,10 +62,11 @@ script = ExtResource("7_18mi5")
 max_board_occ = 3
 
 [node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_mpj13")]
-mem = SubResource("Resource_hjjsg")
+mem = null
 
 [node name="Sahwakoon" parent="Max3PerFloor" instance=ExtResource("9_ucbey")]
-mem = SubResource("Resource_nnskf")
+spawn_prob = 1.0
+mem = null
 
 [node name="Max3PerDungeonAndLate" type="Node" parent="."]
 script = ExtResource("7_18mi5")
@@ -115,14 +74,16 @@ min_depth = 6
 max_dungeon_occ = 3
 
 [node name="Ghost" parent="Max3PerDungeonAndLate" instance=ExtResource("10_smtmw")]
-mem = SubResource("Resource_h2eyj")
+spawn_prob = 1.0
+mem = null
 
 [node name="Max10PerDungeon" type="Node" parent="."]
 script = ExtResource("7_18mi5")
 max_dungeon_occ = 10
 
 [node name="Kobold" parent="Max10PerDungeon" instance=ExtResource("5_u3117")]
-mem = SubResource("Resource_7th18")
+spawn_prob = 1.0
+mem = null
 
 [node name="Deep" type="Node" parent="."]
 script = ExtResource("7_18mi5")
@@ -169,7 +130,7 @@ min_depth = 7
 max_dungeon_occ = 2
 
 [node name="Pacherr" parent="RareAndDeep" instance=ExtResource("24_8ja44")]
-mem = SubResource("Resource_dmc0g")
+mem = null
 
 [node name="Healing" type="Node" parent="."]
 script = ExtResource("7_18mi5")

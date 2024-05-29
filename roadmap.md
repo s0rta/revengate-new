@@ -462,11 +462,12 @@ Items:
 - [x] bug: deck simulator percentiles are innacurate
 - [x] bug: tag on self corrupt the next Move command (#32)
 - [ ] bug: paralized is not saved (#38)
-- [ ] bug: new board is now saved when entering a new area
+- [ ] bug: new board is not saved when entering a new area
 
 - [ ] type a few stories
-- [ ] don't change Tally and Mem every time the scene is loaded in the editor
+- [x] don't change Tally and Mem every time the scene is loaded in the editor
 - [ ] rename MeterGroup
+- [ ] parlor magic is tagged as  "story"
 - [ ] document conn_target and connection fields
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings

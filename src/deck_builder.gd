@@ -35,7 +35,7 @@ func _get_configuration_warnings():
 	return warnings
 
 func _init():
-	if tally == null:
+	if tally == null and not Engine.is_editor_hint():
 		tally = Tally.new()
 
 func _get_cards(node:Node, card_type):

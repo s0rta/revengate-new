@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://ces0girpsmlr7"]
+[gd_scene load_steps=39 format=3 uid="uid://ces0girpsmlr7"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_58o83"]
 [ext_resource type="Script" path="res://src/viewport.gd" id="2_5k2x3"]
@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://b426swtcuck2d" path="res://src/turn_queue.tscn" id="5_odllu"]
 [ext_resource type="Script" path="res://src/hud.gd" id="7_4dw6n"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="7_eg4si"]
-[ext_resource type="Script" path="res://src/combat/memory.gd" id="7_nbfvd"]
 [ext_resource type="PackedScene" uid="uid://cv2ngsgh0xwnl" path="res://src/ui/messages_screen.tscn" id="11_mrt21"]
 [ext_resource type="PackedScene" uid="uid://brwk3ae5bwevg" path="res://src/ui/inventory_screen.tscn" id="12_yw3up"]
 [ext_resource type="Script" path="res://src/dungeons/traboule.gd" id="13_u4fm7"]
@@ -23,7 +22,6 @@
 [ext_resource type="PackedScene" uid="uid://cgdqkl167nhyj" path="res://src/ui/actor_details_screen.tscn" id="14_yna85"]
 [ext_resource type="PackedScene" uid="uid://xj173wp8xock" path="res://src/people/bar_patron.tscn" id="15_mexm3"]
 [ext_resource type="PackedScene" uid="uid://cl6ylq5q74oxy" path="res://src/ui/messages_pane.tscn" id="17_n3emp"]
-[ext_resource type="Script" path="res://src/tally.gd" id="18_jh88m"]
 [ext_resource type="Script" path="res://src/dungeons/trois_gaules_surface.gd" id="18_qey18"]
 [ext_resource type="PackedScene" uid="uid://cd6ngrhhgito0" path="res://src/ui/dialogue_pane.tscn" id="18_vtucs"]
 [ext_resource type="PackedScene" uid="uid://bvm0q1k13gmym" path="res://src/easy_traboule_deck_builder.tscn" id="19_2as3h"]
@@ -39,55 +37,6 @@
 [ext_resource type="PackedScene" uid="uid://dpgcrubb5v6p7" path="res://src/ui/end_of_chapter_screen.tscn" id="30_5u5si"]
 [ext_resource type="PackedScene" uid="uid://cbhsiga8clmpe" path="res://src/ui/MeterGroup.tscn" id="35_eopq6"]
 [ext_resource type="Script" path="res://src/command_pack.gd" id="41_hgs5k"]
-
-[sub_resource type="Resource" id="Resource_7gsj3"]
-script = ExtResource("7_nbfvd")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_45y0r"]
-script = ExtResource("7_nbfvd")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_svdmg"]
-script = ExtResource("7_nbfvd")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_tdvsr"]
-script = ExtResource("7_nbfvd")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_tmb6n"]
-script = ExtResource("7_nbfvd")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_hfpoa"]
-script = ExtResource("7_nbfvd")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_e0wol"]
-script = ExtResource("18_jh88m")
-hold_counts = {}
-draw_counts = {}
-
-[sub_resource type="Resource" id="Resource_rt7xm"]
-script = ExtResource("18_jh88m")
-hold_counts = {}
-draw_counts = {}
-
-[sub_resource type="Resource" id="Resource_jdmp0"]
-script = ExtResource("18_jh88m")
-hold_counts = {}
-draw_counts = {}
-
-[sub_resource type="Resource" id="Resource_ikcq1"]
-script = ExtResource("18_jh88m")
-hold_counts = {}
-draw_counts = {}
-
-[sub_resource type="Resource" id="Resource_wgh8y"]
-script = ExtResource("18_jh88m")
-hold_counts = {}
-draw_counts = {}
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xod6b"]
 content_margin_left = 16.0
@@ -161,7 +110,7 @@ unique_name_in_owner = true
 visible = true
 position = Vector2(112, 48)
 spawn_prob = 1.0
-mem = SubResource("Resource_7gsj3")
+mem = null
 
 [node name="Dynamite" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("7_eg4si")]
 
@@ -170,21 +119,21 @@ visible = true
 position = Vector2(48, 80)
 spawn_prob = 1.0
 mana_full = 0
-mem = SubResource("Resource_45y0r")
+mem = null
 
 [node name="BarTender" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_x3gva")]
 visible = true
 position = Vector2(48, 240)
 spawn_prob = 1.0
 mana_full = 0
-mem = SubResource("Resource_svdmg")
+mem = null
 
 [node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_ymwa7")]
 visible = true
 position = Vector2(464, 48)
 spawn_prob = 1.0
 mana_full = 0
-mem = SubResource("Resource_tdvsr")
+mem = null
 
 [node name="Broom" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_w5yd8")]
 position = Vector2(336, 48)
@@ -201,7 +150,7 @@ conversation_sect = "ghosts"
 spawn_prob = 1.0
 mana_full = 0
 description = "A man in a three piece suit."
-mem = SubResource("Resource_tmb6n")
+mem = null
 
 [node name="BarPatron2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
 visible = true
@@ -212,7 +161,7 @@ conversation_sect = "party_magic"
 spawn_prob = 1.0
 mana_full = 0
 description = "A man with a long tail coat and a top hat."
-mem = SubResource("Resource_hfpoa")
+mem = null
 
 [node name="Sign" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_621w4")]
 position = Vector2(688, 48)
@@ -252,7 +201,6 @@ rect_room_prob = 0.2
 ambient_light_col = Color(0.639216, 0.639216, 0.74902, 1)
 
 [node name="DeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/Traboule1" instance=ExtResource("19_2as3h")]
-tally = SubResource("Resource_e0wol")
 
 [node name="Traboule2" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Dungeons"]
 script = ExtResource("13_u4fm7")
@@ -265,7 +213,6 @@ base_spawn_budget = 8
 ambient_light_col = Color(0.639216, 0.74902, 0.729412, 1)
 
 [node name="DeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/Traboule2" instance=ExtResource("20_4ntfa")]
-tally = SubResource("Resource_rt7xm")
 
 [node name="TroisGaulesSurface" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Dungeons"]
 script = ExtResource("18_qey18")
@@ -278,7 +225,6 @@ start_depth = 1
 base_spawn_budget = 6
 
 [node name="TroisGaulesBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/TroisGaulesSurface" instance=ExtResource("19_fpjoi")]
-tally = SubResource("Resource_jdmp0")
 
 [node name="Stash" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Dungeons"]
 script = ExtResource("13_u4fm7")
@@ -290,7 +236,6 @@ base_spawn_budget = 28
 ambient_light_col = Color(0.7225, 0.7225, 0.85, 1)
 
 [node name="StashDeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/Stash" instance=ExtResource("22_gyaq5")]
-tally = SubResource("Resource_ikcq1")
 
 [node name="Crypt" type="Node" parent="BoardArea/GestureSurveyor/Viewport/Dungeons"]
 script = ExtResource("20_f773d")
@@ -301,7 +246,6 @@ base_spawn_budget = 8
 ambient_light_col = Color(0.639216, 0.729412, 0.619608, 1)
 
 [node name="CryptDeckBuilder" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/Crypt" instance=ExtResource("21_rxcru")]
-tally = SubResource("Resource_wgh8y")
 
 [node name="Camera" type="Camera2D" parent="BoardArea/GestureSurveyor/Viewport"]
 anchor_mode = 0

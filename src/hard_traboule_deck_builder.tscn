@@ -1,8 +1,7 @@
-[gd_scene load_steps=35 format=3 uid="uid://dab6wiatrc0m6"]
+[gd_scene load_steps=23 format=3 uid="uid://dab6wiatrc0m6"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_phj4j"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_3bv6l"]
-[ext_resource type="Script" path="res://src/combat/memory.gd" id="3_dpd04"]
 [ext_resource type="PackedScene" uid="uid://d4f1ul2rt43ys" path="res://src/monsters/labras.tscn" id="3_ia73w"]
 [ext_resource type="PackedScene" uid="uid://b26vqfk7j6un7" path="res://src/monsters/desert_centipede.tscn" id="4_p0gyr"]
 [ext_resource type="PackedScene" uid="uid://cx7utj7hd3ne" path="res://src/monsters/kobold.tscn" id="5_b1bqf"]
@@ -24,98 +23,51 @@
 [ext_resource type="PackedScene" uid="uid://cjoutyju3dhre" path="res://src/monsters/gleugt.tscn" id="25_8ffwd"]
 [ext_resource type="PackedScene" uid="uid://cmshyslfrv0du" path="res://src/vibes/hissing.tscn" id="27_8pr1w"]
 
-[sub_resource type="Resource" id="Resource_drd3x"]
-resource_local_to_scene = true
-script = ExtResource("3_dpd04")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_8ykkd"]
-resource_local_to_scene = true
-script = ExtResource("3_dpd04")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_u775d"]
-resource_local_to_scene = true
-script = ExtResource("3_dpd04")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_yip1b"]
-resource_local_to_scene = true
-script = ExtResource("3_dpd04")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_jc2vr"]
-resource_local_to_scene = true
-script = ExtResource("3_dpd04")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_75n8w"]
-resource_local_to_scene = true
-script = ExtResource("3_dpd04")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_6lfks"]
-resource_local_to_scene = true
-script = ExtResource("3_dpd04")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_1cmmr"]
-resource_local_to_scene = true
-script = ExtResource("3_dpd04")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_17phe"]
-resource_local_to_scene = true
-script = ExtResource("3_dpd04")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_3u84w"]
-resource_local_to_scene = true
-script = ExtResource("3_dpd04")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_ubvso"]
-resource_local_to_scene = true
-script = ExtResource("3_dpd04")
-_facts = []
-
 [node name="HardTrabouleDeckBuilder" type="Node"]
 script = ExtResource("1_phj4j")
 
 [node name="SewerOtter" parent="." instance=ExtResource("2_3bv6l")]
-mem = SubResource("Resource_drd3x")
+spawn_prob = 1.0
+mem = null
 
 [node name="Labras" parent="." instance=ExtResource("3_ia73w")]
-mem = SubResource("Resource_8ykkd")
+spawn_prob = 1.0
+mem = null
 
 [node name="DesertCentipede" parent="." instance=ExtResource("4_p0gyr")]
-mem = SubResource("Resource_u775d")
+spawn_prob = 1.0
+mem = null
 
 [node name="Kobold" parent="." instance=ExtResource("5_b1bqf")]
-mem = SubResource("Resource_yip1b")
+spawn_prob = 1.0
+mem = null
 
 [node name="SulantTiger" parent="." instance=ExtResource("6_auslx")]
-mem = SubResource("Resource_jc2vr")
+spawn_prob = 1.0
+mem = null
 
 [node name="SentryScarab" parent="." instance=ExtResource("7_d5hsq")]
-mem = SubResource("Resource_75n8w")
+spawn_prob = 1.0
+mem = null
 
 [node name="Max3PerFloor" type="Node" parent="."]
 script = ExtResource("7_1er0k")
 max_board_occ = 3
 
 [node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_vett6")]
-mem = SubResource("Resource_6lfks")
+mem = null
 
 [node name="Ghost" parent="Max3PerFloor" instance=ExtResource("10_w0tqq")]
-mem = SubResource("Resource_1cmmr")
+spawn_prob = 1.0
+mem = null
 
 [node name="Max2PerDungeon" type="Node" parent="."]
 script = ExtResource("7_1er0k")
 max_dungeon_occ = 2
 
 [node name="Gleugt" parent="Max2PerDungeon" instance=ExtResource("25_8ffwd")]
-mem = SubResource("Resource_17phe")
+spawn_prob = 1.0
+mem = null
 
 [node name="Rare" type="Node" parent="."]
 script = ExtResource("7_1er0k")
@@ -137,7 +89,7 @@ min_depth = 7
 max_dungeon_occ = 2
 
 [node name="Pacherr" parent="RareAndDeep" instance=ExtResource("24_3pef4")]
-mem = SubResource("Resource_3u84w")
+mem = null
 
 [node name="Healing" type="Node" parent="."]
 script = ExtResource("7_1er0k")
@@ -162,7 +114,8 @@ max_depth = 7
 min_board_occ = 3
 
 [node name="GiantLocust" parent="SwarmingFloors" instance=ExtResource("20_3j7oh")]
-mem = SubResource("Resource_ubvso")
+spawn_prob = 1.0
+mem = null
 
 [connection signal="visibility_changed" from="Rare/Rapier" to="Rare/Rapier" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Rare/Dynamite" to="Rare/Dynamite" method="_on_visibility_changed"]

@@ -1,43 +1,18 @@
-[gd_scene load_steps=11 format=3 uid="uid://dnekf8fb50ge"]
+[gd_scene load_steps=6 format=3 uid="uid://dnekf8fb50ge"]
 
 [ext_resource type="Script" path="res://src/deck_builder_sim.gd" id="1_c3005"]
 [ext_resource type="PackedScene" uid="uid://hynfsvr45204" path="res://src/crypt_deck_builder.tscn" id="2_ee8rm"]
 [ext_resource type="PackedScene" uid="uid://bvm0q1k13gmym" path="res://src/easy_traboule_deck_builder.tscn" id="2_vtj4q"]
 [ext_resource type="PackedScene" uid="uid://cmsxxvu32vsis" path="res://src/stash_deck_builder.tscn" id="2_w8tte"]
 [ext_resource type="PackedScene" uid="uid://dab6wiatrc0m6" path="res://src/hard_traboule_deck_builder.tscn" id="3_0mfiq"]
-[ext_resource type="Script" path="res://src/tally.gd" id="3_day5n"]
-
-[sub_resource type="Resource" id="Resource_xga4t"]
-script = ExtResource("3_day5n")
-hold_counts = {}
-draw_counts = {}
-
-[sub_resource type="Resource" id="Resource_nysud"]
-script = ExtResource("3_day5n")
-hold_counts = {}
-draw_counts = {}
-
-[sub_resource type="Resource" id="Resource_mmps0"]
-script = ExtResource("3_day5n")
-hold_counts = {}
-draw_counts = {}
-
-[sub_resource type="Resource" id="Resource_yx0ln"]
-script = ExtResource("3_day5n")
-hold_counts = {}
-draw_counts = {}
 
 [node name="DeckBuilderSim" type="Node"]
 script = ExtResource("1_c3005")
 
 [node name="EasyTrabouleDeckBuilder" parent="." instance=ExtResource("2_vtj4q")]
-tally = SubResource("Resource_xga4t")
 
 [node name="HardTrabouleDeckBuilder" parent="." instance=ExtResource("3_0mfiq")]
-tally = SubResource("Resource_nysud")
 
 [node name="CryptDeckBuilder" parent="." instance=ExtResource("2_ee8rm")]
-tally = SubResource("Resource_mmps0")
 
 [node name="StashDeckBuilder" parent="." instance=ExtResource("2_w8tte")]
-tally = SubResource("Resource_yx0ln")
