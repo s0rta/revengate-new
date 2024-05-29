@@ -481,14 +481,14 @@ UX:
 - [x] clear previous highlights when inspecting (#59)
 - [x] more info on loot button (#54)
 - [x] Talk command button (#58)
-- [ ] finalize long rest (#16)
+- [x] finalize long rest (#16)
 
 Strategies:
 - [ ] Seeking is easier to resolve even is the target keeps moving
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
 
 Maybe: 
-- [ ] special icon for loot piles (#55)
+- [ ] special icon for loot piles (#55) (🛒 or 🛍)
 
 ## v0.13
 - [ ] new quest: Pacherrs are seeking some new crystals

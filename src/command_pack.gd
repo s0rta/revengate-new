@@ -253,6 +253,8 @@ class SkipTurn extends Command:
 
 class Rest extends Command:
 	const PERCEPTION_MOD = -45
+	const MAX_START_HRATIO = .74
+	const END_HRATIO = .80
 	
 	func _init(index_=null):
 		is_action = true
@@ -266,7 +268,11 @@ class Rest extends Command:
 		return false  # it's valid, but we lie to make the buttons less spammy
 
 	func run(coord:Vector2i) -> bool:
-		var target_health = _find_target_health()
+		var hratio = Tender.hero.get_health_ratio()
+		if hratio > MAX_START_HRATIO:
+			Tender.hero.add_message("You feel well rested already.")
+			return false
+		var target_health = int(END_HRATIO * Tender.hero.health_full)
 		var ttl = _find_ttl(target_health)
 		var strat = Resting.new(Tender.hero, 1.0, ttl, target_health)
 		var mods = StatsModifiers.new()
@@ -279,16 +285,6 @@ class Rest extends Command:
 	func run_at_hero(coord:Vector2i) -> bool:
 		return run(coord)
 		
-	func _find_target_health() -> int:
-		var me = Tender.hero
-		var hratio = me.get_health_ratio()
-		if hratio >= 1.0:
-			return -1
-		elif hratio < .65:
-			return .80 * me.health_full
-		else:
-			return min((hratio + .15) * me.health_full, me.health_full)
-
 	func _find_ttl(target_health:int):
 		const min_ttl := 50
 		var me:Actor = Tender.hero
