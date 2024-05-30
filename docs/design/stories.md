@@ -253,3 +253,18 @@ Yrganiv thought he heard something brushing against the wagon. He closed his eye
 
 "So much for tonight's concert," he muttered as he got up. In two steps in was at the door. He grabbed one of the sabers from the basket there, the one with the largest guard. This one was heavy and sharp.  It was not a stage prop.
 
+
+# Rising
+
+The vampire awakened. It was not like someone emerging from a dream, but more like a newborn painting its first thought onto a blank canvas. The thoughts were simple at first and then gained more structure as time progressed.
+
+Time. There had been a previous time. Time was measured in days and then in seasons. How long had he stopped thinking? There was no way for him to know, but he was still alive.
+
+Life. He needed more of it. With more life, he would be able to think clearly again, be whole. He had no physical sensations, only thoughts. Or did he? That constant background thought without a start or an end might have been feeling cold.
+
+Retz. That was a name. His name. People had called him this way in a previous time. The name brought him pleasure, but it didn't feel right. Maybe it was better to leave it in the previous time.
+
+Steps. The vampire could not see or hear, not yet, but he could sens the vibrations of someone walking nearby. The glimpse of a craving appeared and then grew to eclipse most of his consciousness. He could not act on the craving, not yet, but now his existence had a direction.
+
+Patience. He understood time once more and enjoyed contemplating its flow. He could now read the message in the steps. Someone had come to offer him more life. Whether they were doing it willing or not was delightfully irrelevant.
+
