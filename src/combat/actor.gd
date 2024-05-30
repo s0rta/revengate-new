@@ -413,6 +413,8 @@ func is_animating():
 func _dissipate():
 	## Do some cleanup, then vanish forever
 	queue_redraw()
+	if $DeathSound and $DeathSound.playing:
+		await $DeathSound.finished
 	queue_free()
 
 func start_turn(new_turn:int):

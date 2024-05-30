@@ -458,11 +458,12 @@ Items:
 
 ## v0.12.8
 - [x] bug: potion of absinthe has no breaking sound
-- [ ] bug: kobold has not attack sound
+- [x] bug: kobold has not attack sound
 - [x] bug: deck simulator percentiles are innacurate
 - [x] bug: tag on self corrupt the next Move command (#32)
 - [ ] bug: paralized is not saved (#38)
 - [x] bug: new board is not saved when entering a new area
+- [x] bug: ghost death sound is clipped
 
 - [ ] type a few stories
 - [x] don't change Tally and Mem every time the scene is loaded in the editor

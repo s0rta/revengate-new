@@ -1,15 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://cx7utj7hd3ne"]
+[gd_scene load_steps=7 format=3 uid="uid://cx7utj7hd3ne"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_khagu"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="2_l03ql"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="3_8hon4"]
 [ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="4_v6p64"]
+[ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="5_h4pp1"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="5_odghx"]
 
 [node name="Kobold" instance=ExtResource("1_khagu")]
 char = "k"
 caption = "kobold"
 spawn_cost = 2.0
+spawn_prob = 1.0
 health = 20
 strength = 30
 agility = 40
@@ -20,19 +22,21 @@ faction = 2
 theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)
 text = "k"
 
-[node name="Tracking" type="Node" parent="." index="7"]
+[node name="Tracking" type="Node" parent="." index="6"]
 script = ExtResource("2_l03ql")
 priority = 0.6
 
-[node name="Claw" type="Node" parent="." index="8"]
+[node name="Claw" type="Node" parent="." index="7"]
 script = ExtResource("3_8hon4")
 
 [node name="HitSound" type="AudioStreamPlayer" parent="Claw" index="0"]
+stream = ExtResource("5_h4pp1")
+pitch_scale = 1.25
 
-[node name="SelfDefense" type="Node" parent="." index="9"]
+[node name="SelfDefense" type="Node" parent="." index="8"]
 script = ExtResource("4_v6p64")
 priority = 0.8
 
-[node name="Exploring" type="Node" parent="." index="10"]
+[node name="Exploring" type="Node" parent="." index="9"]
 script = ExtResource("5_odghx")
 priority = 0.5
