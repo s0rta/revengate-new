@@ -268,3 +268,39 @@ Steps. The vampire could not see or hear, not yet, but he could sens the vibrati
 
 Patience. He understood time once more and enjoyed contemplating its flow. He could now read the message in the steps. Someone had come to offer him more life. Whether they were doing it willing or not was delightfully irrelevant.
 
+
+# Contact
+
+The clouds over Lyon were heavy and gusts of wind were lifting coulds of dust in the narrow streets. Philippe quickly turned a corer and dashed though an unmarked door. He was eager to leave the street before the rain started. Few people knew that this door was unlocked because unlike most traboules, this one was not a shortcut to anywhere in particular. It had a few other exits, as all traboules had, but this one would have been a detour for most traveller, perfectly pointless unless you really needed a roof over your head for the next few blocs.
+
+What this traboule did provide was a discreet way to travel and an access to several storage rooms – both related to Philippe's current journey. The upper level of the corridors was lined with doors and courtyards. People lived and operated looms here and they all knew Philippe. Deeper down, you encountered fewer rooms and they stone work of the walls was a lot more utilitarian, even a little rushed sometimes. It was a good idea to carry a sword when wandering this far from the eyes of the law, which Philippe did.
+
+Philippe knocked at a door then entered without waiting for an answer. He greeted the family living there and then went straight to the loom to admire what the canut – the master weaver – was working on. It was an elaborate pictorial pattern over a blue background with six colours and some gold threads. At a glaces, Philippe estimated a little over ten thousand perforated cards in the loom's pattern stack.
+
+"You'll be working on this one for a while, Alain," Philippe said.
+
+"I was sick of flowers," Alain said without losing a beat moving his many shuttles left and right and without lifting his eyes from his work. "I won's see a Franc until this roll is done in three weeks, but it pays better in the end."
+
+"Save us the trimmings from that gold thread," Philippe said. "We can melt it, it's untraceable funding for our operations."
+
+"There are no trimmings, Philippe. Sophie loads my shuttles and they never snag." A girl about twelve years old looked up from her desk with a beaming smile. "What brings you here anyway?" Alain asked.
+
+"I need to borrow your loom." Philippe said.
+
+Alain chuckled. "You come back next month. I'm not rethreading anything until this is done."
+
+"No," Philippe said, "the other loom."
+
+Alain stopped working and turned around. "There was a message?" he asked.
+
+"I think so," Philippe said handing him a bundle of eighty or so perforated cards.
+
+Alain studied the cards in licence, lifting them in front of the tall window to see the holes better. "Yeah," he said after a while. "It starts on cards number seventeen. Sophie, give him the blue key." He went back to his work after giving Philippe the cards back.
+
+Sophie went to a shelf piled high with cards. She retrieved a bundle of a dozen or so yellow cards and gave them to Philippe. What made those more blue than any of the other cards on the shelf was completely lost on him. He walked to the backroom where another loom was taking most of the space. There was a flower pattern showing on the half-done canvas.
+
+Philippe noted which cards was engaged and then proceeded to change the cards stacks: the message in the main overhead loader, and the key in the smaller side loader that was previously unused. He didn't touch any of the threads. He was not going to advance the canvas, only activate the cards and note which pins would lift.
+
+Alain called from the other room: "Burn the key when you are done. It's a one-time."
+
+"Sure thing," Philippe called back. "Want me to burn the flower cards while I'm at it?"
