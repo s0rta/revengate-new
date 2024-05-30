@@ -92,9 +92,9 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 @export var conversation_sect: String
 
 @export_group("Procedural Generation")
-@export var spawn_cost:float   ## in [0..100] for normal cases
-@export_range(0.0,1.0) var spawn_prob := 1.0 ## probability that this gets added to a deck on a per board basis
-@export var spawn_rect:Rect2i
+@export var spawn_cost:float  ## in [0..100] for normal cases
+@export_range(0.0,1.0) var spawn_prob := 1.0  ## probability that this gets added to a deck on a per board basis
+@export var spawn_rect:Rect2i  ## A sub-section of the board to spawn in
 
 # core combat attributes
 @export_group("Combat")
@@ -159,7 +159,8 @@ func _ready():
 	$Label.add_theme_color_override("font_color", color)
 	Utils.assert_all_tags(tags)
 	Utils.hide_unplaced(self)
-	if mem == null and not Engine.is_editor_hint():
+	var parent = get_parent()
+	if mem == null and not Engine.is_editor_hint() and parent is RevBoard:
 		mem = Memory.new()
 	if not was_attacked.is_connected(_learn_attack):
 		was_attacked.connect(_learn_attack)

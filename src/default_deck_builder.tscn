@@ -1,10 +1,9 @@
-[gd_scene load_steps=51 format=3 uid="uid://c185mr0bu3u3w"]
+[gd_scene load_steps=33 format=3 uid="uid://c185mr0bu3u3w"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_yitoo"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_i1rpj"]
 [ext_resource type="Script" path="res://src/tally.gd" id="2_lywjr"]
 [ext_resource type="PackedScene" uid="uid://d4f1ul2rt43ys" path="res://src/monsters/labras.tscn" id="3_tqdik"]
-[ext_resource type="Script" path="res://src/combat/memory.gd" id="4_kpuol"]
 [ext_resource type="PackedScene" uid="uid://b26vqfk7j6un7" path="res://src/monsters/desert_centipede.tscn" id="4_m33kh"]
 [ext_resource type="PackedScene" uid="uid://cx7utj7hd3ne" path="res://src/monsters/kobold.tscn" id="5_yqsgm"]
 [ext_resource type="PackedScene" uid="uid://dae5sqhh0bd65" path="res://src/monsters/sulant_tiger.tscn" id="6_da4pf"]
@@ -38,91 +37,6 @@ script = ExtResource("2_lywjr")
 hold_counts = {}
 draw_counts = {}
 
-[sub_resource type="Resource" id="Resource_v0b0i"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_s3xhm"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_54crc"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_ukqh8"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_hkqm6"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_58sqy"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_v8uhu"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_nmve0"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_88qut"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_u01tk"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_wmmnv"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_obwcl"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_omuge"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_7cd87"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_pcyso"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_bq34y"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_mhmkf"]
-resource_local_to_scene = true
-script = ExtResource("4_kpuol")
-_facts = []
-
 [node name="DeckBuilder" type="Node"]
 script = ExtResource("1_yitoo")
 tally = SubResource("Resource_58dw8")
@@ -130,29 +44,22 @@ tally = SubResource("Resource_58dw8")
 [node name="Hissing" parent="." instance=ExtResource("25_0ydwd")]
 
 [node name="SewerOtter" parent="." instance=ExtResource("2_i1rpj")]
-mem = SubResource("Resource_v0b0i")
 
 [node name="Labras" parent="." instance=ExtResource("3_tqdik")]
-mem = SubResource("Resource_s3xhm")
 
 [node name="DesertCentipede" parent="." instance=ExtResource("4_m33kh")]
-mem = SubResource("Resource_54crc")
 
 [node name="SulantTiger" parent="." instance=ExtResource("6_da4pf")]
-mem = SubResource("Resource_ukqh8")
 
 [node name="Kobold" parent="." instance=ExtResource("5_yqsgm")]
-mem = SubResource("Resource_hkqm6")
 
 [node name="Max3PerFloor" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
 max_board_occ = 3
 
 [node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_eau7g")]
-mem = SubResource("Resource_58sqy")
 
 [node name="Sahwakoon" parent="Max3PerFloor" instance=ExtResource("9_s5p53")]
-mem = SubResource("Resource_v8uhu")
 
 [node name="Quest1Goals" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -161,12 +68,10 @@ min_dungeon_occ = 1
 world_loc = Vector3i(11, 4, 0)
 
 [node name="Outlaw1" parent="Quest1Goals" instance=ExtResource("12_g5w02")]
-mem = SubResource("Resource_nmve0")
 
 [node name="LoomCards" parent="Quest1Goals/Outlaw1" instance=ExtResource("11_320yy")]
 
-[node name="Outlaw2" parent="Quest1Goals" instance=ExtResource("12_g5w02")] = 1.0
-mem = SubResource("Resource_88qut")
+[node name="Outlaw2" parent="Quest1Goals" instance=ExtResource("12_g5w02")]
 
 [node name="PotionOfHealing" parent="Quest1Goals/Outlaw2" instance=ExtResource("22_bxpqo")]
 visible = false
@@ -178,14 +83,8 @@ ttl = -1
 
 [node name="PotionOfRegen" parent="Quest1Goals/Outlaw2" instance=ExtResource("12_5tg6f")]
 visible = false
-message = ""
-skill = ""
-switchable = false
-spawn_rect = Rect2i(0, 0, 0, 0)
-ttl = -1
 
 [node name="Outlaw3" parent="Quest1Goals" instance=ExtResource("12_g5w02")]
-mem = SubResource("Resource_u01tk")
 
 [node name="PotionOfPoison" parent="Quest1Goals/Outlaw3" instance=ExtResource("15_0p6sp")]
 message = ""
@@ -201,10 +100,8 @@ min_dungeon_occ = 1
 world_loc = Vector3i(13, 8, 0)
 
 [node name="Retznac" parent="Quest2Goals" instance=ExtResource("25_cxgj3")]
-mem = SubResource("Resource_wmmnv")
 
 [node name="Grenn" parent="Quest2Goals" instance=ExtResource("16_s7e88")]
-mem = SubResource("Resource_obwcl")
 
 [node name="Rare" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -239,7 +136,6 @@ min_depth = 7
 max_dungeon_occ = 2
 
 [node name="Pacherr" parent="RareAndDeep" instance=ExtResource("21_2o5vb")]
-mem = SubResource("Resource_omuge")
 
 [node name="Healing" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -255,11 +151,6 @@ spawn_rect = Rect2i(0, 0, 0, 0)
 ttl = -1
 
 [node name="PotionOfRegen" parent="Healing" instance=ExtResource("12_5tg6f")]
-message = ""
-skill = ""
-switchable = false
-spawn_rect = Rect2i(0, 0, 0, 0)
-ttl = -1
 
 [node name="TestingQuestTransitions" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -281,11 +172,11 @@ position = Vector2(631, 437)
 [node name="WeightedCane" parent="TestingQuestTransitions" instance=ExtResource("28_0tyeq")]
 position = Vector2(631, 437)
 
+[node name="Kobold" parent="TestingQuestTransitions" instance=ExtResource("5_yqsgm")]
+
 [node name="Grenn" parent="TestingQuestTransitions" instance=ExtResource("16_s7e88")]
-mem = SubResource("Resource_7cd87")
 
 [node name="Retznac" parent="TestingQuestTransitions" instance=ExtResource("25_cxgj3")]
-mem = SubResource("Resource_pcyso")
 
 [node name="MovementStressTest" type="Node" parent="."]
 script = ExtResource("7_bd8gw")
@@ -294,10 +185,8 @@ min_dungeon_occ = 5
 world_loc = Vector3i(13, 4, 0)
 
 [node name="Lyonese" parent="MovementStressTest" instance=ExtResource("34_yppu8")]
-mem = SubResource("Resource_bq34y")
 
 [node name="Rat" parent="MovementStressTest" instance=ExtResource("8_eau7g")]
-mem = SubResource("Resource_mhmkf")
 
 [connection signal="was_attacked" from="SewerOtter" to="SewerOtter" method="_learn_attack"]
 [connection signal="was_attacked" from="Labras" to="Labras" method="_learn_attack"]
