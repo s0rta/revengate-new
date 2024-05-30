@@ -457,7 +457,7 @@ Items:
 - [x] tune vibe cost curves
 
 ## v0.12.8
-- [ ] bug: potion of absinthe has no breaking sound
+- [x] bug: potion of absinthe has no breaking sound
 - [ ] bug: kobold has not attack sound
 - [x] bug: deck simulator percentiles are innacurate
 - [x] bug: tag on self corrupt the next Move command (#32)

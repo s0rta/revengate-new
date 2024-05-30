@@ -57,15 +57,17 @@ func _dissipate():
 	if visible:
 		var coord = get_cell_coord()
 		await shroud()
+	# TODO loop through all the sounds and animations that we might want to wait for
+	if $WreckSound and $WreckSound.playing:
+		await $WreckSound.finished
 	queue_free()
 
 func wreck():
 	## Damage this item, perhaps permanently.
 	## Subclasses should override this to do something more interesting than
 	## just playing a sound.
-	var sound = find_child("WreckSound")
-	if sound:
-		sound.play()
+	if $WreckSound:
+		$WreckSound.play()
 
 func start_new_turn():
 	if depleted:
@@ -226,7 +228,7 @@ func activate_on_actor(actor):
 	if message and actor == Tender.hero:
 		actor.add_message(message)
 	if consumable:
-		queue_free()
+		_dissipate()
 
 func activate_on_coord(coord):
 	assert(false, "not implemented")

@@ -20,8 +20,6 @@ class_name Potion extends Item
 func wreck():
 	super()
 	activate_on_coord(get_cell_coord())
-	if $WreckSound.playing:
-		await $WreckSound.finished
 	_dissipate()
 
 func activate_on_coord(coord):
