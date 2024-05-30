@@ -237,3 +237,19 @@ Gilles heard footsteps coming his way. He closed his eyes and wept softly, unsur
 
 # Bewitching Bookkeeping
 [moved here](../../src/story/bewitching_bookkeeping.md)
+
+
+# Drums of Disruption
+
+Yrganiv was sitting at his mirror redoing the braids in his long facial hair. As a Pacherr, he had a lot of those. Franconians sometimes referred to Pacherrs as "elephant people", which was vaguely offensive given that unlike Yrganiv, elephants walked on all four, were bald, and couldn't play musical instruments. Whatever they wanted to believe, that was fine with him as long as they came to his concerts.
+
+He was already dressed and he was putting the final touch to his stage look. In his pocket, the small wooden box was wound up and ticking. His Zora, he called it. It was made of oak and brass, full of tiny gears inside. His big fingers would never be able to work on suck an elaborate mechanism; he had commissioned Zora in Vienna, after working two years to find and acquire the two crystals at its core: a tourmaline and an emerald. 
+
+When Yrganiv concentrated on the box, he could make his instruments play louder, much louder. His drums and his trombone would be thundering through the neighbourhood, as would all the instruments of his fellow musicians and the steps of the dancers as long and they didn't wander too far. That's how they were able to draw large crowds in all the cities they visited.
+
+Sitting at the other corner of the wagon, Mara and Jacek were putting the final touch to a new song. They had a few bottles of wine to feed their creativity and Yrganiv was doubtful that those had been legally acquired. Wine was just too expensive anywhere in Franconia. Whatever they wanted to do in their freed time. Yrganiv didn't mind as long as they played well on concert nights.
+
+Yrganiv thought he heard something brushing against the wagon. He closed his eyes and sent this thoughts through Zora, being careful to make the sounds louder only to himself. The whispers outside came out as clear as if someone was shouting next to him.
+
+"So much for tonight's concert," he muttered as he got up. In two steps in was at the door. He grabbed one of the sabers from the basket there, the one with the largest guard. This one was heavy and sharp.  It was not a stage prop.
+
