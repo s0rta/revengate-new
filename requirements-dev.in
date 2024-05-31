@@ -1,9 +1,3 @@
--r requirements.txt
 pip-tools
-PySnooper
-buildozer >= 1.4.0
-ipdb
-flit
 invoke
-cython
-pytest >= 7.0.0
+tomlkit

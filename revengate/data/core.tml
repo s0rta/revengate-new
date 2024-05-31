@@ -1,5 +1,0 @@
-[RevengateFile]
-format = 0
-content = "file-map"
-description = "Master file for all the core elements"
-files = ["core-items.tml", "core-actors.tml", "core-dialogues.tml"]

@@ -460,7 +460,7 @@ Items:
 - [x] bug: potion of absinthe has no breaking sound
 - [x] bug: kobold has not attack sound
 - [x] bug: deck simulator percentiles are innacurate
-- [x] bug: tag on self corrupt the next Move command (#32)
+- [x] bug: tap on self corrupt the next Move command (#32)
 - [x] bug: paralized is not saved (#38)
 - [x] bug: new board is not saved when entering a new area
 - [x] bug: ghost death sound is clipped
@@ -473,7 +473,7 @@ Items:
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings
 - [ ] remove src/ui/explosion_vfx.gd
-- [ ] delete some old Python code
+- [x] delete some old Python code
 - [ ] clear todo.txt
 - [ ] self-host web exports for dev builds ( https://gist.github.com/nisovin/cf9dd74678641fb70902866c79692b17 )
 - [ ] F6 on a deck builder does not init a bunch of fields in the scene file
