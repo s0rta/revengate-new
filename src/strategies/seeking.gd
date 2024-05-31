@@ -54,17 +54,20 @@ func is_valid():
 	return super() and target != null and target.is_alive() and not met_target
 		
 func act() -> bool:	
-	# Go towards target, meet target when target reached
+	## Meet target when they are target reached or Move towards target
 	var board = me.get_board()
-	if board.dist(me, target) <= resolution_range:
-		met_target = true
-		if not resolution_message.is_empty():
-			me.add_message(resolution_message, Consts.MessageLevels.WARNING)
-		return resolve()
-	else:
-		return me.move_toward_actor(target)
+	var dist:int = board.dist(me, target)
+	if dist > resolution_range:
+		if me.move_toward_actor(target):
+			dist -= 1
+	if dist <= resolution_range:
+		resolve()
+	return true
 	
 func resolve():
+	met_target = true
+	if not resolution_message.is_empty():
+		me.add_message(resolution_message, Consts.MessageLevels.WARNING)
 	if ttl < 0:
 		ttl = post_resolution_turns
 	for mem in [me.mem, Tender.hero.mem]:

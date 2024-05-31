@@ -461,11 +461,11 @@ Items:
 - [x] bug: kobold has not attack sound
 - [x] bug: deck simulator percentiles are innacurate
 - [x] bug: tag on self corrupt the next Move command (#32)
-- [ ] bug: paralized is not saved (#38)
+- [x] bug: paralized is not saved (#38)
 - [x] bug: new board is not saved when entering a new area
 - [x] bug: ghost death sound is clipped
 
-- [ ] type a few stories
+- [x] type a few stories
 - [x] don't change Tally and Mem every time the scene is loaded in the editor
 - [ ] rename MeterGroup
 - [ ] parlor magic is tagged as  "story"
@@ -476,6 +476,7 @@ Items:
 - [ ] delete some old Python code
 - [ ] clear todo.txt
 - [ ] self-host web exports for dev builds ( https://gist.github.com/nisovin/cf9dd74678641fb70902866c79692b17 )
+- [ ] F6 on a deck builder does not init a bunch of fields in the scene file
 
 UX:
 - [x] yield message is not Critical (#31)
@@ -485,7 +486,7 @@ UX:
 - [x] finalize long rest (#16)
 
 Strategies:
-- [ ] Seeking is easier to resolve even is the target keeps moving
+- [x] Seeking is easier to resolve even is the target keeps moving
 - [ ] plasus rats have a more aggressive version of TribalTerritorial
 
 Maybe: 
