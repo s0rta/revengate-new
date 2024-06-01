@@ -469,12 +469,12 @@ Items:
 - [x] don't change Tally and Mem every time the scene is loaded in the editor
 - [x] rename MeterGroup
 - [ ] parlor magic is tagged as "story"
-- [ ] document conn_target and connection fields
+- [x] document conn_target and connection fields
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings
 - [x] remove src/ui/explosion_vfx.gd
 - [x] delete some old Python code
-- [ ] clear todo.txt
+- [x] clear todo.txt
 - [ ] self-host web exports for dev builds ( https://gist.github.com/nisovin/cf9dd74678641fb70902866c79692b17 )
 - [ ] F6 on a deck builder does not init a bunch of fields in the scene file
 
@@ -491,6 +491,7 @@ Strategies:
 
 Maybe: 
 - [ ] special icon for loot piles (#55) (🛒 or 🛍)
+- [ ] phantruchs do not recover from forgivness
 
 ## v0.13
 - [ ] new quest: Pacherrs are seeking some new crystals

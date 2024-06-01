@@ -36,11 +36,17 @@ signal actor_died(board, coord, tags)
 @export var ambient_light_col := Color(1, 1, 1, 1)
 
 @export_group("Internals")
-# approximate topological distance to the starting board, used for spawning difficulty
+## approximate topological distance to the starting board, used for spawning difficulty
 @export var depth := 0  
-@export var world_loc: Vector3i  # relative positioning of this board in the world
-# per-cell custom data, unlike the per-tile data provided by TileMap
-@export var _cell_records := {}  # (x, y) -> {'rec_name' -> {...}}
+@export var world_loc: Vector3i  ## relative positioning of this board in the world
+
+## Per-cell custom data, unlike the per-tile data provided by TileMap
+## (x, y) -> {'rec_name' -> {...}}
+## known rec_names: 
+##  - "conn_target": this cell will eventually lead to another board ("depth", "dungeon", "world_loc")
+##  - "connection": this cell leads to another board ("far_board_id", "far_coord", "far_loc")
+##  - "locked": there is a locked door here ("key")
+@export var _cell_records := {}  
 
 @export var _cells_by_terrain := {}  # terrain_name -> array of coords
 @export var current_turn := 0

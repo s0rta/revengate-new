@@ -12,10 +12,6 @@ bin
 .direnv
 tmp
 
-# todo.txt is lower friction that Gitlab issues
-todo.txt
-.todo.bak
-
 # Godot auto generated files
 .godot/
 .import/
@@ -25,4 +21,3 @@ android/build*
 build
 android/.build_version
 .DS_Store
-done.txt
