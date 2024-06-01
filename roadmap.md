@@ -467,12 +467,12 @@ Items:
 
 - [x] type a few stories
 - [x] don't change Tally and Mem every time the scene is loaded in the editor
-- [ ] rename MeterGroup
-- [ ] parlor magic is tagged as  "story"
+- [x] rename MeterGroup
+- [ ] parlor magic is tagged as "story"
 - [ ] document conn_target and connection fields
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] silence a few warnings
-- [ ] remove src/ui/explosion_vfx.gd
+- [x] remove src/ui/explosion_vfx.gd
 - [x] delete some old Python code
 - [ ] clear todo.txt
 - [ ] self-host web exports for dev builds ( https://gist.github.com/nisovin/cf9dd74678641fb70902866c79692b17 )

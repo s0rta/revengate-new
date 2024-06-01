@@ -35,7 +35,7 @@
 [ext_resource type="Script" path="res://src/ui/multi_cmd_button.gd" id="26_eo8x3"]
 [ext_resource type="PackedScene" uid="uid://bgntr3w6l7kt0" path="res://src/ui/story_screen.tscn" id="28_7kpa3"]
 [ext_resource type="PackedScene" uid="uid://dpgcrubb5v6p7" path="res://src/ui/end_of_chapter_screen.tscn" id="30_5u5si"]
-[ext_resource type="PackedScene" uid="uid://cbhsiga8clmpe" path="res://src/ui/MeterGroup.tscn" id="35_eopq6"]
+[ext_resource type="PackedScene" uid="uid://cbhsiga8clmpe" path="res://src/ui/meter_group.tscn" id="35_eopq6"]
 [ext_resource type="Script" path="res://src/command_pack.gd" id="41_hgs5k"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xod6b"]
@@ -109,7 +109,6 @@ board_id = 0
 unique_name_in_owner = true
 visible = true
 position = Vector2(112, 48)
-spawn_prob = 1.0
 mem = null
 
 [node name="Dynamite" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("7_eg4si")]
@@ -117,14 +116,12 @@ mem = null
 [node name="Nadege" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_wcjwx")]
 visible = true
 position = Vector2(48, 80)
-spawn_prob = 1.0
 mana_full = 0
 mem = null
 
 [node name="BarTender" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_x3gva")]
 visible = true
 position = Vector2(48, 240)
-spawn_prob = 1.0
 mana_full = 0
 mem = null
 
@@ -147,7 +144,6 @@ position = Vector2(112, 272)
 caption = "Robert"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "ghosts"
-spawn_prob = 1.0
 mana_full = 0
 description = "A man in a three piece suit."
 mem = null
@@ -158,7 +154,6 @@ position = Vector2(112, 208)
 caption = "Mathieu"
 conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "party_magic"
-spawn_prob = 1.0
 mana_full = 0
 description = "A man with a long tail coat and a top hat."
 mem = null
