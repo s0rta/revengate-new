@@ -160,8 +160,12 @@ func _ready():
 	Utils.assert_all_tags(tags)
 	Utils.hide_unplaced(self)
 	var parent = get_parent()
+	assert(parent != $/root, "Don't run this as a subscene, try it in a simulator or in the game")
+		
 	if mem == null and not Engine.is_editor_hint() and parent is RevBoard:
 		mem = Memory.new()
+	else:
+		mem = null
 	if not was_attacked.is_connected(_learn_attack):
 		was_attacked.connect(_learn_attack)
 	picked_item.connect(_clear_mods_cache)

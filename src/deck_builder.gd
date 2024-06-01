@@ -38,6 +38,10 @@ func _init():
 	if tally == null and not Engine.is_editor_hint():
 		tally = Tally.new()
 
+func _ready():
+	var parent = get_parent()
+	assert(parent != $/root, "Don't run this as a subscene, try it in a simulator or add it to a dungeon in the game")
+
 func _get_cards(node:Node, card_type):
 	return node.find_children("", card_type, false, false)
 

@@ -28,38 +28,30 @@ script = ExtResource("1_phj4j")
 
 [node name="SewerOtter" parent="." instance=ExtResource("2_3bv6l")]
 spawn_prob = 1.0
-mem = null
 
 [node name="Labras" parent="." instance=ExtResource("3_ia73w")]
 spawn_prob = 1.0
-mem = null
 
 [node name="DesertCentipede" parent="." instance=ExtResource("4_p0gyr")]
 spawn_prob = 1.0
-mem = null
 
 [node name="Kobold" parent="." instance=ExtResource("5_b1bqf")]
 spawn_prob = 1.0
-mem = null
 
 [node name="SulantTiger" parent="." instance=ExtResource("6_auslx")]
 spawn_prob = 1.0
-mem = null
 
 [node name="SentryScarab" parent="." instance=ExtResource("7_d5hsq")]
 spawn_prob = 1.0
-mem = null
 
 [node name="Max3PerFloor" type="Node" parent="."]
 script = ExtResource("7_1er0k")
 max_board_occ = 3
 
 [node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_vett6")]
-mem = null
 
 [node name="Ghost" parent="Max3PerFloor" instance=ExtResource("10_w0tqq")]
 spawn_prob = 1.0
-mem = null
 
 [node name="Max2PerDungeon" type="Node" parent="."]
 script = ExtResource("7_1er0k")
@@ -67,7 +59,6 @@ max_dungeon_occ = 2
 
 [node name="Gleugt" parent="Max2PerDungeon" instance=ExtResource("25_8ffwd")]
 spawn_prob = 1.0
-mem = null
 
 [node name="Rare" type="Node" parent="."]
 script = ExtResource("7_1er0k")
@@ -89,7 +80,6 @@ min_depth = 7
 max_dungeon_occ = 2
 
 [node name="Pacherr" parent="RareAndDeep" instance=ExtResource("24_3pef4")]
-mem = null
 
 [node name="Healing" type="Node" parent="."]
 script = ExtResource("7_1er0k")
@@ -115,7 +105,6 @@ min_board_occ = 3
 
 [node name="GiantLocust" parent="SwarmingFloors" instance=ExtResource("20_3j7oh")]
 spawn_prob = 1.0
-mem = null
 
 [connection signal="visibility_changed" from="Rare/Rapier" to="Rare/Rapier" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Rare/Dynamite" to="Rare/Dynamite" method="_on_visibility_changed"]

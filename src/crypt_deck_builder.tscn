@@ -16,7 +16,6 @@ script = ExtResource("1_0ct5b")
 
 [node name="Ghost" parent="." instance=ExtResource("2_kjc0p")]
 spawn_prob = 1.0
-mem = null
 
 [node name="Max5PerBoardEarly" type="Node" parent="."]
 script = ExtResource("2_p183e")
@@ -24,11 +23,9 @@ max_depth = 6
 max_board_occ = 5
 
 [node name="Rat" parent="Max5PerBoardEarly" instance=ExtResource("12_xxt6x")]
-mem = null
 
 [node name="PlasusRat" parent="Max5PerBoardEarly" instance=ExtResource("5_e27ml")]
 spawn_prob = 1.0
-mem = null
 
 [node name="Deep" type="Node" parent="."]
 script = ExtResource("2_p183e")
@@ -36,7 +33,6 @@ min_depth = 5
 
 [node name="Skeleton" parent="Deep" instance=ExtResource("5_00grc")]
 spawn_prob = 1.0
-mem = null
 
 [node name="DeepAndUnique" type="Node" parent="."]
 script = ExtResource("2_p183e")
@@ -57,7 +53,6 @@ min_dungeon_occ = 1
 
 [node name="Cherub" parent="RareAndDeep" instance=ExtResource("6_2qcbt")]
 spawn_prob = 1.0
-mem = null
 
 [node name="QuestGoal" type="Node" parent="."]
 script = ExtResource("2_p183e")

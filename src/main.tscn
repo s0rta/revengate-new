@@ -109,7 +109,6 @@ board_id = 0
 unique_name_in_owner = true
 visible = true
 position = Vector2(112, 48)
-mem = null
 
 [node name="Dynamite" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard/Hero" instance=ExtResource("7_eg4si")]
 
@@ -117,20 +116,17 @@ mem = null
 visible = true
 position = Vector2(48, 80)
 mana_full = 0
-mem = null
 
 [node name="BarTender" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_x3gva")]
 visible = true
 position = Vector2(48, 240)
 mana_full = 0
-mem = null
 
 [node name="Michel" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("13_ymwa7")]
 visible = true
 position = Vector2(464, 48)
 spawn_prob = 1.0
 mana_full = 0
-mem = null
 
 [node name="Broom" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_w5yd8")]
 position = Vector2(336, 48)
@@ -146,7 +142,6 @@ conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "ghosts"
 mana_full = 0
 description = "A man in a three piece suit."
-mem = null
 
 [node name="BarPatron2" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("15_mexm3")]
 visible = true
@@ -156,7 +151,6 @@ conversation_file = "res://src/story/bar_chatter.dialogue"
 conversation_sect = "party_magic"
 mana_full = 0
 description = "A man with a long tail coat and a top hat."
-mem = null
 
 [node name="Sign" parent="BoardArea/GestureSurveyor/Viewport/Dungeons/LyonSurface/StartingBoard" instance=ExtResource("14_621w4")]
 position = Vector2(688, 48)

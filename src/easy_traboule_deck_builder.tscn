@@ -32,19 +32,15 @@ script = ExtResource("1_oonn7")
 
 [node name="SewerOtter" parent="." instance=ExtResource("2_v4koq")]
 spawn_prob = 1.0
-mem = null
 
 [node name="Labras" parent="." instance=ExtResource("3_8yfcp")]
 spawn_prob = 1.0
-mem = null
 
 [node name="DesertCentipede" parent="." instance=ExtResource("4_de7ji")]
 spawn_prob = 1.0
-mem = null
 
 [node name="SulantTiger" parent="." instance=ExtResource("6_urs5r")]
 spawn_prob = 1.0
-mem = null
 
 [node name="Hissing" parent="." instance=ExtResource("27_0wnww")]
 
@@ -62,11 +58,9 @@ script = ExtResource("7_18mi5")
 max_board_occ = 3
 
 [node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_mpj13")]
-mem = null
 
 [node name="Sahwakoon" parent="Max3PerFloor" instance=ExtResource("9_ucbey")]
 spawn_prob = 1.0
-mem = null
 
 [node name="Max3PerDungeonAndLate" type="Node" parent="."]
 script = ExtResource("7_18mi5")
@@ -75,7 +69,6 @@ max_dungeon_occ = 3
 
 [node name="Ghost" parent="Max3PerDungeonAndLate" instance=ExtResource("10_smtmw")]
 spawn_prob = 1.0
-mem = null
 
 [node name="Max10PerDungeon" type="Node" parent="."]
 script = ExtResource("7_18mi5")
@@ -83,7 +76,6 @@ max_dungeon_occ = 10
 
 [node name="Kobold" parent="Max10PerDungeon" instance=ExtResource("5_u3117")]
 spawn_prob = 1.0
-mem = null
 
 [node name="Deep" type="Node" parent="."]
 script = ExtResource("7_18mi5")
@@ -130,7 +122,6 @@ min_depth = 7
 max_dungeon_occ = 2
 
 [node name="Pacherr" parent="RareAndDeep" instance=ExtResource("24_8ja44")]
-mem = null
 
 [node name="Healing" type="Node" parent="."]
 script = ExtResource("7_18mi5")
