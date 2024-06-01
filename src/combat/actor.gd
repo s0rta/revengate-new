@@ -1188,6 +1188,7 @@ func pick_item(item):
 	assert(item_coord == get_cell_coord(), "can only pick items that are under us")
 	
 	item.shroud(false)
+	item.reset_display()
 	if item.get("is_equipped") != null:
 		item.is_equipped = false
 	item.reparent(self)

@@ -125,9 +125,9 @@ func get_short_desc():
 		if tag in tags:
 			qualifiers.append(tag)
 	if qualifiers:
-		return "%s %s (%s)" % [$Label.text, desc, ", ".join(qualifiers)]
+		return "%s %s (%s)" % [char, desc, ", ".join(qualifiers)]
 	else:
-		return "%s %s" % [$Label.text, desc]
+		return "%s %s" % [char, desc]
 
 
 func get_long_desc(perception):
@@ -169,6 +169,14 @@ func place(coord, _immediate=null):
 	## No tests are done to see if `coord` is a suitable location.
 	## _immediate: ignored.
 	position = RevBoard.board_to_canvas(coord)
+
+func display_char(alt_char:String):
+	## Temporarily show an alternate character other than `self.char`
+	$Label.text = alt_char
+	
+func reset_display():
+	## Go back to canonical `self.char`
+	$Label.text = char
 
 func should_hide(index=null):
 	if not get_parent() is RevBoard:

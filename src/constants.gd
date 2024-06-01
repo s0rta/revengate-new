@@ -159,3 +159,4 @@ const TAGS = ["ethereal", "undead", "gift", "fragile", "broken", "lit",
 			]
 
 const OFFENSIVE_EVENTS:Array[String] = ["was_attacked", "was_insulted", "was_threatened", "was_targeted"]
+const LOOT_PILE_CHAR = "🛒"

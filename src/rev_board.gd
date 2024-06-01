@@ -294,6 +294,12 @@ class BoardIndex extends RefCounted:
 			return null
 		return _coord_to_items[coord][-1]
 	
+	func nb_items_at(coord:Vector2i):
+		if not _coord_to_items.has(coord):
+			return 0
+		else:
+			return _coord_to_items[coord].size()
+	
 	func items_at(coord:Vector2i):
 		return _coord_to_items.get(coord, [])
 
@@ -1211,12 +1217,16 @@ func reset_visibility(things:Array, index=null):
 	if index == null:
 		index = make_index()
 	for thing in things:
-		if thing.should_hide():
+		if thing is Item:
+			var here = thing.get_cell_coord()
+			if index.nb_items_at(here) > 1 and thing == index.top_item_at(here):
+				thing.display_char(Consts.LOOT_PILE_CHAR)
+		if thing.should_hide(index):
 			thing.hide()
 		else:
 			thing.show()
 			
-		if thing.should_shroud():
+		if thing.should_shroud(index):
 			thing.shroud(false)
 		else:
 			thing.unshroud(true)

@@ -325,6 +325,8 @@ class Inspect extends Command:
 		var item = index.top_item_at(coord)
 		if item != null:
 			messages.append("There is a %s %s" % [item.get_short_desc(), here_str])
+			if index.nb_items_at(coord) > 1:
+				messages.append("There are more item(s) that you can't see really well")
 		elif board.is_on_board(coord):
 			var terrain = board.get_cell_terrain(coord)
 			if Utils.is_debug():
