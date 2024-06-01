@@ -1,4 +1,4 @@
-# Copyright © 2022-2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2022-2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -18,7 +18,8 @@
 ## Go to a specific destination, abort if the destination becomes unreachable.
 class_name Traveling extends Strategy
 
-var dest: Vector2i
+@export var dest: Vector2i
+@export var board_id := 0
 var path
 var arrived = false
 var unreachable := false  # have we failed to find a valid path?
@@ -26,21 +27,24 @@ var updated := false  # have we refreshed the internal data this turn?
 var free_dest := true  # does the destination have to be free?
 var perceivable := false  # are we only considering perceibable tiles?
 var dest_str := "destination"
-var board
 
-func _init(dest_: Vector2i, path_=null, actor=null, priority_=null, ttl_=null):
+func _init(dest_: Vector2i = Consts.COORD_INVALID, path_=null, actor=null, priority_=null, ttl_=null):
 	super(actor, priority_, ttl_)
 	dest = dest_
-	board = me.get_board()
 	cancellable = true
 	if path_:
 		# not setting null paths; we try to generate a new one before deciding if the strategy
 		# is valid.
 		_set_path(path_)
+
+func _ready():
+	super()
 	# We have to get a new path at the start of each turn since things might have move around 
 	# quite a bit.
 	me.turn_done.connect(_expire_path)
 	me.was_attacked.connect(_on_being_attacked, CONNECT_ONE_SHOT)
+	if not board_id:
+		board_id = me.get_board().board_id
 
 func _invalidate(_arg=null):
 	unreachable = true
@@ -61,6 +65,9 @@ func _set_path(path_):
 	updated = true
 
 func _make_path():
+	if dest == Consts.COORD_INVALID:
+		unreachable = true
+		return null
 	var board = me.get_board()
 	assert(board, "Traveling only works on scenes with a board")
 	var path_func
@@ -91,7 +98,7 @@ func is_valid():
 	return path and not arrived and not unreachable
 
 func refresh(_turn):
-	if board != me.get_board():
+	if board_id != me.get_board().board_id:
 		_invalidate()
 	if unreachable or arrived:
 		queue_free()

@@ -30,9 +30,9 @@ var index
 var guard_radius:int
 
 
-func _init(client:Actor, actor=null, priority_=null, ttl_=null):
-	client = client
-	client_id = client.actor_id
+func _init(client_id_:=0, actor=null, priority_=null, ttl_=null):
+	if client_id_:
+		client_id = client_id_
 	super()
 
 func _ready():

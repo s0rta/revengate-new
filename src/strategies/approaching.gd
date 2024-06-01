@@ -18,21 +18,32 @@
 ## Get closer to another actor.
 class_name Approaching extends Traveling
 
+@export var other_id := 0
 var other:Actor
 
-func _init(other_:Actor, path_=null, actor=null, priority_=null, ttl_=null):
-	other = other_
-	var dest_ = other.get_cell_coord()
+func _init(other_:Actor=null, path_=null, actor=null, priority_=null, ttl_=null):
+	var dest_ = Consts.COORD_INVALID
+	if other_ != null:
+		other = other_
+		other_id = other.actor_id
+		dest_ = other.get_cell_coord()
+		dest_str = other.get_short_desc()
 	super(dest_, path_, actor, priority_, ttl_)
 	free_dest = false
 	perceivable = true
-	dest_str = other.get_short_desc()
 
 func _turns_left():
 	return max(0, path.size() - me.get_max_action_range(other))
 
 func refresh(_turn):
 	var board = me.get_board()
+	
+	if other_id and other == null:
+		for actor in board.get_actors():
+			if actor.actor_id == other_id:
+				other = actor
+				break
+	
 	if not me.perceives(other):
 		if not arrived and not unreachable:
 			add_hero_message("Stopped traveling: you don't know where %s went." % dest_str, 
@@ -47,5 +58,6 @@ func refresh(_turn):
 		arrived = true
 		_invalidate()
 	else:
+		dest_str = other.get_short_desc()
 		dest = other.get_cell_coord()	
 	super(_turn)
