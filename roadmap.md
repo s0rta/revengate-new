@@ -491,7 +491,7 @@ Strategies:
 
 Maybe: 
 - [ ] special icon for loot piles (#55) (🛒 or 🛍)
-- [ ] phantruchs do not recover from forgivness
+- [x] phantruchs do not recover from forgivness
 
 ## v0.13
 - [ ] new quest: Pacherrs are seeking some new crystals

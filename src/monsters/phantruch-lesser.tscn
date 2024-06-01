@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://d4adacidkburg"]
+[gd_scene load_steps=10 format=3 uid="uid://d4adacidkburg"]
 
 [ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_v7d6b"]
 [ext_resource type="Script" path="res://src/monsters/phantruch.gd" id="2_bfkng"]
@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="4_hik5q"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="5_1efy2"]
 [ext_resource type="Script" path="res://src/combat/core_skills.gd" id="6_18p1b"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="7_0momf"]
 
 [sub_resource type="Resource" id="Resource_70eag"]
 resource_local_to_scene = true
@@ -45,6 +46,10 @@ pitch_scale = 1.25
 script = ExtResource("5_1efy2")
 priority = 0.5
 
-[node name="SkillLevels" type="Node" parent="." index="8"]
+[node name="Exploring" type="Node" parent="." index="8"]
+script = ExtResource("7_0momf")
+priority = 0.2
+
+[node name="SkillLevels" type="Node" parent="." index="9"]
 script = ExtResource("6_18p1b")
 innate_attack = 2
