@@ -164,7 +164,7 @@ func _ready():
 		
 	if mem == null and not Engine.is_editor_hint() and parent is RevBoard:
 		mem = Memory.new()
-	else:
+	elif not parent is RevBoard:
 		mem = null
 	if not was_attacked.is_connected(_learn_attack):
 		was_attacked.connect(_learn_attack)

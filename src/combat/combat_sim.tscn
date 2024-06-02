@@ -23,12 +23,10 @@ visible = true
 position = Vector2(83, 82)
 health = 500
 mana_full = 0
-mem = null
 
 [node name="Kobold" parent="Board" instance=ExtResource("6_3iqgc")]
 position = Vector2(48, 47)
 mana_full = 0
-mem = null
 
 [node name="ExtraStages" type="Node" parent="."]
 
@@ -36,13 +34,11 @@ mem = null
 position = Vector2(112, 40)
 health = 500
 mana_full = 0
-mem = null
 
 [node name="SuperOutlawWithLoot" parent="ExtraStages" instance=ExtResource("6_n5g3r")]
 position = Vector2(112, 40)
 health = 500
 mana_full = 0
-mem = null
 
 [node name="PotionOfBooze" parent="ExtraStages/SuperOutlawWithLoot" instance=ExtResource("7_scp3a")]
 skill = ""
@@ -214,11 +210,9 @@ ttl = -1
 
 [node name="Rat" parent="ExtraStages" instance=ExtResource("6_b7d4m")]
 mana_full = 0
-mem = null
 
 [node name="Kobold2" parent="ExtraStages" instance=ExtResource("6_3iqgc")]
 position = Vector2(48, 48)
 mana_full = 0
-mem = null
 
 [connection signal="turn_started" from="TurnQueue" to="." method="_on_turn_queue_turn_started"]
