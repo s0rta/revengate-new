@@ -254,4 +254,3 @@ func ddump():
 	var cam = viewport.get_camera_2d()
 	print("transform is: %s" % transform)
 	print("cam offset is: %s %s" % [cam.offset, RevBoard.canvas_to_board_str(cam.offset)])
-

@@ -467,4 +467,3 @@ func place(thing, in_room:=true, coord=null, free:bool=true, bbox=null, index=nu
 			assert(false, "Indexing %s is not implemended." % thing)
 
 	return cell
-

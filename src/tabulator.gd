@@ -46,4 +46,3 @@ static func get_abs_path():
 func save():
 	var ret_code = ResourceSaver.save(self, FILE_PATH)
 	assert(ret_code == OK)
-

@@ -416,4 +416,3 @@ func add_loc_prefabs(builder, world_loc:Vector3i):
 	builder.fabs += fabs		
 	var rect = PrefabPack.fabs_untouched_rect(fabs)
 	return rect
-

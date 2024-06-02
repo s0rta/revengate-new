@@ -118,7 +118,7 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 # bestiary entry
 @export_group("Bestiary")
 @export_file("*.png", "*.jpg", "*.jpeg") var bestiary_img
-@export_multiline var description
+@export_multiline var description := ""
 
 # Those are not meant to be customized in the editor, but they exported anyway to 
 # make the object save better
@@ -160,7 +160,8 @@ func _ready():
 	Utils.assert_all_tags(tags)
 	Utils.hide_unplaced(self)
 	var parent = get_parent()
-	assert(parent != $/root, "Don't run this as a subscene, try it in a simulator or in the game")
+	assert(parent != $/root, 
+			"Don't run Actor as its own scene, try it in a simulator or in the game instead.")
 		
 	if mem == null and not Engine.is_editor_hint() and parent is RevBoard:
 		mem = Memory.new()

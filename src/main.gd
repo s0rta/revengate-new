@@ -22,6 +22,7 @@ signal board_changed(new_board)
 
 @onready var dungeons_cont: Node = %Dungeons  # all dungeons must be direct descendent of this node
 @onready var commands = $CommandPack
+@onready var limbo = Node.new()
 var board: RevBoard  # the active board
 var active := true  # becomes false when the run is over
 var quests = []
@@ -166,7 +167,7 @@ func destroy_nodes(nodes):
 	for node in nodes:
 		node.hide()
 		node.owner = null
-		node.reparent($/root)
+		node.reparent(limbo)
 		node.queue_free()
 		
 func supply_item(actor, item_path, extra_tags=[]):

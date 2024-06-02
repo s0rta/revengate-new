@@ -81,4 +81,3 @@ func act() -> bool:
 			return true
 		else:
 			return false
-
