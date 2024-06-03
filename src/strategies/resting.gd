@@ -44,7 +44,7 @@ func _dissipate():
 		if health_gain:
 			me.add_message("%s %s %d health while resting" % [me.caption, verb, health_gain], 
 							level, 
-							["msg:combat"])
+							["msg:healing"])
 	super()
 
 func refresh(turn):
@@ -69,7 +69,7 @@ func filter_message(text:String,
 					level:Consts.MessageLevels, 
 					tags:Array):
 	# block all regen messages since we'll post a summary at the end of the meditation
-	return "msg:regen" not in tags
+	return "msg:healing" not in tags
 
 func _on_being_attacked(_arg):
 	if is_valid():

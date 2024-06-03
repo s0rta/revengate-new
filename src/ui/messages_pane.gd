@@ -21,17 +21,25 @@ const DECAY_SECS := 5.0
 const FADEOUT_SECS := 1.0
 const MAX_MESSAGES = 10
 
+## message tag to theme types in "src/ui/theme.tres"
+const MSG_STYLES = {"msg:combat": "MsgCombat", 
+					"msg:healing": "MsgHealing",
+					"msg:vibe": "MsgVibe", 
+					"msg:story": "MsgVibe", 
+					"msg:inventory": "MsgInventory",
+					"msg:magic": "MsgMagic", 
+					"msg:alt": "MsgAlt"}
+
 func _ready():
 	%MessageTemplate.hide()
 	
 func add_message(text, level:Consts.MessageLevels, tags:=[]):
 	_trim_old_messages()
 	var label = %MessageTemplate.duplicate()
-	if "msg:combat" in tags:
-		label.theme_type_variation = "MsgCombat"
-	elif "msg:vibe" in tags or "msg:story" in tags:
-		label.theme_type_variation = "MsgVibe"
-
+	for tag in tags:
+		if MSG_STYLES.has(tag):
+			label.theme_type_variation = MSG_STYLES[tag]
+			break  # only the first tag is styled
 	label.text = text
 	if level >= Consts.MessageLevels.WARNING:
 		label.modulate = Color.RED

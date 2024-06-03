@@ -1122,7 +1122,7 @@ func regen(delta:=1):
 	if delta > 0:
 		add_message("%s healed a little" % get_caption(), 
 					Consts.MessageLevels.INFO, 
-					["msg:regen"])
+					["msg:healing"])
 		update_health(delta)
 		
 func refocus(delta:=1):

@@ -265,8 +265,10 @@ func hero_is_foe(actor_tags=[]):
 					return true
 		return false
 
-func show_message(message):
-	Tender.hero.add_message(message)
+func show_message(message:String,
+				level:Consts.MessageLevels=Consts.MessageLevels.INFO, 
+				tags:=[]):
+	Tender.hero.add_message(message, level, tags)
 
 func set_global_sentiment(value:int):
 	## Change the sentiment between the speaker's faction and the hero's faction.

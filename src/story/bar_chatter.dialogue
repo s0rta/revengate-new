@@ -73,7 +73,7 @@ if not hero_has_item(["booze"])
 {{speaker_name}}: I'm not sure why they say that when it's obviously not true. I even know a few tricks myself. I'll show you if you bring me another drink.
 - Sure! 
 	do hero_give_item(["booze"])
-	do show_message("You notice the ashtray floating a few centimeters above the table.")
+	do show_message("You notice the ashtray floating a few centimeters above the table.", Consts.MessageLevels.INFO, ["msg:story"])
 	{{speaker_name}}: Pretty cool, right?
 - Err, no. Look's like you've had enough already.
 	{{speaker_name}}: Fine!
