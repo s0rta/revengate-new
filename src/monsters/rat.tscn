@@ -1,18 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://d32rti5y0shob"]
+[gd_scene load_steps=8 format=3 uid="uid://d32rti5y0shob"]
 
 [ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_cnguh"]
-[ext_resource type="Script" path="res://src/combat/memory.gd" id="2_l0hj0"]
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="3_6ex08"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="4_m70cc"]
 [ext_resource type="AudioStream" uid="uid://da0cslkk526yk" path="res://src/monsters/bite-small.wav" id="4_suc3h"]
 [ext_resource type="Script" path="res://src/strategies/flight_or_fight.gd" id="6_3136s"]
 [ext_resource type="Script" path="res://src/strategies/tribal_territorial.gd" id="6_larah"]
 [ext_resource type="PackedScene" uid="uid://y1ws81ictm30" path="res://src/vibes/rat_poop.tscn" id="7_kqkal"]
-
-[sub_resource type="Resource" id="Resource_denkt"]
-resource_local_to_scene = true
-script = ExtResource("2_l0hj0")
-_facts = []
 
 [node name="Rat" instance=ExtResource("1_cnguh")]
 char = "r"
@@ -22,7 +16,6 @@ health = 3
 strength = 17
 agility = 45
 intelligence = 15
-mem = SubResource("Resource_denkt")
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)

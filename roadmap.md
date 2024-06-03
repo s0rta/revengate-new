@@ -475,8 +475,8 @@ Items:
 - [x] remove src/ui/explosion_vfx.gd
 - [x] delete some old Python code
 - [x] clear todo.txt
-- [ ] self-host web exports for dev builds ( https://gist.github.com/nisovin/cf9dd74678641fb70902866c79692b17 )
-- [ ] F6 on a deck builder does not init a bunch of fields in the scene file
+- [x] self-host web exports for dev builds
+- [x] F6 on a deck builder does not init a bunch of fields in the scene file
 
 UX:
 - [x] yield message is not Critical (#31)
@@ -487,11 +487,13 @@ UX:
 
 Strategies:
 - [x] Seeking is easier to resolve even is the target keeps moving
-- [ ] plasus rats have a more aggressive version of TribalTerritorial
+- [x] plasus rats have a more aggressive version of TribalTerritorial
 
 Maybe: 
 - [x] special icon for loot piles (#55) (🛒 or 🛍)
 - [x] phantruchs do not recover from forgivness
+
+## v0.12.9
 
 ## v0.13
 - [ ] new quest: Pacherrs are seeking some new crystals

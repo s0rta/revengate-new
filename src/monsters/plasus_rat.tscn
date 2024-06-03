@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://j6l7bxwn04uw"]
+[gd_scene load_steps=10 format=3 uid="uid://j6l7bxwn04uw"]
 
 [ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_6au0k"]
 [ext_resource type="Script" path="res://src/strategies/exploring.gd" id="2_x3n4j"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="4_fpob4"]
 [ext_resource type="Script" path="res://src/strategies/tracking.gd" id="4_s27cy"]
 [ext_resource type="AudioStream" uid="uid://da0cslkk526yk" path="res://src/monsters/bite-small.wav" id="5_gr1tg"]
+[ext_resource type="Script" path="res://src/strategies/tribal_territorial.gd" id="5_wutic"]
 [ext_resource type="Script" path="res://src/combat/effect.gd" id="6_hdt8x"]
 [ext_resource type="PackedScene" uid="uid://y1ws81ictm30" path="res://src/vibes/rat_poop.tscn" id="7_erwq1"]
 
@@ -25,7 +26,7 @@ description = "Plasus rats look like common rats, but they have a stubbier face,
 theme_override_colors/font_color = Color(0.65098, 0.321569, 0.0196078, 1)
 text = "r"
 
-[node name="SkillLevels" parent="." index="7"]
+[node name="SkillLevels" parent="." index="6"]
 evasion = 1
 
 [node name="Exploring" type="Node" parent="." index="8"]
@@ -33,14 +34,19 @@ script = ExtResource("2_x3n4j")
 hug_walls = true
 priority = 0.2
 
-[node name="FlightOrFight" type="Node" parent="." index="10"]
+[node name="FlightOrFight" type="Node" parent="." index="9"]
 script = ExtResource("3_twahn")
 probability = 0.5
 priority = 0.9
 
-[node name="Tracking" type="Node" parent="." index="11"]
+[node name="Tracking" type="Node" parent="." index="10"]
 script = ExtResource("4_s27cy")
 priority = 0.7
+
+[node name="TribalTerritorial" type="Node" parent="." index="11"]
+script = ExtResource("5_wutic")
+pers_space_mult = 4
+priority = 0.8
 
 [node name="Bite" type="Node" parent="." index="12"]
 script = ExtResource("4_fpob4")
