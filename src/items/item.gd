@@ -234,7 +234,9 @@ func activate_on_actor(actor):
 	for effect in find_children("", "Effect", false, false):
 		effect.apply(actor)
 	if message and actor == Tender.hero:
-		actor.add_message(message)
+		actor.add_message(message, 
+							Consts.MessageLevels.INFO, 
+							["msg:story"])
 	if consumable:
 		_dissipate()
 

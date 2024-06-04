@@ -1132,7 +1132,9 @@ func refocus(delta:=1):
 	if mana + delta > mana_full:
 		delta = mana_full - mana
 	if delta > 0:
-		add_message("%s seems more focused" % get_caption())
+		add_message("%s seems more focused" % get_caption(), 
+					Consts.MessageLevels.INFO, 
+					["msg:healing"])
 		update_mana(delta)
 
 func equip_item(item, exclusive=true):
@@ -1166,9 +1168,13 @@ func drop_item(item, coord=null, anim_toss=true):
 func reequip_weapon_from_group(grouping, prev_weapon=null):
 	if grouping == null or grouping is ItemGrouping and grouping.is_empty():
 		if prev_weapon != null:
-			add_message("You ran out of %s" % prev_weapon.get_short_desc())
+			add_message("You ran out of %s" % prev_weapon.get_short_desc(), 
+						Consts.MessageLevels.INFO, 
+						["msg:inventory"])
 		else:
-			add_message("You ran out of your previous weapons")
+			add_message("You ran out of your previous weapons", 
+						Consts.MessageLevels.INFO, 
+						["msg:inventory"])
 	else:
 		equip_item(grouping)
 
@@ -1182,9 +1188,13 @@ func give_item(item, actor=null):
 	item.reparent(new_parent)
 	item.remove_tag("gift")  # NPCs keep track of giftable inventory with the "gift" tag
 	if actor:
-		add_message("%s gave a %s to %s" % [self.get_caption(), item.get_short_desc(), actor.get_caption()])
+		add_message("%s gave a %s to %s" % [self.get_caption(), item.get_short_desc(), actor.get_caption()], 
+					Consts.MessageLevels.INFO, 
+					["msg:inventory"])
 	else:
-		add_message("%s gave a %s" % [self.get_caption(), item.get_short_desc()])
+		add_message("%s gave a %s" % [self.get_caption(), item.get_short_desc()], 
+					Consts.MessageLevels.INFO, 
+					["msg:inventory"])
 		item.queue_free()
 	
 func pick_item(item):
@@ -1198,7 +1208,9 @@ func pick_item(item):
 		item.is_equipped = false
 	item.reparent(self)
 	picked_item.emit(item_coord)
-	add_message("%s added to %s's inventory" % [item.get_short_desc(), caption])
+	add_message("%s added to %s's inventory" % [item.get_short_desc(), caption], 
+				Consts.MessageLevels.INFO, 
+				["msg:inventory"])
 
 func consume_item(item: Item):
 	## activate the item and remove is from inventory
@@ -1209,7 +1221,9 @@ func consume_item(item: Item):
 	# reuse before the free happens
 	if item.get_parent():
 		item.reparent($/root)
-	add_message("%s used a %s" % [get_caption(), item.get_short_desc()])
+	add_message("%s used a %s" % [get_caption(), item.get_short_desc()], 
+				Consts.MessageLevels.INFO, 
+				["msg:inventory"])
 	
 func add_message(text:String, 
 				level:Consts.MessageLevels=Consts.MessageLevels.INFO, 
