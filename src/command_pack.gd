@@ -254,6 +254,7 @@ class SkipTurn extends Command:
 class Rest extends Command:
 	const PERCEPTION_MOD = -45
 	const MAX_START_HRATIO = .74
+	const MIN_HRATIO = .10
 	const END_HRATIO = .80
 	
 	func _init(index_=null):
@@ -273,8 +274,12 @@ class Rest extends Command:
 			Tender.hero.add_message("You feel well rested already.")
 			return false
 		var target_health = int(END_HRATIO * Tender.hero.health_full)
+		var min_health = int(MIN_HRATIO * Tender.hero.health_full)
+		if Tender.hero.health < min_health:
+			Tender.hero.add_message("You feel too wrecked to meditate.")
+			return false
 		var ttl = _find_ttl(target_health)
-		var strat = Resting.new(Tender.hero, 1.0, ttl, target_health)
+		var strat = Resting.new(Tender.hero, 1.0, ttl, target_health, min_health)
 		var mods = StatsModifiers.new()
 		mods.perception = PERCEPTION_MOD
 		strat.add_child(mods)
@@ -286,13 +291,16 @@ class Rest extends Command:
 		return run(coord)
 		
 	func _find_ttl(target_health:int):
+		## Return how long we should rest.
+		## The turns estimate is based on a very pessimistic take on healing_prob 
+		## and the likelihood of other conditions interfering.
 		const min_ttl := 50
 		var me:Actor = Tender.hero
 		if target_health < 0:
 			return min_ttl
 		else:
 			var hdelta = target_health - me.health
-			return max(int(hdelta / me.healing_prob * 1.5), min_ttl)
+			return max(int(10.0 * hdelta / me.healing_prob), min_ttl)
 
 class Inspect extends Command:
 	func _init(index_=null):

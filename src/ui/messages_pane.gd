@@ -24,6 +24,7 @@ const MAX_MESSAGES = 10
 ## message tag to theme types in "src/ui/theme.tres"
 const MSG_STYLES = {"msg:combat": "MsgCombat", 
 					"msg:healing": "MsgHealing",
+					"msg:regen": "MsgHealing",
 					"msg:vibe": "MsgVibe", 
 					"msg:story": "MsgVibe", 
 					"msg:inventory": "MsgInventory",
@@ -36,13 +37,14 @@ func _ready():
 func add_message(text, level:Consts.MessageLevels, tags:=[]):
 	_trim_old_messages()
 	var label = %MessageTemplate.duplicate()
-	for tag in tags:
-		if MSG_STYLES.has(tag):
-			label.theme_type_variation = MSG_STYLES[tag]
-			break  # only the first tag is styled
-	label.text = text
 	if level >= Consts.MessageLevels.WARNING:
 		label.modulate = Color.RED
+	else:
+		for tag in tags:
+			if MSG_STYLES.has(tag):
+				label.theme_type_variation = MSG_STYLES[tag]
+				break  # only the first tag style is applied
+	label.text = text
 	%MessagesBox.add_child(label)
 	label.show()
 	%Panel.show()

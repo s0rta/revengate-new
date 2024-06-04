@@ -1122,7 +1122,7 @@ func regen(delta:=1):
 	if delta > 0:
 		add_message("%s healed a little" % get_caption(), 
 					Consts.MessageLevels.INFO, 
-					["msg:healing"])
+					["msg:regen", "msg:healing"])
 		update_health(delta)
 		
 func refocus(delta:=1):
@@ -1134,7 +1134,7 @@ func refocus(delta:=1):
 	if delta > 0:
 		add_message("%s seems more focused" % get_caption(), 
 					Consts.MessageLevels.INFO, 
-					["msg:healing"])
+					["msg:regen", "msg:magic"])
 		update_mana(delta)
 
 func equip_item(item, exclusive=true):
