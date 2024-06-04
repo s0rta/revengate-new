@@ -1,0 +1,22 @@
+Bug fixes:
+- all potions have breaking sound
+- kobold and ghost sounds are fixed
+- tap on self no longer corrupts the next action
+- paralyzed is saved and restored
+- Meditation no longer stops early when poisoned
+- phantruchs no longer freeze when the summoner forgives you
+
+UX:
+- more styling of message log entries
+- show a summary of health changes at the end of Meditation
+- only the last inspected tile is highlighted
+- loot button show the icon of what you are about to pick
+- loot piles have a different icon
+- new talk action button when near someone chatty
+
+Balance:
+- plasus rats are more territorial than regular rats
+- accountant can pass financial records the same turn he gets withing reach
+
+Other:
+- darkness is no longer based on how deep you are
