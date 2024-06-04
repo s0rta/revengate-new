@@ -130,8 +130,6 @@ func build_board(depth, world_loc:Vector3i, size:Vector2i=default_board_size, pr
 	new_board.dungeon_name = name
 	new_board.size = size
 	new_board.ambient_light_col = ambient_light_col
-	if world_loc.z < 0:
-		new_board.ambient_light_col.v = ambient_light_col.v ** abs(world_loc.z)
 	new_board.depth = depth
 	new_board.world_loc = world_loc
 	add_child(new_board)

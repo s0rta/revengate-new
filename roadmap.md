@@ -464,19 +464,21 @@ Items:
 - [x] bug: paralized is not saved (#38)
 - [x] bug: new board is not saved when entering a new area
 - [x] bug: ghost death sound is clipped
+- [x] bug: Meditation stops too early when suffering from conditions (#65)
 
 - [x] type a few stories
 - [x] don't change Tally and Mem every time the scene is loaded in the editor
 - [x] rename MeterGroup
-- [ ] parlor magic is tagged as "story"
+- [x] parlor magic is tagged as "story"
 - [x] document conn_target and connection fields
-- [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
-- [ ] silence a few warnings
+- [x] silence a few warnings
 - [x] remove src/ui/explosion_vfx.gd
 - [x] delete some old Python code
 - [x] clear todo.txt
 - [x] self-host web exports for dev builds
 - [x] F6 on a deck builder does not init a bunch of fields in the scene file
+- [x] vfx obey shadow setting
+- [x] switch to gl_compat renderer on all platforms
 
 UX:
 - [x] yield message is not Critical (#31)
@@ -494,6 +496,7 @@ Maybe:
 - [x] phantruchs do not recover from forgivness
 
 ## v0.12.9
+- [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 
 ## v0.13
 - [ ] new quest: Pacherrs are seeking some new crystals

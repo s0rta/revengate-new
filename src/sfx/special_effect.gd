@@ -49,7 +49,8 @@ func _ready():
 	if $Sound and not skip_sound:
 		$Sound.play()
 	
-	if $Light:
+	Utils.adjust_lights_settings(self)
+	if $Light and $Light.enabled:
 		$Light.energy = 0
 		var tween = create_tween()
 		tween.set_ease(Tween.EASE_OUT)
