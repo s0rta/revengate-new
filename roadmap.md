@@ -497,6 +497,9 @@ Maybe:
 
 ## v0.12.9
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
+- [ ] conditions summary in Inspect
+- [ ] glasses in stash
+- [ ] a bit smarter choosing the next speaker with the Talk button
 
 ## v0.13
 - [ ] new quest: Pacherrs are seeking some new crystals
@@ -509,6 +512,7 @@ Maybe:
 - [ ] packaging for Ubuntu
 
 ## Ice Box: not yet scheduled for a release
+- [ ] factor out tossing logic from the inventory screen
 - [ ] random interlude stories
 - [ ] non-walking movement and path finding (wading, swimming, phasing)
 - [ ] Deck.peek(): select the next card, but do not remove it from the deck

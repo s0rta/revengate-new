@@ -178,7 +178,7 @@ class Talk extends Command:
 			# keep talking to the same chap only if they have new things to say
 			speaker = prev_speaker
 		elif len(others) >= 2 and prev_speaker in others:
-			return Rand.choice(others.filter(func(other): return other != prev_speaker))
+			speaker = Rand.choice(others.filter(func(other): return other != prev_speaker))
 		else:
 			speaker = Rand.choice(others)
 		return true

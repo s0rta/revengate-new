@@ -3,7 +3,7 @@ Bug fixes:
 - kobold and ghost sounds are fixed
 - tap on self no longer corrupts the next action
 - paralyzed is saved and restored
-- Meditation no longer stops early when poisoned
+- Meditation stops at the right time even when poisoned
 - phantruchs no longer freeze when the summoner forgives you
 
 UX:
