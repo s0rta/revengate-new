@@ -128,25 +128,6 @@ func start_turn(turn_number:int):
 	super(turn_number)
 	scale_fog_light(get_perception_ranges().sight)
 
-func highlight_options(board=null, index=null):
-	## Put highlight markers where one-tap actions are available
-	if board == null:
-		board = get_board()
-
-	if index == null:
-		index = board.make_index() as RevBoard.BoardIndex
-
-	var foe_coords = []
-	var cmd = CommandPack.Attack.new(index)
-	for actor in index.get_actors():
-		var there = actor.get_cell_coord()
-		if cmd.is_valid_for(there) and cmd.is_default:
-			foe_coords.append(there)
-	board.highlight_cells(foe_coords, "highlight-foe")
-
-	if not turn_done.is_connected(board.clear_highlights):
-		turn_done.connect(board.clear_highlights, CONNECT_ONE_SHOT)
-
 func scale_fog_light(nb_cells):
 	## Adjust the size of the FogLight to light `nb_cells` passed the hero in all
 	## cardinal directions.
@@ -178,9 +159,6 @@ func act() -> void:
 		print("player acting...")
 		var index = board.make_index()
 		board.update_all_actor_shrouding(index)
-		highlight_options(board, index)
 		# _unhandled_input() or the selected Command must set has_acted and call finalize_turn()
 		await self.turn_done
-		
-	# FIXME: this is not needed if our connection to turn_done works
 	board.clear_highlights()

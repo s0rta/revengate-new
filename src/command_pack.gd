@@ -95,7 +95,8 @@ class Attack extends Command:
 		return true
 
 class QuickAttack extends Command:
-	var nearby_foe = null
+	var last_target
+	var next_target
 	var attack_range:int
 
 	func _init(index_=null):
@@ -112,34 +113,44 @@ class QuickAttack extends Command:
 				victims[fact.foe] = true
 		return victims.keys()
 
-	func is_valid_for_hero_at(coord:Vector2i):
-		var board = Tender.hero.get_board()
+	func is_valid_for_hero_at(coord:Vector2i):		
+		var board:RevBoard = Tender.hero.get_board()
 		var hero = Tender.hero as Actor
 		attack_range = hero.get_max_weapon_range()
 		var actors = index.get_actors_in_sight(hero.get_cell_coord(), attack_range)
 		actors = actors.filter(func(actor): return actor.is_alive())
-		actors.shuffle()
-		var victims = _get_prior_victims()
+		var actors_by_id = {}
 		for actor in actors:
-			if hero.is_foe(actor) or actor.actor_id in victims:
-				nearby_foe = actor
-				return true
-		return false
+			actors_by_id[actor.actor_id] = actor
+		var victim_ids = _get_prior_victims()
+		var targets = []
+		next_target = null
+		
+		for id in victim_ids:
+			if actors_by_id.has(id):
+				targets.append(actors_by_id[id])
+				if not next_target:
+					next_target = actors_by_id[id]
+	
+		for actor in actors:
+			if hero.is_foe(actor) and not actor.actor_id in victim_ids:
+				targets.append(actor)
+				if actor == last_target and not next_target:
+					next_target = actor
+						
+		if not next_target and not targets.is_empty():
+			next_target = Rand.choice(targets)
+		
+		var target_coords = targets.map(func(actor): return actor.get_cell_coord())
+		board.highlight_cells(target_coords, "mark-foe")
+		if next_target:
+			board.highlight_cells([next_target.get_cell_coord()], "mark-foe-default")
+		return not targets.is_empty()
 
 	func run_at_hero(coord:Vector2i) -> bool:
 		var board = Tender.hero.get_board()
-		var foe = nearby_foe
-
-		# try to go again on the last actor we attacked if possible
-		var fact = Tender.hero.mem.recall("attacked")
-		if fact:
-			var last_foe = index.actor_by_id(fact.foe)
-			if (last_foe != null and last_foe.is_alive()
-					and board.dist(Tender.hero, last_foe) <= attack_range
-					and index.has_los(Tender.hero, last_foe)):
-				foe = last_foe
-
-		Tender.hero.attack(foe)
+		Tender.hero.attack(next_target)
+		last_target = next_target
 		return true
 
 class Talk extends Command:
@@ -200,7 +211,6 @@ class Talk extends Command:
 		board.highlight_cells(other_coords, "mark-chatty")
 		var other_dists = other_coords.map(board.dist.bind(coord))
 		var min_dist = other_dists.min()
-		print("The closest chatty chap is %s cells away" % min_dist)
 
 		# bias to pick closer speakers
 		var other_weights = other_dists.map(func(d): return Consts.CONVO_RANGE - d + 1)
