@@ -31,10 +31,12 @@ func _ready():
 func _unhandled_input(event):
 	if state != States.LISTENING:
 		return
+	if event is InputEventMouseMotion:
+		return
 	var acted = false  # TODO: set the `has_acted` member directly
 	var move = null
 	state = States.ACTING
-	
+
 	var board = get_board()
 	var index = board.make_index()
 	if event.is_action_pressed("act-on-cell"):
@@ -50,7 +52,7 @@ func _unhandled_input(event):
 		elif other and not perceives(other):
 			other = null
 		var click_dist = RevBoard.dist(get_cell_coord(), coord)
-		
+
 		var attack_cmd = CommandPack.Attack.new(index)
 		if attack_cmd.is_valid_for(coord) and attack_cmd.is_default:
 			acted = await attack_cmd.run(coord)
@@ -58,9 +60,9 @@ func _unhandled_input(event):
 			if other.get_conversation():
 				acted = await $"/root/Main".commands.talk(coord)
 			else:
-				get_board().add_message(self, 
+				get_board().add_message(self,
 										"%s has nothing to tell you." % other.caption,
-										Consts.MessageLevels.INFO, 
+										Consts.MessageLevels.INFO,
 										["msg:story"])
 				acted = true
 		elif other and not other.is_unexposed():
@@ -95,7 +97,7 @@ func _unhandled_input(event):
 		move = V.i(0, -1)
 	elif Input.is_action_pressed("down"):
 		move = V.i(0, 1)
-		
+
 	if move:
 		var dest = get_cell_coord() + move
 		if board.is_on_board(dest) and index.is_free(dest):
@@ -130,11 +132,7 @@ func highlight_options(board=null, index=null):
 	## Put highlight markers where one-tap actions are available
 	if board == null:
 		board = get_board()
-	
-	# FIXME: this pre-clearing is not needed if we figuere out what prevents turn_done
-	# from firing when there is a conversation
-	board.clear_highlights()
-	
+
 	if index == null:
 		index = board.make_index() as RevBoard.BoardIndex
 
@@ -146,19 +144,11 @@ func highlight_options(board=null, index=null):
 			foe_coords.append(there)
 	board.highlight_cells(foe_coords, "highlight-foe")
 
-	var friend_coords = []
-	cmd = CommandPack.Talk.new(index)
-	for actor in index.get_actors():
-		var there = actor.get_cell_coord()
-		if cmd.is_valid_for(there) and cmd.is_default:
-			friend_coords.append(there)
-	board.highlight_cells(friend_coords, "highlight-friend")
-			
 	if not turn_done.is_connected(board.clear_highlights):
 		turn_done.connect(board.clear_highlights, CONNECT_ONE_SHOT)
 
 func scale_fog_light(nb_cells):
-	## Adjust the size of the FogLight to light `nb_cells` passed the hero in all 
+	## Adjust the size of the FogLight to light `nb_cells` passed the hero in all
 	## cardinal directions.
 	## The light is circular and will therefore cover fewer cells along diagonals.
 	if _fog_anim != null and _fog_anim.is_running():
@@ -170,10 +160,7 @@ func scale_fog_light(nb_cells):
 
 func act() -> void:
 	has_acted = false
-
 	var board = get_board()
-	board.clear_highlights()
-
 	refresh_strategies()
 	var strat = get_strategy()
 	if strat:
@@ -194,3 +181,6 @@ func act() -> void:
 		highlight_options(board, index)
 		# _unhandled_input() or the selected Command must set has_acted and call finalize_turn()
 		await self.turn_done
+		
+	# FIXME: this is not needed if our connection to turn_done works
+	board.clear_highlights()

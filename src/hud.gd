@@ -24,7 +24,7 @@ signal cancel_strategies
 @onready var cheats_box = find_child("CheatsMargin")
 @onready var dialogue_pane = %DialoguePane
 @onready var actor_details_screen = %ActorDetailsScreen
-var quick_attack_cmd : CommandPack.Command 
+var quick_attack_cmd : CommandPack.Command
 
 func _ready():
 	# only show the testing UI on debug builds
@@ -49,7 +49,7 @@ func watch_hero(hero:Actor=null):
 		if Tender.hero != null:
 			hero = Tender.hero
 		else:
-			return  # not much we can do under a hero has been initialized
+			return  # not much we can do until a hero has been initialized
 	hero.moved.connect(refresh_buttons_vis)
 	hero.changed_weapons.connect(_on_hero_changed_weapons)
 	hero.dropped_item.connect(_set_quick_attack_icon)
@@ -64,12 +64,15 @@ func watch_hero(hero:Actor=null):
 	hero.health_changed.connect(refresh_hps)
 	refresh_hps()
 	refresh_buttons_vis(null, hero.get_cell_coord())
-	
-	for btn in %QuickActionsBox.find_children("", "MultiCmdButton", false, false):
-		btn.resolve_commands(%CommandPack)
+
 	var index = hero.get_board().make_index()
+	for btn in %QuickActionsBox.find_children("", "MultiCmdButton", false, false):
+		btn.resolve_commands(%CommandPack, index)
 	quick_attack_cmd = CommandPack.QuickAttack.new(index)
 	_set_quick_attack_icon()
+	var hero_coord = hero.get_cell_coord()
+	_init_lbar_commands(hero_coord, index)
+	_init_cheatsbar_commands(hero_coord, index)
 
 func _set_quick_attack_icon(_arg=null):
 	var weapons = Tender.hero.get_weapons()
@@ -104,28 +107,33 @@ func refresh_spells():
 		%QuickActionsBox.add_child(btn)
 		btn.set_enabled(false)
 
-func _refresh_lbar_commands(hero_coord, index):
-	## Remove commands that are no longer valid from the lbar and add the newly valid ones.
-	# TODO: recycle as many buttons as possible rather than recreating everything.
-	for node in %LButtonBar.get_children():
-		if node is CommandButton:
-			%LButtonBar.remove_child(node)
-	for cmd in %CommandPack.commands_for(hero_coord, true, true, index):
-		if not cmd.is_cheat and not cmd.is_debug and cmd.auto_display:
+func _init_lbar_commands(hero_coord:Vector2i, index):
+	## Add the main command button to the left button bar
+	for btn in %LButtonBar.find_children("", "CommandButton", false, false):
+		%LButtonBar.remove_child(btn)
+	for cmd in %CommandPack.get_all_commands(true, index):
+		if not cmd.is_cheat and not cmd.is_debug:
 			var btn = CommandButton.new(cmd, hero_coord, true)
 			%LButtonBar.add_child(btn)
 
-func _refresh_cheatsbar_commands(hero_coord, index):
-	## Remove commands that are no longer valid from the cheats bar and add the newly valid ones.
-	# TODO: recycle as many buttons as possible rather than recreating everything.
-	for node in %CheatsBar.get_children():
-		if node is CommandButton or node is Button:
-			%CheatsBar.remove_child(node)
+func _refresh_lbar_commands(hero_coord, index):
+	## Hide commands that are no longer valid from the lbar and show the newly valid ones.
+	for btn in %LButtonBar.find_children("", "CommandButton", false, false):
+		btn.reset_visibility(hero_coord, index)
+
+func _init_cheatsbar_commands(hero_coord:Vector2i, index):
+	for btn in %CheatsBar.find_children("", "CommandButton", false, false):
+		%CheatsBar.remove_child(btn)
 	var is_debug = Utils.is_debug()
-	for cmd in %CommandPack.commands_for(hero_coord, true, true, index):
+	for cmd in %CommandPack.get_all_commands(true, index):
 		if cmd.is_cheat or is_debug and cmd.is_debug:
 			var btn = CommandButton.new(cmd, hero_coord, true)
 			%CheatsBar.add_child(btn)
+
+func _refresh_cheatsbar_commands(hero_coord, index):
+	## Hide commands that are no longer valid from the cheats bar and show the newly valid ones.
+	for btn in %CheatsBar.find_children("", "CommandButton", false, false):
+		btn.reset_visibility(hero_coord, index)
 
 func update_states_at(hero_coord):
 	## Refresh internal states by taking into account a recent change at `hero_coord`
@@ -172,12 +180,12 @@ func toggle_cheats_box():
 func show_action_label(text):
 	%ActionLabel.text = text
 	%ActionLabel.show()
-	
+
 func hide_action_label():
 	%ActionLabel.hide()
 
-func add_message(text:String, 
-				level:Consts.MessageLevels, 
+func add_message(text:String,
+				level:Consts.MessageLevels,
 				tags:Array):
 	if "msg:strategy" in tags:
 		if %ProminentMsgLabel.text.is_empty():
@@ -201,7 +209,7 @@ func refresh_input_enabled(enabled):
 		var index = Tender.hero.get_board().make_index()
 		_refresh_lbar_commands(hero_coord, index)
 		_refresh_cheatsbar_commands(hero_coord, index)
-		
+
 	for child in %LButtonBar.get_children():
 		if child is Button:
 			child.disabled = not enabled

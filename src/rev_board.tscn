@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cfc3ttsrd52r"]
+[gd_scene load_steps=23 format=3 uid="uid://cfc3ttsrd52r"]
 
 [ext_resource type="Shader" path="res://src/ui/blinking.gdshader" id="1_a0jvk"]
 [ext_resource type="Texture2D" uid="uid://kau2lr1cng82" path="res://assets/tile-atlas.png" id="1_j50me"]
@@ -353,6 +353,9 @@ texture_region_size = Vector2i(32, 32)
 4:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 4:0/0/physics_layer_0/angular_velocity = 0.0
 
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_fwitx"]
+resource_name = "Scene Tiles"
+
 [sub_resource type="TileSet" id="1"]
 tile_size = Vector2i(32, 32)
 occlusion_layer_0/light_mask = 1
@@ -393,6 +396,7 @@ terrain_set_0/terrain_15/color = Color(0.270588, 0.309804, 1, 1)
 terrain_set_0/terrain_16/name = "highlight-warning"
 terrain_set_0/terrain_16/color = Color(0.968627, 0.921569, 0.00784314, 1)
 sources/0 = SubResource("TileSetAtlasSource_x5cyv")
+sources/1 = SubResource("TileSetScenesCollectionSource_fwitx")
 
 [node name="Board" type="TileMap"]
 position = Vector2(0, 1)
@@ -407,13 +411,6 @@ layer_1/modulate = Color(1, 1, 1, 0.717647)
 layer_1/z_index = -1
 layer_1/tile_data = PackedInt32Array()
 script = ExtResource("2_dlal2")
-ambient_light_col = null
-depth = null
-world_loc = null
-_cell_records = null
-_cells_by_terrain = null
-current_turn = null
-board_id = null
 
 [node name="Pad" type="Node" parent="."]
 editor_description = "This node is a hack to work around an abscure bug that make the first child of a RevBoard invisible."

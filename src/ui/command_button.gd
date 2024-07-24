@@ -23,6 +23,7 @@ var coord:Vector2i
 var hero_pov:bool
 
 func _init(command, coord_, hero_pov_:bool):
+	focus_mode = Control.FOCUS_NONE
 	cmd = command
 	coord = coord_
 	hero_pov = hero_pov_

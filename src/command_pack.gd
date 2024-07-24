@@ -51,7 +51,7 @@ class Command extends RefCounted:
 
 	func is_valid_for_hero_at(coord:Vector2i):
 		return false  # sub-classes must override this to enable the HUD version of this command
-		
+
 	func run(coord:Vector2i) -> bool:
 		## Run the command, return if that counted as a turn action.
 		assert(false, "Not implemented")
@@ -84,11 +84,11 @@ class Attack extends Command:
 		var other = index.actor_at(coord)
 		if other == null or other.is_dead() or not Tender.hero.perceives(other):
 			return false
-		is_default = (other != null 
-						and other != Tender.hero 
+		is_default = (other != null
+						and other != Tender.hero
 						and Tender.hero.is_foe(other))
 		return true
-		
+
 	func run(coord:Vector2i) -> bool:
 		var victim = index.actor_at(coord)
 		await Tender.hero.attack(victim)
@@ -125,17 +125,17 @@ class QuickAttack extends Command:
 				nearby_foe = actor
 				return true
 		return false
-	
+
 	func run_at_hero(coord:Vector2i) -> bool:
 		var board = Tender.hero.get_board()
 		var foe = nearby_foe
-		
+
 		# try to go again on the last actor we attacked if possible
 		var fact = Tender.hero.mem.recall("attacked")
 		if fact:
 			var last_foe = index.actor_by_id(fact.foe)
-			if (last_foe != null and last_foe.is_alive() 
-					and board.dist(Tender.hero, last_foe) <= attack_range 
+			if (last_foe != null and last_foe.is_alive()
+					and board.dist(Tender.hero, last_foe) <= attack_range
 					and index.has_los(Tender.hero, last_foe)):
 				foe = last_foe
 
@@ -143,14 +143,40 @@ class QuickAttack extends Command:
 		return true
 
 class Talk extends Command:
-	var speaker
+	# FIXME: there are many ways we could talk with someone (long tap, chat 
+	#   button in left action bar, ...). Moving the context of the last conversation 
+	#   outside of this command (perhaps in the Tender) 
+	#   is the only real way to keep all those methods consistent.
+	var next_speaker
+	var prev_def_speaker
 	var prev_speaker
 	var prev_convo
-	
+
 	func _init(index_=null):
 		is_action = true
 		caption = "Talk"
 		super(index_)
+
+	func _is_talkative(other:Actor) -> bool:
+		return (other.is_alive()
+				and other.get_conversation() != null
+				and Tender.hero.perceives(other))
+
+	func _chat_with(other:Actor):
+		var conversation = other.get_conversation()
+		if conversation == null:
+			Tender.hud.add_message("%s has nothing to say." % other.caption,
+									Consts.MessageLevels.INFO,
+									["msg:story"])
+		else:
+			prev_speaker = other
+			prev_convo = conversation
+
+			Tender.hud.dialogue_pane.start(conversation.res, conversation.sect, other)
+			await Tender.hud.dialogue_pane.hidden
+
+			# FIXME: we never seem to receive this signal when called by hero directly
+			print("The dia has been closed!")
 
 	func is_valid_for(coord:Vector2i):
 		var board = Tender.hero.get_board()
@@ -160,44 +186,53 @@ class Talk extends Command:
 		var dist = board.dist(hero_coord, coord)
 		# TODO: it would make sense to have conversations further apart
 		var other = index.actor_at(coord)
-		is_default = other != null and not Tender.hero.is_foe(other)		
-		return (dist <= Consts.CONVO_RANGE 
-				and other
-				and _is_talkative(other))
-	
-	func _is_talkative(other:Actor) -> bool:
-		return (other.is_alive() 
-				and other.get_conversation() != null 
-				and Tender.hero.perceives(other))
-	
+		is_default = other != null and not Tender.hero.is_foe(other)
+		if dist <= Consts.CONVO_RANGE and other and _is_talkative(other):
+			next_speaker = other
+			return true
+		else:
+			return false
+
 	func is_valid_for_hero_at(coord:Vector2i):
+		var board:RevBoard = Tender.hero.get_board()
 		var others = index.get_actors_around(coord, Consts.CONVO_RANGE).filter(_is_talkative)
+		var other_coords = others.map(func(actor): return actor.get_cell_coord())
+		board.highlight_cells(other_coords, "mark-chatty")
+		var other_dists = other_coords.map(board.dist.bind(coord))
+		var min_dist = other_dists.min()
+		print("The closest chatty chap is %s cells away" % min_dist)
+
+		# bias to pick closer speakers
+		var other_weights = other_dists.map(func(d): return Consts.CONVO_RANGE - d + 1)
+				
+		# keep the same speaker if possible, 
+		# if not, keep the same default selection, as long as it's one of the optimal choices
+		
 		if others.is_empty():
 			return false
 		elif prev_speaker in others and prev_speaker.get_conversation() != prev_convo:
 			# keep talking to the same chap only if they have new things to say
-			speaker = prev_speaker
+			# FIXME: this needs work because it relies on checkpoints and exiting a convo might 
+			#   happen before a check point, in which case the above test fails to see that the 
+			#   speaker still has things to say.
+			next_speaker = prev_speaker
+		elif next_speaker in others and board.dist(next_speaker, coord) == min_dist:
+			pass  # we keep the same next speaker
 		elif len(others) >= 2 and prev_speaker in others:
-			speaker = Rand.choice(others.filter(func(other): return other != prev_speaker))
+			for i in len(others):
+				if others[i] == prev_speaker:
+					other_weights[i] = 0
+					break
+			next_speaker = Rand.weighted_choice(others, other_weights)
 		else:
-			speaker = Rand.choice(others)
+			next_speaker = Rand.weighted_choice(others, other_weights)
+
+		# highlight the default speaker more prominently
+		board.highlight_cells([next_speaker.get_cell_coord()], "mark-chatty-default")
 		return true
-	
-	func _chat_with(other:Actor):
-		var conversation = other.get_conversation()
-		if conversation == null:
-			Tender.hud.add_message("%s has nothing to say." % other.caption, 
-									Consts.MessageLevels.INFO, 
-									["msg:story"])
-		else:
-			prev_speaker = other
-			prev_convo = conversation
-			
-			Tender.hud.dialogue_pane.start(conversation.res, conversation.sect, other)
-			await Tender.hud.dialogue_pane.hidden
-			
-			# FIXME: we never seem to receive this signal when called by hero directly
-			print("The dia has been closed!")
+
+
+
 
 	func run(coord:Vector2i) -> bool:
 		var other = index.actor_at(coord)
@@ -205,7 +240,7 @@ class Talk extends Command:
 		return true
 
 	func run_at_hero(coord:Vector2i) -> bool:
-		_chat_with(speaker)
+		_chat_with(next_speaker)
 		return true
 
 
@@ -226,7 +261,7 @@ class PickItem extends Command:
 		else:
 			caption = "%s (%s)" % [caption_prefix, item.char]
 			return true
-	
+
 	func run_at_hero(coord:Vector2i) -> bool:
 		var item = index.top_item_at(coord)
 		Tender.hero.pick_item(item)
@@ -256,7 +291,7 @@ class Rest extends Command:
 	const MAX_START_HRATIO = .74
 	const MIN_HRATIO = .10
 	const END_HRATIO = .80
-	
+
 	func _init(index_=null):
 		is_action = true
 		caption = "Rest"
@@ -264,7 +299,7 @@ class Rest extends Command:
 
 	func is_valid_for(coord:Vector2i) -> bool:
 		return coord == Tender.hero.get_cell_coord()
-		
+
 	func is_valid_for_hero_at(_coord:Vector2i) -> bool:
 		return false  # it's valid, but we lie to make the buttons less spammy
 
@@ -286,13 +321,13 @@ class Rest extends Command:
 		Tender.hero.add_strategy(strat)
 		Tender.hero.add_message("You close your eyes and meditate for a while...")
 		return true
-	
+
 	func run_at_hero(coord:Vector2i) -> bool:
 		return run(coord)
-		
+
 	func _find_ttl(target_health:int):
 		## Return how long we should rest.
-		## The turns estimate is based on a very pessimistic take on healing_prob 
+		## The turns estimate is based on a very pessimistic take on healing_prob
 		## and the likelihood of other conditions interfering.
 		const min_ttl := 50
 		var me:Actor = Tender.hero
@@ -310,7 +345,7 @@ class Inspect extends Command:
 
 	func is_valid_for(coord:Vector2i):
 		return true
-		
+
 	func run(coord:Vector2i) -> bool:
 		var board = Tender.hero.get_board()
 		board.clear_highlights()
@@ -319,7 +354,7 @@ class Inspect extends Command:
 		if actor and not actor.is_unexposed(index):
 			Tender.hud.actor_details_screen.show_actor(actor)
 			await Tender.hud.actor_details_screen.closed
-			
+
 		# only one of Actor or Item message will show
 		board.highlight_cells([coord])
 		var here_str = "at %s" % board.coord_str(coord) if Utils.is_debug() else "here"
@@ -341,13 +376,13 @@ class Inspect extends Command:
 				messages.append("There is a %s tile %s" % [terrain, here_str])
 			else:
 				messages.append("This is a %s tile" % [terrain])
-		
+
 		if messages.is_empty():
 			messages.append("There is nothing %s" % here_str)
 
 		for msg in messages:
 			Tender.hero.add_message(msg)
-		
+
 		return false
 
 class TravelTo extends Command:
@@ -363,7 +398,7 @@ class TravelTo extends Command:
 		var hero_coord = Tender.hero.get_cell_coord()
 		# FIXME: should use board.path_perceived()
 		return index.is_free(coord) and board.path(hero_coord, coord)
-		
+
 	func run(coord:Vector2i) -> bool:
 		if Tender.hero.travel_to(coord, index):
 			Tender.hero.act()
@@ -392,7 +427,7 @@ class GetCloser extends Command:
 			return false
 		path = board.path_perceived_strict(hero_coord, coord, Tender.hero, false, -1, index)
 		return path != null
-		
+
 	func run(coord:Vector2i) -> bool:
 		if dist > Tender.hero.get_max_action_range(other):
 			var strat = Approaching.new(other, path, Tender.hero, 0.9)
@@ -412,10 +447,10 @@ class DumpDevCheat extends Command:
 
 	func is_valid_for(coord:Vector2i):
 		return true
-	
+
 	func is_valid_for_hero_at(coord:Vector2i):
 		return true
-	
+
 	func _ddump_at(coord):
 		# TODO: move most of this to board.ddump_cell()
 		var coord_str = RevBoard.coord_str(coord)
@@ -461,10 +496,10 @@ class TeleportCheat extends Cheat:
 
 	func is_valid_for(coord:Vector2i):
 		return true
-	
+
 	func is_valid_for_hero_at(coord:Vector2i):
 		return true
-	
+
 	func run(coord:Vector2i) -> bool:
 		inc_nb_cheats()
 		Tender.hero.place(coord, true)
@@ -488,10 +523,10 @@ class RegenCheat extends Cheat:
 
 	func is_valid_for(coord:Vector2i):
 		return false
-	
+
 	func is_valid_for_hero_at(coord:Vector2i):
 		return true
-	
+
 	func run_at_hero(coord:Vector2i) -> bool:
 		inc_nb_cheats()
 		Tender.hero.health += Tender.hero.health_full / 2
@@ -505,10 +540,10 @@ class VictoryCheat extends Cheat:
 
 	func is_valid_for(coord:Vector2i):
 		return false
-	
+
 	func is_valid_for_hero_at(coord:Vector2i):
 		return true
-	
+
 	func run_at_hero(coord:Vector2i) -> bool:
 		inc_nb_cheats()
 		var game_over = false
@@ -516,11 +551,11 @@ class VictoryCheat extends Cheat:
 			game_over = true
 		Tender.hero.end_chapter.emit(true, game_over)
 		return false
-		
+
 class DoorHandler extends Command:
 	var door_at = null
 	var target_terrain:String
-	
+
 	func _is_valid_door(coord):
 		var board = Tender.hero.get_board() as RevBoard
 		return board.get_cell_terrain(coord) == target_terrain
@@ -538,14 +573,14 @@ class DoorHandler extends Command:
 				door_at = c
 				return true
 		return false
-		
+
 	func run(coord:Vector2i) -> bool:
 		var board = Tender.hero.get_board() as RevBoard
 		board.toggle_door(coord)
 		return true
 
 	func run_at_hero(coord:Vector2i) -> bool:
-		return run(door_at)	
+		return run(door_at)
 
 class CloseDoor extends DoorHandler:
 	func _init(index_=null):
@@ -569,7 +604,7 @@ class OpenDoor extends DoorHandler:
 		if not super(coord):
 			return false
 		var board = Tender.hero.get_board()
-		if board.is_locked(coord): 
+		if board.is_locked(coord):
 			var cell_rec = board.get_cell_rec(coord, "locked")
 			var keys = Tender.hero.get_items([cell_rec.key])
 			if not keys.is_empty():
@@ -584,25 +619,29 @@ class OpenDoor extends DoorHandler:
 			board.unlock(coord, key)
 		super(coord)
 		return true
-		
+
 func _ready():
-	_cmd_classes = [PickItem, Attack, Talk, TravelTo, GetCloser, Inspect, 
-					CloseDoor, OpenDoor, 
-					SkipTurn, Rest, 
+	_cmd_classes = [PickItem, Attack, Talk, TravelTo, GetCloser, Inspect,
+					CloseDoor, OpenDoor,
+					SkipTurn, Rest,
 					DumpDevCheat, TeleportCheat, RegenCheat, VictoryCheat]
 
-func get_commands(names:Array[String]) -> Dictionary:
+func get_commands(names:Array[String], index=null) -> Dictionary:
 	## Return a {name:instance} mapping from command captions.
 	## Raise an assertion error if any of the names does not correspond to a command.
 	## If more than one command use the same caption, the first one in the registry is returned.
-	# TODO: it would be more robust to go by class name rather than caption, but that 
+	# TODO: it would be more robust to go by class name rather than caption, but that
 	#   does not seem possible as of Godot 4.2.1
 	var dict = {}
 	var has_match : bool
+
+	if index == null:
+		index = Tender.hero.get_board().make_index()
+
 	for name in names:
 		has_match = false
 		for cls in _cmd_classes:
-			var cmd = cls.new()
+			var cmd = cls.new(index)
 			if cmd.caption == name:
 				has_match = true
 				dict[name] = cmd
@@ -610,14 +649,14 @@ func get_commands(names:Array[String]) -> Dictionary:
 		assert(has_match, "Can't find a command labeled %s" % name)
 	return dict
 
-func commands_for(coord, hero_pov:=false, auto_display:=true, index=null):
-	## Return a list of valid coordinates for `coord`
+func get_all_commands(auto_display:=true, index=null):
+	## Return a list of new instances of each of the known Commands
 	## `auto_display`: only return auto_display commands
 	var is_debug = Utils.is_debug()
 	var allow_cheats = Tabulator.load().allow_cheats
 	if index == null:
 		index = Tender.hero.get_board().make_index()
-	
+
 	var commands = []
 	for cls in _cmd_classes:
 		var cmd = cls.new(index)
@@ -627,6 +666,14 @@ func commands_for(coord, hero_pov:=false, auto_display:=true, index=null):
 			continue
 		if auto_display and not cmd.auto_display:
 			continue
+		commands.append(cmd)
+	return commands
+
+func commands_for(coord, hero_pov:=false, auto_display:=true, index=null):
+	## Return a list of valid commands for `coord`
+	## `auto_display`: only return auto_display commands
+	var commands = []
+	for cmd in get_all_commands(auto_display, index):
 		if (hero_pov and cmd.is_valid_for_hero_at(coord)) \
 			or (not hero_pov and cmd.is_valid_for(coord)):
 			commands.append(cmd)

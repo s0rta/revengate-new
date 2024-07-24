@@ -19,8 +19,8 @@ class_name RevBoard extends TileMap
 
 const TILE_SIZE = 32
 const INV_TILE_SIZE = 1.0 / TILE_SIZE  # we speed up conversion with mult rather than div
-const LAYER_GEOM = 0
-const LAYER_HIGHLIGHTS = 1
+const LAYER_GEOM := 0  # tiles from the atlas
+const LAYER_HIGHLIGHTS := 1  # dynamically created scene tiles
 
 # which terrains lead to other boards?
 const CONNECTOR_TERRAINS = ["stairs-down", "stairs-up", "gateway"]
@@ -30,6 +30,11 @@ const INDEXED_TERRAINS = CONNECTOR_TERRAINS
 # plain floor without other features
 const FLOOR_TERRAINS = ["floor", "floor-rough", "floor-dirt"]
 
+# dynamic highlight tiles
+const DYN_HIGHLIGHTS = {"mark-chatty": "#407014",
+						"mark-chatty-default": "#86f61f",
+						}
+
 signal new_message(message, level, tags)
 signal actor_died(board, coord, tags)
 
@@ -37,16 +42,16 @@ signal actor_died(board, coord, tags)
 
 @export_group("Internals")
 ## approximate topological distance to the starting board, used for spawning difficulty
-@export var depth := 0  
+@export var depth := 0
 @export var world_loc: Vector3i  ## relative positioning of this board in the world
 
 ## Per-cell custom data, unlike the per-tile data provided by TileMap
 ## (x, y) -> {'rec_name' -> {...}}
-## known rec_names: 
+## known rec_names:
 ##  - "conn_target": this cell will eventually lead to another board ("depth", "dungeon", "world_loc")
 ##  - "connection": this cell leads to another board ("far_board_id", "far_coord", "far_loc")
 ##  - "locked": there is a locked door here ("key")
-@export var _cell_records := {}  
+@export var _cell_records := {}
 
 @export var _cells_by_terrain := {}  # terrain_name -> array of coords
 @export var current_turn := 0
@@ -55,6 +60,7 @@ signal actor_died(board, coord, tags)
 @export var size:Vector2i
 
 var terrain_names := {}  # name -> (terrain_set, terrain_id)
+var alt_terrain_names := {}
 
 class TileSpiral extends RefCounted:
 	var board: RevBoard
@@ -68,17 +74,17 @@ class TileSpiral extends RefCounted:
 	var max_radius
 	var board_index
 	var is_init: bool = false
-	
+
 	static func get_max_radius(center: Vector2i, bbox: Rect2i):
-		## Return the largest radius that a spiral can grow to before only 
+		## Return the largest radius that a spiral can grow to before only
 		## producing coords outside the bounding box.
 		var v1 = center - bbox.position
 		var v2 = bbox.end - center - Vector2i.ONE
 		return max(v1.x, v1.y, v2.x, v2.y)
 
-	func _init(board_, center_, max_radius_=null, free_:bool=true, in_board_:bool=true, 
+	func _init(board_, center_, max_radius_=null, free_:bool=true, in_board_:bool=true,
 				bbox_=null, board_index_=null):
-		## max_radius: how far from center to consider coordiates, infered from 
+		## max_radius: how far from center to consider coordiates, infered from
 		##  the bounding box if not provided.
 		## all other params: like RevBoard.ring()
 		board = board_
@@ -96,19 +102,19 @@ class TileSpiral extends RefCounted:
 			max_radius = max_radius_
 		else:
 			max_radius = get_max_radius(center, bbox)
-		
+
 	func _iter_init(_arg):
 		radius = 0
 		is_init = true
 		return grow_radius()
-		
+
 	func _iter_next(_arg):
 		coords_index += 1
 		if coords_index < coords.size():
 			return true
 		else:
 			return grow_radius()
-		
+
 	func _iter_get(_arg):
 		return coords[coords_index]
 
@@ -130,13 +136,13 @@ class TileSpiral extends RefCounted:
 		if radius > max_radius:
 			coords = []
 			return false
-		
+
 		coords = board.ring(center, radius, free, in_board, bbox, board_index)
 		if coords.size():
 			return true
 		else:
 			return grow_radius()
-			
+
 	func _to_string():
 		var cells = []
 		for c in self:
@@ -151,7 +157,7 @@ class BoardIndex extends RefCounted:
 	var _coord_to_actor := {}
 	var _actor_to_coord := {}
 	var _actor_by_id := {}
-	
+
 	# items can be stacked, so we store them in an array
 	# the top of the stack is at the end (index=-1)
 	var _coord_to_items := {}  # [x:y] -> Array
@@ -178,7 +184,7 @@ class BoardIndex extends RefCounted:
 
 	func get_actors():
 		return _actor_to_coord.keys()
-	
+
 	func get_actors_around(coord, radius=1):
 		var actors = []
 		for actor in get_actors():
@@ -193,7 +199,7 @@ class BoardIndex extends RefCounted:
 			if actor != me and board.dist(my_coord, actor.get_cell_coord()) <= radius:
 				actors.append(actor)
 		return actors
-	
+
 	func add_actor(actor):
 		var coord = actor.get_cell_coord()
 		_coord_to_actor[coord] = actor
@@ -218,7 +224,7 @@ class BoardIndex extends RefCounted:
 			_coord_to_vibes[coord] = []
 		_coord_to_vibes[coord].append(vibe)
 		_vibe_to_coord[vibe] = coord
-		
+
 	func remove_actor(actor):
 		var coord = _actor_to_coord[actor]
 		_actor_to_coord.erase(actor)
@@ -287,24 +293,24 @@ class BoardIndex extends RefCounted:
 	func actor_at(coord:Vector2i):
 		## Return the actor occupying `coord` or null if there is no one there.
 		return _coord_to_actor.get(coord)
-	
+
 	func top_item_at(coord:Vector2i):
 		## return the item at the top of the stack at `coord` or null if there are no items there.
 		if not _coord_to_items.has(coord) or not _coord_to_items[coord].size():
 			return null
 		return _coord_to_items[coord][-1]
-	
+
 	func nb_items_at(coord:Vector2i):
 		if not _coord_to_items.has(coord):
 			return 0
 		else:
 			return _coord_to_items[coord].size()
-	
+
 	func items_at(coord:Vector2i):
 		return _coord_to_items.get(coord, [])
 
 	func top_vibe_at(coord:Vector2i):
-		## return visible vibe closest to the top of the stack at `coord` 
+		## return visible vibe closest to the top of the stack at `coord`
 		## or null if there are no vibes there.
 		if not _coord_to_vibes.has(coord) or not _coord_to_vibes[coord].size():
 			return null
@@ -313,7 +319,7 @@ class BoardIndex extends RefCounted:
 			if not vibe.char.is_empty():
 				return vibe
 		return _coord_to_vibes[coord][-1]
-		
+
 	func vibes_at(coord:Vector2i):
 		return _coord_to_vibes.get(coord, [])
 
@@ -356,7 +362,7 @@ class BoardIndex extends RefCounted:
 		else:
 			return line_of_sight(from, to) != null
 
-	func dist_metrics(start:Vector2i, dest:Vector2i=Consts.COORD_INVALID, 
+	func dist_metrics(start:Vector2i, dest:Vector2i=Consts.COORD_INVALID,
 						free_dest:=false, max_dist:int=-1):
 		## Like Board.dist_metrics(), but cached
 		var key = [start, dest, free_dest, max_dist]
@@ -366,7 +372,7 @@ class BoardIndex extends RefCounted:
 		_metrics[key] = metrics
 		return metrics
 
-	func erase_dist_metrics(start:Vector2i, dest:Vector2i=Consts.COORD_INVALID, 
+	func erase_dist_metrics(start:Vector2i, dest:Vector2i=Consts.COORD_INVALID,
 						free_dest:=false, max_dist:int=-1):
 		var key = [start, dest, free_dest, max_dist]
 		if _metrics.has(key):
@@ -407,9 +413,9 @@ static func canvas_to_board(cpos:Vector2) -> Vector2i:
 					cpos.y * INV_TILE_SIZE)
 
 static func board_to_canvas(coord):
-	## Return a coordinate in pixels to the center of the tile at coord. 
+	## Return a coordinate in pixels to the center of the tile at coord.
 	var half_tile = TILE_SIZE / 2
-	return Vector2(coord.x * TILE_SIZE + half_tile, 
+	return Vector2(coord.x * TILE_SIZE + half_tile,
 					coord.y * TILE_SIZE + half_tile)
 
 static func world_loc_str(loc:Vector3i):
@@ -418,16 +424,21 @@ static func world_loc_str(loc:Vector3i):
 
 static func supercell_str(coord:Vector2i):
 	## Return a short hand notation of a supercell coord that is different from Vector2i.to_string()
-	return "⟦%d¦%d⟧" % [coord.x, coord.y]	
+	return "⟦%d¦%d⟧" % [coord.x, coord.y]
 
 static func coord_str(coord:Vector2i):
 	## Return a short hand notation of coord that is different from Vector2i.to_string()
-	return "[%d:%d]" % [coord.x, coord.y]	
+	return "[%d:%d]" % [coord.x, coord.y]
 
 static func canvas_to_board_str(cpos):
 	return coord_str(canvas_to_board(cpos))
 
 func _ready():
+	for name in DYN_HIGHLIGHTS:
+		var tile = load("res://src/dynamic_highlight.tscn").instantiate()
+		tile.modulate = DYN_HIGHLIGHTS[name]
+		add_tile(tile, name)
+
 	$AmbientLight.color = ambient_light_col
 	if not board_id:
 		board_id = ResourceUID.create_id()
@@ -443,6 +454,13 @@ func _ready():
 	detect_terrain_names()
 	detect_actors()
 	reset_visibility(get_items() + get_actors() + get_vibes())
+
+func add_tile(tile:Node, tile_name:String):
+	var source = tile_set.get_source(LAYER_HIGHLIGHTS)
+	var scene = PackedScene.new()
+	scene.pack(tile)
+	var id = source.create_scene_tile(scene)
+	alt_terrain_names[tile_name] = id
 
 func detect_terrain_names():
 	## Refresh the internal cache of "name" -> [tset, tid] mappings
@@ -480,7 +498,7 @@ func purge_registrations():
 	## Remove all actor registrations
 	for actor in get_actors():
 		deregister_actor(actor)
-	
+
 func register_actor(actor):
 	## connect the relevant signals from `actor` so we can keep track of them
 	if not actor.moved.is_connected(_on_actor_moved):
@@ -491,7 +509,7 @@ func register_actor(actor):
 		actor.picked_item.connect(_on_items_changed_at)
 	if not actor.dropped_item.is_connected(_on_items_changed_at):
 		actor.dropped_item.connect(_on_items_changed_at)
-	
+
 func deregister_actor(actor):
 	## disconnect our connections with `actor`
 	if actor.moved.is_connected(_on_actor_moved):
@@ -502,7 +520,7 @@ func deregister_actor(actor):
 		actor.dropped_item.disconnect(_on_items_changed_at)
 
 func start_turn(new_turn:int):
-	## Mark the start a new game turn	
+	## Mark the start a new game turn
 	# FIXME: handle sub_nodes dissipating while we do a multi-turn update
 	for node in get_children():
 		# skip dead actors
@@ -554,7 +572,7 @@ func set_cell_rec_val(coord:Vector2i, rec_name, key, value):
 	if not _cell_records[coord].has(rec_name):
 		_cell_records[coord][rec_name] = {}
 	_cell_records[coord][rec_name][key] = value
-	
+
 func _append_terrain_cells(cells, terrain_name):
 	assert(terrain_name in INDEXED_TERRAINS)
 	if terrain_name not in _cells_by_terrain:
@@ -562,8 +580,8 @@ func _append_terrain_cells(cells, terrain_name):
 	_cells_by_terrain[terrain_name] += cells
 
 func scan_terrain():
-	## Re-index the terrain of all non-empty cells. 
-	## This is only needed for board that are built manually. BoardBuilders do 
+	## Re-index the terrain of all non-empty cells.
+	## This is only needed for board that are built manually. BoardBuilders do
 	## the indexing automatically when painting cells.
 	_cells_by_terrain = {}
 	for coord in get_used_cells(0):
@@ -573,7 +591,7 @@ func scan_terrain():
 
 func get_cells_by_terrain(terrain_name):
 	## Return all known cells of terrain_name.
-	## Cells matching the terrain will be unknown if they have been painted 
+	## Cells matching the terrain will be unknown if they have been painted
 	## outside the Builder or if they are not of a terrain in INDEXED_TERRAINS.
 	if terrain_name in _cells_by_terrain:
 		return _cells_by_terrain[terrain_name]
@@ -594,7 +612,7 @@ func get_cell_terrain(coord):
 		return null
 	else:
 		return tile_set.get_terrain_name(data.terrain_set, data.terrain)
-	
+
 func is_on_board(coord):
 	## Return whether the coord is strictly contained inside the game board.
 	## For non-rectangular boards, cells without tiles are considered outside the board.
@@ -608,12 +626,12 @@ func add_connection(near_coord, far_board, far_coord=null):
 	## Return the near-side of the connection
 	if far_coord == null:
 		far_coord = far_board.get_connector_for_loc(world_loc)
-	var near_conn = {"far_board_id": far_board.board_id, 
-					"far_coord": far_coord, 
+	var near_conn = {"far_board_id": far_board.board_id,
+					"far_coord": far_coord,
 					"far_loc": far_board.world_loc}
 	set_cell_rec(near_coord, "connection", near_conn)
-	far_board.set_cell_rec(far_coord, "connection", {"far_board_id": board_id, 
-													"far_coord": near_coord, 
+	far_board.set_cell_rec(far_coord, "connection", {"far_board_id": board_id,
+													"far_coord": near_coord,
 													"far_loc": world_loc})
 	clear_cell_rec(near_coord, "conn_target")
 	far_board.clear_cell_rec(far_coord, "conn_target")
@@ -629,9 +647,9 @@ func get_connectors():
 	for terrain in CONNECTOR_TERRAINS:
 		coords += get_cells_by_terrain(terrain)
 	return coords
-	
+
 func get_connector_for_loc(world_loc:Vector3i):
-	## Return the coord of the connector that leads to `world_loc` 
+	## Return the coord of the connector that leads to `world_loc`
 	## or null if no such connector exists.
 	for coord in get_connectors():
 		var loc = get_cell_rec_val(coord, "conn_target", "world_loc")
@@ -670,16 +688,16 @@ func get_neighbors_str():
 func is_connector(coord:Vector2i):
 	## Return whether `coord` is a tile that can connect to a different board.
 	var terrain = get_cell_terrain(coord)
-	return CONNECTOR_TERRAINS.has(terrain) 
+	return CONNECTOR_TERRAINS.has(terrain)
 
 func is_terrain(coord, terrain):
 	## Return whether the cell terrain name at `coord` is of `terrain`.
 	return get_cell_terrain(coord) == terrain
-	
+
 func is_any_terrains(coord, terrains):
 	## Return whether the cell terrain name at `coord` is any of `terrain`.
 	return get_cell_terrain(coord) in terrains
-	
+
 func is_floor(coord:Vector2i):
 	## Return whether a cell is a plain floor tile (no stairs or doors or anything fancy).
 	return is_any_terrains(coord, FLOOR_TERRAINS)
@@ -728,9 +746,9 @@ func is_walkable(coord:Vector2i) -> bool:
 
 func ring(center:Vector2i, radius:int, free:bool=true, in_board:bool=true, bbox=null, index=null) -> Array[Vector2i]:
 	## Return an Array of coords that define a Chebyshev-ring around `center`.
-	## In other words, the coords are arranged like a square on the game board 
+	## In other words, the coords are arranged like a square on the game board
 	## and they all have the same board.dist() metric to `center`.
-	## see filter_coords() for the description of the other params	
+	## see filter_coords() for the description of the other params
 	var coords : Array[Vector2i] = []
 	var r = radius
 
@@ -743,18 +761,18 @@ func ring(center:Vector2i, radius:int, free:bool=true, in_board:bool=true, bbox=
 	for j in range(r-1, -r, -1):
 		coords.append(center + V.i(-r, j))
 	return filter_coords(coords, free, in_board, bbox, index)
-	
-func spiral(center:Vector2i, max_radius=null, free:bool=true, in_board:bool=true, 
+
+func spiral(center:Vector2i, max_radius=null, free:bool=true, in_board:bool=true,
 			bbox=null, index=null):
 	## Return an iterator of coordiates describing progressively larger rings around `center`.
-	## max_radius: how far from center to consider coordiates, infered from 
+	## max_radius: how far from center to consider coordiates, infered from
 	##  the bounding box if not provided.
 	## all other params: like RevBoard.filter_coords()
 	return RevBoard.TileSpiral.new(self, center, max_radius, free, in_board, bbox, index)
 
-func adjacents(coord:Vector2i, free:bool=true, in_board:bool=true, 
+func adjacents(coord:Vector2i, free:bool=true, in_board:bool=true,
 				bbox=null, index=null) -> Array[Vector2i]:
-	## Return an Array of coords immediately next to `coord`. 
+	## Return an Array of coords immediately next to `coord`.
 	## see filter_coords() for the description of the other params
 	# This is a special case of ring()
 	var coords : Array[Vector2i] = []
@@ -775,7 +793,7 @@ func adjacents_walkable(coord:Vector2i, filter_pred=null) -> Array[Vector2i]:
 	return coords
 
 func adjacents_cross(coord:Vector2i, filter_pred=null) -> Array[Vector2i]:
-	## Return an Array of coords immediately up, down, left, and right of `coord`, 
+	## Return an Array of coords immediately up, down, left, and right of `coord`,
 	## in-board and walkable.
 	## filter_pred: only coords that are true for this function are returned.
 	var coords : Array[Vector2i] = []
@@ -787,7 +805,7 @@ func adjacents_cross(coord:Vector2i, filter_pred=null) -> Array[Vector2i]:
 	return coords
 
 func filter_coords(coords:Array[Vector2i], free, in_board, bbox, index=null) -> Array[Vector2i]:
-	## Return a sub-selection of coords that match criteria for being walkable 
+	## Return a sub-selection of coords that match criteria for being walkable
 	## and contained within the bounding box `bbox`.
 	## free: only include tiles that are walkable and unoccupied
 	## in_board: only include tiles that are inside the board (edges included)
@@ -796,9 +814,9 @@ func filter_coords(coords:Array[Vector2i], free, in_board, bbox, index=null) -> 
 	if in_board:
 		if bbox == null:
 			bbox = get_used_rect()
-		# The doc says that the right and bottom edges are excluded, but this 
-		# actally works just fine because they assume a different semantic for 
-		# bottom-right (rect.end()) that is [1, 1] away from our tile-based 
+		# The doc says that the right and bottom edges are excluded, but this
+		# actally works just fine because they assume a different semantic for
+		# bottom-right (rect.end()) that is [1, 1] away from our tile-based
 		# definition. See the doc string in geom.gd for more details.
 		coords = coords.filter(func (coord): return bbox.has_point(coord))
 	if free:
@@ -842,10 +860,16 @@ func paint_cell(coord, terrain_name, layer=LAYER_GEOM):
 	paint_cells([coord], terrain_name, layer)
 
 func paint_cells(coords, terrain_name, layer=LAYER_GEOM):
-	if terrain_name in INDEXED_TERRAINS:
-		_append_terrain_cells(coords, terrain_name)
-	var tkey = terrain_names[terrain_name]
-	set_cells_terrain_connect(layer, coords, tkey[0], tkey[1])
+	if terrain_names.has(terrain_name):
+		if terrain_name in INDEXED_TERRAINS:
+			_append_terrain_cells(coords, terrain_name)
+		var tkey = terrain_names[terrain_name]
+		set_cells_terrain_connect(layer, coords, tkey[0], tkey[1])
+	elif alt_terrain_names.has(terrain_name):
+		for coord in coords:
+			set_cell(layer, coord, LAYER_HIGHLIGHTS, Vector2i.ZERO, alt_terrain_names[terrain_name])
+	else:
+		assert(false, "%s is not a valid terrain name" % [terrain_name])
 
 func highlight_cells(coords, terrain_name="highlight-info"):
 	paint_cells(coords, terrain_name, LAYER_HIGHLIGHTS)
@@ -891,14 +915,14 @@ class MetricsContext extends RefCounted:
 	var rect : Rect2i
 	var metrics : DistMetrics2i
 
-func _init_metric_context_static(start:Vector2i, dest:Vector2i, free_dest=false, 
+func _init_metric_context_static(start:Vector2i, dest:Vector2i, free_dest=false,
 									valid_pred=null, index=null) -> MetricsContext:
-	## Initialize a few internal variables that we need for building a BoardMetrics, 
+	## Initialize a few internal variables that we need for building a BoardMetrics,
 	## no matter which algo is used.
 	## `free_dest`: does the destination have to be walkable?
 	##   true: ex.: you want to go there;
 	##   false: ex.: you want to get close and attack the actor standing there.
-	## `valid_pred`: function to determine if a coord is valid for exploration, 
+	## `valid_pred`: function to determine if a coord is valid for exploration,
 	##   ex.: board.is_walkable() or index.is_free()
 	## `index`: the BoardIndex to query, a fresh one will be created internally if `null`.
 	var ctx := MetricsContext.new()
@@ -907,14 +931,14 @@ func _init_metric_context_static(start:Vector2i, dest:Vector2i, free_dest=false,
 		index = make_index()
 	if valid_pred == null:
 		valid_pred = index.is_free
-	
+
 	# find the start: randomize if not provided
 	if start == Consts.COORD_INVALID:
 		start = Rand.coord_in_rect(ctx.rect)
 		if not is_walkable(start):
 			start = spiral(start, null, true, true, ctx.rect, index).next()
-			
-	var metrics = DistMetrics2i.new(size, start, dest)	
+
+	var metrics = DistMetrics2i.new(size, start, dest)
 	metrics.add_edge(Consts.COORD_INVALID, start)
 	var invalid_dest = false
 	if free_dest and dest != Consts.COORD_INVALID:
@@ -929,10 +953,10 @@ func _init_metric_context_static(start:Vector2i, dest:Vector2i, free_dest=false,
 	ctx.metrics = metrics
 	return ctx
 
-func astar_metrics(start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.COORD_INVALID, 
+func astar_metrics(start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.COORD_INVALID,
 					free_dest_:=false, max_dist:int=-1, valid_pred=null, index=null):
-	## Return sparse BoardMetrics using the A* algorithm. 
-	## If max_dist is provided, only explore until max_dist depth is reached 
+	## Return sparse BoardMetrics using the A* algorithm.
+	## If max_dist is provided, only explore until max_dist depth is reached
 	## and return partial metrics.
 	var ctx:MetricsContext = _init_metric_context_static(start_, dest_, free_dest_, valid_pred, index)
 	if ctx.invalid_dest:
@@ -973,12 +997,12 @@ func astar_metrics(start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.C
 			ctx.queue.enqueue(pos, estimate, [tie_breaker[0]+1, Geom.man_dist(pos, ctx.start)])
 		ctx.done[current] = true
 	return ctx.metrics
-	
-func astar_metrics_custom(pump:Paths.MetricsPump, 
-							start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.COORD_INVALID, 
-							free_dest_:=false, max_dist:int=-1, 
+
+func astar_metrics_custom(pump:Paths.MetricsPump,
+							start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.COORD_INVALID,
+							free_dest_:=false, max_dist:int=-1,
 							valid_pred=null, index=null):
-	## Return sparse BoardMetrics using the A* algorithm. 
+	## Return sparse BoardMetrics using the A* algorithm.
 	## pump: the fully initialized extractor for the intermediate values
 	## all other params like `astar_metrics()`
 	var ctx:MetricsContext = _init_metric_context_static(start_, dest_, free_dest_, valid_pred, index)
@@ -988,7 +1012,7 @@ func astar_metrics_custom(pump:Paths.MetricsPump,
 	var estimate:int = pump.dist_estim(ctx.start, ctx.dest)
 	# dist is h(n), the estimate to dest; [g(n), tiebreak(p, n)] pairs are used to resolve ties.
 	# g(n) is real path dist from start, tiebreak() is provided by the MetricsPump
-	var dist:int = estimate 
+	var dist:int = estimate
 	var tie_breaker:Array[int] = [0, 0]
 	ctx.queue.enqueue(ctx.start, dist, tie_breaker)
 	var current:Vector2i
@@ -1002,10 +1026,10 @@ func astar_metrics_custom(pump:Paths.MetricsPump,
 
 		if current == ctx.dest:
 			break  # Done!
-			
-		adjs = pump.adjacents(current)		
+
+		adjs = pump.adjacents(current)
 		if pump.dist_real(current, ctx.dest) == 1 or ctx.dest in adjs:
-			# We both look at both dist() and adjs because some pumps have step 
+			# We both look at both dist() and adjs because some pumps have step
 			# increments bigger than 1.
 			# Got next to dest, no need to look at adjacents()
 			ctx.metrics.setv(ctx.dest, tie_breaker[0]+pump.dist_real(current, ctx.dest))
@@ -1031,13 +1055,13 @@ func astar_metrics_custom(pump:Paths.MetricsPump,
 		ctx.done[current] = true
 	return ctx.metrics
 
-func dist_metrics(start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.COORD_INVALID, 
+func dist_metrics(start_:Vector2i=Consts.COORD_INVALID, dest_:Vector2i=Consts.COORD_INVALID,
 					free_dest_:=false, max_dist:int=-1, max_steps:int=-1,
 					valid_pred=null, index=null):
-	## Return distance metrics or all positions accessible from start. 
+	## Return distance metrics or all positions accessible from start.
 	## Start is randomly selected if not provided.
 	## Stop exploring after reaching `dest` if provided.
-	## Do not explore further than `max_dist` if provided. 
+	## Do not explore further than `max_dist` if provided.
 	## Do not consider more than `max_steps` coords if provided.
 	# using the Dijkstra algo
 	var ctx:MetricsContext = _init_metric_context_static(start_, dest_, free_dest_, valid_pred, index)
@@ -1102,12 +1126,12 @@ func path(start:Vector2i, dest:Vector2i, free_dest:=true, max_dist:=-1, index=nu
 	return metrics.path()
 
 func path_potential(start:Vector2i, dest:Vector2i, max_dist:=-1, index=null):
-	## Return an Array of coordinates from `start` to `dest`, only looking if cells are walkable 
+	## Return an Array of coordinates from `start` to `dest`, only looking if cells are walkable
 	## and ignoring whether they are occupied.
 	var metrics = astar_metrics(start, dest, false, max_dist, is_walkable, index)
 	return metrics.path()
 
-func path_perceived(start:Vector2i, dest:Vector2i, pov_actor:Actor, 
+func path_perceived(start:Vector2i, dest:Vector2i, pov_actor:Actor,
 					free_dest:=true, max_dist:=-1, index=null):
 	## Return an Array of coordinates from `start` to `dest` as seen by `pov_actor`.
 	if index == null:
@@ -1116,9 +1140,9 @@ func path_perceived(start:Vector2i, dest:Vector2i, pov_actor:Actor,
 	var metrics = astar_metrics(start, dest, free_dest, max_dist, pred, index)
 	return metrics.path()
 
-func path_perceived_strict(start:Vector2i, dest:Vector2i, pov_actor:Actor, 
+func path_perceived_strict(start:Vector2i, dest:Vector2i, pov_actor:Actor,
 							free_dest:=true, max_dist:=-1, index=null):
-	## Return an Array of coordinates from `start` to `dest` as seen by `pov_actor` 
+	## Return an Array of coordinates from `start` to `dest` as seen by `pov_actor`
 	## where every step is perceivable.
 	if index == null:
 		index = make_index()
@@ -1137,14 +1161,14 @@ func is_cell_unexposed(coord):
 	return false
 
 func line_of_sight(coord1, coord2):
-	## Return an array of coords in the line of sight between coord1 and coord2 
+	## Return an array of coords in the line of sight between coord1 and coord2
 	## or null if the direct path is visibly obstructed.
 	## Both end point params are included in the returned array.
 	if not coord1 is Vector2i:
 		coord1 = CombatUtils.as_coord(coord1)
 	if not coord2 is Vector2i:
 		coord2 = CombatUtils.as_coord(coord2)
-	
+
 	var steps = []
 	var nb_steps = dist(coord1, coord2) + 1
 	var mult = max(1, nb_steps - 1)
@@ -1168,7 +1192,7 @@ func visible_coords(center, radius:int, include_center=false):
 	var offset = Vector2i.ONE * (radius - 1)
 	var sight_box = Rect2i(center-offset, Vector2i.ONE*(2*radius-1))
 	sight_box = sight_box.intersection(get_used_rect())
-	
+
 	var vis = {}
 	if include_center:
 		vis[center] = true
@@ -1197,13 +1221,13 @@ func get_actors(include_tags=null, exclude_tags=null):
 
 func get_items():
 	## Return an array of items presently on this board, excluding items in actors' inventory.
-	## For stacked items they are returned bottom of the stack first. 
+	## For stacked items they are returned bottom of the stack first.
 	var items = []
 	for node in get_children():
 		if node is Item and not node.is_expired():
 			items.append(node)
 	return items
-	
+
 func get_vibes():
 	## Return an array of vibes presently on this board.
 	var vibes = []
@@ -1225,21 +1249,21 @@ func reset_visibility(things:Array, index=null):
 			thing.hide()
 		else:
 			thing.show()
-			
+
 		if thing.should_shroud(index):
 			thing.shroud(false)
 		else:
 			thing.unshroud(true)
 
 func update_all_shrouding(things, index=null):
-	## Shroud or reveal things that have changed perceptibility. 
+	## Shroud or reveal things that have changed perceptibility.
 	## The change is animated. For an instantaneous change, consider reset_visibility().
 	## nulls are silently ignored.
 	for thing in things:
 		if thing == null:
 			continue
 		var shroud_it = thing.should_shroud(index)
-	
+
 		if shroud_it:
 			thing.shroud()
 		else:
@@ -1253,11 +1277,11 @@ func update_shrouding_at(where, index:BoardIndex):
 	## See update_all_shrouding() for more details.
 	var things = [index.actor_at(where), index.top_item_at(where)] + index.vibes_at(where)
 	update_all_shrouding(things, index)
-	
+
 func _on_actor_moved(from, to):
 	## fade in and out the visibility of items being stepped on/off.
 	var index = make_index()
-	assert(index.actor_at(to)!=null, 
+	assert(index.actor_at(to)!=null,
 			"The signal seems to have fired before an actor set their dest to %s" % coord_str(to))
 
 	if index.actor_at(to) == Tender.hero:
@@ -1288,9 +1312,9 @@ func _on_items_changed_at(coord):
 func _on_actor_died(coord, tags, actor):
 	deregister_actor(actor)
 	emit_signal("actor_died", self, coord, tags)
-	
-func add_message(actor, text:String, 
-				level:Consts.MessageLevels=Consts.MessageLevels.INFO, 
+
+func add_message(actor, text:String,
+				level:Consts.MessageLevels=Consts.MessageLevels.INFO,
 				tags:=[]):
 	if level == null:
 		level = Consts.MessageLevels.INFO
@@ -1306,7 +1330,7 @@ func ddump_connector(coord:Vector2i):
 		info.connected = false
 		info.target = get_cell_rec(coord, "conn_target")
 	print("Connector at %s: %s" % [coord_str(coord), info])
-	
+
 func ddump_connectors():
 	for coord in get_connectors():
 		ddump_connector(coord)

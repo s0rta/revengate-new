@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://cxpios5e74r10"]
+
+[ext_resource type="Shader" path="res://src/ui/blinking.gdshader" id="1_rc6qk"]
+[ext_resource type="Script" path="res://src/dynamic_highlight.gd" id="1_rhgrf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xnbrr"]
+shader = ExtResource("1_rc6qk")
+
+[node name="DynHighlight" type="Node2D"]
+material = SubResource("ShaderMaterial_xnbrr")
+script = ExtResource("1_rhgrf")
