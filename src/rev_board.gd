@@ -19,8 +19,11 @@ class_name RevBoard extends TileMap
 
 const TILE_SIZE = 32
 const INV_TILE_SIZE = 1.0 / TILE_SIZE  # we speed up conversion with mult rather than div
-const LAYER_GEOM := 0  # tiles from the atlas
-const LAYER_HIGHLIGHTS := 1  # dynamically created scene tiles
+const LAYER_GEOM := 0  # the base dungeon terrain
+const LAYER_HIGHLIGHTS_ACTION := 1  # highlights only when listening for player's input
+const LAYER_HIGHLIGHTS_LONG := 2  # highlights that are on for most of the turn(s)
+const SOURCE_ATLAS := 0
+const SOURCE_SCENES := 1
 
 # which terrains lead to other boards?
 const CONNECTOR_TERRAINS = ["stairs-down", "stairs-up", "gateway"]
@@ -34,7 +37,9 @@ const FLOOR_TERRAINS = ["floor", "floor-rough", "floor-dirt"]
 const DYN_HIGHLIGHTS = {"mark-chatty": "#407014",
 						"mark-chatty-default": "#86f61f",
 						"mark-foe": "#701414", 
-						"mark-foe-default": "f61f1f"
+						"mark-foe-default": "f61f1f", 
+						"mark-step": "#4799bc",
+						"mark-step-alt": "#448e94"
 						}
 
 signal new_message(message, level, tags)
@@ -458,7 +463,7 @@ func _ready():
 	reset_visibility(get_items() + get_actors() + get_vibes())
 
 func add_tile(tile:Node, tile_name:String):
-	var source = tile_set.get_source(LAYER_HIGHLIGHTS)
+	var source = tile_set.get_source(SOURCE_SCENES)
 	var scene = PackedScene.new()
 	scene.pack(tile)
 	var id = source.create_scene_tile(scene)
@@ -869,12 +874,12 @@ func paint_cells(coords, terrain_name, layer=LAYER_GEOM):
 		set_cells_terrain_connect(layer, coords, tkey[0], tkey[1])
 	elif alt_terrain_names.has(terrain_name):
 		for coord in coords:
-			set_cell(layer, coord, LAYER_HIGHLIGHTS, Vector2i.ZERO, alt_terrain_names[terrain_name])
+			set_cell(layer, coord, SOURCE_SCENES, Vector2i.ZERO, alt_terrain_names[terrain_name])
 	else:
 		assert(false, "%s is not a valid terrain name" % [terrain_name])
 
-func highlight_cells(coords, terrain_name="highlight-info"):
-	paint_cells(coords, terrain_name, LAYER_HIGHLIGHTS)
+func highlight_cells(coords, terrain_name="highlight-info", layer:=LAYER_HIGHLIGHTS_ACTION):
+	paint_cells(coords, terrain_name, layer)
 
 func paint_path(path:Array[Vector2i], terrain_name, layer=LAYER_GEOM, interpolate=true):
 	assert(terrain_name not in INDEXED_TERRAINS, "indexing path terrain is not implemented")
@@ -890,9 +895,9 @@ func paint_rect(rect, terrain_name, layer=LAYER_GEOM):
 			cells.append(rect.position + V.i(i, j))
 	paint_cells(cells, terrain_name, layer)
 
-func clear_highlights():
+func clear_highlights(layer:=LAYER_HIGHLIGHTS_ACTION):
 	## Remove all visible cell highlights
-	clear_layer(LAYER_HIGHLIGHTS)
+	clear_layer(layer)
 
 func toggle_door(coord:Vector2i):
 	var terrain = get_cell_terrain(coord)

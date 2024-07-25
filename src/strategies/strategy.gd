@@ -121,7 +121,8 @@ func highlight_path(path):
 		return
 		
 	var board:RevBoard = me.get_board()
-	var terrain = "highlight-info"
+	var terrain = "mark-step"
 	if me != Tender.hero:
-		terrain = "highlight-warning"
-	board.highlight_cells(path, terrain)
+		terrain = "mark-step-alt"
+	board.clear_layer(RevBoard.LAYER_HIGHLIGHTS_LONG)
+	board.highlight_cells(path, terrain, RevBoard.LAYER_HIGHLIGHTS_LONG)

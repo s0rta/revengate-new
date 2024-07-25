@@ -20,10 +20,10 @@ class_name DynHighlight extends Node2D
 
 func _draw() -> void:
 	var rect = Rect2(-16, -16, 32, 32)
-	draw_rect(rect, "#ffffff28")
+	draw_rect(rect, "#ffffff35")
 	
 	var k = 4
 	for i in k:
 		var size = Vector2.ONE * (32 - k + i)
 		rect = Rect2(-size / 2.0, size)
-		draw_rect(rect, "#ffffff18", false, k - i)
+		draw_rect(rect, "#ffffff25", false, k - i)

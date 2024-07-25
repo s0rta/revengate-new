@@ -1,6 +1,6 @@
 shader_type canvas_item;
 
-const float min_alpha = 0.25;
+const float min_alpha = 0.5;
 const float max_alpha = 1.0;
 const float speed = 2.5;
 

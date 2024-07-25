@@ -155,6 +155,7 @@ func act() -> void:
 		await get_tree().create_timer(0.0001).timeout
 		finalize_turn()
 	else:
+		board.clear_layer(RevBoard.LAYER_HIGHLIGHTS_LONG)
 		state = States.LISTENING
 		print("player acting...")
 		var index = board.make_index()
