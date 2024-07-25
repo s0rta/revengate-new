@@ -899,6 +899,13 @@ func clear_highlights(layer:=LAYER_HIGHLIGHTS_ACTION):
 	## Remove all visible cell highlights
 	clear_layer(layer)
 
+func clear_other_cells(kept_coords:Dictionary, layer:=LAYER_HIGHLIGHTS_ACTION):
+	## Remove all the cells from a layer except 'kept_coords'
+	var used_coords = get_used_cells(layer)
+	for coord in used_coords:
+		if not kept_coords.has(coord):
+			erase_cell(layer, coord)
+
 func toggle_door(coord:Vector2i):
 	var terrain = get_cell_terrain(coord)
 	if terrain == "door-open":
