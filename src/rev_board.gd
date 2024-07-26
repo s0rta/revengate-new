@@ -39,7 +39,10 @@ const DYN_HIGHLIGHTS = {"mark-chatty": "#407014",
 						"mark-foe": "#701414", 
 						"mark-foe-default": "f61f1f", 
 						"mark-step": "#4799bc",
-						"mark-step-alt": "#448e94"
+						"mark-step-alt": "#448e94", 
+						"mark-target-good": "#ee6427",
+						"mark-target-ok": "#eeac27", 
+						"mark-target-bad": "#eed327", 
 						}
 
 signal new_message(message, level, tags)
@@ -878,7 +881,7 @@ func paint_cells(coords, terrain_name, layer=LAYER_GEOM):
 	else:
 		assert(false, "%s is not a valid terrain name" % [terrain_name])
 
-func highlight_cells(coords, terrain_name="highlight-info", layer:=LAYER_HIGHLIGHTS_ACTION):
+func highlight_cells(coords, terrain_name:String, layer:=LAYER_HIGHLIGHTS_ACTION):
 	paint_cells(coords, terrain_name, layer)
 
 func paint_path(path:Array[Vector2i], terrain_name, layer=LAYER_GEOM, interpolate=true):

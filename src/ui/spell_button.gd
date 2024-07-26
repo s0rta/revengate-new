@@ -52,10 +52,10 @@ func _target_and_cast():
 	var index = board.make_index()
 	var here = Tender.hero.get_cell_coord()
 	var coords = board.visible_coords(here, spell.range)
-	board.highlight_cells(coords, "highlight-info")
+	board.highlight_cells(coords, "mark-target-bad")
 
 	var actor_coords = coords.filter(index.actor_at)
-	board.highlight_cells(actor_coords, "highlight-warning")
+	board.highlight_cells(actor_coords, "mark-target-good")
 	
 	coords.append(here)
 	var surveyor = Tender.hud.get_gesture_surveyor()

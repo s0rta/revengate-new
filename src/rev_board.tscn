@@ -1,15 +1,11 @@
-[gd_scene load_steps=23 format=3 uid="uid://cfc3ttsrd52r"]
+[gd_scene load_steps=20 format=3 uid="uid://cfc3ttsrd52r"]
 
-[ext_resource type="Shader" path="res://src/ui/blinking.gdshader" id="1_a0jvk"]
 [ext_resource type="Texture2D" uid="uid://kau2lr1cng82" path="res://assets/tile-atlas.png" id="1_j50me"]
 [ext_resource type="Material" uid="uid://v8da3elp8mal" path="res://src/ui/water_material.tres" id="1_ssjw7"]
 [ext_resource type="Script" path="res://src/rev_board.gd" id="2_dlal2"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_wxw3g"]
 polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_uu26s"]
-shader = ExtResource("1_a0jvk")
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_ilkw4"]
 polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
@@ -37,9 +33,6 @@ polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_q4lh8"]
 polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_m5c7u"]
-shader = ExtResource("1_a0jvk")
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_j2hj3"]
 polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
@@ -324,34 +317,6 @@ texture_region_size = Vector2i(32, 32)
 3:7/0/terrain = 10
 3:7/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 3:7/0/physics_layer_0/angular_velocity = 0.0
-7:0/0 = 0
-7:0/0/modulate = Color(1, 0, 0, 0.686275)
-7:0/0/material = SubResource("ShaderMaterial_m5c7u")
-7:0/0/terrain_set = 0
-7:0/0/terrain = 13
-7:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-7:0/0/physics_layer_0/angular_velocity = 0.0
-6:0/0 = 0
-6:0/0/modulate = Color(0, 1, 0, 0.686275)
-6:0/0/material = SubResource("ShaderMaterial_uu26s")
-6:0/0/terrain_set = 0
-6:0/0/terrain = 14
-6:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-6:0/0/physics_layer_0/angular_velocity = 0.0
-5:0/0 = 0
-5:0/0/modulate = Color(0, 0.698039, 1, 0.784314)
-5:0/0/material = SubResource("ShaderMaterial_uu26s")
-5:0/0/terrain_set = 0
-5:0/0/terrain = 15
-5:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-5:0/0/physics_layer_0/angular_velocity = 0.0
-4:0/0 = 0
-4:0/0/modulate = Color(1, 0.815686, 0, 0.686275)
-4:0/0/material = SubResource("ShaderMaterial_uu26s")
-4:0/0/terrain_set = 0
-4:0/0/terrain = 16
-4:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-4:0/0/physics_layer_0/angular_velocity = 0.0
 
 [sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_fwitx"]
 resource_name = "Scene Tiles"
@@ -360,7 +325,7 @@ resource_name = "Scene Tiles"
 tile_size = Vector2i(32, 32)
 occlusion_layer_0/light_mask = 1
 physics_layer_0/collision_layer = 1
-terrain_set_0/mode = 0
+terrain_set_0/mode = 2
 terrain_set_0/terrain_0/name = "floor"
 terrain_set_0/terrain_0/color = Color(0.478431, 0.478431, 0.482353, 1)
 terrain_set_0/terrain_1/name = "wall-brick"
@@ -387,14 +352,6 @@ terrain_set_0/terrain_11/name = "wall-old"
 terrain_set_0/terrain_11/color = Color(0.329412, 0.329412, 0.333333, 1)
 terrain_set_0/terrain_12/name = "wall"
 terrain_set_0/terrain_12/color = Color(0.329412, 0.329412, 0.333333, 1)
-terrain_set_0/terrain_13/name = "highlight-foe"
-terrain_set_0/terrain_13/color = Color(1, 0, 0, 1)
-terrain_set_0/terrain_14/name = "highlight-friend"
-terrain_set_0/terrain_14/color = Color(0, 1, 0, 1)
-terrain_set_0/terrain_15/name = "highlight-info"
-terrain_set_0/terrain_15/color = Color(0.270588, 0.309804, 1, 1)
-terrain_set_0/terrain_16/name = "highlight-warning"
-terrain_set_0/terrain_16/color = Color(0.968627, 0.921569, 0.00784314, 1)
 sources/0 = SubResource("TileSetAtlasSource_x5cyv")
 sources/1 = SubResource("TileSetScenesCollectionSource_fwitx")
 

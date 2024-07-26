@@ -56,7 +56,7 @@ UI:
 - [x] bug: the cheats pannel captures click even when hidden
 
 ## v0.4
-Strategies: 
+Strategies:
 - [x] bug: TravelTo stopped working with Godot 4b16
 
 Combat:
@@ -90,7 +90,7 @@ UI:
 ## v0.6
 - [x] bug: death does not make items under the victim reappear
 - [x] style UI with Godot theme
-  - [x] non actions are easily distinguished from turn-ending action 
+  - [x] non actions are easily distinguished from turn-ending action
 - [x] splash image as the start screen background
 - [x] water ripples VFX
 
@@ -101,7 +101,7 @@ Builder:
 - [x] items and monsters selected with parametric decks
 - [x] mazes can fill arbitrary areas of a board
 
-UI: 
+UI:
 - [x] ability to cancel a multi-turn command
 - [x] ability to completely skip dialogues
 - [x] long press for context menu (in GDScript)
@@ -115,7 +115,7 @@ UI:
 - [x] connector tiles should always be stairs when changing elevation
 
 VFX:
-- [x] water highlights 
+- [x] water highlights
 
 Combat:
 - [x] TribalTerritorial strategy
@@ -224,7 +224,7 @@ Monsters:
 
 Combat:
 - [x] fail if meeting happened
-  
+
 ## v0.11
 - [x] bug: attack markers stays on after killing a monster
 - [x] bug: victory screen flashes if exiting the last dungeon without killing Retznac
@@ -259,7 +259,7 @@ Items:
 Vibe:
 - [x] pre-fabs can inject rules in the deck generator after the geometry pass of a new board
 - [x] candles (🕯)
-- [x] incense 
+- [x] incense
 - [x] cross (☨, ♰, ♱, ✟, 🕈, 🕆)
 - [x] altar (ꟷ, 𝌁, ⚎)
 
@@ -291,7 +291,7 @@ Combat:
 - [x] quest summary
   - [x] save quest activation status in SaveBundle
 - [x] faster move animations when there are many visible actors
-- [x] play time (screen time) on victory screen 
+- [x] play time (screen time) on victory screen
 - [x] "here" -> "Café Caché" for quest 3 summary
 - [x] saved games
   - [x] restore workflow on start screen
@@ -491,11 +491,12 @@ Strategies:
 - [x] Seeking is easier to resolve even is the target keeps moving
 - [x] plasus rats have a more aggressive version of TribalTerritorial
 
-Maybe: 
+Maybe:
 - [x] special icon for loot piles (#55) (🛒 or 🛍)
 - [x] phantruchs do not recover from forgivness
 
 ## v0.12.9
+- [ ] bug: Command.Pick is broken for coffee
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] conditions summary in Inspect
 - [ ] glasses in stash
@@ -519,7 +520,7 @@ Maybe:
 - [ ] help screen with contextual content
 - [ ] on-screen joystick
 - [ ] auto-pan to hero when he gets close to the egde of the screen
-- [ ] VFX: edge of water reflections 
+- [ ] VFX: edge of water reflections
 - [ ] Allow mixing rooms and mazes in level generation
 - [ ] Strategy.refresh() updates the internal index
 - [ ] phantruch is destroyed if the vital assembly is broken or stolen
