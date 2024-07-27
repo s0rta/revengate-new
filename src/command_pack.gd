@@ -256,6 +256,7 @@ class Talk extends Command:
 
 class PickItem extends Command:
 	var caption_prefix = "Pick"
+	
 	func _init(index_=null):
 		super(index)
 		is_action = true

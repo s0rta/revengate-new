@@ -496,7 +496,7 @@ Maybe:
 - [x] phantruchs do not recover from forgivness
 
 ## v0.12.9
-- [ ] bug: Command.Pick is broken for coffee
+- [x] bug: Command.Pick is broken for coffee
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] conditions summary in Inspect
 - [ ] glasses in stash

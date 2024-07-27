@@ -27,7 +27,7 @@ func _init(command, coord_, hero_pov_:bool):
 	cmd = command
 	coord = coord_
 	hero_pov = hero_pov_
-	text =  command.caption
+	text = command.caption
 	if cmd.is_action:
 		theme_type_variation = "ActionBtn"
 	button_up.connect(on_button_up)
@@ -40,12 +40,14 @@ func _shortcut_input(event):
 		pressed.emit()
 		on_button_up()
 
-func reset_visibility(coord, index:RevBoard.BoardIndex):
+func reset_visibility(coord_:Vector2i, index:RevBoard.BoardIndex):
+	coord = coord_
 	cmd.index = index
 	if hero_pov:
 		visible = cmd.is_valid_for_hero_at(coord)
 	else:
 		visible = cmd.is_valid_for(coord)
+	text = cmd.caption
 
 func on_button_up():	
 	var acted: bool
