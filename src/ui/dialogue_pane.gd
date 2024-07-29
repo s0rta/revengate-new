@@ -21,6 +21,7 @@
 class_name DialoguePane extends Control
 
 const MIN_RESPONSES = 6
+const FADE_IN_SECS = 0.2
 
 signal closed(acted:bool)
 signal new_sentiment(faction_a, faction_b, value:int)
@@ -105,7 +106,16 @@ func start(dia_res_: DialogueResource, title: String, speaker_=null, extra_game_
 	speaker = speaker_
 	# TODO: blank out everything before showing
 	self.dialogue_line = await dia_res.get_next_dialogue_line(title, temp_game_states)
+	
+	if speaker:
+		var game_area_size = Vector2(size.x, size.y - %SpeechBackgroud.size.y)
+		var viewport = Tender.viewport
+		viewport.pan_on_coord(speaker.get_cell_coord(), game_area_size/2.0, FADE_IN_SECS)
+	
+	modulate.a = 0.0
 	show()
+	var anim = create_tween()
+	anim.tween_property(self, "modulate:a", 1.0, FADE_IN_SECS)
 
 func close():
 	hide()

@@ -79,10 +79,30 @@ func inject_event(event):
 
 func center_on_coord(coord):
 	## move the camera to be directly above `coord`
+	# FIXME: deprecate
 	var pos = RevBoard.board_to_canvas(coord)
 	var camera = get_camera_2d()
 	camera.offset = pos - pos_to_local(size/2.0, false)
+
+func pan_on_coord(coord, to_pos=null, anim_secs:=0.0):
+	## move the camera so that the board cell at 'coord' is at 'to_tos' on the screen.
+	## to_pos: center of the screen if not provided
+	## anim_secs: how long to take to animate the transion, 0.0 for instant effect
+	if to_pos == null:
+		to_pos = size / 2.0
+	else:
+		assert(to_pos is Vector2 or to_pos is Vector2i)
+
+	var from_pos = RevBoard.board_to_canvas(coord)
+	var new_offset = from_pos - pos_to_local(to_pos, false)
+	var camera = get_camera_2d()
 	
+	if anim_secs > 0.0:
+		var anim = create_tween()
+		anim.tween_property(camera, "offset", new_offset, anim_secs)
+	else:
+		camera.offset = new_offset
+
 func flash_coord_selection(coord:Vector2i):
 	var highlight = load("res://src/ui/cell_highlight.tscn").instantiate()
 	highlight.position = RevBoard.board_to_canvas(coord)
