@@ -305,7 +305,6 @@ func _place_on_start_board(coord:Vector2i):
 	var builder = BoardBuilder.new(board)
 	builder.place(Tender.hero, false, coord)
 	center_on_hero()
-	Tender.hero.highlight_options()
 	
 func start_ch2():
 	_place_on_start_board(V.i(2, 2))

@@ -184,7 +184,7 @@ class Talk extends Command:
 			prev_convo = conversation
 
 			Tender.hud.dialogue_pane.start(conversation.res, conversation.sect, other)
-			await Tender.hud.dialogue_pane.hidden
+			await Tender.hud.dialogue_pane.closed
 
 			# FIXME: we never seem to receive this signal when called by hero directly
 			print("The dia has been closed!")
@@ -246,11 +246,11 @@ class Talk extends Command:
 
 	func run(coord:Vector2i) -> bool:
 		var other = index.actor_at(coord)
-		_chat_with(other)
+		await _chat_with(other)
 		return true
 
 	func run_at_hero(coord:Vector2i) -> bool:
-		_chat_with(next_speaker)
+		await _chat_with(next_speaker)
 		return true
 
 

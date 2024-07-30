@@ -52,7 +52,7 @@ func reset_visibility(coord_:Vector2i, index:RevBoard.BoardIndex):
 func on_button_up():	
 	var acted: bool
 	if hero_pov:
-		acted = cmd.run_at_hero(coord)
+		acted = await cmd.run_at_hero(coord)
 	else:
 		acted = await cmd.run(coord)
 		

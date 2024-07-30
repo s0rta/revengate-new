@@ -48,6 +48,12 @@ var dialogue_line: DialogueLine:
 			node.queue_free()
 		
 		dialogue_line = next_dialogue_line
+		
+		if dialogue_line.character == "Hero":
+			_focus_on(Tender.hero)
+		else:
+			_focus_on(speaker)
+		
 		%SpeakerLabel.text = dialogue_line.character
 		%DialogueLabel.dialogue_line = dialogue_line
 		%NextButton.disabled = has_options()
@@ -99,24 +105,34 @@ func _unhandled_input(event):
 		# Consume all keyboard input while the balloon is visible
 		accept_event()
 	
+func _focus_on(actor:Actor):
+	## Show some emphasis on 'actor'
+	if not actor:
+		return
+
+	var there = actor.get_cell_coord()
+	var game_area_size = Vector2(size.x, size.y - %SpeechBackgroud.size.y)
+	var viewport = Tender.viewport
+	viewport.pan_on_coord(there, game_area_size/2.0, FADE_IN_SECS)
+
+	var board:RevBoard = actor.get_board()
+	board.clear_highlights()
+	board.highlight_cells([there], "mark-speaker-active")
+	
+	
 func start(dia_res_: DialogueResource, title: String, speaker_=null, extra_game_states: Array = []):
 	## Start a dialogue sequence
 	temp_game_states = extra_game_states + [self]
 	dia_res = dia_res_
 	speaker = speaker_
 	# TODO: blank out everything before showing
-	self.dialogue_line = await dia_res.get_next_dialogue_line(title, temp_game_states)
-	
-	if speaker:
-		var game_area_size = Vector2(size.x, size.y - %SpeechBackgroud.size.y)
-		var viewport = Tender.viewport
-		viewport.pan_on_coord(speaker.get_cell_coord(), game_area_size/2.0, FADE_IN_SECS)
-	
+		
 	modulate.a = 0.0
 	show()
+	self.dialogue_line = await dia_res.get_next_dialogue_line(title, temp_game_states)
 	var anim = create_tween()
 	anim.tween_property(self, "modulate:a", 1.0, FADE_IN_SECS)
-
+	
 func close():
 	hide()
 	# talking to someone always counts as a turn action, event if you exit the conversation early.
