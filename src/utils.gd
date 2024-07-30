@@ -465,3 +465,38 @@ static func adjust_lights_settings(node:Node):
 			if light.shadow_enabled:
 				light.shadow_filter = Light2D.SHADOW_FILTER_PCF5
 				light.shadow_filter_smooth = 18
+
+static func collapse_strings(strings:Array, window=1) -> Array:
+	## Return an array of {str, nb_occ} that summarizes strings. 
+	## Duplicate strings are collapsed into one single record.
+	## window: duplicates have to be at most this far appart to be collapsed, 0 means no collapsing. 
+	# Since the window slides left to right, beg > end the whole time, end is outside of the window.
+	# We add items only after their last occurence falls out of the window, 
+	# therefore "foo, bar, foo" becomes "bar, foo x2", not "foo x2, bar"
+	var res = []
+	var in_window = {}
+	var window_max = {}
+	for beg in len(strings) + window:
+		if beg < len(strings):
+			in_window[strings[beg]] = in_window.get(strings[beg], 0) + 1
+			window_max[strings[beg]] = window_max.get(strings[beg], 0) + 1
+		var end = beg - window
+		if end >= 0:
+			in_window[strings[end]] -= 1
+			if in_window[strings[end]] == 0:
+
+				res.append({"str":strings[end], "nb_occ": window_max[strings[end]]})
+				window_max[strings[end]] = 0
+	return res
+	
+static func collapse_strings_fmt(strings:Array, window=1, fmt="%s x%d") -> Array:
+	## Like collapse_strings(), but return formated strings instead of summary dicts
+	## fmt: the format string used when nb_occ > 1.
+	## ex.: ["foo", "foo", "foo" "bar"] -> ["foo x3", "bar"]
+	var res = []
+	for rec in collapse_strings(strings, window):
+		if rec.nb_occ == 1:
+			res.append(rec.str)
+		else:
+			res.append(fmt % [rec.str, rec.nb_occ])
+	return res

@@ -19,24 +19,33 @@
 class_name MessagesScreen extends ModalScreen
 
 const MAX_MESSAGES:=500
+const COLLAPSE_WINDOW = 10
+
+var messages := []
 
 func popup():
+	trim_old_messages()
+	%ListView.clear()
+	var lines = Utils.collapse_strings_fmt(messages, COLLAPSE_WINDOW)
+	for line in lines:
+		%ListView.add_item(line)
 	$EmptyLabel.visible = (%ListView.item_count == 0)
 	%ListView.select(%ListView.item_count-1)
 	%ListView.ensure_current_is_visible()
 	super()
 
 func trim_old_messages():
-	var nb_msg = %ListView.item_count
+	var nb_msg = len(messages)
 	var extra = max(0, nb_msg - MAX_MESSAGES)
-	for i in range(extra):
-		%ListView.remove_item(0)
+	if extra:
+		messages = messages.slice(extra)
 	
 func add_message(text:String, 
 				level:Consts.MessageLevels, 
 				tags:Array):
-	%ListView.add_item(text)
-	trim_old_messages()
+	messages.append(text)
+	if len(messages) > MAX_MESSAGES * 2:
+		trim_old_messages()
 
 func _on_back_button_pressed():
 	close(false)
