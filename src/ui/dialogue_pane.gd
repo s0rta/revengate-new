@@ -134,9 +134,12 @@ func start(dia_res_: DialogueResource, title: String, speaker_=null, extra_game_
 	anim.tween_property(self, "modulate:a", 1.0, FADE_IN_SECS)
 	
 func close():
-	hide()
+	var anim:Tween = create_tween()
+	anim.tween_property(self, "modulate:a", 0.0, FADE_IN_SECS)
 	# talking to someone always counts as a turn action, event if you exit the conversation early.
 	emit_signal("closed", true)  
+	await anim.finished
+	hide()
 
 func advance():
 	## Finish typing or go to the next message.
