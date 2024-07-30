@@ -33,7 +33,25 @@ const MSG_STYLES = {"msg:combat": "MsgCombat",
 
 func _ready():
 	%MessageTemplate.hide()
-	
+
+func _remove_dups(text) -> int:
+	## Hide previous messages that are similar to 'text', return how many were hidden
+	var nb_dups := 0
+	for label in %MessagesBox.find_children("", "Label", false, false):
+		if label.visible and label.text.begins_with(text):
+			var inc = 1
+			# TODO: we recover the previous multiplier from a suffix of the previous 
+			#    string, but this is brittle. Storing the multiplier as a node property 
+			#    would be more robust.
+			if len(label.text) - len(text) >= 2:
+				var tail = label.text.substr(len(text))
+				if tail.begins_with(" x"):
+					inc = tail.substr(2).to_int()
+			nb_dups += inc
+			label.hide()
+	return nb_dups
+
+
 func add_message(text, level:Consts.MessageLevels, tags:=[]):
 	_trim_old_messages()
 	var label = %MessageTemplate.duplicate()
@@ -44,7 +62,11 @@ func add_message(text, level:Consts.MessageLevels, tags:=[]):
 			if MSG_STYLES.has(tag):
 				label.theme_type_variation = MSG_STYLES[tag]
 				break  # only the first tag style is applied
-	label.text = text
+	var nb_dups = _remove_dups(text)
+	if nb_dups:
+		label.text = "%s x%d" % [text, nb_dups + 1]
+	else:
+		label.text = text
 	%MessagesBox.add_child(label)
 	label.show()
 	%Panel.show()
@@ -56,7 +78,7 @@ func _fadeout_node(node):
 	if node.visible:
 		var tree = get_tree()
 		var anim = tree.create_tween()
-		anim.tween_property(node, "modulate", Color(1, 1, 1, 0), FADEOUT_SECS)
+		anim.tween_property(node, "modulate:a", 0.0, FADEOUT_SECS)
 		await anim.finished
 		node.hide()
 	node.queue_free()
