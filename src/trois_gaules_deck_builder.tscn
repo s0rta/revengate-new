@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://bnbtimmwf4woe"]
+[gd_scene load_steps=23 format=3 uid="uid://bnbtimmwf4woe"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_gqi5c"]
 [ext_resource type="Script" path="res://src/card_rule.gd" id="2_ktv76"]
@@ -20,60 +20,9 @@
 [ext_resource type="PackedScene" uid="uid://bnykesyfgf2b5" path="res://src/people/lyonese.tscn" id="11_qwldy"]
 [ext_resource type="PackedScene" uid="uid://db6sjyoaw3ms2" path="res://src/monsters/giant_locust.tscn" id="13_veiw4"]
 [ext_resource type="PackedScene" uid="uid://dk1dv7sw386vc" path="res://src/items/coffee.tscn" id="18_ipka3"]
+[ext_resource type="PackedScene" uid="uid://dsm1c0wpq4pqj" path="res://src/items/potion_of_snake_oil.tscn" id="19_4h0a3"]
 
 [sub_resource type="Resource" id="Resource_hh4m1"]
-script = ExtResource("4_111fo")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_ovmtc"]
-resource_local_to_scene = true
-script = ExtResource("4_111fo")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_0nw1w"]
-script = ExtResource("4_111fo")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_nf07h"]
-script = ExtResource("4_111fo")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_5fp0k"]
-script = ExtResource("4_111fo")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_fu0ta"]
-resource_local_to_scene = true
-script = ExtResource("4_111fo")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_blo6h"]
-resource_local_to_scene = true
-script = ExtResource("4_111fo")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_h5hmq"]
-resource_local_to_scene = true
-script = ExtResource("4_111fo")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_h0rdx"]
-script = ExtResource("4_111fo")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_w5kg7"]
-script = ExtResource("4_111fo")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_yav2i"]
-script = ExtResource("4_111fo")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_jtimj"]
-script = ExtResource("4_111fo")
-_facts = []
-
-[sub_resource type="Resource" id="Resource_hqej2"]
 script = ExtResource("4_111fo")
 _facts = []
 
@@ -89,21 +38,16 @@ world_loc = Vector3i(10, 4, 0)
 mem = SubResource("Resource_hh4m1")
 
 [node name="Accountant" parent="Quest2Board" instance=ExtResource("4_nh7cg")]
-mem = SubResource("Resource_ovmtc")
 spawn_cost = 1.0
 
 [node name="Automaton" parent="Quest2Board" instance=ExtResource("5_n0hai")]
-mem = SubResource("Resource_0nw1w")
 
 [node name="Automaton2" parent="Quest2Board" instance=ExtResource("5_n0hai")]
-mem = SubResource("Resource_nf07h")
 
 [node name="SulantTiger" parent="Quest2Board" instance=ExtResource("6_hqcnm")]
-mem = SubResource("Resource_5fp0k")
 faction = 4
 
 [node name="Yarohu" parent="Quest2Board" instance=ExtResource("7_ltn2i")]
-mem = SubResource("Resource_fu0ta")
 
 [node name="Tent" parent="Quest2Board" instance=ExtResource("9_i0iae")]
 
@@ -114,10 +58,8 @@ script = ExtResource("2_ktv76")
 max_dungeon_occ = 1
 
 [node name="Outlaw" parent="Max1PerDungeon" instance=ExtResource("8_5vl31")]
-mem = SubResource("Resource_blo6h")
 
 [node name="Nochort" parent="Max1PerDungeon" instance=ExtResource("9_7av4t")]
-mem = SubResource("Resource_h5hmq")
 
 [node name="PotionOfAbsinthe" parent="Max1PerDungeon" instance=ExtResource("11_3h4uh")]
 
@@ -127,17 +69,16 @@ max_board_occ = 1
 max_dungeon_occ = 2
 
 [node name="PettyThief" parent="Infrequent" instance=ExtResource("9_15m00")]
-mem = SubResource("Resource_h0rdx")
 
 [node name="Tourist" parent="Infrequent" instance=ExtResource("10_xeej0")]
-mem = SubResource("Resource_w5kg7")
 
 [node name="GiantLocust" parent="Infrequent" instance=ExtResource("13_veiw4")]
-mem = SubResource("Resource_yav2i")
 
 [node name="Carrot" parent="Infrequent" instance=ExtResource("11_gnuqb")]
 
 [node name="Coffee" parent="Infrequent" instance=ExtResource("18_ipka3")]
+
+[node name="PotionOfSnakeOil" parent="Infrequent" instance=ExtResource("19_4h0a3")]
 
 [node name="Frequent" type="Node" parent="."]
 script = ExtResource("2_ktv76")
@@ -145,7 +86,5 @@ max_board_occ = 2
 min_board_occ = 1
 
 [node name="Rat" parent="Frequent" instance=ExtResource("10_6v1jq")]
-mem = SubResource("Resource_jtimj")
 
 [node name="Lyonese" parent="Frequent" instance=ExtResource("11_qwldy")]
-mem = SubResource("Resource_hqej2")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cmsxxvu32vsis"]
+[gd_scene load_steps=17 format=3 uid="uid://cmsxxvu32vsis"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_up4qd"]
 [ext_resource type="PackedScene" uid="uid://cmshyslfrv0du" path="res://src/vibes/hissing.tscn" id="2_l3w3v"]
@@ -8,9 +8,11 @@
 [ext_resource type="Script" path="res://src/card_rule.gd" id="9_gahru"]
 [ext_resource type="PackedScene" uid="uid://dnw86n1s88cwl" path="res://src/weapons/dagger.tscn" id="11_6cs3w"]
 [ext_resource type="PackedScene" uid="uid://dk1dv7sw386vc" path="res://src/items/coffee.tscn" id="11_6fb54"]
+[ext_resource type="PackedScene" uid="uid://eotqpasq760o" path="res://src/items/spellbook_of_zapping.tscn" id="13_pw5hp"]
 [ext_resource type="PackedScene" uid="uid://de85ahbbn0ced" path="res://src/items/potion_of_healing.tscn" id="14_vnhuk"]
 [ext_resource type="PackedScene" uid="uid://dvr7bsle8gy1x" path="res://src/items/potion_of_regen.tscn" id="15_88mj7"]
 [ext_resource type="PackedScene" uid="uid://wdbao74ejnju" path="res://src/items/potion_of_poison.tscn" id="16_k2kco"]
+[ext_resource type="PackedScene" uid="uid://pdu1a8fc862t" path="res://src/items/eye_glasses.tscn" id="16_tkt0o"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="25_g62gj"]
 [ext_resource type="PackedScene" uid="uid://bado87soxnga5" path="res://src/items/potion_of_absinthe.tscn" id="27_4a275"]
 [ext_resource type="PackedScene" uid="uid://b2dem6s27irbs" path="res://src/weapons/grayswandir.tscn" id="29_6skwl"]
@@ -51,6 +53,9 @@ world_loc = Vector3i(15, 5, -1)
 
 [node name="Grayswandir" parent="Unique" instance=ExtResource("29_6skwl")]
 
+[node name="SpellbookOfZapping" parent="Unique" instance=ExtResource("13_pw5hp")]
+spawn_prob = 1.0
+
 [node name="Weapons" type="Node" parent="."]
 script = ExtResource("9_gahru")
 max_board_occ = 2
@@ -59,6 +64,11 @@ min_board_occ = 1
 [node name="Dagger" parent="Weapons" instance=ExtResource("11_6cs3w")]
 
 [node name="Dynamite" parent="Weapons" instance=ExtResource("25_g62gj")]
+
+[node name="Items" type="Node" parent="."]
+script = ExtResource("9_gahru")
+
+[node name="EyeGlasses" parent="Items" instance=ExtResource("16_tkt0o")]
 
 [connection signal="visibility_changed" from="Potions/PotionOfHealing" to="Potions/PotionOfHealing" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Potions/PotionOfRegen" to="Potions/PotionOfRegen" method="_on_visibility_changed"]

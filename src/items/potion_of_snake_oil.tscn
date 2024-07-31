@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dsm1c0wpq4pqj"]
+
+[ext_resource type="PackedScene" uid="uid://c3qrp6eeq1lio" path="res://src/items/potion.tscn" id="1_apj4e"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="2_mgiry"]
+
+[node name="PotionOfSnakeOil" instance=ExtResource("1_apj4e")]
+caption = "potion of snake oil"
+desc_simple = "a viscous transparent fluid"
+desc_detailed = "distilled petrolum infused with camphor and habeñaro chiles, may contain trace amounts of viper fat"
+message = "this leaves a burning sensation in your mouth"
+spawn_cost = 2.0
+
+[node name="HighSpice" type="Node" parent="." index="2"]
+script = ExtResource("2_mgiry")
+damage = 1
+damage_family = 8
+agility = 1
+immediate = true
