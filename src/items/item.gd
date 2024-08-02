@@ -132,12 +132,12 @@ func get_short_desc():
 
 func get_long_desc(perception):
 	const empty_desc = "???"
-	var is_perfect_perception = perception >= Consts.PERFECT_PERCEPTION
 	var complete_desc
+	var plevel = CombatUtils.percep_level(perception)
 	
-	if perception <= Consts.INEPT_PERCEPTION:
+	if plevel <= Consts.PercepLevel.INEPT:
 		return empty_desc
-	elif is_perfect_perception and not desc_detailed.is_empty():
+	elif plevel >= Consts.PercepLevel.PERFECT and not desc_detailed.is_empty():
 		complete_desc = desc_detailed
 	elif not desc_simple.is_empty():
 		complete_desc = desc_simple

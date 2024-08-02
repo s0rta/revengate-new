@@ -10,12 +10,12 @@ caption = "potion of absinthe"
 desc_simple = "A greenish liquid that smells of licorice and herbs."
 desc_detailed = "A rectified grain spirit redistilled with over a dozen botanicals, including Artemisia genipi, Artemisia absinthium, and Foeniculum vulgare."
 message = "Things around you look more pleasant somehow"
-consumable = true
 spawn_cost = 3.0
 tags = Array[String](["fragile", "groupable", "booze"])
 
 [node name="Effect" type="Node" parent="." index="2"]
 script = ExtResource("2_j48p2")
+condition_name = "inspired"
 healing = 1
 agility = -10
 perception = -20

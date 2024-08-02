@@ -497,10 +497,18 @@ Maybe:
 
 ## v0.12.9
 - [x] bug: Command.Pick is broken for coffee
+- [ ] bug: keyboard movement should be disabled during conversations
+- [ ] deprecate Viewport.center_on_coord()
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
-- [ ] conditions summary in Inspect
-- [ ] glasses in stash
-- [ ] a bit smarter choosing the next speaker with the Talk button
+- [x] conditions summary in Inspect
+- [x] glasses in stash
+- [x] a bit smarter choosing the next speaker with the Talk button
+
+UI
+- [x] duplicate messages are collapsed in message overlay and message log screen
+
+Items:
+- [x] potion of snake oil
 
 ## v0.13
 - [ ] new quest: Pacherrs are seeking some new crystals

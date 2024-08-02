@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Revengate.  If not, see <https://www.gnu.org/licenses/>.
 
+@tool
 class_name Paralysis extends Effect
 
 func apply(actor):

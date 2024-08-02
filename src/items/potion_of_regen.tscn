@@ -16,5 +16,6 @@ ttl = -1
 
 [node name="Effect" type="Node" parent="." index="2"]
 script = ExtResource("3_tjfos")
+condition_name = "enhanced healing"
 healing = 3
 nb_turns = 5

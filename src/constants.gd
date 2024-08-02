@@ -61,6 +61,14 @@ enum SkillLevel {
 	MYTHICAL,  # beyond the realm of mortals
 }
 
+enum PercepLevel {
+	INEPT, 
+	WEAK,
+	NORMAL, 
+	GREAT, 
+	PERFECT,
+}
+
 enum MessageLevels {
 	INFO,  # regular game progress
 	WARNING,  # you should probably change your strategy after seeing this
@@ -94,6 +102,7 @@ var WEAPON_BASE_STATS := ["damage", "range", "damage_family"] + ITEM_BASE_STATS
 
 const PERFECT_PERCEPTION = 75
 const GREAT_PERCEPTION = 60
+const NORMAL_PERCEPTION = 50
 const INEPT_PERCEPTION = 20
 
 const COORD_INVALID = Vector2i(-1, -1)

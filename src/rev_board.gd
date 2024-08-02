@@ -37,6 +37,7 @@ const FLOOR_TERRAINS = ["floor", "floor-rough", "floor-dirt"]
 const DYN_HIGHLIGHTS = {"mark-chatty": "#407014",
 						"mark-chatty-default": "#86f61f",
 						"mark-speaker-active": "#1c30f9", 
+						"mark-selected": "#1c30f9", 
 						"mark-foe": "#701414", 
 						"mark-foe-default": "f61f1f", 
 						"mark-step": "#4799bc",

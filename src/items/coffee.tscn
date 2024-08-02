@@ -13,6 +13,7 @@ spawn_cost = 3.0
 
 [node name="ManaRegen" type="Node" parent="." index="2"]
 script = ExtResource("2_l7ov0")
+condition_name = "focussed"
 perception = 2
 mana_recovery_prob = 0.5
 nb_turns = 15

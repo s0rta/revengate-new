@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -29,6 +29,19 @@ static func node_core_stats(node):
 		if val:
 			mods[key] = val
 	return mods
+
+static func percep_level(perception_stat):
+	## Return a Consts.PercepLevel
+	if perception_stat <= Consts.INEPT_PERCEPTION:
+		return Consts.PercepLevel.INEPT
+	elif perception_stat < Consts.NORMAL_PERCEPTION:
+		return Consts.PercepLevel.WEAK
+	elif perception_stat < Consts.GREAT_PERCEPTION:
+		return Consts.PercepLevel.NORMAL
+	elif perception_stat < Consts.PERFECT_PERCEPTION:
+		return Consts.PercepLevel.GREAT
+	else:
+		return Consts.PercepLevel.PERFECT
 
 static func skill_modifier(level:Consts.SkillLevel):
 	return 5 * level

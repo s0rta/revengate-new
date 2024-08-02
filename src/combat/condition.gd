@@ -20,6 +20,7 @@
 class_name Condition extends Node
 
 @export var dkind: String  # Debug Kind, never shown to the player
+@export var condition_name: String  # shown to the player
 @export var damage: int
 @export var healing: int
 @export var damage_family: Consts.DamageFamily
@@ -27,10 +28,12 @@ class_name Condition extends Node
 @export var stats_modifiers: Dictionary
 @export var tags:Array[String]
 
-func _init(dkind_:String="", damage_=0, healing_=0, damage_family_=Consts.DamageFamily.NONE, 
+func _init(dkind_:String, condition_name_:String, 
+			damage_=0, healing_=0, damage_family_=Consts.DamageFamily.NONE, 
 			tags_:Array[String]=[], nb_turns_=0):
 	name = dkind_  # might be overriden before _ready() if there is a name clash with our siblings
 	dkind = dkind_
+	condition_name = condition_name_
 	damage = damage_
 	healing = healing_
 	damage_family = damage_family_
@@ -38,8 +41,43 @@ func _init(dkind_:String="", damage_=0, healing_=0, damage_family_=Consts.Damage
 	nb_turns = nb_turns_
 
 func _to_string():
-	return "<%s %s dmg=%d heal=%d, turns=%d>" % [name, dkind, damage, healing, nb_turns]
+	# TODO: include the summary of mods
+	return "<%s %s dmg=%d heal=%d, turns=%d>" % [name, condition_name, damage, healing, nb_turns]
 	
+func summary(percep_lvl:Consts.PercepLevel) -> String:
+	assert(percep_lvl in Consts.PercepLevel.values())
+	
+	if percep_lvl <= Consts.PercepLevel.INEPT:
+		return ""
+	elif percep_lvl == Consts.PercepLevel.WEAK:
+		return condition_name
+
+	var turns_str:String
+	if nb_turns < 1 or percep_lvl < Consts.PercepLevel.PERFECT:
+		turns_str = ""
+	elif nb_turns == 1:
+		turns_str = "last turn"
+	else:
+		turns_str = "%d turns left" % nb_turns
+	
+	var deltas = []
+	for key in ["healing", "damage"]:
+		var val = get(key)
+		if val:
+			deltas.append("%s: %s" % [key, val])
+	var modstrs = UIUtils.format_modifiers(stats_modifiers)
+	var keys = modstrs.keys()
+	keys.sort()
+	for stat in keys:
+		if percep_lvl == Consts.PercepLevel.NORMAL:
+			deltas.append("%s%s" % [" +-"[sign(stats_modifiers[stat])], stat])
+		else:
+			deltas.append("%s: %s" % [stat, modstrs[stat]])
+	var parts = deltas.duplicate()
+	if turns_str:
+		parts.append(turns_str)	
+	return "%s (%s)" % [condition_name, ", ".join(parts)]
+
 func erupt():
 	## activate the condition
 	var actor = get_parent()

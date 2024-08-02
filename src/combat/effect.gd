@@ -19,6 +19,9 @@
 ## An effect that can result in a damage-over-time condition
 class_name Effect extends Node
 
+@export_group("Presentation")
+@export var condition_name := ""
+
 @export_group("Health Changes")
 @export var damage := 0
 # healing could also be expressed as a negative damage, but positive numbers are more intuitive
@@ -51,6 +54,8 @@ func _get_configuration_warnings():
 			warnings.append("Permanent effects can't specify nb_turns!")
 		if damage != 0 or healing != 0:
 			warnings.append("Permanent effects can only affect core stats, not provide damage or healing!")
+	if not cond_name_is_valid():
+		warnings.append("Effects that leave a Condition on the actor need a condtion_name!")
 	return warnings
 
 func apply(actor):
@@ -64,7 +69,8 @@ func apply(actor):
 	if permanent:
 		perma_boost(actor, mods)
 	else:
-		var cond = Condition.new("%sCond" % [name], damage, healing, damage_family, tags, nb_turns)
+		var dkind = "%sCond" % [name]
+		var cond = Condition.new(dkind, condition_name, damage, healing, damage_family, tags, nb_turns)
 		cond.stats_modifiers = mods
 		cond.owner = null
 		actor.add_child(cond)
@@ -76,3 +82,15 @@ func perma_boost(actor:Actor, modifiers):
 		var new_val = actor.get(key) + modifiers[key]
 		actor.set(key, new_val)
 		
+func cond_name_is_valid() -> bool:
+	## Return whether the condition name is valid.
+	## The effect needs a condition name if it can leave an Inspectable condition on the actor:
+	##  - non-permanent
+	##  - nb_turns > 1
+	if permanent or nb_turns < 1:
+		return true
+	elif immediate and nb_turns == 1:
+		return true
+	else:
+		return not condition_name.is_empty()
+	

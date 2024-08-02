@@ -17,9 +17,11 @@ ttl = -1
 
 [node name="PerfectPerception" type="Node" parent="." index="2"]
 script = ExtResource("2_erdg5")
+condition_name = "exceedingly observant"
 perception = 150
 nb_turns = 12
 
 [node name="Paralysis" type="Node" parent="." index="3"]
 script = ExtResource("3_ty7co")
+condition_name = "paralized"
 nb_turns = 10

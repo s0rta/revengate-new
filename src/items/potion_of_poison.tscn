@@ -11,6 +11,7 @@ spawn_cost = 1.0
 
 [node name="PoisonEffect" type="Node" parent="." index="2"]
 script = ExtResource("2_8q3xi")
+condition_name = "poisoned"
 damage = 2
 damage_family = 7
 nb_turns = 4

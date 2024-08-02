@@ -20,6 +20,7 @@ immediate = true
 
 [node name="VisionEffect" type="Node" parent="." index="2"]
 script = ExtResource("2_2ktei")
+condition_name = "balanced diet"
 perception = 7
 immediate = true
 nb_turns = 35

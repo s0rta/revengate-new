@@ -53,7 +53,12 @@ func show_actor(actor:Actor):
 		%DrawingLabel.text = EMPTY_IMG_TEXT % actor.char
 	%NameLabel.text = "Name: %s" % actor.get_caption()
 	var perception = Tender.hero.get_stat("perception")
-	if perception >= Consts.PERFECT_PERCEPTION:
+	var plevel = CombatUtils.percep_level(perception)
+	if plevel < Consts.PercepLevel.PERFECT and actor != Tender.hero:
+		# you can't perceive other people's status as well as your own
+		plevel = min(plevel - 1, Consts.PercepLevel.INEPT)
+		
+	if plevel >= Consts.PercepLevel.PERFECT:
 		%HealthLabel.text = "Health: %s" % actor.health
 	elif actor.health_full > 0:
 		%HealthLabel.text = "Health (typical): %s" % actor.health_full
@@ -66,7 +71,21 @@ func show_actor(actor:Actor):
 	var percep = actor.get_stat("perception")
 	%PerceptionLabel.text = "Perception: %s" % Utils.vague_value(percep, percep/100.0, perception)
 	if actor.description:
+		# TODO: convert description to percep_lvl
 		%DescLabel.text = actor.description
 	else:
 		%DescLabel.text = "???"
+		
+	var conds = _sorted_conditions(actor.get_conditions())
+	var cond_lines = conds.map(func (c): return "‣ " + c.summary(plevel))
+	cond_lines.filter(func (l): return l)  # filter out empty lines
+	if cond_lines:
+		cond_lines = Utils.collapse_strings_fmt(cond_lines, len(cond_lines))
+		%DescLabel.text += "\n\nConditions:\n%s" % ["\n".join(cond_lines)]
 	popup()
+
+func _sorted_conditions(conds):
+	var elems = conds.map(func (c): return [c.condition_name, c.nb_turns, c])
+	elems.sort()
+	return elems.map(func (e): return e[-1])
+	

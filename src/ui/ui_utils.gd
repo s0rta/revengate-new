@@ -35,3 +35,19 @@ static func resize_text_controls(size=null):
 
 	var theme = ThemeDB.get_project_theme()
 	theme.merge_with(alt_theme)
+
+static func format_modifiers(mods:Dictionary, strip_blanks=true):
+	## Return a {key:val_str} mapping suitable for presenting to the player
+	var modstrs := {}
+	for key in mods:
+		if strip_blanks and not mods[key]:
+			pass
+		if mods[key] is int:
+			modstrs[key] = "%+d" % mods[key]
+		elif key.ends_with("_prob"):
+			modstrs[key] = "%+0.1f%%" % (100.0 * mods[key])
+		elif mods[key] is float:
+			modstrs[key] = "%+0.1f" % mods[key]
+		else:
+			modstrs[key] = "%s" % mods[key]
+	return modstrs

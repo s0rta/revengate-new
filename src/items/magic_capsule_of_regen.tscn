@@ -13,6 +13,7 @@ spawn_cost = 4.0
 
 [node name="Effect" type="Node" parent="." index="1"]
 script = ExtResource("2_qi62v")
+condition_name = "amplified healing"
 healing = 3
 nb_turns = 8
 tags = Array[String](["magical"])
