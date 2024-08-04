@@ -61,6 +61,7 @@ pitch_scale = 1.25
 [node name="Poison" type="Node" parent="Stinger" index="1"]
 script = ExtResource("6_58sdh")
 condition_name = "numbed"
+activation_msg = "You suddenly feel dizzy"
 damage = 1
 damage_family = 7
 agility = -2

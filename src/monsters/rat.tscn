@@ -16,6 +16,7 @@ health = 3
 strength = 17
 agility = 45
 intelligence = 15
+mem = null
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.921569, 0.921569, 0.921569, 1)

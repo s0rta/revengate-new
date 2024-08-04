@@ -23,6 +23,7 @@ const BAD_NAME_MSG = "Effects that leave a Condition on the actor need a condtio
 
 @export_group("Presentation")
 @export var condition_name := ""
+@export var activation_msg := ""
 
 @export_group("Health Changes")
 @export var damage := 0
@@ -80,6 +81,10 @@ func apply(actor):
 		actor.add_child(cond)
 		if immediate:
 			cond.erupt()
+	## Currently messages are only in second person, but in the future, it could
+	## be cool to have third person messages (translation makes this tricky)
+	if not activation_msg.is_empty() and actor == Tender.hero:
+		actor.add_message(activation_msg, Consts.MessageLevels.INFO, ["msg:story"])
 
 func perma_boost(actor:Actor, modifiers):
 	for key in modifiers:

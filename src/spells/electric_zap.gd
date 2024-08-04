@@ -37,6 +37,8 @@ func cast_on(victim:Actor):
 	
 	# stun!
 	var strat = Paralized.new(victim, 1.0, stun_turns)
+	## TODO: right now this adds a stratagy, but no affect, so we cannot emit
+	## A message that someone has been stunned.
 	victim.add_strategy(strat)
 
 	victim.was_attacked.emit(me)

@@ -60,6 +60,7 @@ stream = ExtResource("5_gr1tg")
 [node name="Infection" type="Node" parent="Bite" index="1"]
 script = ExtResource("6_hdt8x")
 condition_name = "infected"
+activation_msg = "That bite site wont stop itching!"
 damage = 1
 damage_family = 10
 probability = 0.2

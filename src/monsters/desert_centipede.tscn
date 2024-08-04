@@ -40,6 +40,7 @@ stream = ExtResource("5_dmajw")
 [node name="Poison" type="Node" parent="PoisonBite" index="1"]
 script = ExtResource("4_csjey")
 condition_name = "poisoned"
+activation_msg = "Wow! That stinging feeling is persistant."
 damage = 2
 damage_family = 7
 probability = 0.5
