@@ -367,7 +367,7 @@ class Inspect extends Command:
 			await Tender.hud.actor_details_screen.closed
 
 		# only one of Actor or Item message will show
-		board.highlight_cells([coord])
+		board.highlight_cells([coord], "mark-selected")
 		var here_str = "at %s" % board.coord_str(coord) if Utils.is_debug() else "here"
 
 		if Tender.hero.perceives(coord):

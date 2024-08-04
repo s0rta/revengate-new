@@ -21,6 +21,7 @@ agility = 47
 intelligence = 17
 resistance = 7
 description = "Plasus rats look like common rats, but they have a stubbier face, roughly like a gerbil's. They commonly carry infectious diseases and are immune to most poisons. They are also roughly the size of a house cat."
+mem = null
 
 [node name="Label" parent="." index="0"]
 theme_override_colors/font_color = Color(0.65098, 0.321569, 0.0196078, 1)
@@ -58,6 +59,7 @@ stream = ExtResource("5_gr1tg")
 
 [node name="Infection" type="Node" parent="Bite" index="1"]
 script = ExtResource("6_hdt8x")
+condition_name = "infected"
 damage = 1
 damage_family = 10
 probability = 0.2

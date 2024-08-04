@@ -28,7 +28,7 @@ class_name Condition extends Node
 @export var stats_modifiers: Dictionary
 @export var tags:Array[String]
 
-func _init(dkind_:String, condition_name_:String, 
+func _init(dkind_:="", condition_name_:="", 
 			damage_=0, healing_=0, damage_family_=Consts.DamageFamily.NONE, 
 			tags_:Array[String]=[], nb_turns_=0):
 	name = dkind_  # might be overriden before _ready() if there is a name clash with our siblings

@@ -19,6 +19,8 @@
 ## An effect that can result in a damage-over-time condition
 class_name Effect extends Node
 
+const BAD_NAME_MSG = "Effects that leave a Condition on the actor need a condtion_name!"
+
 @export_group("Presentation")
 @export var condition_name := ""
 
@@ -46,7 +48,6 @@ class_name Effect extends Node
 @export_group("Tagging")
 @export var tags:Array[String]
 
-	
 func _get_configuration_warnings():
 	var warnings = []
 	if permanent:
@@ -55,8 +56,11 @@ func _get_configuration_warnings():
 		if damage != 0 or healing != 0:
 			warnings.append("Permanent effects can only affect core stats, not provide damage or healing!")
 	if not cond_name_is_valid():
-		warnings.append("Effects that leave a Condition on the actor need a condtion_name!")
+		warnings.append(BAD_NAME_MSG)
 	return warnings
+
+func _ready():
+	assert(cond_name_is_valid(), BAD_NAME_MSG)
 
 func apply(actor):
 	## Apply the effect to `actor`. 
