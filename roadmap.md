@@ -492,7 +492,7 @@ Strategies:
 - [x] plasus rats have a more aggressive version of TribalTerritorial
 
 Maybe:
-- [x] special icon for loot piles (#55) (🛒 or 🛍)
+- [x] special icon for loot piles (#55) (🛒, 🛍, 📦, 🍿, 𝍸, 𝄚, 𖡧, 𐛒, ᯥ, ࠽)
 - [x] phantruchs do not recover from forgivness
 
 ## v0.12.9

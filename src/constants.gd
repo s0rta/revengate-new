@@ -20,8 +20,8 @@
 extends Node
 
 # TODO: leave a non-significant digit in the version code to allow for patched builds
-const VERSION := "0.12.8"
-const VERSION_CODE := 1028128
+const VERSION := "0.12.9"
+const VERSION_CODE := 1028129
 const DEBUG = true
 const DEBUG_PATHS = false
 
