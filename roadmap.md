@@ -497,12 +497,14 @@ Maybe:
 
 ## v0.12.9
 - [x] bug: Command.Pick is broken for coffee
-- [ ] bug: keyboard movement should be disabled during conversations
+- [x] bug: keyboard movement should be disabled during conversations
 - [ ] deprecate Viewport.center_on_coord()
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
-- [x] conditions summary in Inspect
+- [x] conditions summary in Inspect and message log
 - [x] glasses in stash
 - [x] a bit smarter choosing the next speaker with the Talk button
+- [ ] bump Andoid build target
+- [ ] openjdk-17-jdk-headless in build recipe?
 
 UI
 - [x] duplicate messages are collapsed in message overlay and message log screen

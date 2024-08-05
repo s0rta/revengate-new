@@ -104,7 +104,15 @@ func _unhandled_input(event):
 	if visible and event is InputEventKey:
 		# Consume all keyboard input while the balloon is visible
 		accept_event()
-	
+
+func _input(event):
+	# Consume most keyboard input while the balloon is visible
+	if visible and event is InputEventKey:
+		# TODO: this should work in _unhandled_input() if we get the node order right it the scene tree
+		for action in ["up", "down", "right", "left"]:
+			if Input.is_action_pressed(action):
+				accept_event()
+
 func _focus_on(actor:Actor):
 	## Show some emphasis on 'actor'
 	if not actor:
