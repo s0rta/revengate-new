@@ -503,7 +503,7 @@ Maybe:
 - [x] conditions summary in Inspect and message log
 - [x] glasses in stash
 - [x] a bit smarter choosing the next speaker with the Talk button
-- [ ] bump Andoid build target
+- [x] bump Andoid build target
 - [ ] openjdk-17-jdk-headless in build recipe?
 
 UI
