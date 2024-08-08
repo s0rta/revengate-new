@@ -1,0 +1,7 @@
+- duplicate messages are merged (shown with "xN" suffix)
+- conditions (buffs and debuffs) are visible in the Inspect screen
+- most conditions show an activation message
+- eye glasses are in the secret stash
+- new potion: snake oil
+- default targets for Talk and Quick Attack buttons are highlighted with a brighter colour
+- auto-panning to the speaker during conversations
