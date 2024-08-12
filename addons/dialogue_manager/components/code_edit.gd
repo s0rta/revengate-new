@@ -7,10 +7,11 @@ signal error_clicked(line_number: int)
 signal external_file_requested(path: String, title: String)
 
 
+const DialogueManagerParser = preload("./parser.gd")
 const DialogueSyntaxHighlighter = preload("./code_edit_syntax_highlighter.gd")
 
 
-# A link back to the owner MainView
+# A link back to the owner `MainView`
 var main_view
 
 # Theme overrides for syntax highlighting, etc
@@ -70,25 +71,30 @@ func _ready() -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
+	# Handle shortcuts that come from the editor
 	if event is InputEventKey and event.is_pressed():
-		match event.as_text():
-			"Ctrl+Equal", "Command+Equal":
-				self.font_size += 1
-				get_viewport().set_input_as_handled()
-			"Ctrl+Minus", "Command+Minus":
-				self.font_size -= 1
-				get_viewport().set_input_as_handled()
-			"Ctrl+0", "Command+0":
-				self.font_size = theme_overrides.font_size
-				get_viewport().set_input_as_handled()
-			"Ctrl+K", "Command+K":
+		var shortcut: String = Engine.get_meta("DialogueManagerPlugin").get_editor_shortcut(event)
+		match shortcut:
+			"toggle_comment":
 				toggle_comment()
 				get_viewport().set_input_as_handled()
-			"Alt+Up":
+			"delete_line":
+				delete_current_line()
+				get_viewport().set_input_as_handled()
+			"move_up":
 				move_line(-1)
 				get_viewport().set_input_as_handled()
-			"Alt+Down":
+			"move_down":
 				move_line(1)
+				get_viewport().set_input_as_handled()
+			"text_size_increase":
+				self.font_size += 1
+				get_viewport().set_input_as_handled()
+			"text_size_decrease":
+				self.font_size -= 1
+				get_viewport().set_input_as_handled()
+			"text_size_reset":
+				self.font_size = theme_overrides.font_size
 				get_viewport().set_input_as_handled()
 
 	elif event is InputEventMouse:
@@ -274,7 +280,7 @@ func insert_bbcode(open_tag: String, close_tag: String = "") -> void:
 
 # Insert text at current caret position
 # Move Caret down 1 line if not => END
-func insert_text(text: String) -> void:
+func insert_text_at_cursor(text: String) -> void:
 	if text != "=> END":
 		insert_text_at_caret(text+"\n")
 		set_caret_line(get_caret_line()+1)
@@ -349,6 +355,19 @@ func toggle_comment() -> void:
 	text_changed.emit()
 
 
+# Remove the current line
+func delete_current_line() -> void:
+	var cursor = get_cursor()
+	if get_line_count() == 1:
+		select_all()
+	elif cursor.y == 0:
+		select(0, 0, 1, 0)
+	else:
+		select(cursor.y - 1, get_line_width(cursor.y - 1), cursor.y, get_line_width(cursor.y))
+	delete_selection()
+	text_changed.emit()
+
+
 # Move the selected lines up or down
 func move_line(offset: int) -> void:
 	offset = clamp(offset, -1, 1)
@@ -364,7 +383,7 @@ func move_line(offset: int) -> void:
 
 	var lines := text.split("\n")
 
-	# We can't move the lines out of bounds
+	# Prevent the lines from being out of bounds
 	if from + offset < 0 or to + offset >= lines.size(): return
 
 	var target_from_index = from - 1 if offset == -1 else to + 1
