@@ -120,8 +120,9 @@ def make_fdroid_presets(c, godot_src_dir):
         parser[sect]["version/name"] = f'"{version_name}"'
         parser[sect]["custom_template/release"] = f'"{templates}"'
         parser[sect]["package/signed"] = "false"
-        parser[sect]["gradle_build/use_gradle_build"] = "true"
+        parser[sect]["gradle_build/use_gradle_build"] = "false"
         parser[sect]["gradle_build/min_sdk"] = '""'
+        parser[sect]["gradle_build/target_sdk"] = '""'
 
     parser.write(open(PRESETS_PATH, "wt"), False)
 
