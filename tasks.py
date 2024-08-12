@@ -77,7 +77,7 @@ def make_export_presets(c, signed=True):
     parser.read(PRESETS_PATH + ".in")
     if signed:
         creds = _load_credentials()
-    
+
     for sect in ["preset.0", "preset.1", "preset.2", "preset.3"]:
         old_path = parser[sect]["export_path"]
         parser[sect]["export_path"] = _make_path(old_path, version_name)
@@ -104,13 +104,13 @@ def make_export_presets(c, signed=True):
 
 @task
 def make_fdroid_presets(c, godot_src_dir):
-    """ Generate a presets file that Godot can use to produce unsigned Android builds 
+    """ Generate a presets file that Godot can use to produce unsigned Android builds
     for F-Droid. """
     version_name, version_code = _get_version()
     parser = ConfigParser()
     parser.read(PRESETS_PATH + ".in")
     templates = os.path.join(godot_src_dir, "bin", "android_release.apk")
-    
+
     for sect in ["preset.0", "preset.1"]:
         old_path = parser[sect]["export_path"]
         parser[sect]["export_path"] = _make_path(old_path, version_name)
@@ -120,7 +120,7 @@ def make_fdroid_presets(c, godot_src_dir):
         parser[sect]["version/name"] = f'"{version_name}"'
         parser[sect]["custom_template/release"] = f'"{templates}"'
         parser[sect]["package/signed"] = "false"
-        parser[sect]["gradle_build/use_gradle_build"] = "false"
+        parser[sect]["gradle_build/use_gradle_build"] = "true"
         parser[sect]["gradle_build/min_sdk"] = '""'
 
     parser.write(open(PRESETS_PATH, "wt"), False)
@@ -133,7 +133,7 @@ def _find_godot(context):
     if "GODOT" in os.environ:
         return os.environ["GODOT"]
     else:
-        raise RuntimeError("Can't find Godot binary. " 
+        raise RuntimeError("Can't find Godot binary. "
                            "Consider linking it to `godot4` or defining "
                            "the GODOT environment variable.")
 
@@ -143,7 +143,7 @@ def build_android(c):
     """ Make the two android package formats from the current sources. """
     # Ex.: godot --export-release 'Android APK' bin/revengate.apk
     godot = _find_godot(c)
-    
+
     parser = ConfigParser()
     parser.read(PRESETS_PATH)
     for sect in ["preset.0", "preset.1"]:
@@ -160,7 +160,7 @@ def build_web(c):
     """ Make a zip file with the HTML5 flavour of the game. """
     # Ex.: godot --export-release 'Web' bin/revengate.apk
     godot = _find_godot(c)
-    
+
     parser = ConfigParser()
     parser.read(PRESETS_PATH)
     sect = "preset.2"
@@ -181,11 +181,11 @@ def build_web(c):
 
     res = c.run(f"zip -r {pack_path} {base_dir}", echo=True)
     assert res.return_code == 0
-    
+
     print(f"Saved HTML5 export pack to {pack_path}")
 
 
-@task 
+@task
 def configure_android_sdk(c, sdk_path):
     """Save the path to the Android SDK in the Godot settings"""
     # FIXME: this is not needed anymore with Godot 4.2+
@@ -202,7 +202,7 @@ def configure_android_sdk(c, sdk_path):
 
 @task
 def migrate_legacy_asset(c, old_path, new_path):
-    """ Move an asset from the legacy Python codebase to the new Godot one, 
+    """ Move an asset from the legacy Python codebase to the new Godot one,
     leave a symlink in the old location. """
     print(f"migrate_legacy_asset: {old_path=} {new_path=}")
     assert old_path != new_path
@@ -217,7 +217,7 @@ def migrate_legacy_asset(c, old_path, new_path):
     if os.path.isfile(new_path):
         assert os.path.islink(new_path)
         os.unlink(new_path)
-    
+
     c.run(f"git mv {old_path} {new_path}")
     os.chdir(basedir)
     depth = len(basedir.split(os.path.sep))
@@ -241,17 +241,17 @@ def _parse_room(path):
                 floor_coords.append((x, y))
     if not wall_coords:
         raise ValueError(f"Couldn't find any wall coords in {path}")
-                
+
     # shrink the bounding box
     xs, ys = zip(*wall_coords)
     offset = (-min(xs), -min(ys))
     wall_coords = _move_coords(wall_coords, offset)
     floor_coords = _move_coords(floor_coords, offset)
-    
+
     # convert the outer wall into a serial path
     all_walls = set(wall_coords)
     perim = [wall_coords[0]]
-    
+
     current = wall_coords[0]
     while all_walls:
         has_next = False
@@ -263,7 +263,7 @@ def _parse_room(path):
                 has_next = True
                 break
         if not has_next:
-            raise ValueError(f"wall outline in {path} is not continous at {current}")        
+            raise ValueError(f"wall outline in {path} is not continous at {current}")
         perim.append(current)
     if perim[0] != perim[-1]:
         raise ValueError(f"the outer wall in {path} is not closed")
@@ -282,9 +282,9 @@ def _parse_room(path):
         direction = (dx, dy)
 
     # Simplify the floor coords
-    # Only keep the first floor tile after a wall on each line, we stop when we see a 
-    # wall if there is a restart, then we keep another seed to know we need another 
-    # floor section. This allows for expansion in O(x*y) in one pass without taking much 
+    # Only keep the first floor tile after a wall on each line, we stop when we see a
+    # wall if there is a restart, then we keep another seed to know we need another
+    # floor section. This allows for expansion in O(x*y) in one pass without taking much
     # space in the json dump.
 
     floor_seeds = []
@@ -299,9 +299,9 @@ def _parse_room(path):
             elif (i, j) in walls and in_sect:
                 in_sect = False
 
-    room = dict(name=os.path.splitext(os.path.basename(path))[0], 
-                size=size, 
-                pillars=pillars, 
+    room = dict(name=os.path.splitext(os.path.basename(path))[0],
+                size=size,
+                pillars=pillars,
                 floor_seeds=floor_seeds)
     return room
 
@@ -310,7 +310,7 @@ def _parse_room(path):
 def jsonify_room_layouts(c, files, extra_files=[]):
     """ Convert Zorbus room layouts into a json representation.
 
-    `files`: file path or glob expression 
+    `files`: file path or glob expression
     `extra_files`: file path or glob expression, can be specified more than once
     """
     paths = chain(*[glob(os.path.expanduser(arg)) for arg in [files] + extra_files])
@@ -320,13 +320,13 @@ def jsonify_room_layouts(c, files, extra_files=[]):
             rooms.append(_parse_room(path))
         except ValueError as e:
             print(e, file=sys.stderr)
-            
+
     rooms = [room for room in rooms if max(room["size"]) <= MAX_ROOM_SIDE]
-    
+
     rooms.sort(key=lambda room: (mul(*room["size"]), room["name"]))
     jstxt = json.dumps(rooms)
-    
+
     # put each room on one like to make git diffs smaller when we add rooms
     jstxt = jstxt.replace("},", "},\n")
-   
+
     print(jstxt)
