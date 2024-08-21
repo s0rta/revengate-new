@@ -498,13 +498,10 @@ Maybe:
 ## v0.12.9
 - [x] bug: Command.Pick is broken for coffee
 - [x] bug: keyboard movement should be disabled during conversations
-- [ ] deprecate Viewport.center_on_coord()
-- [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [x] conditions summary in Inspect and message log
 - [x] glasses in stash
 - [x] a bit smarter choosing the next speaker with the Talk button
 - [x] bump Andoid build target
-- [ ] openjdk-17-jdk-headless in build recipe?
 
 UI
 - [x] duplicate messages are collapsed in message overlay and message log screen
@@ -513,7 +510,30 @@ Items:
 - [x] potion of snake oil
 
 ## v0.13
-- [ ] new quest: Pacherrs are seeking some new crystals
+- [ ] openjdk-17-jdk-headless in build recipe?
+- [ ] deprecate Viewport.center_on_coord()
+- [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
+- [ ] the person you just talked to can't act for the rest of the turn (#91)
+- [ ] use the SkillLevel scale for the Perception increments
+- [ ] list supported languages (#95)
+
+New Quest – traveling Pacherrs are in town:
+- [ ] new area where they hang out
+- [ ] new traboule, door is locked
+- [ ] a few canuts in town have the key
+- [ ] loot crystals somewhere down the new traboule
+
+UX:
+- [ ] message for critical damages
+- [ ] smarter choice of default speaker by tracking last convo in Hero.mem (#91)
+- [ ] show sentiment in Inspect (#90)
+- [ ] keep attacking if you hold quick attack down (#84)
+- [ ] quick attack does not throw weapons melee-and-ranged weapons like daggers
+- [ ] update highlights after teleport (#87)
+
+Items:
+- [ ] potion of analysis paralysis are more abundant
+
 
 ## v1.0
 - [ ] A Fight for Fumes campaign
@@ -552,3 +572,13 @@ Weapons:
 
 Performance:
 - [ ] mem.recall accept an importance param to know how deep to search
+
+Decks:
+- [ ] accept extra tally for fine grained generation stats
+- [ ] rename `spawn_prob` to `deck_prob`
+- [ ] simulators takes a dungeon and discovers generation params from it
+
+Self Hosted Exports:
+- [ ] start with SystemD
+- [ ] use Cady to serve static sites
+- [ ] upgrade base OS to 24.04
