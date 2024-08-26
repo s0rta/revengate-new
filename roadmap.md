@@ -510,12 +510,14 @@ Items:
 - [x] potion of snake oil
 
 ## v0.13
+- [x] Godot 4.3: seems to run without any porting!
 - [ ] openjdk-17-jdk-headless in build recipe?
 - [ ] deprecate Viewport.center_on_coord()
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [ ] the person you just talked to can't act for the rest of the turn (#91)
 - [ ] use the SkillLevel scale for the Perception increments
 - [ ] list supported languages (#95)
+- [ ] sewer aligators
 
 New Quest – traveling Pacherrs are in town:
 - [ ] new area where they hang out
@@ -534,6 +536,8 @@ UX:
 Items:
 - [ ] potion of analysis paralysis are more abundant
 
+Maybe:
+- [ ] anim of pathfinding
 
 ## v1.0
 - [ ] A Fight for Fumes campaign
@@ -572,6 +576,7 @@ Weapons:
 
 Performance:
 - [ ] mem.recall accept an importance param to know how deep to search
+- [ ] speed up path finding with [JPS](https://zerowidth.com/2013/a-visual-explanation-of-jump-point-search/)
 
 Decks:
 - [ ] accept extra tally for fine grained generation stats
