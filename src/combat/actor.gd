@@ -22,7 +22,7 @@ class_name Actor extends Area2D
 # the internal state changed
 signal state_changed(new_state)
 # the actor won't play again until the turn counter is incremented
-signal turn_done  
+signal turn_done
 # the actor is done moving, but it could move again during the current turn
 signal anims_done
 # tried to hit `foe` but missed
@@ -60,9 +60,9 @@ enum States {
 }
 
 # std. dev. for a normal distribution more or less contained in 0..100
-const SIGMA := 12.5  
+const SIGMA := 12.5
 # average of the above distribution
-const MU := 50  
+const MU := 50
 
 # 50% less damage if you have a resistance
 const RESIST_MULT := 0.5
@@ -100,7 +100,7 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 @export_group("Combat")
 @export var health := 50
 # health can only go above this level in exceptional cases, -1 to auto-set to `health`
-@export var health_full := -1 
+@export var health_full := -1
 @export_range(0.0, 1.0) var healing_prob := 0.05  # %chance to heal at any given turn
 @export var strength := 50
 @export var agility := 50
@@ -120,7 +120,7 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 @export_file("*.png", "*.jpg", "*.jpeg") var bestiary_img
 @export_multiline var description := ""
 
-# Those are not meant to be customized in the editor, but they exported anyway to 
+# Those are not meant to be customized in the editor, but they exported anyway to
 # make the object save better
 @export_group("Internals")
 # Turn logic: when possible, use `state`, await on `turn_done()` and ttl/decay rather than
@@ -129,7 +129,7 @@ const MAX_AWARENESS_DIST = 8  # perfect out-of-sight sensing
 @export var conditions_turn: int
 @export var acted_turn: int
 
-# keep track of where we are going while animations are running 
+# keep track of where we are going while animations are running
 @export var dest:Vector2i = Consts.COORD_INVALID
 
 @export var mem: Memory
@@ -160,9 +160,9 @@ func _ready():
 	Utils.assert_all_tags(tags)
 	Utils.hide_unplaced(self)
 	var parent = get_parent()
-	assert(parent != $/root, 
+	assert(parent != $/root,
 			"Don't run Actor as its own scene, try it in a simulator or in the game instead.")
-		
+
 	if mem == null and not Engine.is_editor_hint() and parent is RevBoard:
 		mem = Memory.new()
 	elif not parent is RevBoard:
@@ -203,7 +203,7 @@ func ddump_pos():
 	if dest and dest != Consts.COORD_INVALID:
 		print("  going to %s" % RevBoard.coord_str(dest))
 	print("  is_animating: %s nb_anims:%d" % [is_animating(), len(_anims)])
-	var fcoord = Vector2(1.0 * position.x / RevBoard.TILE_SIZE, 
+	var fcoord = Vector2(1.0 * position.x / RevBoard.TILE_SIZE,
 						1.0 * position.y / RevBoard.TILE_SIZE)
 	print("  pos: %s fractional cell: [%s:%s]" % [position, fcoord.x, fcoord.y])
 
@@ -215,17 +215,17 @@ func is_acting() -> bool:
 
 func is_listening() -> bool:
 	return state == States.LISTENING
-	
+
 func stop_listening():
 	## Stop waiting for player input without signaling.
-	## To make the TurnQueue move passed this actor, cancel_action() is probably 
+	## To make the TurnQueue move passed this actor, cancel_action() is probably
 	## what you are looking for.
 	assert(is_listening())
 	state = States.IDLE
 
 func cancel_action():
 	## Stop doing whatever we are doing and mark us as having played this turn.
-	# As long as `has_acted` has been properly set by any action code invoked since the 
+	# As long as `has_acted` has been properly set by any action code invoked since the
 	# beginning of the turn, we don't have any cleanup to do besides ending our turn.
 	finalize_turn()
 
@@ -262,7 +262,7 @@ func spawn():
 
 func restore():
 	## Filter sub-node and keep only the ones that should be restored.
-	## This should be called exactly once per actor after a reloaded game has 
+	## This should be called exactly once per actor after a reloaded game has
 	## been added to the scene tree.
 	for item in get_items([], [], false):
 		if item.owner == self:
@@ -276,7 +276,7 @@ func get_caption():
 		return caption
 	else:
 		return name
-		
+
 func get_short_desc():
 	return "(%s) %s" % [char, get_caption()]
 
@@ -297,7 +297,7 @@ func get_modifiers():
 func get_skills():
 	## Return a {skill_name->level} mapping
 	return Utils.get_node_skills(self)
-	
+
 func get_skill(skill_name) -> Consts.SkillLevel:
 	## Return the level of a skill.
 	## Unknown skills return Consts.SkillLevel.NEOPHYTE
@@ -342,13 +342,13 @@ func mana_cost(base_cost):
 	return max(1, base_cost * get_stat("mana_burn_rate") / 100)
 
 func has_mana(base_cost):
-	## Return whether the actor has enough mana to perform a spell of a 
+	## Return whether the actor has enough mana to perform a spell of a
 	## given `base_cost` (the cost before taking into account modifiers).
 	return mana >= mana_cost(base_cost)
-	
+
 func use_mana(base_cost):
-	## Decrease mana. The effective number of mana points will differ from `base_cost` if the 
-	## actor has modifiers. 
+	## Decrease mana. The effective number of mana points will differ from `base_cost` if the
+	## actor has modifiers.
 	## Return how many mana points were used.
 	var cost = mana_cost(base_cost)
 	mana -= cost
@@ -363,16 +363,16 @@ func add_spell(spell:Spell):
 	spells_changed.emit()
 
 func stat_roll(stat_name, challenge=null):
-	## Return a random number in [0..1] weighted by the given stat. 
+	## Return a random number in [0..1] weighted by the given stat.
 	## The distribution is uniform.
 	## 0 is terrible, 1 is glorious
 	var stat = get_stat(stat_name, challenge)
-	# 1% better stat than MU gives 1% higher return on average 
+	# 1% better stat than MU gives 1% higher return on average
 	return (1 + (stat - MU) / 100.0) * randf()
 
 func stat_trial(difficulty, stat_name, challenge=null, modifier:=0):
 	## Return true if a random stat_roll is >= than difficulty
-	## Typical difficulties should be from 0 (trivial) to 100 (extremely hard), 
+	## Typical difficulties should be from 0 (trivial) to 100 (extremely hard),
 	## but the scale is unbounded.
 	## Modifier: added to the hero stat
 	var stat = get_stat(stat_name, challenge) + modifier
@@ -396,11 +396,11 @@ func get_board() -> RevBoard:
 func _dec_active_anims(old_anim:Tween):
 	var old_size = len(_anims)
 	_anims.erase(old_anim)
-	
-	# TODO: This _usually_ makes the anim.finished signal propagate to all it's 
+
+	# TODO: This _usually_ makes the anim.finished signal propagate to all it's
 	#   handlers, but not all the time. We need something more reliable.
 	old_anim.kill()
-	
+
 	if _anims.is_empty():
 		emit_signal("anims_done")
 
@@ -425,10 +425,10 @@ func _dissipate():
 
 func start_turn(new_turn:int):
 	## Mark the start a new game turn, but we do not play until act() is called.
-	# If we have been out of play for a turn or more (ex.: on an innactive board), we push the 
-	# expiration of our sub-components and trigger conditions for once for each missed turn. 
+	# If we have been out of play for a turn or more (ex.: on an innactive board), we push the
+	# expiration of our sub-components and trigger conditions for once for each missed turn.
 	# This might hurt!
-	
+
 	# activate_conditions() adequately verifies if we have we died along the way...
 	var multi_step_nodes = []
 	for node in get_children():
@@ -437,7 +437,7 @@ func start_turn(new_turn:int):
 		elif node.get("start_new_turn"):
 			multi_step_nodes.append(node)
 
-	# Process one conditions event per turn, skip everything if we've already seen new_turn, 
+	# Process one conditions event per turn, skip everything if we've already seen new_turn,
 	# which might happen if the TurnQueue has been paused and restarted in the middle of a turn.
 	for i in new_turn - current_turn:
 		activate_conditions()
@@ -470,7 +470,7 @@ func get_cell_coord() -> Vector2i:
 func place(board_coord, immediate:=false):
 	## Place the actor at the specific coordinate without animations.
 	## No tests are done to see if board_coord is a suitable location.
-	## immediate: don't wait for the Actor to finish their turn, some interference 
+	## immediate: don't wait for the Actor to finish their turn, some interference
 	##   with animations is possible.
 	var old_coord = get_cell_coord()
 	if not immediate:
@@ -490,19 +490,19 @@ func should_shroud(index=null):
 
 func shroud(animate=true):
 	Utils.shroud_node(self, animate)
-		
+
 func unshroud(animate=true):
 	Utils.unshroud_node(self, animate)
 
 func move_by(cell_vect: Vector2i) -> void:
-	## Move by the specified number of tiles from the current position. 
+	## Move by the specified number of tiles from the current position.
 	## The move is animated.
 	var new_pos = RevBoard.canvas_to_board(position) + cell_vect
 	move_to(new_pos)
-	
+
 func move_to(board_coord) -> void:
-	## Move to the specified board coordinate in number of tiles from the 
-	## origin. 
+	## Move to the specified board coordinate in number of tiles from the
+	## origin.
 	## The move is animated.
 	# only animating if the player would see it
 	if is_unexposed() and get_board().is_cell_unexposed(board_coord):
@@ -510,17 +510,17 @@ func move_to(board_coord) -> void:
 	else:
 		# FIXME: kill() the previous anim if it's not done
 		assert(not is_animating(), "reset_dest won't work if we start moving before the previous move is over")
-		
+
 		var old_coord = get_cell_coord()
 		var anim := create_anim()
 		var cpos = RevBoard.board_to_canvas(board_coord)
 		anim.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
 		anim.tween_property(self, "position", cpos, .2)
 		dest = board_coord
-		
+
 		var inval_func = reset_dest.bind(board_coord)
 		anim.finished.connect(inval_func, CONNECT_ONE_SHOT)
-		
+
 		# We emit before the end of the animation, which allows for more
 		# overlap between our active turn and other visual changes.
 		emit_signal("moved", old_coord, board_coord)
@@ -529,6 +529,7 @@ func move_toward_actor(actor) -> bool:
 	## Try to take one step toward `actor`, return true if it worked.
 	var here = get_cell_coord()
 	var there = actor.get_cell_coord()
+	assert(here != there, "Can't go towards %s, already there!" % [actor])
 	var path = get_board().path(here, there, false)
 	if path != null and len(path) >= 2:
 		move_to(path[1])
@@ -537,9 +538,9 @@ func move_toward_actor(actor) -> bool:
 		return false
 
 func travel_to(there, index=null):
-	## Start the multi-turn journey that takes us to `there`, 
+	## Start the multi-turn journey that takes us to `there`,
 	##   return `false` if the journey is not possible.
-	## Depending on where we are in the turn logic, the caller might need to call `stop_listening()` 
+	## Depending on where we are in the turn logic, the caller might need to call `stop_listening()`
 	## for the travelling strategy to kick in, otherwise, it will only be active on the next turn.
 	var path = get_board().path_perceived(get_cell_coord(), there, self, true, -1, index)
 	if path == null or path.size() == 0:
@@ -592,7 +593,7 @@ func has_strategy(cancellable=false):
 	return false
 
 func _get_lunge_anim_cpos(where):
-	## Return the canvas coord where an attack animation should reach before starting the 
+	## Return the canvas coord where an attack animation should reach before starting the
 	## retreat animation.
 	## `where`: an actor, possibly a foe, or a coord
 	# going roughtly half a cell towards foe, no matter how far foe is
@@ -602,7 +603,7 @@ func _get_lunge_anim_cpos(where):
 	attack_vec = attack_vec.normalized()
 	var anim_vec = 0.45 * attack_vec
 	return position + anim_vec * RevBoard.TILE_SIZE
-	
+
 func _anim_lunge(where):
 	## Return the animation of lunging forward towards `where` then retreaing.
 	## `where`: a coord or an actor
@@ -613,7 +614,7 @@ func _anim_lunge(where):
 	anim.tween_property(self, "position", anim_dest, .15)
 	anim.tween_property(self, "position", old_cpos, .2)
 	return anim
-	
+
 func anim_miss(foe, weapon):
 	## Animate a missed strike towards `foe`
 	play_sound("MissSound", weapon)
@@ -657,7 +658,7 @@ func _anim_health_change(label_, number, direction:Vector2):
 	timer.timeout.connect(anim2.play)
 
 func get_health_ratio() -> float:
-	## Return a number in 0..inf (typically in 0..1) reprensenting our current 
+	## Return a number in 0..inf (typically in 0..1) reprensenting our current
 	## fraction of health_full.
 	return 1.0 * health / health_full
 
@@ -665,17 +666,17 @@ func update_health(hp_delta: int):
 	## Update our health and animate the event.
 	if hp_delta == 0:
 		return  # don't animate 0 deltas
-	
+
 	health += hp_delta
 	health_changed.emit(health)
-		
+
 	if not is_unexposed():
 		# animate visible health changes
 		if hp_delta < 0:
 			_anim_health_change($DamageLabel, -hp_delta, Vector2(.25, -.5))
 		else:
 			_anim_health_change($HealingLabel, hp_delta, Vector2(.25, .5))
-		
+
 	if health <= 0:
 		die()
 
@@ -683,7 +684,7 @@ func update_mana(mana_delta: int):
 	## Update our mana.
 	if mana_delta == 0:
 		return  # nothing to do
-	
+
 	mana += mana_delta
 	mana_changed.emit(mana)
 
@@ -707,12 +708,12 @@ func die():
 
 func _learn_attack(attacker):
 	## Remember who just hit us.
-	mem.learn("was_attacked", current_turn, Memory.Importance.NOTABLE, 
+	mem.learn("was_attacked", current_turn, Memory.Importance.NOTABLE,
 			{"by": attacker.actor_id})
 
 func is_alive():
 	return health > 0
-	
+
 func is_dead():
 	return not is_alive()
 
@@ -721,11 +722,11 @@ func is_expired():
 
 func is_unexposed(index=null):
 	## Return if this actor is where the hero shouldn't be aware of them
-	
+
 	# not inside a valid game
 	if Tender.hero == null:
 		return true
-	
+
 	# on a board other than the active one
 	var parent = get_parent()
 	if parent == null or not parent is RevBoard or not parent.is_active():
@@ -738,7 +739,7 @@ func is_unexposed(index=null):
 	return false
 
 func recalls_offense(other=null):
-	## Return whether we recall ever being offended 
+	## Return whether we recall ever being offended
 	## `other`: if provided, only offences by this actor are considered
 	var pred = null
 	if other != null:
@@ -754,14 +755,14 @@ func is_friend(other: Actor):
 	if not Tender.sentiments:
 		return false
 	return Tender.sentiments.is_friend(self, other) and not recalls_offense(other)
-	
+
 func is_foe(other: Actor):
 	## Return whether `self` has negative sentiment towards `other`
 	if Tender.sentiments:
 		return Tender.sentiments.is_foe(self, other) or recalls_offense(other)
 	else:
 		return false
-	
+
 func is_neutral(other: Actor):
 	## Return whether `self` has neutral sentiment towards `other`
 	if Tender.sentiments:
@@ -774,7 +775,7 @@ func get_perception_ranges():
 	var percep = get_stat("perception")
 	var min = 1
 	return {"sight": max(min, MAX_SIGHT_DIST / 100.0 * percep),
-			"aware": max(min, MAX_AWARENESS_DIST / 100.0 * percep), 
+			"aware": max(min, MAX_AWARENESS_DIST / 100.0 * percep),
 			"feel": min}
 
 func perceives(thing, index=null):
@@ -817,7 +818,7 @@ func perceives_free(coord:Vector2i, index:RevBoard.BoardIndex):
 
 func get_conversation():
 	## Return a {res:..., sect:...} dict or null if the actor has nothing to say
-	## Actors with eloborate conversation logic should overload this method without 
+	## Actors with eloborate conversation logic should overload this method without
 	##   even calling the parent implementation.
 	if conversation_file == null or len(conversation_file) == 0:
 		return null
@@ -844,11 +845,11 @@ func get_conditions():
 func get_max_weapon_range():
 	var str = get_stat("strength")
 	var max_range = 0
-	
+
 	for weapon in get_weapons():
 		var weapon_range = get_eff_weapon_range(weapon)
 		if (weapon is Weapon or weapon is InnateWeapon) and weapon_range > max_range:
-			max_range = weapon_range	
+			max_range = weapon_range
 	return max_range
 
 func get_max_action_range(other:Actor):
@@ -879,7 +880,7 @@ func get_weapons():
 		if node is Weapon and node.is_equipped:
 			has_equipped_weapon = true
 			break
-			
+
 	var all_weapons = []
 	for node in get_children():
 		if not has_equipped_weapon and node is InnateWeapon:
@@ -975,9 +976,9 @@ func get_spells(include_tags=null, exclude_tags=null):
 	return spells
 
 func get_evasion(_weapon):
-	## Return the evasion stat against a particular weapon. 
+	## Return the evasion stat against a particular weapon.
 	return get_stat("agility", "evasion")
-	
+
 func get_resist_mult(weapon):
 	## Return a multiplier to attenuate `weapon`'s damage based on our resistances.
 	## The multiplier is in [0..1], with 1 being full damage
@@ -987,9 +988,9 @@ func get_resist_mult(weapon):
 		return RESIST_MULT
 	else:
 		return 1.0
-	
+
 func _get_feature_modifier(foe, weapon, feature_table):
-	## Return the feature-specific modifier(s) when attacking `foe` with `weapon`. 
+	## Return the feature-specific modifier(s) when attacking `foe` with `weapon`.
 	## Return 0 if the weapon has no feature that apply to this attack.
 	## feature_table: TO_HIT_FEATURE_MODS, DAMAGE_FEATURE_MODS, or a similar table
 	var mod = 0
@@ -998,15 +999,15 @@ func _get_feature_modifier(foe, weapon, feature_table):
 		for weapon_tag in weapon.tags:
 			mod += feature_mods.get(weapon_tag, 0)
 	return mod
-	
+
 func attack(foe) -> bool:
 	## A full multi-strike attack on foe.
 	## Return whether at least one strike has landed as a hit.
-	## Sentiment and range are not checked, the caller is responsible for 
+	## Sentiment and range are not checked, the caller is responsible for
 	## performing those tests.
 	var has_hit = false
 	var weapons = get_weapons()
-	
+
 	for weapon in weapons:
 		var wait_time = 0
 		if foe.is_alive():
@@ -1016,11 +1017,11 @@ func attack(foe) -> bool:
 	return has_hit
 
 func strike(foe:Actor, weapon, throw=null):
-	## Strike foe with weapon. The strike could result in a miss. 
+	## Strike foe with weapon. The strike could result in a miss.
 	## The result is immediately visible in the world.
 	## `throw`: whether the weapon will leave our hand; auto-detect if null
 	# combats works with two random rolls: to-hit then damage.
-	mem.learn("attacked", current_turn, Memory.Importance.TRIVIAL, 
+	mem.learn("attacked", current_turn, Memory.Importance.TRIVIAL,
 			{"foe": foe.actor_id})
 	foe.was_offended.emit(self)
 
@@ -1031,7 +1032,7 @@ func strike(foe:Actor, weapon, throw=null):
 	# to-hit
 	# pre-compute the to-hit bonnus from features
 	var hit_mod = _get_feature_modifier(foe, weapon, TO_HIT_FEATURE_MODS)
-	
+
 	var attack_dist = Geom.cheby_dist(here, foe_coord)
 	if throw == null:
 		throw = Utils.has_tags(weapon, ["throwable"]) and attack_dist > 1
@@ -1041,19 +1042,19 @@ func strike(foe:Actor, weapon, throw=null):
 			var next_weapon = get_compatible_item(weapon)
 			reequip_weapon_from_group(next_weapon, weapon)
 		drop_item(weapon, foe_coord, false)
-	
+
 	if stat_trial(foe.get_evasion(weapon), "agility", weapon.skill, hit_mod):
 		# Miss!
-		foe.mem.learn("was_targeted", 
-						current_turn, 
-						Memory.Importance.TRIVIAL, 
+		foe.mem.learn("was_targeted",
+						current_turn,
+						Memory.Importance.TRIVIAL,
 						{"by": actor_id})
 		if with_anims:
 			anim_miss(foe, weapon)
 		missed.emit(foe)
 		return false
 
-	# TODO: agility should influence the chance of a critical hit	
+	# TODO: agility should influence the chance of a critical hit
 	var roll = randfn(MU, SIGMA)
 	if roll > MU + 2*SIGMA:
 		crit = true
@@ -1070,10 +1071,10 @@ func strike(foe:Actor, weapon, throw=null):
 	damage = foe.normalize_damage(weapon, damage)
 	foe.update_health(-damage)
 	if weapon.get("has_effect"):
-		CombatUtils.apply_all_effects(weapon, foe)	
+		CombatUtils.apply_all_effects(weapon, foe)
 	emit_signal("hit", foe, damage)
-	add_message("%s hit %s for %d dmg" % [get_short_desc(), foe.get_short_desc(), damage], 
-				Consts.MessageLevels.INFO, 
+	add_message("%s hit %s for %d dmg" % [get_short_desc(), foe.get_short_desc(), damage],
+				Consts.MessageLevels.INFO,
 				["msg:combat"])
 	foe.was_attacked.emit(self)
 	if with_anims and not foe.is_unexposed():
@@ -1081,7 +1082,7 @@ func strike(foe:Actor, weapon, throw=null):
 	return true
 
 func normalize_damage(weapon, damage):
-	## Return the number of hit points after applying resistances and minimums with `self` as 
+	## Return the number of hit points after applying resistances and minimums with `self` as
 	## the receiver of `damage`.
 	# TODO: should probably replace all calls with normalize_health_delta()
 	damage *= get_resist_mult(weapon)
@@ -1091,11 +1092,11 @@ func normalize_health_delta(vector, h_delta):
 	## a more generic version of `normalize_damage()` that works for healing and non-weapons.
 	assert(h_delta != 0, "delta must be strictly positive (healing) or strictly negative (damage)")
 	h_delta = h_delta * get_resist_mult(vector) as int
-	
+
 	# check for overhealing
 	if not Utils.has_tags(vector, ["magical"]) and health + h_delta > health_full:
 		return health_full - health
-	
+
 	if h_delta > 0:
 		return max(1, h_delta)
 	else:
@@ -1120,11 +1121,11 @@ func regen(delta:=1):
 	if health + delta > health_full:
 		delta = health_full - health
 	if delta > 0:
-		add_message("%s healed a little" % get_caption(), 
-					Consts.MessageLevels.INFO, 
+		add_message("%s healed a little" % get_caption(),
+					Consts.MessageLevels.INFO,
 					["msg:regen", "msg:healing"])
 		update_health(delta)
-		
+
 func refocus(delta:=1):
 	## Regain some mana from natural recovery
 	## Do nothing if mana is already full
@@ -1132,13 +1133,13 @@ func refocus(delta:=1):
 	if mana + delta > mana_full:
 		delta = mana_full - mana
 	if delta > 0:
-		add_message("%s seems more focused" % get_caption(), 
-					Consts.MessageLevels.INFO, 
+		add_message("%s seems more focused" % get_caption(),
+					Consts.MessageLevels.INFO,
 					["msg:regen", "msg:magic"])
 		update_mana(delta)
 
 func equip_item(item, exclusive=true):
-	## Equip the item (typically a weapon). 
+	## Equip the item (typically a weapon).
 	## If `exclusive`, all other items are deequipped first
 	if item is Node:
 		assert(item.get_parent() == self, "Must own an item before it can be equipped.")
@@ -1168,12 +1169,12 @@ func drop_item(item, coord=null, anim_toss=true):
 func reequip_weapon_from_group(grouping, prev_weapon=null):
 	if grouping == null or grouping is ItemGrouping and grouping.is_empty():
 		if prev_weapon != null:
-			add_message("You ran out of %s" % prev_weapon.get_short_desc(), 
-						Consts.MessageLevels.INFO, 
+			add_message("You ran out of %s" % prev_weapon.get_short_desc(),
+						Consts.MessageLevels.INFO,
 						["msg:inventory"])
 		else:
-			add_message("You ran out of your previous weapons", 
-						Consts.MessageLevels.INFO, 
+			add_message("You ran out of your previous weapons",
+						Consts.MessageLevels.INFO,
 						["msg:inventory"])
 	else:
 		equip_item(grouping)
@@ -1188,28 +1189,28 @@ func give_item(item, actor=null):
 	item.reparent(new_parent)
 	item.remove_tag("gift")  # NPCs keep track of giftable inventory with the "gift" tag
 	if actor:
-		add_message("%s gave a %s to %s" % [self.get_caption(), item.get_short_desc(), actor.get_caption()], 
-					Consts.MessageLevels.INFO, 
+		add_message("%s gave a %s to %s" % [self.get_caption(), item.get_short_desc(), actor.get_caption()],
+					Consts.MessageLevels.INFO,
 					["msg:inventory"])
 	else:
-		add_message("%s gave a %s" % [self.get_caption(), item.get_short_desc()], 
-					Consts.MessageLevels.INFO, 
+		add_message("%s gave a %s" % [self.get_caption(), item.get_short_desc()],
+					Consts.MessageLevels.INFO,
 					["msg:inventory"])
 		item.queue_free()
-	
+
 func pick_item(item):
 	# TODO: dist() == 1 would also work nicely
 	var item_coord = item.get_cell_coord()
 	assert(item_coord == get_cell_coord(), "can only pick items that are under us")
-	
+
 	item.shroud(false)
 	item.reset_display()
 	if item.get("is_equipped") != null:
 		item.is_equipped = false
 	item.reparent(self)
 	picked_item.emit(item_coord)
-	add_message("%s added to %s's inventory" % [item.get_short_desc(), caption], 
-				Consts.MessageLevels.INFO, 
+	add_message("%s added to %s's inventory" % [item.get_short_desc(), caption],
+				Consts.MessageLevels.INFO,
 				["msg:inventory"])
 
 func consume_item(item: Item):
@@ -1217,28 +1218,27 @@ func consume_item(item: Item):
 	assert(item.consumable)
 	item.activate_on_actor(self)
 	item.hide()
-	# the item will free itself, but we have to remove it from inventory to prevent 
+	# the item will free itself, but we have to remove it from inventory to prevent
 	# reuse before the free happens
 	if item.get_parent():
 		item.reparent($/root)
-	add_message("%s used a %s" % [get_caption(), item.get_short_desc()], 
-				Consts.MessageLevels.INFO, 
+	add_message("%s used a %s" % [get_caption(), item.get_short_desc()],
+				Consts.MessageLevels.INFO,
 				["msg:inventory"])
-	
-func add_message(text:String, 
-				level:Consts.MessageLevels=Consts.MessageLevels.INFO, 
+
+func add_message(text:String,
+				level:Consts.MessageLevels=Consts.MessageLevels.INFO,
 				tags:=[]):
-	## Try to add a message to the message window. 
+	## Try to add a message to the message window.
 	## The visibility of the message depends on us being visible to the Hero
-	## Any direct child of the actor can block a message by implementing filter_message() and 
+	## Any direct child of the actor can block a message by implementing filter_message() and
 	## returning false for the same args as add_message()
 	if level == null:
 		level = Consts.MessageLevels.INFO
 	for node in get_children():
 		var filter = node.get("filter_message")
 		if filter != null and not filter.call(text, level, tags):
-			return			
+			return
 	var board = get_board()
 	if board != null:
 		board.add_message(self, text, level, tags)
-		

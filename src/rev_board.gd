@@ -36,15 +36,15 @@ const FLOOR_TERRAINS = ["floor", "floor-rough", "floor-dirt"]
 # dynamic highlight tiles
 const DYN_HIGHLIGHTS = {"mark-chatty": "#407014",
 						"mark-chatty-default": "#86f61f",
-						"mark-speaker-active": "#1c30f9", 
-						"mark-selected": "#1c30f9", 
-						"mark-foe": "#701414", 
-						"mark-foe-default": "f61f1f", 
+						"mark-speaker-active": "#1c30f9",
+						"mark-selected": "#1c30f9",
+						"mark-foe": "#701414",
+						"mark-foe-default": "f61f1f",
 						"mark-step": "#4799bc",
-						"mark-step-alt": "#448e94", 
+						"mark-step-alt": "#448e94",
 						"mark-target-good": "#ee6427",
-						"mark-target-ok": "#eeac27", 
-						"mark-target-bad": "#eed327", 
+						"mark-target-ok": "#eeac27",
+						"mark-target-bad": "#eed327",
 						}
 
 signal new_message(message, level, tags)
@@ -94,7 +94,7 @@ class TileSpiral extends RefCounted:
 		var v2 = bbox.end - center - Vector2i.ONE
 		return max(v1.x, v1.y, v2.x, v2.y)
 
-	func _init(board_, center_, max_radius_=null, free_:bool=true, in_board_:bool=true,
+	func _init(board_, center_:Vector2i, max_radius_=null, free_:bool=true, in_board_:bool=true,
 				bbox_=null, board_index_=null):
 		## max_radius: how far from center to consider coordiates, infered from
 		##  the bounding box if not provided.
@@ -454,6 +454,8 @@ func _ready():
 	$AmbientLight.color = ambient_light_col
 	if not board_id:
 		board_id = ResourceUID.create_id()
+	if not size:
+		size = get_used_rect().size
 
 	var tabulator:Tabulator = Tabulator.load()
 	if not tabulator.enable_shaders:

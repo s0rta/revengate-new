@@ -40,7 +40,7 @@ func _init(board_:RevBoard):
 func has_rooms():
 	## Return whether this builder is aware of rooms.
 	return not rooms.is_empty()
-	
+
 func is_in_room(coord:Vector2i):
 	## Return whether `coord` is inside one of the rooms known by this builder.
 	for room in rooms:
@@ -53,7 +53,7 @@ func rand_layout(max_size:Vector2i):
 	## Return `null` if there are no such layout
 	if not _layout_pack:
 		_layout_pack = load("res://assets/rooms.json")
-	var size_pred = func(layout): 
+	var size_pred = func(layout):
 			return layout.size[0] <= max_size.x and layout.size[1] <= max_size.y
 	var layouts = _layout_pack.data.filter(size_pred)
 	if not layouts.is_empty():
@@ -69,11 +69,11 @@ func add_room(room: Room):
 		board.paint_path(path, wall_terrain)
 
 func room_region(room: Room):
-	## Return the region that this room is mostly in. 
+	## Return the region that this room is mostly in.
 	## It's possible that the room also spills slightly into other regions.
 	var center = room.get_center()
 	return Geom.coord_region(center, rect)
-	
+
 func random_floor_cell():
 	var coord = null
 	if has_rooms():
@@ -94,7 +94,7 @@ func random_floor_cell():
 func random_coord_in_region(region, valid_pred=null, strict=false):
 	## Return a random coordinate inside the region.
 	## if a callable is supplied as `valid_pred` the coord will be true for this predicate.
-	## strict: coord must be in region, otherwise, a nearby fallback is acceptable when no 
+	## strict: coord must be in region, otherwise, a nearby fallback is acceptable when no
 	##   coords exist in region.
 	## Return null if no coord can be found matching valid_pred.
 	var region_rect = Geom.region_bounding_rect(rect, region)
@@ -126,11 +126,11 @@ func random_coord_in_region(region, valid_pred=null, strict=false):
 
 func _find_maxi_min(score_rect:Rect2i, other_coords:Array, index:RevBoard.BoardIndex, valid_pred=null):
 	## Return a coord that is maximal amongst the minimums of all dist_metrics.
-	## In other words, find a coord that is as far as possible when all the dist_metrics 
+	## In other words, find a coord that is as far as possible when all the dist_metrics
 	## are considered.
 	## If more than one coords have maximum min_score, then a random one is selected.
 	## Return null if no suitable coord can be found.
-	## score_rect: only coords inside this rect are considered. Use board.get_used_rect() 
+	## score_rect: only coords inside this rect are considered. Use board.get_used_rect()
 	##   to be exhaustive.
 	var max_score = -INF
 	var max_coords = []
@@ -163,7 +163,7 @@ func random_distant_coords(nb_coords:int, region=null, valid_pred=null, strict=f
 	## Return an array of random coords as distant from one another as possible.
 	## region: if specified, try to pick the coords in that region
 	## valid_pred: only coord that are `true` with this predicate are considered
-	## strict: if false, fewer than nb_coords migth be returned and out-of-region 
+	## strict: if false, fewer than nb_coords migth be returned and out-of-region
 	##   fallbacks are considered.
 	##   if true, return null rather than a partial Array when any requirement can't be satisfied.
 	## other_coords: those existing coords should also be avoided
@@ -184,13 +184,13 @@ func random_distant_coords(nb_coords:int, region=null, valid_pred=null, strict=f
 		if valid_pred != null and not valid_pred.call(coord):
 			return false
 		return true
-	
+
 	var score_rect:Rect2i
 	if region != null:
 		score_rect = Geom.region_bounding_rect(rect, region)
 	else:
 		score_rect = rect
-	
+
 	# bootstrap: the system starts by finding a coord that is fairly distant from everything
 	var seed = random_floor_cell()
 	if other_coords.is_empty():
@@ -207,13 +207,13 @@ func random_distant_coords(nb_coords:int, region=null, valid_pred=null, strict=f
 			if coord == null:
 				# failed to bootstrap even by allowing fallbacks
 				return null
-		
+
 		coords.append(coord)
 		# erase the bootstrap seed state
 		assert(all_coords.pop_back()==seed)
 		all_coords.append(coord)
 		index.erase_dist_metrics(seed)
-	
+
 	while len(coords) < nb_coords:
 		coord = _find_maxi_min(score_rect, all_coords, index, pred)
 		if coord != null:
@@ -227,9 +227,9 @@ func random_distant_coords(nb_coords:int, region=null, valid_pred=null, strict=f
 			# we tried the best we could, but failed along the way
 			# deliver a partial result
 			break
-			
+
 	return coords
-	
+
 func gen_level(nb_rooms=4):
 	## Generate a default underground level
 	board.paint_rect(rect, "rock")
@@ -248,9 +248,9 @@ func gen_rooms(nb_rooms:int, add_corridors:=true):
 	var is_full := false
 	var _large_enough = func(rect):
 		return max(rect.size.x, rect.size.y) >= MIN_PART_SIZE
-	
+
 	if nb_rooms <= 0:
-		# we need to handle this case separately in order to be able to seed partitions 
+		# we need to handle this case separately in order to be able to seed partitions
 		# with the whole bounding rect
 		return 0
 	while not is_full and partitions.size() < nb_rooms and nb_iter < 10:
@@ -277,7 +277,7 @@ func gen_rooms(nb_rooms:int, add_corridors:=true):
 			var sub_rect = Rand.sub_rect(rect, Vector2i(layout.size[0], layout.size[1]))
 			room = Room.from_layout(layout, sub_rect.position)
 		add_room(room)
-		
+
 	if add_corridors:
 		for i in rooms.size()-1:
 			if not connect_rooms_clean(rooms[i], rooms[i+1]):
@@ -305,13 +305,13 @@ func add_door(coord, open=true, key_tag=null):
 	var terrain = ["door-closed", "door-open"][int(open)]
 	board.paint_cell(coord, terrain)
 	if key_tag:
-		assert(not open, "Can only lock closed doors")		
+		assert(not open, "Can only lock closed doors")
 		board.lock(coord, key_tag)
 
 func add_stairs(stairs=["stairs-up", "stairs-down"]):
 	## place stairs as far appart as possible
 	# TODO: stairs should always be in a room when we have rooms
-	
+
 	# the first two that we receice are as far as possible from one another
 	var poles = find_poles()
 	board.paint_cells([poles[0]], stairs.pop_front())
@@ -322,10 +322,10 @@ func add_stairs(stairs=["stairs-up", "stairs-down"]):
 		board.paint_cells([coord], stairs.pop_back())
 
 func find_poles():
-	## Return an array with the two coordinates that are the furthest apart 
+	## Return an array with the two coordinates that are the furthest apart
 	## by RevBoard.dist().
 	## For something more flexible, see random_distant_coords()
-	# We have to do two consecutive runs of Dijkstra. The first one finds one pole, 
+	# We have to do two consecutive runs of Dijkstra. The first one finds one pole,
 	# the second starting at the first pole will find the second one.
 	var start = null
 	if has_rooms():
@@ -341,12 +341,12 @@ func connect_rooms(room1, room2):
 	rooms.sort()
 	room1 = rooms[0][1]
 	room2 = rooms[1][1]
-	
+
 	var c1 = room1.get_center()
 	var c2 = room2.get_center()
 	var v = c2 - c1
 	var v_sign = v.sign()
-	
+
 	# make an elbow
 	var cells:Array[Vector2i] = []
 	if v.x:
@@ -359,7 +359,7 @@ func connect_rooms(room1, room2):
 	board.paint_path(cells, floor_terrain)
 
 func _valid_door_spot(coord) -> bool:
-	# We can punch a door in a wall breach if it's not next to another opening 
+	# We can punch a door in a wall breach if it's not next to another opening
 	# and doesn't lead to a corridor (we place the doors before carving the passage).
 	var adjs = board.adjacents_cross(coord, board.is_walkable)
 	return len(adjs) <= 1
@@ -383,8 +383,8 @@ func connect_rooms_clean(room1, room2) -> bool:
 		while not (r1_perim.is_empty() or r2_perim.is_empty()):
 			var start = r1_perim.pop_back()
 			var end = r2_perim.pop_back()
-			
-			var metrics = board.astar_metrics_custom(pump, start, end, 
+
+			var metrics = board.astar_metrics_custom(pump, start, end,
 													false, -1, pred, index)
 			var path = metrics.path()
 			if path != null:
@@ -405,13 +405,13 @@ func place(thing, in_room:=true, coord=null, free:bool=true, bbox=null, index=nu
 	var spawn_tags = Utils.spawn_tags(thing)
 	if coord is Vector2i:
 		if in_room:
-			assert(is_in_room(coord), 
+			assert(is_in_room(coord),
 					("The supplied `coord` is not in a room. Pass coord=null if "
 					+ "you want the builder to find a suitable in-room location."))
 		cell = Vector2i(coord.x, coord.y)
 	elif not spawn_tags.is_empty():
 		assert(not in_room, "In-room placement is not implemented for spawn tag constraints.")
-		assert(len(spawn_tags) == 1, 
+		assert(len(spawn_tags) == 1,
 				"Support for multiple spawn constraint tags is not implemented")
 		var tag = spawn_tags[0]
 		var region = Consts.REGION_NAMES[tag.split("-")[-1]]
@@ -434,11 +434,12 @@ func place(thing, in_room:=true, coord=null, free:bool=true, bbox=null, index=nu
 			available = board.is_walkable(cell)
 	if not available:
 		var old_cell = cell
-		# We ignore the bounding box at this point since we already failed an optimal 
+		# We ignore the bounding box at this point since we already failed an optimal
 		# placement and we're just trying to find a fallback.
 		bbox = null
-		cell = board.spiral(cell, null, true, true, bbox, index).next()
-		
+		var spiral = board.spiral(cell, null, true, true, bbox, index)
+		cell = spiral.next()
+
 	# reparent if needed
 	if thing is Node:
 		var parent = thing.get_parent()
@@ -454,7 +455,7 @@ func place(thing, in_room:=true, coord=null, free:bool=true, bbox=null, index=nu
 				board.register_actor(thing)
 		thing.owner = board
 
-	# do the actual coord update	
+	# do the actual coord update
 	thing.place(cell, true)
 	if index:
 		if thing is Actor:
