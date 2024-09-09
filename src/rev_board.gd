@@ -1259,6 +1259,7 @@ func get_vibes():
 
 func reset_visibility(things:Array, index=null):
 	## Show or hide things depending on whether they are perceived
+	var no_whitness = not Tender.hero
 	if index == null:
 		index = make_index()
 	for thing in things:
@@ -1266,7 +1267,10 @@ func reset_visibility(things:Array, index=null):
 			var here = thing.get_cell_coord()
 			if index.nb_items_at(here) > 1 and thing == index.top_item_at(here):
 				thing.display_char(Consts.LOOT_PILE_CHAR)
-		if thing.should_hide(index):
+		if no_whitness:
+			thing.hide()
+			continue
+		elif thing.should_hide(index):
 			thing.hide()
 		else:
 			thing.show()
