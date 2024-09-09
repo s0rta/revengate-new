@@ -1,6 +1,6 @@
 Lead coding: Yannick Gingras
 
-Additionnal coding: 
+Additionnal coding:
 - JT Wright
 - Ryan Prior
 - Nicole Schwartz
@@ -31,6 +31,7 @@ Bestiary and NPC images:
 - Henry Bessemer, Nochorts, Sentry Scarabs: CC-BY by Tuyên Đặng, 2021
 - Labras, Pacherr, Phantruch (lesser and greater), Gleugt, Desert Centipede, Algerian Giant Locust, Cherub, Yarohu: Creative Commons Attribution 4.0 International License by Jason Teves, 2021
 - Skeleton: public domain, by Hartmann Schedel (1440-1514)
+- Sewer Alligator: public domain, by Pearson Scott Foresman
 
 Splash Screen:
 - CC-BY-SA, Zanya Fernández Rodríguez
@@ -42,11 +43,11 @@ Symbola_hint.ttf:
 - Copyright (C) 2007-2015 George Douros
 - "Fonts are free for any use; they may be opened, edited, modified, regenerated, packaged and redistributed."
 
-Shield outline on the launch icon: 
+Shield outline on the launch icon:
 Public Domain by OpenClipart
 https://freesvg.org/vector-drawing-of-blank-silver-shield
 
-Icons in assets/opencliparts: 
+Icons in assets/opencliparts:
 - CC0 by the Open Cliparts project. More info at http://www.openclipart.org
 
 Combat Sound Effects:

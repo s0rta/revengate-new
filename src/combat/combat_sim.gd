@@ -187,7 +187,7 @@ func get_actors(alive:=false):
 	return actors
 
 func _make_duelist(actor):
-	var strat = Dueling.new(actor, 1.0)
+	var strat = Dueling.new(actor, 0.99)
 	actor.add_child(strat)
 
 func advance_stage() -> bool:

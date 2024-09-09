@@ -1,0 +1,75 @@
+[gd_scene load_steps=9 format=3 uid="uid://dyru8oxadarmy"]
+
+[ext_resource type="PackedScene" uid="uid://qeqrkp7uhv5v" path="res://src/monsters/beast.tscn" id="1_8q321"]
+[ext_resource type="Script" path="res://src/weapons/innate_weapon.gd" id="3_dk6ok"]
+[ext_resource type="Script" path="res://src/combat/effect.gd" id="4_2pocy"]
+[ext_resource type="AudioStream" uid="uid://ecmikkxw2jbm" path="res://src/combat/claw.wav" id="4_bllut"]
+[ext_resource type="AudioStream" uid="uid://evhtpi4fygok" path="res://src/weapons/hammer-01.mp3" id="5_ha6vu"]
+[ext_resource type="Script" path="res://src/strategies/tracking.gd" id="5_oiycd"]
+[ext_resource type="Script" path="res://src/combat/stun.gd" id="6_opk2e"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="6_rrxeu"]
+
+[node name="SewerAlligator" instance=ExtResource("1_8q321")]
+char = "A"
+caption = "sewer alligator"
+color = Color(0.329412, 0.4, 0.870588, 1)
+spawn_cost = 12.0
+health = 27
+strength = 45
+agility = 49
+intelligence = 25
+perception = 55
+resistance = 2
+bestiary_img = "res://src/monsters/sewer-alligator.png"
+description = "Those large reptiles can measure 1m to 2m from snout to the end of the tail. They are commonly dark brown, but dark shades of blue and green have also been observed.
+
+They have very strong jaw and they can deliver stunning blows with their tails. Due to the environment that they live in, they often carry infectious diseases. 
+
+Their eggs are a rare and expensive delicacy in many Franconian cities."
+mem = null
+
+[node name="Label" parent="." index="0"]
+auto_translate_mode = 2
+theme_override_colors/font_color = Color(0.329412, 0.4, 0.870588, 1)
+text = "A"
+
+[node name="Jaw" type="Node" parent="." index="8"]
+script = ExtResource("3_dk6ok")
+damage = 4
+damage_family = 3
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Jaw" index="0"]
+stream = ExtResource("4_bllut")
+
+[node name="Infection" type="Node" parent="Jaw" index="1"]
+script = ExtResource("4_2pocy")
+condition_name = "infected"
+activation_msg = "That bite site wont stop itching!"
+damage = 1
+damage_family = 10
+probability = 0.2
+nb_turns = 12
+
+[node name="Tail" type="Node" parent="." index="9"]
+script = ExtResource("3_dk6ok")
+damage = 3
+damage_family = 1
+probability = 0.2
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Tail" index="0"]
+stream = ExtResource("5_ha6vu")
+
+[node name="Stun" type="Node" parent="Tail" index="1"]
+script = ExtResource("6_opk2e")
+condition_name = "stunned"
+activation_msg = "You see some stars after this his!"
+damage_family = 1
+nb_turns = 3
+
+[node name="Tracking" type="Node" parent="." index="10"]
+script = ExtResource("5_oiycd")
+priority = 0.6
+
+[node name="Exploring" type="Node" parent="." index="11"]
+script = ExtResource("6_rrxeu")
+priority = 0.2

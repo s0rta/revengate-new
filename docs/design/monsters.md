@@ -1,4 +1,4 @@
-# Monsters 
+# Monsters
 
 ## plasus rats
 Illustration: to do
@@ -29,7 +29,7 @@ Illustration by Tuyên Đặng
 
 Nochorts have the general allure of a moose standing on its hind legs. Thankfully, they are much smaller, typically 2.5m from head to toes (3m if you count the antlers). The can wield weapons with their three-fingered hands. Their considerable strength give devastating swings to those weapons.
 
-Nochorts are strictly vegetarian, but they won't hesitate to attack any sentient being that they consider a foe. They live in highly hierarchical society and rarely question authority. They are employed by many organizations because of this loyalty. 
+Nochorts are strictly vegetarian, but they won't hesitate to attack any sentient being that they consider a foe. They live in highly hierarchical society and rarely question authority. They are employed by many organizations because of this loyalty.
 
 Due to their size, they have a hard time negotiating tight passages.
 
@@ -39,7 +39,7 @@ Illustration by Jonathan Timmons
 
 Éguis are what you get if a cobra had limbs. They stand like a kangaroo using two legs and their tail. They are smart enough to use weapons and will invariably take offense at being compared to a snake, which they view as an lower life form. Most are 140 to 160 cm tall form head to toes (longer from head to tail). Very old individuals can reach 2m.
 
-Éguis are master of assassination, patient and cunning. You will rarely see one fire a gun, they prefer quiet and discrete alternatives like blow darts and shuriken. 
+Éguis are master of assassination, patient and cunning. You will rarely see one fire a gun, they prefer quiet and discrete alternatives like blow darts and shuriken.
 
 
 ## Automatons
@@ -78,17 +78,17 @@ The snare yucca vaguely looks like an agave. It's a succulent plant with thick t
 
 Spreading underground from the centre of the plant is a rhizome network. The network can span up to 5m in radius. Scattered across the network are small mushrooms-like growths. When disturbed, the domes o those growths will launch spores in all directions. The spores themselves are perfectly inoffensive, but if they come in contact with the main leaves, they cause those to twist and contract, causing slicing damage to nearby adventurers and possibly ensnaring them. The contraction is very swift, then the leaf will slowly unfurl back to its original position over the course of several minutes, unless something is trapped in its embrace, in which case, the leaf can remain curled for several days.
 
-The plant blooms once every several years. It grows a long stalk about 50% taller than its leaves. The flower blooms at the top of the stalk. The flower is said to be very beautiful, full of bright colours with a strong smell of orange blossoms. For reasons of practicality and safety, those flowers are rarely harvested. 
+The plant blooms once every several years. It grows a long stalk about 50% taller than its leaves. The flower blooms at the top of the stalk. The flower is said to be very beautiful, full of bright colours with a strong smell of orange blossoms. For reasons of practicality and safety, those flowers are rarely harvested.
 
 
 ## Labras
 Illustration by Jason Teves
 
-The labra is a gliding reptile. It's front claws deploy like the praying mantis forearms. Claws are slightly curved, sharp and serrated, 20cm to 40cm long. 
+The labra is a gliding reptile. It's front claws deploy like the praying mantis forearms. Claws are slightly curved, sharp and serrated, 20cm to 40cm long.
 
-Labras stand on their back legs like many dinosaurs did, using their tail for balance. The front claws are usually held retracted until the moment of the attack. In this position, it looks like a mantis, but with four limbs rather than six. 
+Labras stand on their back legs like many dinosaurs did, using their tail for balance. The front claws are usually held retracted until the moment of the attack. In this position, it looks like a mantis, but with four limbs rather than six.
 
-Connected to the first joints from the body on each limb is a membrane that also runs along the torso. The membrane is usually held retracted and in this position, it merely looks like a skin flap. When all limbs are extended, however, the membrane deploys like a sail and allows the labra to glide great distances. 
+Connected to the first joints from the body on each limb is a membrane that also runs along the torso. The membrane is usually held retracted and in this position, it merely looks like a skin flap. When all limbs are extended, however, the membrane deploys like a sail and allows the labra to glide great distances.
 
 The head of the labra looks like that of a caiman with rows of sharp teeth that are visible whether the mouth is open or closed. The labra can snap it's jaw with great force.
 
@@ -110,18 +110,18 @@ They are rather slow, moving roughly at the pace of a brisk walking average huma
 
 Like regular scarabs, they tend to display elaborate patterns and flashy colours on their body, including metallic and iridescent light effects.
 
-Sentry scarabs have a high mental capacity for insects due to their large head size. They can be trained and a few individuals can collaborate in the resolution of simple tasks. 
+Sentry scarabs have a high mental capacity for insects due to their large head size. They can be trained and a few individuals can collaborate in the resolution of simple tasks.
 
 ## Pacherrs
 Illustration by Jason Teves
 
 Pacherrs are human-sized bipedal wholly mammoths. They are essentially the closest one gets to Tolkienan dwarves: stubby with elaborate braiding on their long facial wool. Celtic knots are often carved in the ivory of their tusks, less commonly, jewels are also set in their tusks.
 
-They rarely go taller than 1.5m, but because they are greatly muscular, 100kg is pretty much as light as an adult can be. Thanks to their massive head, they are also much smarter than the typical human can be.  Their clothing has a lot in common with Cossack attires, including robe-like gowns and long coats for males as well as fluffy hats. 
+They rarely go taller than 1.5m, but because they are greatly muscular, 100kg is pretty much as light as an adult can be. Thanks to their massive head, they are also much smarter than the typical human can be.  Their clothing has a lot in common with Cossack attires, including robe-like gowns and long coats for males as well as fluffy hats.
 
 Pacherrs come from nomadic tribes in Ukraine and Eastern Russian. They form strong bonds within their clan and will readily help any individual within the clan. Clans have a matriarchal structure with an elder female having the final word on internal affairs.
 
-Among themselves, Pacherrs love music and dancing with both genders taking interchangeable roles in their traditional dances. Their music often includes the tambourine and the balalaika. 
+Among themselves, Pacherrs love music and dancing with both genders taking interchangeable roles in their traditional dances. Their music often includes the tambourine and the balalaika.
 
 They are adept at fencing with the shashka sabre. The typically lack the finesse of human duellists, which they compensate for with the fantastic power of their swings. They are also generally proficient with pole arms. They sometimes have trunk attachments that serve as weapon, the trunk-morning-star being a common one.
 
@@ -135,9 +135,9 @@ The world of Revengate is filled with various kinds of bears. There are the comm
 
 All bears share similar characteristics and attach styles. The species of a bear dictates how strong of a foe it's going to be and to some extent, it's level of aggression. Unsurprisingly, pandas are the least aggressive and rarely attack unless provoked while polar bears are the most aggressive and will almost always attack on sight.
 
-Bears all have a very powerful sense of smell. With it, they can detect heroes who hide around corners. They can all climb and sprint for short distances, which is the basis for their charge attack. Given their considerable mass, a bear charge can deal a lot of damage and even knock a hero off their feet. 
+Bears all have a very powerful sense of smell. With it, they can detect heroes who hide around corners. They can all climb and sprint for short distances, which is the basis for their charge attack. Given their considerable mass, a bear charge can deal a lot of damage and even knock a hero off their feet.
 
-Bear are not social and are rarely seen in groups except for a mother with young cubs. A mother with cubs will always be more aggressive than other individuals from the same species. 
+Bear are not social and are rarely seen in groups except for a mother with young cubs. A mother with cubs will always be more aggressive than other individuals from the same species.
 
 Bears attack with their sharp front claws, which do slashing damage, and with their bites, which does piercing damage. Their attack range is short, but their thick fur offers a lot of protection so their can easily get into close-range combat.
 
@@ -147,17 +147,17 @@ Bears can often be distracted by food, especially smelly and sweet ripe fruits.
 ## Raccoons (including sahwakoon)
 Illustration: not needed
 
-Raccoons and sahwakoons share common behaviours. Both are very smart, but raccoons are smarter and have more dexterous front paws, which allows them to solve a wider range of problems. 
+Raccoons and sahwakoons share common behaviours. Both are very smart, but raccoons are smarter and have more dexterous front paws, which allows them to solve a wider range of problems.
 
 Raccoons are the most social of the two. They can form groups of up to five. Their communication being limited, they do not coordinate attacks, but they have been seen helping one another for simple tasks, such as climbing over a tall structure.
 
 Raccoons can easily grab objects, but they have not been seen using them as tools or weapons. They will readily steal objects from adventurers, including their weapons, but they will rarely run away with the object they just stole.
 
-Rabid raccoons are the ones who have been infected by rabies. They are more aggressive than healthy individuals and can pass on the virus to humans. Unless vaccinated, humans almost never survive rabies. 
+Rabid raccoons are the ones who have been infected by rabies. They are more aggressive than healthy individuals and can pass on the virus to humans. Unless vaccinated, humans almost never survive rabies.
 
-Raccoon claws inflict slashing damage, but they are not particularly sharp. Their teeth are sharper and they inflict piercing damage. Their thick fur offers a surprisingly high amount of protection for an animal of this size. 
+Raccoon claws inflict slashing damage, but they are not particularly sharp. Their teeth are sharper and they inflict piercing damage. Their thick fur offers a surprisingly high amount of protection for an animal of this size.
 
-It is rumoured that raccoons can be trained and that pet raccoons can steal items from enemies. If this turns out to be true, that would make these avid climbers very valuable companions on many dungeon adventures. 
+It is rumoured that raccoons can be trained and that pet raccoons can steal items from enemies. If this turns out to be true, that would make these avid climbers very valuable companions on many dungeon adventures.
 
 
 ## Phantruch
@@ -167,11 +167,11 @@ A phantruch is a magical creation. At first glace, it is a creature floating ins
 
 A major phantruch has an insect-like oval shaped torso that features a head and four limbs. Two of the arms are spider like, hairy, long and stiff, one with a crab-like pincer and one with a dagger shaped claw. The two other arms are soft tentacles tipped with suckers, a bit like those of squids. There are no legs, the thing simply floats.
 
-The part of the creature that is inside the blue flame is ethereal and semi-transparent. When a body part ventures outside of the flames, like for an attack, it instantly become solid and tangible. 
+The part of the creature that is inside the blue flame is ethereal and semi-transparent. When a body part ventures outside of the flames, like for an attack, it instantly become solid and tangible.
 
 The head is roughly triangular and features four eyes. The are many horns and spikes around the head, but no visible mouth.
 
-And the center of the creature floats the "vital assemblage", a frame of wood and brass housing an intricate mechanism that keeps the creature animated. The frame is adorned with writing in the ancient Aramaic script. Inside the frame there are four crystals arranged in the shape of a tetrahedron pyramid and a complex clockwork set of gears and springs constantly moving with a soft ticking sound. The vital assemblage has a very solid look to it despite being at the very center of the flames. 
+And the center of the creature floats the "vital assemblage", a frame of wood and brass housing an intricate mechanism that keeps the creature animated. The frame is adorned with writing in the ancient Aramaic script. Inside the frame there are four crystals arranged in the shape of a tetrahedron pyramid and a complex clockwork set of gears and springs constantly moving with a soft ticking sound. The vital assemblage has a very solid look to it despite being at the very center of the flames.
 
 When a phantruch dies, the creature and the flames completely evaporate, but the vital assemblage remains. Any damage to the vital assemblage is likely to cause the creature to vanish.
 
@@ -179,9 +179,9 @@ The lesser phantruch is held in animation by only two crystals. The weaker magic
 
 The creature of the lesser phantruch resembles a cross between a moray eel and a Chinese dragon. The serpent like beast remains coiled around the vital assemblage until the time of the attack. It attacks by springing forward with the swiftness of the cobra. As it floats in the air, the creature really seems to be swimming. Just like for the greater phantruch, the creature is ethereal and semi-transparent while it remains inside the blue flames.
 
-The lesser phantruch creature has diminutive arms like a Chinese dragon. Behind the head are protruding external gills somewhat similar to those of an axolotl. There are no eyes and no nostrils. How it senses it's enemy is a mystery. 
+The lesser phantruch creature has diminutive arms like a Chinese dragon. Behind the head are protruding external gills somewhat similar to those of an axolotl. There are no eyes and no nostrils. How it senses it's enemy is a mystery.
 
-The simpler vital assemblage of the lesser phantruch is still very intricate. The assemblage simply floats in mid-air without any visible attachment points. Sometimes the outline of a portal is visible as a two dimensional triangle. The equilateral triangle has one point facing down to the ground and emits a faint glow. It is about half as big as the creature. 
+The simpler vital assemblage of the lesser phantruch is still very intricate. The assemblage simply floats in mid-air without any visible attachment points. Sometimes the outline of a portal is visible as a two dimensional triangle. The equilateral triangle has one point facing down to the ground and emits a faint glow. It is about half as big as the creature.
 
 If the creature manages to snatch an item and to drop it inside the blue flame, the item will soon vanish into oblivion, never to be found again.
 
@@ -191,21 +191,21 @@ Illustration by Jason Teves
 
 A gleugt is an horror recognized in many Bavarian folk tales. The creature has the head of a goat, very long skinny arms that end in sharp claws, bird-like legs, and horrible looking wings.
 
-The head is roughly the shape of a goat's head with short horns protruding. The rest is hard to tell because gleugts almost always wear a plain looking mask. Long wavy hairs flow from the side of the mask down to the shoulders of the beast. 
+The head is roughly the shape of a goat's head with short horns protruding. The rest is hard to tell because gleugts almost always wear a plain looking mask. Long wavy hairs flow from the side of the mask down to the shoulders of the beast.
 
-The long skinny arms are shaped a bit like those of gibbons or spider monkeys, but less hairy and much skinnier, making the bone structure show through the thin skin. The claws resemble those of moles. The arms go down below the knees, almost touching the ground. 
+The long skinny arms are shaped a bit like those of gibbons or spider monkeys, but less hairy and much skinnier, making the bone structure show through the thin skin. The claws resemble those of moles. The arms go down below the knees, almost touching the ground.
 
-The legs of a gleugt are very similar to those of an ostrich, with the exception that they are equipped with sharp claws – a mix of those of an eagle and those or a road runner. 
+The legs of a gleugt are very similar to those of an ostrich, with the exception that they are equipped with sharp claws – a mix of those of an eagle and those or a road runner.
 
-Deployed, the wings are about 2m across, which is probably not large enough to make the creature fly very far. The wings have mostly the shape of bat or dragon wings, but the bone structure is very irregular, almost like it was made by tree branches. Over the bone structure is a thin semi-transparent slimy membrane. The membrane is pinkish with many veins showing. The membrane is somewhat reminiscent of the amniotic sack or the placenta of a new born. 
+Deployed, the wings are about 2m across, which is probably not large enough to make the creature fly very far. The wings have mostly the shape of bat or dragon wings, but the bone structure is very irregular, almost like it was made by tree branches. Over the bone structure is a thin semi-transparent slimy membrane. The membrane is pinkish with many veins showing. The membrane is somewhat reminiscent of the amniotic sack or the placenta of a new born.
 
-Gleugts are about as tall as a short human: between 1.25m and 1.5m. Because they are very skinny, they can move very fast despite their frail musculature. 
+Gleugts are about as tall as a short human: between 1.25m and 1.5m. Because they are very skinny, they can move very fast despite their frail musculature.
 
-In addition to the mask, gleugts typically wear as sleeveless vest and a skirt that looks more like a Victorian take on the Roman battle attire than like a kilt. It's also common to them to have a pocket watch on a chain and a ceremonial dagger on their belt. 
+In addition to the mask, gleugts typically wear as sleeveless vest and a skirt that looks more like a Victorian take on the Roman battle attire than like a kilt. It's also common to them to have a pocket watch on a chain and a ceremonial dagger on their belt.
 
-Gleugts are adept at magic and can cast a wide range of spells, especially the older individuals who can be identified by their longer horns and their more leathery tattered wings. Their mastery of spells come from a natural affinity with magic rather than from long studying. Their intelligence is in fact lower than that of the average human and they respond in impulsive manner rather than in a calculated way most of the time. They are smart enough to execute coordinated attacks between multiple individuals and to command other thinking beasts. 
+Gleugts are adept at magic and can cast a wide range of spells, especially the older individuals who can be identified by their longer horns and their more leathery tattered wings. Their mastery of spells come from a natural affinity with magic rather than from long studying. Their intelligence is in fact lower than that of the average human and they respond in impulsive manner rather than in a calculated way most of the time. They are smart enough to execute coordinated attacks between multiple individuals and to command other thinking beasts.
 
-Gleugts prefer to dedicate their life to communion with nature through meditation and various rituals, but they will venture inside human civilisations to gather various ingredients for their rituals and for other items that they can't craft themselves. 
+Gleugts prefer to dedicate their life to communion with nature through meditation and various rituals, but they will venture inside human civilisations to gather various ingredients for their rituals and for other items that they can't craft themselves.
 
 
 ## Siren
@@ -217,9 +217,9 @@ The torso of a siren is about the same size as that of the average human, but wi
 
 In the wild, especially as sea, sirens rarely bother with clothing, which they say interferes with their swimming, but in a civilized setting, they usually wear beautifully crafted attires. They also wear armour when fighting is expected, but very rarely anything made of metal because they like to keep option of a water retreat.  Sirens like long clothing over their torso, such as riding jackets, Greek-style togas, sarongs, and a variety of gowns. They wear jewellery on their tail, but rarely more. They do enjoy elaborate body paintings on their tails.
 
-Sirens can easily crawl on land. When they do, they go about half as fast as a walking human. In water, they can swim about four times as fast as a human and maintain that speed for up to an hour. In sea water, they also regenerate cuts and wounds in just a few hours. They can get oxygen from sea water, but not from fresh water. 
+Sirens can easily crawl on land. When they do, they go about half as fast as a walking human. In water, they can swim about four times as fast as a human and maintain that speed for up to an hour. In sea water, they also regenerate cuts and wounds in just a few hours. They can get oxygen from sea water, but not from fresh water.
 
-The two genders can mate together and female sirens can have offsprings with male humans; it is unknown if the same is true with the genders reversed. 
+The two genders can mate together and female sirens can have offsprings with male humans; it is unknown if the same is true with the genders reversed.
 
 Sirens have some innate magical abilities, such as charming sentient beings with their voice. They can also lean other spells from studying. They are about as smart as the average human, but they live twice as long, which gives them plenty of time to perfect their learning.
 
@@ -233,7 +233,7 @@ They tend to liven in small groups of 5 to 30 individuals. They rarely have indi
 ## Tripolitan Desert Centipede (aka Centrach)
 Illustration by Jason Teves
 
-The Tripolitan Desert Centipede is not the kind of bug that you can hope to crush under your boot. These distant cousins of the more common house centipede measure 1m on average and feature a very thick armored exoskeleton. 
+The Tripolitan Desert Centipede is not the kind of bug that you can hope to crush under your boot. These distant cousins of the more common house centipede measure 1m on average and feature a very thick armored exoskeleton.
 
 The head has six eyes, two short antennas, and tow long and sharp mandibles. The body is segmented with each segment interlocking with the next one like on the tails of lobsters or scorpions. The segments have all sorts of spike and protrusions. The tails ends with two large spikes, one on each side, which can deliver great damage when the creature swings around. The last 25% to 35% of the segments towards the tail do not have any legs. Each leg ends with a small claw that allows the creature to climb on most textured surfaces.
 
@@ -280,18 +280,30 @@ http://aarondinin.com/wp-content/uploads/2017/07/saber-toothed-tiger.jpeg
 ## Yarohu
 Illustration by Jason Teves
 
-The yarohu is a giant one meter tall red frog. They climb on trees and drop on unsuspecting victims. The center of their hands have lamprey like mouths that they sure to suck the blood from their victims. They can also inject a paralytic neuro-toxin to hold the victim still. After incapacitating a victim, they can swallow the victim whole and digest it slowly. 
+The yarohu is a giant one meter tall red frog. They climb on trees and drop on unsuspecting victims. The center of their hands have lamprey like mouths that they sure to suck the blood from their victims. They can also inject a paralytic neuro-toxin to hold the victim still. After incapacitating a victim, they can swallow the victim whole and digest it slowly.
 
-The face vaguely look like a human one, especially the nose. The mouth is very large. Like on a snake, the jaw can dislocate to make space for a large prey. The stomach of the creature will also expand to make room for a victim as large as the average human. 
+The face vaguely look like a human one, especially the nose. The mouth is very large. Like on a snake, the jaw can dislocate to make space for a large prey. The stomach of the creature will also expand to make room for a victim as large as the average human.
 
 The hands and feet have sharp claws that allow the yarohu to climb on trees. It also has opposable thumbs, which it uses to securely hold onto branches.
 
 The very large eyes are typically yellow. The mouth has no visible teeth. The gaze of the yarohu can cause confusion. On the body of the creature are usually elaborate skin patterns in white, yellow, and/or green.
 
-The creature is solitary. The female yarohu typically have one or tow eggs per mating. Eggs sell for a large sum on the black market. They stay viable for a few weeks if kept at the right temperature. They can be hatched with artificial light and the new born yarohu will imprint the first animal or human is sees as its "mother". They can be trained to obey simple commands and they are really good at detecting warm blooded animals with their infrared vision. 
+The creature is solitary. The female yarohu typically have one or tow eggs per mating. Eggs sell for a large sum on the black market. They stay viable for a few weeks if kept at the right temperature. They can be hatched with artificial light and the new born yarohu will imprint the first animal or human is sees as its "mother". They can be trained to obey simple commands and they are really good at detecting warm blooded animals with their infrared vision.
 
 ### References
 https://i1.wp.com/fishingbooker.com/blog/media/Lamprey.jpg?fit=2400%2C1680&ssl=1
+
+
+## Sewer Alligator
+Illustration: to do
+
+Sewer Alligators are smaller than their wild cousins. They tend to live deep inside canal and cave systems. They have powerful jaws and muscular tails that they can use to deliver stunning blows. Urban specimens often carry infectious diseases, a characteristic that is rare for sewer alligators living in natural cave systems.
+
+Their size range from 1.0 to 2.0 meters long from snout to then end of the tail, with 1.5m being typical of an average adult. They are usually some shade of dark brown, but blue and green have also been sighted. The tough skin can be tanned. It's pattern is usually to irregular and damaged for ornamental leather goods.
+
+They are very fast swimmers in both deep and shallow water. On land, they are slightly slower than the average human. They have great sight in low light conditions and are extremely perceptive of vibrations both on land and in water. Their sense of smell is rather poor.
+
+Sewer alligators are typically solitary. What triggers them to seek a mating partner is unknown and they have never been observed to breed in captivity. A female will typically lay 2 to 5 eggs, which she will guard ferociously until they hatch. The youngs are left to care for themselves after about two weeks. The large leathery eggs prized for their taste. Considering the risks involve in harvesting them, they remain a rare and expensive delicacy in most franconian cities. The eggs are very nutritious and will keep for a few weeks without refrigeration.
 
 
 ## Sewer otters
@@ -299,7 +311,7 @@ Illustration: to do
 
 Sewer otters probably didn't evolve in sewers, but this is where most people are likely to encounter them these days, hence their name. They look like a very large, very ferocious otter.
 
-They can be as long as 2m, but most specimens are 1.5m long. The head has a longer nose and and jaw than a river otter, almost as long as that of a fox, with very sharp teeth pointing up and down. Paws are webbed with very sharp claws, a bit like a mix between duck and wolverine paws. The tail is about twice as tall as the one of river otters when compared to the length of the body. The tail features a handful of long stiff whisker hairs, possibly to help the animal sense its surroundings in the dark. 
+They can be as long as 2m, but most specimens are 1.5m long. The head has a longer nose and and jaw than a river otter, almost as long as that of a fox, with very sharp teeth pointing up and down. Paws are webbed with very sharp claws, a bit like a mix between duck and wolverine paws. The tail is about twice as tall as the one of river otters when compared to the length of the body. The tail features a handful of long stiff whisker hairs, possibly to help the animal sense its surroundings in the dark.
 
 Sewer otters are most commonly seen dripping with mud. Several diseased patches of skin are likely to be missing hair. They can stand on their back legs, like a ferret and pounce forward for their attack. They can snatch items from adventurers thanks to their opposable thumbs, but they have not been observed using tools.
 
@@ -332,15 +344,15 @@ Illustration: to do
 
 Bolivian thunder boars, more commonly referred to as floofs, are long haired pig-like animals living in many parts of South America.
 
-The animal has roughly the size and shape of a javelina with long fluffy hair like that of an Angola rabbit. The hair is typically white or silver. Under certain conditions, the eyes can have a faint blue glow. 
+The animal has roughly the size and shape of a javelina with long fluffy hair like that of an Angola rabbit. The hair is typically white or silver. Under certain conditions, the eyes can have a faint blue glow.
 
 Thunder boars derive their names from the strong electric discharge that they can produce. The electrical shock is usually delivered through a bite and is strong enough to paralyze an adult human for a minute. Large specimens are also able to deliver the shock from a distance via and electrical arc. How far the arc can reach is not known.
 
-The animal is very tame and will rarely attack unless provoked. It is believed that they posses some form of telepathy since nearby sentient animals will often rush to help a thunder boar who feels threatened. 
+The animal is very tame and will rarely attack unless provoked. It is believed that they posses some form of telepathy since nearby sentient animals will often rush to help a thunder boar who feels threatened.
 
-In their natural habitat, they live in small groups of 4 to 18 individuals. A few thunder boars which had been imported to Europe to advance the study of electricity have since escaped. The rare sighting of a thunder boar in Europe usually reports a single individual. 
+In their natural habitat, they live in small groups of 4 to 18 individuals. A few thunder boars which had been imported to Europe to advance the study of electricity have since escaped. The rare sighting of a thunder boar in Europe usually reports a single individual.
 
-They mostly eat roots and fruits, but they can switch to an omnivorous diet in times of need. They are particularly found of cactus fruits. 
+They mostly eat roots and fruits, but they can switch to an omnivorous diet in times of need. They are particularly found of cactus fruits.
 
 
 ### References
@@ -351,11 +363,11 @@ Angola rabbit: https://cdn.fotofits.com/petzlover/gallery/img/l/angora-rabbit-47
 ## Algerian giant locust
 Illustration: Jason Teves
 
-The Algerian giant locust is a large insect that looks like a cross between a wood wasp and a grasshopper. A single one of them poses little threat on its own, but they tend to come in very large numbers. 
+The Algerian giant locust is a large insect that looks like a cross between a wood wasp and a grasshopper. A single one of them poses little threat on its own, but they tend to come in very large numbers.
 
-The insect is about 30 cm to 40 cm long from head to tail. They have sharp protruding mandibles, two pairs of shorter front legs, and one pair of powerful long back legs that allow the insect to jump with great speed. The abdomen is on a separate body segment and ends with a long pointy stinger. The body is sparsely covered in long hair. Most of the body has stripes of dark green and a beautiful iridescent blue. The wings fold neatly backwards when the creature is not in flight. 
+The insect is about 30 cm to 40 cm long from head to tail. They have sharp protruding mandibles, two pairs of shorter front legs, and one pair of powerful long back legs that allow the insect to jump with great speed. The abdomen is on a separate body segment and ends with a long pointy stinger. The body is sparsely covered in long hair. Most of the body has stripes of dark green and a beautiful iridescent blue. The wings fold neatly backwards when the creature is not in flight.
 
-The mandibles deliver cutting attacks and are strong enough to cut through leather or to work through a wooden door over the course of a few hours. The stinger delivers a strong venom that causes intense pain. Repeated strings will eventually paralyze a human. The insect produces enough venom to string about three times per day. 
+The mandibles deliver cutting attacks and are strong enough to cut through leather or to work through a wooden door over the course of a few hours. The stinger delivers a strong venom that causes intense pain. Repeated strings will eventually paralyze a human. The insect produces enough venom to string about three times per day.
 
 The giant locust are usually found in groups of 6 to 120 individuals. They eat some plants, but usually prefer to hunt small animals. When food is scares, they can burrow underground and enter a state of stasis. It is not well understood what triggers them to come back from stasis, but when it happens, the whole group usually emerges almost all at once.
 
@@ -379,7 +391,7 @@ Trinian bats sometimes steal items from people, which they bring back to their c
 ## Elementals
 Illustration: to do
 
-Elementals form a large class of beings spawned from animated mater. The two most common ones are the air and the water elementals. Both look vaguely like a small tornado that is obviously moving around with some sort of purpose. 
+Elementals form a large class of beings spawned from animated mater. The two most common ones are the air and the water elementals. Both look vaguely like a small tornado that is obviously moving around with some sort of purpose.
 
 The vortex – or column of mater – can bend around itself like a snake. Elementals can lift objects then release them at high velocity to cause destruction. Large elementals can engulf a person and lift them off the ground. While air elementals would typically then throw them back down from some height in order to cause injury, the water elementals are more likely to drag the unlucky victim underwater in an attempt to drown them.
 
@@ -394,7 +406,7 @@ The creature looks like a long twisty tube made of hundreds or oven thousands of
 
 Everything inside a flesh elemental is alive. Plant roots and limbs grow to reach every single organism and provide nutrition. The creature also engages in odd behaviors such as rolling in pools of blood in order to feed its numerous components. If an organism dies, it will be ejected and another organism of similar size will soon be incorporated in the elemental. How the elemental decides how big to grow is not understood.
 
-The creature's movement is more like that of a worm or a caterpillar than that of a snake, except for constriction, which is a common method that it uses to finish a victim. It will usually apply enough form to pulverize its prey and convert it into a shapeless soup of nutrients that is easily to absorbed. It will also attack by slapping, by delivering dozens of venomous stings all at once, and by producing a variety of irritant secretions of vegetal origin. 
+The creature's movement is more like that of a worm or a caterpillar than that of a snake, except for constriction, which is a common method that it uses to finish a victim. It will usually apply enough form to pulverize its prey and convert it into a shapeless soup of nutrients that is easily to absorbed. It will also attack by slapping, by delivering dozens of venomous stings all at once, and by producing a variety of irritant secretions of vegetal origin.
 
 
 ## Catrena (cactus mole)
@@ -402,7 +414,7 @@ Illustration: to do
 
 The catrena is a distant relative of the porcupines that look more like a cross between a gerbil and a cactus.
 
-While the general shape is that of a gerbil, the animal is much bigger: just a little smaller than a beaver, weighing 15kg on average. The skin and the short fuzzy hair takes various shades of green, which helps the animal to hide under foliage. On most of the back of the animal are long stiff needle-like quills that are somewhat reminiscent of cactus spines. There are lengthwise stripes on the animal that give the impression that it's body is ribbed like a barrel cactus, but that impression is merely an optical illusion. 
+While the general shape is that of a gerbil, the animal is much bigger: just a little smaller than a beaver, weighing 15kg on average. The skin and the short fuzzy hair takes various shades of green, which helps the animal to hide under foliage. On most of the back of the animal are long stiff needle-like quills that are somewhat reminiscent of cactus spines. There are lengthwise stripes on the animal that give the impression that it's body is ribbed like a barrel cactus, but that impression is merely an optical illusion.
 
 Catrenas are good tree climbers. They move on the ground by hopping around like kangaroos. During short sprints, they can match the running speed of an average human. They can roll into a ball for defense and they have very sharp incisor teeth like all rodents, which they readily use for attack. The quills easily break on impact and the tiny barbs along the length of the quills ensure that they keep digging deeper into a victim's flesh over time. A mild acid on the quill causes intense pain and swelling at the puncture site. The animal can regrow damaged quills in about a week.
 
