@@ -13,13 +13,13 @@
 [ext_resource type="PackedScene" uid="uid://de85ahbbn0ced" path="res://src/items/potion_of_healing.tscn" id="13_eq3ao"]
 [ext_resource type="PackedScene" uid="uid://d01nbq4dt1cs5" path="res://src/weapons/silver_saber.tscn" id="13_sfc7u"]
 [ext_resource type="PackedScene" uid="uid://dvr7bsle8gy1x" path="res://src/items/potion_of_regen.tscn" id="14_cxrka"]
+[ext_resource type="PackedScene" uid="uid://dyru8oxadarmy" path="res://src/monsters/sewer_alligator.tscn" id="16_7pja7"]
 [ext_resource type="PackedScene" uid="uid://c7fgdridawfb3" path="res://src/items/magic_capsule_of_regen.tscn" id="16_ap6xo"]
 [ext_resource type="PackedScene" uid="uid://bado87soxnga5" path="res://src/items/potion_of_absinthe.tscn" id="16_mb0ny"]
 [ext_resource type="PackedScene" uid="uid://diwm5gi6utoab" path="res://src/weapons/rapier.tscn" id="19_n7j36"]
 [ext_resource type="PackedScene" uid="uid://db6sjyoaw3ms2" path="res://src/monsters/giant_locust.tscn" id="20_3j7oh"]
 [ext_resource type="PackedScene" uid="uid://dk1dv7sw386vc" path="res://src/items/coffee.tscn" id="21_pcgkh"]
 [ext_resource type="PackedScene" uid="uid://btvcwiysrm7i6" path="res://src/items/dynamite.tscn" id="23_6bt64"]
-[ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="24_3pef4"]
 [ext_resource type="PackedScene" uid="uid://cjoutyju3dhre" path="res://src/monsters/gleugt.tscn" id="25_8ffwd"]
 [ext_resource type="PackedScene" uid="uid://cmshyslfrv0du" path="res://src/vibes/hissing.tscn" id="27_8pr1w"]
 
@@ -27,22 +27,21 @@
 script = ExtResource("1_phj4j")
 
 [node name="SewerOtter" parent="." instance=ExtResource("2_3bv6l")]
-spawn_prob = 1.0
+mem = null
 
 [node name="Labras" parent="." instance=ExtResource("3_ia73w")]
-spawn_prob = 1.0
+mem = null
 
 [node name="DesertCentipede" parent="." instance=ExtResource("4_p0gyr")]
-spawn_prob = 1.0
 
 [node name="Kobold" parent="." instance=ExtResource("5_b1bqf")]
-spawn_prob = 1.0
+mem = null
 
 [node name="SulantTiger" parent="." instance=ExtResource("6_auslx")]
-spawn_prob = 1.0
+mem = null
 
 [node name="SentryScarab" parent="." instance=ExtResource("7_d5hsq")]
-spawn_prob = 1.0
+mem = null
 
 [node name="Max3PerFloor" type="Node" parent="."]
 script = ExtResource("7_1er0k")
@@ -51,14 +50,14 @@ max_board_occ = 3
 [node name="Rat" parent="Max3PerFloor" instance=ExtResource("8_vett6")]
 
 [node name="Ghost" parent="Max3PerFloor" instance=ExtResource("10_w0tqq")]
-spawn_prob = 1.0
+mem = null
 
 [node name="Max2PerDungeon" type="Node" parent="."]
 script = ExtResource("7_1er0k")
 max_dungeon_occ = 2
 
 [node name="Gleugt" parent="Max2PerDungeon" instance=ExtResource("25_8ffwd")]
-spawn_prob = 1.0
+mem = null
 
 [node name="Rare" type="Node" parent="."]
 script = ExtResource("7_1er0k")
@@ -79,7 +78,7 @@ script = ExtResource("7_1er0k")
 min_depth = 7
 max_dungeon_occ = 2
 
-[node name="Pacherr" parent="RareAndDeep" instance=ExtResource("24_3pef4")]
+[node name="SewerAlligator" parent="RareAndDeep" instance=ExtResource("16_7pja7")]
 
 [node name="Healing" type="Node" parent="."]
 script = ExtResource("7_1er0k")
@@ -104,7 +103,6 @@ max_depth = 7
 min_board_occ = 3
 
 [node name="GiantLocust" parent="SwarmingFloors" instance=ExtResource("20_3j7oh")]
-spawn_prob = 1.0
 
 [connection signal="visibility_changed" from="Rare/Rapier" to="Rare/Rapier" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="Rare/Dynamite" to="Rare/Dynamite" method="_on_visibility_changed"]
