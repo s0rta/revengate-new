@@ -514,10 +514,10 @@ Items:
 - [ ] openjdk-17-jdk-headless in build recipe?
 - [ ] deprecate Viewport.center_on_coord()
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
-- [ ] the person you just talked to can't act for the rest of the turn (#91)
+- [x] the person you just talked to can't act for the rest of the turn (#91)
 - [ ] use the SkillLevel scale for the Perception increments
 - [ ] list supported languages (#95)
-- [ ] sewer aligators
+- [x] sewer aligators
 
 New Quest – traveling Pacherrs are in town:
 - [ ] new area where they hang out

@@ -180,6 +180,7 @@ class Talk extends Command:
 									Consts.MessageLevels.INFO,
 									["msg:story"])
 		else:
+			other.has_acted = true
 			prev_speaker = other
 			prev_convo = conversation
 
