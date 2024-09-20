@@ -4,10 +4,10 @@ Revengate Stories
 Long narrations and short stories set in the Revengate universe. See also `src/story/*.txt`.
 
 
-## The Audition
+# The Audition
 [moved here](../../src/story/the_audition.md)
 
-## The Initiation
+# The Initiation
 
 There were a dozen students sitting around the table, all bent over large leather bound books. They were all in their early twenties and judging by their attires, they came from all walks of life.
 
@@ -15,7 +15,7 @@ An older man entered the room. "Neophytes," he called, "Brother de Lévi is here
 
 Brother de Lévi followed. We was in his early forties and was wearing a dark robe. On his shoulder was a leather satchel and in his hand was a long cane with an intricate large pommel. He placed both on the table before taking a seat. The older man who had introduced him retreated to a corner of the room.
 
-De Lévi studied the room while the students exchanged excited glances and closed their books. 
+De Lévi studied the room while the students exchanged excited glances and closed their books.
 
 "I would like you to close your eyes," de Lévi called, "and thing back to the brightest fire you've ever seen. For some of you, it is going to be a bonfire at the solstice festival, some of you will think of the coal box on a great steam engine, and maybe a lucky few fill remember the roaring furnace of a steal foundry."
 
@@ -33,11 +33,11 @@ The faces of the students came alive with their effort. Some brows became wrinkl
 
 The only sounds in the room were deep breathing and a faint ticking that came from de Lévi's cane. It was not as fast as the ticking of a pocked watch and not as slow as that of a pendulum clock, about halfway in between. A trained ear could have recognized the distinctive two-tone clicking of a lever escapement, but that detail was missed since everyone in the room had their attention somewhere else.
 
-"Brighter... hotter... stronger... Bring the flames right here in front of you." 
+"Brighter... hotter... stronger... Bring the flames right here in front of you."
 
 De Lévi took his glass rod and stood up. He walked next to a student and placed the bulbous end of the rod between the students hands. He held it there for a moment.
 
-"Brighter... hotter... stronger..." 
+"Brighter... hotter... stronger..."
 
 He moved around the table, repeating the process and gently separating the hands that were help too close together. When he was done, he went back to his seat.
 
@@ -67,7 +67,7 @@ With his eyes still closed, de Lévi slowly brought down his cane. When its base
 
 De Lévi lifted his cane then it all stopped.
 
-He opened his eyes and started rotating the disc at the base of the pommel. 
+He opened his eyes and started rotating the disc at the base of the pommel.
 
 "Brother de Lévi," a student called, "that was most eloquent. Will we learn this spell?"
 
@@ -78,9 +78,9 @@ De Lévi grabbed his satchel and gave a modest bow.
 "That is all for me today and I hope to see you all at the next full moon ritual. Welcome to the Blue Circle Lodge!"
 
 
-## What Lurks in the Crypt
+# What Lurks in the Crypt
 
-Baw pushed her rapier forward as she crawled through the narrow passage. She clenched her jaw every time she heard the scrapping sound. An hour with a whetstone and she would be able to restore the blade's edge, but the ornate hilt guard would need professional attention, the kind of attention that would core her some pretty Francs if she had any hope of wearing her blade in public again without making a fool of herself. 
+Baw pushed her rapier forward as she crawled through the narrow passage. She clenched her jaw every time she heard the scrapping sound. An hour with a whetstone and she would be able to restore the blade's edge, but the ornate hilt guard would need professional attention, the kind of attention that would core her some pretty Francs if she had any hope of wearing her blade in public again without making a fool of herself.
 
 Baw was a field agent for Lux Co. She generally liked her job. She liked the fencing and she liked the spying. "Bordel," she muttered as she freed one shoulder from a tight squeeze. She didn't like narrow passages, she didn't like rats, and she really hated narrow passages full of rats. But now that she thought about it, it had been a while since the last encountered a rat. This might have been a good or a bad thing and something in the back of her mind told her that answering this particular questions could tell her a lot about herself and about where she was.
 
@@ -90,15 +90,15 @@ The grate offered no resistance. She was obviously not the first one to use this
 
 The narrow passage opened into a low vaulted room with three layer of alcoves covering two of the walls. Baw had reached the crypt.
 
-She carefully replaced the grate and did  her best to dust herself away from the entry point. She was after incriminating documents. She knew that those were more likely to be found in the offices above, but she was here all alone and it seemed like a good place to start searching. 
+She carefully replaced the grate and did  her best to dust herself away from the entry point. She was after incriminating documents. She knew that those were more likely to be found in the offices above, but she was here all alone and it seemed like a good place to start searching.
 
 Most of the alcoves hosted stone caskets, but a few has rows of urns separated by ornate wooden boxes here and there. She found many golden crosses and jeweled chalices, but nothing resembling documents. After the fourth box, She decided to move on.
 
-Shadows danced as she moved across the room. The lamp was a constant flicker now. One of the shadows passed right in front of her then brushed against her neck. She felt the cold sting and immediately took a step back. It was like a frostbite from a strong blizzard reaching deep below her skin. 
+Shadows danced as she moved across the room. The lamp was a constant flicker now. One of the shadows passed right in front of her then brushed against her neck. She felt the cold sting and immediately took a step back. It was like a frostbite from a strong blizzard reaching deep below her skin.
 
-The shadow seemed to absorb more of the light, to grow darker. It had the vague outline of a person and it was floating slowly towards Baw. She drew her rapier and slashed. The blade went right through the dark form. She slashed again. 
+The shadow seemed to absorb more of the light, to grow darker. It had the vague outline of a person and it was floating slowly towards Baw. She drew her rapier and slashed. The blade went right through the dark form. She slashed again.
 
-As the blade passed through the shadows, the shaped reached for Baw's hand. The chill was so sharp that she dropped her weapon. The ringing of hardened steel echoed through the silent hallways ahead. 
+As the blade passed through the shadows, the shaped reached for Baw's hand. The chill was so sharp that she dropped her weapon. The ringing of hardened steel echoed through the silent hallways ahead.
 
 For several seconds, she could neither feel nor move her fingers. She took several steps back. When the sensation painfully came back, her fingers felt like old rusty cogs struggling to move.
 
@@ -108,23 +108,23 @@ Three more slashed and she had pushed the shape back about half a meter. This wo
 
 She kept slashing as the sound of footsteps grew closer, then suddenly the dark shape slid away from her and merged with one of the walls. She raced to retrieve her rapier the darted down the hallway ready to face whoever was coming. The flame from her carbide lamp was now dim, yellow, and sooty.
 
-She almost tripped when her legs froze after she got close enough to see that it was not a person coming. The four legged creature was as large as a pony. It the body of a griffin with a human head perched atop a long neck. Wings were folded along its back. The creature turned its head, revealing another face, that of a large cat. It roared. The sound sent shivers down Baw's spine, it was deep and metallic, like nothing she had heard before. 
+She almost tripped when her legs froze after she got close enough to see that it was not a person coming. The four legged creature was as large as a pony. It the body of a griffin with a human head perched atop a long neck. Wings were folded along its back. The creature turned its head, revealing another face, that of a large cat. It roared. The sound sent shivers down Baw's spine, it was deep and metallic, like nothing she had heard before.
 
 Baw spun around and ran to the closest side room, placed the carbide lamp on the ground, then sheathed her rapier. The clicking of claws on the stone floor were steadily drawing closer, unhurriedly. Baw assessed her surroundings. The room was just like the first one she had been in. It was not very big, but it would have to do.
 
-The creature entered the room. Baw could now see another face on the side of the head opposite to the cats face. It had a long dog-like snout with pointy teeth. The human face was very beautiful with fine angular features. It could have been the face of a woman or that of a man still too young to grow a mustache. The beastly torso was very muscular. 
+The creature entered the room. Baw could now see another face on the side of the head opposite to the cats face. It had a long dog-like snout with pointy teeth. The human face was very beautiful with fine angular features. It could have been the face of a woman or that of a man still too young to grow a mustache. The beastly torso was very muscular.
 
 The creature kept approaching and Baw snapped out of her contemplation. Now was the time.
 
 She sprinted towards the creature. When she was two meters away, she dove sideways and rolled with the landing. A set of claws dug into her shoulder as she moved passed the monster.
 
-The pain came instantly, a here and now kind of pain. It was the king of paint that makes one forget about what year it is and what kind of hat they were hoping to buy with the next week's wages. In Baw's mind, there room for only two things: the source of the pain behind and the dark hallway ahead. She raced into the darkness. 
+The pain came instantly, a here and now kind of pain. It was the king of paint that makes one forget about what year it is and what kind of hat they were hoping to buy with the next week's wages. In Baw's mind, there room for only two things: the source of the pain behind and the dark hallway ahead. She raced into the darkness.
 
 She ran as fast as she could with eyes wide open even though there was nothing to see. She ran with he hand brushing the wall. She ran and tripped and fell, then got back up and ran again. She ran and fell again when she reached the stairs, then clumsily made her way up until she bumped into a wooden door with a loud thump.
 
-Baw collapsed on the ground after passing the door. The penumbra gave just enough light to see the outline of her surroundings: a long hallways with moonlight coming from somewhere around the corner. After her breath slowed down, she pressed her ear against the wooden door. The only sound came from her still racing heart. If the creature was still chasing her, it must have been far behind. 
+Baw collapsed on the ground after passing the door. The penumbra gave just enough light to see the outline of her surroundings: a long hallways with moonlight coming from somewhere around the corner. After her breath slowed down, she pressed her ear against the wooden door. The only sound came from her still racing heart. If the creature was still chasing her, it must have been far behind.
 
-It all came back slowly after that: she was here for documents and she liked spying. She started walking as silently as she could down the hallway. She also started recall the plans of the Church compound that she had studied before her mission. The plans had shown a wall around the perimeter of the compound. Baw had never seen the wall, but she could picture it in her mind: old and tall, aged enough to feature plenty of gaps between the stones. 
+It all came back slowly after that: she was here for documents and she liked spying. She started walking as silently as she could down the hallway. She also started recall the plans of the Church compound that she had studied before her mission. The plans had shown a wall around the perimeter of the compound. Baw had never seen the wall, but she could picture it in her mind: old and tall, aged enough to feature plenty of gaps between the stones.
 
 Baw would climb that wall on her way out.
 
@@ -179,7 +179,7 @@ Everything was still except Ferland's sword point which was oscillating a lot mo
 
 The dark shape kept drawing closer. Ferland spurt into a warning strike, aiming for the left shoulder. He missed.
 
-Or did he? His blade was extended right through the shader where a shoulder should have been, but he had felt to resistance at all on the way in. He pushed back two steps. He squinted trying to make sense of it all. The dark shape kept advancing. Ferland jumped forward aiming for the abdomen. 
+Or did he? His blade was extended right through the shader where a shoulder should have been, but he had felt to resistance at all on the way in. He pushed back two steps. He squinted trying to make sense of it all. The dark shape kept advancing. Ferland jumped forward aiming for the abdomen.
 
 He felt no resistance as his blade went through. Whatever it was, the dark shape was not solid. The shape touched Ferland's extended right knee.
 
@@ -191,7 +191,7 @@ Captain Filo appeared saber in hand. "Fall back you dim!" he called while switch
 
 He could see the captain slashing with a steady cadence. The saber was passing right through the dark shape with every strike. Convulsions were moving through the shape when the blade swept. The captain kept pushing his way forward. Two soldiers with lanterns in hand join the scene.
 
-In the dim light of the lanterns, all doubt escaped Ferland's mind. "Bordel..." muttered the man to his left. Several steps away, the captain was slashing at a transparent mass just slightly darker than the surrounding night. The dark mass was clearly retreating now. 
+In the dim light of the lanterns, all doubt escaped Ferland's mind. "Bordel..." muttered the man to his left. Several steps away, the captain was slashing at a transparent mass just slightly darker than the surrounding night. The dark mass was clearly retreating now.
 
 "There are ghosts here, captain" Ferland called out when Captain Filo started heading back towards them.
 
@@ -243,7 +243,7 @@ Gilles heard footsteps coming his way. He closed his eyes and wept softly, unsur
 
 Yrganiv was sitting at his mirror redoing the braids in his long facial hair. As a Pacherr, he had a lot of those. Franconians sometimes referred to Pacherrs as "elephant people", which was vaguely offensive given that unlike Yrganiv, elephants walked on all four, were bald, and couldn't play musical instruments. Whatever they wanted to believe, that was fine with him as long as they came to his concerts.
 
-He was already dressed and he was putting the final touch to his stage look. In his pocket, the small wooden box was wound up and ticking. His Zora, he called it. It was made of oak and brass, full of tiny gears inside. His big fingers would never be able to work on suck an elaborate mechanism; he had commissioned Zora in Vienna, after working two years to find and acquire the two crystals at its core: a tourmaline and an emerald. 
+He was already dressed and he was putting the final touch to his stage look. In his pocket, the small wooden box was wound up and ticking. His Zora, he called it. It was made of oak and brass, full of tiny gears inside. His big fingers would never be able to work on suck an elaborate mechanism; he had commissioned Zora in Vienna, after working two years to find and acquire the two crystals at its core: a tourmaline and an emerald.
 
 When Yrganiv concentrated on the box, he could make his instruments play louder, much louder. His drums and his trombone would be thundering through the neighbourhood, as would all the instruments of his fellow musicians and the steps of the dancers as long and they didn't wander too far. That's how they were able to draw large crowds in all the cities they visited.
 
@@ -271,7 +271,7 @@ Patience. He understood time once more and enjoyed contemplating its flow. He co
 
 # Contact
 
-The clouds over Lyon were heavy and gusts of wind were lifting coulds of dust in the narrow streets. Philippe quickly turned a corer and dashed though an unmarked door. He was eager to leave the street before the rain started. Few people knew that this door was unlocked because unlike most traboules, this one was not a shortcut to anywhere in particular. It had a few other exits, as all traboules had, but this one would have been a detour for most traveller, perfectly pointless unless you really needed a roof over your head for the next few blocs.
+The clouds over Lyon were heavy and gusts of wind were lifting dust in the narrow streets. Philippe quickly turned a corer and dashed though an unmarked door. He was eager to leave the street before the rain started. Few people knew that this door was unlocked because unlike most traboules, this one was not a shortcut to anywhere in particular. It had a few other exits, as all traboules had, but this one would have been a detour for most traveller, perfectly pointless unless you really needed a roof over your head for the next few blocs.
 
 What this traboule did provide was a discreet way to travel and an access to several storage rooms – both related to Philippe's current journey. The upper level of the corridors was lined with doors and courtyards. People lived and operated looms here and they all knew Philippe. Deeper down, you encountered fewer rooms and they stone work of the walls was a lot more utilitarian, even a little rushed sometimes. It was a good idea to carry a sword when wandering this far from the eyes of the law, which Philippe did.
 
@@ -304,3 +304,96 @@ Philippe noted which cards was engaged and then proceeded to change the cards st
 Alain called from the other room: "Burn the key when you are done. It's a one-time."
 
 "Sure thing," Philippe called back. "Want me to burn the flower cards while I'm at it?"
+
+
+# Barrels and Bravery
+
+Pridout was waiting on the street corner. Thanks to his contact being late, he had been there for a while now.
+
+He whistled at a woman across the street and winked a few times. He didn't find here attractive, but it seemed like a good time to advertise a plausible reason for him being there. Somewhere nearby were bundles of untaxed silk and mechanical contraptions he want's too sure what the purpose of was. As a smuggler, finding a purpose for cargo was not his problem. Moving it discreetly was.
+
+He considered going to grab a sandwich. They always made good sandwiches in Lyon. He did the whistling routine again, with a Pacherr this time. He was not certain about the gender, but it was unlikely to get him in trouble. Getting his ship inspected was what he was worried about.
+
+He would have to pay import duty on the Sicilian wine, that was bad enough, and where was a whole array of chemicals that he had never heard of ten years prior. Some even came with instructions on what could and could not be stacked together. Those probably spelled real trouble. He had destroyed the stacking instructions after the ship had been loaded. This provided him with plausible deniability, but he now regretted doing so a little. Whoever was going to buy those "nitrates" had better be up to speed on the ins and outs of storing them.
+
+A door opened. "Monsieur Pridout, " someone called from inside, "you should have come in."
+
+"Come in where?" Pridout asked at the unseen voice.
+
+"The traboule, Mr. Pridout. This one is never locked on Tuesdays. Let me show you the crates we wish to ship."
+
+
+# Birth Dice
+
+"Don't let him play with his brass dice," the inn keeper said as he placed two mugs of beer on the table "they're loaded."
+
+"They're not loaded, they are just my lucky birth dice," objected the young man who was sitting down. He took three metal dice from a leather pouch and set them carefully on the table. "And they are not made of brass, they're cast bronze. An absinthe please, René."
+
+"The heck are birth dice?" Asked the woman sitting to his right.
+
+"Those were rolled to decide who my parents would be, maybe also other things that they never told me about."
+
+"How the heck can you decide who your parents are? The woman replied. "That's not how babies are made, boy!" Laughters burst around the table.
+
+The young man carefully arranged his glass and spoon under the water fountain that had just arrived. "Of course I was not the one who did the roll, a government official did it for the marriage lottery. Five francs stake on the next game?"
+
+Skeptical looks were exchanged around the table, then a nod, and then a silent consensus was reached.
+
+"Sure," said a bearded sailor with a twitchy face, "but we all get to use your dice. You Tripolitan? They do random marriages over there."
+
+"That's where my parents met, but I was born in Marseille," said the young man. He tossed a few coins in the center of the table and carefully handed two of his dice to the sailor.
+
+"I guess you can't pick an accent like that anywhere else," the sailor said, attracting another burst o f laughter. He added some coins to the pile and rolled the dice. Nothing good came up, so we passed the dice to the old man to his left.
+
+"I've been to Marseille," said the new player who added his coins to the pile. "I ate an exquisite tajine there. What brings you to Lyon?" He rolled, but didn't win anything.
+
+"I make bicycles," the young man replied. "I rolled my birth dice to select a city and they told me I should open a shop in Lyon."
+
+The woman added her coins to the pile. "You seen the hills around here? It's the doctors who are going to win if you sell any bikes," said the woman. After the new waves of laughter died down, she rolled. Nothing.
+
+The young man accepted the dice back and took a sip of his absinthe, which brought a smile to his lips. "It's true that canuts move about faster down the traboules than they would out on the streets, event if they had a good set of wheels," he said. "But not everyone is a canut and sometimes you are better of listening to your gut rather than over analyzing flawed assumptions." He rolled and won the pot. "Some call it believing in your luck."
+
+Dumbfounded looks were exchanged around the table while the young man pocketed his winnings.
+
+"You switched one of the dice, that's how you did it!" Said the old man.
+
+"Don't you think I would be playing cards if I was into those tricks?" The young man stood, bowed, and left.
+
+
+# The Forge
+
+The ringing of metal was loud in the workshop. A woman in her twenties was feeding a boiler while the blacksmith was working a long metal rod under the steam powered hammer. Every few seconds, a jet of steam would hiss and the large mass would drop loudly on the glowing rod, sending sparks in all directions. Both were clad with a leather apron and wore goggles.
+
+The blacksmith knew by feel when to move his work piece. "I will draw this to the right length," he said putting the rod in a bed of hot coals, "then we can shape the blade cross section. I think a narrow fuller near the point would look good on this one."
+
+"Whatever you say, Boss." The apprentice said. "It's forging tools that I'm interested in. I don't think we'll be making blades much longer once they make duels illegal."
+
+"I lost one of those when I was your age," the blacksmith said. "It got me this scar." He pointed as his muscular forearm. In the hot and dusty environment the many scars were obvious, unlike the skin around them, they all seemed to stay clean. Which particular scar he was referring to was not immediately obvious. "Now when someone insults me, I let it slide and I know the bloke is the kind of folk to whom I can sell a rapier."
+
+"Why are they doing it? Why risk your life just to prove a point?" The apprentice asked.
+
+"You'll see when this one is done. A good blade is a beautiful thing," the blacksmith said. "If we get the balance right it feels part of yourself, it improves the parts that nature made a little weak."
+
+The rod was now white hot and it went back under the hammer for a few minutes.
+
+When rod came back in the hot coals, the apprentice asked: "So they think they are better than everyone because they have a good sword?"
+
+The blacksmith shrugged. "You don't forge a wrench like you forge a rapier. Some folks are stiff, some have more flex and you can't change them much after they've cooled down. If you want to live old, you'd better learn how to tell one from the other by how they ring." He took the blade from the coals and looked at it from various angles. "Here, make this sections rectangular, than taper it to a flat point around here."
+
+"You want me to the do this part?" The apprentice asked.
+
+The blacksmith gestured towards the steam hammer with his chin then went to grab a cup of water. He watched his apprentice work in silence.
+
+"Where's the balance point now?" He finally asked.
+
+"About here", she said, pointing at the blade.
+
+"This is not an axe. Draw the point thinner and cut the excess. You want the balance close to you if you want to say in control." The blacksmith said. "It's the same if you want to say in business, you have to control the changes in direction."
+
+"I don't get it," the apprentice said.
+
+"Make the base of the blade heavier than the point," the blacksmith said.
+
+"I get that part," the apprentice said. "What's the deal with staying in business?"
+
+"Gears." The blacksmith said. "The more gears there are in a machine, the less margin you have for imperfections.  Machines are not getting simpler, so get good at making gears. Also, go to the bars near the port. Beer is terrible there, but that's where you can guess where your opponent's blade is about to move."
