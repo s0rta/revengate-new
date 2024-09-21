@@ -516,7 +516,7 @@ Items:
 - [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [x] the person you just talked to can't act for the rest of the turn (#91)
 - [ ] use the SkillLevel scale for the Perception increments
-- [ ] list supported languages (#95)
+- [x] list supported languages (#95)
 - [x] sewer aligators
 
 New Quest – traveling Pacherrs are in town:
