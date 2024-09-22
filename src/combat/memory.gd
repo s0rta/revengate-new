@@ -51,6 +51,8 @@ func learn(event:String, turn, importance:=Importance.NOTABLE, data=null):
 		gc(turn)
 	var fact = {"event": event, "turn": turn, "importance": importance}
 	if data:
+		for key in ["event", "turn", "importance"]:
+			assert(not data.has(key), "Extra data for %s can't include key:%s" % [event, key])
 		fact.merge(data)
 	_facts.append(fact)
 

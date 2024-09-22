@@ -22,6 +22,7 @@ class_name DialoguePane extends Control
 
 const MIN_RESPONSES = 6
 const FADE_IN_SECS = 0.2
+const DEF_IMPORTANCE = Memory.Importance.NOTABLE
 
 signal closed(acted:bool)
 signal new_sentiment(faction_a, faction_b, value:int)
@@ -29,6 +30,7 @@ signal quest_activated()
 
 var dia_res: DialogueResource
 var temp_game_states := []
+var sect: String
 var speaker = null
 var speaker_name: String:
 	get:
@@ -39,7 +41,7 @@ var dialogue_line: DialogueLine:
 		return dialogue_line
 	set(next_dialogue_line):
 		if not next_dialogue_line:
-			close()
+			close(false)
 			return
 		
 		# Remove any previous responses
@@ -89,6 +91,9 @@ func _ready():
 		# are also taking space
 		var parent_h = %SpeechBackgroud.get_parent().size.y
 		%SpeechBackgroud.custom_minimum_size.y = min(parent_h, MIN_RESPONSES * line_height)
+		
+	var dm = Engine.get_singleton("DialogueManager")
+	dm.passed_title.connect(_on_new_sect)
 
 func _unhandled_key_input(event):
 	# TODO: handle ui_accept key as well
@@ -141,7 +146,15 @@ func start(dia_res_: DialogueResource, title: String, speaker_=null, extra_game_
 	var anim = create_tween()
 	anim.tween_property(self, "modulate:a", 1.0, FADE_IN_SECS)
 	
-func close():
+func close(cancelled:=true):
+	## Wrap up the conversation and hide the dialogue pane.
+	## `cancelled`: whether the conversation was abborted by the player or reached its end.
+	if Tender.hero and speaker:
+		var turn = Tender.hero.current_turn
+		var event = ["talk_finished", "talk_cancelled"][int(cancelled)]
+		Tender.hero.mem.learn(event, turn, DEF_IMPORTANCE, 
+								{"sect": sect, "speaker": speaker.actor_id})
+		
 	var anim:Tween = create_tween()
 	anim.tween_property(self, "modulate:a", 0.0, FADE_IN_SECS)
 	# talking to someone always counts as a turn action, event if you exit the conversation early.
@@ -159,6 +172,13 @@ func advance():
 func next(next_id: String):
 	## Go to the next message, or close the pane if we are done.
 	self.dialogue_line = await dia_res.get_next_dialogue_line(next_id, temp_game_states)
+
+func _on_new_sect(sect_:String):
+	sect = sect_
+	if Tender.hero and speaker:
+		var turn = Tender.hero.current_turn
+		Tender.hero.mem.learn("talk_started", turn, DEF_IMPORTANCE, 
+								{"sect": sect, "speaker": speaker.actor_id})
 
 func _on_response_gui_input(event, option_idx):
 	if Utils.event_is_tap_or_left(event) and event.pressed:
@@ -207,7 +227,7 @@ func event_happened(event) -> bool:
 	var hero = Tender.hero
 	return hero.mem.recall(event, hero.current_turn) != null
 
-func speaker_learns(event_name, importance:=Memory.Importance.NOTABLE, by_hero=true):
+func speaker_learns(event_name, importance:=DEF_IMPORTANCE, by_hero=true):
 	var data = null
 	## Add a fact to the speaker's memory
 	if by_hero:

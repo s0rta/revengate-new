@@ -527,7 +527,8 @@ New Quest – traveling Pacherrs are in town:
 
 UX:
 - [ ] message for critical damages
-- [ ] smarter choice of default speaker by tracking last convo in Hero.mem (#91)
+- [x] smarter choice of default speaker by tracking last convo in Hero.mem (#91)
+  - new facts: talk_started, talk_cancelled, talk_finished
 - [ ] show sentiment in Inspect (#90)
 - [ ] keep attacking if you hold quick attack down (#84)
 - [ ] quick attack does not throw weapons melee-and-ranged weapons like daggers

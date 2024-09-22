@@ -154,14 +154,8 @@ class QuickAttack extends Command:
 		return true
 
 class Talk extends Command:
-	# FIXME: there are many ways we could talk with someone (long tap, chat 
-	#   button in left action bar, ...). Moving the context of the last conversation 
-	#   outside of this command (perhaps in the Tender) 
-	#   is the only real way to keep all those methods consistent.
 	var next_speaker
 	var prev_def_speaker
-	var prev_speaker
-	var prev_convo
 
 	func _init(index_=null):
 		is_action = true
@@ -181,8 +175,6 @@ class Talk extends Command:
 									["msg:story"])
 		else:
 			other.has_acted = true
-			prev_speaker = other
-			prev_convo = conversation
 
 			Tender.hud.dialogue_pane.start(conversation.res, conversation.sect, other)
 			await Tender.hud.dialogue_pane.closed
@@ -196,7 +188,6 @@ class Talk extends Command:
 			return false
 		var hero_coord = Tender.hero.get_cell_coord()
 		var dist = board.dist(hero_coord, coord)
-		# TODO: it would make sense to have conversations further apart
 		var other = index.actor_at(coord)
 		is_default = other != null and not Tender.hero.is_foe(other)
 		if dist <= Consts.CONVO_RANGE and other and _is_talkative(other):
@@ -206,44 +197,69 @@ class Talk extends Command:
 			return false
 
 	func is_valid_for_hero_at(coord:Vector2i):
+		var prev_speaker_id
+		var start_turns = {}  # {actor_id:turn_num}, last time we started a convo with this actor
 		var board:RevBoard = Tender.hero.get_board()
 		var others = index.get_actors_around(coord, Consts.CONVO_RANGE).filter(_is_talkative)
 		var other_coords = others.map(func(actor): return actor.get_cell_coord())
 		board.highlight_cells(other_coords, "mark-chatty")
-		var other_dists = other_coords.map(board.dist.bind(coord))
-		var min_dist = other_dists.min()
+		var other_ids = others.map(func(actor): return actor.actor_id)
 
-		# bias to pick closer speakers
-		var other_weights = other_dists.map(func(d): return Consts.CONVO_RANGE - d + 1)
-				
-		# keep the same speaker if possible, 
-		# if not, keep the same default selection, as long as it's one of the optimal choices
+		# Select the default speaker in that order or preference:
+		# - the last actor we talked to, unless we cancelled the convo or they have nothing new to say
+		# - a random actor we've never talked with (sticky)
+		# - the actor we least recently talked with
+		next_speaker = null
+		# find the true speaker, see if still valid
+		var mem = Tender.hero.mem
+		var start_fact = mem.recall("talk_started", Tender.hero.current_turn)
+		if start_fact and start_fact.speaker in other_ids:
+			# we have a prev_speaker!
+			var fin_fact = mem.recall("talk_finished", Tender.hero.current_turn, 
+										func (fact): return fact.speaker == start_fact.speaker and fact.turn == start_fact.turn)
+			var prev_speaker = others.filter(func(actor): return actor.actor_id == start_fact.speaker)[0]
+			prev_speaker_id = prev_speaker.actor_id
+			if fin_fact:
+				# we have completed a conversation with that the prev_speaker
+				if prev_speaker.conversation_sect != start_fact.sect:
+					# they have new things to say!
+					next_speaker = prev_speaker
+
+		if not next_speaker:
+			# find prefered speakers: we've never talked to them or we didn't cancel our last convo with them
+			var start_facts = mem.recall_all("talk_started", Tender.hero.current_turn)
+			var cancel_facts = mem.recall_all("talk_cancelled", Tender.hero.current_turn)
+			for fact in start_facts:
+				if not start_turns.has(fact.speaker):
+					start_turns[fact.speaker] = fact.turn
+			var cancelled_ids = []  # speakers with whom we cancelled our most recent convo
+			for fact in cancel_facts:
+				if start_facts.has(fact.speaker) and start_facts[fact.speaker] == fact.turn:
+					cancelled_ids.append(fact.speaker)
+			var is_valid = func(actor): 
+				return actor.actor_id != prev_speaker_id \
+					and (not start_turns.has(actor.actor_id) or actor.actor_id not in cancelled_ids)
+			var preferred = others.filter(is_valid)
+			if not preferred.is_empty():
+				preferred.shuffle()
+				var pairs = preferred.map(func(actor): return [start_turns.get(actor.actor_id, -1), actor])
+				pairs.sort()
+				if pairs[0][0] == -1 and prev_def_speaker in preferred:
+					# if we have never talked with anyone, might as well make the last default sticky
+					next_speaker = prev_def_speaker
+				else:
+					next_speaker = pairs[0][-1]
 		
-		if others.is_empty():
-			return false
-		elif prev_speaker in others and prev_speaker.get_conversation() != prev_convo:
-			# keep talking to the same chap only if they have new things to say
-			# FIXME: this needs work because it relies on checkpoints and exiting a convo might 
-			#   happen before a check point, in which case the above test fails to see that the 
-			#   speaker still has things to say.
-			next_speaker = prev_speaker
-		elif next_speaker in others and board.dist(next_speaker, coord) == min_dist:
-			pass  # we keep the same next speaker
-		elif len(others) >= 2 and prev_speaker in others:
-			for i in len(others):
-				if others[i] == prev_speaker:
-					other_weights[i] = 0
-					break
-			next_speaker = Rand.weighted_choice(others, other_weights)
-		else:
-			next_speaker = Rand.weighted_choice(others, other_weights)
+		if not next_speaker:
+			# everyone left has either nothing new to say or we have cancelled our last convo with them, pick whoever we least recently chatted with
+			var pairs = others.map(func(actor): return [start_turns[actor.actor_id], actor])
+			pairs.sort()
+			next_speaker = pairs[0][-1]
 
 		# highlight the default speaker more prominently
+		prev_def_speaker = next_speaker
 		board.highlight_cells([next_speaker.get_cell_coord()], "mark-chatty-default")
 		return true
-
-
-
 
 	func run(coord:Vector2i) -> bool:
 		var other = index.actor_at(coord)
