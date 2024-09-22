@@ -245,7 +245,7 @@ class Talk extends Command:
 				var pairs = preferred.map(func(actor): return [start_turns.get(actor.actor_id, -1), actor])
 				pairs.sort()
 				if pairs[0][0] == -1 and prev_def_speaker in preferred:
-					# if we have never talked with anyone, might as well make the last default sticky
+					# if we have never talked with anyone nearby, might as well make the last default sticky
 					next_speaker = prev_def_speaker
 				else:
 					next_speaker = pairs[0][-1]

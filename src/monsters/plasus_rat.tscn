@@ -24,6 +24,7 @@ description = "Plasus rats look like common rats, but they have a stubbier face,
 mem = null
 
 [node name="Label" parent="." index="0"]
+auto_translate_mode = 2
 theme_override_colors/font_color = Color(0.65098, 0.321569, 0.0196078, 1)
 text = "r"
 
