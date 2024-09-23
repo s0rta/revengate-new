@@ -26,11 +26,22 @@ func dungeon_for_loc(world_loc:Vector3i):
 	return null
 
 func _neighbors_for_level(depth:int, world_loc:Vector3i, prev=null):
-	# FIXME: put the logic for sideway gateways towards destination here rather than in prefabs
-	#        Traboules do most of that, we can factor of some of their implementation
 	var locs = []
 	if prev != null:
 		locs.append(prev)
+
+	# strickly travel East-West until we align, then North-South, then down, but never up
+	if dest_world_loc != Consts.LOC_INVALID and world_loc != dest_world_loc:
+		var delta:Vector3i = dest_world_loc - world_loc
+		var delta_s := delta.sign()
+		if delta.x:
+			locs.append(world_loc + Vector3i(delta_s.x, 0, 0))
+		elif delta.y:
+			locs.append(world_loc + Vector3i(0, delta_s.y, 0))
+		elif delta.z < 0:
+			locs.append(world_loc + Vector3i(0, 0, delta_s.z))
+		else:
+			assert(false, "Can't go to %s from %s" % [dest_world_loc, world_loc].map(RevBoard.world_loc_str))
 
 	var mk_rec = _conn_rec_for_loc.bind(world_loc, prev, depth)
 	return locs.map(mk_rec)
