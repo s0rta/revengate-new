@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://2d8jw4r5bwa5"]
+
+[ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="1_lkp6b"]
+[ext_resource type="PackedScene" uid="uid://7c0a5mmquxyp" path="res://src/items/concert_ticket.tscn" id="2_xa2eu"]
+[ext_resource type="PackedScene" uid="uid://bvu7t3614rxwv" path="res://src/items/potion_of_cognac.tscn" id="3_dacxh"]
+
+[node name="Yrganiv" instance=ExtResource("1_lkp6b")]
+caption = "Yrganiv"
+color = Color(0.472895, 0.230073, 0.243613, 1)
+conversation_file = "res://src/story/yrganiv.dialogue"
+health = 70
+strength = 67
+agility = 44
+perception = 65
+
+[node name="Label" parent="." index="0"]
+theme_override_colors/font_color = Color(0.472895, 0.230073, 0.243613, 1)
+
+[node name="ConcertTicket" parent="." index="10" instance=ExtResource("2_xa2eu")]
+
+[node name="PotionOfCognac" parent="." index="11" instance=ExtResource("3_dacxh")]
+tags = Array[String](["fragile", "groupable", "booze", "cognac", "precious", "gift"])

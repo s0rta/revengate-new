@@ -1,0 +1,15 @@
+[remap]
+
+importer="dialogue_manager_compiler_12"
+type="Resource"
+uid="uid://caol57kw6mkro"
+path="res://.godot/imported/pacherr.dialogue-4d74eb1153b41b034077c0acf8ded3f6.tres"
+
+[deps]
+
+source_file="res://src/story/pacherr.dialogue"
+dest_files=["res://.godot/imported/pacherr.dialogue-4d74eb1153b41b034077c0acf8ded3f6.tres"]
+
+[params]
+
+defaults=true

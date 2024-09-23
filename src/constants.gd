@@ -145,13 +145,16 @@ const VIS_MODULATE := Color.WHITE
 # Tags must be declared here before the can be added to items and actors. 
 # This is a small safeguard against typos.
 const TAGS = ["ethereal", "undead", "gift", "fragile", "broken", "lit", 
-			"booze", "cognac",
+			"booze", "cognac", "gem",
 			"magical",  # magical effects and items are often more potent
 			"groupable",  # shows in "stacks" on the inventory screen
+			# economy
+			"tradable",  # you can use is as money 
+			"precious",  # like above, but better
 			# spells
 			"vital-assemblage", "summoning", "healing", "attack",
 			# locks
-			"key-blue", "key-red",
+			"key-blue", "key-red", "key-green",
 			# campaigns
 			"quest-item", "quest-reward", "quest-boss-retznac", "quest-boss-salapou",
 			# weapons
@@ -164,6 +167,7 @@ const TAGS = ["ethereal", "undead", "gift", "fragile", "broken", "lit",
 			"spawn-center", "spawn-distant", 
 			# quest items
 			"old-occult-book", "book-key-of-solomon", "book-of-magical-ceremonies",
+			"concert-ticket",
 			# quest IDs
 			"quest-lost-cards", "quest-stop-accountant", "quest-face-retznac",
 			]

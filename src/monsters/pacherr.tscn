@@ -9,11 +9,14 @@
 char = "P"
 caption = "pacherr"
 color = Color(0.596078, 0.411765, 0.321569, 1)
+conversation_file = "res://src/story/pacherr.dialogue"
+conversation_sect = "intro"
 spawn_cost = 12.0
 health = 60
 strength = 63
 agility = 40
 intelligence = 70
+faction = 0
 bestiary_img = "res://src/monsters/pacherr.jpg"
 description = "Pacherrs are human-sized bipedal wholly mammoths. They are essentially the closest one gets to Norse dwarves: stubby with elaborate braiding on their long facial wool. Celtic knots are often carved in the ivory of their tusks, less commonly, jewels are also set in their tusks.
 
