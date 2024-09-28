@@ -292,7 +292,7 @@ func open_rooms():
 		# building doors should not face the edge of the board
 		var region = Geom.coord_region(room.get_center(), rect)
 		var coord = room.new_door_coord(-region)
-		add_door(coord)
+		add_door(coord, room.door_key_tag.is_empty(), room.door_key_tag)
 
 func gen_maze(rect_, biases=null):
 	## Fill rect with a maze.

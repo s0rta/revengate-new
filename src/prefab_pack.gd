@@ -287,6 +287,7 @@ class LockedTrabouleFab extends Prefab:
 		
 		var room_rect = Rand.sub_rect(inner_rect, Vector2i.ONE * MIN_SIDE)
 		var room = Room.new(room_rect)
+		room.door_key_tag = "key-green"
 		builder.add_room(room)
 		_add_stairs(Rand.coord_in_rect(Geom.inner_rect(room_rect)), "CrystalTraboule")
 
