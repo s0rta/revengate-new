@@ -1,4 +1,4 @@
-# Copyright © 2023 Yannick Gingras <ygingras@ygingras.net> and contributors
+# Copyright © 2023–2024 Yannick Gingras <ygingras@ygingras.net> and contributors
 
 # This file is part of Revengate.
 
@@ -21,7 +21,8 @@ class_name PrefabPack extends RefCounted
 # {char -> fab_class}
 const _fab_chars := {"r": RiverFab, 
 					"p": PassageFab, 
-					"c": ChurchFab}
+					"c": ChurchFab, 
+					"t": LockedTrabouleFab}
 
 class Prefab extends RefCounted:
 	var builder: BoardBuilder
@@ -45,6 +46,14 @@ class Prefab extends RefCounted:
 	
 	func _to_string():
 		return "<PreFab %s on %s>" % [caption, fab_rect]
+
+	func _add_stairs(where, dungeon_name):
+		builder.board.paint_cell(where, "stairs-down")
+		var new_world_loc = builder.board.world_loc + Consts.LOC_LOWER
+		var rec = {"dungeon": dungeon_name, 
+				"world_loc": new_world_loc, 
+				"depth": builder.board.depth + 1}
+		builder.board.set_cell_rec(where, "conn_target", rec)
 
 	func fill():
 		## Fill our `rect` with the pre-fap pattern.
@@ -165,6 +174,7 @@ class PassageFab extends Prefab:
 			
 		builder.board.paint_cell(where, "gateway")
 		var new_world_loc = Vector3i(region.x, region.y, 0) + builder.board.world_loc
+		# FIXME: dynamically detect the dungeon name
 		var rec = {"dungeon": "TroisGaulesSurface", 
 				"world_loc": new_world_loc, 
 				"depth": builder.board.depth + 1}
@@ -223,15 +233,7 @@ class ChurchFab extends Prefab:
 	func fill():
 		var board = builder.board
 		board.paint_path(wall_path, "wall")
-		_add_stairs(fab_rect.position + Rand.choice(tower_cores))
-		
-	func _add_stairs(where):
-		builder.board.paint_cell(where, "stairs-down")
-		var new_world_loc = builder.board.world_loc + Consts.LOC_LOWER
-		var rec = {"dungeon": "Crypt", 
-				"world_loc": new_world_loc, 
-				"depth": builder.board.depth + 1}
-		builder.board.set_cell_rec(where, "conn_target", rec)
+		_add_stairs(fab_rect.position + Rand.choice(tower_cores), "Crypt")
 		
 	func get_untouched_rect():
 		var wiggle_room = rect.size - fab_rect.size
@@ -263,6 +265,30 @@ class ChurchFab extends Prefab:
 	func get_optional_cards():
 		return _spawn_in_nave(super())
 
+
+class LockedTrabouleFab extends Prefab:
+	## A room with stairs that go down and a locked door
+	
+	# TODO: locked door, passage to go down, don't mess with the perim
+	const MIN_SIDE := 3
+	func _init(builder, rect, region):
+		super(builder, rect, region)
+		caption = "locked-traboule"
+		
+		var small_side = fab_rect.size[fab_rect.size.min_axis_index()]
+		assert(small_side >= (2 + MIN_SIDE), "This location is too small for a locked room!")
+	
+	func fill():
+		var inner_rect = Geom.inner_rect(fab_rect, 1)
+		if region and region != Consts.REG_CENTER:		
+			inner_rect.size += region.abs()
+			if region in [Consts.REG_EAST, Consts.REG_SOUTH]:
+				inner_rect.position -= region
+		
+		var room_rect = Rand.sub_rect(inner_rect, Vector2i.ONE * MIN_SIDE)
+		var room = Room.new(room_rect)
+		builder.add_room(room)
+		_add_stairs(Rand.coord_in_rect(Geom.inner_rect(room_rect)), "CrystalTraboule")
 
 static func parse_fabstr(fabstr:String, builder:BoardBuilder, rect=null):
 	## Return a list of prefab instances for fabstr.

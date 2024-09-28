@@ -21,9 +21,9 @@ class_name Rand extends Object
 enum Orientation {HORIZONTAL, VERTICAL, RANDOM, LONG_SIDE}
 
 static func rstest(success_rate:float):
-	## Randon Success Test: return `true` success_rate fraction of the times 
+	## Randon Success Test: return `true` success_rate fraction of the times
 	## success_rate: in 0..1
-	# Because both 0.0 and 1.0 are likely `randf()` outcomes, we need a special case on one of 
+	# Because both 0.0 and 1.0 are likely `randf()` outcomes, we need a special case on one of
 	# those sides to make sure that 0.0 fails all the times and that 1.0 always succeeds.
 	if success_rate == 0.0:
 		return false
@@ -31,9 +31,9 @@ static func rstest(success_rate:float):
 		return randf() <= success_rate
 
 static func rftest(failure_rate:float):
-	## Randon Failure Test: return `true` failure_rate fraction of the times 
+	## Randon Failure Test: return `true` failure_rate fraction of the times
 	## failure_rate: in 0..1
-	# Because both 0.0 and 1.0 are likely `randf()` outcomes, we need a special case on one of 
+	# Because both 0.0 and 1.0 are likely `randf()` outcomes, we need a special case on one of
 	# those sides to make sure that 1.0 fails all the times and that 0.0 always succeeds.
 	if failure_rate == 1.0:
 		return false
@@ -55,12 +55,12 @@ static func choice(seq:Array):
 	return seq[idx]
 
 static func weighted_choice(seq:Array, weights:Array):
-	## Select an element from seq with a bias specified by weights. 
+	## Select an element from seq with a bias specified by weights.
 	##
-	## weights: relative bias of each element of seq, must have the same number of 
-	## elements as seq. For example, to make the first item 3 times as likely to be selected and the 
+	## weights: relative bias of each element of seq, must have the same number of
+	## elements as seq. For example, to make the first item 3 times as likely to be selected and the
 	## second one half as likely, you would pass weights = [3, 0.5, 1, 1 ..., 1].
-	
+
 	# inspired by the Python implementation of random.choices()
 	var cum_weights = [0]
 	var tot = 0
@@ -68,28 +68,28 @@ static func weighted_choice(seq:Array, weights:Array):
 	for w in weights:
 		tot += w
 		cum_weights.append(tot)
-			
+
 	# weighted indexing with a random val
 	var val = randf_range(0, tot)
 	return seq[cum_weights.bsearch(val) - 1]
 
 static func biased_choice(seq:Array, bias, biased_elem=null):
-	## Select an element from seq with a bias for one of the element. 
-	## 
-	## bias: how many times is the biased element more likely to be select 
-	## ex.: 0.5 for half as likely, 2 for twice as likely 
-	## 
-	## If biased_elem elem is provided and is present in the sequence, it's 
-	## first occurence will be biased; if it's not in the sequence, no item 
-	## will receive bias. If biased_elem is not provided, the first element 
+	## Select an element from seq with a bias for one of the element.
+	##
+	## bias: how many times is the biased element more likely to be select
+	## ex.: 0.5 for half as likely, 2 for twice as likely
+	##
+	## If biased_elem elem is provided and is present in the sequence, it's
+	## first occurence will be biased; if it's not in the sequence, no item
+	## will receive bias. If biased_elem is not provided, the first element
 	## receives the bias.
 	# inspired by the Python implementation of random.choices()
-	
+
 	# find the biased element
 	var bias_idx = 0
 	if biased_elem != null:
 		bias_idx = seq.find(biased_elem)
-	
+
 	# compute cumulative weights
 	var cum_weights = [0]
 	var tot = 0
@@ -99,7 +99,7 @@ static func biased_choice(seq:Array, bias, biased_elem=null):
 		else:
 			tot += 1
 		cum_weights.append(tot)
-			
+
 	# weighted indexing with a random val
 	var val = randf_range(0, tot)
 	return seq[cum_weights.bsearch(val) - 1]
@@ -123,7 +123,7 @@ static func rect(rects, valid_pred=null):
 	return Rand.weighted_choice(indices, areas)
 
 static func coord_in_rect(rect:Rect2i):
-	var offset = Vector2i(randi_range(0, rect.size.x-1), 
+	var offset = Vector2i(randi_range(0, rect.size.x-1),
 						randi_range(0, rect.size.y-1))
 	return rect.position + offset
 
@@ -133,7 +133,7 @@ static func coord_on_rect_perim(rect: Rect2i, region=null):
 	if region == null or region == Consts.REG_CENTER:
 		region = choice([Consts.REG_NORTH, Consts.REG_SOUTH, Consts.REG_WEST, Consts.REG_EAST])
 
-	# We pick a random coord inside the rect, then project it against one of the 
+	# We pick a random coord inside the rect, then project it against one of the
 	# sides accoding to the region.
 	# rect.end() is outside the rect, so we have to subtract 1 from it
 	var coord = coord_in_rect(Geom.inner_rect(rect))
@@ -151,14 +151,15 @@ static func coord_on_rect_perim(rect: Rect2i, region=null):
 static func sub_rect(rect:Rect2i, min_size:=Vector2i.ONE):
 	## Return a rectangle that is contained inside rect, likely smaller.
 	## `min_size`: The rect is at least that big.
-	var size = Vector2i(randi_range(min_size.x, rect.size.x), 
+	assert(rect.size >= min_size, "%s is too small to accomodate a sub_rect of size=%s" % [rect, min_size])
+	var size = Vector2i(randi_range(min_size.x, rect.size.x),
 						randi_range(min_size.y, rect.size.y))
 	var margin = rect.size - size
 	var offset = Vector2i(randi_range(0, margin.x), randi_range(0, margin.y))
-	return Rect2i(rect.position + offset, size)					
+	return Rect2i(rect.position + offset, size)
 
 static func split_rect(rect:Rect2i, orientation, pad=0, min_side=1):
-	## Return an array of two rects corresponding to the binary partition of 
+	## Return an array of two rects corresponding to the binary partition of
 	## rect.
 	## Return null if rect can't be splip in a way that meets the requirements.
 	## orientation: one of Rand.Orientation, including RANDOM
@@ -184,13 +185,13 @@ static func split_rect(rect:Rect2i, orientation, pad=0, min_side=1):
 		metric = rect.size.x
 	elif orientation == Orientation.VERTICAL:
 		metric = rect.size.y
-		
-	assert(metric >= min_metric, 
+
+	assert(metric >= min_metric,
 			"%s is too small to be split with min_side=%s and pad=%s" % [rect, min_side, pad])
 
 	# a line just beyond the first partition
 	var boundary = randi_range(min_side, metric - min_side - pad)
-	
+
 	var r1size = null  # size of the first rect
 	var r2size = null  # size of the second rect
 	var tl2 = null  # top-left of second partition
@@ -202,7 +203,7 @@ static func split_rect(rect:Rect2i, orientation, pad=0, min_side=1):
 		r1size = Vector2i(rect.size.x, boundary)
 		r2size = Vector2i(rect.size.x, metric - boundary - pad)
 		tl2 = rect.position + Vector2i(0, boundary + pad)
-	else: 
+	else:
 		return null
-	return [Rect2i(rect.position, r1size), 
+	return [Rect2i(rect.position, r1size),
 			Rect2i(tl2, r2size)]

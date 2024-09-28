@@ -162,7 +162,7 @@ class Talk extends Command:
 		caption = "Talk"
 		super(index_)
 
-	func _is_talkative(other:Actor, index) -> bool:
+	func _is_talkative(other:Actor) -> bool:
 		return (other.is_alive()
 				and other.get_conversation() != null
 				and Tender.hero.perceives(other)
@@ -185,14 +185,13 @@ class Talk extends Command:
 
 	func is_valid_for(coord:Vector2i):
 		var board = Tender.hero.get_board()
-		var index = board.make_index()
 		if not board.is_on_board(coord):
 			return false
 		var hero_coord = Tender.hero.get_cell_coord()
 		var dist = board.dist(hero_coord, coord)
 		var other = index.actor_at(coord)
 		is_default = other != null and not Tender.hero.is_foe(other)
-		if dist <= Consts.CONVO_RANGE and other and _is_talkative(other, index):
+		if dist <= Consts.CONVO_RANGE and other and _is_talkative(other):
 			next_speaker = other
 			return true
 		else:
@@ -202,8 +201,7 @@ class Talk extends Command:
 		var prev_speaker_id
 		var start_turns = {}  # {actor_id:turn_num}, last time we started a convo with this actor
 		var board:RevBoard = Tender.hero.get_board()
-		var index = board.make_index()
-		var others = index.get_actors_around(coord, Consts.CONVO_RANGE).filter(_is_talkative.bind(index))
+		var others = index.get_actors_around(coord, Consts.CONVO_RANGE).filter(_is_talkative)
 		var other_coords = others.map(func(actor): return actor.get_cell_coord())
 		board.highlight_cells(other_coords, "mark-chatty")
 		var other_ids = others.map(func(actor): return actor.actor_id)
