@@ -6,3 +6,7 @@
 char = "⛺"
 caption = "a small plain tent"
 spawn_cost = 4.0
+tags = Array[String](["spawn-outside-rooms"])
+
+[node name="Label" parent="." index="0"]
+auto_translate_mode = 2

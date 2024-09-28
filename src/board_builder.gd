@@ -414,9 +414,20 @@ func place(thing, in_room:=true, coord=null, free:bool=true, bbox=null, index=nu
 		assert(len(spawn_tags) == 1,
 				"Support for multiple spawn constraint tags is not implemented")
 		var tag = spawn_tags[0]
-		var region = Consts.REGION_NAMES[tag.split("-")[-1]]
-		# not passing a pred since seeing if the cell is free comes later
-		cell = random_coord_in_region(region)
+		if tag == "spawn-outside-rooms":
+			cell = Rand.coord_in_rect(rect)
+			var is_valid = func (coord): 
+				if free and not index.is_free(coord):
+					return false
+				return not is_in_room(coord)
+			if not is_valid.call(cell):
+				var spiral = board.spiral(cell, null, free, true, rect, index)		
+				while cell and not is_valid.call(cell):
+					cell = spiral.next()				
+		else:
+			var region = Consts.REGION_NAMES[tag.split("-")[-1]]
+			# not passing a pred since seeing if the cell is free comes later
+			cell = random_coord_in_region(region)
 		Utils.remove_tag(thing, tag)
 	elif in_room:
 		var room = Rand.choice(rooms)

@@ -30,15 +30,15 @@ const SAVE_PROB := 0.05  # chance that we save the game at the end of a turn
 ## The kind of damage, mostly used to compute resistances. Can apply to healing as well.
 enum DamageFamily {
 	NONE,
-	IMPACT, 
-	SLICE, 
-	PIERCE, 
-	ARCANE, 
-	HEAT, 
-	ACID, 
-	POISON, 
-	CHEMICAL, 
-	ELECTRIC, 
+	IMPACT,
+	SLICE,
+	PIERCE,
+	ARCANE,
+	HEAT,
+	ACID,
+	POISON,
+	CHEMICAL,
+	ELECTRIC,
 	MICROBIAL
 }
 
@@ -46,26 +46,26 @@ enum DamageFamily {
 enum Factions {
 	NONE,
 	LUX_CO,
-	BEASTS, 
-	OUTLAWS, 
+	BEASTS,
+	OUTLAWS,
 	CIRCUS,
-	CELESTIALS, 
+	CELESTIALS,
 	HOUSE_RETZ
 }
 
 enum SkillLevel {
 	NEOPHYTE,  # no skills at all
-	INITIATE, 
-	PROFICIENT, 
-	EXPERT, 
+	INITIATE,
+	PROFICIENT,
+	EXPERT,
 	MYTHICAL,  # beyond the realm of mortals
 }
 
 enum PercepLevel {
-	INEPT, 
+	INEPT,
 	WEAK,
-	NORMAL, 
-	GREAT, 
+	NORMAL,
+	GREAT,
 	PERFECT,
 }
 
@@ -77,22 +77,22 @@ enum MessageLevels {
 
 enum TextSizes {
 	UNSET,
-	NORMAL, 
-	BIG, 
+	NORMAL,
+	BIG,
 	HUGE
 }
 
 enum Lights {
 	UNSET,
-	NONE, 
-	HARD_SHADOWS, 
+	NONE,
+	HARD_SHADOWS,
 	SOFT_SHADOWS
 }
 
 
-const CORE_STATS := ["agility", "strength", "intelligence", "perception", 
-					"health_full", "healing_prob", 
-					"mana_burn_rate", "mana_recovery_prob"] 
+const CORE_STATS := ["agility", "strength", "intelligence", "perception",
+					"health_full", "healing_prob",
+					"mana_burn_rate", "mana_recovery_prob"]
 const SKILLS := ["evasion", "innate_attack", "fencing", "channeling", "device_of_focusing", "polearm"]
 # TODO: should be a const, but the parser has issue with the `+` expression
 var CHALLENGES := [] + SKILLS
@@ -123,15 +123,15 @@ const REG_SOUTH = Vector2i(0, 1)
 const REG_EAST = Vector2i(1, 0)
 const REG_WEST = Vector2i(-1, 0)
 
-const REGION_CHARS = {"C": REG_CENTER, 
-						"N": REG_NORTH, 
-						"S": REG_SOUTH, 
-						"E": REG_EAST, 
+const REGION_CHARS = {"C": REG_CENTER,
+						"N": REG_NORTH,
+						"S": REG_SOUTH,
+						"E": REG_EAST,
 						"W": REG_WEST}
-const REGION_NAMES = {"center": REG_CENTER, 
-						"north": REG_NORTH, 
-						"south": REG_SOUTH, 
-						"east": REG_EAST, 
+const REGION_NAMES = {"center": REG_CENTER,
+						"north": REG_NORTH,
+						"south": REG_SOUTH,
+						"east": REG_EAST,
 						"west": REG_WEST}
 const ALL_REGIONS = [REG_NORTH, REG_SOUTH, REG_EAST, REG_WEST, REG_CENTER]
 
@@ -142,14 +142,14 @@ const FADE_DURATION := .15
 const FADE_MODULATE := Color(.7, .7, .7, 0.0)
 const VIS_MODULATE := Color.WHITE
 
-# Tags must be declared here before the can be added to items and actors. 
+# Tags must be declared here before the can be added to items and actors.
 # This is a small safeguard against typos.
-const TAGS = ["ethereal", "undead", "gift", "fragile", "broken", "lit", 
+const TAGS = ["ethereal", "undead", "gift", "fragile", "broken", "lit",
 			"booze", "cognac", "gem",
 			"magical",  # magical effects and items are often more potent
 			"groupable",  # shows in "stacks" on the inventory screen
 			# economy
-			"tradable",  # you can use is as money 
+			"tradable",  # you can use is as money
 			"precious",  # like above, but better
 			# spells
 			"vital-assemblage", "summoning", "healing", "attack",
@@ -158,13 +158,13 @@ const TAGS = ["ethereal", "undead", "gift", "fragile", "broken", "lit",
 			# campaigns
 			"quest-item", "quest-reward", "quest-boss-retznac", "quest-boss-salapou",
 			# weapons
-			"silver", "throwable", 
+			"silver", "throwable",
 			# messages
 			"msg:strategy", "msg:combat", "msg:healing", "msg:regen",
-			"msg:magic", "msg:alt", "msg:inventory", "msg:vibe", "msg:story", 
+			"msg:magic", "msg:alt", "msg:inventory", "msg:vibe", "msg:story",
 			# progen placement constraints
-			"spawn-north", "spawn-south", "spawn-west", "spawn-east", 
-			"spawn-center", "spawn-distant", 
+			"spawn-north", "spawn-south", "spawn-west", "spawn-east",
+			"spawn-center", "spawn-distant", "spawn-outside-rooms",
 			# quest items
 			"old-occult-book", "book-key-of-solomon", "book-of-magical-ceremonies",
 			"concert-ticket",
