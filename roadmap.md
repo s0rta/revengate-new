@@ -521,9 +521,20 @@ Items:
 
 New Quest – traveling Pacherrs are in town:
 - [ ] new area where they hang out
-- [ ] new traboule, door is locked
-- [ ] a few canuts in town have the key
+  - Directly north of cafe cache
+  - [x] ability to get ticket from this location, ticket is used to trade a master weaver for a green key to the traboule
+    - bunch of Pacherrs, with a quest giver (Yrganiv)
+- [x] new traboule, door is locked
+  - North of the cafe as well
 - [ ] loot crystals somewhere down the new traboule
+  - [x] Only green crystals will let you complete the quest (which is not mentioned), non green crystals will cause dialog along the lines of 'not interested'
+  - [x] First message from Yrganiv mentions 'I want a magical crystal like emerald or (another green crystal)
+  - [x] If you bring a non magical crystal, you'll get a message like 'No no, this is nothing, (then mentions two more green crystals)
+  - [x] If you bring a non magical crystal again, you'll get a message like 'Do you drink absinthe? Bring me something that looks like that!'
+- [ ] non magical crystals should be placed before the magical ones, causing players to attempt to trade them and being dismissed for not finding what the Pacherr wants
+- [x] at somepoint it should be made obvious that green is equated to magic
+- [ ] master weaver with key to the traboule
+  - [ ] Mention cool things about lyon/weaving, a bunch of insider knowledge 
 
 UX:
 - [ ] message for critical damages
