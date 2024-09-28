@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://bd6cfr7s56sou"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_2ajyv"]
+
+[node name="Gem" instance=ExtResource("1_2ajyv")]
+char = "💎"
+caption = "a shiny rock"
+desc_simple = "a very hard rock with really high reflective property"
+desc_detailed = "a valuable gemstone"
+spawn_cost = 1.0
+tags = Array[String](["gem", "tradable"])
+
+[node name="Label" parent="." index="0"]
+auto_translate_mode = 2

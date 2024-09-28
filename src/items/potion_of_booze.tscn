@@ -10,7 +10,10 @@ desc_simple = "A cheap beer."
 desc_detailed = "An ale with a mixed grain bill of mostly barley and some beet sugar to increase the alcohol content. Bittered with gruit rather than hops, which stimulates the immune system."
 message = "What an invigorating feeling!"
 spawn_cost = 3.0
-tags = Array[String](["fragile", "groupable", "booze"])
+tags = Array[String](["fragile", "groupable", "booze", "tradable"])
+
+[node name="Label" parent="." index="0"]
+auto_translate_mode = 2
 
 [node name="Effect" type="Node" parent="." index="2"]
 script = ExtResource("2_8bn8y")

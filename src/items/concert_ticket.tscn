@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://7c0a5mmquxyp"]
+
+[ext_resource type="PackedScene" uid="uid://c6fe3irjwm5gv" path="res://src/items/item.tscn" id="1_s2ryr"]
+
+[node name="ConcertTicket" instance=ExtResource("1_s2ryr")]
+char = "🎟"
+caption = "concert ticket"
+desc_simple = "A paper rectangle with some hand written scribbles"
+desc_detailed = "A ticket for the sold of concert by the traveling Pacherrs."
+tags = Array[String](["concert-ticket", "precious", "gift"])
+
+[node name="Label" parent="." index="0"]
+auto_translate_mode = 2

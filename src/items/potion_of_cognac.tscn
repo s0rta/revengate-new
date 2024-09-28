@@ -6,7 +6,7 @@
 caption = "potion of cognac"
 desc_simple = "A bottle of Cognac."
 desc_detailed = "A grape brandy aged in limousin oak for over a decade. Despite the high alcohol concentration, there is no burn. This premium distilate stimulates health."
-tags = Array[String](["fragile", "groupable", "booze", "cognac"])
+tags = Array[String](["fragile", "groupable", "booze", "cognac", "precious"])
 
 [node name="Effect" parent="." index="2"]
 healing = 2

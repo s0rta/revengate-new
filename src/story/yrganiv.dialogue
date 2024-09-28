@@ -1,0 +1,62 @@
+~ intro
+if hero_has_item(["gem", "magical"]):
+	=> quest_bypass_start
+	=> END
+Yrganiv: Do you know anything about traboules?
+- For sure!
+	=> negotiate
+- Me? What? No.
+	=> no_deal
+
+~ no_deal
+Yrganiv: Too bad. If you know a canut or something, send them my way and for a free concert ticket.
+=> END
+
+~ negotiate
+Yrganiv: I was a this cool café and overheard a conversation. Not that I was listening or anything, but sounds like there might be magical crystals in the traboule down the road and I would be willing to do a really good trade for one of those.
+=> info_about_key
+
+~ info_about_key
+Yrganiv: I tried to go there, but it's locked. Sounds like we'd need a canut to provide a key. Do you know any of those folks?
+- I do!
+	do checkpoint("quest_status")
+	Yrganiv: Perfect! Come back to me when you have a gem!
+- Maybe, but what's in it for them?
+	do checkpoint("quest_status")
+	=> concert_ticket
+- Magical crystals?
+	Yrganiv: Yeah, you know, something like emeralds or tourmaline that you can use to build channeling devices for stronger magic.
+	=> info_about_key
+=> END
+
+~ concert_ticket
+Yrganiv: We're only playing in town for a two more nights and the concerts are sold out, but here's a ticket for you friend.
+do speaker_give_item(["concert-ticket"])
+=> END
+
+~ quest_bypass_start
+Yrganiv: That looks like a beautiful gem you have there. I was looking for something just like that. Interested in a trade?
+- Sure!
+	Yrganiv: Excellent!
+	do hero_give_item(["gem", "magical"])
+	do speaker_give_item(["cognac"])
+	do checkpoint("bye")
+- No way!
+	Yrganiv: Too bad. Come see me again if you change your mind.
+=> END
+
+~ quest_status
+if hero_has_item(["gem", "magical"]):
+	Yrganiv: Amazing! Take this, but please be quiet about it.
+	do hero_give_item(["gem", "magical"])
+	do speaker_give_item(["cognac"])
+	do checkpoint("bye")
+elif hero_has_item(["gem"]):
+	Yrganiv: I see you found some gems, but I'm really looking for something magical. You know, like malachite or jade. You've never seen magical gems?
+else:
+	Yrganiv: Have you found any gems yet? We're not in town much longer.
+=> END
+
+~ bye
+Yrganiv: It was great meeting you. Hopefully you'll get a chance to see our concerts next time we're in town.
+=> END

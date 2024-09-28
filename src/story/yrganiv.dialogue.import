@@ -1,0 +1,15 @@
+[remap]
+
+importer="dialogue_manager_compiler_12"
+type="Resource"
+uid="uid://bbmsy5cyscgnv"
+path="res://.godot/imported/yrganiv.dialogue-6d4e42ef6119d61ed8cc0fac497803e2.tres"
+
+[deps]
+
+source_file="res://src/story/yrganiv.dialogue"
+dest_files=["res://.godot/imported/yrganiv.dialogue-6d4e42ef6119d61ed8cc0fac497803e2.tres"]
+
+[params]
+
+defaults=true

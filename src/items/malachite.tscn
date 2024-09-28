@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://d0bqc8t021r2d"]
+
+[ext_resource type="PackedScene" uid="uid://bd6cfr7s56sou" path="res://src/items/gem.tscn" id="1_r2ulq"]
+
+[node name="Malachite" instance=ExtResource("1_r2ulq")]
+modulate = Color(0.16, 0.5, 0.239333, 1)
+caption = "malachite"
+desc_simple = "a green rock that glitters a lot when rotated"
+desc_detailed = "a slightly fibrous copper rich gem with moderate magical potential"
+spawn_cost = 5.0
+tags = Array[String](["gem", "tradable", "magical"])

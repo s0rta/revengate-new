@@ -513,7 +513,7 @@ Items:
 - [x] Godot 4.3: seems to run without any porting!
 - [ ] openjdk-17-jdk-headless in build recipe?
 - [ ] deprecate Viewport.center_on_coord()
-- [ ] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
+- [x] TroisGaules neighborhood uses Dungeon destination for passages rather than prefabs
 - [x] the person you just talked to can't act for the rest of the turn (#91)
 - [ ] use the SkillLevel scale for the Perception increments
 - [x] list supported languages (#95)

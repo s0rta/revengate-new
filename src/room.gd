@@ -25,6 +25,7 @@ class_name Room extends Resource
 @export var layout_perim:Array[Vector2i]
 # sparse: only the left most coord of a floor section that will continue right to the next wall
 @export var floor_seeds:Array[Vector2i]
+@export var door_key_tag := ""
 var position:Vector2i:
 	get:
 		return rect.position

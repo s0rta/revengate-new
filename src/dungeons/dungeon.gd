@@ -27,12 +27,11 @@ const BUDGET_MULTIPLIERS = {"Actor": 1.7,
 var prefab_map = {Vector3i(13, 3, 0): "Er", 
 					Vector3i(13, 4, 0): "Er", 
 					Vector3i(13, 5, 0): "Er", 
-					Vector3i(13, 6, 0): "Er", 
+					Vector3i(13, 6, 0): "WtEr", 
 					Vector3i(13, 7, 0): "Er", 
 					Vector3i(13, 8, 0): "Er", 
-					Vector3i(12, 5, 0): "WpEc",
-					Vector3i(11, 5, 0): "Wp",
-					Vector3i(10, 5, 0): "NpSr"
+					Vector3i(12, 5, 0): "Ec",
+					Vector3i(10, 5, 0): "Sr"
 				}
 
 @export var default_board_size := Vector2i(23, 15)
