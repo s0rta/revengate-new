@@ -1,0 +1,15 @@
+[remap]
+
+importer="dialogue_manager_compiler_12"
+type="Resource"
+uid="uid://de06c54kvgvxn"
+path="res://.godot/imported/canut.dialogue-60b70fb872a7022bdc7b101314aed3d7.tres"
+
+[deps]
+
+source_file="res://src/story/canut.dialogue"
+dest_files=["res://.godot/imported/canut.dialogue-60b70fb872a7022bdc7b101314aed3d7.tres"]
+
+[params]
+
+defaults=true

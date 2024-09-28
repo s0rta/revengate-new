@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://ckwurta0jp1i"]
+
+[ext_resource type="PackedScene" uid="uid://dl5etg1cv5hbt" path="res://src/combat/actor.tscn" id="1_yp4ui"]
+[ext_resource type="Script" path="res://src/strategies/self_defense.gd" id="3_7c4qr"]
+[ext_resource type="Script" path="res://src/strategies/exploring.gd" id="4_ohv3f"]
+[ext_resource type="PackedScene" uid="uid://drnpu2dw1i4nn" path="res://src/weapons/weighted_cane.tscn" id="4_uraiw"]
+[ext_resource type="PackedScene" uid="uid://bvl22jmu56wp6" path="res://src/items/key.tscn" id="5_4lb1i"]
+
+[node name="Canut" instance=ExtResource("1_yp4ui")]
+char = "@"
+caption = "Canut"
+color = Color(0.650832, 0.294108, 0.892336, 1)
+conversation_file = "res://src/story/canut.dialogue"
+conversation_sect = "intro"
+spawn_cost = 4.0
+health = 34
+strength = 48
+agility = 51
+intelligence = 52
+perception = 52
+mem = null
+
+[node name="Label" parent="." index="0"]
+auto_translate_mode = 2
+theme_override_colors/font_color = Color(0.650832, 0.294108, 0.892336, 1)
+text = "@"
+
+[node name="SelfDefense" type="Node" parent="." index="6"]
+script = ExtResource("3_7c4qr")
+priority = 0.7
+
+[node name="Exploring" type="Node" parent="." index="7"]
+script = ExtResource("4_ohv3f")
+priority = 0.4
+
+[node name="WeightedCane" parent="." index="8" instance=ExtResource("4_uraiw")]
+is_equipped = true
+
+[node name="Key" parent="." index="9" instance=ExtResource("5_4lb1i")]
+caption = "key for green locks"
+desc_simple = "An old bronze key."
+desc_detailed = "An aged bronze key designed for a lever lock with a pronounced wave in the keyway."
+tags = Array[String](["key-green", "gift"])

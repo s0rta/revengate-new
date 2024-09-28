@@ -1,0 +1,44 @@
+~ intro
+
+% Canut: Wow! What a busy week, Salapou is in town and the Pacherrs are playing as well.
+% Canut: I'm not busy tomorrow night for a change, but I can't go to the concert, it's completely sold out!
+% Canut: Traboule? I know about those but i'd rather not say too much.  
+=> ask_other_questions
+
+=> END
+
+~ ask_other_questions
+
+Canut: Is there anything else you'd want to know?
+- Would you like to trade?
+	=> trade
+- Have you seen any ghosts in the traboule?
+	Canut: err... obviously no.
+- Why is wine so expensive around here?
+	Canut: I've never looked at it that way, I guess it is fairly lavish.
+	
+=> END
+
+~ trade
+if hero_has_item(["precious"]):
+	Canut: Sure! I'd love to trade.
+	Canut: The only thing I have on me right now is a key to the traboule.
+	Canut: That might not seem like much, but that's really valuable around here.
+	- For sure
+		=> complete_trade
+	- No way
+		Canut: If you don't see the inherent value, it's probably better you don't go down there anyway.
+else: 
+	Canut: I'm not particularly interested in trading with you.
+
+=> END
+
+~ complete_trade
+do speaker_give_items()
+if hero_has_item(["concert-ticket"]):
+	do hero_give_item(["concert-ticket"])
+	Canut: You're making my day, you have no idea!
+else:
+	do hero_give_item(["precious"])
+	Canut: Merci!
+=> END

@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://c185mr0bu3u3w"]
+[gd_scene load_steps=41 format=3 uid="uid://c185mr0bu3u3w"]
 
 [ext_resource type="Script" path="res://src/deck_builder.gd" id="1_yitoo"]
 [ext_resource type="PackedScene" uid="uid://ons174xuqpcw" path="res://src/monsters/sewer_otter.tscn" id="2_i1rpj"]
@@ -31,10 +31,11 @@
 [ext_resource type="PackedScene" uid="uid://bado87soxnga5" path="res://src/items/potion_of_absinthe.tscn" id="27_p82t1"]
 [ext_resource type="PackedScene" uid="uid://drnpu2dw1i4nn" path="res://src/weapons/weighted_cane.tscn" id="28_0tyeq"]
 [ext_resource type="PackedScene" uid="uid://dyru8oxadarmy" path="res://src/monsters/sewer_alligator.tscn" id="28_gg2lb"]
-[ext_resource type="PackedScene" uid="uid://d0bqc8t021r2d" path="res://src/items/malachite.tscn" id="30_yr7or"]
+[ext_resource type="PackedScene" uid="uid://ckwurta0jp1i" path="res://src/people/canut.tscn" id="29_4utm8"]
+[ext_resource type="PackedScene" path="res://src/items/malachite.tscn" id="30_yr7or"]
 [ext_resource type="PackedScene" uid="uid://cjhuo8ouk2mpa" path="res://src/monsters/pacherr.tscn" id="32_yyth2"]
-[ext_resource type="PackedScene" uid="uid://2d8jw4r5bwa5" path="res://src/monsters/yrganiv.tscn" id="33_rbr6l"]
-[ext_resource type="PackedScene" uid="uid://bd6cfr7s56sou" path="res://src/items/gem.tscn" id="34_io24d"]
+[ext_resource type="PackedScene" path="res://src/monsters/yrganiv.tscn" id="33_rbr6l"]
+[ext_resource type="PackedScene" path="res://src/items/gem.tscn" id="34_io24d"]
 [ext_resource type="PackedScene" uid="uid://bnykesyfgf2b5" path="res://src/people/lyonese.tscn" id="34_yppu8"]
 
 [sub_resource type="Resource" id="Resource_58dw8"]
@@ -182,6 +183,8 @@ script = ExtResource("7_bd8gw")
 min_dungeon_occ = 1
 world_loc = Vector3i(13, 6, 0)
 debug_only = true
+
+[node name="Canut" parent="TestingQuestTransitions" instance=ExtResource("29_4utm8")]
 
 [node name="LoomCards" parent="TestingQuestTransitions" instance=ExtResource("11_320yy")]
 
